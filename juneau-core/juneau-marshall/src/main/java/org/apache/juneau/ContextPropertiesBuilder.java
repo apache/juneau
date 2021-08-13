@@ -57,6 +57,11 @@ public class ContextPropertiesBuilder {
 		apply(cp);
 	}
 
+	/** Copy Constructor */
+	ContextPropertiesBuilder(ContextPropertiesBuilder cp) {
+		apply(cp.build());
+	}
+
 	/**
 	 * Creates a new {@link ContextProperties} based on the values in this builder.
 	 *

@@ -87,6 +87,17 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	public ContextBuilder(ContextBuilder copyFrom) {
+		this.cpb = new ContextPropertiesBuilder(copyFrom.cpb);
+		this.debug = copyFrom.debug;
+		this.contextClass = copyFrom.contextClass;
+	}
+
+	/**
 	 * Build the object.
 	 *
 	 * @return

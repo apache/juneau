@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
@@ -52,15 +49,18 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @FluentSetters
-public class BeanContextBuilder extends ContextBuilder {
+public abstract class BeanContextableBuilder extends ContextBuilder {
+
+	private BeanContextBuilder bcBuilder;
 
 	/**
 	 * Constructor.
 	 *
 	 * All default settings.
 	 */
-	public BeanContextBuilder() {
+	public BeanContextableBuilder() {
 		super();
+		this.bcBuilder = BeanContext.create();
 	}
 
 	/**
@@ -68,8 +68,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public BeanContextBuilder(BeanContext copyFrom) {
+	public BeanContextableBuilder(BeanContextable copyFrom) {
 		super(copyFrom);
+		this.bcBuilder = copyFrom.getBeanContext().copy();
 	}
 
 	/**
@@ -77,13 +78,20 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param copyFrom The builder to copy from.
 	 */
-	protected BeanContextBuilder(BeanContextBuilder copyFrom) {
-		super(copyFrom);
+	public BeanContextableBuilder(BeanContextableBuilder copyFrom) {
+		bcBuilder = new BeanContextBuilder(copyFrom.bcBuilder);
 	}
 
+	/**
+	 * Makes a copy of this builder.
+	 *
+	 * @return A new copy of this builder.
+	 */
+	public abstract BeanContextableBuilder copy();
+
 	@Override /* ContextBuilder */
-	public BeanContext build() {
-		return build(BeanContext.class);
+	public BeanContextable build() {
+		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -132,8 +140,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanClassVisibility(Visibility value) {
-		return set(BEAN_beanClassVisibility, value);
+	public BeanContextableBuilder beanClassVisibility(Visibility value) {
+		bcBuilder.beanClassVisibility(value);
+		return this;
 	}
 
 	/**
@@ -181,8 +190,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanConstructorVisibility(Visibility value) {
-		return set(BEAN_beanConstructorVisibility, value);
+	public BeanContextableBuilder beanConstructorVisibility(Visibility value) {
+		bcBuilder.beanConstructorVisibility(value);
+		return this;
 	}
 
 	/**
@@ -239,8 +249,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanFieldVisibility(Visibility value) {
-		return set(BEAN_beanFieldVisibility, value);
+	public BeanContextableBuilder beanFieldVisibility(Visibility value) {
+		bcBuilder.beanFieldVisibility(value);
+		return this;
 	}
 
 	/**
@@ -294,8 +305,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
-		return annotations(BeanAnnotation.create(on).interceptor(value).build());
+	public BeanContextableBuilder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
+		bcBuilder.beanInterceptor(on, value);
+		return this;
 	}
 
 	/**
@@ -329,8 +341,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanMapPutReturnsOldValue() {
-		return set(BEAN_beanMapPutReturnsOldValue);
+	public BeanContextableBuilder beanMapPutReturnsOldValue() {
+		bcBuilder.beanMapPutReturnsOldValue();
+		return this;
 	}
 
 	/**
@@ -377,8 +390,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanMethodVisibility(Visibility value) {
-		return set(BEAN_beanMethodVisibility, value);
+	public BeanContextableBuilder beanMethodVisibility(Visibility value) {
+		bcBuilder.beanMethodVisibility(value);
+		return this;
 	}
 
 	/**
@@ -430,8 +444,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beansRequireDefaultConstructor() {
-		return set(BEAN_beansRequireDefaultConstructor);
+	public BeanContextableBuilder beansRequireDefaultConstructor() {
+		bcBuilder.beansRequireDefaultConstructor();
+		return this;
 	}
 
 	/**
@@ -478,8 +493,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beansRequireSerializable() {
-		return set(BEAN_beansRequireSerializable);
+	public BeanContextableBuilder beansRequireSerializable() {
+		bcBuilder.beansRequireSerializable();
+		return this;
 	}
 
 	/**
@@ -524,8 +540,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beansRequireSettersForGetters() {
-		return set(BEAN_beansRequireSettersForGetters);
+	public BeanContextableBuilder beansRequireSettersForGetters() {
+		bcBuilder.beansRequireSettersForGetters();
+		return this;
 	}
 
 	/**
@@ -567,8 +584,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder disableBeansRequireSomeProperties() {
-		return set(BEAN_disableBeansRequireSomeProperties);
+	public BeanContextableBuilder disableBeansRequireSomeProperties() {
+		bcBuilder.disableBeansRequireSomeProperties();
+		return this;
 	}
 
 	/**
@@ -627,8 +645,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanProperties(Class<?> beanClass, String properties) {
-		return annotations(BeanAnnotation.create(beanClass).p(properties).build());
+	public BeanContextableBuilder beanProperties(Class<?> beanClass, String properties) {
+		bcBuilder.beanProperties(beanClass, properties);
+		return this;
 	}
 
 	/**
@@ -689,9 +708,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanProperties(Map<String,Object> values) {
-		for (Map.Entry<String,Object> e : values.entrySet())
-			annotations(BeanAnnotation.create(e.getKey()).p(stringify(e.getValue())).build());
+	public BeanContextableBuilder beanProperties(Map<String,Object> values) {
+		bcBuilder.beanProperties(values);
 		return this;
 	}
 
@@ -753,8 +771,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanProperties(String beanClassName, String properties) {
-		return annotations(BeanAnnotation.create(beanClassName).p(properties).build());
+	public BeanContextableBuilder beanProperties(String beanClassName, String properties) {
+		bcBuilder.beanProperties(beanClassName, properties);
+		return this;
 	}
 
 	/**
@@ -805,8 +824,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		return annotations(BeanAnnotation.create(beanClass).xp(properties).build());
+	public BeanContextableBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		bcBuilder.beanPropertiesExcludes(beanClass, properties);
+		return this;
 	}
 
 	/**
@@ -859,9 +879,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		for (Map.Entry<String,Object> e : values.entrySet())
-			annotations(BeanAnnotation.create(e.getKey()).xp(stringify(e.getValue())).build());
+	public BeanContextableBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		bcBuilder.beanPropertiesExcludes(values);
 		return this;
 	}
 
@@ -915,8 +934,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		return annotations(BeanAnnotation.create(beanClassName).xp(properties).build());
+	public BeanContextableBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		bcBuilder.beanPropertiesExcludes(beanClassName, properties);
+		return this;
 	}
 
 	/**
@@ -970,8 +990,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-		return annotations(BeanAnnotation.create(beanClass).ro(properties).build());
+	public BeanContextableBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		bcBuilder.beanPropertiesReadOnly(beanClass, properties);
+		return this;
 	}
 
 	/**
@@ -1027,9 +1048,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesReadOnly(Map<String,Object> values) {
-		for (Map.Entry<String,Object> e : values.entrySet())
-			annotations(BeanAnnotation.create(e.getKey()).ro(stringify(e.getValue())).build());
+	public BeanContextableBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		bcBuilder.beanPropertiesReadOnly(values);
 		return this;
 	}
 
@@ -1086,8 +1106,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
-		return annotations(BeanAnnotation.create(beanClassName).ro(properties).build());
+	public BeanContextableBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		bcBuilder.beanPropertiesReadOnly(beanClassName, properties);
+		return this;
 	}
 
 	/**
@@ -1140,8 +1161,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-		return annotations(BeanAnnotation.create(beanClass).wo(properties).build());
+	public BeanContextableBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		bcBuilder.beanPropertiesWriteOnly(beanClass, properties);
+		return this;
 	}
 
 	/**
@@ -1196,9 +1218,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
-		for (Map.Entry<String,Object> e : values.entrySet())
-			annotations(BeanAnnotation.create(e.getKey()).wo(stringify(e.getValue())).build());
+	public BeanContextableBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		bcBuilder.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
@@ -1254,8 +1275,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
-		return annotations(BeanAnnotation.create(beanClassName).wo(properties).build());
+	public BeanContextableBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		bcBuilder.beanPropertiesWriteOnly(beanClassName, properties);
+		return this;
 	}
 
 	/**
@@ -1341,7 +1363,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextableBuilder#dictionary_replace(Object...)}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *
@@ -1350,8 +1372,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dictionary(Object...values) {
-		return prependTo(BEAN_beanDictionary, values);
+	public BeanContextableBuilder dictionary(Object...values) {
+		bcBuilder.dictionary(values);
+		return this;
 	}
 
 	/**
@@ -1365,7 +1388,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextableBuilder#dictionary(Object...)}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *
@@ -1374,8 +1397,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dictionary_replace(Object...values) {
-		return set(BEAN_beanDictionary, values);
+	public BeanContextableBuilder dictionary_replace(Object...values) {
+		bcBuilder.dictionary_replace(values);
+		return this;
 	}
 
 	/**
@@ -1422,8 +1446,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dictionaryOn(Class<?> on, Class<?>...values) {
-		return annotations(BeanAnnotation.create(on).dictionary(values).build());
+	public BeanContextableBuilder dictionaryOn(Class<?> on, Class<?>...values) {
+		bcBuilder.dictionaryOn(on, values);
+		return this;
 	}
 
 	/**
@@ -1470,8 +1495,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
-		return annotations(MarshalledAnnotation.create(pojoClass).example(json(o)).build());
+	public <T> BeanContextableBuilder example(Class<T> pojoClass, T o) {
+		bcBuilder.example(pojoClass, o);
+		return this;
 	}
 
 	/**
@@ -1519,8 +1545,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public <T> BeanContextBuilder example(Class<T> pojoClass, String json) {
-		return annotations(MarshalledAnnotation.create(pojoClass).example(json).build());
+	public <T> BeanContextableBuilder example(Class<T> pojoClass, String json) {
+		bcBuilder.example(pojoClass, json);
+		return this;
 	}
 
 	/**
@@ -1569,8 +1596,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder findFluentSetters() {
-		return set(BEAN_findFluentSetters);
+	public BeanContextableBuilder findFluentSetters() {
+		bcBuilder.findFluentSetters();
+		return this;
 	}
 
 	/**
@@ -1609,8 +1637,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder findFluentSetters(Class<?> on) {
-		return annotations(BeanAnnotation.create(on).findFluentSetters(true).build());
+	public BeanContextableBuilder findFluentSetters(Class<?> on) {
+		bcBuilder.findFluentSetters(on);
+		return this;
 	}
 
 	/**
@@ -1647,8 +1676,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder ignoreInvocationExceptionsOnGetters() {
-		return set(BEAN_ignoreInvocationExceptionsOnGetters);
+	public BeanContextableBuilder ignoreInvocationExceptionsOnGetters() {
+		bcBuilder.ignoreInvocationExceptionsOnGetters();
+		return this;
 	}
 
 	/**
@@ -1685,8 +1715,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder ignoreInvocationExceptionsOnSetters() {
-		return set(BEAN_ignoreInvocationExceptionsOnSetters);
+	public BeanContextableBuilder ignoreInvocationExceptionsOnSetters() {
+		bcBuilder.ignoreInvocationExceptionsOnSetters();
+		return this;
 	}
 
 	/**
@@ -1727,8 +1758,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder disableIgnoreMissingSetters() {
-		return set(BEAN_disableIgnoreMissingSetters);
+	public BeanContextableBuilder disableIgnoreMissingSetters() {
+		bcBuilder.disableIgnoreMissingSetters();
+		return this;
 	}
 
 	/**
@@ -1766,8 +1798,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder disableIgnoreTransientFields() {
-		return set(BEAN_disableIgnoreTransientFields);
+	public BeanContextableBuilder disableIgnoreTransientFields() {
+		bcBuilder.disableIgnoreTransientFields();
+		return this;
 	}
 
 	/**
@@ -1802,8 +1835,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder ignoreUnknownBeanProperties() {
-		return set(BEAN_ignoreUnknownBeanProperties);
+	public BeanContextableBuilder ignoreUnknownBeanProperties() {
+		bcBuilder.ignoreUnknownBeanProperties();
+		return this;
 	}
 
 	/**
@@ -1838,8 +1872,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder disableIgnoreUnknownNullBeanProperties() {
-		return set(BEAN_disableIgnoreUnknownNullBeanProperties);
+	public BeanContextableBuilder disableIgnoreUnknownNullBeanProperties() {
+		bcBuilder.disableIgnoreUnknownNullBeanProperties();
+		return this;
 	}
 
 	/**
@@ -1877,8 +1912,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		return annotations(MarshalledAnnotation.create(interfaceClass).implClass(implClass).build());
+	public BeanContextableBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
+		bcBuilder.implClass(interfaceClass, implClass);
+		return this;
 	}
 
 	/**
@@ -1916,9 +1952,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder implClasses(Map<Class<?>,Class<?>> values) {
-		for (Map.Entry<Class<?>,Class<?>> e : values.entrySet())
-			annotations(MarshalledAnnotation.create(e.getKey()).implClass(e.getValue()).build());
+	public BeanContextableBuilder implClasses(Map<Class<?>,Class<?>> values) {
+		bcBuilder.implClasses(values);
 		return this;
 	}
 
@@ -1964,8 +1999,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder interfaceClass(Class<?> on, Class<?> value) {
-		return annotations(BeanAnnotation.create(on).interfaceClass(value).build());
+	public BeanContextableBuilder interfaceClass(Class<?> on, Class<?> value) {
+		bcBuilder.interfaceClass(on, value);
+		return this;
 	}
 
 	/**
@@ -2009,9 +2045,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder interfaces(Class<?>...value) {
-		for (Class<?> v : value)
-			annotations(BeanAnnotation.create(v).interfaceClass(v).build());
+	public BeanContextableBuilder interfaces(Class<?>...value) {
+		bcBuilder.interfaces(value);
 		return this;
 	}
 
@@ -2062,8 +2097,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder locale(Locale value) {
-		return set(BEAN_locale, value);
+	public BeanContextableBuilder locale(Locale value) {
+		bcBuilder.locale(value);
+		return this;
 	}
 
 	/**
@@ -2113,8 +2149,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder mediaType(MediaType value) {
-		return set(BEAN_mediaType, value);
+	public BeanContextableBuilder mediaType(MediaType value) {
+		bcBuilder.mediaType(value);
+		return this;
 	}
 
 	/**
@@ -2172,8 +2209,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder notBeanClasses(Object...values) {
-		return addTo(BEAN_notBeanClasses, values);
+	public BeanContextableBuilder notBeanClasses(Object...values) {
+		bcBuilder.notBeanClasses(values);
+		return this;
 	}
 
 	/**
@@ -2192,8 +2230,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder notBeanClasses_replace(Object...values) {
-		return set(BEAN_notBeanClasses, values);
+	public BeanContextableBuilder notBeanClasses_replace(Object...values) {
+		bcBuilder.notBeanClasses_replace(values);
+		return this;
 	}
 
 	/**
@@ -2237,20 +2276,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder notBeanPackages(Object...values) {
-		for (Object o : values) {
-			if (o instanceof Package)
-				addTo(BEAN_notBeanPackages, ((Package) o).getName());
-			else if (o instanceof String)
-				addTo(BEAN_notBeanPackages, o.toString());
-			else if (o instanceof Collection) {
-				for (Object o2 : (Collection<?>)o)
-					notBeanPackages(o2);
-			} else if (o.getClass().isArray()) {
-				for (int i = 0; i < Array.getLength(o); i++)
-					notBeanPackages(Array.get(o, i));
-			}
-		}
+	public BeanContextableBuilder notBeanPackages(Object...values) {
+		bcBuilder.notBeanPackages(values);
 		return this;
 	}
 
@@ -2296,8 +2323,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder propertyNamer(Class<? extends PropertyNamer> value) {
-		return set(BEAN_propertyNamer, value);
+	public BeanContextableBuilder propertyNamer(Class<? extends PropertyNamer> value) {
+		bcBuilder.propertyNamer(value);
+		return this;
 	}
 
 	/**
@@ -2336,8 +2364,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-		return annotations(BeanAnnotation.create(on).propertyNamer(value).build());
+	public BeanContextableBuilder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
+		bcBuilder.propertyNamer(on, value);
+		return this;
 	}
 
 	/**
@@ -2384,8 +2413,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder sortProperties() {
-		return set(BEAN_sortProperties);
+	public BeanContextableBuilder sortProperties() {
+		bcBuilder.sortProperties();
+		return this;
 	}
 
 	/**
@@ -2422,9 +2452,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder sortProperties(Class<?>...on) {
-		for (Class<?> c : on)
-			annotations(BeanAnnotation.create(c).sort(true).build());
+	public BeanContextableBuilder sortProperties(Class<?>...on) {
+		bcBuilder.sortProperties(on);
 		return this;
 	}
 
@@ -2469,8 +2498,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder stopClass(Class<?> on, Class<?> value) {
-		return annotations(BeanAnnotation.create(on).stopClass(value).build());
+	public BeanContextableBuilder stopClass(Class<?> on, Class<?> value) {
+		bcBuilder.stopClass(on, value);
+		return this;
 	}
 
 	/**
@@ -2559,8 +2589,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder swaps(Object...values) {
-		return appendTo(BEAN_swaps, values);
+	public BeanContextableBuilder swaps(Object...values) {
+		bcBuilder.swaps(values);
+		return this;
 	}
 
 	/**
@@ -2609,8 +2640,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder timeZone(TimeZone value) {
-		return set(BEAN_timeZone, value);
+	public BeanContextableBuilder timeZone(TimeZone value) {
+		bcBuilder.timeZone(value);
+		return this;
 	}
 
 	/**
@@ -2655,8 +2687,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder typeName(Class<?> on, String value) {
-		return annotations(BeanAnnotation.create(on).typeName(value).build());
+	public BeanContextableBuilder typeName(Class<?> on, String value) {
+		bcBuilder.typeName(on, value);
+		return this;
 	}
 
 	/**
@@ -2712,8 +2745,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder typePropertyName(String value) {
-		return set(BEAN_typePropertyName, value);
+	public BeanContextableBuilder typePropertyName(String value) {
+		bcBuilder.typePropertyName(value);
+		return this;
 	}
 
 	/**
@@ -2758,8 +2792,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder typePropertyName(Class<?> on, String value) {
-		return annotations(BeanAnnotation.create(on).typePropertyName(value).build());
+	public BeanContextableBuilder typePropertyName(Class<?> on, String value) {
+		bcBuilder.typePropertyName(on, value);
+		return this;
 	}
 
 	/**
@@ -2803,8 +2838,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder useEnumNames() {
-		return set(BEAN_useEnumNames);
+	public BeanContextableBuilder useEnumNames() {
+		bcBuilder.useEnumNames();
+		return this;
 	}
 
 	/**
@@ -2823,8 +2859,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder disableInterfaceProxies() {
-		return set(BEAN_disableInterfaceProxies);
+	public BeanContextableBuilder disableInterfaceProxies() {
+		bcBuilder.disableInterfaceProxies();
+		return this;
 	}
 
 	/**
@@ -2850,113 +2887,117 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder useJavaBeanIntrospector() {
-		return set(BEAN_useJavaBeanIntrospector);
+	public BeanContextableBuilder useJavaBeanIntrospector() {
+		bcBuilder.useJavaBeanIntrospector();
+		return this;
 	}
 
-	// <FluentSetters>
+	@Override
+	public BeanContextableBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		bcBuilder.applyAnnotations(al.filter(x -> x.isType(BeanConfig.class)), r);
+		super.applyAnnotations(al.filter(x -> ! x.isType(BeanConfig.class)), r);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder add(Map<String,Object> properties) {
+	public BeanContextableBuilder add(Map<String,Object> properties) {
+		bcBuilder.add(properties);
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder addTo(String name, Object value) {
+	public BeanContextableBuilder addTo(String name, Object value) {
+		bcBuilder.addTo(name, value);
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder annotations(Annotation...value) {
+	public BeanContextableBuilder annotations(Annotation...value) {
+		bcBuilder.annotations(value);
 		super.annotations(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder appendTo(String name, Object value) {
+	public BeanContextableBuilder appendTo(String name, Object value) {
+		bcBuilder.appendTo(name, value);
 		super.appendTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder apply(ContextProperties copyFrom) {
+	public BeanContextableBuilder apply(ContextProperties copyFrom) {
+		bcBuilder.apply(copyFrom);
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
-		super.applyAnnotations(fromClasses);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(Method...fromMethods) {
-		super.applyAnnotations(fromMethods);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder debug() {
+	public BeanContextableBuilder debug() {
+		bcBuilder.debug();
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder prependTo(String name, Object value) {
+	public BeanContextableBuilder prependTo(String name, Object value) {
+		bcBuilder.prependTo(name, value);
 		super.prependTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder putAllTo(String name, Object value) {
+	public BeanContextableBuilder putAllTo(String name, Object value) {
+		bcBuilder.putAllTo(name, value);
 		super.putAllTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder putTo(String name, String key, Object value) {
+	public BeanContextableBuilder putTo(String name, String key, Object value) {
+		bcBuilder.putTo(name, key, value);
 		super.putTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder removeFrom(String name, Object value) {
+	public BeanContextableBuilder removeFrom(String name, Object value) {
+		bcBuilder.removeFrom(name, value);
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(String name) {
+	public BeanContextableBuilder set(String name) {
+		bcBuilder.set(name);
 		super.set(name);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(Map<String,Object> properties) {
+	public BeanContextableBuilder set(Map<String,Object> properties) {
+		bcBuilder.set(properties);
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(String name, Object value) {
+	public BeanContextableBuilder set(String name, Object value) {
+		bcBuilder.set(name, value);
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder unset(String name) {
+	public BeanContextableBuilder unset(String name) {
+		bcBuilder.unset(name);
 		super.unset(name);
 		return this;
 	}
+
+	// <FluentSetters>
 
 	// </FluentSetters>
 }
