@@ -14,67 +14,50 @@
 package org.apache.juneau.testutils;
 
 import java.io.*;
-import java.util.*;
-import java.util.function.*;
 
-import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 
 /**
- * Utility class for creating mocked writer serializers.
+ * Utility class for creating mocked reader parsers.
  */
-public class MockWriterSerializer extends WriterSerializer {
+public class MockReaderParser extends ReaderParser {
 
-	private final MockWriterSerializerFunction function;
-	private final Function<SerializerSession,Map<String,String>> headers;
+	private final MockReaderParserFunction function;
 
-	protected MockWriterSerializer(Builder builder) {
+	protected MockReaderParser(Builder builder) {
 		super(builder);
 		this.function = builder.function;
-		this.headers = builder.headers;
 	}
 
 	public static Builder create() {
 		return new Builder();
 	}
 
-	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new WriterSerializerSession(this, args) {
-			@Override /* SerializerSession */
-			protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-				out.getWriter().write(function.apply(this,o));
-			}
-			@Override /* SerializerSession */
-			public Map<String,String> getResponseHeaders() {
-				return headers.apply(this);
+	@Override /* Parser */
+	public ReaderParserSession createSession(ParserSessionArgs args) {
+		return new ReaderParserSession(this, args) {
+			@Override
+			@SuppressWarnings("unchecked")
+			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+				if (function != null)
+					return (T)function.apply(this, pipe.asString(), type);
+				return null;
 			}
 		};
 	}
 
-	public static class Builder extends WriterSerializerBuilder {
-		MockWriterSerializerFunction function = (s,o) -> StringUtils.stringify(o);
-		Function<SerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
+	public static class Builder extends ReaderParserBuilder {
+		MockReaderParserFunction function;
 
-		public Builder function(MockWriterSerializerFunction function) {
+		public Builder function(MockReaderParserFunction function) {
 			this.function = function;
 			return this;
 		}
 
-		public Builder headers(Function<SerializerSession,Map<String,String>> headers) {
-			this.headers = headers;
-			return this;
-		}
-
 		@Override
-		public Builder produces(String value) {
-			super.produces(value);
-			return this;
-		}
-
-		@Override
-		public Builder accept(String value) {
-			super.accept(value);
+		public Builder consumes(String value) {
+			super.consumes(value);
 			return this;
 		}
 	}

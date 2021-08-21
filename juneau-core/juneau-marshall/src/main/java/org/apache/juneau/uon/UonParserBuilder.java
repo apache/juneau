@@ -38,6 +38,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 */
 	public UonParserBuilder() {
 		super();
+		consumes("text/uon");
+		contextClass(UonParser.class);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 
 	@Override /* ContextBuilder */
 	public UonParser build() {
-		return build(UonParser.class);
+		return (UonParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -22,7 +22,6 @@ import java.util.*;
 
 import javax.servlet.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.Messages;
 import org.apache.juneau.encoders.*;
@@ -279,8 +278,8 @@ public class RestOp_Params_Test {
 	}
 
 	public static class B1b extends PlainTextParser {
-		public B1b(ContextProperties cp) {
-			super(cp, "*/*");
+		protected B1b(PlainTextParserBuilder b) {
+			super(b.consumes("*/*"));
 		}
 	}
 

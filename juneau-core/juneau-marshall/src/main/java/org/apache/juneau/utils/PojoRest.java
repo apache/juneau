@@ -162,7 +162,7 @@ public final class PojoRest {
 	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
 	 */
 	public PojoRest(Object o, ReaderParser parser) {
-		this.session = parser == null ? BeanContext.DEFAULT_SESSION : parser.createBeanSession();
+		this.session = parser == null ? BeanContext.DEFAULT_SESSION : parser.getBeanContext().createBeanSession();
 		if (parser == null)
 			parser = JsonParser.DEFAULT;
 		this.parser = parser;

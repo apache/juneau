@@ -41,6 +41,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	public RdfParserBuilder() {
 		super();
+		contextClass(RdfParser.class);
 	}
 
 	/**
@@ -54,12 +55,18 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	@Override /* ContextBuilder */
 	public RdfParser build() {
-		return build(RdfParser.class);
+		return (RdfParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public RdfParserBuilder consumes(String value) {
+		super.consumes(value);
+		return this;
+	}
 
 	/**
 	 * XML namespace for Juneau properties.

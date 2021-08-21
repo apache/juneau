@@ -14,15 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.IOException;
-
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -214,25 +211,7 @@ public class Header_ContentType_Test {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class DummyParser extends ReaderParser {
-		String name;
-		DummyParser(ContextProperties cp, String name, String...consumes) {
-			super(cp, consumes);
-			this.name = name;
-		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return (T)name;
-				}
-			};
-		}
-	}
-
-	public static class P1 extends DummyParser { public P1(ContextProperties cp) {super(cp, "p1", "text/p1");}}
-	public static class P2 extends DummyParser { public P2(ContextProperties cp) {super(cp, "p2", "text/p2");}}
-	public static class P3 extends DummyParser { public P3(ContextProperties cp) {super(cp, "p3", "text/p3");}}
+	public static class P1 extends MockReaderParser { protected P1(MockReaderParser.Builder b) {super(b.consumes("text/p1").function((session,in,type)->"p1"));}}
+	public static class P2 extends MockReaderParser { protected P2(MockReaderParser.Builder b) {super(b.consumes("text/p2").function((session,in,type)->"p2"));}}
+	public static class P3 extends MockReaderParser { protected P3(MockReaderParser.Builder b) {super(b.consumes("text/p3").function((session,in,type)->"p3"));}}
 }

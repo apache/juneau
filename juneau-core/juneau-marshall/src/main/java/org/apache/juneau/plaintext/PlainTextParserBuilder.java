@@ -35,6 +35,8 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	 */
 	public PlainTextParserBuilder() {
 		super();
+		consumes("text/plain");
+		contextClass(PlainTextParser.class);
 	}
 
 	/**
@@ -48,7 +50,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 
 	@Override /* ContextBuilder */
 	public PlainTextParser build() {
-		return build(PlainTextParser.class);
+		return (PlainTextParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -56,6 +58,11 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
+
+	@Override
+	public PlainTextParserBuilder consumes(String value) {
+		return (PlainTextParserBuilder)super.consumes(value);
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public PlainTextParserBuilder add(Map<String,Object> properties) {

@@ -180,7 +180,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final XmlParser DEFAULT = new XmlParser(ContextProperties.DEFAULT);
+	public static final XmlParser DEFAULT = new XmlParser(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -200,23 +200,12 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
+	 * @param builder
 	 * 	The property store containing all the settings for this object.
 	 */
-	public XmlParser(ContextProperties cp) {
-		this(cp, "text/xml", "application/xml");
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param consumes
-	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
-	 */
-	public XmlParser(ContextProperties cp, String...consumes) {
-		super(cp, consumes);
+	protected XmlParser(XmlParserBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		validating = cp.getBoolean(XML_validating).orElse(false);
 		preserveRootElement = cp.getBoolean(XML_preserveRootElement).orElse(false);
 		reporter = cp.getInstance(XML_reporter, XMLReporter.class).orElse(null);

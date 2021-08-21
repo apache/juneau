@@ -12,19 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.IOException;
-
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -34,67 +30,27 @@ public class Restx_Parsers_Test {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class PA extends ReaderParser {
-		public PA(ContextProperties cp) {
-			super(cp, "text/a");
-		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return (T)("text/a - " + read(pipe.getReader()).trim());
-				}
-			};
+	public static class PA extends MockReaderParser {
+		protected PA(MockReaderParser.Builder b) {
+			super(b.consumes("text/a").function((session,in,type)->"text/a - " + in));
 		}
 	}
 
-	public static class PB extends ReaderParser {
-		public PB(ContextProperties cp) {
-			super(cp, "text/b");
-		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return (T)("text/b - " + read(pipe.getReader()).trim());
-				}
-			};
+	public static class PB extends MockReaderParser {
+		protected PB(MockReaderParser.Builder b) {
+			super(b.consumes("text/b").function((session,in,type)->"text/b - " + in));
 		}
 	}
 
-	public static class PC extends ReaderParser {
-		public PC(ContextProperties cp) {
-			super(cp, "text/c");
-		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return (T)("text/c - " + read(pipe.getReader()).trim());
-				}
-			};
+	public static class PC extends MockReaderParser {
+		protected PC(MockReaderParser.Builder b) {
+			super(b.consumes("text/c").function((session,in,type)->"text/c - " + in));
 		}
 	}
 
-	public static class PD extends ReaderParser {
-		public PD(ContextProperties cp) {
-			super(cp, "text/d");
-		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return (T)("text/d - " + read(pipe.getReader()).trim());
-				}
-			};
+	public static class PD extends MockReaderParser {
+		protected PD(MockReaderParser.Builder b) {
+			super(b.consumes("text/d").function((session,in,type)->"text/d - " + in));
 		}
 	}
 
@@ -188,26 +144,11 @@ public class Restx_Parsers_Test {
 	// Test parser inheritance.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class DummyParser extends ReaderParser {
-		public DummyParser(String...consumes) {
-			super(ContextProperties.DEFAULT, consumes);
-		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return null;
-				}
-			};
-		}
-	}
-
-	public static class P1 extends DummyParser{ public P1(ContextProperties cp) {super("text/p1");} }
-	public static class P2 extends DummyParser{ public P2(ContextProperties cp) {super("text/p2");} }
-	public static class P3 extends DummyParser{ public P3(ContextProperties cp) {super("text/p3");} }
-	public static class P4 extends DummyParser{ public P4(ContextProperties cp) {super("text/p4");} }
-	public static class P5 extends DummyParser{ public P5(ContextProperties cp) {super("text/p5");} }
+	public static class P1 extends MockReaderParser{ protected P1(MockReaderParser.Builder b) {super(b.consumes("text/p1"));} }
+	public static class P2 extends MockReaderParser{ protected P2(MockReaderParser.Builder b) {super(b.consumes("text/p2"));} }
+	public static class P3 extends MockReaderParser{ protected P3(MockReaderParser.Builder b) {super(b.consumes("text/p3"));} }
+	public static class P4 extends MockReaderParser{ protected P4(MockReaderParser.Builder b) {super(b.consumes("text/p4"));} }
+	public static class P5 extends MockReaderParser{ protected P5(MockReaderParser.Builder b) {super(b.consumes("text/p5"));} }
 
 	@Rest(parsers={P1.class,P2.class})
 	public static class B {}

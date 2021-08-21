@@ -38,6 +38,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 */
 	public OpenApiParserBuilder() {
 		super();
+		consumes("text/openapi");
+		contextClass(OpenApiParser.class);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 
 	@Override /* ContextBuilder */
 	public OpenApiParser build() {
-		return build(OpenApiParser.class);
+		return (OpenApiParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

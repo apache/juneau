@@ -146,10 +146,10 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT = new JsonParser(ContextProperties.DEFAULT);
+	public static final JsonParser DEFAULT = new JsonParser(create());
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(ContextProperties.DEFAULT);
+	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -162,14 +162,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Strict(ContextProperties cp) {
-			super(cp.copy().setDefault(PARSER_strict, true).setDefault(JSON_validateEnd, true).build());
+		protected Strict(JsonParserBuilder builder) {
+			super(builder.strict().validateEnd());
 		}
 	}
-
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -182,20 +180,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public JsonParser(ContextProperties cp) {
-		this(cp, "application/json", "text/json");
-	}
+	protected JsonParser(JsonParserBuilder builder) {
+		super(builder);
 
-	/**
-	 * Constructor.
-	 *
-	 * @param cp The property store containing all the settings for this object.
-	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
-	 */
-	public JsonParser(ContextProperties cp, String...consumes) {
-		super(cp, consumes);
+		ContextProperties cp = getContextProperties();
 		validateEnd = cp.getBoolean(JSON_validateEnd).orElse(false);
 	}
 

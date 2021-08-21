@@ -47,6 +47,11 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		super(copyFrom);
 	}
 
+	@Override /* ContextBuilder */
+	public InputStreamParser build() {
+		return (InputStreamParser)super.build();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -556,9 +561,4 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	// </FluentSetters>
-
-	@Override /* Context */
-	public InputStreamParser build() {
-		return null;
-	}
 }

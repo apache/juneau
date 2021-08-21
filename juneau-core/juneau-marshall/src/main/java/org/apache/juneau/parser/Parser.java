@@ -20,6 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
@@ -114,15 +115,29 @@ import org.apache.juneau.utils.*;
  * </table>
  */
 @ConfigurableContext
-public abstract class Parser extends BeanContext {
+public abstract class Parser extends BeanContextable {
 
 	/**
 	 * Represents no Parser.
 	 */
 	public static abstract class Null extends Parser {
-		private Null(ContextProperties cp, String[] consumes) {
-			super(cp, consumes);
+		private Null(ParserBuilder builder) {
+			super(builder);
 		}
+	}
+
+	/**
+	 * Instantiates a builder of the specified parser class.
+	 *
+	 * <p>
+	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
+	 * or protected constructor of the class.
+	 *
+	 * @param c The builder to create.
+	 * @return A new builder.
+	 */
+	public static ParserBuilder createParserBuilder(Class<? extends Parser> c) {
+		return (ParserBuilder)Context.createBuilder(c);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -294,13 +309,6 @@ public abstract class Parser extends BeanContext {
 	 */
 	public static final String PARSER_unbuffered = PREFIX + ".unbuffered.b";
 
-	static Parser DEFAULT = new Parser(ContextProperties.create().build()) {
-		@Override
-		public ParserSession createSession(ParserSessionArgs args) {
-			throw new NoSuchMethodError();
-		}
-	};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -312,21 +320,26 @@ public abstract class Parser extends BeanContext {
 	/** General parser properties currently set on this parser. */
 	private final MediaType[] consumes;
 
+	final String _consumes;
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
-	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
+	 * @param builder The builder this object.
 	 */
-	protected Parser(ContextProperties cp, String...consumes) {
-		super(cp);
+	protected Parser(ParserBuilder builder) {
+		super(builder);
 
+		_consumes = builder.consumes;
+		ContextProperties cp = getContextProperties();
 		trimStrings = cp.getBoolean(PARSER_trimStrings).orElse(false);
 		strict = cp.getBoolean(PARSER_strict).orElse(false);
 		autoCloseStreams = cp.getBoolean(PARSER_autoCloseStreams).orElse(false);
 		debugOutputLines = cp.getInteger(PARSER_debugOutputLines).orElse(5);
 		unbuffered = cp.getBoolean(PARSER_unbuffered).orElse(false);
 		listener = cp.getClass(PARSER_listener, ParserListener.class).orElse(null);
+
+		String[] consumes = StringUtils.split(builder.consumes, ',');
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
 			this.consumes[i] = MediaType.of(consumes[i]);

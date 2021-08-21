@@ -14,9 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -70,39 +67,15 @@ public class Header_AcceptCharset_Test {
 			return in;
 		}
 
-		public static class TestParser extends InputStreamParser {
-			public TestParser(ContextProperties cp) {
-				super(cp, "text/plain");
-			}
-			@Override /* Parser */
-			public InputStreamParserSession createSession(final ParserSessionArgs args) {
-				return new InputStreamParserSession(args) {
-					@Override /* ParserSession */
-					@SuppressWarnings("unchecked")
-					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-						SessionProperties sp = getSessionProperties();
-						return (T)sp.get(ReaderParser.RPARSER_streamCharset).get().toString();
-					}
-				};
+		public static class TestParser extends MockStreamParser {
+			protected TestParser(MockStreamParser.Builder builder) {
+				super(builder.consumes("text/plain").function((session,in,type) -> session.getSessionProperties().get(ReaderParser.RPARSER_streamCharset).get().toString()));
 			}
 		}
 
 		public static class TestSerializer extends MockStreamSerializer {
 			protected TestSerializer(MockStreamSerializer.Builder builder) {
-				super(builder.produces("text/plain"));
-			}
-			@Override /* Serializer */
-			public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
-				return new OutputStreamSerializerSession(this, args) {
-					@Override /* SerializerSession */
-					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-						SessionProperties sp = getSessionProperties();
-						try (Writer w = new OutputStreamWriter(out.getOutputStream())) {
-							Object sc = sp.get(WriterSerializer.WSERIALIZER_streamCharset).orElse(null);
-							w.append(o.toString()).append('/').append(sc == null ? null : sc.toString());
-						}
-					}
-				};
+				super(builder.produces("text/plain").function((session,o) -> (o.toString() + "/" + session.getSessionProperties().get(WriterSerializer.WSERIALIZER_streamCharset).orElse(null)).getBytes()));
 			}
 		}
 	}

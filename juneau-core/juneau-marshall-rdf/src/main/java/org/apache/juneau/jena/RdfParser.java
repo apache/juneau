@@ -108,8 +108,9 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * @param cp The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public RdfParser(ContextProperties cp, String...consumes) {
-		super(cp, consumes);
+	protected RdfParser(RdfParserBuilder builder) {
+		super((RdfParserBuilder) builder.consumes(getConsumes(builder)));
+		ContextProperties cp = getContextProperties();
 		trimWhitespace = cp.getBoolean(RDF_trimWhitespace).orElse(false);
 		looseCollections = cp.getBoolean(RDF_looseCollections).orElse(false);
 		rdfLanguage = cp.getString(RDF_language).orElse("RDF/XML-ABBREV");
@@ -124,16 +125,10 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 		jenaProperties = m.unmodifiable();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param cp The property store containing all the settings for this object.
-	 */
-	public RdfParser(ContextProperties cp) {
-		this(cp, getConsumes(cp));
-	}
-
-	private static String getConsumes(ContextProperties cp) {
+	private static String getConsumes(RdfParserBuilder builder) {
+		if (builder.getConsumes() != null)
+			return builder.getConsumes();
+		ContextProperties cp = builder.getContextProperties();
 		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML":

@@ -13,61 +13,51 @@
 package org.apache.juneau.testutils;
 
 import java.io.*;
-import java.util.*;
-import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.parser.*;
 
 /**
- * Utility class for creating mocked stream serializers.
+ * Utility class for creating mocked stream parser.
  */
-public class MockStreamSerializer extends OutputStreamSerializer {
+public class MockStreamParser extends InputStreamParser {
 
-	private final MockStreamSerializerFunction function;
+	private final MockStreamParserFunction function;
 
-	protected MockStreamSerializer(Builder builder) {
+	protected MockStreamParser(Builder builder) {
 		super(builder);
-		function = builder.function;
+		this.function = builder.function;
 	}
 
 	public static Builder create() {
 		return new Builder();
 	}
 
-	@Override /* Serializer */
-	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
-		return new OutputStreamSerializerSession(this, args) {
-			@Override /* SerializerSession */
-			protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-				out.getOutputStream().write(function.apply(this, o));
+	@Override /* Parser */
+	public InputStreamParserSession createSession(ParserSessionArgs args) {
+		return new InputStreamParserSession(this, args) {
+			@SuppressWarnings("unchecked")
+			@Override
+			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+				if (function != null)
+					return (T)function.apply(this, IOUtils.readBytes(pipe.getInputStream()), type);
+				return null;
 			}
 		};
 	}
 
-	public static class Builder extends OutputStreamSerializerBuilder {
-		MockStreamSerializerFunction function = (s,o) -> StringUtils.stringify(o).getBytes();
-		Function<SerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
+	public static class Builder extends InputStreamParserBuilder {
+		MockStreamParserFunction function;
 
-		public Builder function(MockStreamSerializerFunction function) {
-			this.function = function;
-			return this;
-		}
-
-		public Builder headers(Function<SerializerSession,Map<String,String>> headers) {
-			this.headers = headers;
+		public Builder function(MockStreamParserFunction value) {
+			function = value;
 			return this;
 		}
 
 		@Override
-		public Builder produces(String value) {
-			super.produces(value);
-			return this;
-		}
-
-		@Override
-		public Builder accept(String value) {
-			super.accept(value);
+		public Builder consumes(String value) {
+			super.consumes(value);
 			return this;
 		}
 	}

@@ -42,6 +42,8 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 */
 	public XmlParserBuilder() {
 		super();
+		consumes("text/xml,application/xml");
+		contextClass(XmlParser.class);
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 
 	@Override /* ContextBuilder */
 	public XmlParser build() {
-		return build(XmlParser.class);
+		return (XmlParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

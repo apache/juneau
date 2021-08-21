@@ -48,7 +48,7 @@ public class Nls_Test {
 	}
 	public static class A1 extends MockWriterSerializer {
 		protected A1(MockWriterSerializer.Builder builder) {
-			super(builder.accept("*/*").serialize((s,o)->out(s)));
+			super(builder.accept("*/*").function((s,o)->out(s)));
 		}
 
 		public static String out(SerializerSession s) {

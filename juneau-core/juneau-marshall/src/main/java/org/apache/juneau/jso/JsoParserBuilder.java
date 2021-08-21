@@ -34,6 +34,8 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	 */
 	public JsoParserBuilder() {
 		super();
+		consumes("application/x-java-serialized-object");
+		contextClass(JsoParser.class);
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 
 	@Override /* ContextBuilder */
 	public JsoParser build() {
-		return build(JsoParser.class);
+		return (JsoParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

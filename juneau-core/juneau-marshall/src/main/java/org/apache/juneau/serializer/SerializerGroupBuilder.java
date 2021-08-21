@@ -37,6 +37,15 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
+	 * Clone an existing serializer group builder.
+	 *
+	 * @param copyFrom The serializer group that we're copying settings and serializers from.
+	 */
+	public SerializerGroupBuilder(SerializerGroup copyFrom) {
+		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
+	}
+
+	/**
 	 * Associates an existing bean context builder with all serializer builders in this group.
 	 *
 	 * @param value The bean contest builder to associate.
@@ -46,15 +55,6 @@ public class SerializerGroupBuilder {
 		bcBuilder = value;
 		forEach(x -> x.beanContextBuilder(value));
 		return this;
-	}
-
-	/**
-	 * Clone an existing serializer group builder.
-	 *
-	 * @param copyFrom The serializer group that we're copying settings and serializers from.
-	 */
-	public SerializerGroupBuilder(SerializerGroup copyFrom) {
-		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
 	}
 
 	/**

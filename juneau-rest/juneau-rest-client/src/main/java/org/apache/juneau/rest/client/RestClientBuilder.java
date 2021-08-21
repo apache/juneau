@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
@@ -99,8 +98,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private boolean pooled;
 
 	SerializerGroupBuilder serializerGroupBuilder;
+	ParserGroupBuilder parserGroupBuilder;
+
 	SerializerBuilder partSerializerBuilder;
+	ParserBuilder partParserBuilder;
+
 	HttpPartSerializer simplePartSerializer;
+	HttpPartParser simplePartParser;
+
 
 	/**
 	 * Constructor.
@@ -114,7 +119,9 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		this.formData = PartList.create();
 		this.pathData = PartList.create();
 		this.serializerGroupBuilder = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
+		this.parserGroupBuilder = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
 		this.partSerializerBuilder = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
+		this.partParserBuilder = (ParserBuilder) OpenApiParser.create().beanContextBuilder(getBeanContextBuilder());
 		contextClass(RestClient.class);
 	}
 
@@ -132,10 +139,16 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		this.formData = copyFrom.formData.copy();
 		this.pathData = copyFrom.pathData.copy();
 		this.serializerGroupBuilder = copyFrom.serializers.copy().beanContextBuilder(getBeanContextBuilder());
+		this.parserGroupBuilder = copyFrom.parsers.copy().beanContextBuilder(getBeanContextBuilder());
 		if (copyFrom.partSerializer instanceof Serializer) {
 			this.partSerializerBuilder = (SerializerBuilder) ((Serializer)copyFrom.partSerializer).copy().beanContextBuilder(getBeanContextBuilder());
 		} else {
 			this.simplePartSerializer = copyFrom.partSerializer;
+		}
+		if (copyFrom.partParser instanceof Parser) {
+			this.partParserBuilder = (ParserBuilder) ((Parser)copyFrom.partParser).copy().beanContextBuilder(getBeanContextBuilder());
+		} else {
+			this.simplePartParser = copyFrom.partParser;
 		}
 		contextClass(copyFrom.getClass());
 	}
@@ -2856,7 +2869,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshall
 	 *
 	 * <p>
-	 * Shortcut for specifying the serializers and {@link RestClient#RESTCLIENT_parsers}
+	 * Shortcut for specifying the serializers and parsers
 	 * using the serializer and parser defined in a marshall.
 	 *
 	 * <ul class='notes'>
@@ -2888,7 +2901,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshalls
 	 *
 	 * <p>
-	 * Shortcut for specifying the serializers and {@link RestClient#RESTCLIENT_parsers}
+	 * Shortcut for specifying the serializers and parsers
 	 * using the serializer and parser defined in a marshall.
 	 *
 	 * <ul class='notes'>
@@ -2941,10 +2954,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
@@ -2979,10 +2988,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
 	 * 		.build();
 	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
@@ -3022,10 +3027,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
@@ -3034,7 +3035,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-		return prependTo(RESTCLIENT_parsers, value);
+		parserGroupBuilder.append(value);
+		return this;
 	}
 
 	/**
@@ -3065,10 +3067,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
@@ -3076,7 +3074,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder parsers(Parser...value) {
-		return prependTo(RESTCLIENT_parsers, value);
+		parserGroupBuilder.append(value);
+		return this;
 	}
 
 	/**
@@ -3106,9 +3105,19 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	<br>The default value is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
-		return set(RESTCLIENT_partParser, value);
+		if (Parser.class.isAssignableFrom(value))
+			this.partParserBuilder = Parser.createParserBuilder((Class<? extends Parser>)value);
+		else {
+			try {
+				this.simplePartParser = ClassInfo.of(value).getPublicConstructor().invoke();
+			} catch (ExecutableException e) {
+				throw new ConfigException(e, "Could not instantiate HttpPartParser class {0}", value);
+			}
+		}
+		return this;
 	}
 
 	/**
@@ -3140,7 +3149,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder partParser(HttpPartParser value) {
-		return set(RESTCLIENT_partParser, value);
+		simplePartParser = value;
+		return this;
 	}
 
 	/**
@@ -4454,7 +4464,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder debugOutputLines(int value) {
-		set(PARSER_debugOutputLines, value);
+		parserGroupBuilder.forEach(x -> x.debugOutputLines(value));
 		return this;
 	}
 
@@ -4520,7 +4530,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder strict() {
-		return set(PARSER_strict);
+		parserGroupBuilder.forEach(x -> x.strict());
+		return this;
 	}
 
 	/**
@@ -4557,7 +4568,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnRead() {
-		return set(PARSER_trimStrings);
+		parserGroupBuilder.forEach(x -> x.trimStrings());
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4628,6 +4640,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		serializerGroupBuilder.forEach(OpenApiSerializerBuilder.class, x -> x.format(value));
 		if (partSerializerBuilder instanceof OpenApiSerializerBuilder)
 			((OpenApiSerializerBuilder)partSerializerBuilder).format(value);
+		if (partParserBuilder instanceof OpenApiParserBuilder)
+			((OpenApiParserBuilder)partParserBuilder).format(value);
 		return this;
 	}
 
@@ -4690,6 +4704,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		serializerGroupBuilder.forEach(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
 		if (partSerializerBuilder instanceof OpenApiSerializerBuilder)
 			((OpenApiSerializerBuilder)partSerializerBuilder).collectionFormat(value);
+		if (partParserBuilder instanceof OpenApiParserBuilder)
+			((OpenApiParserBuilder)partParserBuilder).collectionFormat(value);
 		return this;
 	}
 

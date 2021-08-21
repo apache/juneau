@@ -41,16 +41,6 @@ public abstract class InputStreamParserSession extends ParserSession {
 		this.ctx = ctx;
 	}
 
-	/**
-	 * Constructor for sessions that don't require context.
-	 *
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected InputStreamParserSession(ParserSessionArgs args) {
-		this(InputStreamParser.DEFAULT, args);
-	}
-
 	@Override /* ParserSession */
 	public final boolean isReaderParser() {
 		return false;

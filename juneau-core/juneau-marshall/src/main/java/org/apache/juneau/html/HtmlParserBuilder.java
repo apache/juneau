@@ -38,6 +38,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	 */
 	public HtmlParserBuilder() {
 		super();
+		consumes("text/html,text/html+stripped");
+		contextClass(HtmlParser.class);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 
 	@Override /* ContextBuilder */
 	public HtmlParser build() {
-		return build(HtmlParser.class);
+		return (HtmlParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

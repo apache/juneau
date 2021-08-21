@@ -20,7 +20,6 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
@@ -1576,51 +1575,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static final String RESTCLIENT_logRequestsPredicate = PREFIX + "logRequestsPredicate.o";
 
 	/**
-	 * Configuration property:  Parsers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_parsers RESTCLIENT_parsers}
-	 * 	<li><b>Name:</b>  <js>"RestClient.parsers.lo"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.parser.Parser}&gt;</c>
-	 * 			<li>{@link org.apache.juneau.parser.Parser}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  No parsers.
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#parser(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#parser(Parser)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#parsers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#parsers(Parser...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Associates the specified {@link Parser Parsers} with the HTTP client.
-	 *
-	 * <p>
-	 * The parsers are used to parse the HTTP response body into a POJO.
-	 *
-	 * <p>
-	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
-	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_parsers = PREFIX + "parsers.lo";
-
-	/**
 	 * Configuration property:  Part parser.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1803,7 +1757,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private final BeanStore beanStore;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	final HttpPartSerializer partSerializer;
-	private final HttpPartParser partParser;
+	final HttpPartParser partParser;
 	private final RestCallHandler callHandler;
 	private final String rootUri;
 	private volatile boolean isClosed = false;
@@ -1857,7 +1811,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param builder The builder for this client.
 	 */
-	@SuppressWarnings("unchecked")
 	public RestClient(RestClientBuilder builder) {
 		super(builder);
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
@@ -1889,27 +1842,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		this.logRequestsPredicate = cp.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		this.serializers = builder.serializerGroupBuilder.build();
-
-		ParserGroupBuilder pgb = ParserGroup.create();
-		for (Object o : cp.getArray(RESTCLIENT_parsers, Object.class).orElse(new Object[0])) {
-			if (o instanceof Parser) {
-				pgb.append((Parser)o);  // Don't apply ContextProperties.
-			} else if (o instanceof Class) {
-				Class<?> c = (Class<?>)o;
-				if (! Parser.class.isAssignableFrom(c))
-					throw new ConfigException("RESTCLIENT_parsers property had invalid class of type ''{0}''", className(c));
-				pgb.append(ContextCache.INSTANCE.create((Class<? extends Parser>)o, cp));
-			} else {
-				throw new ConfigException("RESTCLIENT_parsers property had invalid object of type ''{0}''", className(o));
-			}
-		}
-		this.parsers = pgb.build();
+		this.parsers = builder.parserGroupBuilder.build();
 
 		this.urlEncodingSerializer = UrlEncodingSerializer.create().apply(cp).build();
 
 		this.partSerializer = builder.simplePartSerializer != null ? builder.simplePartSerializer : (HttpPartSerializer) builder.partSerializerBuilder.build();
 
-		this.partParser = cp.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bs).orElseGet(bs.createBeanSupplier(OpenApiParser.class));
+		this.partParser = builder.simplePartParser != null ? builder.simplePartParser : (HttpPartParser) builder.partParserBuilder.build();
+
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
 		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.createBeanSupplier(BasicRestCallHandler.class));
@@ -3725,6 +3665,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		if (o == null) {
 			if (Serializer.class.isAssignableFrom(c)) {
 				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).apply(getContextProperties()).build();
+			} else if (Parser.class.isAssignableFrom(c)) {
+				o = Parser.createParserBuilder((Class<? extends Parser>)c).apply(getContextProperties()).build();
 			} else {
 				o = ContextCache.INSTANCE.create(c, getContextProperties());
 			}

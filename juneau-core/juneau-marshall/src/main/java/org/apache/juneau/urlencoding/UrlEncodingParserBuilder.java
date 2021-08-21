@@ -38,6 +38,9 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 */
 	public UrlEncodingParserBuilder() {
 		super();
+		decoding();
+		consumes("application/x-www-form-urlencoded");
+		contextClass(UrlEncodingParser.class);
 	}
 
 	/**
@@ -51,7 +54,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	@Override /* ContextBuilder */
 	public UrlEncodingParser build() {
-		return build(UrlEncodingParser.class);
+		return (UrlEncodingParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

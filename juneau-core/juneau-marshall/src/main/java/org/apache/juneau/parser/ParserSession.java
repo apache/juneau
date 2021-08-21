@@ -60,23 +60,13 @@ public abstract class ParserSession extends BeanSession {
 	 * 	Runtime session arguments.
 	 */
 	protected ParserSession(Parser ctx, ParserSessionArgs args) {
-		super(ctx, args == null ? ParserSessionArgs.DEFAULT : args);
+		super(ctx.getBeanContext(), args == null ? ParserSessionArgs.DEFAULT : args);
 		args = args == null ? ParserSessionArgs.DEFAULT : args;
 		this.ctx = ctx;
 		SessionProperties sp = getSessionProperties();
 		javaMethod = args.javaMethod;
 		outer = args.outer;
 		listener = sp.getInstance(PARSER_listener, ParserListener.class).orElseGet(()->ClassUtils.castOrCreate(ParserListener.class, ctx.getListener()));
-	}
-
-	/**
-	 * Default constructor.
-	 *
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected ParserSession(ParserSessionArgs args) {
-		this(Parser.DEFAULT, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

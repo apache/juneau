@@ -44,7 +44,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OpenApiParser}. */
-	public static final OpenApiParser DEFAULT = new OpenApiParser(ContextProperties.DEFAULT);
+	public static final OpenApiParser DEFAULT = new OpenApiParser(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -59,22 +59,11 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public OpenApiParser(ContextProperties cp) {
-		this(cp, "text/openapi");
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param consumes
-	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
-	 */
-	public OpenApiParser(ContextProperties cp, String...consumes) {
-		super(cp, consumes);
+	protected OpenApiParser(OpenApiParserBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		format = cp.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
 		collectionFormat = cp.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}

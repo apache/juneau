@@ -91,7 +91,7 @@ public class OpenApiParserSession extends UonParserSession {
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
 			t = type.getPrimitiveDefault();
-		schema.validateOutput(t, ctx);
+		schema.validateOutput(t, ctx.getBeanContext());
 
 		if (isOptional)
 			t = (T)Optional.ofNullable(t);
@@ -297,7 +297,7 @@ public class OpenApiParserSession extends UonParserSession {
 				}
 
 				if (type.isBean()) {
-					BeanMap<T> m = ctx.createBeanSession().newBeanMap(type.getInnerClass());
+					BeanMap<T> m = ctx.getBeanContext().createBeanSession().newBeanMap(type.getInnerClass());
 					for (String s : ss) {
 						String[] kv = split(s, '=', 2);
 						if (kv.length != 2)

@@ -131,7 +131,7 @@ public final class PojoIntrospector {
 			InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		if (o == null)
 			return null;
-		Method m = p.getClassMeta(o.getClass()).getPublicMethods().get(method);
+		Method m = p.getBeanContext().getClassMeta(o.getClass()).getPublicMethods().get(method);
 		if (m == null)
 			throw new NoSuchMethodException(method);
 		return invokeMethod(m, args == null ? null : new StringReader(args));

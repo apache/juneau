@@ -41,13 +41,13 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final MsgPackParser DEFAULT = new MsgPackParser(ContextProperties.DEFAULT);
+	public static final MsgPackParser DEFAULT = new MsgPackParser(create());
 
 	/** Default parser, all default settings, string input encoded as spaced-hex.*/
-	public static final MsgPackParser DEFAULT_SPACED_HEX = new SpacedHex(ContextProperties.DEFAULT);
+	public static final MsgPackParser DEFAULT_SPACED_HEX = new SpacedHex(create());
 
 	/** Default parser, all default settings, string input encoded as BASE64.*/
-	public static final MsgPackParser DEFAULT_BASE64 = new Base64(ContextProperties.DEFAULT);
+	public static final MsgPackParser DEFAULT_BASE64 = new Base64(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -59,11 +59,11 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public SpacedHex(ContextProperties cp) {
+		protected SpacedHex(MsgPackParserBuilder builder) {
 			super(
-				cp.copy().setDefault(ISPARSER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+				builder.binaryFormat(BinaryFormat.SPACED_HEX)
 			);
 		}
 	}
@@ -74,11 +74,11 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Base64(ContextProperties cp) {
+		protected Base64(MsgPackParserBuilder builder) {
 			super(
-				cp.copy().setDefault(ISPARSER_binaryFormat, BinaryFormat.BASE64).build()
+				builder.binaryFormat(BinaryFormat.BASE64)
 			);
 		}
 	}
@@ -93,10 +93,10 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public MsgPackParser(ContextProperties cp) {
-		super(cp, "octal/msgpack");
+	protected MsgPackParser(MsgPackParserBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* Context */

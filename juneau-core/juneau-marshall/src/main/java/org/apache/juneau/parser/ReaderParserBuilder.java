@@ -48,6 +48,11 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		super(copyFrom);
 	}
 
+	@Override /* ContextBuilder */
+	public ReaderParser build() {
+		return (ReaderParser)super.build();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------

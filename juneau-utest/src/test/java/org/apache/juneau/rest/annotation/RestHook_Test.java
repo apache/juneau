@@ -16,7 +16,6 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.util.Collections.*;
 
-import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.*;
@@ -83,20 +82,15 @@ public class RestHook_Test {
 		}
 	}
 
-	public static class A1 extends ReaderParser {
-		public A1(ContextProperties cp) {
-			super(cp, "text/a1", "text/a2", "text/a3");
+	public static class A1 extends MockReaderParser {
+		protected A1(MockReaderParser.Builder b) {
+			super(b.consumes("text/a1,text/a2,text/a3").function((session,in,type)->in(session)));
 		}
-		@Override /* Parser */
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			return new ReaderParserSession(args) {
-				@Override /* ParserSession */
-				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					SessionProperties sp = getSessionProperties();
-					return (T)("p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null));
-				}
-			};
+
+		private static Object in(ReaderParserSession session) {
+			SessionProperties sp = session.getSessionProperties();
+			return "p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null);
+
 		}
 	}
 
@@ -162,7 +156,7 @@ public class RestHook_Test {
 
 	public static class B1 extends MockWriterSerializer {
 		protected B1(MockWriterSerializer.Builder b) {
-			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").serialize((s,o) -> out(s)).headers(s->headers(s)));
+			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(s->headers(s)));
 		}
 		public static String out(SerializerSession s) {
 			SessionProperties sp = s.getSessionProperties();

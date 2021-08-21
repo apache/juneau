@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
@@ -74,7 +73,7 @@ import org.apache.juneau.http.header.*;
  * </p>
  */
 @ConfigurableContext(nocache=true)
-public final class ParserGroup extends BeanContext {
+public final class ParserGroup {
 
 	/**
 	 * An unmodifiable empty parser group.
@@ -103,16 +102,12 @@ public final class ParserGroup extends BeanContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The modifiable properties that were used to initialize the parsers.
-	 * 	A snapshot of these will be made so that we can clone and modify this group.
 	 * @param parsers
 	 * 	The parsers defined in this group.
 	 * 	The order is important because they will be tried in reverse order (e.g. newer first) in which they will be
 	 * 	tried to match against media types.
 	 */
-	public ParserGroup(ContextProperties cp, Parser[] parsers) {
-		super(cp);
+	public ParserGroup(Parser[] parsers) {
 		this.parsers = AList.unmodifiable(parsers);
 
 		AList<MediaType> lmt = AList.create();
@@ -126,6 +121,15 @@ public final class ParserGroup extends BeanContext {
 
 		this.mediaTypes = lmt.unmodifiable();
 		this.mediaTypeParsers = l.unmodifiable();
+	}
+
+	/**
+	 * Creates a copy of this parser group.
+	 *
+	 * @return A new copy of this parser group.
+	 */
+	public ParserGroupBuilder copy() {
+		return new ParserGroupBuilder(this);
 	}
 
 	/**

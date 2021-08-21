@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.rest.client.RestClient.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -398,8 +397,6 @@ public class RestClient_Config_RestClient_Test {
 		x = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
 		b = x.post("/echoBody",bean).run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().asType(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
-		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,String.class).build()).messages().contains("RESTCLIENT_parsers property had invalid class of type 'java.lang.String'");
-		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,"").build()).messages().contains("RESTCLIENT_parsers property had invalid object of type 'java.lang.String'");
 	}
 
 	@Test

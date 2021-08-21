@@ -49,17 +49,6 @@ public abstract class ReaderParserSession extends ParserSession {
 		this.streamCharset = sp.get(RPARSER_streamCharset, Charset.class).orElse(ctx.getStreamCharset());
 	}
 
-	/**
-	 * Constructor for sessions that don't require context.
-	 *
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected ReaderParserSession(ParserSessionArgs args) {
-		this(ReaderParser.DEFAULT, args);
-	}
-
-
 	@Override /* ParserSession */
 	public final boolean isReaderParser() {
 		return true;

@@ -4361,7 +4361,7 @@ public class RestContext extends BeanContext {
 		ParserGroupBuilder g = ParserGroup
 			.create()
 			.append(x)
-			.apply(properties);
+			.forEach(y -> y.apply(properties));
 
 		g = BeanStore
 			.of(beanStore, resource)
@@ -4491,7 +4491,7 @@ public class RestContext extends BeanContext {
 			x = beanStore.getBean(HttpPartParser.class).orElse(null);
 
 		if (x == null)
-			x = new OpenApiParser(properties);
+			x = OpenApiParser.create().apply(properties).build();
 
 		x = BeanStore
 			.of(beanStore, resource)

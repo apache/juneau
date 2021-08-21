@@ -94,13 +94,6 @@ public abstract class ReaderParser extends Parser {
 	 */
 	public static final String RPARSER_streamCharset = PREFIX + ".streamCharset.s";
 
-	static final ReaderParser DEFAULT = new ReaderParser(ContextProperties.create().build(), "") {
-		@Override
-		public ReaderParserSession createSession(ParserSessionArgs args) {
-			throw new NoSuchMethodError();
-		}
-	};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -110,12 +103,12 @@ public abstract class ReaderParser extends Parser {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
-	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
+	 * @param builder The builder for this object.
 	 */
-	protected ReaderParser(ContextProperties cp, String...consumes) {
-		super(cp, consumes);
+	protected ReaderParser(ReaderParserBuilder builder) {
+		super(builder);
 
+		ContextProperties cp = getContextProperties();
 		streamCharset = cp.get(RPARSER_streamCharset, Charset.class).orElse(IOUtils.UTF8);
 		fileCharset = cp.get(RPARSER_fileCharset, Charset.class).orElse(Charset.defaultCharset());
 	}

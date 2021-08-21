@@ -62,7 +62,7 @@ public class Rest_RVars_Test {
 
 		public static class A1 extends MockWriterSerializer {
 			protected A1(MockWriterSerializer.Builder b) {
-				super(b.produces("text/plain").accept("*/*").serialize((s,o) -> out(s)));
+				super(b.produces("text/plain").accept("*/*").function((s,o) -> out(s)));
 			}
 			public static String out(SerializerSession s) {
 				SessionProperties sp = s.getSessionProperties();

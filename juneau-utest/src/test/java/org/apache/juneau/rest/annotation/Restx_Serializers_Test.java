@@ -31,25 +31,25 @@ public class Restx_Serializers_Test {
 
 	public static class SA extends MockWriterSerializer {
 		protected SA(MockWriterSerializer.Builder b) {
-			super(b.produces("text/a").serialize((s,o)->"text/a - "+o));
+			super(b.produces("text/a").function((s,o)->"text/a - "+o));
 		}
 	}
 
 	public static class SB extends MockWriterSerializer {
 		protected SB(MockWriterSerializer.Builder b) {
-			super(b.produces("text/b").serialize((s,o)->"text/b - "+o));
+			super(b.produces("text/b").function((s,o)->"text/b - "+o));
 		}
 	}
 
 	public static class SC extends MockWriterSerializer {
 		protected SC(MockWriterSerializer.Builder b) {
-			super(b.produces("text/a").serialize((s,o)->"text/c - "+o));
+			super(b.produces("text/a").function((s,o)->"text/c - "+o));
 		}
 	}
 
 	public static class SD extends MockWriterSerializer {
 		protected SD(MockWriterSerializer.Builder b) {
-			super(b.produces("text/d").accept("text/a,text/d").serialize((s,o)->"text/d - "+o));
+			super(b.produces("text/d").accept("text/a,text/d").function((s,o)->"text/d - "+o));
 		}
 	}
 

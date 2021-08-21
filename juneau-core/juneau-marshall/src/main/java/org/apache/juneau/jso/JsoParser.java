@@ -42,7 +42,7 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final JsoParser DEFAULT = new JsoParser(ContextProperties.DEFAULT);
+	public static final JsoParser DEFAULT = new JsoParser(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -54,10 +54,10 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public JsoParser(ContextProperties cp) {
-		super(cp, "application/x-java-serialized-object");
+	protected JsoParser(JsoParserBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* Context */
@@ -88,7 +88,7 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 
 	@Override /* Parser */
 	public JsoParserSession createSession(ParserSessionArgs args) {
-		return new JsoParserSession(args);
+		return new JsoParserSession(this, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

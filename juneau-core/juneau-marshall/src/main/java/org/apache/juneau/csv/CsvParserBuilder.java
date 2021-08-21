@@ -35,6 +35,8 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	 */
 	public CsvParserBuilder() {
 		super();
+		consumes("text/csv");
+		contextClass(CsvParser.class);
 	}
 
 	/**
@@ -48,7 +50,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 
 	@Override /* ContextBuilder */
 	public CsvParser build() {
-		return build(CsvParser.class);
+		return (CsvParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

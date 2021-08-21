@@ -59,8 +59,8 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 			parsers = ParserGroup.create()
 				.append(jp.parsers())
-				.swaps((Object[])jp.swaps())
-				.set(properties)
+				.forEach(x -> x.swaps((Object[])jp.swaps()))
+				.forEach(x -> x.set(properties))
 				.build();
 
 		} catch (Exception e) {
@@ -135,7 +135,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 					.mediaType(pm.getMediaType())
 			);
 			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
-			return session.parse(in2, p.getClassMeta(gType));
+			return session.parse(in2, p.getBeanContext().getClassMeta(gType));
 		} catch (ParseException e) {
 			throw ioException(e);
 		}

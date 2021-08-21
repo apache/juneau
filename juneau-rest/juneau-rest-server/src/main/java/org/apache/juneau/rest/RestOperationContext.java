@@ -1117,7 +1117,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			g = ParserGroup
 				.create()
 				.append(x)
-				.apply(properties)
+				.forEach(y -> y.apply(properties))
 				.build();
 		}
 
@@ -1235,7 +1235,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = beanStore.getBean(HttpPartParser.class).orElse(null);
 
 		if (x == null)
-			x = new OpenApiParser(properties);
+			x = OpenApiParser.create().apply(properties).build();
 
 		x = BeanStore
 			.of(beanStore, resource)

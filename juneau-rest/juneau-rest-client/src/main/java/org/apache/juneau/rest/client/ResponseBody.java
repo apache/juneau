@@ -1324,7 +1324,7 @@ public class ResponseBody implements HttpEntity {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private BeanContext getBeanContext() {
-		return parser == null ? BeanContext.DEFAULT : parser;
+		return parser == null ? BeanContext.DEFAULT : parser.getBeanContext();
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> c) {

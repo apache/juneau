@@ -781,14 +781,12 @@ public class BeanConfigTest {
 
 	private void assertSameCache(ParserBuilder p1b, ParserBuilder p2b) {
 		Parser p1 = p1b.build(), p2 = p2b.build();
-		assertTrue(p1.hasSameCache(p2));
-		assertTrue(p1.hashCode() == p2.hashCode());
+		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}
 
 	private void assertDifferentCache(ParserBuilder p1b, ParserBuilder p2b) {
 		Parser p1 = p1b.build(), p2 = p2b.build();
-		assertFalse(p1.hasSameCache(p2));
-		assertFalse(p1.hashCode() == p2.hashCode());
+		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}
 
 	//====================================================================================================

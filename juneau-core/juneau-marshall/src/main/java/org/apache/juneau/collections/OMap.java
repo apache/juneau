@@ -192,7 +192,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public OMap(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.createBeanSession());
+		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		if (! StringUtils.isEmpty(in))
@@ -223,7 +223,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public OMap(Reader in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.createBeanSession());
+		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().createBeanSession());
 		parse(in, p);
 	}
 

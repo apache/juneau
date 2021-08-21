@@ -34,6 +34,8 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	 */
 	public MsgPackParserBuilder() {
 		super();
+		consumes("octal/msgpack");
+		contextClass(MsgPackParser.class);
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 
 	@Override /* ContextBuilder */
 	public MsgPackParser build() {
-		return build(MsgPackParser.class);
+		return (MsgPackParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

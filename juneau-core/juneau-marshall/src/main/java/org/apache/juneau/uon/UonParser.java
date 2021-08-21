@@ -124,10 +124,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
-	public static final UonParser DEFAULT = new UonParser(ContextProperties.DEFAULT);
+	public static final UonParser DEFAULT = new UonParser(create());
 
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
-	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(ContextProperties.DEFAULT);
+	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -140,10 +140,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Decoding(ContextProperties cp) {
-			super(cp.copy().setDefault(UON_decoding, true).build());
+		protected Decoding(UonParserBuilder builder) {
+			super(builder.decoding());
 		}
 	}
 
@@ -214,30 +214,11 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public UonParser(ContextProperties cp) {
-		this(cp, "text/uon");
-	}
-
-	/**
-	 * No-arg constructor.
-	 */
-	public UonParser() {
-		this(ContextProperties.DEFAULT, "text/uon");
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param consumes
-	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
-	 */
-	public UonParser(ContextProperties cp, String...consumes) {
-		super(cp, consumes);
+	protected UonParser(UonParserBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		this.decoding = cp.getBoolean(UON_decoding).orElse(false);
 		this.validateEnd = cp.getBoolean(UON_validateEnd).orElse(false);
 	}
@@ -348,6 +329,16 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+		return getBeanContext().getClassMeta(c);
+	}
+
+	@Override
+	public <T> ClassMeta<T> getClassMeta(Type t, Type... args) {
+		return getBeanContext().getClassMeta(t, args);
+	}
 
 	@Override /* Context */
 	public OMap toMap() {

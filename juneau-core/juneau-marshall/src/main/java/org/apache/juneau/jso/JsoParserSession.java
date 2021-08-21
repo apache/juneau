@@ -31,11 +31,17 @@ public class JsoParserSession extends InputStreamParserSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
 	 * @param args
-	 * 	Runtime session arguments.
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
 	 */
-	protected JsoParserSession(ParserSessionArgs args) {
-		super(args);
+	protected JsoParserSession(JsoParser ctx, ParserSessionArgs args) {
+		super(ctx, args);
 	}
 
 	@Override /* ParserSession */

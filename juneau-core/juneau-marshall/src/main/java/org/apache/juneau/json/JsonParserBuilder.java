@@ -38,6 +38,8 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 */
 	public JsonParserBuilder() {
 		super();
+		consumes("application/json,text/json");
+		contextClass(JsonParser.class);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 
 	@Override /* ContextBuilder */
 	public JsonParser build() {
-		return build(JsonParser.class);
+		return (JsonParser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -90,6 +92,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public JsonParserBuilder consumes(String value) {
+		super.consumes(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonParserBuilder add(Map<String,Object> properties) {

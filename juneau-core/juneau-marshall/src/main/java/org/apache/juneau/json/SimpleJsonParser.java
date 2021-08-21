@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -33,36 +32,32 @@ public class SimpleJsonParser extends JsonParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, Accept=application/json+simple. */
-	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(ContextProperties.DEFAULT);
+	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(create());
 
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public SimpleJsonParser(ContextProperties cp) {
-		super(cp, "application/json+simple", "text/json+simple", "application/json", "text/json");
+	protected SimpleJsonParser(JsonParserBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* Context */
-	public SimpleJsonParserBuilder copy() {
-		return new SimpleJsonParserBuilder(this);
+	public JsonParserBuilder copy() {
+		return new JsonParserBuilder(this);
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link SimpleJsonParserBuilder} object.
+	 * Instantiates a new clean-slate {@link JsonParserBuilder} object.
 	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> SimpleJsonParserBuilder()</code>.
-	 *
-	 * <p>
 	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
-	 * @return A new {@link SimpleJsonParserBuilder} object.
+	 * @return A new {@link JsonParserBuilder} object.
 	 */
-	public static SimpleJsonParserBuilder create() {
-		return new SimpleJsonParserBuilder();
+	public static JsonParserBuilder create() {
+		return JsonParser.create().consumes("application/json+simple,text/json+simple,application/json,text/json");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -46,8 +46,8 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Represents no Serializer.
 	 */
 	public static abstract class Null extends Serializer {
-		private Null(SerializerBuilder cp) {
-			super(cp);
+		private Null(SerializerBuilder builder) {
+			super(builder);
 		}
 	}
 
@@ -431,8 +431,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Constructor
 	 *
-	 * @param builder
-	 * 	The builder this object.
+	 * @param builder The builder this object.
 	 */
 	protected Serializer(SerializerBuilder builder) {
 		super(builder);

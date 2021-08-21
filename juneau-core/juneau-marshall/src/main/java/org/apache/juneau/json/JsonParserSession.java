@@ -45,7 +45,10 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
 	 * @param args
-	 * 	Runtime session arguments.
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
 	 */
 	protected JsonParserSession(JsonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);

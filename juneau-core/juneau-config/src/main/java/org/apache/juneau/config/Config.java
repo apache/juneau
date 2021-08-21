@@ -213,7 +213,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		configMap.register(this);
 		serializer = builder.serializer;
 		parser = builder.parser;
-		beanSession = parser.createBeanSession();
+		beanSession = parser.getBeanContext().createBeanSession();
 		encoder = builder.encoder;
 		varResolver = builder.varResolver;
 		varSession = varResolver

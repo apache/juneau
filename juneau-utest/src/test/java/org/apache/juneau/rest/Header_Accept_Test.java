@@ -30,17 +30,17 @@ public class Header_Accept_Test {
 
 	public static class S1 extends MockWriterSerializer {
 		protected S1(MockWriterSerializer.Builder b) {
-			super(b.produces("text/s1").serialize((s,o) -> "s1"));
+			super(b.produces("text/s1").function((s,o) -> "s1"));
 		}
 	}
 	public static class S2 extends MockWriterSerializer {
 		protected S2(MockWriterSerializer.Builder b) {
-			super(b.produces("text/s2").serialize((s,o) -> "s2"));
+			super(b.produces("text/s2").function((s,o) -> "s2"));
 		}
 	}
 	public static class S3 extends MockWriterSerializer {
 		protected S3(MockWriterSerializer.Builder b) {
-			super(b.produces("text/s3").serialize((s,o) -> "s3"));
+			super(b.produces("text/s3").function((s,o) -> "s3"));
 		}
 	}
 

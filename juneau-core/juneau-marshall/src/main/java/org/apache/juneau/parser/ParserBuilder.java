@@ -34,7 +34,9 @@ import org.apache.juneau.xml.*;
  * {@review}
  */
 @FluentSetters
-public class ParserBuilder extends BeanContextBuilder {
+public class ParserBuilder extends BeanContextableBuilder {
+
+	String consumes;
 
 	/**
 	 * Constructor, default settings.
@@ -50,12 +52,38 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	public ParserBuilder(Parser copyFrom) {
 		super(copyFrom);
+		consumes = copyFrom._consumes;
+	}
+
+	@Override /* ContextBuilder */
+	public Parser build() {
+		return (Parser)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Specifies the media type that this parser consumes.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ParserBuilder consumes(String value) {
+		this.consumes = value;
+		return this;
+	}
+
+	/**
+	 * Returns the current value for the 'consumes' property.
+	 *
+	 * @return The current value for the 'consumes' property.
+	 */
+	public String getConsumes() {
+		return consumes;
+	}
 
 	/**
 	 * Auto-close streams.
@@ -769,9 +797,4 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	// </FluentSetters>
-
-	@Override /* Context */
-	public Parser build() {
-		return null;
-	}
 }
