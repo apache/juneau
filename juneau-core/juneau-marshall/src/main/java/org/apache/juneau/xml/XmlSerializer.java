@@ -297,22 +297,22 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer without namespaces. */
-	public static final XmlSerializer DEFAULT = new XmlSerializer(ContextProperties.DEFAULT);
+	public static final XmlSerializer DEFAULT = new XmlSerializer(create());
 
 	/** Default serializer without namespaces, with single quotes. */
-	public static final XmlSerializer DEFAULT_SQ = new Sq(ContextProperties.DEFAULT);
+	public static final XmlSerializer DEFAULT_SQ = new Sq(create());
 
 	/** Default serializer without namespaces, with single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(ContextProperties.DEFAULT);
+	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(create());
 
 	/** Default serializer, all default settings. */
-	public static final XmlSerializer DEFAULT_NS = new Ns(ContextProperties.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS = new Ns(create());
 
 	/** Default serializer, single quotes. */
-	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(ContextProperties.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(create());
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(ContextProperties.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -325,14 +325,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Sq(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.build()
-				);
+		protected Sq(XmlSerializerBuilder builder) {
+			super(builder.quoteChar('\''));
 		}
 	}
 
@@ -342,15 +338,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public SqReadable(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.setDefault(WSERIALIZER_useWhitespace, true)
-					.build()
-				);
+		protected SqReadable(XmlSerializerBuilder builder) {
+			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -360,16 +351,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Ns(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(XML_enableNamespaces, true)
-					.build(),
-				"text/xml",
-				"text/xml+simple"
-			);
+		protected Ns(XmlSerializerBuilder builder) {
+			super(builder.enableNamespaces());
 		}
 	}
 
@@ -379,15 +364,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public NsSq(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(XML_enableNamespaces, true)
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.build()
-				);
+		protected NsSq(XmlSerializerBuilder builder) {
+			super(builder.enableNamespaces().quoteChar('\''));
 		}
 	}
 
@@ -397,16 +377,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public NsSqReadable(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(XML_enableNamespaces, true)
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.setDefault(WSERIALIZER_useWhitespace, true)
-					.build()
-				);
+		protected NsSqReadable(XmlSerializerBuilder builder) {
+			super(builder.enableNamespaces().quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -433,41 +407,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public XmlSerializer(ContextProperties cp) {
-		this(cp, "text/xml", (String)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public XmlSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected XmlSerializer(XmlSerializerBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		autoDetectNamespaces = ! cp.getBoolean(XML_disableAutoDetectNamespaces).orElse(false);
 		enableNamespaces = cp.getBoolean(XML_enableNamespaces).orElse(false);
 		addNamespaceUrlsToRoot = cp.getBoolean(XML_addNamespaceUrisToRoot).orElse(false);

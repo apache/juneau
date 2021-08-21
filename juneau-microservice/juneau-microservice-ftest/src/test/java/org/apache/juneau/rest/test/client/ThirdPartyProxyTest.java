@@ -70,7 +70,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = getCached(label, ThirdPartyProxy.class);
 		if (proxy == null) {
-			this.proxy = getClient(label, serializer, parser).copy().ignoreErrors().partSerializer(UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
+			proxy = TestMicroservice.client(serializer, parser).ignoreErrors().partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
 			cache(label, proxy);
 		}
 	}

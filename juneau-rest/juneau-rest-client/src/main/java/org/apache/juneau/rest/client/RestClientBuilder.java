@@ -14,14 +14,8 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.rest.client.RestClient.*;
-import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
-import static org.apache.juneau.serializer.OutputStreamSerializer.*;
-import static org.apache.juneau.serializer.WriterSerializer.*;
-import static org.apache.juneau.oapi.OpenApiCommon.*;
-import static org.apache.juneau.uon.UonSerializer.*;
-
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -96,7 +90,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @FluentSetters(ignore={"beanMapPutReturnsOldValue","example","exampleJson"})
-public class RestClientBuilder extends BeanContextBuilder {
+public class RestClientBuilder extends BeanContextableBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
 	private HeaderListBuilder headerData;
@@ -104,47 +98,60 @@ public class RestClientBuilder extends BeanContextBuilder {
 	private CloseableHttpClient httpClient;
 	private boolean pooled;
 
+	SerializerGroupBuilder serializerGroupBuilder;
+	SerializerBuilder partSerializerBuilder;
+	HttpPartSerializer simplePartSerializer;
+
+	/**
+	 * Constructor.
+	 */
+	protected RestClientBuilder() {
+		super();
+		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_INTERNAL_httpClientBuilder);
+		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
+		this.headerData = HeaderList.create();
+		this.queryData = PartList.create();
+		this.formData = PartList.create();
+		this.pathData = PartList.create();
+		this.serializerGroupBuilder = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
+		this.partSerializerBuilder = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
+		contextClass(RestClient.class);
+	}
+
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The client to copy from.
 	 */
 	protected RestClientBuilder(RestClient copyFrom) {
 		super(copyFrom);
 		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_INTERNAL_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
-		if (copyFrom == null) {
-			this.headerData = HeaderList.create();
-			this.queryData = PartList.create();
-			this.formData = PartList.create();
-			this.pathData = PartList.create();
+		this.headerData = copyFrom.headerData.copy();
+		this.queryData = copyFrom.queryData.copy();
+		this.formData = copyFrom.formData.copy();
+		this.pathData = copyFrom.pathData.copy();
+		this.serializerGroupBuilder = copyFrom.serializers.copy().beanContextBuilder(getBeanContextBuilder());
+		if (copyFrom.partSerializer instanceof Serializer) {
+			this.partSerializerBuilder = (SerializerBuilder) ((Serializer)copyFrom.partSerializer).copy().beanContextBuilder(getBeanContextBuilder());
 		} else {
-			this.headerData = copyFrom.headerData.copy();
-			this.queryData = copyFrom.queryData.copy();
-			this.formData = copyFrom.formData.copy();
-			this.pathData = copyFrom.pathData.copy();
+			this.simplePartSerializer = copyFrom.partSerializer;
 		}
-	}
-
-	/**
-	 * No-arg constructor.
-	 *
-	 * <p>
-	 * Provided so that this class can be easily subclassed.
-	 */
-	protected RestClientBuilder() {
-		this(null);
+		contextClass(copyFrom.getClass());
 	}
 
 	@Override /* ContextBuilder */
 	public RestClient build() {
-		return new RestClient(contextProperties());
+		contextProperties();
+		return (RestClient)super.build();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
 		contextProperties();
-		return super.build(c);
+		contextClass(c);
+		return (T)super.build();
 	}
 
 	private ContextProperties contextProperties() {
@@ -2849,7 +2856,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshall
 	 *
 	 * <p>
-	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
+	 * Shortcut for specifying the serializers and {@link RestClient#RESTCLIENT_parsers}
 	 * using the serializer and parser defined in a marshall.
 	 *
 	 * <ul class='notes'>
@@ -2881,7 +2888,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshalls
 	 *
 	 * <p>
-	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
+	 * Shortcut for specifying the serializers and {@link RestClient#RESTCLIENT_parsers}
 	 * using the serializer and parser defined in a marshall.
 	 *
 	 * <ul class='notes'>
@@ -3154,18 +3161,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default value is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
-		return set(RESTCLIENT_partSerializer, value);
+		if (Serializer.class.isAssignableFrom(value))
+			this.partSerializerBuilder = Serializer.createSerializerBuilder((Class<? extends Serializer>)value);
+		else {
+			try {
+				this.simplePartSerializer = ClassInfo.of(value).getPublicConstructor().invoke();
+			} catch (ExecutableException e) {
+				throw new ConfigException(e, "Could not instantiate HttpPartSerializer class {0}", value);
+			}
+		}
+		return this;
 	}
 
 	/**
@@ -3186,10 +3199,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default value is {@link OpenApiSerializer}.
@@ -3197,7 +3206,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder partSerializer(HttpPartSerializer value) {
-		return set(RESTCLIENT_partSerializer, value);
+		this.simplePartSerializer = value;
+		return this;
 	}
 
 	/**
@@ -3261,10 +3271,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link JsonSerializer}.
@@ -3299,10 +3305,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
 	 * 		.build();
 	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
@@ -3342,10 +3344,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link JsonSerializer}.
@@ -3354,7 +3352,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-		return prependTo(RESTCLIENT_serializers, value);
+		serializerGroupBuilder.append(value);
+		return this;
 	}
 
 	/**
@@ -3385,10 +3384,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link JsonSerializer}.
@@ -3396,7 +3391,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder serializers(Serializer...value) {
-		return prependTo(RESTCLIENT_serializers, value);
+		serializerGroupBuilder.append(value);
+		return this;
 	}
 
 	/**
@@ -3564,7 +3560,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder detectRecursions() {
-		return set(BEANTRAVERSE_detectRecursions);
+		serializerGroupBuilder.forEach(x -> x.detectRecursions());
+		return this;
 	}
 
 	/**
@@ -3616,7 +3613,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ignoreRecursions() {
-		return set(BEANTRAVERSE_ignoreRecursions);
+		serializerGroupBuilder.forEach(x -> x.ignoreRecursions());
+		return this;
 	}
 
 	/**
@@ -3660,7 +3658,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder initialDepth(int value) {
-		return set(BEANTRAVERSE_initialDepth, value);
+		serializerGroupBuilder.forEach(x -> x.initialDepth(value));
+		return this;
 	}
 
 	/**
@@ -3696,7 +3695,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxDepth(int value) {
-		return set(BEANTRAVERSE_maxDepth, value);
+		serializerGroupBuilder.forEach(x -> x.maxDepth(value));
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -3753,7 +3753,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addBeanTypes() {
-		return set(SERIALIZER_addBeanTypes);
+		serializerGroupBuilder.forEach(x -> x.addBeanTypes());
+		return this;
 	}
 
 	/**
@@ -3806,7 +3807,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addRootType() {
-		return set(SERIALIZER_addRootType);
+		serializerGroupBuilder.forEach(x -> x.addRootType());
+		return this;
 	}
 
 	/**
@@ -3847,7 +3849,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder keepNullProperties() {
-		return set(SERIALIZER_keepNullProperties);
+		serializerGroupBuilder.forEach(x -> x.keepNullProperties());
+		return this;
 	}
 
 	/**
@@ -3885,7 +3888,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortCollections() {
-		return set(SERIALIZER_sortCollections);
+		serializerGroupBuilder.forEach(x -> x.sortCollections());
+		return this;
 	}
 
 	/**
@@ -3923,7 +3927,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortMaps() {
-		return set(SERIALIZER_sortMaps);
+		serializerGroupBuilder.forEach(x -> x.sortMaps());
+		return this;
 	}
 
 	/**
@@ -3968,7 +3973,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyCollections() {
-		return set(SERIALIZER_trimEmptyCollections);
+		serializerGroupBuilder.forEach(x -> x.trimEmptyCollections());
+		return this;
 	}
 
 	/**
@@ -4012,7 +4018,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyMaps() {
-		return set(SERIALIZER_trimEmptyMaps);
+		serializerGroupBuilder.forEach(x -> x.trimEmptyMaps());
+		return this;
 	}
 
 	/**
@@ -4047,7 +4054,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnWrite() {
-		return set(SERIALIZER_trimStrings);
+		serializerGroupBuilder.forEach(x -> x.trimStrings());
+		return this;
 	}
 
 	/**
@@ -4095,7 +4103,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriContext(UriContext value) {
-		return set(SERIALIZER_uriContext, value);
+		serializerGroupBuilder.forEach(x -> x.uriContext(value));
+		return this;
 	}
 
 	/**
@@ -4133,7 +4142,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriRelativity(UriRelativity value) {
-		return set(SERIALIZER_uriRelativity, value);
+		serializerGroupBuilder.forEach(x -> x.uriRelativity(value));
+		return this;
 	}
 
 	/**
@@ -4173,7 +4183,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriResolution(UriResolution value) {
-		return set(SERIALIZER_uriResolution, value);
+		serializerGroupBuilder.forEach(x -> x.uriResolution(value));
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4212,7 +4223,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxIndent(int value) {
-		return set(WSERIALIZER_maxIndent, value);
+		serializerGroupBuilder.forEachWS(x -> x.maxIndent(value));
+		return this;
 	}
 
 	/**
@@ -4256,7 +4268,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder quoteChar(char value) {
-		return set(WSERIALIZER_quoteChar, value);
+		serializerGroupBuilder.forEachWS(x -> x.quoteChar(value));
+		return this;
+	}
+
+	/**
+	 * Same as {@link #quoteChar(char)} but overrides it if it has a default setting on the serializer.
+	 *
+	 * <p>
+	 * For example, you can use this to override the quote character on {@link SimpleJsonSerializer} even though
+	 * the quote char is normally a single quote on that class.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder quoteCharOverride(char value) {
+		serializerGroupBuilder.forEachWS(x -> x.quoteCharOverride(value));
+		return this;
 	}
 
 	/**
@@ -4297,7 +4328,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sq() {
-		return set(WSERIALIZER_quoteChar, '\'');
+		serializerGroupBuilder.forEachWS(x -> x.sq());
+		return this;
 	}
 
 	/**
@@ -4333,7 +4365,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace);
+		serializerGroupBuilder.forEachWS(x -> x.useWhitespace());
+		return this;
 	}
 
 	/**
@@ -4370,7 +4403,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ws() {
-		return set(WSERIALIZER_useWhitespace);
+		serializerGroupBuilder.forEachWS(x -> x.ws());
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4591,7 +4625,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder oapiFormat(HttpPartFormat value) {
-		return set(OAPI_format, value);
+		serializerGroupBuilder.forEach(OpenApiSerializerBuilder.class, x -> x.format(value));
+		if (partSerializerBuilder instanceof OpenApiSerializerBuilder)
+			((OpenApiSerializerBuilder)partSerializerBuilder).format(value);
+		return this;
 	}
 
 	/**
@@ -4650,7 +4687,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder oapiCollectionFormat(HttpPartCollectionFormat value) {
-		return set(OAPI_collectionFormat, value);
+		serializerGroupBuilder.forEach(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
+		if (partSerializerBuilder instanceof OpenApiSerializerBuilder)
+			((OpenApiSerializerBuilder)partSerializerBuilder).collectionFormat(value);
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4703,7 +4743,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder paramFormat(ParamFormat value) {
-		return set(UON_paramFormat, value);
+		serializerGroupBuilder.forEach(UonSerializerBuilder.class, x -> x.paramFormat(value));
+		return this;
 	}
 
 	/**
@@ -4743,7 +4784,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder paramFormatPlain() {
-		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
+		serializerGroupBuilder.forEach(UonSerializerBuilder.class, x -> x.paramFormatPlain());
+		return this;
 	}
 
 	// <FluentSetters>

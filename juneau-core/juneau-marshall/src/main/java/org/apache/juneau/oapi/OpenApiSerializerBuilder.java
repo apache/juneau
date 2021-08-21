@@ -36,8 +36,10 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public OpenApiSerializerBuilder() {
+	protected OpenApiSerializerBuilder() {
 		super();
+		produces("text/openapi");
+		contextClass(OpenApiSerializer.class);
 	}
 
 	/**
@@ -45,13 +47,13 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public OpenApiSerializerBuilder(OpenApiSerializer copyFrom) {
+	protected OpenApiSerializerBuilder(OpenApiSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public OpenApiSerializer build() {
-		return build(OpenApiSerializer.class);
+		return (OpenApiSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -181,6 +183,18 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public OpenApiSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public OpenApiSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiSerializerBuilder add(Map<String,Object> properties) {

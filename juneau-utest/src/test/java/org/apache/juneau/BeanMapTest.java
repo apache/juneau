@@ -1778,7 +1778,7 @@ public class BeanMapTest {
 	@Test
 	public void testHiddenProperties() throws Exception {
 		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
-		BeanMeta bm = s.getBeanMeta(U.class);
+		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
 		assertNull(bm.getPropertyMeta("c"));
@@ -1831,7 +1831,7 @@ public class BeanMapTest {
 	@Test
 	public void testHiddenProperties_usingConfig() throws Exception {
 		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
-		BeanMeta bm = s.getBeanMeta(U.class);
+		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
 		assertNull(bm.getPropertyMeta("c"));

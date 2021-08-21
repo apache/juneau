@@ -14,14 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.IOException;
-
-import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -48,18 +46,13 @@ public class Nls_Test {
 			return null;
 		}
 	}
-	public static class A1 extends WriterSerializer {
-		public A1(ContextProperties cp) {
-			super(cp, "text/plain", null);
+	public static class A1 extends MockWriterSerializer {
+		protected A1(MockWriterSerializer.Builder builder) {
+			super(builder.accept("*/*").serialize((s,o)->out(s)));
 		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write(getSessionProperties().getString("TestProperty").orElse(null));
-				}
-			};
+
+		public static String out(SerializerSession s) {
+			return s.getSessionProperties().getString("TestProperty").orElse(null);
 		}
 	}
 

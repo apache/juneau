@@ -27,7 +27,6 @@ import org.apache.http.Header;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -61,8 +60,8 @@ public class RestClient_Response_Test {
 	}
 
 	public static class A1 extends MockRestClient {
-		public A1(ContextProperties cp) {
-			super(cp);
+		public A1(MockRestClientBuilder b) {
+			super(b);
 		}
 		@Override
 		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {

@@ -548,6 +548,7 @@ public class ClassInfoTest {
 	static class DCx {}
 	static class DC1 {
 		public static DCx create() {return null;}
+		protected DC1(DCx x) {}
 	}
 	static class DC2 {
 		protected static DCx create() {return null;}

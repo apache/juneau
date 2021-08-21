@@ -40,8 +40,9 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public RdfSerializerBuilder() {
+	protected RdfSerializerBuilder() {
 		super();
+		contextClass(RdfSerializer.class);
 	}
 
 	/**
@@ -49,13 +50,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public RdfSerializerBuilder(RdfSerializer copyFrom) {
+	protected RdfSerializerBuilder(RdfSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public RdfSerializer build() {
-		return build(RdfSerializer.class);
+		return (RdfSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -885,6 +886,18 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public RdfSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public RdfSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public RdfSerializerBuilder add(Map<String,Object> properties) {

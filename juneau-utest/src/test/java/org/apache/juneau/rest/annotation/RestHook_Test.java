@@ -14,6 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.junit.runners.MethodSorters.*;
+import static java.util.Collections.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,6 +33,7 @@ import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -158,26 +160,19 @@ public class RestHook_Test {
 		}
 	}
 
-	public static class B1 extends WriterSerializer {
-		public B1(ContextProperties cp) {
-			super(cp, "test/s1", "text/s1,text/s2,text/s3");
+	public static class B1 extends MockWriterSerializer {
+		protected B1(MockWriterSerializer.Builder b) {
+			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").serialize((s,o) -> out(s)).headers(s->headers(s)));
 		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					SessionProperties sp = getSessionProperties();
-					out.getWriter().write("p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null));
-				}
-				@Override /* SerializerSession */
-				public Map<String,String> getResponseHeaders() {
-					SessionProperties sp = getSessionProperties();
-					if (sp.contains("Override-Content-Type"))
-						return AMap.of("Content-Type",sp.getString("Override-Content-Type").orElse(null));
-					return Collections.emptyMap();
-				}
-			};
+		public static String out(SerializerSession s) {
+			SessionProperties sp = s.getSessionProperties();
+			return "p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null);
+		}
+		public static Map<String,String> headers(SerializerSession s) {
+			SessionProperties sp = s.getSessionProperties();
+			if (sp.contains("Override-Content-Type"))
+				return AMap.of("Content-Type",sp.getString("Override-Content-Type").orElse(null));
+			return emptyMap();
 		}
 	}
 

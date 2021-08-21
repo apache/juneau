@@ -12,16 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.
@@ -44,8 +45,22 @@ public final class RemoteOperationArg {
 		this.schema = schema;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static HttpPartSerializer createSerializer(HttpPartType partType, HttpPartSchema schema) {
-		return castOrCreate(HttpPartSerializer.class, schema.getSerializer());
+		Class<? extends HttpPartSerializer> c = schema.getSerializer();
+		if (c == null)
+			return null;
+		ConstructorInfo cc = ClassInfo.of(c).getPublicConstructor();
+		if (cc != null) {
+			try {
+				return cc.invoke();
+			} catch (ExecutableException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		if (Serializer.class.isAssignableFrom(c))
+			return (HttpPartSerializer)Serializer.createSerializerBuilder((Class<? extends Serializer>)c).build();
+		return null;
 	}
 
 	/**

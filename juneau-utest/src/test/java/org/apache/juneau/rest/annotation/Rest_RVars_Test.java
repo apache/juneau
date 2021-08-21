@@ -15,13 +15,12 @@ package org.apache.juneau.rest.annotation;
 import static java.lang.String.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.IOException;
-
 import org.apache.juneau.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -61,21 +60,15 @@ public class Rest_RVars_Test {
 			res.setOutput(null);
 		}
 
-		public static class A1 extends WriterSerializer {
-			public A1(ContextProperties cp) {
-				super(cp, "text/plain", "*/*");
+		public static class A1 extends MockWriterSerializer {
+			protected A1(MockWriterSerializer.Builder b) {
+				super(b.produces("text/plain").accept("*/*").serialize((s,o) -> out(s)));
 			}
-			@Override /* Serializer */
-			public WriterSerializerSession createSession(SerializerSessionArgs args) {
-				return new WriterSerializerSession(args) {
-					@Override /* SerializerSession */
-					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-						SessionProperties sp = getSessionProperties();
-						out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
-							sp.get("A1").orElse(null), sp.get("A2").orElse(null), sp.get("B1").orElse(null), sp.get("B2").orElse(null), sp.get("C").orElse(null),
-							sp.get("R1a").orElse(null), sp.get("R1b").orElse(null), sp.get("R2").orElse(null), sp.get("R3").orElse(null), sp.get("R4").orElse(null), sp.get("R5").orElse(null), sp.get("R6").orElse(null)));
-					}
-				};
+			public static String out(SerializerSession s) {
+				SessionProperties sp = s.getSessionProperties();
+				return format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
+					sp.get("A1").orElse(null), sp.get("A2").orElse(null), sp.get("B1").orElse(null), sp.get("B2").orElse(null), sp.get("C").orElse(null),
+					sp.get("R1a").orElse(null), sp.get("R1b").orElse(null), sp.get("R2").orElse(null), sp.get("R3").orElse(null), sp.get("R4").orElse(null), sp.get("R5").orElse(null), sp.get("R6").orElse(null));
 			}
 		}
 	}

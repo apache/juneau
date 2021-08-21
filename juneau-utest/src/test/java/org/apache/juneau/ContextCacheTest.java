@@ -149,6 +149,11 @@ public class ContextCacheTest {
 		public OMap toMap() {
 			return OMap.of("f1", f1);
 		}
+
+		@Override
+		public ContextBuilder copy() {
+			return null;
+		}
 	}
 
 	@ConfigurableContext

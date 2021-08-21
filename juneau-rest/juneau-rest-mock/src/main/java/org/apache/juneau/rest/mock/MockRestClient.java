@@ -250,13 +250,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public MockRestClient(ContextProperties cp) {
-		super(preInit(cp));
-		cp = getContextProperties();
+	public MockRestClient(MockRestClientBuilder builder) {
+		super(preInit(builder));
+		ContextProperties cp = getContextProperties();
 		this.restBeanCtx = cp.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class).get();
 		this.restObject = restBeanCtx.getResource();
 		this.contextPath = cp.getString(MOCKRESTCLIENT_contextPath).orElse("");
@@ -268,9 +267,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			((MockHttpClientConnectionManager)ccm).init(this);
 	}
 
-	private static ContextProperties preInit(ContextProperties cp) {
+	private static MockRestClientBuilder preInit(MockRestClientBuilder builder) {
 		try {
-			ContextPropertiesBuilder cpb = cp.copy();
+			ContextProperties cp = builder.getContextProperties();
 			Object restBean = cp.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
 			String contextPath = cp.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
 			String servletPath = cp.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
@@ -290,16 +289,16 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				REST_CONTEXTS.put(c, rc);
 			}
 			RestContext restBeanCtx = REST_CONTEXTS.get(c);
-			cpb.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
+			builder.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
 
 			if (servletPath == null)
 				servletPath = toValidContextPath(restBeanCtx.getFullPath());
 
 			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
 
-			cpb.set(MOCKRESTCLIENT_servletPath, servletPath);
-			cpb.set(RESTCLIENT_rootUri, rootUrl);
-			return cpb.build();
+			builder.set(MOCKRESTCLIENT_servletPath, servletPath);
+			builder.set(RESTCLIENT_rootUri, rootUrl);
+			return builder;
 		} catch (Exception e) {
 			throw new ConfigException(e, "Could not initialize MockRestClient");
 		}

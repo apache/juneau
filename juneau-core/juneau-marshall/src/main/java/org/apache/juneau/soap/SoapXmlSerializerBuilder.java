@@ -35,8 +35,11 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public SoapXmlSerializerBuilder() {
+	protected SoapXmlSerializerBuilder() {
 		super();
+		produces("text/xml");
+		accept("text/xml+soap");
+		contextClass(SoapXmlSerializer.class);
 	}
 
 	/**
@@ -44,13 +47,13 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public SoapXmlSerializerBuilder(SoapXmlSerializer copyFrom) {
+	protected SoapXmlSerializerBuilder(SoapXmlSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public SoapXmlSerializer build() {
-		return build(SoapXmlSerializer.class);
+		return (SoapXmlSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -75,6 +78,18 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public SoapXmlSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public SoapXmlSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public SoapXmlSerializerBuilder add(Map<String,Object> properties) {

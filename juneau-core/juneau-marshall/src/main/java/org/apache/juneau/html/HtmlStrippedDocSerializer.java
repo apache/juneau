@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
@@ -40,7 +39,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlStrippedDocSerializer DEFAULT = new HtmlStrippedDocSerializer(ContextProperties.DEFAULT);
+	public static final HtmlStrippedDocSerializer DEFAULT = new HtmlStrippedDocSerializer(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -51,41 +50,10 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public HtmlStrippedDocSerializer(ContextProperties cp) {
-		this(cp, "text/html", "text/html+stripped");
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of
-	 * 	{@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public HtmlStrippedDocSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected HtmlStrippedDocSerializer(HtmlStrippedDocSerializerBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* Context */

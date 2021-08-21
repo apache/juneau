@@ -1019,7 +1019,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @ConfigurableContext(nocache=true)
-public class RestClient extends BeanContext implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
+public class RestClient extends BeanContextable implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -1659,44 +1659,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public static final String RESTCLIENT_partParser = PREFIX + "partParser.o";
 
 	/**
-	 * Configuration property:  Part serializer.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partSerializer RESTCLIENT_partSerializer}
-	 * 	<li><b>Name:</b>  <js>"RestClient.partSerializer.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c>
-	 * 			<li>{@link org.apache.juneau.httppart.HttpPartSerializer}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiSerializer};
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partSerializer(HttpPartSerializer)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-	 *
-	 * <p>
-	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.partSerializer(UonSerializer.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
-
-	/**
 	 * Configuration property:  Root URI.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1734,51 +1696,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </p>
 	 */
 	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
-
-	/**
-	 * Configuration property:  Serializers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_serializers RESTCLIENT_serializers}
-	 * 	<li><b>Name:</b>  <js>"RestClient.serializers.lo"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.serializer.Serializer}&gt;</c>
-	 * 			<li>{@link org.apache.juneau.serializer.Serializer}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  No serializers.
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#serializer(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#serializer(Serializer)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#serializers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#serializers(Serializer...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer is used to serialize POJOs into the HTTP request body.
-	 *
-	 * <p>
-	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.serializers(JsonSerializer.<jk>class</jk>,XmlSerializer.<jk>class</jk>)
-	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 
 	/**
 	 * Configuration property:  Skip empty form data.
@@ -1938,11 +1855,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing the unmodifiable configuration for this client.
+	 * @param builder The builder for this client.
 	 */
 	@SuppressWarnings("unchecked")
-	protected RestClient(ContextProperties cp) {
-		super(cp);
+	public RestClient(RestClientBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 		this.httpClient = cp.getInstance(RESTCLIENT_INTERNAL_httpClient, CloseableHttpClient.class).orElse(null);
 		this.headerData = cp.getInstance(RESTCLIENT_INTERNAL_headerDataBuilder, HeaderListBuilder.class).orElseGet(HeaderListBuilder::new).copy();
 		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
@@ -1970,20 +1888,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.console = cp.getInstance(RESTCLIENT_console, PrintStream.class).orElse(System.err);
 		this.logRequestsPredicate = cp.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 
-		SerializerGroupBuilder sgb = SerializerGroup.create();
-		for (Object o : cp.getArray(RESTCLIENT_serializers, Object.class).orElse(new Object[0])) {
-			if (o instanceof Serializer) {
-				sgb.append((Serializer)o);  // Don't apply ContextProperties.
-			} else if (o instanceof Class) {
-				Class<?> c = (Class<?>)o;
-				if (! Serializer.class.isAssignableFrom(c))
-					throw new ConfigException("RESTCLIENT_serializers property had invalid class of type ''{0}''", className(c));
-				sgb.append(ContextCache.INSTANCE.create((Class<? extends Serializer>)o, cp));
-			} else {
-				throw new ConfigException("RESTCLIENT_serializers property had invalid object of type ''{0}''", className(o));
-			}
-		}
-		this.serializers = sgb.build();
+		this.serializers = builder.serializerGroupBuilder.build();
 
 		ParserGroupBuilder pgb = ParserGroup.create();
 		for (Object o : cp.getArray(RESTCLIENT_parsers, Object.class).orElse(new Object[0])) {
@@ -2001,7 +1906,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.parsers = pgb.build();
 
 		this.urlEncodingSerializer = UrlEncodingSerializer.create().apply(cp).build();
-		this.partSerializer = cp.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, bs).orElseGet(bs.createBeanSupplier(OpenApiSerializer.class));
+
+		this.partSerializer = builder.simplePartSerializer != null ? builder.simplePartSerializer : (HttpPartSerializer) builder.partSerializerBuilder.build();
+
 		this.partParser = cp.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bs).orElseGet(bs.createBeanSupplier(OpenApiParser.class));
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
@@ -3816,7 +3723,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	<T extends Context> T getInstance(Class<T> c) {
 		Context o = requestContexts.get(c);
 		if (o == null) {
-			o = ContextCache.INSTANCE.create(c, getContextProperties());
+			if (Serializer.class.isAssignableFrom(c)) {
+				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).apply(getContextProperties()).build();
+			} else {
+				o = ContextCache.INSTANCE.create(c, getContextProperties());
+			}
 			requestContexts.put(c, o);
 		}
 		return (T)o;

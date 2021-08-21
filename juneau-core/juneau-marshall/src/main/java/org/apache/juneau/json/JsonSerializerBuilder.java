@@ -36,8 +36,11 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsonSerializerBuilder() {
+	protected JsonSerializerBuilder() {
 		super();
+		produces("application/json");
+		accept("application/json,text/json");
+		contextClass(JsonSerializer.class);
 	}
 
 	/**
@@ -45,13 +48,13 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public JsonSerializerBuilder(JsonSerializer copyFrom) {
+	protected JsonSerializerBuilder(JsonSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public JsonSerializer build() {
-		return build(JsonSerializer.class);
+		return (JsonSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -191,6 +194,24 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public JsonSerializerBuilder beanContextBuilder(BeanContextBuilder value) {
+		super.beanContextBuilder(value);
+		return this;
+	}
+
+	@Override
+	public JsonSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public JsonSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSerializerBuilder add(Map<String,Object> properties) {

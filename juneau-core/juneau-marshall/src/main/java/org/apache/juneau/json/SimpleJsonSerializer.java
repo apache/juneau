@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
-
 /**
  * Serializes POJO models to Simplified JSON.
  *
@@ -43,10 +40,10 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
-	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(ContextProperties.DEFAULT);
+	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(create());
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
+	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -58,63 +55,32 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Readable(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(JSON_simpleMode, true)
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.setDefault(WSERIALIZER_useWhitespace, true)
-					.build()
-			);
+		protected Readable(JsonSerializerBuilder builder) {
+			super(builder.simpleMode().quoteChar('\'').useWhitespace());
 		}
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public SimpleJsonSerializer(ContextProperties cp) {
-		super(
-			cp.copy()
-				.setDefault(JSON_simpleMode, true)
-				.setDefault(WSERIALIZER_quoteChar, '\'')
-				.build(),
-			"application/json", "application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9"
-		);
-	}
-
-	@Override /* Context */
-	public SimpleJsonSerializerBuilder copy() {
-		return new SimpleJsonSerializerBuilder(this);
+	protected SimpleJsonSerializer(JsonSerializerBuilder builder) {
+		super(builder.simpleMode().quoteChar('\''));
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link SimpleJsonSerializerBuilder} object.
+	 * Instantiates a new clean-slate {@link JsonSerializerBuilder} object.
 	 *
 	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> SimpleJsonSerializerBuilder()</code>.
+	 * This is equivalent to simply calling <code><jk>new</jk> JsonSerializerBuilder()</code>.
 	 *
-	 * @return A new {@link SimpleJsonSerializerBuilder} object.
+	 * @return A new {@link JsonSerializerBuilder} object.
 	 */
-	public static SimpleJsonSerializerBuilder create() {
-		return new SimpleJsonSerializerBuilder();
+	public static JsonSerializerBuilder create() {
+		return new JsonSerializerBuilder().simpleMode().quoteChar('\'').produces("application/json").accept("application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9");
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"SimpleJsonSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

@@ -176,6 +176,15 @@ public final class ClassUtils {
 	 * 	An array of parameters.
 	 */
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object... args) {
+		boolean needsShuffle = paramTypes.length != args.length;
+		if (! needsShuffle) {
+			for (int i = 0; i < paramTypes.length; i++) {
+				if (! paramTypes[i].isInstance(args[i]))
+					needsShuffle = true;
+			}
+		}
+		if (! needsShuffle)
+			return args;
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			ClassInfo pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();

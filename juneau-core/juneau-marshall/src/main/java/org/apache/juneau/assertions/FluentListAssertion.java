@@ -188,9 +188,8 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 *
 	 * @return A new list assertion.
 	 */
-	public FluentListAssertion<E,R> first() {
-		int TODO;
-		throw new UnsupportedOperationException("Not implemented");
+	public FluentAnyAssertion<E,R> first() {
+		return item(0);
 	}
 
 	/**
@@ -198,9 +197,8 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 *
 	 * @return A new list assertion.
 	 */
-	public FluentListAssertion<E,R> last() {
-		int TODO;
-		throw new UnsupportedOperationException("Not implemented");
+	public FluentAnyAssertion<E,R> last() {
+		return item(getSize()-1);
 	}
 
 	/**
@@ -210,8 +208,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A new list assertion.  The contents of the original list remain unchanged.
 	 */
 	public FluentListAssertion<E,R> first(int count) {
-		int TODO;
-		throw new UnsupportedOperationException("Not implemented");
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(0, count), returns());
 	}
 
 	/**
@@ -221,8 +218,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A new list assertion.  The contents of the original list remain unchanged.
 	 */
 	public FluentListAssertion<E,R> last(int count) {
-		int TODO;
-		throw new UnsupportedOperationException("Not implemented");
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(getSize()-count, getSize()), returns());
 	}
 
 	/**
@@ -233,8 +229,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A new list assertion.  The contents of the original list remain unchanged.
 	 */
 	public FluentListAssertion<E,R> sublist(int start, int end) {
-		int TODO;
-		throw new UnsupportedOperationException("Not implemented");
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(start, end), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

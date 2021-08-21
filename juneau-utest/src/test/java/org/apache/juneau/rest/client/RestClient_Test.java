@@ -34,7 +34,6 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -77,7 +76,11 @@ public class RestClient_Test {
 	public void a01_basic_overrideHttpClient() {
 		HttpClientBuilder cb = HttpClientBuilder.create();
 		CloseableHttpClient hc = HttpClientBuilder.create().build();
-		RestClient.create().httpClientBuilder(cb).build().copy().build();
+		RestClient.create()
+			.httpClientBuilder(cb)
+			.build()
+			.copy()
+			.build();
 		RestClient.create().httpClient(hc).build().copy().build();
 	}
 
@@ -132,8 +135,8 @@ public class RestClient_Test {
 
 	public static class B4 extends RestClient {
 		private static boolean CREATE_REQUEST_CALLED, CREATE_RESPONSE_CALLED;
-		public B4(ContextProperties cp) {
-			super(cp);
+		public B4(RestClientBuilder b) {
+			super(b);
 		}
 		@Override
 		protected RestRequest createRequest(java.net.URI uri, String method, boolean hasBody) throws RestCallException {

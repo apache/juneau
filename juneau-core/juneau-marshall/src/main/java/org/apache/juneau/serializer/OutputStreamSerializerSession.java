@@ -50,16 +50,6 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		this.ctx = ctx;
 	}
 
-	/**
-	 * Constructor for sessions that don't require context.
-	 *
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected OutputStreamSerializerSession(SerializerSessionArgs args) {
-		this(OutputStreamSerializer.DEFAULT, args);
-	}
-
 	@Override /* SerializerSession */
 	public final boolean isWriterSerializer() {
 		return false;

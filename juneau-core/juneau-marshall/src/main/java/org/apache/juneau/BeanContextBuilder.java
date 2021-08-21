@@ -72,15 +72,6 @@ public class BeanContextBuilder extends ContextBuilder {
 		super(copyFrom);
 	}
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The builder to copy from.
-	 */
-	protected BeanContextBuilder(BeanContextBuilder copyFrom) {
-		super(copyFrom);
-	}
-
 	@Override /* ContextBuilder */
 	public BeanContext build() {
 		return build(BeanContext.class);

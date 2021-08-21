@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
@@ -66,7 +65,7 @@ import org.apache.juneau.http.header.*;
  * </p>
  */
 @ConfigurableContext(nocache=true)
-public final class SerializerGroup extends BeanTraverseContext {
+public final class SerializerGroup {
 
 	/**
 	 * An unmodifiable empty serializer group.
@@ -97,16 +96,12 @@ public final class SerializerGroup extends BeanTraverseContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The modifiable properties that were used to initialize the serializers.
-	 * 	A snapshot of these will be made so that we can clone and modify this group.
 	 * @param serializers
 	 * 	The serializers defined in this group.
 	 * 	The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
 	 * 	to match against media types.
 	 */
-	public SerializerGroup(ContextProperties cp, Serializer[] serializers) {
-		super(cp);
+	public SerializerGroup(Serializer[] serializers) {
 		this.serializers = AList.unmodifiable(serializers);
 
 		AList<MediaRange> lmtr = AList.create();
@@ -124,6 +119,15 @@ public final class SerializerGroup extends BeanTraverseContext {
 		this.mediaRanges = lmtr.unmodifiable();
 		this.mediaTypesList = AList.of(lmt).unmodifiable();
 		this.mediaTypeRangeSerializers = l.unmodifiable();
+	}
+
+	/**
+	 * Creates a copy of this serializer group.
+	 *
+	 * @return A new copy of this serializer group.
+	 */
+	public SerializerGroupBuilder copy() {
+		return new SerializerGroupBuilder(this);
 	}
 
 	/**

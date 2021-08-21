@@ -312,13 +312,13 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlSerializer DEFAULT = new HtmlSerializer(ContextProperties.DEFAULT);
+	public static final HtmlSerializer DEFAULT = new HtmlSerializer(create());
 
 	/** Default serializer, single quotes. */
-	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(ContextProperties.DEFAULT);
+	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(create());
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(ContextProperties.DEFAULT);
+	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -331,14 +331,10 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Sq(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.build()
-			);
+		protected Sq(HtmlSerializerBuilder builder) {
+			super(builder.quoteChar('\''));
 		}
 	}
 
@@ -348,15 +344,10 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public SqReadable(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.setDefault(WSERIALIZER_useWhitespace, true)
-					.build()
-			);
+		protected SqReadable(HtmlSerializerBuilder builder) {
+			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -380,42 +371,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public HtmlSerializer(ContextProperties cp) {
-		this(cp, "text/html", (String)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of
-	 * 	{@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public HtmlSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected HtmlSerializer(HtmlSerializerBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		uriAnchorText = cp.get(HTML_uriAnchorText, AnchorText.class).orElse(AnchorText.TO_STRING);
 		detectLabelParameters = ! cp.getBoolean(HTML_disableDetectLabelParameters).orElse(false);
 		detectLinksInStrings = ! cp.getBoolean(HTML_disableDetectLinksInStrings).orElse(false);
@@ -462,7 +422,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = copy().build(HtmlSchemaSerializer.class);
+			schemaSerializer = HtmlSchemaSerializer.create().apply(getContextProperties()).build();
 		return schemaSerializer;
 	}
 

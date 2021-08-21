@@ -90,7 +90,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private HeaderList headerData;
 	private PartList queryData, formData, pathData;
 
-	private boolean ignoreErrors;
+	private boolean ignoreErrors, suppressLogging;
 
 	private Object input;
 	private Serializer serializer;
@@ -115,7 +115,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
-		super(client, BeanSessionArgs.DEFAULT);
+		super(client.getBeanContext(), BeanSessionArgs.DEFAULT);
 		this.client = client;
 		this.request = createInnerRequest(method, uri, hasBody);
 		this.errorCodes = client.errorCodes;
@@ -751,6 +751,23 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@Override
 	public boolean isDebug() {
 		return getHeaderData().get("Debug", Boolean.class).orElse(false);
+	}
+
+	/**
+	 * Causes logging to be suppressed for the duration of this request.
+	 *
+	 * <p>
+	 * Overrides the {@link #debug()} setting on this request or client.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest suppressLogging() {
+		this.suppressLogging = true;
+		return this;
+	}
+
+	boolean isLoggingSuppressed() {
+		return suppressLogging;
 	}
 
 	/**

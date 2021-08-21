@@ -17,6 +17,7 @@ import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.reflect.ReflectionFilters.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -714,9 +715,12 @@ public final class ClassInfo {
 	 * @return The <c>public static Builder create()</c> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
 	public MethodInfo getBuilderCreateMethod() {
-		for (MethodInfo m : getDeclaredMethods())
-			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)) && (!m.hasReturnType(c)))
-				return m;
+		for (MethodInfo m : getPublicMethods()) {
+			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)) && (!m.hasReturnType(c))) {
+				if (getConstructor(Visibility.PROTECTED, m.getReturnType().inner()) != null)
+					return m;
+			}
+		}
 		return null;
 	}
 
@@ -753,10 +757,33 @@ public final class ClassInfo {
 	 *  The public constructor with the specified argument types, or <jk>null</jk> if not found.
 	 */
 	public ConstructorInfo getPublicConstructor(Class<?>...args) {
-		for (ConstructorInfo ci : _getPublicConstructors())
-			if (ci.hasParamTypes(args))
-				return ci;
-		return null;
+		return Arrays.stream(_getPublicConstructors()).filter(hasArgs(args)).findFirst().orElse(null);
+	}
+
+	/**
+	 * Returns the public constructor that passes the specified predicate test.
+	 *
+	 * <p>
+	 * The {@link ReflectionFilters} class has predefined predicates that can be used for testing.
+	 *
+	 * @param test The test that the public constructor must pass.
+	 * @return The first matching public constructor.
+	 */
+	public Optional<ConstructorInfo> getPublicConstructor(Predicate<ExecutableInfo> test) {
+		return Arrays.stream(_getPublicConstructors()).filter(test).findFirst();
+	}
+
+	/**
+	 * Returns the public constructor that passes the specified predicate test.
+	 *
+	 * <p>
+	 * The {@link ReflectionFilters} class has predefined predicates that can be used for testing.
+	 *
+	 * @param test The test that the public constructor must pass.
+	 * @return The first matching public constructor.
+	 */
+	public Optional<ConstructorInfo> getConstructor(Predicate<ExecutableInfo> test) {
+		return Arrays.stream(_getDeclaredConstructors()).filter(test).findFirst();
 	}
 
 	/**

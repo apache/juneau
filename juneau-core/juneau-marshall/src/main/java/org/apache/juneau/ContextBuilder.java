@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Context.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.reflect.ReflectionFilters.*;
+import static org.apache.juneau.Visibility.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -87,17 +89,6 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The builder to copy from.
-	 */
-	public ContextBuilder(ContextBuilder copyFrom) {
-		this.cpb = new ContextPropertiesBuilder(copyFrom.cpb);
-		this.debug = copyFrom.debug;
-		this.contextClass = copyFrom.contextClass;
-	}
-
-	/**
 	 * Build the object.
 	 *
 	 * @return
@@ -109,7 +100,7 @@ public abstract class ContextBuilder {
 			throw runtimeException("Context class not specified.");
 		try {
 			ClassInfo ci = ClassInfo.of(contextClass);
-			ConstructorInfo cc = ci.getPublicConstructor(this);
+			ConstructorInfo cc = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
 			if (cc != null)
 				return cc.invoke(this);
 			cc = ci.getPublicConstructor(cpb);

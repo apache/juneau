@@ -28,12 +28,12 @@ import org.apache.juneau.svl.*;
  * {@review}
  */
 @FluentSetters
-public class BeanTraverseBuilder extends BeanContextBuilder {
+public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public BeanTraverseBuilder() {
+	protected BeanTraverseBuilder() {
 		super();
 	}
 
@@ -42,8 +42,13 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public BeanTraverseBuilder(BeanTraverseContext copyFrom) {
+	protected BeanTraverseBuilder(BeanTraverseContext copyFrom) {
 		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public BeanTraverseContext build() {
+		return (BeanTraverseContext)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -651,9 +656,4 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	// </FluentSetters>
-
-	@Override /* Context */
-	public BeanTraverseContext build() {
-		return null;
-	}
 }

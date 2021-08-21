@@ -192,10 +192,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT = new JsonSerializer(ContextProperties.DEFAULT);
+	public static final JsonSerializer DEFAULT = new JsonSerializer(create());
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
+	public static final JsonSerializer DEFAULT_READABLE = new Readable(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -208,12 +208,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Readable(ContextProperties cp) {
-			super(
-				cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build()
-			);
+		protected Readable(JsonSerializerBuilder builder) {
+			super(builder.useWhitespace());
 		}
 	}
 
@@ -226,17 +224,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public ReadableSafe(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(JSON_simpleMode, true)
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.setDefault(WSERIALIZER_useWhitespace, true)
-					.setDefault(BEANTRAVERSE_detectRecursions, true)
-					.build()
-			);
+		protected ReadableSafe(JsonSerializerBuilder builder) {
+			super(builder.simpleMode().quoteChar('\'').useWhitespace().detectRecursions());
 		}
 	}
 
@@ -257,42 +248,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public JsonSerializer(ContextProperties cp) {
-		this(cp, "application/json", "application/json,text/json");
-	}
+	protected JsonSerializer(JsonSerializerBuilder builder) {
+		super(builder);
 
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public JsonSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
-
+		ContextProperties cp = getContextProperties();
 		simpleMode = cp.getBoolean(JSON_simpleMode).orElse(false);
 		escapeSolidus = cp.getBoolean(JSON_escapeSolidus).orElse(false);
 		addBeanTypes = cp.getFirstBoolean(JSON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
@@ -326,7 +287,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = copy().build(JsonSchemaSerializer.class);
+			schemaSerializer = JsonSchemaSerializer.create().apply(getContextProperties()).build();
 		return schemaSerializer;
 	}
 

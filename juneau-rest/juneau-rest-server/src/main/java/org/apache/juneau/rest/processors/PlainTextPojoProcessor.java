@@ -44,7 +44,10 @@ public final class PlainTextPojoProcessor implements ResponseProcessor {
 			res.setHeader(ContentType.TEXT_PLAIN);
 
 		FinishablePrintWriter w = res.getNegotiatedWriter();
-		w.append(req.getBeanSession().getClassMetaForObject(o).toString(o));
+		if (o == null)
+			w.append("null");
+		else
+			w.append(req.getBeanSession().getClassMetaForObject(o).toString(o));
 		w.flush();
 		w.finish();
 

@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
-import org.apache.juneau.*;
-
 /**
  * Subclass of {@link RdfParser} for parsing RDF in Abbreviated-XML notation.
  */
@@ -26,7 +22,7 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(ContextProperties.DEFAULT);
+	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,14 +44,9 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public RdfXmlAbbrevSerializer(ContextProperties cp) {
-		super(
-			cp.copy()
-				.set(RDF_language, LANG_RDF_XML_ABBREV)
-				.build(),
-			"text/xml+rdf", "text/xml+rdf+abbrev,text/xml+rdf;q=0.9"
-		);
+	protected RdfXmlAbbrevSerializer(RdfSerializerBuilder builder) {
+		super(builder.xmlabbrev());
 	}
 }

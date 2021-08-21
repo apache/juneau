@@ -76,6 +76,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	protected MockRestClientBuilder(MockRestClient copyFrom) {
 		super(copyFrom);
 		connectionManager(new MockHttpClientConnectionManager());
+		contextClass(MockRestClient.class);
 	}
 
 	/**
@@ -85,7 +86,9 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * Provided so that this class can be easily subclassed.
 	 */
 	protected MockRestClientBuilder() {
-		this(null);
+		super();
+		connectionManager(new MockHttpClientConnectionManager());
+		contextClass(MockRestClient.class);
 	}
 
 	/**
@@ -211,6 +214,15 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		return pathVars(AMap.<String,String>ofPairs((Object[])pairs));
 	}
 
+	/**
+	 * Suppress logging on this client.
+	 *
+	 * @return This object.
+	 */
+	public MockRestClientBuilder suppressLogging() {
+		return logRequests(DetailLevel.NONE, null, null);
+	}
+
 	@Override /* ContextBuilder */
 	public MockRestClientBuilder debug() {
 		header("Debug", "true");
@@ -220,7 +232,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public MockRestClient build() {
-		return build(MockRestClient.class);
+		return (MockRestClient)super.build();
 	}
 
 	@Override /* ContextBuilder */

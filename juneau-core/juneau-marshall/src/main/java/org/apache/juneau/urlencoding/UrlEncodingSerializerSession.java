@@ -135,6 +135,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.
 			out.append("_value=");
+			pop();
 			super.serializeAnything(out, o, null, null, null);
 			return out;
 		}

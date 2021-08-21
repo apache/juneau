@@ -39,6 +39,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	private final JsonSchemaGenerator ctx;
 	private final Map<String,OMap> defs;
 	private JsonSerializerSession jsSession;
+	private JsonParserSession jpSession;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -271,7 +272,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws SerializeException {
 		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
 		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
-			Object example = sType.getExample(this);
+			Object example = sType.getExample(this, jpSession());
 			if (example != null) {
 				try {
 					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
@@ -287,6 +288,12 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		if (jsSession == null)
 			jsSession = ctx.getJsonSerializer().createSession(null);
 		return jsSession.serializeToString(o);
+	}
+
+	private JsonParserSession jpSession() {
+		if (jpSession == null)
+			jpSession = ctx.getJsonParser().createSession(null);
+		return jpSession;
 	}
 
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {

@@ -52,7 +52,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(ContextProperties.DEFAULT);
+	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -65,41 +65,11 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public PlainTextSerializer(ContextProperties cp) {
-		this(cp, "text/plain", (String)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public PlainTextSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected PlainTextSerializer(PlainTextSerializerBuilder builder) {
+		super(builder);
 	}
 
 

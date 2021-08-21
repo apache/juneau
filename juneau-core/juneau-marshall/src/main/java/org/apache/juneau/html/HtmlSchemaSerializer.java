@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
@@ -52,16 +51,16 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(ContextProperties.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(create());
 
 	/** Default serializer, all default settings.*/
-	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(create());
 
 	/** Default serializer, single quotes, simple mode. */
-	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(ContextProperties.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(create());
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(ContextProperties.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -73,12 +72,10 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Readable(ContextProperties cp) {
-			super(
-				cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build()
-			);
+		protected Readable(HtmlSchemaSerializerBuilder builder) {
+			super(builder.useWhitespace());
 		}
 	}
 
@@ -88,14 +85,10 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Simple(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.build()
-				);
+		protected Simple(HtmlSchemaSerializerBuilder builder) {
+			super(builder.quoteChar('\''));
 		}
 	}
 
@@ -105,15 +98,10 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public SimpleReadable(ContextProperties cp) {
-			super(
-				cp.copy()
-					.setDefault(WSERIALIZER_quoteChar, '\'')
-					.setDefault(WSERIALIZER_useWhitespace, true)
-					.build()
-			);
+		protected SimpleReadable(HtmlSchemaSerializerBuilder builder) {
+			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -126,19 +114,28 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store to use for creating the context for this serializer.
+	 * @param builder The builder for this serializer.
 	 */
-	public HtmlSchemaSerializer(ContextProperties cp) {
-		super(
-			cp.copy()
-				.setDefault(BEANTRAVERSE_detectRecursions, true)
-				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
-				.build(),
-			"text/html", "text/html+schema"
-		);
+	protected HtmlSchemaSerializer(HtmlSchemaSerializerBuilder builder) {
+		super(builder.detectRecursions().ignoreRecursions());
 
 		generator = JsonSchemaGenerator.create().apply(getContextProperties()).build();
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link HtmlSchemaSerializerBuilder} object.
+	 *
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> HtmlSchemaSerializerBuilder()</code>.
+	 *
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
+	 * the settings of the object called on.
+	 *
+	 * @return A new {@link HtmlSerializerBuilder} object.
+	 */
+	public static HtmlSchemaSerializerBuilder create() {
+		return new HtmlSchemaSerializerBuilder();
 	}
 
 	@Override /* Context */

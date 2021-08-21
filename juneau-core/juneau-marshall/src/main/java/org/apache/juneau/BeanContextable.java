@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import org.apache.juneau.collections.*;
+
 /**
- * Context class for classes that use {@link BeanContext} object.s
+ * Context class for classes that use {@link BeanContext} objects.
  */
 public abstract class BeanContextable extends Context {
 
@@ -26,8 +28,11 @@ public abstract class BeanContextable extends Context {
 	 */
 	protected BeanContextable(BeanContextableBuilder b) {
 		super(b);
-		beanContext = ContextCache.INSTANCE.create(BeanContext.class, getContextProperties());
+		beanContext = b.bcBuilder.build();
 	}
+
+	@Override
+	public abstract BeanContextableBuilder copy();
 
 	/**
 	 * Returns the bean context for this object.
@@ -67,5 +72,18 @@ public abstract class BeanContextable extends Context {
 	@Override /* Context */
 	public BeanSessionArgs createDefaultSessionArgs() {
  		return beanContext.createDefaultSessionArgs();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public OMap toMap() {
+		return super.toMap()
+			.a(
+				"BeanContextable",
+				OMap.of("beanContext", beanContext.toMap())
+			);
 	}
 }

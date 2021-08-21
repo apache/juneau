@@ -25,7 +25,7 @@ import org.apache.juneau.collections.*;
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  */
 @ConfigurableContext
-public abstract class BeanTraverseContext extends BeanContext {
+public abstract class BeanTraverseContext extends BeanContextable {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -158,22 +158,20 @@ public abstract class BeanTraverseContext extends BeanContext {
 	/**
 	 * Constructor
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	protected BeanTraverseContext(ContextProperties cp) {
-		super(cp);
+	protected BeanTraverseContext(BeanTraverseBuilder builder) {
+		super(builder);
 
+		ContextProperties cp = getContextProperties();
 		maxDepth = cp.getInteger(BEANTRAVERSE_maxDepth).orElse(100);
 		initialDepth = cp.getInteger(BEANTRAVERSE_initialDepth).orElse(0);
 		ignoreRecursions = cp.getBoolean(BEANTRAVERSE_ignoreRecursions).orElse(false);
 		detectRecursions = cp.getBoolean(BEANTRAVERSE_detectRecursions).orElse(ignoreRecursions);
 	}
 
-	@Override /* Context */
-	public BeanTraverseBuilder copy() {
-		return new BeanTraverseBuilder(this);
-	}
+	@Override
+	public abstract BeanTraverseBuilder copy();
 
 	@Override /* Context */
 	public BeanTraverseSession createSession() {

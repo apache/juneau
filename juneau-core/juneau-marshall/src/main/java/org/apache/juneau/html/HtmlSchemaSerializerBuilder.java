@@ -24,6 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -39,8 +40,11 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public HtmlSchemaSerializerBuilder() {
+	protected HtmlSchemaSerializerBuilder() {
 		super();
+		produces("text/html");
+		accept("text/html+schema");
+		contextClass(HtmlSchemaSerializer.class);
 	}
 
 	/**
@@ -48,13 +52,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlSchemaSerializerBuilder(HtmlSchemaSerializer copyFrom) {
+	protected HtmlSchemaSerializerBuilder(HtmlSchemaSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public HtmlSchemaSerializer build() {
-		return build(HtmlSchemaSerializer.class);
+		return (HtmlSchemaSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -89,7 +93,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 * <p>
-	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
+	 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}

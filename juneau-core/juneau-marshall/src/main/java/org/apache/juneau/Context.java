@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -51,6 +52,35 @@ import org.apache.juneau.utils.*;
  */
 @ConfigurableContext
 public abstract class Context implements MetaProvider {
+
+	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
+
+	/**
+	 * Instantiates a builder of the specified context class.
+	 *
+	 * <p>
+	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
+	 * or protected constructor of the class.
+	 *
+	 * @param c The builder to create.
+	 * @return A new builder.
+	 */
+	public static ContextBuilder createBuilder(Class<? extends Context> c) {
+		try {
+			MethodInfo mi = BUILDER_CREATE_METHODS.get(c);
+			if (mi == null) {
+				mi = ClassInfo.of(c).getBuilderCreateMethod();
+				if (mi == null)
+					throw new RuntimeException("Could not find builder create method on class " + c);
+				BUILDER_CREATE_METHODS.put(c, mi);
+			}
+			ContextBuilder b = (ContextBuilder)mi.invoke(null);
+			b.contextClass(c);
+			return b;
+		} catch (ExecutableException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	static final String PREFIX = "Context";
 
@@ -166,9 +196,10 @@ public abstract class Context implements MetaProvider {
 	 * @param builder The builder for this class.
 	 */
 	protected Context(ContextBuilder builder) {
-		debug = builder.debug;
+		ContextProperties cp = builder.getContextProperties();
+		debug = cp.getBoolean(CONTEXT_debug).orElse(builder.debug);
 		identityCode = System.identityHashCode(this);
-		properties = ContextProperties.DEFAULT;
+		properties = builder.getContextProperties();
 
 		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 		for (Annotation a : builder.getContextProperties().getList(CONTEXT_annotations, Annotation.class).orElse(emptyList())) {
@@ -228,9 +259,7 @@ public abstract class Context implements MetaProvider {
 	 *
 	 * @return A new ContextBuilder object.
 	 */
-	public ContextBuilder copy() {
-		throw new UnsupportedOperationException();  // Can't copy an abstract class.
-	}
+	public abstract ContextBuilder copy();
 
 	/**
 	 * Constructs the specified context class using the property store of this context class.

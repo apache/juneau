@@ -159,16 +159,16 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
-	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(ContextProperties.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(create());
 
 	/** Reusable instance of {@link UrlEncodingSerializer.PlainText}. */
-	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(ContextProperties.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(create());
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
-	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(ContextProperties.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(create());
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
-	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -183,10 +183,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Expanded(ContextProperties cp) {
-			super(cp.copy().setDefault(URLENC_expandedParams, true).build());
+		protected Expanded(UrlEncodingSerializerBuilder builder) {
+			super(builder.expandedParams());
 		}
 	}
 
@@ -198,10 +198,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Readable(ContextProperties cp) {
-			super(cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build());
+		protected Readable(UrlEncodingSerializerBuilder builder) {
+			super(builder.useWhitespace());
 		}
 	}
 
@@ -213,10 +213,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public PlainText(ContextProperties cp) {
-			super(cp.copy().setDefault(UON_paramFormat, "PLAINTEXT").build());
+		protected PlainText(UrlEncodingSerializerBuilder builder) {
+			super(builder.paramFormatPlain());
 		}
 	}
 
@@ -233,47 +233,11 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public UrlEncodingSerializer(ContextProperties cp) {
-		this(cp, "application/x-www-form-urlencoded", (String)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public UrlEncodingSerializer(ContextProperties cp, String produces, String accept) {
-		super(
-			cp.copy()
-				.setDefault(UON_encoding, true)
-				.build(),
-			produces,
-			accept
-		);
+	protected UrlEncodingSerializer(UrlEncodingSerializerBuilder builder) {
+		super(builder.encoding());
+		ContextProperties cp = getContextProperties();
 		expandedParams = cp.getBoolean(URLENC_expandedParams).orElse(false);
 	}
 

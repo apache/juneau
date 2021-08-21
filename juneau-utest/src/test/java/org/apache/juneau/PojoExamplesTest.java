@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.json.*;
 import org.junit.*;
 
 /*
@@ -24,13 +25,15 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class PojoExamplesTest {
 
+	private final JsonParserSession session = JsonParser.DEFAULT.createSession();
+
 	//====================================================================================================
 	// test BEAN_examples
 	//====================================================================================================
 	@Test
 	public void testProperty() throws Exception {
 		BeanSession bs = BeanContext.create().example(A.class, new A().init()).build().createSession();
-		assertObject(bs.getClassMeta(A.class).getExample(bs)).asJson().is("{f1:'f1a'}");
+		assertObject(bs.getClassMeta(A.class).getExample(bs,session)).asJson().is("{f1:'f1a'}");
 	}
 
 	public static class A {
@@ -48,7 +51,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleField() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(B1.class).getExample(bs)).asJson().is("{f1:'f1b'}");
+		assertObject(bs.getClassMeta(B1.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
 
 	public static class B1 {
@@ -66,7 +69,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleField_usingConfig() throws Exception {
 		BeanSession bs = BeanContext.create().applyAnnotations(B1cConfig.class).build().createSession();
-		assertObject(bs.getClassMeta(B1c.class).getExample(bs)).asJson().is("{f1:'f1b'}");
+		assertObject(bs.getClassMeta(B1c.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
 
 	@Example(on="Dummy1.EXAMPLE")
@@ -91,7 +94,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleFieldPrivate() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(B2.class).getExample(bs)).asJson().is("{f1:'f1b'}");
+		assertObject(bs.getClassMeta(B2.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
 
 	public static class B2 {
@@ -109,7 +112,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleFieldPrivate_usingConfig() throws Exception {
 		BeanSession bs = BeanContext.create().applyAnnotations(B2cConfig.class).build().createSession();
-		assertObject(bs.getClassMeta(B2c.class).getExample(bs)).asJson().is("{f1:'f1b'}");
+		assertObject(bs.getClassMeta(B2c.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
 
 	@Example(on="Dummy1.EXAMPLE")
@@ -135,7 +138,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleOnPublicNoArgMethod() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(C1.class).getExample(bs)).asJson().is("{f1:'f1c'}");
+		assertObject(bs.getClassMeta(C1.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
 
 	public static class C1 {
@@ -155,7 +158,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleOnPublicNoArgMethod_usingConfig() throws Exception {
 		BeanSession bs = BeanContext.create().applyAnnotations(C1cConfig.class).build().createSession();
-		assertObject(bs.getClassMeta(C1c.class).getExample(bs)).asJson().is("{f1:'f1c'}");
+		assertObject(bs.getClassMeta(C1c.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
 
 	@Example(on="Dummy1.x")
@@ -182,7 +185,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleOnPrivateNoArgMethod() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(C2.class).getExample(bs)).asJson().is("{f1:'f1c'}");
+		assertObject(bs.getClassMeta(C2.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
 
 	public static class C2 {
@@ -202,7 +205,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleOnPrivateNoArgMethod_usingConfig() throws Exception {
 		BeanSession bs = BeanContext.create().applyAnnotations(C2cConfig.class).build().createSession();
-		assertObject(bs.getClassMeta(C2c.class).getExample(bs)).asJson().is("{f1:'f1c'}");
+		assertObject(bs.getClassMeta(C2c.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
 
 	@Example(on="Dummy1.x")
@@ -230,7 +233,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleOnPublicOneArgMethod() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(D1.class).getExample(bs)).asJson().is("{f1:'f1d'}");
+		assertObject(bs.getClassMeta(D1.class).getExample(bs,session)).asJson().is("{f1:'f1d'}");
 	}
 
 	public static class D1 {
@@ -250,7 +253,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleOnPublicOneArgMethod_usingConfig() throws Exception {
 		BeanSession bs = BeanContext.create().applyAnnotations(D1cConfig.class).build().createSession();
-		assertObject(bs.getClassMeta(D1c.class).getExample(bs)).asJson().is("{f1:'f1d'}");
+		assertObject(bs.getClassMeta(D1c.class).getExample(bs,session)).asJson().is("{f1:'f1d'}");
 	}
 
 	@Example(on="Dummy1.x(BeanSession)")
@@ -277,7 +280,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleMethod() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(E1.class).getExample(bs)).asJson().is("{f1:'f1e'}");
+		assertObject(bs.getClassMeta(E1.class).getExample(bs,session)).asJson().is("{f1:'f1e'}");
 	}
 
 	public static class E1 {
@@ -299,7 +302,7 @@ public class PojoExamplesTest {
 	@Test
 	public void testExampleBeanSessionMethod() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertObject(bs.getClassMeta(E2.class).getExample(bs)).asJson().is("{f1:'f1e'}");
+		assertObject(bs.getClassMeta(E2.class).getExample(bs,session)).asJson().is("{f1:'f1e'}");
 	}
 
 	public static class E2 {

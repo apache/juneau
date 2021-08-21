@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
-import org.apache.juneau.*;
-
 /**
  * Subclass of {@link RdfSerializer} for serializing RDF in Turtle notation.
  */
@@ -26,7 +22,7 @@ public class TurtleSerializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default Turtle serializer, all default settings.*/
-	public static final TurtleSerializer DEFAULT = new TurtleSerializer(ContextProperties.DEFAULT);
+	public static final TurtleSerializer DEFAULT = new TurtleSerializer(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -50,12 +46,7 @@ public class TurtleSerializer extends RdfSerializer {
 	 *
 	 * @param cp The property store containing all the settings for this object.
 	 */
-	public TurtleSerializer(ContextProperties cp) {
-		super(
-			cp.copy()
-				.set(RDF_language, LANG_TURTLE)
-				.build(),
-			"text/turtle", (String)null
-		);
+	protected TurtleSerializer(RdfSerializerBuilder builder) {
+		super(builder.turtle());
 	}
 }

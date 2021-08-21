@@ -473,7 +473,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(ContextProperties.DEFAULT);
+	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -492,41 +492,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public HtmlDocSerializer(ContextProperties cp) {
-		this(cp, "text/html", (String)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of
-	 * 	{@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json",text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public HtmlDocSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected HtmlDocSerializer(HtmlDocSerializerBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		style = cp.getArray(HTMLDOC_style, String.class).orElse(new String[0]);
 		stylesheet = cp.getArray(HTMLDOC_stylesheet, String.class).orElse(new String[0]);
 		script = cp.getArray(HTMLDOC_script, String.class).orElse(new String[0]);

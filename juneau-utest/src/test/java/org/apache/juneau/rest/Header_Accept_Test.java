@@ -14,14 +14,11 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.IOException;
-
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -31,26 +28,21 @@ public class Header_Accept_Test {
 	// Setup classes
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class DummySerializer extends WriterSerializer {
-		String name;
-		DummySerializer(ContextProperties cp, String name, String produces) {
-			super(cp, produces, null);
-			this.name = name;
-		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write(name);
-				}
-			};
+	public static class S1 extends MockWriterSerializer {
+		protected S1(MockWriterSerializer.Builder b) {
+			super(b.produces("text/s1").serialize((s,o) -> "s1"));
 		}
 	}
-
-	public static class S1 extends DummySerializer { public S1(ContextProperties cp) {super(cp, "s1", "text/s1");}}
-	public static class S2 extends DummySerializer { public S2(ContextProperties cp) {super(cp, "s2", "text/s2");}}
-	public static class S3 extends DummySerializer { public S3(ContextProperties cp) {super(cp, "s3", "text/s3");}}
+	public static class S2 extends MockWriterSerializer {
+		protected S2(MockWriterSerializer.Builder b) {
+			super(b.produces("text/s2").serialize((s,o) -> "s2"));
+		}
+	}
+	public static class S3 extends MockWriterSerializer {
+		protected S3(MockWriterSerializer.Builder b) {
+			super(b.produces("text/s3").serialize((s,o) -> "s3"));
+		}
+	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Accept headers on servlet annotation are picked up.

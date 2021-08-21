@@ -30,12 +30,14 @@ import org.apache.juneau.svl.*;
  * {@review}
  */
 @FluentSetters
-public class SerializerBuilder extends BeanTraverseBuilder {
+public abstract class SerializerBuilder extends BeanTraverseBuilder {
+
+	String produces, accept;
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public SerializerBuilder() {
+	protected SerializerBuilder() {
 		super();
 	}
 
@@ -44,13 +46,79 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public SerializerBuilder(Serializer copyFrom) {
+	protected SerializerBuilder(Serializer copyFrom) {
 		super(copyFrom);
+		produces = copyFrom._produces;
+		accept = copyFrom._accept;
+	}
+
+	@Override /* ContextBuilder */
+	public Serializer build() {
+		return (Serializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Specifies the media type that this serializer produces.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public SerializerBuilder produces(String value) {
+		this.produces = value;
+		return this;
+	}
+
+	/**
+	 * Returns the current value for the 'produces' property.
+	 *
+	 * @return The current value for the 'produces' property.
+	 */
+	public String getProduces() {
+		return produces;
+	}
+
+	/**
+	 * 	Specifies the accept media types that the serializer can handle.
+	 *
+	 * 	<p>
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<p class='bcode w800'>
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
+	 * 	</p>
+	 * 	<br>...or...
+	 * 	<p class='bcode w800'>
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
+	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public SerializerBuilder accept(String value) {
+		this.accept = value;
+		return this;
+	}
+
+	/**
+	 * Returns the current value for the 'accept' property.
+	 *
+	 * @return The current value for the 'accept' property.
+	 */
+	public String getAccept() {
+		return accept;
+	}
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1012,9 +1080,4 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	// </FluentSetters>
-
-	@Override /* Context */
-	public Serializer build() {
-		return null;
-	}
 }

@@ -339,8 +339,8 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A7 extends RestClient {
 		private static String lastMessage;
-		public A7(ContextProperties cp) {
-			super(cp);
+		public A7(RestClientBuilder builder) {
+			super(builder);
 		}
 		@Override
 		public void log(Level level,String msg,Object...args) {
@@ -398,8 +398,6 @@ public class RestClient_Config_RestClient_Test {
 		x = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
 		b = x.post("/echoBody",bean).run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().asType(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
-		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers,String.class).build()).messages().contains("RESTCLIENT_serializers property had invalid class of type 'java.lang.String'");
-		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers,"").build()).messages().contains("RESTCLIENT_serializers property had invalid object of type 'java.lang.String'");
 		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,String.class).build()).messages().contains("RESTCLIENT_parsers property had invalid class of type 'java.lang.String'");
 		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,"").build()).messages().contains("RESTCLIENT_parsers property had invalid object of type 'java.lang.String'");
 	}

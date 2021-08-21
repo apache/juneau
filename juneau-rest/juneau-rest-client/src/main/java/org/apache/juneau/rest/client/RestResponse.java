@@ -437,7 +437,7 @@ public class RestResponse implements HttpResponse {
 					HttpPartSchema schema = pm.getSchema();
 					HttpPartType pt = pm.getPartType();
 					String name = pm.getPartName().orElse(null);
-					ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
+					ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
 					if (pt == RESPONSE_HEADER)
 						return getHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
 					if (pt == RESPONSE_STATUS)
@@ -832,7 +832,7 @@ public class RestResponse implements HttpResponse {
 		isClosed = true;
 		EntityUtils.consumeQuietly(response.getEntity());
 
-		if (request.isDebug() || client.logRequestsPredicate.test(request, this)) {
+		if (request.isLoggingSuppressed() == false && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
 			if (client.logRequests == DetailLevel.SIMPLE) {
 				client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
 			} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {

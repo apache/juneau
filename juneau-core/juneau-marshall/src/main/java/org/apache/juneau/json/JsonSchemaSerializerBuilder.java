@@ -35,11 +35,17 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
+	JsonSchemaGeneratorBuilder generatorBuilder;
+
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsonSchemaSerializerBuilder() {
+	protected JsonSchemaSerializerBuilder() {
 		super();
+		produces("application/json");
+		accept("application/json+schema,text/json+schema");
+		contextClass(JsonSchemaSerializer.class);
+		generatorBuilder = (JsonSchemaGeneratorBuilder) JsonSchemaGenerator.create().beanContextBuilder(getBeanContextBuilder());
 	}
 
 	/**
@@ -47,13 +53,14 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public JsonSchemaSerializerBuilder(JsonSchemaSerializer copyFrom) {
+	protected JsonSchemaSerializerBuilder(JsonSchemaSerializer copyFrom) {
 		super(copyFrom);
+		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generator.copy().beanContextBuilder(getBeanContextBuilder());
 	}
 
 	@Override /* ContextBuilder */
 	public JsonSchemaSerializer build() {
-		return build(JsonSchemaSerializer.class);
+		return (JsonSchemaSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -88,7 +95,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 * <p>
-	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
+	 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}

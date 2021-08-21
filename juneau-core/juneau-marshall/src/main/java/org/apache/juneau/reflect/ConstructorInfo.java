@@ -134,7 +134,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	@SuppressWarnings("unchecked")
 	public <T> T invoke(Object...args) throws ExecutableException {
 		try {
-			return (T)c.newInstance(args);
+			return (T)c.newInstance(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
 		} catch (InvocationTargetException e) {
 			throw new ExecutableException(e.getTargetException());
 		} catch (Exception e) {

@@ -955,20 +955,21 @@ public final class ClassMeta<T> implements Type {
 	 * @param session
 	 * 	The bean session.
 	 * 	<br>Required because the example method may take it in as a parameter.
+	 * @param jpSession The JSON parser for parsing examples into POJOs.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
-	public T getExample(BeanSession session) {
+	public T getExample(BeanSession session, JsonParserSession jpSession) {
 		try {
 			if (example != null)
-				return session.getContext().getContext(JsonParser.class).parse(example, this);
+				return jpSession.parse(example, this);
 			if (exampleMethod != null)
 				return (T)MethodInfo.of(exampleMethod).invokeFuzzy(null, session);
 			if (exampleField != null)
 				return (T)exampleField.get(null);
 
 			if (isCollection()) {
-				Object etExample = getElementType().getExample(session);
+				Object etExample = getElementType().getExample(session, jpSession);
 				if (etExample != null) {
 					if (canCreateNewInstance()) {
 						Collection c = (Collection)newInstance();
@@ -978,15 +979,15 @@ public final class ClassMeta<T> implements Type {
 					return (T)Collections.singleton(etExample);
 				}
 			} else if (isArray()) {
-				Object etExample = getElementType().getExample(session);
+				Object etExample = getElementType().getExample(session, jpSession);
 				if (etExample != null) {
 					Object o = Array.newInstance(getElementType().innerClass, 1);
 					Array.set(o, 0, etExample);
 					return (T)o;
 				}
 			} else if (isMap()) {
-				Object vtExample = getValueType().getExample(session);
-				Object ktExample = getKeyType().getExample(session);
+				Object vtExample = getValueType().getExample(session, jpSession);
+				Object ktExample = getKeyType().getExample(session, jpSession);
 				if (ktExample != null && vtExample != null) {
 					if (canCreateNewInstance()) {
 						Map m = (Map)newInstance();
@@ -1770,7 +1771,7 @@ public final class ClassMeta<T> implements Type {
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 		ConstructorInfo c = getConstructor();
 		if (c != null)
-			return c.<T>invoke((Object[])null);
+			return c.<T>invoke();
 		InvocationHandler h = getProxyInvocationHandler();
 		if (h != null)
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);

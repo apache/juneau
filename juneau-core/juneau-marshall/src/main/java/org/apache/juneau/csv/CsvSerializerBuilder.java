@@ -33,8 +33,10 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public CsvSerializerBuilder() {
+	protected CsvSerializerBuilder() {
 		super();
+		produces("text/csv");
+		contextClass(CsvSerializer.class);
 	}
 
 	/**
@@ -42,13 +44,13 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public CsvSerializerBuilder(CsvSerializer copyFrom) {
+	protected CsvSerializerBuilder(CsvSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public CsvSerializer build() {
-		return build(CsvSerializer.class);
+		return (CsvSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -56,6 +58,18 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
+
+	@Override
+	public CsvSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public CsvSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public CsvSerializerBuilder add(Map<String,Object> properties) {

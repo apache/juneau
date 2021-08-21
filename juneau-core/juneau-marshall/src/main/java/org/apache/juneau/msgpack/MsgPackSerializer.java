@@ -76,13 +76,13 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(ContextProperties.DEFAULT);
+	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(create());
 
 	/** Default serializer, all default settings, spaced-hex string output.*/
-	public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(ContextProperties.DEFAULT);
+	public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());
 
 	/** Default serializer, all default settings, spaced-hex string output.*/
-	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(ContextProperties.DEFAULT);
+	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -94,12 +94,10 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public SpacedHex(ContextProperties cp) {
-			super(
-				cp.copy().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX).build()
-			);
+		protected SpacedHex(MsgPackSerializerBuilder builder) {
+			super(builder.binaryFormat(BinaryFormat.SPACED_HEX));
 		}
 	}
 
@@ -109,12 +107,10 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Base64(ContextProperties cp) {
-			super(
-				cp.copy().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.BASE64).build()
-			);
+		protected Base64(MsgPackSerializerBuilder builder) {
+			super(builder.binaryFormat(BinaryFormat.BASE64));
 		}
 	}
 
@@ -130,10 +126,11 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public MsgPackSerializer(ContextProperties cp) {
-		super(cp, "octal/msgpack", null);
+	protected MsgPackSerializer(MsgPackSerializerBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		this.addBeanTypes = cp.getFirstBoolean(MSGPACK_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 	}
 

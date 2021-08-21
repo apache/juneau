@@ -870,7 +870,7 @@ public class BeanMeta<T> {
 				return constructor.<T>invoke(outer);
 		} else {
 			if (constructor != null)
-				return constructor.<T>invoke((Object[])null);
+				return constructor.<T>invoke();
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (h != null) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();

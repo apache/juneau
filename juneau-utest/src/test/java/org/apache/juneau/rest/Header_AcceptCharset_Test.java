@@ -24,6 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -86,13 +87,13 @@ public class Header_AcceptCharset_Test {
 			}
 		}
 
-		public static class TestSerializer extends OutputStreamSerializer {
-			public TestSerializer(ContextProperties cp) {
-				super(cp, "text/plain", null);
+		public static class TestSerializer extends MockStreamSerializer {
+			protected TestSerializer(MockStreamSerializer.Builder builder) {
+				super(builder.produces("text/plain"));
 			}
 			@Override /* Serializer */
 			public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
-				return new OutputStreamSerializerSession(args) {
+				return new OutputStreamSerializerSession(this, args) {
 					@Override /* SerializerSession */
 					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 						SessionProperties sp = getSessionProperties();

@@ -13,7 +13,6 @@
 package org.apache.juneau.serializer;
 
 import java.io.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -47,9 +46,23 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Represents no Serializer.
 	 */
 	public static abstract class Null extends Serializer {
-		private Null(ContextProperties cp, String produces, String accept) {
-			super(cp, produces, accept);
+		private Null(SerializerBuilder cp) {
+			super(cp);
 		}
+	}
+
+	/**
+	 * Instantiates a builder of the specified serializer class.
+	 *
+	 * <p>
+	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
+	 * or protected constructor of the class.
+	 *
+	 * @param c The builder to create.
+	 * @return A new builder.
+	 */
+	public static SerializerBuilder createSerializerBuilder(Class<? extends Serializer> c) {
+		return (SerializerBuilder)Context.createBuilder(c);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -391,13 +404,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + ".uriResolution.s";
 
-	static final Serializer DEFAULT = new Serializer(ContextProperties.create().build(), "", "") {
-		@Override
-		public SerializerSession createSession(SerializerSessionArgs args) {
-			throw new NoSuchMethodError();
-		}
-	};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -420,35 +426,20 @@ public abstract class Serializer extends BeanTraverseContext {
 	private final MediaType[] accepts;
 	private final MediaType produces;
 
+	final String _produces, _accept;
+
 	/**
 	 * Constructor
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
+	 * @param builder
+	 * 	The builder this object.
 	 */
-	protected Serializer(ContextProperties cp, String produces, String accept) {
-		super(cp);
+	protected Serializer(SerializerBuilder builder) {
+		super(builder);
 
+		_produces = builder.produces;
+		_accept = builder.accept;
+		ContextProperties cp = getContextProperties();
 		addBeanTypes = cp.getBoolean(SERIALIZER_addBeanTypes).orElse(false);
 		keepNullProperties = cp.getBoolean(SERIALIZER_keepNullProperties).orElse(false);
 		trimEmptyCollections = cp.getBoolean(SERIALIZER_trimEmptyCollections).orElse(false);
@@ -462,15 +453,13 @@ public abstract class Serializer extends BeanTraverseContext {
 		uriRelativity = cp.get(SERIALIZER_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
 		listener = cp.getClass(SERIALIZER_listener, SerializerListener.class).orElse(null);
 
-		this.produces = MediaType.of(produces);
-		this.accept = accept == null ? MediaRanges.of(produces) : MediaRanges.of(accept);
-		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.ofAll(StringUtils.split(accept, ','));
+		this.produces = MediaType.of(builder.produces);
+		this.accept = builder.accept == null ? MediaRanges.of(builder.produces) : MediaRanges.of(builder.accept);
+		this.accepts = builder.accept == null ? new MediaType[] {this.produces} : MediaType.ofAll(StringUtils.split(builder.accept, ','));
 	}
 
-	@Override /* Context */
-	public SerializerBuilder copy() {
-		throw new UnsupportedOperationException();
-	}
+	@Override
+	public abstract SerializerBuilder copy();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods

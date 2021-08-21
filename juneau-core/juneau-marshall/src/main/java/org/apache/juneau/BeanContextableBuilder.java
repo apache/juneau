@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
@@ -51,14 +52,14 @@ import org.apache.juneau.transform.*;
 @FluentSetters
 public abstract class BeanContextableBuilder extends ContextBuilder {
 
-	private BeanContextBuilder bcBuilder;
+	BeanContextBuilder bcBuilder;
 
 	/**
 	 * Constructor.
 	 *
 	 * All default settings.
 	 */
-	public BeanContextableBuilder() {
+	protected BeanContextableBuilder() {
 		super();
 		this.bcBuilder = BeanContext.create();
 	}
@@ -68,30 +69,39 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public BeanContextableBuilder(BeanContextable copyFrom) {
+	protected BeanContextableBuilder(BeanContextable copyFrom) {
 		super(copyFrom);
 		this.bcBuilder = copyFrom.getBeanContext().copy();
 	}
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The builder to copy from.
-	 */
-	public BeanContextableBuilder(BeanContextableBuilder copyFrom) {
-		bcBuilder = new BeanContextBuilder(copyFrom.bcBuilder);
+	@Override /* ContextBuilder */
+	public BeanContextable build() {
+		return (BeanContextable)super.build();
 	}
 
 	/**
-	 * Makes a copy of this builder.
+	 * Returns the inner bean context builder.
 	 *
-	 * @return A new copy of this builder.
+	 * @return The inner bean context builder.
 	 */
-	public abstract BeanContextableBuilder copy();
+	public BeanContextBuilder getBeanContextBuilder() {
+		return bcBuilder;
+	}
 
-	@Override /* ContextBuilder */
-	public BeanContextable build() {
-		return null;
+	/**
+	 * Overrides the bean context builder.
+	 *
+	 * <p>
+	 * Used when sharing bean context builders across multiple context objects.
+	 * For example, {@link JsonSchemaGeneratorBuilder} uses this to apply common bean settings with the JSON
+	 * serializer and parser.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextableBuilder beanContextBuilder(BeanContextBuilder value) {
+		this.bcBuilder = value;
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2894,8 +2904,8 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 
 	@Override
 	public BeanContextableBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		bcBuilder.applyAnnotations(al.filter(x -> x.isType(BeanConfig.class)), r);
-		super.applyAnnotations(al.filter(x -> ! x.isType(BeanConfig.class)), r);
+		bcBuilder.applyAnnotations(al, r);
+		super.applyAnnotations(al, r);
 		return this;
 	}
 

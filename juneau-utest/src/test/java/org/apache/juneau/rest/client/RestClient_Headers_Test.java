@@ -31,6 +31,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
@@ -39,6 +40,14 @@ import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class RestClient_Headers_Test {
+
+	public static final CaptureLogger LOGGER = new CaptureLogger();
+
+	public static class CaptureLogger extends BasicTestCaptureRestLogger {
+		public static CaptureLogger getInstance() {
+			return LOGGER;
+		}
+	}
 
 	public static class ABean {
 		public int f;
@@ -55,7 +64,7 @@ public class RestClient_Headers_Test {
 
 	private static ABean bean = ABean.get();
 
-	@Rest
+	@Rest(callLogger=CaptureLogger.class)
 	public static class A extends BasicRestObject {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
@@ -309,7 +318,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void b03_debugHeader() throws Exception {
-		checkClient("Debug").build().get("/headers").debug().run().assertBody().is("['true']");
+		checkClient("Debug").build().get("/headers").debug().suppressLogging().run().assertBody().is("['true']");
 	}
 
 	@Test
@@ -319,7 +328,7 @@ public class RestClient_Headers_Test {
 		RestClient rc = checkClient("Accept").header("Accept","text/foo").build();
 		RestRequest req = rc.get("/headers");
 		req.setHeader("Accept","text/plain");
-		req.debug().run().assertBody().is("['text/plain']");
+		req.run().assertBody().is("['text/plain']");
 	}
 
 	@Test

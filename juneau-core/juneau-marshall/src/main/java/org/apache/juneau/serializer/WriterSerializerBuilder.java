@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -30,12 +31,12 @@ import org.apache.juneau.svl.*;
  * {@review}
  */
 @FluentSetters
-public class WriterSerializerBuilder extends SerializerBuilder {
+public abstract class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public WriterSerializerBuilder() {
+	protected WriterSerializerBuilder() {
 		super();
 	}
 
@@ -44,8 +45,13 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public WriterSerializerBuilder(WriterSerializer copyFrom) {
+	protected WriterSerializerBuilder(WriterSerializer copyFrom) {
 		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public WriterSerializer build() {
+		return (WriterSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -160,6 +166,23 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	@FluentSetter
 	public WriterSerializerBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * Same as {@link #quoteChar(char)} but overrides it if it has a default setting on the serializer.
+	 *
+	 * <p>
+	 * For example, you can use this to override the quote character on {@link SimpleJsonSerializer} even though
+	 * the quote char is normally a single quote on that class.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public WriterSerializerBuilder quoteCharOverride(char value) {
+		return set(WSERIALIZER_quoteCharOverride, value);
 	}
 
 	/**
@@ -303,6 +326,18 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public WriterSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public WriterSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public WriterSerializerBuilder add(Map<String,Object> properties) {
@@ -833,9 +868,4 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	// </FluentSetters>
-
-	@Override /* Context */
-	public WriterSerializer build() {
-		return null;
-	}
 }

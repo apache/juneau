@@ -127,7 +127,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * 	serializer contexts.
 	 */
 	protected SerializerSession(SerializerSessionArgs args) {
-		this(Serializer.DEFAULT, args);
+		this(null, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

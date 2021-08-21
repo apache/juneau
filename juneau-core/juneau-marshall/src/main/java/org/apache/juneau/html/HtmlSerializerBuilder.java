@@ -36,8 +36,10 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public HtmlSerializerBuilder() {
+	protected HtmlSerializerBuilder() {
 		super();
+		produces("text/html");
+		contextClass(HtmlSerializer.class);
 	}
 
 	/**
@@ -45,13 +47,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlSerializerBuilder(HtmlSerializer copyFrom) {
+	protected HtmlSerializerBuilder(HtmlSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public HtmlSerializer build() {
-		return build(HtmlSerializer.class);
+		return (HtmlSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -444,6 +446,18 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public HtmlSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public HtmlSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlSerializerBuilder add(Map<String,Object> properties) {

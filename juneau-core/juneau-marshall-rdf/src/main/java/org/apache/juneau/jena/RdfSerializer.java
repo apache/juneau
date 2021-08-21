@@ -250,31 +250,12 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public RdfSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected RdfSerializer(RdfSerializerBuilder builder) {
+		super(builder.produces(getProduces(builder)).accept(getAccept(builder)));
+		ContextProperties cp = getContextProperties();
 		addLiteralTypes = cp.getBoolean(RDF_addLiteralTypes).orElse(false);
 		addRootProperty = cp.getBoolean(RDF_addRootProperty).orElse(false);
 		useXmlNamespaces = ! cp.getBoolean(RDF_disableUseXmlNamespaces).orElse(false);
@@ -294,21 +275,32 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 		jenaProperties = m.unmodifiable();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 */
-	public RdfSerializer(ContextProperties cp) {
-		this(cp, getProduces(cp), (String)null);
-	}
-
-	private static String getProduces(ContextProperties cp) {
+	private static String getProduces(RdfSerializerBuilder builder) {
+		if (builder.getProduces() != null)
+			return builder.getProduces();
+		ContextProperties cp = builder.getContextProperties();
 		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML": return "text/xml+rdf+abbrev";
 			case "RDF/XML-ABBREV": return "text/xml+rdf";
+			case "N-TRIPLE": return "text/n-triple";
+			case "N3": return "text/n3";
+			case "N3-PP": return "text/n3-pp";
+			case "N3-PLAIN": return "text/n3-plain";
+			case "N3-TRIPLES": return "text/n3-triples";
+			case "TURTLE": return "text/turtle";
+			default: return "text/xml+rdf";
+		}
+	}
+
+	private static String getAccept(RdfSerializerBuilder builder) {
+		if (builder.getAccept() != null)
+			return builder.getAccept();
+		ContextProperties cp = builder.getContextProperties();
+		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
+		switch(rdfLanguage) {
+			case "RDF/XML": return "text/xml+rdf+abbrev";
+			case "RDF/XML-ABBREV": return "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
 			case "N-TRIPLE": return "text/n-triple";
 			case "N3": return "text/n3";
 			case "N3-PP": return "text/n3-pp";

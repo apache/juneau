@@ -36,8 +36,10 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public UonSerializerBuilder() {
+	protected UonSerializerBuilder() {
 		super();
+		produces("text/uon");
+		contextClass(UonSerializer.class);
 	}
 
 	/**
@@ -45,13 +47,13 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public UonSerializerBuilder(UonSerializer copyFrom) {
+	protected UonSerializerBuilder(UonSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public UonSerializer build() {
-		return build(UonSerializer.class);
+		return (UonSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -100,6 +102,16 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@FluentSetter
 	public UonSerializerBuilder encoding() {
 		return set(UON_encoding);
+	}
+
+	/**
+	 * Same as {@link #encoding()} but allows you to disable the previous setting.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public UonSerializerBuilder encoding(boolean value) {
+		return set(UON_encoding, value);
 	}
 
 	/**
@@ -189,6 +201,18 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public UonSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public UonSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public UonSerializerBuilder add(Map<String,Object> properties) {

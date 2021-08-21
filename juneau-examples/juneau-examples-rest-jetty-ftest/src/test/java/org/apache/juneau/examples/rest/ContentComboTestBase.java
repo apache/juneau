@@ -18,6 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
@@ -35,6 +36,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@SuppressWarnings("unchecked")
 public class ContentComboTestBase extends RestTestcase {
 
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
@@ -46,7 +48,7 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/csv": return getClient(mt, CsvSerializer.DEFAULT, CsvParser.DEFAULT);
 			case "text/html": return getClient(mt, HtmlSerializer.DEFAULT, HtmlParser.DEFAULT);
 			case "application/json": return getClient(mt, JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-			case "octal/msgpack": return getClient(mt, MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT).copy().queryData("plainText","true").build();
+			case "octal/msgpack": return getClient(mt, MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT, x -> x.queryData("plainText","true"));
 			case "text/plain": return getClient(mt, PlainTextSerializer.DEFAULT, PlainTextParser.DEFAULT);
 			case "text/uon": return getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
 			case "application/x-www-form-urlencoded": return getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
@@ -59,9 +61,13 @@ public class ContentComboTestBase extends RestTestcase {
 		}
 	}
 
-	protected RestClient getClient(String label, Serializer serializer, Parser parser) {
-		if (! clients.containsKey(label))
-			clients.put(label, SamplesMicroservice.client(serializer, parser).build());
+	protected RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClientBuilder>...postApply) {
+		if (! clients.containsKey(label)) {
+			RestClientBuilder b = SamplesMicroservice.client(serializer, parser);
+			for (Consumer<RestClientBuilder> c : postApply)
+				c.accept(b);
+			clients.put(label, b.build());
+		}
 		return clients.get(label);
 	}
 

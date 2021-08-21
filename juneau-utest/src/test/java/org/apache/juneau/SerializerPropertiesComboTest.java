@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.xml.XmlSerializer.*;
@@ -380,7 +381,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>T11</jp:_type>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f>\n<rdf:Seq>\n<rdf:li>_x0020_foo_x0020_</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>T11</jp:t>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f>\n<rdf:Seq>\n<rdf:li>_x0020_foo_x0020_</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>T11</jp:_type>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f>\n            <rdf:Seq>\n              <rdf:li>_x0020_foo_x0020_</rdf:li>\n            </rdf:Seq>\n          </jp:f>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(WSERIALIZER_quoteChar, '|', SERIALIZER_addBeanTypes, true, SERIALIZER_addRootType, true, XML_addNamespaceUrisToRoot, true))
+				.properties(OMap.of(WSERIALIZER_quoteCharOverride, '|', SERIALIZER_addBeanTypes, true, SERIALIZER_addRootType, true, XML_addNamespaceUrisToRoot, true))
 				.skipTest(x -> x.startsWith("parse") || x.startsWith("verify"))
 			},
 		});

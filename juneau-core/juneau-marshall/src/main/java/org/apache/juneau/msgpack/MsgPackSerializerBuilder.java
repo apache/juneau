@@ -32,8 +32,10 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public MsgPackSerializerBuilder() {
+	protected MsgPackSerializerBuilder() {
 		super();
+		produces("octal/msgpack");
+		contextClass(MsgPackSerializer.class);
 	}
 
 	/**
@@ -41,13 +43,13 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public MsgPackSerializerBuilder(MsgPackSerializer copyFrom) {
+	protected MsgPackSerializerBuilder(MsgPackSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public MsgPackSerializer build() {
-		return build(MsgPackSerializer.class);
+		return (MsgPackSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,6 +57,18 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
+
+	@Override
+	public MsgPackSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public MsgPackSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public MsgPackSerializerBuilder add(Map<String,Object> properties) {

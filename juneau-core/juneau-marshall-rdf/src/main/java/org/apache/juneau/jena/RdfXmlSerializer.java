@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
-import org.apache.juneau.*;
-
 /**
  * Subclass of {@link RdfSerializer} for serializing RDF in standard XML notation.
  */
@@ -26,7 +22,7 @@ public class RdfXmlSerializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfXmlSerializer DEFAULT = new RdfXmlSerializer(ContextProperties.DEFAULT);
+	public static final RdfXmlSerializer DEFAULT = new RdfXmlSerializer(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -50,12 +46,7 @@ public class RdfXmlSerializer extends RdfSerializer {
 	 *
 	 * @param cp The property store containing all the settings for this object.
 	 */
-	public RdfXmlSerializer(ContextProperties cp) {
-		super(
-			cp.copy()
-				.set(RDF_language, LANG_RDF_XML)
-				.build(),
-			"text/xml+rdf", "text/xml+rdf,text/xml+rdf+abbrev;q=0.9"
-		);
+	protected RdfXmlSerializer(RdfSerializerBuilder builder) {
+		super(builder.xml());
 	}
 }

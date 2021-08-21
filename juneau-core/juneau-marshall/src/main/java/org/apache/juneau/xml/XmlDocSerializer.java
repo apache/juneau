@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -43,10 +42,10 @@ public class XmlDocSerializer extends XmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Ns(ContextProperties cp) {
-			super(cp.copy().setDefault(XML_enableNamespaces, true).build());
+		protected Ns(XmlSerializerBuilder builder) {
+			super(builder.enableNamespaces());
 		}
 	}
 
@@ -57,10 +56,10 @@ public class XmlDocSerializer extends XmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public XmlDocSerializer(ContextProperties cp) {
-		super(cp);
+	protected XmlDocSerializer(XmlSerializerBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* Serializer */

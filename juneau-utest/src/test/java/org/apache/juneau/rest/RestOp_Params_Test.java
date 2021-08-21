@@ -273,8 +273,8 @@ public class RestOp_Params_Test {
 	}
 
 	public static class B1a extends PlainTextSerializer {
-		public B1a(ContextProperties cp) {
-			super(cp, "text/plain", "*/*");
+		protected B1a(PlainTextSerializerBuilder b) {
+			super(b.accept("*/*"));
 		}
 	}
 

@@ -37,7 +37,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final CsvSerializer DEFAULT = new CsvSerializer(ContextProperties.DEFAULT);
+	public static final CsvSerializer DEFAULT = new CsvSerializer(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -50,10 +50,10 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public CsvSerializer(ContextProperties cp) {
-		super(cp, "text/csv", null);
+	protected CsvSerializer(CsvSerializerBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* Context */

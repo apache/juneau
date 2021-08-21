@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
-import org.apache.juneau.*;
-
 /**
  * Subclass of {@link RdfSerializer} for serializing RDF in N3 notation.
  */
@@ -26,7 +22,7 @@ public class N3Serializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N3 serializer, all default settings.*/
-	public static final N3Serializer DEFAULT = new N3Serializer(ContextProperties.DEFAULT);
+	public static final N3Serializer DEFAULT = new N3Serializer(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -50,12 +46,7 @@ public class N3Serializer extends RdfSerializer {
 	 *
 	 * @param cp The property store containing all the settings for this object.
 	 */
-	public N3Serializer(ContextProperties cp) {
-		super(
-			cp.copy()
-				.set(RDF_language, LANG_N3)
-				.build(),
-			"text/n3", (String)null
-		);
+	protected N3Serializer(RdfSerializerBuilder builder) {
+		super(builder.n3());
 	}
 }

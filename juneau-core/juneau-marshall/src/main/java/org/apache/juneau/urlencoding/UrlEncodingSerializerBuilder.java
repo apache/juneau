@@ -36,8 +36,10 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public UrlEncodingSerializerBuilder() {
+	protected UrlEncodingSerializerBuilder() {
 		super();
+		produces("application/x-www-form-urlencoded");
+		contextClass(UrlEncodingSerializer.class);
 	}
 
 	/**
@@ -45,13 +47,13 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public UrlEncodingSerializerBuilder(UrlEncodingSerializer copyFrom) {
+	protected UrlEncodingSerializerBuilder(UrlEncodingSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializer build() {
-		return build(UrlEncodingSerializer.class);
+		return (UrlEncodingSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

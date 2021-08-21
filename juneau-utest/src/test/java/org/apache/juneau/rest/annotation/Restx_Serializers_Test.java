@@ -14,15 +14,12 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.IOException;
-
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -32,64 +29,27 @@ public class Restx_Serializers_Test {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class SA extends WriterSerializer {
-		public SA(ContextProperties cp) {
-			super(cp, "text/a", null);
-		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write("text/a - " + o);
-				}
-			};
+	public static class SA extends MockWriterSerializer {
+		protected SA(MockWriterSerializer.Builder b) {
+			super(b.produces("text/a").serialize((s,o)->"text/a - "+o));
 		}
 	}
 
-	public static class SB extends WriterSerializer {
-		public SB(ContextProperties cp) {
-			super(cp, "text/b", null);
-		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write("text/b - " + o);
-				}
-			};
+	public static class SB extends MockWriterSerializer {
+		protected SB(MockWriterSerializer.Builder b) {
+			super(b.produces("text/b").serialize((s,o)->"text/b - "+o));
 		}
 	}
 
-	public static class SC extends WriterSerializer {
-		public SC(ContextProperties cp) {
-			super(cp, "text/a", null);
-		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write("text/c - " + o);
-				}
-			};
+	public static class SC extends MockWriterSerializer {
+		protected SC(MockWriterSerializer.Builder b) {
+			super(b.produces("text/a").serialize((s,o)->"text/c - "+o));
 		}
 	}
 
-	public static class SD extends WriterSerializer {
-		public SD(ContextProperties cp) {
-			super(cp, "text/d", "text/a,text/d");
-		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write("text/d - " + o);
-				}
-			};
+	public static class SD extends MockWriterSerializer {
+		protected SD(MockWriterSerializer.Builder b) {
+			super(b.produces("text/d").accept("text/a,text/d").serialize((s,o)->"text/d - "+o));
 		}
 	}
 
@@ -170,26 +130,17 @@ public class Restx_Serializers_Test {
 	// Test serializer inheritance.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class DummySerializer extends WriterSerializer {
-		public DummySerializer(String produces) {
-			super(ContextProperties.DEFAULT, produces, null);
-		}
-		@Override /* Serializer */
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			return new WriterSerializerSession(args) {
-				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write(o.toString());
-				}
-			};
+	public static class DummySerializer extends MockWriterSerializer {
+		protected DummySerializer(MockWriterSerializer.Builder b, String produces) {
+			super(b.produces(produces));
 		}
 	}
 
-	public static class S1 extends DummySerializer{ public S1(ContextProperties cp) {super("text/s1");} }
-	public static class S2 extends DummySerializer{ public S2(ContextProperties cp) {super("text/s2");} }
-	public static class S3 extends DummySerializer{ public S3(ContextProperties cp) {super("text/s3");} }
-	public static class S4 extends DummySerializer{ public S4(ContextProperties cp) {super("text/s4");} }
-	public static class S5 extends DummySerializer{ public S5(ContextProperties cp) {super("text/s5");} }
+	public static class S1 extends DummySerializer{ protected S1(MockWriterSerializer.Builder b) {super(b, "text/s1");} }
+	public static class S2 extends DummySerializer{ protected S2(MockWriterSerializer.Builder b) {super(b, "text/s2");} }
+	public static class S3 extends DummySerializer{ protected S3(MockWriterSerializer.Builder b) {super(b, "text/s3");} }
+	public static class S4 extends DummySerializer{ protected S4(MockWriterSerializer.Builder b) {super(b, "text/s4");} }
+	public static class S5 extends DummySerializer{ protected S5(MockWriterSerializer.Builder b) {super(b, "text/s5");} }
 
 	@Rest(serializers={S1.class,S2.class})
 	public static class B {}

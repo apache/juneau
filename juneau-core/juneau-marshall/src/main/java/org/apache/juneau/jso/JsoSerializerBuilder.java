@@ -32,8 +32,10 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsoSerializerBuilder() {
+	protected JsoSerializerBuilder() {
 		super();
+		produces("application/x-java-serialized-object");
+		contextClass(JsoSerializer.class);
 	}
 
 	/**
@@ -41,13 +43,13 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public JsoSerializerBuilder(JsoSerializer copyFrom) {
+	protected JsoSerializerBuilder(JsoSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public JsoSerializer build() {
-		return build(JsoSerializer.class);
+		return (JsoSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,6 +57,18 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
+
+	@Override
+	public JsoSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public JsoSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsoSerializerBuilder add(Map<String,Object> properties) {

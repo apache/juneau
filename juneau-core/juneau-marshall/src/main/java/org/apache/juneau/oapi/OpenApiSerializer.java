@@ -44,7 +44,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OpenApiSerializer}, all default settings. */
-	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(ContextProperties.DEFAULT);
+	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -59,49 +59,14 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public OpenApiSerializer(ContextProperties cp, String produces, String accept) {
-		super(
-			cp.copy()
-				.setDefault(UON_encoding, false)
-				.build(),
-			produces,
-			accept
-		);
+	protected OpenApiSerializer(OpenApiSerializerBuilder builder) {
+		super(builder.encoding(false));
+		ContextProperties cp = getContextProperties();
 		format = cp.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
 		collectionFormat = cp.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 */
-	public OpenApiSerializer(ContextProperties cp) {
-		this(cp, "text/openapi", null);
 	}
 
 	@Override /* Context */

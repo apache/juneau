@@ -4266,7 +4266,7 @@ public class RestContext extends BeanContext {
 		SerializerGroupBuilder g = SerializerGroup
 			.create()
 			.append(x)
-			.apply(properties);
+			.forEach(y -> y.apply(properties));
 
 		g = BeanStore
 			.of(beanStore, resource)
@@ -4426,7 +4426,7 @@ public class RestContext extends BeanContext {
 			x = beanStore.getBean(HttpPartSerializer.class).orElse(null);
 
 		if (x == null)
-			x = new OpenApiSerializer(properties);
+			x = OpenApiSerializer.create().apply(properties).build();
 
 		x = BeanStore
 			.of(beanStore, resource)

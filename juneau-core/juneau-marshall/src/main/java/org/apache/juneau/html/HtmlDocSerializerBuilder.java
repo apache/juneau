@@ -36,8 +36,11 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public HtmlDocSerializerBuilder() {
+	protected HtmlDocSerializerBuilder() {
 		super();
+		produces("text/html");
+		accept("text/html");
+		contextClass(HtmlDocSerializer.class);
 	}
 
 	/**
@@ -45,13 +48,13 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlDocSerializerBuilder(HtmlDocSerializer copyFrom) {
+	protected HtmlDocSerializerBuilder(HtmlDocSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public HtmlDocSerializer build() {
-		return build(HtmlDocSerializer.class);
+		return (HtmlDocSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

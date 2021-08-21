@@ -1056,7 +1056,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			g = SerializerGroup
 				.create()
 				.append(x)
-				.apply(properties)
+				.forEach(y -> y.apply(properties))
 				.build();
 		}
 
@@ -1177,7 +1177,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = beanStore.getBean(HttpPartSerializer.class).orElse(null);
 
 		if (x == null)
-			x = new OpenApiSerializer(properties);
+			x = OpenApiSerializer.create().apply(properties).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -1543,7 +1543,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		Class<?> c = o.getClass();
 		ResponseBeanMeta rbm = responseBeanMetas.get(c);
 		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, serializers.getContextProperties());
+			rbm = ResponseBeanMeta.create(c, ContextProperties.DEFAULT);
 			if (rbm == null)
 				rbm = ResponseBeanMeta.NULL;
 			responseBeanMetas.put(c, rbm);
@@ -1568,7 +1568,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			ResponseHeader a = c.getAnnotation(ResponseHeader.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getContextProperties(), partSerializer);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), ContextProperties.DEFAULT, partSerializer);
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)
@@ -1595,7 +1595,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			ResponseBody a = c.getAnnotation(ResponseBody.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getContextProperties(), partSerializer);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), ContextProperties.DEFAULT, partSerializer);
 				pm = new ResponsePartMeta(BODY, schema, serializer);
 			}
 			if (pm == null)

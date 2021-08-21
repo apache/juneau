@@ -33,8 +33,10 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public PlainTextSerializerBuilder() {
+	protected PlainTextSerializerBuilder() {
 		super();
+		produces("text/plain");
+		contextClass(PlainTextSerializer.class);
 	}
 
 	/**
@@ -42,13 +44,13 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public PlainTextSerializerBuilder(PlainTextSerializer copyFrom) {
+	protected PlainTextSerializerBuilder(PlainTextSerializer copyFrom) {
 		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */
 	public PlainTextSerializer build() {
-		return build(PlainTextSerializer.class);
+		return (PlainTextSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -56,6 +58,18 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
+
+	@Override
+	public PlainTextSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public PlainTextSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public PlainTextSerializerBuilder add(Map<String,Object> properties) {

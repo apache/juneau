@@ -10,43 +10,49 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jena;
+package org.apache.juneau.testutils;
+
+import java.io.*;
+import java.util.function.*;
+
+import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * Subclass of {@link RdfSerializer} for serializing RDF in N-Triple notation.
+ * Utility class for creating mocked stream serializers.
  */
-public class NTripleSerializer extends RdfSerializer {
+public class MockStreamSerializer extends OutputStreamSerializer {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
-	//-------------------------------------------------------------------------------------------------------------------
+	private final Function<Object,String> serializeFunction;
 
-	/** Default N-Triple serializer, all default settings.*/
-	public static final NTripleSerializer DEFAULT = new NTripleSerializer(create());
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfSerializerBuilder} object.
-	 */
-	public static RdfSerializerBuilder create() {
-		return new RdfSerializerBuilder().ntriple();
+	public MockStreamSerializer(OutputStreamSerializerBuilder builder, String produces, Function<Object,String> serializeFunction) {
+		super(builder.produces(produces));
+		this.serializeFunction = serializeFunction;
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param cp The property store containing all the settings for this object.
-	 */
-	protected NTripleSerializer(RdfSerializerBuilder builder) {
-		super(builder.ntriple());
+	protected MockStreamSerializer(OutputStreamSerializerBuilder builder) {
+		super(builder.produces("text/plain"));
+		this.serializeFunction = (o) -> StringUtils.stringify(o);
+	}
+
+	public static Builder create() {
+		return new Builder();
+	}
+
+	@Override /* Serializer */
+	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+		return new OutputStreamSerializerSession(this, args) {
+			@Override /* SerializerSession */
+			protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+				out.getWriter().write(serializeFunction.apply(o));
+			}
+		};
+	}
+
+	public static class Builder extends OutputStreamSerializerBuilder {}
+
+	@Override
+	public Builder copy() {
+		throw new NoSuchMethodError("Not implemented.");
 	}
 }

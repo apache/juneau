@@ -63,16 +63,6 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		this.useWhitespace = sp.getBoolean(WSERIALIZER_useWhitespace).orElse(ctx.isUseWhitespace());
 	}
 
-	/**
-	 * Constructor for sessions that don't require context.
-	 *
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected WriterSerializerSession(SerializerSessionArgs args) {
-		this(WriterSerializer.DEFAULT, args);
-	}
-
 	@Override /* SerializerSession */
 	public final boolean isWriterSerializer() {
 		return true;

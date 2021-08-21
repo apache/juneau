@@ -239,7 +239,7 @@ public abstract class ExecutableInfo {
 		return params;
 	}
 
-	private ClassInfo[] _getParamTypes() {
+	ClassInfo[] _getParamTypes() {
 		if (paramTypes == null) {
 			Class<?>[] ptc = _getRawParamTypes();
 			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may

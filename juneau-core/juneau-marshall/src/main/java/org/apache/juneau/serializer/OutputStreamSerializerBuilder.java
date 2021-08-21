@@ -29,12 +29,12 @@ import org.apache.juneau.svl.*;
  * {@review}
  */
 @FluentSetters
-public class OutputStreamSerializerBuilder extends SerializerBuilder {
+public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public OutputStreamSerializerBuilder() {
+	protected OutputStreamSerializerBuilder() {
 		super();
 	}
 
@@ -43,8 +43,13 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public OutputStreamSerializerBuilder(OutputStreamSerializer copyFrom) {
+	protected OutputStreamSerializerBuilder(OutputStreamSerializer copyFrom) {
 		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public OutputStreamSerializer build() {
+		return (OutputStreamSerializer)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -88,6 +93,18 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override
+	public OutputStreamSerializerBuilder produces(String value) {
+		super.produces(value);
+		return this;
+	}
+
+	@Override
+	public OutputStreamSerializerBuilder accept(String value) {
+		super.accept(value);
+		return this;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public OutputStreamSerializerBuilder add(Map<String,Object> properties) {
@@ -618,9 +635,4 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	// </FluentSetters>
-
-	@Override /* Context */
-	public OutputStreamSerializer build() {
-		return null;
-	}
 }

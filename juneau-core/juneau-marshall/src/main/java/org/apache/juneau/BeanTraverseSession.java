@@ -69,7 +69,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * 	serializer contexts.
 	 */
 	protected BeanTraverseSession(BeanTraverseContext ctx, BeanSessionArgs args) {
-		super(ctx, args == null ? BeanSessionArgs.DEFAULT : args);
+		super(ctx.getBeanContext(), args == null ? BeanSessionArgs.DEFAULT : args);
 		args = args == null ? BeanSessionArgs.DEFAULT : args;
 		this.ctx = ctx;
 		this.indent = getInitialDepth();

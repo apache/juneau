@@ -91,7 +91,7 @@ public class Rest_Context_Test {
 
 	@Test
 	public void a05_invalidConstructor() throws Exception {
-		assertThrown(()->client(A5.class)).message().contains("Could not create instance");
+		assertThrown(()->client(A5.class)).messages().contains("Error occurred trying to create context.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

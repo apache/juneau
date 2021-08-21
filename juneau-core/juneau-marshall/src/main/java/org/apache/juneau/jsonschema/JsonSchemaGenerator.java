@@ -239,7 +239,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(ContextProperties.DEFAULT);
+	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -249,7 +249,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	private final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
 	private final BeanDefMapper beanDefMapper;
 	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
-	private final JsonSerializer jsonSerializer;
+	final JsonSerializer jsonSerializer;
+	final JsonParser jsonParser;
 	private final Set<Pattern> ignoreTypes;
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -257,11 +258,12 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Constructor.
 	 *
-	 * @param cp Initialize with the specified config property store.
+	 * @param builder The builder for this object.
 	 */
-	public JsonSchemaGenerator(ContextProperties cp) {
-		super(cp.copy().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
+	protected JsonSchemaGenerator(JsonSchemaGeneratorBuilder builder) {
+		super(builder.detectRecursions().ignoreRecursions());
 
+		ContextProperties cp = getContextProperties();
 		useBeanDefs = cp.getBoolean(JSONSCHEMA_useBeanDefs).orElse(false);
 		allowNestedExamples = cp.getBoolean(JSONSCHEMA_allowNestedExamples).orElse(false);
 		allowNestedDescriptions = cp.getBoolean(JSONSCHEMA_allowNestedDescriptions).orElse(false);
@@ -274,7 +276,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
 		this.ignoreTypes = ignoreTypes;
 
-		jsonSerializer = new JsonSerializer(cp);
+		jsonSerializer = builder.jsonSerializerBuilder.build();
+		jsonParser = builder.jsonParserBuilder.apply(getBeanContext().getContextProperties()).build();
 	}
 
 	@Override /* Context */
@@ -306,6 +309,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 	JsonSerializer getJsonSerializer() {
 		return jsonSerializer;
+	}
+
+	JsonParser getJsonParser() {
+		return jsonParser;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -453,6 +460,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 					.a("addExamplesTo", addExamplesTo)
 					.a("addDescriptionsTo", addDescriptionsTo)
 					.a("ignoreTypes", ignoreTypes)
+				)
+				.a("JsonSerializer", jsonSerializer.toMap()
 			);
 	}
 }

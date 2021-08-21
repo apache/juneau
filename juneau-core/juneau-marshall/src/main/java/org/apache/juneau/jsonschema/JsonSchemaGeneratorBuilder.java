@@ -23,6 +23,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -34,11 +35,17 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 
+	JsonSerializerBuilder jsonSerializerBuilder;
+	JsonParserBuilder jsonParserBuilder;
+
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsonSchemaGeneratorBuilder() {
+	protected JsonSchemaGeneratorBuilder() {
 		super();
+		jsonSerializerBuilder = JsonSerializer.create().beanContextBuilder(this.getBeanContextBuilder());
+		jsonParserBuilder = JsonParser.create();
+		contextClass(JsonSchemaGenerator.class);
 	}
 
 	/**
@@ -46,13 +53,15 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public JsonSchemaGeneratorBuilder(JsonSchemaGenerator copyFrom) {
+	protected JsonSchemaGeneratorBuilder(JsonSchemaGenerator copyFrom) {
 		super(copyFrom);
+		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContextBuilder(getBeanContextBuilder());
+		jsonParserBuilder = copyFrom.jsonParser.copy();
 	}
 
 	@Override /* ContextBuilder */
 	public JsonSchemaGenerator build() {
-		return build(JsonSchemaGenerator.class);
+		return (JsonSchemaGenerator)super.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -99,7 +108,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 * <p>
-	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
+	 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
@@ -288,7 +297,23 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		return set(JSONSCHEMA_useBeanDefs);
 	}
 
-	// <FluentSetters>
+	/**
+	 * Gives access to the inner JSON serializer builder if you want to modify the serializer settings.
+	 *
+	 * @return The JSON serializer builder.
+	 */
+	public JsonSerializerBuilder getJsonSerializerBuilder() {
+		return jsonSerializerBuilder;
+	}
+
+	/**
+	 * Gives access to the inner JSON parser builder if you want to modify the parser settings.
+	 *
+	 * @return The JSON serializer builder.
+	 */
+	public JsonParserBuilder getJsonParserBuilder() {
+		return jsonParserBuilder;
+	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder add(Map<String,Object> properties) {
@@ -745,6 +770,4 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		super.maxDepth(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

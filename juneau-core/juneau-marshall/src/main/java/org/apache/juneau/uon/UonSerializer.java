@@ -222,13 +222,13 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
-	public static final UonSerializer DEFAULT = new UonSerializer(ContextProperties.DEFAULT);
+	public static final UonSerializer DEFAULT = new UonSerializer(create());
 
 	/** Reusable instance of {@link UonSerializer.Readable}. */
-	public static final UonSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
+	public static final UonSerializer DEFAULT_READABLE = new Readable(create());
 
 	/** Reusable instance of {@link UonSerializer.Encoding}. */
-	public static final UonSerializer DEFAULT_ENCODING = new Encoding(ContextProperties.DEFAULT);
+	public static final UonSerializer DEFAULT_ENCODING = new Encoding(create());
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -243,10 +243,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Readable(ContextProperties cp) {
-			super(cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build());
+		protected Readable(UonSerializerBuilder builder) {
+			super(builder.useWhitespace());
 		}
 	}
 
@@ -258,10 +258,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		/**
 		 * Constructor.
 		 *
-		 * @param cp The property store containing all the settings for this object.
+		 * @param builder The builder for this object.
 		 */
-		public Encoding(ContextProperties cp) {
-			super(cp.copy().setDefault(UON_encoding, true).build());
+		protected Encoding(UonSerializerBuilder builder) {
+			super(builder.encoding());
 		}
 	}
 
@@ -306,52 +306,16 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public UonSerializer(ContextProperties cp) {
-		this(cp, "text/uon", (String)null);
-	}
-
-	/**
-	 * No-arg constructor.
-	 */
-	public UonSerializer() {
-		this(ContextProperties.DEFAULT, "text/uon", (String)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public UonSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected UonSerializer(UonSerializerBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		encoding = cp.getBoolean(UON_encoding).orElse(false);
 		addBeanTypes = cp.getFirstBoolean(UON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 		paramFormat = cp.get(UON_paramFormat, ParamFormat.class).orElse(ParamFormat.UON);
-		quoteChar = cp.getString(WSERIALIZER_quoteChar).orElse("'").charAt(0);
+		quoteChar = cp.getString(WSERIALIZER_quoteCharOverride).orElse(cp.getString(WSERIALIZER_quoteChar).orElse("'")).charAt(0);
 	}
 
 	@Override /* Context */

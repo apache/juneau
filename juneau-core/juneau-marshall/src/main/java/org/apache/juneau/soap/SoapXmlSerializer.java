@@ -78,10 +78,11 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
-	public SoapXmlSerializer(ContextProperties cp) {
-		super(cp, "text/xml", "text/xml+soap");
+	protected SoapXmlSerializer(SoapXmlSerializerBuilder builder) {
+		super(builder);
+		ContextProperties cp = getContextProperties();
 		soapAction = cp.getString(SOAPXML_SOAPAction).orElse("http://www.w3.org/2003/05/soap-envelope");
 	}
 

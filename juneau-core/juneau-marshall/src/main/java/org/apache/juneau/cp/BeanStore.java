@@ -287,6 +287,21 @@ public class BeanStore {
 			}
 		}
 
+		// Look for static-builder/protected-constructor pair.
+		if (matchedConstructor == null) {
+			for (ConstructorInfo cc2 : ci.getDeclaredConstructors()) {
+				if (cc2.getParamCount() == 1 && cc2.isVisible(Visibility.PROTECTED)) {
+					Class<?> pt = cc2.getParam(0).getParameterType().inner();
+					for (MethodInfo m : ci.getPublicMethods()) {
+						if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(pt) && (!m.hasAnnotation(BeanIgnore.class))) {
+							Object builder = m.invoke(null);
+							return cc2.accessible().invoke(builder);
+						}
+					}
+				}
+			}
+		}
+
 		if (matchedConstructor != null)
 			return matchedConstructor.invoke(getParams(matchedConstructor.getParams()));
 

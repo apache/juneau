@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 
@@ -87,7 +88,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 * <p>
-	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
+	 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
@@ -238,7 +239,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 */
 	String useBeanDefs() default "";
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// BeanTraverseContext
 	//-----------------------------------------------------------------------------------------------------------------

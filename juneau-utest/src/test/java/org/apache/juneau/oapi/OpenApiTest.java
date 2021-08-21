@@ -34,7 +34,7 @@ public class OpenApiTest {
 
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;
-	public static final BeanSession BS = DS.createBeanSession();
+	public static final BeanSession BS = DS.createSession();
 
 	private String serialize(HttpPartSchema schema, Object in) throws Exception {
 		return DS.createSession().serialize(null, schema, in);

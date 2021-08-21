@@ -124,7 +124,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 		String out = null;
 
-		schema.validateOutput(value, ctx);
+		schema.validateOutput(value, ctx.getBeanContext());
 
 		if (type.hasMutaterTo(schema.getParsedType()) || schema.getParsedType().hasMutaterFrom(type)) {
 			value = toType(value, schema.getParsedType());

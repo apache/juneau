@@ -117,6 +117,11 @@ public abstract class WriterSerializer extends Serializer {
 	public static final String WSERIALIZER_quoteChar = PREFIX + ".quoteChar.s";
 
 	/**
+	 * Allows you to override the quote-char setting.
+	 */
+	public static final String WSERIALIZER_quoteCharOverride = PREFIX + ".quoteCharOverride.s";
+
+	/**
 	 * Configuration property:  Output stream charset.
 	 *
 	 * <p>
@@ -171,13 +176,6 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	public static final String WSERIALIZER_useWhitespace = PREFIX + ".useWhitespace.b";
 
-	static final WriterSerializer DEFAULT = new WriterSerializer(ContextProperties.create().build(), "", "") {
-		@Override
-		public WriterSerializerSession createSession(SerializerSessionArgs args) {
-			throw new NoSuchMethodError();
-		}
-	};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -191,38 +189,22 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	protected WriterSerializer(ContextProperties cp, String produces, String accept) {
-		super(cp, produces, accept);
+	protected WriterSerializer(WriterSerializerBuilder builder) {
+		super(builder);
 
+		ContextProperties cp = getContextProperties();
 		maxIndent = cp.getInteger(WSERIALIZER_maxIndent).orElse(100);
-		quoteChar = cp.getString(WSERIALIZER_quoteChar).orElse("\"").charAt(0);
+		quoteChar = cp.getString(WSERIALIZER_quoteCharOverride).orElse(cp.getString(WSERIALIZER_quoteChar).orElse("\"")).charAt(0);
 		streamCharset = cp.get(WSERIALIZER_streamCharset, Charset.class).orElse(IOUtils.UTF8);
 		fileCharset = cp.get(WSERIALIZER_fileCharset, Charset.class).orElse(Charset.defaultCharset());
 		useWhitespace = cp.getBoolean(WSERIALIZER_useWhitespace).orElse(false);
 	}
+
+	@Override
+	public abstract WriterSerializerBuilder copy();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods

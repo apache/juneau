@@ -190,7 +190,8 @@ public class BeanConfigAnnotation_Test {
 	@Test
 	public void b01_noValues() throws Exception {
 		AnnotationList al = b.getAnnotationList();
-		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
+		JsonSerializer js = JsonSerializer.create().applyAnnotations(al, sr).build();
+		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionaryClasses());
@@ -202,18 +203,18 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
-		check("false", bc.isDebug());
-		check("false", bc.isDetectRecursions());
+		check("false", js.isDebug());
+		check("false", js.isDetectRecursions());
 		check("false", bc.isFindFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
 		check("true", bc.isIgnoreMissingSetters());
-		check("false", bc.isIgnoreRecursions());
+		check("false", js.isIgnoreRecursions());
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
-		check("0", bc.getInitialDepth());
+		check("0", js.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getDefaultLocale());
-		check("100", bc.getMaxDepth());
+		check("100", js.getMaxDepth());
 		check(null, bc.getDefaultMediaType());
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
 		check("", bc.getSwaps());
@@ -235,7 +236,8 @@ public class BeanConfigAnnotation_Test {
 	@Test
 	public void c01_noAnnotation() throws Exception {
 		AnnotationList al = c.getAnnotationList();
-		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
+		JsonSerializer js = JsonSerializer.create().applyAnnotations(al, sr).build();
+		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionaryClasses());
@@ -247,18 +249,18 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
-		check("false", bc.isDebug());
-		check("false", bc.isDetectRecursions());
+		check("false", js.isDebug());
+		check("false", js.isDetectRecursions());
 		check("false", bc.isFindFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
 		check("true", bc.isIgnoreMissingSetters());
-		check("false", bc.isIgnoreRecursions());
+		check("false", js.isIgnoreRecursions());
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
-		check("0", bc.getInitialDepth());
+		check("0", js.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getDefaultLocale());
-		check("100", bc.getMaxDepth());
+		check("100", js.getMaxDepth());
 		check(null, bc.getDefaultMediaType());
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
 		check("", bc.getSwaps());

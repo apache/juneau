@@ -15,7 +15,6 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -52,20 +51,20 @@ public class SerializerGroupTest {
 
 
 	public static class SA1 extends JsonSerializer {
-		public SA1(ContextProperties cp) {
-			super(cp, "application/json", "text/foo+*,text/foo_a+*");
+		protected SA1(JsonSerializerBuilder builder) {
+			super(builder.accept("text/foo+*,text/foo_a+*"));
 		}
 	}
 
 	public static class SA2 extends JsonSerializer {
-		public SA2(ContextProperties cp) {
-			super(cp, "application/json", "text/foo+bar+*,text/foo+bar_a+*");
+		protected SA2(JsonSerializerBuilder builder) {
+			super(builder.accept("text/foo+bar+*,text/foo+bar_a+*"));
 		}
 	}
 
 	public static class SA3 extends JsonSerializer {
-		public SA3(ContextProperties cp) {
-			super(cp, "application/json", "text/baz+*,text/baz_a+*");
+		protected SA3(JsonSerializerBuilder builder) {
+			super(builder.accept("text/baz+*,text/baz_a+*"));
 		}
 	}
 
@@ -91,32 +90,32 @@ public class SerializerGroupTest {
 	}
 
 	public static class SB1 extends JsonSerializer {
-		public SB1(ContextProperties cp) {
-			super(cp, "application/json", "text/1");
+		protected SB1(JsonSerializerBuilder builder) {
+			super(builder.accept("text/1"));
 		}
 	}
 
 	public static class SB2 extends JsonSerializer {
-		public SB2(ContextProperties cp) {
-			super(cp, "application/json", "text/2,text/2a");
+		protected SB2(JsonSerializerBuilder builder) {
+			super(builder.accept("text/2,text/2a"));
 		}
 	}
 
 	public static class SB3 extends JsonSerializer {
-		public SB3(ContextProperties cp) {
-			super(cp, "application/json", "text/3");
+		protected SB3(JsonSerializerBuilder builder) {
+			super(builder.accept("text/3"));
 		}
 	}
 
 	public static class SB4 extends JsonSerializer {
-		public SB4(ContextProperties cp) {
-			super(cp, "application/json", "text/4,text/4a");
+		protected SB4(JsonSerializerBuilder builder) {
+			super(builder.accept("text/4,text/4a"));
 		}
 	}
 
 	public static class SB5 extends JsonSerializer {
-		public SB5(ContextProperties cp) {
-			super(cp, "application/json", "text/5");
+		protected SB5(JsonSerializerBuilder builder) {
+			super(builder.accept("text/5"));
 		}
 	}
 
@@ -136,20 +135,20 @@ public class SerializerGroupTest {
 	}
 
 	public static class SC1 extends JsonSerializer {
-		public SC1(ContextProperties cp) {
-			super(cp, "application/json", "text/*");
+		protected SC1(JsonSerializerBuilder builder) {
+			super(builder.accept("text/*"));
 		}
 	}
 
 	public static class SC2 extends JsonSerializer {
-		public SC2(ContextProperties cp) {
-			super(cp, "application/json", "*/json");
+		protected SC2(JsonSerializerBuilder builder) {
+			super(builder.accept("*/json"));
 		}
 	}
 
 	public static class SC3 extends JsonSerializer {
-		public SC3(ContextProperties cp) {
-			super(cp, "application/json", "*/*");
+		protected SC3(JsonSerializerBuilder builder) {
+			super(builder.accept("*/*"));
 		}
 	}
 }
