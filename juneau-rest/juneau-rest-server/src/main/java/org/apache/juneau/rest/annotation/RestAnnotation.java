@@ -1022,29 +1022,26 @@ public class RestAnnotation {
 	}
 
 	/**
-	 * Applies {@link Rest} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link Rest} annotations to a {@link RestContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Rest,ContextPropertiesBuilder> {
+	public static class RestContextApply extends AnnotationApplier<Rest,RestContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Rest.class, ContextPropertiesBuilder.class, vr);
+		public RestContextApply(VarResolverSession vr) {
+			super(Rest.class, RestContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rest> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Rest> ai, RestContextBuilder b) {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
-			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
-			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			b.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
 			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
-			b.prependTo(REST_encoders, a.encoders());
 			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(REST_defaultRequestAttributes, x));
@@ -1053,8 +1050,6 @@ public class RestAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			b.prependTo(REST_responseProcessors, a.responseProcessors());
-			b.prependTo(REST_converters, a.converters());
-			b.prependTo(REST_guards, reverse(a.guards()));
 			b.prependTo(REST_children, a.children());
 			b.prependTo(REST_restOperationArgs, a.restOperationArgs());
 			b.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
@@ -1079,10 +1074,47 @@ public class RestAnnotation {
 			b.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
 			b.setIfNotEmpty(REST_allowedMethodParams, string(a.allowedMethodParams()));
 			b.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
-			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			b.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
 			b.setIfNotEmpty(REST_debug, string(a.debug()));
 			b.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
+		}
+
+		private String trimLeadingSlash(String value) {
+			if (startsWith(value, '/'))
+				return value.substring(1);
+			return value;
+		}
+	}
+
+	/**
+	 * Applies {@link Rest} annotations to a {@link RestOperationContextBuilder}.
+	 */
+	public static class RestOperationContextApply extends AnnotationApplier<Rest,RestOperationContextBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public RestOperationContextApply(VarResolverSession vr) {
+			super(Rest.class, RestOperationContextBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Rest> ai, RestOperationContextBuilder b) {
+			Rest a = ai.getAnnotation();
+
+			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
+			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
+			b.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
+			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
+			b.prependTo(REST_encoders, a.encoders());
+			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
+			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
+			b.prependTo(REST_converters, a.converters());
+			b.prependTo(REST_guards, reverse(a.guards()));
+			b.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
+			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
+			b.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 		}
