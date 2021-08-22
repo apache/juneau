@@ -597,7 +597,7 @@ public class RestPutAnnotation {
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			b.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
+			value(a.contextClass(), RestOperationContext.Null.class).ifPresent(x -> b.contextClass(x));
 			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
@@ -610,7 +610,7 @@ public class RestPutAnnotation {
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.prependTo(RESTOP_matchers, a.matchers());
-			string2(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 			b.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
 			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));

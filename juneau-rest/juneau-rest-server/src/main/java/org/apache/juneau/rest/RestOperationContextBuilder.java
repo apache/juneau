@@ -56,11 +56,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestOperationContext build() {
 		try {
-			// Temporary.
-			Class<? extends RestOperationContext> c = getContextProperties().getClass(RESTOP_contextClass, RestOperationContext.class).orElse(null);
-			if (c != null)
-				contextClass(c);
-
 			Class<? extends RestOperationContext> ic = (Class<? extends RestOperationContext>) getContextClass().orElse(getDefaultImplClass());
 			return BeanStore.of(beanStore).addBean(RestOperationContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {

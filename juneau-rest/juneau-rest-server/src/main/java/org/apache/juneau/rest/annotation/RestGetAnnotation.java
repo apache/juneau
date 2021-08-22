@@ -511,7 +511,7 @@ public class RestGetAnnotation {
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			b.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
+			value(a.contextClass(), RestOperationContext.Null.class).ifPresent(x -> b.contextClass(x));
 			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultResponseHeaders, x));
@@ -521,7 +521,7 @@ public class RestGetAnnotation {
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.prependTo(RESTOP_matchers, a.matchers());
-			string2(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
 			b.setIfNotEmpty(RESTOP_path, a.value());

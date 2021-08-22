@@ -102,9 +102,20 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The string containing variables to resolve.
 	 * @return An optional containing the specified string if it exists, or {@link Optional#empty()} if it does not.
 	 */
-	protected Optional<String> string2(String in) {
+	protected Optional<String> value(String in) {
 		in = vr.resolve(in);
 		return isEmpty(in) ? Optional.empty() : Optional.of(in);
+	}
+
+	/**
+	 * Returns the specified value if it's not the specified default.
+	 *
+	 * @param in The value to return if it's not the default.
+	 * @param def The default value.
+	 * @return An optional containing the specified value if it's not the default, or {@link Optional#empty()} if it does not.
+	 */
+	protected <T> Optional<T> value(T in, T def) {
+		return in != def ? Optional.of(in) : Optional.empty();
 	}
 
 	/**

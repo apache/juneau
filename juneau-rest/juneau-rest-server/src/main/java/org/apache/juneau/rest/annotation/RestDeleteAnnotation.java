@@ -457,7 +457,7 @@ public class RestDeleteAnnotation {
 			b.httpMethod("delete");
 
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			b.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
+			value(a.contextClass(), RestOperationContext.Null.class).ifPresent(x -> b.contextClass(x));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestAttributes, x));
@@ -465,7 +465,7 @@ public class RestDeleteAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.prependTo(RESTOP_matchers, a.matchers());
-			string2(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
 			b.setIfNotEmpty(RESTOP_path, a.value());
