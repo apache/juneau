@@ -521,7 +521,7 @@ public class RestGetAnnotation {
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.prependTo(RESTOP_matchers, a.matchers());
-			b.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
+			string2(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
 			b.setIfNotEmpty(RESTOP_path, a.value());

@@ -43,6 +43,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	RestContext restContext;
 	Method restMethod;
 	String httpMethod;
+	String clientVersion;
 
 	private BeanStore beanStore;
 
@@ -122,13 +123,71 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	//----------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Client version pattern matcher.
+	 * Client version pattern matcher.
 	 *
 	 * <p>
 	 * Specifies whether this method can be called based on the client version.
 	 *
+	 * <p>
+	 * The client version is identified via the HTTP request header identified by
+	 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"Client-Version"</js>.
+	 *
+	 * <p>
+	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
+	 * method/path based on the client version.
+	 *
+	 * <p>
+	 * The format of the client version range is similar to that of OSGi versions.
+	 *
+	 * <p>
+	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Call this method if Client-Version is at least 2.0.
+	 * 	// Note that this also matches 2.0.1.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<jk>public</jk> Object method1()  {...}
+	 *
+	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<jk>public</jk> Object method2()  {...}
+	 *
+	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<jk>public</jk> Object method3()  {...}
+	 * </p>
+	 *
+	 * <p>
+	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
+	 * backwards compatibility.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<jk>public</jk> NewPojo newMethod()  {...}
+	 *
+	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
+	 * 	<jk>public</jk> NewPojo oldMethod() {
+	 * 		<jk>return</jk> newMethod();
+	 * 	}
+	 *
+	 * <p>
+	 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
+	 * an older form.
+	 * The old method could also just return back a completely different object.
+	 * The range can be any of the following:
+	 * <ul>
+	 * 	<li><js>"[0,1.0)"</js> = Less than 1.0.  1.0 and 1.0.0 does not match.
+	 * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
+	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_clientVersion}
+	 * 	<li class='ja'>{@link RestOp#clientVersion}
+	 * 	<li class='ja'>{@link RestGet#clientVersion}
+	 * 	<li class='ja'>{@link RestPut#clientVersion}
+	 * 	<li class='ja'>{@link RestPost#clientVersion}
+	 * 	<li class='ja'>{@link RestDelete#clientVersion}
+	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -136,7 +195,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder clientVersion(String value) {
-		return set(RESTOP_clientVersion, value);
+		clientVersion = value;
+		return this;
 	}
 
 	@Override
@@ -151,10 +211,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * Enables debugging on this method.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_clientVersion}
-	 * </ul>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).

@@ -83,91 +83,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	static final String PREFIX = "RestOperationContext";
 
 	/**
-	 * Configuration property:  Client version pattern matcher.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_clientVersion RESTOP_clientVersion}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.clientVersion.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.clientVersion</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_CLIENTVERSION</c>
-	 * 	<li><b>Default:</b>  empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#clientVersion()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#clientVersion(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies whether this method can be called based on the client version.
-	 *
-	 * <p>
-	 * The client version is identified via the HTTP request header identified by
-	 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"Client-Version"</js>.
-	 *
-	 * <p>
-	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
-	 * method/path based on the client version.
-	 *
-	 * <p>
-	 * The format of the client version range is similar to that of OSGi versions.
-	 *
-	 * <p>
-	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
-	 * <p class='bcode w800'>
-	 * 	<jc>// Call this method if Client-Version is at least 2.0.
-	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
-	 * 	<jk>public</jk> Object method1()  {...}
-	 *
-	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
-	 * 	<jk>public</jk> Object method2()  {...}
-	 *
-	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
-	 * 	<jk>public</jk> Object method3()  {...}
-	 * </p>
-	 *
-	 * <p>
-	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
-	 * backwards compatibility.
-	 * <p class='bcode w800'>
-	 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
-	 * 	<jk>public</jk> NewPojo newMethod()  {...}
-	 *
-	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
-	 * 	<jk>public</jk> NewPojo oldMethod() {
-	 * 		<jk>return</jk> newMethod();
-	 * 	}
-	 *
-	 * <p>
-	 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
-	 * an older form.
-	 * The old method could also just return back a completely different object.
-	 * The range can be any of the following:
-	 * <ul>
-	 * 	<li><js>"[0,1.0)"</js> = Less than 1.0.  1.0 and 1.0.0 does not match.
-	 * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
-	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
-	 * </ul>
-	 */
-	public static final String RESTOP_clientVersion = PREFIX + ".clientVersion.s";
-
-	/**
 	 * Configuration property:  REST method context class.
 	 *
 	 * <ul class='spaced-list'>
@@ -660,7 +575,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			guards = createGuards(r, cp, bs).asArray();
 			bs.addBean(RestGuard[].class, guards);
 
-			RestMatcherList matchers = createMatchers(r, cp, bs);
+			RestMatcherList matchers = createMatchers(r, cp, builder, bs);
  			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
@@ -853,12 +768,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param properties xxx
+	 * @param builder The builder for this bean.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The method matchers for this REST resource method.
 	 * @throws Exception If method matchers could not be instantiated.
 	 * @see #RESTOP_matchers
 	 */
-	protected RestMatcherList createMatchers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestMatcherList createMatchers(Object resource, ContextProperties properties, RestOperationContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		RestMatcherList x = RestMatcherList.create();
 
@@ -867,7 +783,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		if (x.isEmpty())
 			x = beanStore.getBean(RestMatcherList.class).orElse(x);
 
-		String clientVersion = properties.get(RESTOP_clientVersion, String.class).orElse(null);
+		String clientVersion = builder.clientVersion;
 		if (clientVersion != null)
 			x.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 
