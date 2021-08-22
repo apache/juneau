@@ -342,43 +342,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 */
 	public static final String RESTOP_matchers = PREFIX + ".matchers.lo";
 
-	/**
-	 * Configuration property:  Resource method paths.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_path RESTOP_path}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.path.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>String[]</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.path</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_PATH</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#path()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#path(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies the URL subpath relative to the servlet class.
-	 *
-	 * <p>
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		This method is only applicable for Java methods.
-	 * 	<li>
-	 * 		Slashes are trimmed from the path ends.
-	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
-	 * </ul>
-	 */
-	public static final String RESTOP_path = PREFIX + ".path.ls";
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -480,7 +443,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
  			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
-			pathMatchers = createPathMatchers(r, cp, bs).asArray();
+			pathMatchers = createPathMatchers(r, cp, builder, bs).asArray();
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
@@ -1001,20 +964,22 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param properties xxx
+	 * @param builder The builder for this bean.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
-	 * @see #RESTOP_path
 	 */
-	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, RestOperationContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		UrlPathMatcherList x = UrlPathMatcherList.create();
 		boolean dotAll = properties.getBoolean("RestOperationContext.dotAll.b").orElse(false);
 
-		for (String p : properties.getArray(RESTOP_path, String.class).orElse(new String[0])) {
-			if (dotAll && ! p.endsWith("/*"))
-				p += "/*";
-			x.add(UrlPathMatcher.of(p));
+		if (builder.path != null) {
+			for (String p : builder.path) {
+				if (dotAll && ! p.endsWith("/*"))
+					p += "/*";
+				x.add(UrlPathMatcher.of(p));
+			}
 		}
 
 		if (x.isEmpty()) {

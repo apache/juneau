@@ -467,8 +467,8 @@ public class RestDeleteAnnotation {
 			b.prependTo(RESTOP_matchers, a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
-			b.setIfNotEmpty(RESTOP_path, a.value());
+			stringStream(a.path()).forEach(x -> b.path(x));
+			value(a.value()).ifPresent(x -> b.path(x));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 			value(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));

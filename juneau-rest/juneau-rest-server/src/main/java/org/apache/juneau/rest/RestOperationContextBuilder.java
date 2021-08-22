@@ -44,6 +44,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	Method restMethod;
 	String httpMethod, clientVersion;
 	Enablement debug;
+	List<String> path;
 
 	private BeanStore beanStore;
 
@@ -210,7 +211,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
 	 * </ul>
-	 * 
+	 *
 	 * <p>
 	 * If not sppecified, the debug enablement is inherited from the class context.
 	 *
@@ -593,8 +594,13 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Identifies the URL subpath relative to the servlet class.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_path}
+	 * <p>
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This method is only applicable for Java methods.
+	 * 	<li>
+	 * 		Slashes are trimmed from the path ends.
+	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
 	 * </ul>
 	 *
 	 * @param values The new values for this setting.
@@ -602,7 +608,11 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder path(String...values) {
-		return set(RESTOP_path, values);
+		if (path == null)
+			path = new ArrayList<>(Arrays.asList(values));
+		else
+			path.addAll(0, Arrays.asList(values));
+		return this;
 	}
 
 	// <FluentSetters>

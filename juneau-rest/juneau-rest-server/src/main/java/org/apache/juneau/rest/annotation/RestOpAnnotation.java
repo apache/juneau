@@ -628,7 +628,7 @@ public class RestOpAnnotation {
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 			b.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
-			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
+			stringStream(a.path()).forEach(x -> b.path(x));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 
@@ -642,7 +642,7 @@ public class RestOpAnnotation {
 					b.httpMethod(v);
 				} else {
 					b.httpMethod(v.substring(0, i).trim());
-					b.prependTo(RESTOP_path,  v.substring(i).trim());
+					b.path(v.substring(i).trim());
 				}
 			}
 		}
