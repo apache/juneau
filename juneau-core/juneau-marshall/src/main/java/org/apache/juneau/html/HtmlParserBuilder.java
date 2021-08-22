@@ -36,7 +36,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public HtmlParserBuilder() {
+	protected HtmlParserBuilder() {
 		super();
 		consumes("text/html,text/html+stripped");
 		contextClass(HtmlParser.class);
@@ -47,8 +47,22 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlParserBuilder(HtmlParser copyFrom) {
+	protected HtmlParserBuilder(HtmlParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected HtmlParserBuilder(HtmlParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlParserBuilder copy() {
+		return new HtmlParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

@@ -48,6 +48,20 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected PlainTextSerializerBuilder(PlainTextSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextSerializerBuilder copy() {
+		return new PlainTextSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public PlainTextSerializer build() {
 		return (PlainTextSerializer)super.build();

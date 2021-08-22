@@ -58,7 +58,7 @@ public class ConfigBuilder extends ContextBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public ConfigBuilder() {
+	protected ConfigBuilder() {
 		super();
 		name = env("Config.name", "Configuration.cfg");
 		store = ConfigFileStore.DEFAULT;
@@ -77,7 +77,7 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ConfigBuilder(Config copyFrom) {
+	protected ConfigBuilder(Config copyFrom) {
 		super(copyFrom);
 		name = copyFrom.name;
 		store = copyFrom.store;
@@ -89,6 +89,30 @@ public class ConfigBuilder extends ContextBuilder {
 		binaryFormat = copyFrom.binaryFormat;
 		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 		readOnly = copyFrom.readOnly;
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ConfigBuilder(ConfigBuilder copyFrom) {
+		super(copyFrom);
+		name = copyFrom.name;
+		store = copyFrom.store;
+		serializer = copyFrom.serializer;
+		parser = copyFrom.parser;
+		encoder = copyFrom.encoder;
+		varResolver = copyFrom.varResolver;
+		binaryLineLength = copyFrom.binaryLineLength;
+		binaryFormat = copyFrom.binaryFormat;
+		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+		readOnly = copyFrom.readOnly;
+	}
+
+	@Override /* ContextBuilder */
+	public ConfigBuilder copy() {
+		return new ConfigBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

@@ -47,6 +47,20 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected MsgPackSerializerBuilder(MsgPackSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public MsgPackSerializerBuilder copy() {
+		return new MsgPackSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public MsgPackSerializer build() {
 		return (MsgPackSerializer)super.build();

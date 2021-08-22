@@ -51,6 +51,20 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected UrlEncodingSerializerBuilder(UrlEncodingSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingSerializerBuilder copy() {
+		return new UrlEncodingSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializer build() {
 		return (UrlEncodingSerializer)super.build();

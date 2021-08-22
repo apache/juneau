@@ -47,6 +47,18 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected OutputStreamSerializerBuilder(OutputStreamSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public abstract OutputStreamSerializerBuilder copy();
+
 	@Override /* ContextBuilder */
 	public OutputStreamSerializer build() {
 		return (OutputStreamSerializer)super.build();

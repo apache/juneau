@@ -188,6 +188,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 	}
 
+	@Override /* ContextBuilder */
+	public RestContextBuilder copy() {
+		throw new NoSuchMethodError("Not implemented.");
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
 	public RestContext build() {

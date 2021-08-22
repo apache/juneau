@@ -56,6 +56,20 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected HtmlSchemaSerializerBuilder(HtmlSchemaSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlSchemaSerializerBuilder copy() {
+		return new HtmlSchemaSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public HtmlSchemaSerializer build() {
 		return (HtmlSchemaSerializer)super.build();

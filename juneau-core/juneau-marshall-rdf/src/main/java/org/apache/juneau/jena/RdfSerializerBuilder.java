@@ -54,6 +54,20 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected RdfSerializerBuilder(RdfSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder copy() {
+		return new RdfSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public RdfSerializer build() {
 		return (RdfSerializer)super.build();

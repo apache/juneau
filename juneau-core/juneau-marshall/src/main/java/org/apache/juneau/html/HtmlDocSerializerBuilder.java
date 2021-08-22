@@ -52,6 +52,20 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected HtmlDocSerializerBuilder(HtmlDocSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlDocSerializerBuilder copy() {
+		return new HtmlDocSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public HtmlDocSerializer build() {
 		return (HtmlDocSerializer)super.build();

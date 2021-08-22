@@ -52,6 +52,20 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 		accept = copyFrom._accept;
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected SerializerBuilder(SerializerBuilder copyFrom) {
+		super(copyFrom);
+		produces = copyFrom.produces;
+		accept = copyFrom.accept;
+	}
+
+	@Override /* ContextBuilder */
+	public abstract SerializerBuilder copy();
+
 	@Override /* ContextBuilder */
 	public Serializer build() {
 		return (Serializer)super.build();

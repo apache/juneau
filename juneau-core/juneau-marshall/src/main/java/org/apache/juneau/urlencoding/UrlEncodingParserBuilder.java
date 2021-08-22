@@ -36,7 +36,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public UrlEncodingParserBuilder() {
+	protected UrlEncodingParserBuilder() {
 		super();
 		decoding();
 		consumes("application/x-www-form-urlencoded");
@@ -48,8 +48,22 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public UrlEncodingParserBuilder(UrlEncodingParser copyFrom) {
+	protected UrlEncodingParserBuilder(UrlEncodingParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected UrlEncodingParserBuilder(UrlEncodingParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingParserBuilder copy() {
+		return new UrlEncodingParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

@@ -70,6 +70,11 @@ public class MockStreamSerializer extends OutputStreamSerializer {
 			super.accept(value);
 			return this;
 		}
+
+		@Override
+		public Builder copy() {
+			throw new NoSuchMethodError("Not implemented.");
+		}
 	}
 
 	@Override

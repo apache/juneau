@@ -58,6 +58,21 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generator.copy().beanContextBuilder(getBeanContextBuilder());
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected JsonSchemaSerializerBuilder(JsonSchemaSerializerBuilder copyFrom) {
+		super(copyFrom);
+		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generatorBuilder.copy().beanContextBuilder(getBeanContextBuilder());
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaSerializerBuilder copy() {
+		return new JsonSchemaSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public JsonSchemaSerializer build() {
 		return (JsonSchemaSerializer)super.build();

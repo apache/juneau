@@ -39,7 +39,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public RdfParserBuilder() {
+	protected RdfParserBuilder() {
 		super();
 		contextClass(RdfParser.class);
 	}
@@ -49,8 +49,22 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public RdfParserBuilder(RdfParser copyFrom) {
+	protected RdfParserBuilder(RdfParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected RdfParserBuilder(RdfParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public RdfParserBuilder copy() {
+		return new RdfParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

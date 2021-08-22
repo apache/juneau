@@ -51,6 +51,20 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected SoapXmlSerializerBuilder(SoapXmlSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public SoapXmlSerializerBuilder copy() {
+		return new SoapXmlSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public SoapXmlSerializer build() {
 		return (SoapXmlSerializer)super.build();

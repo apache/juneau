@@ -62,19 +62,9 @@ public abstract class ContextBuilder {
 	 * Constructor.
 	 * Default settings.
 	 */
-	public ContextBuilder() {
-		this.cpb = ContextProperties.create();
+	protected ContextBuilder() {
+		cpb = ContextProperties.create();
 		debug = env("Context.debug", false);
-	}
-
-	/**
-	 * Constructor.
-	 * Default settings.
-	 * @param contextClass The class being built.
-	 */
-	public ContextBuilder(Class<?> contextClass) {
-		this();
-		this.contextClass = contextClass;
 	}
 
 	/**
@@ -82,11 +72,29 @@ public abstract class ContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ContextBuilder(Context copyFrom) {
-		this.cpb = copyFrom == null ? ContextProperties.DEFAULT.copy() : copyFrom.properties.copy();
-		this.debug = copyFrom == null ? env("Context.debug", false) : copyFrom.debug;
-		this.contextClass = copyFrom == null ? null : copyFrom.getClass();
+	protected ContextBuilder(Context copyFrom) {
+		this.cpb = copyFrom.properties.copy();
+		this.debug = copyFrom.debug;
+		this.contextClass = copyFrom.getClass();
 	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ContextBuilder(ContextBuilder copyFrom) {
+		this.cpb =  new ContextPropertiesBuilder(copyFrom.cpb);
+		this.debug = copyFrom.debug;
+		this.contextClass = copyFrom.getClass();
+	}
+
+	/**
+	 * Copy creator.
+	 *
+	 * @return A new mutable copy of this builder.
+	 */
+	public abstract ContextBuilder copy();
 
 	/**
 	 * Build the object.

@@ -46,6 +46,18 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected BeanTraverseBuilder(BeanTraverseBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public abstract BeanTraverseBuilder copy();
+
 	@Override /* ContextBuilder */
 	public BeanTraverseContext build() {
 		return (BeanTraverseContext)super.build();

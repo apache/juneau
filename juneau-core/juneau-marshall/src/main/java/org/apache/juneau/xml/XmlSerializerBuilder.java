@@ -51,6 +51,20 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected XmlSerializerBuilder(XmlSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public XmlSerializerBuilder copy() {
+		return new XmlSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public XmlSerializer build() {
 		return (XmlSerializer)super.build();

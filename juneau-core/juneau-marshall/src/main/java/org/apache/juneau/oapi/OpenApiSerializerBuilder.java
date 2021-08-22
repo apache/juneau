@@ -51,6 +51,20 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected OpenApiSerializerBuilder(OpenApiSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiSerializerBuilder copy() {
+		return new OpenApiSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public OpenApiSerializer build() {
 		return (OpenApiSerializer)super.build();

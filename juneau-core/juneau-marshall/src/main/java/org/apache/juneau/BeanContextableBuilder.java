@@ -74,6 +74,19 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 		this.bcBuilder = copyFrom.getBeanContext().copy();
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected BeanContextableBuilder(BeanContextableBuilder copyFrom) {
+		super(copyFrom);
+		this.bcBuilder = copyFrom.bcBuilder.copy();
+	}
+
+	@Override /* ContextBuilder */
+	public abstract BeanContextableBuilder copy();
+
 	@Override /* ContextBuilder */
 	public BeanContextable build() {
 		return (BeanContextable)super.build();
@@ -88,6 +101,10 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 		return bcBuilder;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Overrides the bean context builder.
 	 *
@@ -99,14 +116,11 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public BeanContextableBuilder beanContextBuilder(BeanContextBuilder value) {
 		this.bcBuilder = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Minimum bean class visibility.

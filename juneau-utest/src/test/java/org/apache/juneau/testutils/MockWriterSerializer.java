@@ -77,6 +77,11 @@ public class MockWriterSerializer extends WriterSerializer {
 			super.accept(value);
 			return this;
 		}
+
+		@Override
+		public Builder copy() {
+			throw new NoSuchMethodError("Not implemented.");
+		}
 	}
 
 	@Override

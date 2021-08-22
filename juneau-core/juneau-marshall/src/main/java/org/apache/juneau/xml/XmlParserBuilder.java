@@ -40,7 +40,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public XmlParserBuilder() {
+	protected XmlParserBuilder() {
 		super();
 		consumes("text/xml,application/xml");
 		contextClass(XmlParser.class);
@@ -51,8 +51,22 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public XmlParserBuilder(XmlParser copyFrom) {
+	protected XmlParserBuilder(XmlParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected XmlParserBuilder(XmlParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public XmlParserBuilder copy() {
+		return new XmlParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

@@ -347,25 +347,7 @@ public abstract class Parser extends BeanContextable {
 	}
 
 	@Override /* Context */
-	public ParserBuilder copy() {
-		return new ParserBuilder(this);
-	}
-
-	/**
-	 * Instantiates a new clean-slate {@link ParserBuilder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> ParserBuilder()</code>.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link ParserBuilder} object.
-	 */
-	public static ParserBuilder create() {
-		return new ParserBuilder();
-	}
+	public abstract ParserBuilder copy();
 
 
 	//-----------------------------------------------------------------------------------------------------------------

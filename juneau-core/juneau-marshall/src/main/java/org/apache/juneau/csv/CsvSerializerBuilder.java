@@ -48,6 +48,20 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected CsvSerializerBuilder(CsvSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public CsvSerializerBuilder copy() {
+		return new CsvSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public CsvSerializer build() {
 		return (CsvSerializer)super.build();

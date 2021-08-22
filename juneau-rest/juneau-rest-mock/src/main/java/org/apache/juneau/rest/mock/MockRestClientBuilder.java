@@ -69,6 +69,18 @@ import org.apache.http.protocol.*;
 public class MockRestClientBuilder extends RestClientBuilder {
 
 	/**
+	 * No-arg constructor.
+	 *
+	 * <p>
+	 * Provided so that this class can be easily subclassed.
+	 */
+	protected MockRestClientBuilder() {
+		super();
+		connectionManager(new MockHttpClientConnectionManager());
+		contextClass(MockRestClient.class);
+	}
+
+	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The bean to copy from.
@@ -79,16 +91,9 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		contextClass(MockRestClient.class);
 	}
 
-	/**
-	 * No-arg constructor.
-	 *
-	 * <p>
-	 * Provided so that this class can be easily subclassed.
-	 */
-	protected MockRestClientBuilder() {
-		super();
-		connectionManager(new MockHttpClientConnectionManager());
-		contextClass(MockRestClient.class);
+	@Override /* ContextBuilder */
+	public MockRestClientBuilder copy() {
+		throw new NoSuchMethodError("Not implemented.");
 	}
 
 	/**

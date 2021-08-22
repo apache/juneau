@@ -36,7 +36,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public OpenApiParserBuilder() {
+	protected OpenApiParserBuilder() {
 		super();
 		consumes("text/openapi");
 		contextClass(OpenApiParser.class);
@@ -47,8 +47,22 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public OpenApiParserBuilder(OpenApiParser copyFrom) {
+	protected OpenApiParserBuilder(OpenApiParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected OpenApiParserBuilder(OpenApiParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiParserBuilder copy() {
+		return new OpenApiParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

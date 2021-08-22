@@ -33,7 +33,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public PlainTextParserBuilder() {
+	protected PlainTextParserBuilder() {
 		super();
 		consumes("text/plain");
 		contextClass(PlainTextParser.class);
@@ -44,8 +44,22 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public PlainTextParserBuilder(PlainTextParser copyFrom) {
+	protected PlainTextParserBuilder(PlainTextParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected PlainTextParserBuilder(PlainTextParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextParserBuilder copy() {
+		return new PlainTextParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

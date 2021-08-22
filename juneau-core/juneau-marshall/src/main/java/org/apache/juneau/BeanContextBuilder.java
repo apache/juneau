@@ -59,7 +59,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * All default settings.
 	 */
-	public BeanContextBuilder() {
+	protected BeanContextBuilder() {
 		super();
 	}
 
@@ -68,8 +68,22 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public BeanContextBuilder(BeanContext copyFrom) {
+	protected BeanContextBuilder(BeanContext copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected BeanContextBuilder(BeanContextBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public BeanContextBuilder copy() {
+		return new BeanContextBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

@@ -51,6 +51,20 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected UonSerializerBuilder(UonSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public UonSerializerBuilder copy() {
+		return new UonSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public UonSerializer build() {
 		return (UonSerializer)super.build();

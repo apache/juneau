@@ -36,7 +36,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsonParserBuilder() {
+	protected JsonParserBuilder() {
 		super();
 		consumes("application/json,text/json");
 		contextClass(JsonParser.class);
@@ -47,8 +47,22 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public JsonParserBuilder(JsonParser copyFrom) {
+	protected JsonParserBuilder(JsonParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected JsonParserBuilder(JsonParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public JsonParserBuilder copy() {
+		return new JsonParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

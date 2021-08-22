@@ -30,7 +30,7 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public ConfigStoreBuilder() {
+	protected ConfigStoreBuilder() {
 		super();
 	}
 
@@ -39,9 +39,21 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ConfigStoreBuilder(ConfigStore copyFrom) {
+	protected ConfigStoreBuilder(ConfigStore copyFrom) {
 		super(copyFrom);
 	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ConfigStoreBuilder(ConfigStoreBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public abstract ConfigStoreBuilder copy();
 
 	@Override
 	public abstract ConfigStore build();

@@ -106,7 +106,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	HttpPartSerializer simplePartSerializer;
 	HttpPartParser simplePartParser;
 
-
 	/**
 	 * Constructor.
 	 */
@@ -151,6 +150,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 			this.simplePartParser = copyFrom.partParser;
 		}
 		contextClass(copyFrom.getClass());
+	}
+
+	@Override /* ContextBuilder */
+	public RestClientBuilder copy() {
+		throw new NoSuchMethodError("Not implemented.");
 	}
 
 	@Override /* ContextBuilder */

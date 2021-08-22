@@ -34,14 +34,14 @@ import org.apache.juneau.xml.*;
  * {@review}
  */
 @FluentSetters
-public class ParserBuilder extends BeanContextableBuilder {
+public abstract class ParserBuilder extends BeanContextableBuilder {
 
 	String consumes;
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public ParserBuilder() {
+	protected ParserBuilder() {
 		super();
 	}
 
@@ -50,10 +50,23 @@ public class ParserBuilder extends BeanContextableBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ParserBuilder(Parser copyFrom) {
+	protected ParserBuilder(Parser copyFrom) {
 		super(copyFrom);
 		consumes = copyFrom._consumes;
 	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ParserBuilder(ParserBuilder copyFrom) {
+		super(copyFrom);
+		consumes = copyFrom.consumes;
+	}
+
+	@Override /* ContextBuilder */
+	public abstract ParserBuilder copy();
 
 	@Override /* ContextBuilder */
 	public Parser build() {

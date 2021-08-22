@@ -32,7 +32,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public MsgPackParserBuilder() {
+	protected MsgPackParserBuilder() {
 		super();
 		consumes("octal/msgpack");
 		contextClass(MsgPackParser.class);
@@ -43,8 +43,22 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public MsgPackParserBuilder(MsgPackParser copyFrom) {
+	protected MsgPackParserBuilder(MsgPackParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected MsgPackParserBuilder(MsgPackParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public MsgPackParserBuilder copy() {
+		return new MsgPackParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

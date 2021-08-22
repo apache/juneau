@@ -47,6 +47,20 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected JsoSerializerBuilder(JsoSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public JsoSerializerBuilder copy() {
+		return new JsoSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public JsoSerializer build() {
 		return (JsoSerializer)super.build();

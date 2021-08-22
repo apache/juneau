@@ -43,6 +43,11 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 	private BeanStore beanStore;
 
+	@Override /* ContextBuilder */
+	public RestOperationContextBuilder copy() {
+		throw new NoSuchMethodError("Not implemented.");
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
 	public RestOperationContext build() {

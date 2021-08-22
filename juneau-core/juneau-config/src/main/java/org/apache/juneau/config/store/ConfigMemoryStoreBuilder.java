@@ -30,7 +30,7 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public ConfigMemoryStoreBuilder() {
+	protected ConfigMemoryStoreBuilder() {
 		super();
 	}
 
@@ -39,8 +39,22 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ConfigMemoryStoreBuilder(ConfigMemoryStore copyFrom) {
+	protected ConfigMemoryStoreBuilder(ConfigMemoryStore copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ConfigMemoryStoreBuilder(ConfigMemoryStoreBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public ConfigMemoryStoreBuilder copy() {
+		return new ConfigMemoryStoreBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

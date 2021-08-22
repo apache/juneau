@@ -49,6 +49,18 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected WriterSerializerBuilder(WriterSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public abstract WriterSerializerBuilder copy();
+
 	@Override /* ContextBuilder */
 	public WriterSerializer build() {
 		return (WriterSerializer)super.build();

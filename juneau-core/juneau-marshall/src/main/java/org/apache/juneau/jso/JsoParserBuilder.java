@@ -32,7 +32,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public JsoParserBuilder() {
+	protected JsoParserBuilder() {
 		super();
 		consumes("application/x-java-serialized-object");
 		contextClass(JsoParser.class);
@@ -43,8 +43,22 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public JsoParserBuilder(JsoParser copyFrom) {
+	protected JsoParserBuilder(JsoParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected JsoParserBuilder(JsoParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public JsoParserBuilder copy() {
+		return new JsoParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

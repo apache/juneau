@@ -52,6 +52,20 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected JsonSerializerBuilder(JsonSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSerializerBuilder copy() {
+		return new JsonSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public JsonSerializer build() {
 		return (JsonSerializer)super.build();

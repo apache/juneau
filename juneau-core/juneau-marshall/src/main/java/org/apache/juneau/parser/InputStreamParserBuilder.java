@@ -29,12 +29,12 @@ import org.apache.juneau.svl.*;
  * {@review}
  */
 @FluentSetters
-public class InputStreamParserBuilder extends ParserBuilder {
+public abstract class InputStreamParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public InputStreamParserBuilder() {
+	protected InputStreamParserBuilder() {
 		super();
 	}
 
@@ -43,9 +43,21 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public InputStreamParserBuilder(InputStreamParser copyFrom) {
+	protected InputStreamParserBuilder(InputStreamParser copyFrom) {
 		super(copyFrom);
 	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected InputStreamParserBuilder(InputStreamParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public abstract InputStreamParserBuilder copy();
 
 	@Override /* ContextBuilder */
 	public InputStreamParser build() {

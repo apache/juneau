@@ -33,7 +33,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public CsvParserBuilder() {
+	protected CsvParserBuilder() {
 		super();
 		consumes("text/csv");
 		contextClass(CsvParser.class);
@@ -44,8 +44,22 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public CsvParserBuilder(CsvParser copyFrom) {
+	protected CsvParserBuilder(CsvParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected CsvParserBuilder(CsvParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public CsvParserBuilder copy() {
+		return new CsvParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

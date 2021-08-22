@@ -36,7 +36,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public UonParserBuilder() {
+	protected UonParserBuilder() {
 		super();
 		consumes("text/uon");
 		contextClass(UonParser.class);
@@ -47,8 +47,22 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public UonParserBuilder(UonParser copyFrom) {
+	protected UonParserBuilder(UonParser copyFrom) {
 		super(copyFrom);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected UonParserBuilder(UonParserBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public UonParserBuilder copy() {
+		return new UonParserBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

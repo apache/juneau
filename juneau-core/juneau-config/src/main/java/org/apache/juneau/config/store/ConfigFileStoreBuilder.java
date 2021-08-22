@@ -37,7 +37,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	/**
 	 * Constructor, default settings.
 	 */
-	public ConfigFileStoreBuilder() {
+	protected ConfigFileStoreBuilder() {
 		super();
 		directory = env("ConfigFileStore.directory", ".");
 		charset = env("ConfigFileStore.charset", Charset.defaultCharset());
@@ -52,7 +52,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ConfigFileStoreBuilder(ConfigFileStore copyFrom) {
+	protected ConfigFileStoreBuilder(ConfigFileStore copyFrom) {
 		super(copyFrom);
 		directory = copyFrom.directory;
 		charset = copyFrom.charset;
@@ -60,7 +60,26 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 		watcherSensitivity = copyFrom.watcherSensitivity;
 		updateOnWrite = copyFrom.updateOnWrite;
 		extensions = copyFrom.extensions;
+	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ConfigFileStoreBuilder(ConfigFileStoreBuilder copyFrom) {
+		super(copyFrom);
+		directory = copyFrom.directory;
+		charset = copyFrom.charset;
+		enableWatcher = copyFrom.enableWatcher;
+		watcherSensitivity = copyFrom.watcherSensitivity;
+		updateOnWrite = copyFrom.updateOnWrite;
+		extensions = copyFrom.extensions;
+	}
+
+	@Override /* ContextBuilder */
+	public ConfigFileStoreBuilder copy() {
+		return new ConfigFileStoreBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

@@ -43,8 +43,9 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	protected JsonSchemaGeneratorBuilder() {
 		super();
-		jsonSerializerBuilder = JsonSerializer.create().beanContextBuilder(this.getBeanContextBuilder());
-		jsonParserBuilder = JsonParser.create();
+		BeanContextBuilder bc = getBeanContextBuilder();
+		jsonSerializerBuilder = JsonSerializer.create().beanContextBuilder(bc);
+		jsonParserBuilder = (JsonParserBuilder) JsonParser.create().beanContextBuilder(bc);
 		contextClass(JsonSchemaGenerator.class);
 	}
 
@@ -55,8 +56,26 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	protected JsonSchemaGeneratorBuilder(JsonSchemaGenerator copyFrom) {
 		super(copyFrom);
-		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContextBuilder(getBeanContextBuilder());
-		jsonParserBuilder = copyFrom.jsonParser.copy();
+		BeanContextBuilder bc = getBeanContextBuilder();
+		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContextBuilder(bc);
+		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParser.copy().beanContextBuilder(bc);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected JsonSchemaGeneratorBuilder(JsonSchemaGeneratorBuilder copyFrom) {
+		super(copyFrom);
+		BeanContextBuilder bc = getBeanContextBuilder();
+		jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContextBuilder(bc);
+		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParserBuilder.copy().beanContextBuilder(bc);
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaGeneratorBuilder copy() {
+		return new JsonSchemaGeneratorBuilder(this);
 	}
 
 	@Override /* ContextBuilder */

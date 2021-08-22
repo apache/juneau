@@ -51,6 +51,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		super(copyFrom);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected HtmlSerializerBuilder(HtmlSerializerBuilder copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlSerializerBuilder copy() {
+		return new HtmlSerializerBuilder(this);
+	}
+
 	@Override /* ContextBuilder */
 	public HtmlSerializer build() {
 		return (HtmlSerializer)super.build();
