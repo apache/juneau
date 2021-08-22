@@ -26,9 +26,11 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
 import java.lang.reflect.Method;
 
@@ -40,6 +42,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 	RestContext restContext;
 	Method restMethod;
+	String httpMethod;
 
 	private BeanStore beanStore;
 
@@ -447,16 +450,55 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  HTTP method name.
-	 *
-	 * <p>
-	 * REST method name.
+	 * HTTP method name.
 	 *
 	 * <p>
 	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
 	 *
+	 * <p>
+	 * Method names are case-insensitive (always folded to upper-case).
+	 *
+	 * <p>
+	 * Note that you can use {@link org.apache.juneau.http.HttpMethod} for constant values.
+	 *
+	 * <p>
+	 * Besides the standard HTTP method names, the following can also be specified:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"*"</js>
+	 * 		- Denotes any method.
+	 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
+	 * 		<br>The {@link org.apache.juneau.rest.annotation.Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
+	 * 		distinguish the actual HTTP method name.
+	 * 	<li>
+	 * 		<js>""</js>
+	 * 		- Auto-detect.
+	 * 		<br>The method name is determined based on the Java method name.
+	 * 		<br>For example, if the method is <c>doPost(...)</c>, then the method name is automatically detected
+	 * 		as <js>"POST"</js>.
+	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
+	 * 	<li>
+	 * 		<js>"RRPC"</js>
+	 * 		- Remote-proxy interface.
+	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
+	 * 		{@link Remote @Remote} annotation) to be used as a remote proxy using
+	 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
+	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
+	 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
+	 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of
+	 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
+	 * 	<li>
+	 * 		Anything else
+	 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
+	 * 		parameter.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_httpMethod}
+	 * 	<li class='ja'>{@link RestOp#method()}
+	 * 	<li class='ja'>{@link RestGet}
+	 * 	<li class='ja'>{@link RestPut}
+	 * 	<li class='ja'>{@link RestPost}
+	 * 	<li class='ja'>{@link RestDelete}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -464,7 +506,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder httpMethod(String value) {
-		return set(RESTOP_httpMethod, value);
+		this.httpMethod = value;
+		return this;
 	}
 
 	/**

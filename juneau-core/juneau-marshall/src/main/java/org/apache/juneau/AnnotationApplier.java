@@ -97,6 +97,17 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	}
 
 	/**
+	 * Resolves the specified string.
+	 *
+	 * @param in The string containing variables to resolve.
+	 * @return An optional containing the specified string if it exists, or {@link Optional#empty()} if it does not.
+	 */
+	protected Optional<String> string2(String in) {
+		in = vr.resolve(in);
+		return isEmpty(in) ? Optional.empty() : Optional.of(in);
+	}
+
+	/**
 	 * Resolves the specified strings in the string array.
 	 *
 	 * @param in The string array containing variables to resolve.

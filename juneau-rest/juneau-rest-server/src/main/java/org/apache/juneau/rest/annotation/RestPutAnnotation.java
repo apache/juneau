@@ -577,14 +577,14 @@ public class RestPutAnnotation {
 	/**
 	 * Applies {@link RestPut} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<RestPut,RestOperationContextBuilder> {
+	public static class RestOperationContextApply extends AnnotationApplier<RestPut,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
+		public RestOperationContextApply(VarResolverSession vr) {
 			super(RestPut.class, RestOperationContextBuilder.class, vr);
 		}
 
@@ -592,7 +592,7 @@ public class RestPutAnnotation {
 		public void apply(AnnotationInfo<RestPut> ai, RestOperationContextBuilder b) {
 			RestPut a = ai.getAnnotation();
 
-			b.setIfNotEmpty(RESTOP_httpMethod, "put");
+			b.httpMethod("put");
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));

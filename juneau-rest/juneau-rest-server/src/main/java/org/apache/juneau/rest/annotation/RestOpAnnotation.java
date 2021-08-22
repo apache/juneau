@@ -594,14 +594,14 @@ public class RestOpAnnotation {
 	/**
 	 * Applies {@link RestOp} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<RestOp,RestOperationContextBuilder> {
+	public static class RestOperationContextApply extends AnnotationApplier<RestOp,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
+		public RestOperationContextApply(VarResolverSession vr) {
 			super(RestOp.class, RestOperationContextBuilder.class, vr);
 		}
 
@@ -631,16 +631,17 @@ public class RestOpAnnotation {
 			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-			b.setIfNotEmpty(RESTOP_httpMethod, string(a.method()));
+
+			string2(a.method()).ifPresent(x -> b.httpMethod(x));
 			b.setIfNotEmpty(RESTOP_debug, string(a.debug()));
 
 			String v = StringUtils.trim(string(a.value()));
 			if (v != null) {
 				int i = v.indexOf(' ');
 				if (i == -1) {
-					b.set(RESTOP_httpMethod, v);
+					b.httpMethod(v);
 				} else {
-					b.set(RESTOP_httpMethod, v.substring(0, i).trim());
+					b.httpMethod(v.substring(0, i).trim());
 					b.prependTo(RESTOP_path,  v.substring(i).trim());
 				}
 			}

@@ -492,14 +492,14 @@ public class RestGetAnnotation {
 	/**
 	 * Applies {@link RestGet} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<RestGet,RestOperationContextBuilder> {
+	public static class RestOperationContextApply extends AnnotationApplier<RestGet,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
+		public RestOperationContextApply(VarResolverSession vr) {
 			super(RestGet.class, RestOperationContextBuilder.class, vr);
 		}
 
@@ -507,7 +507,7 @@ public class RestGetAnnotation {
 		public void apply(AnnotationInfo<RestGet> ai, RestOperationContextBuilder b) {
 			RestGet a = ai.getAnnotation();
 
-			b.setIfNotEmpty(RESTOP_httpMethod, "get");
+			b.httpMethod("get");
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
