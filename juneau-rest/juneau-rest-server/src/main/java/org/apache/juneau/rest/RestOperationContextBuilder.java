@@ -42,8 +42,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 	RestContext restContext;
 	Method restMethod;
-	String httpMethod;
-	String clientVersion;
+	String httpMethod, clientVersion;
+	Enablement debug;
 
 	private BeanStore beanStore;
 
@@ -202,17 +202,25 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Debug mode.
+	 * Debug mode.
 	 *
 	 * <p>
-	 * Enables debugging on this method.
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * </ul>
+	 * 
+	 * <p>
+	 * If not sppecified, the debug enablement is inherited from the class context.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder debug(Enablement value) {
-		return set(RESTOP_debug, value);
+		debug = value;
+		return this;
 	}
 
 	/**

@@ -633,7 +633,7 @@ public class RestOpAnnotation {
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 
 			value(a.method()).ifPresent(x -> b.httpMethod(x));
-			b.setIfNotEmpty(RESTOP_debug, string(a.debug()));
+			value(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 
 			String v = StringUtils.trim(string(a.value()));
 			if (v != null) {

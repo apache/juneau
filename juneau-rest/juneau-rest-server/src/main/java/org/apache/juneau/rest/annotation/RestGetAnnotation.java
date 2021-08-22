@@ -527,7 +527,7 @@ public class RestGetAnnotation {
 			b.setIfNotEmpty(RESTOP_path, a.value());
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-			b.setIfNotEmpty(RESTOP_debug, string(a.debug()));
+			value(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}
 	}
 }

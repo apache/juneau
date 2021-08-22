@@ -83,42 +83,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	static final String PREFIX = "RestOperationContext";
 
 	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_debug RESTOP_debug}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.debug</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#debug()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#debug(Enablement)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debug}
-	 * </ul>
-	 */
-	public static final String RESTOP_debug = PREFIX + ".debug.s";
-
-	/**
 	 * Configuration property:  Default form data.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -451,6 +415,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	private final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	private final ResponseBeanMeta responseMeta;
 	private final int hierarchyDepth;
+	private final DebugEnablement debug;
 
 	/**
 	 * Creator.
@@ -475,6 +440,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		try {
 			context = builder.restContext;
 			method = builder.restMethod;
+
+			if (builder.debug == null)
+				debug = context.getDebugEnablement();
+			else
+				debug = DebugEnablement.create().enable(builder.debug, "*").build();
 
 			ContextProperties cp = getContextProperties();
 
@@ -1626,7 +1596,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		call.logger(callLogger);
 
-		call.debug(context.getDebugEnablement().isDebug(this, call.getRequest()));
+		call.debug(debug.isDebug(this, call.getRequest()));
 
 		Object[] args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
