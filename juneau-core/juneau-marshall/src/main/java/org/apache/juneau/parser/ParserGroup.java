@@ -13,6 +13,9 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static java.util.Arrays.*;
+import static java.util.Collections.*;
+
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -20,6 +23,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
@@ -85,7 +89,8 @@ public final class ParserGroup {
 
 	private final List<MediaType> mediaTypes;
 	private final List<Parser> mediaTypeParsers;
-	private final List<Parser> parsers;
+
+	final Parser[] parsers;
 
 	/**
 	 * Instantiates a new clean-slate {@link ParserGroupBuilder} object.
@@ -102,13 +107,19 @@ public final class ParserGroup {
 	/**
 	 * Constructor.
 	 *
-	 * @param parsers
-	 * 	The parsers defined in this group.
-	 * 	The order is important because they will be tried in reverse order (e.g. newer first) in which they will be
-	 * 	tried to match against media types.
+	 * @param builder The builder for this bean.
 	 */
-	public ParserGroup(Parser[] parsers) {
-		this.parsers = AList.unmodifiable(parsers);
+	public ParserGroup(ParserGroupBuilder builder) {
+		List<Parser> x = new ArrayList<>();
+		for (Object p : builder.parsers) {
+			if (p instanceof ParserBuilder) {
+				x.add(((ParserBuilder)p).build());
+			} else {
+				x.add((Parser)p);
+			}
+		}
+
+		this.parsers = ArrayUtils.toReverseArray(Parser.class, x);
 
 		AList<MediaType> lmt = AList.create();
 		AList<Parser> l = AList.create();
@@ -207,7 +218,7 @@ public final class ParserGroup {
 	 * @return An unmodifiable list of parsers in this group.
 	 */
 	public List<Parser> getParsers() {
-		return parsers;
+		return unmodifiableList(asList(parsers));
 	}
 
 	/**
@@ -216,6 +227,6 @@ public final class ParserGroup {
 	 * @return <jk>true</jk> if this group contains no parsers.
 	 */
 	public boolean isEmpty() {
-		return parsers.isEmpty();
+		return parsers.length == 0;
 	}
 }

@@ -26,23 +26,64 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public class SerializerGroupBuilder {
 
-	private final AList<Object> serializers;
+	final AList<Object> serializers;
 	private BeanContextBuilder bcBuilder;
 
 	/**
 	 * Create an empty serializer group builder.
 	 */
-	public SerializerGroupBuilder() {
+	protected SerializerGroupBuilder() {
 		this.serializers = AList.create();
+	}
+
+	/**
+	 * Clone an existing serializer group.
+	 *
+	 * @param copyFrom The serializer group that we're copying settings and serializers from.
+	 */
+	protected SerializerGroupBuilder(SerializerGroup copyFrom) {
+		this.serializers = AList.create().appendReverse(Arrays.asList(copyFrom.serializers));
 	}
 
 	/**
 	 * Clone an existing serializer group builder.
 	 *
+	 * <p>
+	 * Serializer builders will be cloned during this process.
+	 *
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
-	public SerializerGroupBuilder(SerializerGroup copyFrom) {
-		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
+	protected SerializerGroupBuilder(SerializerGroupBuilder copyFrom) {
+		bcBuilder = copyFrom.bcBuilder.copy();
+		serializers = AList.create();
+		copyFrom.serializers.stream().map(x -> copyBuilder(x)).forEach(x -> serializers.add(x));
+	}
+
+	private Object copyBuilder(Object o) {
+		if (o instanceof SerializerBuilder)
+			return ((SerializerBuilder)o).copy().beanContextBuilder(bcBuilder);
+		return o;
+	}
+
+	/**
+	 * Copy creator.
+	 *
+	 * @return A new mutable copy of this builder.
+	 */
+	public SerializerGroupBuilder copy() {
+		return new SerializerGroupBuilder(this);
+	}
+
+	/**
+	 * Creates a new {@link SerializerGroup} object using a snapshot of the settings defined in this builder.
+	 *
+	 * <p>
+	 * This method can be called multiple times to produce multiple serializer groups.
+	 *
+	 * @return A new {@link SerializerGroup} object.
+	 */
+	public SerializerGroup build() {
+		return new SerializerGroup(this);
 	}
 
 	/**
@@ -110,26 +151,6 @@ public class SerializerGroupBuilder {
 	public SerializerGroupBuilder append(Object...s) {
 		serializers.appendReverse(instantiate(Arrays.asList(s)));
 		return this;
-	}
-
-	/**
-	 * Creates a new {@link SerializerGroup} object using a snapshot of the settings defined in this builder.
-	 *
-	 * <p>
-	 * This method can be called multiple times to produce multiple serializer groups.
-	 *
-	 * @return A new {@link SerializerGroup} object.
-	 */
-	public SerializerGroup build() {
-		List<Serializer> l = new ArrayList<>();
-		for (Object s : serializers) {
-			if (s instanceof SerializerBuilder) {
-				l.add(((SerializerBuilder)s).build());
-			} else {
-				l.add((Serializer)s);
-			}
-		}
-		return new SerializerGroup(ArrayUtils.toReverseArray(Serializer.class, l));
 	}
 
 	/**

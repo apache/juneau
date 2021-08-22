@@ -26,13 +26,13 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public class ParserGroupBuilder {
 
-	private final AList<Object> parsers;
+	final AList<Object> parsers;
 	private BeanContextBuilder bcBuilder;
 
 	/**
 	 * Create an empty parser group builder.
 	 */
-	public ParserGroupBuilder() {
+	protected ParserGroupBuilder() {
 		this.parsers = AList.create();
 	}
 
@@ -41,8 +41,37 @@ public class ParserGroupBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public ParserGroupBuilder(ParserGroup copyFrom) {
+	protected ParserGroupBuilder(ParserGroup copyFrom) {
 		this.parsers = AList.create().appendReverse(copyFrom.getParsers());
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The builder to copy from.
+	 */
+	protected ParserGroupBuilder(ParserGroupBuilder copyFrom) {
+		bcBuilder = copyFrom.bcBuilder.copy();
+		parsers = AList.create();
+		copyFrom.parsers.stream().map(x -> copyBuilder(x)).forEach(x -> parsers.add(x));
+	}
+
+	private Object copyBuilder(Object o) {
+		if (o instanceof ParserBuilder)
+			return ((ParserBuilder)o).copy().beanContextBuilder(bcBuilder);
+		return o;
+	}
+
+	/**
+	 * Creates a new {@link ParserGroup} object using a snapshot of the settings defined in this builder.
+	 *
+	 * <p>
+	 * This method can be called multiple times to produce multiple parser groups.
+	 *
+	 * @return A new {@link ParserGroup} object.
+	 */
+	public ParserGroup build() {
+		return new ParserGroup(this);
 	}
 
 	/**
@@ -109,26 +138,6 @@ public class ParserGroupBuilder {
 	public ParserGroupBuilder append(Object...p) {
 		parsers.appendReverse(instantiate(Arrays.asList(p)));
 		return this;
-	}
-
-	/**
-	 * Creates a new {@link ParserGroup} object using a snapshot of the settings defined in this builder.
-	 *
-	 * <p>
-	 * This method can be called multiple times to produce multiple parser groups.
-	 *
-	 * @return A new {@link ParserGroup} object.
-	 */
-	public ParserGroup build() {
-		List<Parser> l = new ArrayList<>();
-		for (Object p : parsers) {
-			if (p instanceof ParserBuilder) {
-				l.add(((ParserBuilder)p).build());
-			} else {
-				l.add((Parser)p);
-			}
-		}
-		return new ParserGroup(ArrayUtils.toReverseArray(Parser.class, l));
 	}
 
 	/**

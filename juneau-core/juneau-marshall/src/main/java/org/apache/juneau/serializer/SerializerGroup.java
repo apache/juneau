@@ -13,6 +13,8 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static java.util.Arrays.*;
+import static java.util.Collections.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -20,6 +22,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
@@ -79,7 +82,7 @@ public final class SerializerGroup {
 	private final List<Serializer> mediaTypeRangeSerializers;
 
 	private final List<MediaType> mediaTypesList;
-	private final List<Serializer> serializers;
+	final Serializer[] serializers;
 
 	/**
 	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
@@ -96,13 +99,19 @@ public final class SerializerGroup {
 	/**
 	 * Constructor.
 	 *
-	 * @param serializers
-	 * 	The serializers defined in this group.
-	 * 	The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
-	 * 	to match against media types.
+	 * @param builder The builder for this bean.
 	 */
-	public SerializerGroup(Serializer[] serializers) {
-		this.serializers = AList.unmodifiable(serializers);
+	protected SerializerGroup(SerializerGroupBuilder builder) {
+
+		List<Serializer> x = new ArrayList<>();
+		for (Object s : builder.serializers) {
+			if (s instanceof SerializerBuilder) {
+				x.add(((SerializerBuilder)s).build());
+			} else {
+				x.add((Serializer)s);
+			}
+		}
+		this.serializers = ArrayUtils.toReverseArray(Serializer.class, x);
 
 		AList<MediaRange> lmtr = AList.create();
 		ASet<MediaType> lmt = ASet.of();
@@ -261,7 +270,7 @@ public final class SerializerGroup {
 	 * @return An unmodifiable list of serializers in this group.
 	 */
 	public List<Serializer> getSerializers() {
-		return serializers;
+		return unmodifiableList(asList(serializers));
 	}
 
 	/**
@@ -270,6 +279,6 @@ public final class SerializerGroup {
 	 * @return <jk>true</jk> if this group contains no serializers.
 	 */
 	public boolean isEmpty() {
-		return serializers.isEmpty();
+		return serializers.length == 0;
 	}
 }
