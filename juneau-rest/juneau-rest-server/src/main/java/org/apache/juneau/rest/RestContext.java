@@ -3371,14 +3371,10 @@ public class RestContext extends BeanContext {
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
 	private final Class<? extends RestOperationArg>[] opArgs, hookMethodArgs;
-	private final SerializerGroup serializers;
-	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
-	private final List<MediaType>
-		consumes,
-		produces;
+	private final List<MediaType> consumes, produces;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
 	private final List<NamedAttribute> defaultRequestAttributes;
 	private final List<ResponseProcessor> responseProcessors;
@@ -3509,12 +3505,6 @@ public class RestContext extends BeanContext {
 			callLogger = createCallLogger(r, cp, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
 
-			serializers = createSerializerGroup(r, cp, bf);
-			bf.addBean(SerializerGroup.class, serializers);
-
-			parsers = createParserGroup(r, cp, bf);
-			bf.addBean(ParserGroup.class, parsers);
-
 			partSerializer = createPartSerializer(r, cp, bf);
 			bf.addBean(HttpPartSerializer.class, partSerializer);
 
@@ -3551,9 +3541,6 @@ public class RestContext extends BeanContext {
 
 			debugEnablement = createDebugEnablement(r, cp, bf);
 
-			consumes = unmodifiableList(cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes()));
-			produces = unmodifiableList(cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes()));
-
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 			path = builder.getPath();
 
@@ -3572,6 +3559,27 @@ public class RestContext extends BeanContext {
 			postCallMethods = createPostCallMethods(r, cp, bf).stream().map(this::toRestOperationInvoker).toArray(RestOperationInvoker[]:: new);
 
 			restOperations = createRestOperations(r, cp, bf);
+
+			List<MediaType> _produces = cp.getList(REST_produces, MediaType.class).orElse(null);
+			List<MediaType> _consumes = cp.getList(REST_consumes, MediaType.class).orElse(null);
+			List<RestOperationContext> opContexts = restOperations.getOperationContexts();
+
+			if (_produces != null)
+				produces = AList.unmodifiable(_produces);
+			else {
+				Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+				opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
+				produces = AList.unmodifiable(s);
+			}
+
+			if (_consumes != null)
+				consumes = AList.unmodifiable(_consumes);
+			else {
+				Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getParsers().getSupportedMediaTypes());
+				opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
+				consumes = AList.unmodifiable(s);
+			}
+
 			restChildren = createRestChildren(r, cp, bf, builder.inner);
 
 			swaggerProvider = createSwaggerProvider(r, cp, bf, ff, m, vr);
@@ -4182,196 +4190,6 @@ public class RestContext extends BeanContext {
 			.run();
 
 		return x;
-	}
-
-	/**
-	 * Instantiates the serializers for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for {@link #REST_serializers} value set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Serializer...)}
-	 * 			<li>{@link Rest#serializers()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createSerializers()</> method that returns <c>{@link Serializer}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>Serializer[0]</c>.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_serializers}
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
-	 * @return The serializers for this REST resource.
-	 * @throws Exception If serializers could not be instantiated.
-	 */
-	protected SerializerGroup createSerializerGroup(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
-
-		SerializerGroup g = beanStore.getBean(SerializerGroup.class).orElse(null);
-
-		if (g == null)
-			g = createSerializerGroupBuilder(resource, properties, beanStore).build();
-
-		g = BeanStore
-			.of(beanStore, resource)
-			.addBean(SerializerGroup.class, g)
-			.beanCreateMethodFinder(SerializerGroup.class, resource)
-			.find("createSerializers")
-			.withDefault(g)
-			.run();
-
-		return g;
-	}
-
-	/**
-	 * Creates the builder for the serializer group.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
-	 * @return The serializers for this REST resource.
-	 * @throws Exception If serializers could not be instantiated.
-	 */
-	protected SerializerGroupBuilder createSerializerGroupBuilder(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
-
-		Object[] x = properties.getArray(REST_serializers, Object.class).orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(Serializer[].class).orElse(null);
-
-		if (x == null)
-			x = new Serializer[0];
-
-		SerializerGroupBuilder g = SerializerGroup
-			.create()
-			.append(x)
-			.forEach(y -> y.apply(properties));
-
-		g = BeanStore
-			.of(beanStore, resource)
-			.addBean(SerializerGroupBuilder.class, g)
-			.beanCreateMethodFinder(SerializerGroupBuilder.class, resource)
-			.find("createSerializerGroupBuilder")
-			.withDefault(g)
-			.run();
-
-		return g;
-	}
-
-	/**
-	 * Instantiates the parsers for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for {@link #REST_parsers} value set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Parser...)}
-	 * 			<li>{@link Rest#parsers()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createParsers()</> method that returns <c>{@link Parser}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>Parser[0]</c>.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_parsers}
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
-	 * @return The parsers for this REST resource.
-	 * @throws Exception If parsers could not be instantiated.
-	 */
-	protected ParserGroup createParserGroup(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
-
-		ParserGroup g = beanStore.getBean(ParserGroup.class).orElse(null);
-
-		if (g == null)
-			g = createParserGroupBuilder(resource, properties, beanStore).build();
-
-		g = BeanStore
-			.of(beanStore, resource)
-			.addBean(ParserGroup.class, g)
-			.beanCreateMethodFinder(ParserGroup.class, resource)
-			.find("createParserGroup")
-			.withDefault(g)
-			.run();
-
-		return g;
-	}
-
-	/**
-	 * Creates the builder for the parser group.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
-	 * @return The serializers for this REST resource.
-	 * @throws Exception If serializers could not be instantiated.
-	 */
-	protected ParserGroupBuilder createParserGroupBuilder(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
-
-		Object[] x = properties.getArray(REST_parsers, Object.class).orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(Parser[].class).orElse(null);
-
-		if (x == null)
-			x = new Parser[0];
-
-		ParserGroupBuilder g = ParserGroup
-			.create()
-			.append(x)
-			.forEach(y -> y.apply(properties));
-
-		g = BeanStore
-			.of(beanStore, resource)
-			.addBean(ParserGroupBuilder.class, g)
-			.beanCreateMethodFinder(ParserGroupBuilder.class, resource)
-			.find("createParserGroupBuilder")
-			.withDefault(g)
-			.run();
-
-		return g;
 	}
 
 	/**
@@ -6281,10 +6099,11 @@ public class RestContext extends BeanContext {
 	/**
 	 * Returns the explicit list of supported accept types for this resource.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * </ul>
+	 * <p>
+	 * Consists of the media types for production common to all operations on this class.
+	 *
+	 * <p>
+	 * Can be overridden by {@link RestContext#REST_produces}.
 	 *
 	 * @return
 	 * 	An unmodifiable list of supported <c>Accept</c> header values for this resource.
@@ -6297,10 +6116,11 @@ public class RestContext extends BeanContext {
 	/**
 	 * Returns the explicit list of supported content types for this resource.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * </ul>
+	 * <p>
+	 * Consists of the media types for consumption common to all operations on this class.
+	 *
+	 * <p>
+	 * Can be overridden by {@link RestContext#REST_consumes}.
 	 *
 	 * @return
 	 * 	An unmodifiable list of supported <c>Content-Type</c> header values for this resource.
@@ -7152,13 +6972,11 @@ public class RestContext extends BeanContext {
 					.a("defaultResponseHeaders", defaultResponseHeaders)
 					.a("fileFinder", fileFinder)
 					.a("opArgs", opArgs)
-					.a("parsers", parsers)
 					.a("partParser", partParser)
 					.a("partSerializer", partSerializer)
 					.a("produces", produces)
 					.a("renderResponseStackTraces", renderResponseStackTraces)
 					.a("responseProcessors", responseProcessors)
-					.a("serializers", serializers)
 					.a("staticFiles", staticFiles)
 					.a("swaggerProvider", swaggerProvider)
 					.a("uriAuthority", uriAuthority)

@@ -1174,6 +1174,10 @@ public class Swagger_Test {
 		public X a() {
 			return null;
 		}
+		@RestPut(path="/b")
+		public X b() {
+			return null;
+		}
 	}
 
 	@Test
@@ -1303,6 +1307,10 @@ public class Swagger_Test {
 	public static class I8 {
 		@RestPut(path="/path2/{foo}",serializers={XmlSerializer.class})
 		public X a() {
+			return null;
+		}
+		@RestGet(path="/b")
+		public X b() {
 			return null;
 		}
 	}
