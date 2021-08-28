@@ -24,6 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logging.*;
@@ -265,7 +266,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * 	<li class='jm'>{@link RestContextBuilder#consumes(MediaType...)}
 	 * </ul>
 	 */
 	String[] consumes() default {};
@@ -896,7 +897,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * 	<li class='jm'>{@link RestContextBuilder#produces(MediaType...)}
 	 * </ul>
 	 */
 	String[] produces() default {};

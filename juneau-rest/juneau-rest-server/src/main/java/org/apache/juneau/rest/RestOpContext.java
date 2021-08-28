@@ -182,8 +182,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, cp, bs);
 			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
-			supportedAcceptTypes = unmodifiableList(cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes()));
-			supportedContentTypes = unmodifiableList(cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes()));
+			supportedAcceptTypes = unmodifiableList(ofNullable(builder.produces).orElse(serializers.getSupportedMediaTypes()));
+			supportedContentTypes = unmodifiableList(ofNullable(builder.consumes).orElse(parsers.getSupportedMediaTypes()));
 
 			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bs, method, context).build();
 			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bs, method, context).build();

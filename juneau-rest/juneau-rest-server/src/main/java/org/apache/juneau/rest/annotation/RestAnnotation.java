@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -1042,8 +1043,8 @@ public class RestAnnotation {
 
 			b.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
 			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
-			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
-			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
+			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(REST_defaultRequestAttributes, x));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultResponseHeaders, x));
@@ -1102,8 +1103,8 @@ public class RestAnnotation {
 			b.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
 			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
 			b.prependTo(REST_encoders, a.encoders());
-			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
-			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
+			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
 			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));

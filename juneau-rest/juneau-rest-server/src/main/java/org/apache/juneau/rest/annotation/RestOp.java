@@ -20,6 +20,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.dto.swagger.*;
 
@@ -113,7 +114,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#consumes(MediaType...)}
 	 * </ul>
 	 */
 	String[] consumes() default {};
@@ -613,7 +614,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#produces(MediaType...)}
 	 * </ul>
 	 */
 	String[] produces() default {};

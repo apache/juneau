@@ -44,6 +44,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	NamedAttributeList defaultRequestAttributes;
 	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
 	RestMatcherListBuilder restMatchers;
+	List<MediaType> produces, consumes;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -629,6 +630,74 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 			path = new ArrayList<>(Arrays.asList(values));
 		else
 			path.addAll(0, Arrays.asList(values));
+		return this;
+	}
+
+	/**
+	 * Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 * <br>An example where this might be useful if you have serializers registered that handle media types that you
+	 * don't want exposed in the Swagger documentation.
+	 *
+	 * <p>
+	 * This affects the returned values from the following:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
+	 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#produces}
+	 * 	<li class='ja'>{@link RestOp#produces}
+	 * 	<li class='ja'>{@link RestGet#produces}
+	 * 	<li class='ja'>{@link RestPut#produces}
+	 * 	<li class='ja'>{@link RestPost#produces}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder produces(MediaType...values) {
+		if (produces == null)
+			produces = new ArrayList<>(Arrays.asList(values));
+		else
+			produces.addAll(Arrays.asList(values));
+		return this;
+	}
+
+	/**
+	 * Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 * <br>An example where this might be useful if you have parsers registered that handle media types that you
+	 * don't want exposed in the Swagger documentation.
+	 *
+	 * <p>
+	 * This affects the returned values from the following:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#consumes}
+	 * 	<li class='ja'>{@link RestOp#consumes}
+	 * 	<li class='ja'>{@link RestPut#consumes}
+	 * 	<li class='ja'>{@link RestPost#consumes}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder consumes(MediaType...values) {
+		if (consumes == null)
+			consumes = new ArrayList<>(Arrays.asList(values));
+		else
+			consumes.addAll(Arrays.asList(values));
 		return this;
 	}
 

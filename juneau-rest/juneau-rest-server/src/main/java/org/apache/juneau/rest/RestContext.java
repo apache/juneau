@@ -383,70 +383,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_children = PREFIX + ".children.lo";
 
 	/**
-	 * Configuration property:  Supported content media types.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_consumes REST_consumes}
-	 * 	<li><b>Name:</b>  <js>"RestContext.consumes.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.consumes</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_CONSUMES</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#consumes()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#consumes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumes(String...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumes(MediaType...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumesReplace(String...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumesReplace(MediaType...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 * <br>An example where this might be useful if you have parsers registered that handle media types that you
-	 * don't want exposed in the Swagger documentation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>)
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_consumes</jsf>, <js>"application/json"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * This affects the returned values from the following:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
-	 * </ul>
-	 */
-	public static final String REST_consumes = PREFIX + ".consumes.ls";
-
-	/**
 	 * Configuration property:  REST context class.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1649,71 +1585,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_partSerializer = PREFIX + ".partSerializer.o";
 
 	/**
-	 * Configuration property:  Supported accept media types.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_produces REST_produces}
-	 * 	<li><b>Name:</b>  <js>"RestContext.produces.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.produces</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_PRODUCES</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#produces()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#produces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#produces(String...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#produces(MediaType...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#producesReplace(String...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#producesReplace(MediaType...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-	 * <br>An example where this might be useful if you have serializers registered that handle media types that you
-	 * don't want exposed in the Swagger documentation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>)
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_produces</jsf>, <js>"application/json"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * This affects the returned values from the following:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
-	 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
-	 * </ul>
-	 */
-	public static final String REST_produces = PREFIX + ".produces.ls";
-
-	/**
 	 * Configuration property:  Render response stack traces in responses.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2806,20 +2677,18 @@ public class RestContext extends BeanContext {
 
 			restOperations = createRestOperations(r, cp, bf);
 
-			List<MediaType> _produces = cp.getList(REST_produces, MediaType.class).orElse(null);
-			List<MediaType> _consumes = cp.getList(REST_consumes, MediaType.class).orElse(null);
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
-			if (_produces != null)
-				produces = AList.unmodifiable(_produces);
+			if (builder.produces != null)
+				produces = AList.unmodifiable(builder.produces);
 			else {
 				Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 				opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
 				produces = AList.unmodifiable(s);
 			}
 
-			if (_consumes != null)
-				consumes = AList.unmodifiable(_consumes);
+			if (builder.consumes != null)
+				consumes = AList.unmodifiable(builder.consumes);
 			else {
 				Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getParsers().getSupportedMediaTypes());
 				opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
@@ -5353,7 +5222,7 @@ public class RestContext extends BeanContext {
 	 * Consists of the media types for production common to all operations on this class.
 	 *
 	 * <p>
-	 * Can be overridden by {@link RestContext#REST_produces}.
+	 * Can be overridden by {@link RestContextBuilder#produces(MediaType...)}.
 	 *
 	 * @return
 	 * 	An unmodifiable list of supported <c>Accept</c> header values for this resource.
@@ -5370,7 +5239,7 @@ public class RestContext extends BeanContext {
 	 * Consists of the media types for consumption common to all operations on this class.
 	 *
 	 * <p>
-	 * Can be overridden by {@link RestContext#REST_consumes}.
+	 * Can be overridden by {@link RestContextBuilder#consumes(MediaType...)}.
 	 *
 	 * @return
 	 * 	An unmodifiable list of supported <c>Content-Type</c> header values for this resource.

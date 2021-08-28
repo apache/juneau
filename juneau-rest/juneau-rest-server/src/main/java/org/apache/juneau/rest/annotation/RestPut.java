@@ -21,6 +21,7 @@ import java.nio.charset.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Identifies a REST PUT operation Java method on a {@link RestServlet} implementation class.
@@ -115,7 +116,7 @@ public @interface RestPut {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#consumes(MediaType...)}
 	 * </ul>
 	 */
 	String[] consumes() default {};
@@ -539,7 +540,7 @@ public @interface RestPut {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#produces(MediaType...)}
 	 * </ul>
 	 */
 	String[] produces() default {};

@@ -117,6 +117,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	UriResolution uriResolution;
 	Charset defaultCharset;
 	long maxInput;
+	List<MediaType> consumes, produces;
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
@@ -2122,49 +2123,47 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
+	 * Supported accept media types.
 	 *
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 * <br>An example where this might be useful if you have serializers registered that handle media types that you
+	 * don't want exposed in the Swagger documentation.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * </ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
+	 * 	<jk>public class</jk> MyResource {
 	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder produces(String...values) {
-		return prependTo(REST_produces, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 *
-	 * <p>
-	 * Same as {@link #produces(String...)} but replaces any previous values.
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>)
+	 * 		}
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder producesReplace(String...values) {
-		return set(REST_produces, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 *
 	 * <p>
-	 * Same as {@link #produces(String...)} except input is {@link MediaType} instances.
+	 * This affects the returned values from the following:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
+	 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * 	<li class='ja'>{@link Rest#produces}
+	 * 	<li class='ja'>{@link RestOp#produces}
+	 * 	<li class='ja'>{@link RestGet#produces}
+	 * 	<li class='ja'>{@link RestPut#produces}
+	 * 	<li class='ja'>{@link RestPost#produces}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
@@ -2172,71 +2171,53 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder produces(MediaType...values) {
-		return prependTo(REST_produces, values);
+		if (produces == null)
+			produces = new ArrayList<>(Arrays.asList(values));
+		else
+			produces.addAll(Arrays.asList(values));
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
-	 *
-	 * <p>
-	 * Same as {@link #produces(MediaType...)} but replaces any previous values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder producesReplace(MediaType...values) {
-		return set(REST_produces, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
+	 * Supported content media types.
 	 *
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 * <br>An example where this might be useful if you have parsers registered that handle media types that you
+	 * don't want exposed in the Swagger documentation.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * </ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
+	 * 	<jk>public class</jk> MyResource {
 	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder consumes(String...values) {
-		return prependTo(REST_consumes, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 *
-	 * <p>
-	 * Same as {@link #consumes(String...)} but replaces any existing values.
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>)
+	 * 		}
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder consumesReplace(String...values) {
-		return set(REST_consumes, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 *
 	 * <p>
-	 * Same as {@link #consumes(String...)} except input is {@link MediaType} instances.
+	 * This affects the returned values from the following:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * 	<li class='ja'>{@link Rest#consumes}
+	 * 	<li class='ja'>{@link RestOp#consumes}
+	 * 	<li class='ja'>{@link RestPut#consumes}
+	 * 	<li class='ja'>{@link RestPost#consumes}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
@@ -2244,25 +2225,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder consumes(MediaType...values) {
-		return prependTo(REST_consumes, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
-	 *
-	 * <p>
-	 * Same as {@link #consumes(MediaType...)} except replaces any existing values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder consumesReplace(MediaType...values) {
-		return set(REST_consumes, values);
+		if (consumes == null)
+			consumes = new ArrayList<>(Arrays.asList(values));
+		else
+			consumes.addAll(Arrays.asList(values));
+		return this;
 	}
 
 	/**
