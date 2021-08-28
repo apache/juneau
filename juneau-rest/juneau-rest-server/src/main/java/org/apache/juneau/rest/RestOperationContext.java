@@ -83,50 +83,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	static final String PREFIX = "RestOperationContext";
 
 	/**
-	 * Configuration property:  Default request attributes.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultRequestAttributes RESTOP_defaultRequestAttributes}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.reqAttrs.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.rest.NamedAttribute}[]</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultRequestAttributes</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTREQUESTATTRIBUTES</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultRequestAttributes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestAttribute(String,Object)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestAttribute(String,Supplier)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestAttributes(NamedAttribute...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they are not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
-	 * </ul>
-	 */
-	public static final String RESTOP_defaultRequestAttributes = PREFIX + ".defaultRequestAttributes.lo";
-
-	/**
 	 * Configuration property:  Default request headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -381,7 +337,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bs, method, context).build();
 			defaultRequestQuery = createDefaultRequestQuery(r, builder, bs, method).build();
 			defaultRequestFormData = createDefaultRequestFormData(r, builder, bs, method).build();
-			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, cp, bs, method, context));
+			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, builder, bs, method, context));
 
 			int _hierarchyDepth = 0;
 			Class<?> sc = method.getDeclaringClass().getSuperclass();
@@ -1051,19 +1007,16 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates the default request attributes for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @param method This Java method.
 	 * @param context The REST class context.
 	 * @return The default request attributes for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected NamedAttributeList createDefaultRequestAttributes(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
-		NamedAttributeList x = NamedAttributeList.create();
+	protected NamedAttributeList createDefaultRequestAttributes(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		x.appendUnique(context.getDefaultRequestAttributes());
-
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestAttributes, NamedAttribute.class, beanStore).orElse(new NamedAttribute[0]));
+		NamedAttributeList x = context.getDefaultRequestAttributes().copy().appendUnique(builder.defaultRequestAttributes);
 
 		x = BeanStore
 			.of(beanStore, resource)

@@ -46,6 +46,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	Enablement debug;
 	List<String> path;
 	PartListBuilder defaultFormData, defaultQueryData;
+	NamedAttributeList defaultRequestAttributes;
 
 	private BeanStore beanStore;
 
@@ -81,6 +82,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		this.beanStore = context.getRootBeanStore();
 		this.defaultFormData = PartList.create();
 		this.defaultQueryData = PartList.create();
+		this.defaultRequestAttributes = NamedAttributeList.create();
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -406,13 +408,24 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 * Default request attributes.
 	 *
 	 * <p>
-	 * Adds a single default request attribute.
+	 * Specifies a default value for a request attribute if it is not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultRequestAttributes}
+	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
 	 * </ul>
 	 *
 	 * @param name The attribute name.
@@ -425,13 +438,24 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 * Default request attributes.
 	 *
 	 * <p>
-	 * Adds a single default request attribute.
+	 * Specifies a default value for a request attribute if it is not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultRequestAttributes}
+	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
 	 * </ul>
 	 *
 	 * @param name The attribute name.
@@ -444,13 +468,24 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 * Default request attributes.
 	 *
 	 * <p>
-	 * Adds multiple default request attributes.
+	 * Specifies default values for request attributes if they are not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultRequestAttributes}
+	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
+	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
 	 * </ul>
 	 *
 	 * @param values The request attributes to add.
@@ -458,7 +493,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-		asList(values).stream().forEach(x -> appendTo(RESTOP_defaultRequestAttributes, x));
+		defaultRequestAttributes.append(values);
 		return this;
 	}
 

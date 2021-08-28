@@ -3376,7 +3376,7 @@ public class RestContext extends BeanContext {
 	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final List<MediaType> consumes, produces;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
-	private final List<NamedAttribute> defaultRequestAttributes;
+	private final NamedAttributeList defaultRequestAttributes;
 	private final List<ResponseProcessor> responseProcessors;
 	private final Messages messages;
 	private final Config config;
@@ -3522,7 +3522,7 @@ public class RestContext extends BeanContext {
 
 			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bf).build();
 			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bf).build();
-			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, cp, bf));
+			defaultRequestAttributes = createDefaultRequestAttributes(r, cp, bf);
 
 			opArgs = createRestOperationArgs(r, cp, bf).asArray();
 			hookMethodArgs = createHookMethodArgs(r, cp, bf).asArray();
@@ -6156,7 +6156,7 @@ public class RestContext extends BeanContext {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public List<NamedAttribute> getDefaultRequestAttributes() {
+	public NamedAttributeList getDefaultRequestAttributes() {
 		return defaultRequestAttributes;
 	}
 

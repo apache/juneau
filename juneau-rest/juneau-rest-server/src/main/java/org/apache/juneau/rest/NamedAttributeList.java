@@ -46,6 +46,15 @@ public class NamedAttributeList extends AList<NamedAttribute> {
 	}
 
 	/**
+	 * Returns a copy of this list.
+	 *
+	 * @return A new copy of this list.
+	 */
+	public NamedAttributeList copy() {
+		return NamedAttributeList.of(asArray());
+	}
+
+	/**
 	 * Appends or replaces the named attribute values in this list.
 	 *
 	 * <p>
