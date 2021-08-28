@@ -15,7 +15,6 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
-import static org.apache.juneau.rest.RestOperationContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
@@ -520,7 +519,7 @@ public class RestGetAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
-			b.prependTo(RESTOP_matchers, a.matchers());
+			b.matchers(a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 			stringStream(a.path()).forEach(x -> b.path(x));

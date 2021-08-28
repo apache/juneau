@@ -13,8 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.HttpRuntimeException.*;
-import static org.apache.juneau.rest.RestOperationContext.*;
-
 import java.lang.annotation.*;
 import java.util.*;
 import org.apache.http.*;
@@ -44,6 +42,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	PartListBuilder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
 	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
+	RestMatcherListBuilder restMatchers;
 
 	private BeanStore beanStore;
 
@@ -82,6 +81,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		this.defaultRequestAttributes = NamedAttributeList.create();
 		this.defaultRequestHeaders = HeaderList.create();
 		this.defaultResponseHeaders = HeaderList.create();
+		this.restMatchers = RestMatcherList.create();
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -438,13 +438,21 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Method-level matchers.
+	 * Method-level matchers.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
 	 *
+	 * <p>
+	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
+	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_matchers}
+	 * 	<li class='ja'>{@link RestOp#matchers()}
+	 * 	<li class='ja'>{@link RestGet#matchers()}
+	 * 	<li class='ja'>{@link RestPut#matchers()}
+	 * 	<li class='ja'>{@link RestPost#matchers()}
+	 * 	<li class='ja'>{@link RestDelete#matchers()}
 	 * </ul>
 	 *
 	 * @param values The new values for this setting.
@@ -452,7 +460,49 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder matchers(RestMatcher...values) {
-		return set(RESTOP_matchers, values);
+		restMatchers.append(values);
+		return this;
+	}
+
+	/**
+	 * Method-level matchers.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
+	 *
+	 * <p>
+	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
+	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link RestOp#matchers()}
+	 * 	<li class='ja'>{@link RestGet#matchers()}
+	 * 	<li class='ja'>{@link RestPut#matchers()}
+	 * 	<li class='ja'>{@link RestPost#matchers()}
+	 * 	<li class='ja'>{@link RestDelete#matchers()}
+	 * </ul>
+	 *
+	 * @param values The new values for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	@FluentSetter
+	public RestOperationContextBuilder matchers(Class<? extends RestMatcher>...values) {
+		restMatchers.append(values);
+		return this;
 	}
 
 	/**

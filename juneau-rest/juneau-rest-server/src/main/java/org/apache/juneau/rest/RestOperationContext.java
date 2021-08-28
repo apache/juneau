@@ -75,63 +75,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "RestOperationContext";
-
-	/**
-	 * Configuration property:  Method-level matchers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_matchers RESTOP_matchers}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.matchers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestMatcher}|Class&lt;{@link org.apache.juneau.rest.RestMatcher}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#matchers()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#matchers(RestMatcher...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
-	 *
-	 * <p>
-	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
-	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmMatchers}
-	 * </ul>
-	 */
-	public static final String RESTOP_matchers = PREFIX + ".matchers.lo";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
 	private final RestOperationArg[] opArgs;
@@ -225,9 +168,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			guards = createGuards(r, cp, bs).asArray();
 			bs.addBean(RestGuard[].class, guards);
 
-			RestMatcherList matchers = createMatchers(r, cp, builder, bs);
- 			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
-			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
+			RestMatcherList matchers = createMatchers(r, builder, bs);
+ 			requiredMatchers = matchers.getMatchers().stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
+			optionalMatchers = matchers.getMatchers().stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
 			pathMatchers = createPathMatchers(r, cp, builder, bs).asArray();
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
@@ -400,7 +343,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #RESTOP_matchers} value set via any of the following:
+	 * 	<li>Looks for matchers set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestOp#matchers()}.
 	 * 		</ul>
@@ -417,35 +360,28 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
-	 * @param builder The builder for this bean.
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The method matchers for this REST resource method.
 	 * @throws Exception If method matchers could not be instantiated.
-	 * @see #RESTOP_matchers
 	 */
-	protected RestMatcherList createMatchers(Object resource, ContextProperties properties, RestOperationContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected RestMatcherList createMatchers(Object resource, RestOperationContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		RestMatcherList x = RestMatcherList.create();
-
-		x.append(properties.getInstanceArray(RESTOP_matchers, RestMatcher.class, beanStore).orElse(new RestMatcher[0]));
-
-		if (x.isEmpty())
-			x = beanStore.getBean(RestMatcherList.class).orElse(x);
+		RestMatcherListBuilder x = builder.restMatchers.beanStore(beanStore);
 
 		String clientVersion = builder.clientVersion;
 		if (clientVersion != null)
-			x.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
+			x.append(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestMatcherList.class, x)
-			.beanCreateMethodFinder(RestMatcherList.class, resource)
+			.addBean(RestMatcherListBuilder.class, x)
+			.beanCreateMethodFinder(RestMatcherListBuilder.class, resource)
 			.find("createMatchers", Method.class)
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.build();
 	}
 
 	/**

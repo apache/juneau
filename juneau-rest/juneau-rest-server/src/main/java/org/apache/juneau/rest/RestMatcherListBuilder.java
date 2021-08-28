@@ -12,61 +12,66 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static java.util.stream.Collectors.*;
-import static java.util.Collections.*;
-
-import java.util.*;
-
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
 
 /**
- * A list of {@link RestMatcher} objects.
+ * Builder for {@link RestMatcherList} objects.
  */
-public class RestMatcherList {
+@FluentSetters
+public class RestMatcherListBuilder {
 
-	private final List<RestMatcher> matchers;
+	AList<Object> matchers;
+	BeanStore beanStore;
 
 	/**
-	 * Static creator.
-	 *
-	 * @return An empty list.
+	 * Create an empty builder.
 	 */
-	public static RestMatcherListBuilder create() {
-		return new RestMatcherListBuilder();
+	protected RestMatcherListBuilder() {
+		this.matchers = AList.create();
 	}
 
 	/**
-	 * Constructor.
+	 * Creates a new {@link RestMatcherList} object using a snapshot of the settings defined in this builder.
 	 *
-	 * @param builder The builder containing the contents for this list.
+	 * @return A new {@link RestMatcherList} object.
 	 */
-	protected RestMatcherList(RestMatcherListBuilder builder) {
-		matchers = unmodifiableList(
-			builder
-				.matchers
-				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
-				.collect(toList())
-		);
-	}
-
-	private static RestMatcher instantiate(Object o, BeanStore bs) {
-		if (o instanceof RestMatcher)
-			return (RestMatcher)o;
-		try {
-			return (RestMatcher)bs.createBean((Class<?>)o);
-		} catch (ExecutableException e) {
-			throw new ConfigException(e, "Could not instantiate class {0}", o);
-		}
+	public RestMatcherList build() {
+		return new RestMatcherList(this);
 	}
 
 	/**
-	 * Returns the matchers in this list.
+	 * Appends the specified rest matcher classes to the list.
 	 *
-	 * @return The matchers in this list.  The list is unmodifiable.
+	 * @param values The values to add.
+	 * @return This object (for method chaining).
 	 */
-	public List<RestMatcher> getMatchers() {
-		return matchers;
+	@SuppressWarnings("unchecked")
+	public RestMatcherListBuilder append(Class<? extends RestMatcher>...values) {
+		matchers.append((Object[])values);
+		return this;
+	}
+
+	/**
+	 * Appends the specified rest matcher classes to the list.
+	 *
+	 * @param values The values to add.
+	 * @return This object (for method chaining).
+	 */
+	public RestMatcherListBuilder append(RestMatcher...values) {
+		matchers.append((Object[])values);
+		return this;
+	}
+
+	/**
+	 * Specifies the bean store to use for instantiating rest matcher classes.
+	 *
+	 * @param value The bean store to use for instantiating rest matcher classes.
+	 * @return This object (for method chaining).
+	 */
+	public RestMatcherListBuilder beanStore(BeanStore value) {
+		beanStore = value;
+		return this;
 	}
 }
