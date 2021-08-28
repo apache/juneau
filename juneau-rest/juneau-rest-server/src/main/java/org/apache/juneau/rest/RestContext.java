@@ -23,6 +23,7 @@ import static org.apache.juneau.rest.ResponseProcessor.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -1648,80 +1649,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_partSerializer = PREFIX + ".partSerializer.o";
 
 	/**
-	 * Configuration property:  Resource path.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_path REST_path}
-	 * 	<li><b>Name:</b>  <js>"RestContext.path.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.path.</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_PATH</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#path()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#path(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies the URL subpath relative to the ascendant resource.
-	 *
-	 * <p>
-	 * This setting is critical for the routing of HTTP requests from ascendant to child resources.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(path=<js>"/myResource"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_path</jsf>, <js>"/myResource"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
-	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-	 * 	<li>
-	 * 		Typically, this setting is only applicable to resources defined as children through the
-	 * 		{@link Rest#children() @Rest(children)} annotation.
-	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-	 * 	<li>
-	 * 		Slashes are trimmed from the path ends.
-	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
-	 * 	<li>
-	 * 		This path is available through the following method:
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContext#getPath() RestContext.getPath()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String REST_path = PREFIX + ".path.s";
-
-	/**
 	 * Configuration property:  Supported accept media types.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2860,8 +2787,8 @@ public class RestContext extends BeanContext {
 
 			debugEnablement = createDebugEnablement(r, cp, bf);
 
-			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
-			path = builder.getPath();
+			path = ofNullable(builder.path).orElse("");
+			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + path;
 
 			String p = path;
 			if (! p.endsWith("/*"))
@@ -5133,7 +5060,7 @@ public class RestContext extends BeanContext {
 	 * If path is not specified, returns <js>""</js>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_path}
+	 * 	<li class='jf'>{@link RestContextBuilder#path(String)}
 	 * </ul>
 	 *
 	 * @return The servlet path.
@@ -5150,7 +5077,7 @@ public class RestContext extends BeanContext {
 	 * If path is not specified, returns <js>""</js>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_path}
+	 * 	<li class='jm'>{@link RestContextBuilder#path(String)}
 	 * </ul>
 	 *
 	 * @return The full path.

@@ -878,7 +878,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_path}
+	 * 	<li class='jm'>{@link RestContextBuilder#path(String)}
 	 * </ul>
 	 */
 	String path() default "";

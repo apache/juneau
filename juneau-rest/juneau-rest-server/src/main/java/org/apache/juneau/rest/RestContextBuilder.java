@@ -112,7 +112,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	Config config;
 	VarResolverBuilder varResolverBuilder;
-	String allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, uriAuthority, uriContext;
+	String allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, uriAuthority, uriContext, path;
 	UriRelativity uriRelativity;
 	UriResolution uriResolution;
 	Charset defaultCharset;
@@ -453,16 +453,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public VarResolverBuilder getVarResolverBuilder() {
 		return varResolverBuilder;
-	}
-
-	/**
-	 * Returns the REST path defined on this builder.
-	 *
-	 * @return The REST path defined on this builder.
-	 */
-	public String getPath() {
-		Object p = peek(REST_path);
-		return p == null ? "" : p.toString();
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -1741,13 +1731,56 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource path.
+	 * Resource path.
 	 *
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
 	 *
+	 * <p>
+	 * This setting is critical for the routing of HTTP requests from ascendant to child resources.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(path=<js>"/myResource"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
+	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * 	<li>
+	 * 		Typically, this setting is only applicable to resources defined as children through the
+	 * 		{@link Rest#children() @Rest(children)} annotation.
+	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 * 	<li>
+	 * 		Slashes are trimmed from the path ends.
+	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
+	 * 	<li>
+	 * 		This path is available through the following method:
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContext#getPath() RestContext.getPath()}
+	 * 		</ul>
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_path}
+	 * 	<li class='ja'>{@link Rest#path}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -1755,9 +1788,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder path(String value) {
-		if (startsWith(value, '/'))
-			value = value.substring(1);
-		set(REST_path, value);
+		value = trimLeadingSlashes(value);
+		if (! isEmpty(value))
+			path = value;
 		return this;
 	}
 

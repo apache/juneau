@@ -14,7 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
@@ -1061,7 +1060,7 @@ public class RestAnnotation {
 			b.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
 			b.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
 			b.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
-			b.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
+			value(a.path()).ifPresent(x -> b.path(x));
 			value(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
 			b.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
 			b.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
@@ -1077,12 +1076,6 @@ public class RestAnnotation {
 			b.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
 			b.setIfNotEmpty(REST_debug, string(a.debug()));
 			b.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
-		}
-
-		private String trimLeadingSlash(String value) {
-			if (startsWith(value, '/'))
-				return value.substring(1);
-			return value;
 		}
 	}
 
@@ -1113,17 +1106,10 @@ public class RestAnnotation {
 			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
-			b.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
 			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			value(a.maxInput()).ifPresent(x -> b.maxInput(x));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-		}
-
-		private String trimLeadingSlash(String value) {
-			if (startsWith(value, '/'))
-				return value.substring(1);
-			return value;
 		}
 	}
 }
