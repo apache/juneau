@@ -105,221 +105,6 @@ public class RestContext extends BeanContext {
 	static final String PREFIX = "RestContext";
 
 	/**
-	 * Configuration property:  Allowed header URL parameters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedHeaderParams REST_allowedHeaderParams}
-	 * 	<li><b>Name:</b>  <js>"RestContext.allowedHeaderParams.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
-	 * 	<li><b>System property:</b>  <c>RestContext.allowedHeaderParams</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWHEADERPARAMS</c>
-	 * 	<li><b>Default:</b>  <js>"Accept,Content-Type"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowedHeaderParams()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowedHeaderParams(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?Accept=text/json&amp;Content-Type=text/json
-	 * </p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(allowedHeaderParams=<js>"Accept,Content-Type"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.allowedHeaderParams(<js>"Accept,Content-Type"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_allowedHeaderParams</jsf>, <js>"Accept,Content-Type"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.allowedHeaderParams(<js>"Accept,Content-Type"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
-	 * 		in the URL bar.
-	 * 	<li>
-	 * 		Header names are case-insensitive.
-	 * 	<li>
-	 * 		Use <js>"*"</js> to allow any headers to be specified as URL parameters.
-	 * 	<li>
-	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-	 * </ul>
-	 */
-	public static final String REST_allowedHeaderParams = PREFIX + ".allowedHeaderParams.s";
-
-	/**
-	 * Configuration property:  Allowed method headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedMethodHeaders REST_allowedMethodHeaders}
-	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodHeaders.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
-	 * 	<li><b>System property:</b>  <c>RestContext.allowedMethodHeaders</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWEDMETHODHEADERS</c>
-	 * 	<li><b>Default:</b>  empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowedMethodHeaders()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowedMethodHeaders(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
-	 * to override the real HTTP method name.
-	 * <p>
-	 * Allows you to override the actual HTTP method with a simulated method.
-	 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
-	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
-	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_allowedMethodHeaders</jsf>, <js>"PATCH"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Method names are case-insensitive.
-	 * 	<li>
-	 * 		Use <js>"*"</js> to represent all methods.
-	 * 	<li>
-	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-	 * </ul>
-	 */
-	public static final String REST_allowedMethodHeaders = PREFIX + ".allowedMethodHeaders.s";
-
-	/**
-	 * Configuration property:  Allowed method URL parameters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
-	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
-	 * 	<li><b>System property:</b>  <c>RestContext.allowedMethodParams</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWEDMETHODPARAMS</c>
-	 * 	<li><b>Default:</b>  <js>"HEAD,OPTIONS"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowedMethodParams()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowedMethodParams(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> (case-insensitive) URL parameter on a regular
-	 * GET request.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  /myservlet/myendpoint?method=OPTIONS
-	 * </p>
-	 * <p>
-	 * 	Useful in cases where you want to simulate a non-GET request in a browser by simply adding a parameter.
-	 * 	<br>Also useful if you want to construct hyperlinks to non-GET REST endpoints such as links to <c>OPTIONS</c>
-	 * pages.
-	 *
-	 * <p>
-	 * Note that per the {@doc ExtRFC2616.section9 HTTP specification}, special care should
-	 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
-	 *
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_allowedMethodParams</jsf>, <js>"HEAD,OPTIONS,PUT"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-	 * 	<li>
-	 * 		<js>'method'</js> parameter name is case-insensitive.
-	 * 	<li>
-	 * 		Use <js>"*"</js> to represent all methods.
-	 * 	<li>
-	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-	 * </ul>
-	 */
-	public static final String REST_allowedMethodParams = PREFIX + ".allowedMethodParams.s";
-
-	/**
 	 * Configuration property:  Bean store.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -595,82 +380,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_children = PREFIX + ".children.lo";
-
-	/**
-	 * Configuration property:  Client version header.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
-	 * 	<li><b>Name:</b>  <js>"RestContext.clientVersionHeader.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.clientVersionHeader</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_CLIENTVERSIONHEADER</c>
-	 * 	<li><b>Default:</b>  <js>"Client-Version"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#clientVersionHeader()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#clientVersionHeader(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the name of the header used to denote the client version on HTTP requests.
-	 *
-	 * <p>
-	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestOp#clientVersion() @RestOp(clientVersion)} annotation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_clientVersionHeader</jsf>, <js>"Client-Version"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Call this method if Client-Version is at least 2.0.
-	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestGet/ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
-	 * 	<jk>public</jk> Object method1() {
-	 * 		...
-	 * 	}
-	 *
-	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
-	 * 	<jk>public</jk> Object method2() {
-	 * 		...
-	 * 	}
-	 *
-	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
-	 * 	<jk>public</jk> Object method3() {
-	 * 		...
-	 * 	}
-	 * </p>
-	 */
-	public static final String REST_clientVersionHeader = PREFIX + ".clientVersionHeader.s";
 
 	/**
 	 * Configuration property:  Supported content media types.
@@ -1031,64 +740,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_debugOn = PREFIX + ".debugOn.s";
-
-	/**
-	 * Configuration property:  Default character encoding.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_defaultCharset REST_defaultCharset}
-	 * 	<li><b>Name:</b>  <js>"RestContext.defaultCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.defaultCharset</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEFAULTCHARSET</c>
-	 * 	<li><b>Default:</b>  <js>"utf-8"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#defaultCharset()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultCharset()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultCharset(String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultCharset(Charset)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The default character encoding for the request and response if not specified on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_defaultCharset</jsf>, <js>"US-ASCII"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(defaultCharset=<js>"UTF-16"</js>)
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 */
-	public static final String REST_defaultCharset = PREFIX + ".defaultCharset.s";
 
 	/**
 	 * Configuration property:  Default request attributes.
@@ -1657,74 +1308,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_guards = PREFIX + ".guards.lo";
-
-	/**
-	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_maxInput REST_maxInput}
-	 * 	<li><b>Name:</b>  <js>"RestContext.maxInput.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.maxInput</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_MAXINPUT</c>
-	 * 	<li><b>Default:</b>  <js>"100M"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#maxInput()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#maxInput()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#maxInput(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
-	 * in out-of-memory errors which could affect system stability.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_maxInput</jsf>, <js>"10M"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		String value that gets resolved to a <jk>long</jk>.
-	 * 	<li>
-	 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
-	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>
-	 * 		A value of <js>"-1"</js> can be used to represent no limit.
-	 * </ul>
-	 */
-	public static final String REST_maxInput = PREFIX + ".maxInput.s";
 
 	/**
 	 * Configuration property:  Messages.
@@ -3396,6 +2979,8 @@ public class RestContext extends BeanContext {
 	private final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
 	private final Instant startTime;
 	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
+	final Charset defaultCharset;
+	final long maxInput;
 
 	// Lifecycle methods
 	private final MethodInvoker[]
@@ -3533,11 +3118,13 @@ public class RestContext extends BeanContext {
 			uriRelativity = cp.get(REST_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
 
 			allowBodyParam = ! cp.getBoolean(REST_disableAllowBodyParam).orElse(false);
-			allowedHeaderParams = newCaseInsensitiveSet(cp.getString(REST_allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse("Accept,Content-Type"));
-			allowedMethodParams = newCaseInsensitiveSet(cp.getString(REST_allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse("HEAD,OPTIONS"));
-			allowedMethodHeaders = newCaseInsensitiveSet(cp.getString(REST_allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedHeaderParams = newCaseInsensitiveSet(Optional.of(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(Optional.of(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodHeaders = newCaseInsensitiveSet(Optional.of(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			renderResponseStackTraces = cp.getBoolean(REST_renderResponseStackTraces).orElse(false);
-			clientVersionHeader = cp.getString(REST_clientVersionHeader).orElse("Client-Version");
+			clientVersionHeader = builder.clientVersionHeader;
+			defaultCharset = builder.defaultCharset;
+			maxInput = builder.maxInput;
 
 			debugEnablement = createDebugEnablement(r, cp, bf);
 
@@ -5947,7 +5534,8 @@ public class RestContext extends BeanContext {
 	 * Allowed header URL parameters.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
+	 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
+	 * 	<li class='jm'>{@link RestContextBuilder#allowedHeaderParams(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -5962,7 +5550,8 @@ public class RestContext extends BeanContext {
 	 * Allowed method headers.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodHeaders}
+	 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
+	 * 	<li class='jm'>{@link RestContextBuilder#allowedMethodHeaders(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -5977,7 +5566,8 @@ public class RestContext extends BeanContext {
 	 * Allowed method URL parameters.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * 	<li class='ja'>{@link Rest#allowedMethodParams}
+	 * 	<li class='jm'>{@link RestContextBuilder#allowedMethodParams(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -5992,7 +5582,8 @@ public class RestContext extends BeanContext {
 	 * Returns the name of the client version header name used by this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * 	<li class='ja'>{@link Rest#clientVersionHeader}
+	 * 	<li class='jm'>{@link RestContextBuilder#clientVersionHeader(String)}
 	 * </ul>
 	 *
 	 * @return

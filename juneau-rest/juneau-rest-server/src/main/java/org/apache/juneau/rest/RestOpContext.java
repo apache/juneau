@@ -23,6 +23,7 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -46,7 +47,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
@@ -206,9 +206,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = Charset.forName(cp.getString(REST_defaultCharset).orElse("utf-8"));
-
-			maxInput = StringUtils.parseLongWithSuffix(cp.get(REST_maxInput, String.class).orElse("100M"));
+			defaultCharset = ofNullable(builder.defaultCharset).orElse(context.defaultCharset);
+			maxInput = ofNullable(builder.maxInput).orElse(context.maxInput);
 
 			responseMeta = ResponseBeanMeta.create(mi, cp);
 

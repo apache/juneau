@@ -27,6 +27,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
 import java.lang.reflect.Method;
+import java.nio.charset.*;
 
 /**
  * Builder class for {@link RestOpContext} objects.
@@ -43,6 +44,9 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	NamedAttributeList defaultRequestAttributes;
 	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
 	RestMatcherListBuilder restMatchers;
+
+	Charset defaultCharset;
+	Long maxInput;
 
 	private BeanStore beanStore;
 
@@ -187,7 +191,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 * 	<li class='ja'>{@link RestPut#clientVersion}
 	 * 	<li class='ja'>{@link RestPost#clientVersion}
 	 * 	<li class='ja'>{@link RestDelete#clientVersion}
-	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * 	<li class='jm'>{@link RestContextBuilder#clientVersionHeader(String)}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -225,6 +229,37 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestOpContextBuilder debug(Enablement value) {
 		debug = value;
+		return this;
+	}
+
+	/**
+	 * Default character encoding.
+	 *
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
+	 *
+	 * <p>
+	 * This overrides the value defined on the {@link RestContext}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link RestContextBuilder#defaultCharset(Charset)}
+	 * 	<li class='ja'>{@link Rest#defaultCharset}
+	 * 	<li class='ja'>{@link RestOp#defaultCharset}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.defaultCharset"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
+	 * 		<li><js>"utf-8"</js>
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder defaultCharset(Charset value) {
+		defaultCharset = value;
 		return this;
 	}
 
@@ -502,6 +537,71 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestOpContextBuilder matchers(Class<? extends RestMatcher>...values) {
 		restMatchers.append(values);
+		return this;
+	}
+
+	/**
+	 * The maximum allowed input size (in bytes) on HTTP requests.
+	 *
+	 * <p>
+	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
+	 * in out-of-memory errors which could affect system stability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>
+	 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>
+	 * 		A value of <js>"-1"</js> can be used to represent no limit.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#maxInput}
+	 * 	<li class='ja'>{@link RestOp#maxInput}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#maxInput(String)}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.maxInput"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_MAXINPUT"
+	 * 		<li><js>"100M"</js>
+	 * 	</ul>
+	 * 	<br>The default is <js>"100M"</js>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder maxInput(String value) {
+		maxInput = StringUtils.parseLongWithSuffix(value);
 		return this;
 	}
 

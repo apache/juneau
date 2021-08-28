@@ -19,6 +19,7 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -521,7 +522,7 @@ public class RestGetAnnotation {
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.matchers(a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
+			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			stringStream(a.path()).forEach(x -> b.path(x));
 			value(a.value()).ifPresent(x -> b.path(x));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));

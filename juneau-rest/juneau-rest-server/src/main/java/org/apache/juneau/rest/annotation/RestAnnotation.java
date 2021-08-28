@@ -19,6 +19,7 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -1061,7 +1062,7 @@ public class RestAnnotation {
 			b.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
 			b.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
 			b.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
-			b.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
+			value(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
 			b.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
 			b.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
 			b.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
@@ -1070,9 +1071,9 @@ public class RestAnnotation {
 			b.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
 			b.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
 			b.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
-			b.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
-			b.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
-			b.setIfNotEmpty(REST_allowedMethodParams, string(a.allowedMethodParams()));
+			value(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
+			value(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
+			value(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
 			b.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
 			b.setIfNotEmpty(REST_debug, string(a.debug()));
 			b.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
@@ -1113,8 +1114,8 @@ public class RestAnnotation {
 			b.prependTo(REST_converters, a.converters());
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
-			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			b.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
+			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			value(a.maxInput()).ifPresent(x -> b.maxInput(x));
 			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
 			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 		}

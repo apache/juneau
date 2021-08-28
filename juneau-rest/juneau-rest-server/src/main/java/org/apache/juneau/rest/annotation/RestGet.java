@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
@@ -96,7 +97,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * 	<li class='jm'>{@link RestContextBuilder#clientVersionHeader(String)}
 	 * </ul>
 	 */
 	String clientVersion() default "";
@@ -179,7 +180,9 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * 	<li class='jm'>{@link RestContextBuilder#defaultCharset(Charset)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#defaultCharset(Charset)}
+	 * 	<li class='ja'>{@link Rest#defaultCharset}
 	 * </ul>
 	 */
 	String defaultCharset() default "";

@@ -112,6 +112,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	Config config;
 	VarResolverBuilder varResolverBuilder;
+	String allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader;
+	Charset defaultCharset;
+	long maxInput;
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
@@ -137,6 +140,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				PlainTextPojoProcessor.class,
 				SerializedPojoProcessor.class
 			);
+
+			allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type");
+			allowedMethodHeaders = env("RestContext.allowedMethodHeaders", "");
+			allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS");
+			clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
+			defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
+			maxInput = StringUtils.parseLongWithSuffix(env("RestContext.maxInput", "100M"));
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -454,7 +464,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	//----------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed header URL parameters.
+	 * Allowed header URL parameters.
 	 *
 	 * <p>
 	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
@@ -465,48 +475,103 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
+	 * 		in the URL bar.
+	 * 	<li>
+	 * 		Header names are case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to allow any headers to be specified as URL parameters.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
+	 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>true</jk>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.allowedHeaderParams"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDHEADERPARAMS"
+	 * 		<li><js>"Accept,Content-Type"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder allowedHeaderParams(String value) {
-		return set(REST_allowedHeaderParams, value);
+		allowedHeaderParams = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed method headers.
+	 * Allowed method headers.
 	 *
 	 * <p>
 	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
 	 * to override the real HTTP method name.
+	 *
 	 * <p>
 	 * Allows you to override the actual HTTP method with a simulated method.
 	 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
 	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
 	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Method names are case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodHeaders}
+	 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>true</jk>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.allowedMethodHeaders"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODHEADERS"
+	 * 		<li><js>""</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder allowedMethodHeaders(String value) {
-		return set(REST_allowedMethodHeaders, value);
+		allowedMethodHeaders = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed method parameters.
+	 * Allowed method parameters.
 	 *
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
@@ -517,19 +582,65 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
+	 * <p>
+	 * 	Useful in cases where you want to simulate a non-GET request in a browser by simply adding a parameter.
+	 * 	<br>Also useful if you want to construct hyperlinks to non-GET REST endpoints such as links to <c>OPTIONS</c>
+	 * pages.
+	 *
+	 * <p>
+	 * Note that per the {@doc ExtRFC2616.section9 HTTP specification}, special care should
+	 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
+	 * 	<li>
+	 * 		<js>'method'</js> parameter name is case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * 	<li class='ja'>{@link Rest#allowedMethodParams}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is <code>[<js>"HEAD"</js>,<js>"OPTIONS"</js>]</code>.
-	 * 	<br>Individual values can also be comma-delimited lists.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.allowedMethodParams"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODPARAMS"
+	 * 		<li><js>"HEAD,OPTIONS"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder allowedMethodParams(String value) {
-		return set(REST_allowedMethodParams, value);
+		allowedMethodParams = value;
+		return this;
 	}
 
 	/**
@@ -731,7 +842,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Client version header.
+	 * Client version header.
 	 *
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
@@ -740,18 +851,66 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
 	 * <br>Used in conjunction with {@link RestOp#clientVersion() @RestOp(clientVersion)} annotation.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Call this method if Client-Version is at least 2.0.
+	 * 	// Note that this also matches 2.0.1.</jc>
+	 * 	<ja>@RestGet/ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<jk>public</jk> Object method1() {
+	 * 		...
+	 * 	}
+	 *
+	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<jk>public</jk> Object method2() {
+	 * 		...
+	 * 	}
+	 *
+	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<jk>public</jk> Object method3() {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * 	<li class='ja'>{@link Rest#clientVersionHeader}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is <js>"Client-Version"</js>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.clientVersionHeader"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_CLIENTVERSIONHEADER"
+	 * 		<li><js>"Client-Version"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder clientVersionHeader(String value) {
-		return set(REST_clientVersionHeader, value);
+		clientVersionHeader = value;
+		return this;
 	}
 
 	@Override
@@ -881,43 +1040,55 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default character encoding.
+	 * Default character encoding.
 	 *
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(defaultCharset=<js>"UTF-16"</js>)
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * 	<li class='ja'>{@link Rest#defaultCharset}
+	 * 	<li class='ja'>{@link RestOp#defaultCharset}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is <js>"utf-8"</js>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultCharset(String value) {
-		return set(REST_defaultCharset, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default character encoding.
-	 *
-	 * <p>
-	 * Same as {@link #defaultCharset(Charset)} but takes in an instance of {@link Charset}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is <js>"utf-8"</js>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.defaultCharset"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
+	 * 		<li><js>"utf-8"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultCharset(Charset value) {
-		return set(REST_defaultCharset, value);
+		defaultCharset = value;
+		return this;
 	}
 
 	/**
@@ -1301,24 +1472,68 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  The maximum allowed input size (in bytes) on HTTP requests.
+	 * The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>
+	 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>
+	 * 		A value of <js>"-1"</js> can be used to represent no limit.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
+	 * 	<li class='ja'>{@link Rest#maxInput}
+	 * 	<li class='ja'>{@link RestOp#maxInput}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#maxInput(String)}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.maxInput"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_MAXINPUT"
+	 * 		<li><js>"100M"</js>
+	 * 	</ul>
 	 * 	<br>The default is <js>"100M"</js>.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder maxInput(String value) {
-		return set(REST_maxInput, value);
+		maxInput = StringUtils.parseLongWithSuffix(value);
+		return this;
 	}
 
 	/**

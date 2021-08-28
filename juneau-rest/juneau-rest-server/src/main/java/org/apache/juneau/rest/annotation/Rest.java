@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -93,7 +94,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
+	 * 	<li class='jm'>{@link RestContextBuilder#allowedHeaderParams(String)}
 	 * </ul>
 	 */
 	String allowedHeaderParams() default "";
@@ -147,7 +148,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * 	<li class='jm'>{@link RestContextBuilder#allowedMethodParams(String)}
 	 * </ul>
 	 */
 	String allowedMethodParams() default "";
@@ -225,7 +226,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * 	<li class='jm'>{@link RestContextBuilder#clientVersionHeader(String)}
 	 * </ul>
 	 */
 	String clientVersionHeader() default "";
@@ -486,7 +487,13 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * 	<li class='jm'>{@link RestContextBuilder#defaultCharset(Charset)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#defaultCharset(Charset)}
+	 * 	<li class='ja'>{@link RestOp#defaultCharset}
+	 * 	<li class='ja'>{@link RestGet#defaultCharset}
+	 * 	<li class='ja'>{@link RestPut#defaultCharset}
+	 * 	<li class='ja'>{@link RestPost#defaultCharset}
+	 * 	<li class='ja'>{@link RestDelete#defaultCharset}
 	 * </ul>
 	 */
 	String defaultCharset() default "";
@@ -639,7 +646,11 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
+	 * 	<li class='jm'>{@link RestContextBuilder#maxInput(String)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#maxInput(String)}
+	 * 	<li class='ja'>{@link RestOp#maxInput}
+	 * 	<li class='ja'>{@link RestPost#maxInput}
+	 * 	<li class='ja'>{@link RestPut#maxInput}
 	 * </ul>
 	 */
 	String maxInput() default "";
