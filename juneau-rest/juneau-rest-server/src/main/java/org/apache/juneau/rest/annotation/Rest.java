@@ -1192,7 +1192,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriAuthority}
+	 * 	<li class='jm'>{@link RestContextBuilder#uriAuthority(String)}
 	 * </ul>
 	 */
 	String uriAuthority() default "";
@@ -1210,7 +1210,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriContext}
+	 * 	<li class='jm'>{@link RestContextBuilder#uriContext(String)}
 	 * </ul>
 	 */
 	String uriContext() default "";
@@ -1231,7 +1231,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriRelativity}
+	 * 	<li class='jm'>{@link RestContextBuilder#uriRelativity(UriRelativity)}
 	 * </ul>
 	 */
 	String uriRelativity() default "";
@@ -1252,7 +1252,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriResolution}
+	 * 	<li class='jm'>{@link RestContextBuilder#uriResolution(UriResolution)}
 	 * </ul>
 	 */
 	String uriResolution() default "";

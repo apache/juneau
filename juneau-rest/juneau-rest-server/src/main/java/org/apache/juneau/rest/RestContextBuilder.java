@@ -112,7 +112,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	Config config;
 	VarResolverBuilder varResolverBuilder;
-	String allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader;
+	String allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, uriAuthority, uriContext;
+	UriRelativity uriRelativity;
+	UriResolution uriResolution;
 	Charset defaultCharset;
 	long maxInput;
 
@@ -147,6 +149,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
 			defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
 			maxInput = StringUtils.parseLongWithSuffix(env("RestContext.maxInput", "100M"));
+			uriAuthority = env("RestContext.uriAuthority", (String)null);
+			uriContext = env("RestContext.uriContext", (String)null);
+			uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
+			uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -2343,7 +2349,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource authority path.
+	 * Resource authority path.
 	 *
 	 * <p>
 	 * Overrides the authority path value for this resource and any child resources.
@@ -2351,22 +2357,70 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * This setting is useful if you want to resolve relative URIs to absolute paths and want to explicitly specify the hostname/port.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriAuthority}
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getAuthorityPath()}
 	 * </ul>
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * If you do not specify the authority, it is automatically calculated via the following:
+	 *
+	 * <p class='bcode w800'>
+	 * 	String <jv>scheme</jv> = <jv>request</jv>.getScheme();
+	 * 	<jk>int</jk> <jv>port</jv> = <jv>request</jv>.getServerPort();
+	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<jv>request</jv>.getScheme()).append(<js>"://"</js>).append(<jv>request</jv>.getServerName());
+	 * 	<jk>if</jk> (! (<jv>port</jv> == 80 &amp;&amp; <js>"http"</js>.equals(<jv>scheme</jv>) || port == 443 &amp;&amp; <js>"https"</js>.equals(<jv>scheme</jv>)))
+	 * 		<jv>sb</jv>.append(<js>':'</js>).append(<jv>port</jv>);
+	 * 	<jv>authorityPath</jv> = <jv>sb</jv>.toString();
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriAuthority=<js>"$C{REST/authorityPathOverride,http://localhost:10000}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriAuthority}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriAuthority"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URIAUTHORITY"
+	 * 		<li><jk>null</jk>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder uriAuthority(String value) {
-		if (! value.isEmpty())
-			set(REST_uriAuthority, value);
+		uriAuthority = value;
 		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource context path.
+	 * Resource context path.
 	 *
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
@@ -2375,22 +2429,59 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
 	 * the context path is not actually specified on the servlet container.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriContext}
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getContextPath()} - Returns the overridden context path for the resource.
+	 * 	<li class='jm'>{@link RestRequest#getServletPath()} - Includes the overridden context path for the resource.
 	 * </ul>
 	 *
-	 * @param value The new value for this setting.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriContext=<js>"$C{REST/contextPathOverride,/foo}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriContext}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriContext"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URICONTEXT"
+	 * 		<li><jk>null</jk>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder uriContext(String value) {
-		if (! value.isEmpty())
-			set(REST_uriContext, value);
+		uriContext = value;
 		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  URI resolution relativity.
+	 * URI resolution relativity.
 	 *
 	 * <p>
 	 * Specifies how relative URIs should be interpreted by serializers.
@@ -2398,22 +2489,58 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriRelativity}
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
 	 * </ul>
 	 *
-	 * @param value The new value for this setting.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriRelativity=<js>"$C{REST/uriRelativity,PATH_INFO}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriRelativity}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriRelativity"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URIRELATIVITY"
+	 * 		<li>{@link UriRelativity#RESOURCE}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder uriRelativity(String value) {
-		if (! value.isEmpty())
-			set(REST_uriRelativity, value);
+	public RestContextBuilder uriRelativity(UriRelativity value) {
+		uriRelativity = value;
 		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  URI resolution.
+	 * URI resolution.
 	 *
 	 * <p>
 	 * Specifies how relative URIs should be interpreted by serializers.
@@ -2421,17 +2548,53 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_uriResolution}
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
 	 * </ul>
 	 *
-	 * @param value The new value for this setting.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriResolution=<js>"$C{REST/uriResolution,ABSOLUTE}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriResolution}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriResolution"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URIRESOLUTION"
+	 * 		<li>{@link UriResolution#ROOT_RELATIVE}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder uriResolution(String value) {
-		if (! value.isEmpty())
-			set(REST_uriResolution, value);
+	public RestContextBuilder uriResolution(UriResolution value) {
+		uriResolution = value;
 		return this;
 	}
 

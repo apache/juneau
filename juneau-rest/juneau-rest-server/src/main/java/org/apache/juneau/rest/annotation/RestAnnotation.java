@@ -1054,10 +1054,10 @@ public class RestAnnotation {
 			b.prependTo(REST_children, a.children());
 			b.prependTo(REST_restOperationArgs, a.restOpArgs());
 			b.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
-			b.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
-			b.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
-			b.setIfNotEmpty(REST_uriRelativity, string(a.uriRelativity()));
-			b.setIfNotEmpty(REST_uriResolution, string(a.uriResolution()));
+			value(a.uriContext()).ifPresent(x -> b.uriContext(x));
+			value(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
+			value(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
+			value(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
 			b.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
 			b.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
 			b.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
