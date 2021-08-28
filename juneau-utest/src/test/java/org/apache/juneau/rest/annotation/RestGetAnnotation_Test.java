@@ -39,7 +39,7 @@ public class RestGetAnnotation_Test {
 		.debug("debug")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
-		.defaultQuery("defaultQuery")
+		.defaultQueryData("defaultQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -65,7 +65,7 @@ public class RestGetAnnotation_Test {
 		.debug("debug")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
-		.defaultQuery("defaultQuery")
+		.defaultQueryData("defaultQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -94,7 +94,7 @@ public class RestGetAnnotation_Test {
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
-				+ "defaultQuery:['defaultQuery'],"
+				+ "defaultQueryData:['defaultQueryData'],"
 				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
 				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
@@ -165,7 +165,7 @@ public class RestGetAnnotation_Test {
 			debug="debug",
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
-			defaultQuery="defaultQuery",
+			defaultQueryData="defaultQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",
@@ -192,7 +192,7 @@ public class RestGetAnnotation_Test {
 			debug="debug",
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
-			defaultQuery="defaultQuery",
+			defaultQueryData="defaultQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",

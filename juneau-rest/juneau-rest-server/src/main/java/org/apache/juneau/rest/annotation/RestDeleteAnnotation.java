@@ -62,7 +62,7 @@ public class RestDeleteAnnotation {
 		Class<?>[] encoders=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] defaultQuery={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={};
+		String[] defaultQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={};
 
 		/**
 		 * Constructor.
@@ -136,13 +136,13 @@ public class RestDeleteAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestDelete#defaultQuery()} property on this annotation.
+		 * Sets the {@link RestDelete#defaultQueryData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder defaultQuery(String...value) {
-			this.defaultQuery = value;
+		public Builder defaultQueryData(String...value) {
+			this.defaultQueryData = value;
 			return this;
 		}
 
@@ -314,7 +314,7 @@ public class RestDeleteAnnotation {
 		private final Class<?>[] encoders;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
-		private final String[] defaultQuery, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path;
+		private final String[] defaultQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path;
 
 		Impl(Builder b) {
 			super(b);
@@ -323,7 +323,7 @@ public class RestDeleteAnnotation {
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
-			this.defaultQuery = copyOf(b.defaultQuery);
+			this.defaultQueryData = copyOf(b.defaultQueryData);
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
@@ -366,8 +366,8 @@ public class RestDeleteAnnotation {
 		}
 
 		@Override /* RestDelete */
-		public String[] defaultQuery() {
-			return defaultQuery;
+		public String[] defaultQueryData() {
+			return defaultQueryData;
 		}
 
 		@Override /* RestDelete */
@@ -461,7 +461,7 @@ public class RestDeleteAnnotation {
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestAttributes, x));
-			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> b.appendTo(RESTOP_defaultQuery, x));
+			stringStream(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.prependTo(REST_guards, reverse(a.guards()));
 			b.prependTo(RESTOP_matchers, a.matchers());

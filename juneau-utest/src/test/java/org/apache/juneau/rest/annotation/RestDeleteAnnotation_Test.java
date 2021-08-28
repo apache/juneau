@@ -37,7 +37,7 @@ public class RestDeleteAnnotation_Test {
 		.debug("debug")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
-		.defaultQuery("defaultQuery")
+		.defaultQueryData("defaultQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -60,7 +60,7 @@ public class RestDeleteAnnotation_Test {
 		.debug("debug")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
-		.defaultQuery("defaultQuery")
+		.defaultQueryData("defaultQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -86,7 +86,7 @@ public class RestDeleteAnnotation_Test {
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
-				+ "defaultQuery:['defaultQuery'],"
+				+ "defaultQueryData:['defaultQueryData'],"
 				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
 				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
@@ -154,7 +154,7 @@ public class RestDeleteAnnotation_Test {
 			debug="debug",
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
-			defaultQuery="defaultQuery",
+			defaultQueryData="defaultQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",
@@ -178,7 +178,7 @@ public class RestDeleteAnnotation_Test {
 			debug="debug",
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
-			defaultQuery="defaultQuery",
+			defaultQueryData="defaultQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",

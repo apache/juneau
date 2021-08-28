@@ -63,7 +63,7 @@ public class RestOpAnnotation {
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultFormData={}, defaultQuery={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
+		String[] consumes={}, defaultFormData={}, defaultQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
 
 		/**
 		 * Constructor.
@@ -181,13 +181,13 @@ public class RestOpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestOp#defaultQuery()} property on this annotation.
+		 * Sets the {@link RestOp#defaultQueryData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder defaultQuery(String...value) {
-			this.defaultQuery = value;
+		public Builder defaultQueryData(String...value) {
+			this.defaultQueryData = value;
 			return this;
 		}
 
@@ -415,7 +415,7 @@ public class RestOpAnnotation {
 		private final Class<?>[] encoders, parsers, serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;
-		private final String[] consumes, defaultFormData, defaultQuery, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
+		private final String[] consumes, defaultFormData, defaultQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
 
 		Impl(Builder b) {
 			super(b);
@@ -428,7 +428,7 @@ public class RestOpAnnotation {
 			this.defaultCharset = b.defaultCharset;
 			this.defaultContentType = b.defaultContentType;
 			this.defaultFormData = copyOf(b.defaultFormData);
-			this.defaultQuery = copyOf(b.defaultQuery);
+			this.defaultQueryData = copyOf(b.defaultQueryData);
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
@@ -496,8 +496,8 @@ public class RestOpAnnotation {
 		}
 
 		@Override /* RestOp */
-		public String[] defaultQuery() {
-			return defaultQuery;
+		public String[] defaultQueryData() {
+			return defaultQueryData;
 		}
 
 		@Override /* RestOp */
@@ -618,8 +618,8 @@ public class RestOpAnnotation {
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestAttributes, x));
-			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> b.appendTo(RESTOP_defaultQuery, x));
-			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.appendTo(RESTOP_defaultFormData, x));
+			stringStream(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
+			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultFormData(x));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			b.prependTo(REST_converters, a.converters());

@@ -16,7 +16,6 @@ import static java.util.Arrays.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
-import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -26,6 +25,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -45,6 +45,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	String httpMethod, clientVersion;
 	Enablement debug;
 	List<String> path;
+	PartListBuilder defaultFormData, defaultQueryData;
 
 	private BeanStore beanStore;
 
@@ -78,6 +79,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		this.restContext = context;
 		this.restMethod = method;
 		this.beanStore = context.getRootBeanStore();
+		this.defaultFormData = PartList.create();
+		this.defaultQueryData = PartList.create();
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -225,13 +228,20 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default form data parameters.
+	 * Default form data parameters.
 	 *
 	 * <p>
-	 * Adds a single default form data parameter.
+	 * Sets a default value for a form data parameter.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultFormData}
+	 * 	<li class='ja'>{@link RestOp#defaultFormData}
+	 * 	<li class='ja'>{@link RestPost#defaultFormData}
 	 * </ul>
 	 *
 	 * @param name The form data parameter name.
@@ -240,17 +250,25 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultFormData(String name, Object value) {
-		return defaultFormData(basicPart(name, value));
+		defaultFormData.setDefault(name, value);
+		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default form data parameters.
+	 * Default form data parameters.
 	 *
 	 * <p>
-	 * Adds a single default form data parameter.
+	 * Sets a default value for a form data parameter.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultFormData}
+	 * 	<li class='ja'>{@link RestOp#defaultFormData}
+	 * 	<li class='ja'>{@link RestPost#defaultFormData}
 	 * </ul>
 	 *
 	 * @param name The form data parameter name.
@@ -259,17 +277,25 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultFormData(String name, Supplier<?> value) {
-		return defaultFormData(basicPart(name, value));
+		defaultFormData.setDefault(name, value);
+		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default form data parameters.
+	 * Default form data parameters.
 	 *
 	 * <p>
-	 * Specifies default values for form data parameters if they're not specified in the request body.
+	 * Sets default values for form data parameters.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultFormData}
+	 * 	<li class='ja'>{@link RestOp#defaultFormData}
+	 * 	<li class='ja'>{@link RestPost#defaultFormData}
 	 * </ul>
 	 *
 	 * @param values The form data parameters to add.
@@ -277,18 +303,31 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultFormData(NameValuePair...values) {
-		asList(values).stream().forEach(x -> appendTo(RESTOP_defaultFormData, x));
+		defaultFormData.setDefault(values);
 		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default query parameters.
+	 * Default query parameters.
 	 *
 	 * <p>
-	 * Adds a single default query parameter.
+	 * Sets a default value for a query data parameter.
 	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultQuery}
+	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
+	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
+	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
+	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
+	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
 	 * </ul>
 	 *
 	 * @param name The query parameter name.
@@ -296,18 +335,32 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultQuery(String name, Object value) {
-		return defaultQuery(basicPart(name, value));
+	public RestOperationContextBuilder defaultQueryData(String name, Object value) {
+		defaultQueryData.setDefault(name, value);
+		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default query parameters.
+	 * Default query parameters.
 	 *
 	 * <p>
-	 * Adds a single default query parameter.
+	 * Sets a default value for a query data parameter.
 	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultQuery}
+	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
+	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
+	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
+	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
+	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
 	 * </ul>
 	 *
 	 * @param name The query parameter name.
@@ -315,26 +368,40 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultQuery(String name, Supplier<?> value) {
-		return defaultQuery(basicPart(name, value));
+	public RestOperationContextBuilder defaultQueryData(String name, Supplier<?> value) {
+		defaultQueryData.setDefault(name, value);
+		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default query parameters.
+	 * Default query parameters.
 	 *
 	 * <p>
-	 * Specifies default values for query parameters if they're not specified on the request.
+	 * Sets default values for query data parameters.
 	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultQuery}
+	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
+	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
+	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
+	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
+	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
 	 * </ul>
 	 *
 	 * @param values The query parameters to add.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultQuery(NameValuePair...values) {
-		asList(values).stream().forEach(x -> appendTo(RESTOP_defaultQuery, x));
+	public RestOperationContextBuilder defaultQueryData(NameValuePair...values) {
+		defaultQueryData.setDefault(values);
 		return this;
 	}
 

@@ -43,7 +43,7 @@ public class RestOpAnnotation_Test {
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
 		.defaultFormData("defaultFormData")
-		.defaultQuery("defaultQuery")
+		.defaultQueryData("defaultQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -75,7 +75,7 @@ public class RestOpAnnotation_Test {
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
 		.defaultFormData("defaultFormData")
-		.defaultQuery("defaultQuery")
+		.defaultQueryData("defaultQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -110,7 +110,7 @@ public class RestOpAnnotation_Test {
 				+ "defaultCharset:'defaultCharset',"
 				+ "defaultContentType:'defaultContentType',"
 				+ "defaultFormData:['defaultFormData'],"
-				+ "defaultQuery:['defaultQuery'],"
+				+ "defaultQueryData:['defaultQueryData'],"
 				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
 				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
@@ -187,7 +187,7 @@ public class RestOpAnnotation_Test {
 			defaultCharset="defaultCharset",
 			defaultContentType="defaultContentType",
 			defaultFormData="defaultFormData",
-			defaultQuery="defaultQuery",
+			defaultQueryData="defaultQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",
@@ -220,7 +220,7 @@ public class RestOpAnnotation_Test {
 			defaultCharset="defaultCharset",
 			defaultContentType="defaultContentType",
 			defaultFormData="defaultFormData",
-			defaultQuery="defaultQuery",
+			defaultQueryData="defaultQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",

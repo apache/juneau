@@ -181,7 +181,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestDelete</ja>(path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<ja>@RestDelete</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doDelete(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -195,7 +195,7 @@ public @interface RestDelete {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultQuery() default {};
+	String[] defaultQueryData() default {};
 
 	/**
 	 * Default request attributes.

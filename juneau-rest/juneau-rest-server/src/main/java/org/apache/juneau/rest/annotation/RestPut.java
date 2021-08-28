@@ -252,7 +252,7 @@ public @interface RestPut {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doPut(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -266,7 +266,7 @@ public @interface RestPut {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultQuery() default {};
+	String[] defaultQueryData() default {};
 
 	/**
 	 * Default request attributes.

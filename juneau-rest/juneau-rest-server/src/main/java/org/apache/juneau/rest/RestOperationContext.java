@@ -83,85 +83,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	static final String PREFIX = "RestOperationContext";
 
 	/**
-	 * Configuration property:  Default form data.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultFormData RESTOP_defaultFormData}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultFormData.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.NameValuePair}[]</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultFormData</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTFORMDATA</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultFormData()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultFormData(String,Object)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultFormData(String,Supplier)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultFormData(NameValuePair...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies default values for form-data parameters.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getFormParam(String)} when the parameter is not present on the
-	 * request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-	 */
-	public static final String RESTOP_defaultFormData = PREFIX + ".defaultFormData.lo";
-
-	/**
-	 * Configuration property:  Default query parameters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultQuery RESTOP_defaultQuery}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultQuery.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.NameValuePair}[]</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultQuery</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTQUERY</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultQuery()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultQuery(String,Object)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultQuery(String,Supplier)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultQuery(NameValuePair...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies default values for query parameters.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-	 */
-	public static final String RESTOP_defaultQuery = PREFIX + ".defaultQuery.lo";
-
-	/**
 	 * Configuration property:  Default request attributes.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -458,8 +379,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bs, method, context).build();
 			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bs, method, context).build();
-			defaultRequestQuery = createDefaultRequestQuery(r, cp, bs, method).build();
-			defaultRequestFormData = createDefaultRequestFormData(r, cp, bs, method).build();
+			defaultRequestQuery = createDefaultRequestQuery(r, builder, bs, method).build();
+			defaultRequestFormData = createDefaultRequestFormData(r, builder, bs, method).build();
 			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, cp, bs, method, context));
 
 			int _hierarchyDepth = 0;
@@ -1159,17 +1080,15 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates the default query parameters for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @param method This Java method.
 	 * @return The default request query parameters for this method.
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
-	protected PartListBuilder createDefaultRequestQuery(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
+	protected PartListBuilder createDefaultRequestQuery(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
 
-		PartListBuilder x = PartList.create();
-
-		x.setDefault(properties.getInstanceArray(RESTOP_defaultQuery, NameValuePair.class, beanStore).orElse(new NameValuePair[0]));
+		PartListBuilder x = builder.defaultQueryData;
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1203,17 +1122,15 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates the default form-data parameters for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @param method This Java method.
 	 * @return The default request form-data parameters for this method.
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
-	protected PartListBuilder createDefaultRequestFormData(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
+	protected PartListBuilder createDefaultRequestFormData(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
 
-		PartListBuilder x = PartList.create();
-
-		x.setDefault(properties.getInstanceArray(RESTOP_defaultFormData, NameValuePair.class, beanStore).orElse(new NameValuePair[0]));
+		PartListBuilder x = builder.defaultFormData;
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
