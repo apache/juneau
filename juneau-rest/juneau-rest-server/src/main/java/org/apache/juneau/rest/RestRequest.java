@@ -112,7 +112,7 @@ public final class RestRequest {
 	// Constructor initialized.
 	private HttpServletRequest inner;
 	private final RestContext context;
-	private final RestOperationContext opContext;
+	private final RestOpContext opContext;
 	private final RequestBody body;
 	private final BeanSession beanSession;
 	private final RequestQueryParams queryParams;
@@ -140,7 +140,7 @@ public final class RestRequest {
 	 */
 	RestRequest(RestCall call) throws Exception {
 		this.call = call;
-		this.opContext = call.getRestOperationContext();
+		this.opContext = call.getRestOpContext();
 
 		inner = call.getRequest();
 		context = call.getContext();
@@ -1655,11 +1655,11 @@ public final class RestRequest {
 	}
 
 	/**
-	 * Returns access to the inner {@link RestOperationContext} of this method.
+	 * Returns access to the inner {@link RestOpContext} of this method.
 	 *
-	 * @return The {@link RestOperationContext} of this method.  May be <jk>null</jk> if method has not yet been found.
+	 * @return The {@link RestOpContext} of this method.  May be <jk>null</jk> if method has not yet been found.
 	 */
-	public RestOperationContext getOpContext() {
+	public RestOpContext getOpContext() {
 		return opContext;
 	}
 

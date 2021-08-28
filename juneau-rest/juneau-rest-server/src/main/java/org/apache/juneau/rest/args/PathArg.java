@@ -30,7 +30,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Resolves method parameters and parameter types annotated with {@link Path} on {@link RestOp}-annotated Java methods.
  */
-public class PathArg implements RestOperationArg {
+public class PathArg implements RestOpArg {
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
 	private final String name;
@@ -96,7 +96,7 @@ public class PathArg implements RestOperationArg {
 		throw new ArgException(paramInfo, "@Path used without name or value");
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		if (name.equals("*")) {

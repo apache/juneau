@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
  * The parameter value must be of type {@link Value} that accepts a value that is then set via
  * <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>)</c>.
  */
-public class ResponseHeaderArg implements RestOperationArg {
+public class ResponseHeaderArg implements RestOpArg {
 	final ResponsePartMeta meta;
 	final String name;
 	private final Type type;
@@ -80,7 +80,7 @@ public class ResponseHeaderArg implements RestOperationArg {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(final RestCall call) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {

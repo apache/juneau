@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Resolves method parameters annotated with {@link ResponseStatus} on {@link RestOp}-annotated Java methods.
  */
-public class ResponseStatusArg implements RestOperationArg {
+public class ResponseStatusArg implements RestOpArg {
 
 	private final Type type;
 
@@ -52,7 +52,7 @@ public class ResponseStatusArg implements RestOperationArg {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(final RestCall call) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {

@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The parameter type must be {@link String}.
  */
-public class MethodArg implements RestOperationArg {
+public class MethodArg implements RestOpArg {
 
 	/**
 	 * Static creator.
@@ -45,7 +45,7 @@ public class MethodArg implements RestOperationArg {
 	protected MethodArg() {
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getMethod();
 	}

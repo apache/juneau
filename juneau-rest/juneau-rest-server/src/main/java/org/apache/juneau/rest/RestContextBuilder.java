@@ -1636,7 +1636,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST method context class.
 	 *
 	 * <p>
-	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
+	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_restOperationContextClass}
@@ -1646,7 +1646,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder restOperationContextClass(Class<? extends RestOperationContext> value) {
+	public RestContextBuilder restOpContextClass(Class<? extends RestOpContext> value) {
 		return set(REST_restOperationContextClass, value);
 	}
 
@@ -1667,7 +1667,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	@SuppressWarnings("unchecked")
-	public RestContextBuilder restOperationArgs(Class<? extends RestOperationArg>...values) {
+	public RestContextBuilder restOpArgs(Class<? extends RestOpArg>...values) {
 		return prependTo(REST_restOperationArgs, values);
 	}
 

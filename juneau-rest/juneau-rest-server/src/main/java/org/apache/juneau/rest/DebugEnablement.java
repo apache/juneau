@@ -59,5 +59,5 @@ public interface DebugEnablement {
 	 * @param req The HTTP request.
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
-	public boolean isDebug(RestOperationContext context, HttpServletRequest req);
+	public boolean isDebug(RestOpContext context, HttpServletRequest req);
 }

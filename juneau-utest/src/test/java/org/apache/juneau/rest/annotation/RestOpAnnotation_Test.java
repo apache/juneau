@@ -36,7 +36,7 @@ public class RestOpAnnotation_Test {
 	RestOp a1 = RestOpAnnotation.create()
 		.clientVersion("clientVersion")
 		.consumes("consumes")
-		.contextClass(RestOperationContext.class)
+		.contextClass(RestOpContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -68,7 +68,7 @@ public class RestOpAnnotation_Test {
 	RestOp a2 = RestOpAnnotation.create()
 		.clientVersion("clientVersion")
 		.consumes("consumes")
-		.contextClass(RestOperationContext.class)
+		.contextClass(RestOpContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -103,7 +103,7 @@ public class RestOpAnnotation_Test {
 			+ "{"
 				+ "clientVersion:'clientVersion',"
 				+ "consumes:['consumes'],"
-				+ "contextClass:'org.apache.juneau.rest.RestOperationContext',"
+				+ "contextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "converters:['org.apache.juneau.rest.RestConverter'],"
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
@@ -180,7 +180,7 @@ public class RestOpAnnotation_Test {
 		@RestOp(
 			clientVersion="clientVersion",
 			consumes="consumes",
-			contextClass=RestOperationContext.class,
+			contextClass=RestOpContext.class,
 			converters=RestConverter.class,
 			debug="debug",
 			defaultAccept="defaultAccept",
@@ -213,7 +213,7 @@ public class RestOpAnnotation_Test {
 		@RestOp(
 			clientVersion="clientVersion",
 			consumes="consumes",
-			contextClass=RestOperationContext.class,
+			contextClass=RestOpContext.class,
 			converters=RestConverter.class,
 			debug="debug",
 			defaultAccept="defaultAccept",

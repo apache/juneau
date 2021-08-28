@@ -65,19 +65,19 @@ import org.apache.juneau.utils.*;
  * {@review}
  */
 @ConfigurableContext(nocache=true)
-public class RestOperationContext extends BeanContext implements Comparable<RestOperationContext>  {
+public class RestOpContext extends BeanContext implements Comparable<RestOpContext>  {
 
 	/** Represents a null value for the {@link RestOp#contextClass()} annotation.*/
 	@SuppressWarnings("javadoc")
-	public static final class Null extends RestOperationContext {
-		public Null(RestOperationContextBuilder builder) throws Exception {
+	public static final class Null extends RestOpContext {
+		public Null(RestOpContextBuilder builder) throws Exception {
 			super(builder);
 		}
 	}
 
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
-	private final RestOperationArg[] opArgs;
+	private final RestOpArg[] opArgs;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
@@ -116,8 +116,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param context The Java class context.
 	 * @return A new builder.
 	 */
-	public static RestOperationContextBuilder create(java.lang.reflect.Method method, RestContext context) {
-		return new RestOperationContextBuilder(method, context);
+	public static RestOpContextBuilder create(java.lang.reflect.Method method, RestContext context) {
+		return new RestOpContextBuilder(method, context);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param builder The builder for this object.
 	 * @throws ServletException If context could not be created.
 	 */
-	public RestOperationContext(RestOperationContextBuilder builder) throws ServletException {
+	public RestOpContext(RestOpContextBuilder builder) throws ServletException {
 		super(builder.getContextProperties());
 
 		try {
@@ -145,7 +145,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			Object r = context.getResource();
 
 			BeanStore bs = BeanStore.of(context.getRootBeanStore(), r)
-				.addBean(RestOperationContext.class, this)
+				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
 				.addBean(ContextProperties.class, cp);
 			bs.addBean(BeanStore.class, bs);
@@ -365,7 +365,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The method matchers for this REST resource method.
 	 * @throws Exception If method matchers could not be instantiated.
 	 */
-	protected RestMatcherList createMatchers(Object resource, RestOperationContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected RestMatcherList createMatchers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		RestMatcherListBuilder x = builder.restMatchers.beanStore(beanStore);
 
@@ -691,10 +691,10 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 */
-	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, RestOperationContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		UrlPathMatcherList x = UrlPathMatcherList.create();
-		boolean dotAll = properties.getBoolean("RestOperationContext.dotAll.b").orElse(false);
+		boolean dotAll = properties.getBoolean("RestOpContext.dotAll.b").orElse(false);
 
 		if (builder.path != null) {
 			for (String p : builder.path) {
@@ -783,7 +783,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
 		HeaderListBuilder x = HeaderList.create().setDefault(context.getDefaultRequestHeaders()).setDefault(builder.defaultRequestHeaders.build());
 
@@ -825,7 +825,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
 		HeaderListBuilder x = HeaderList.create().setDefault(context.getDefaultResponseHeaders()).setDefault(builder.defaultResponseHeaders.build());
 
@@ -851,7 +851,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request attributes for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected NamedAttributeList createDefaultRequestAttributes(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected NamedAttributeList createDefaultRequestAttributes(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
 		NamedAttributeList x = context.getDefaultRequestAttributes().copy().appendUnique(builder.defaultRequestAttributes);
 
@@ -876,7 +876,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request query parameters for this method.
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
-	protected PartListBuilder createDefaultRequestQuery(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
+	protected PartListBuilder createDefaultRequestQuery(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
 
 		PartListBuilder x = builder.defaultQueryData;
 
@@ -918,7 +918,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request form-data parameters for this method.
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
-	protected PartListBuilder createDefaultRequestFormData(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
+	protected PartListBuilder createDefaultRequestFormData(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
 
 		PartListBuilder x = builder.defaultFormData;
 
@@ -1259,7 +1259,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 */
 	protected void invoke(RestCall call) throws Throwable {
 
-		call.restOperationContext(this);
+		call.restOpContext(this);
 
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
@@ -1342,7 +1342,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * It maintains the order in which matches are made during requests.
 	 */
 	@Override /* Comparable */
-	public int compareTo(RestOperationContext o) {
+	public int compareTo(RestOpContext o) {
 		int c;
 
 		for (int i = 0; i < Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
@@ -1390,7 +1390,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestOperationContext) && eq(this, (RestOperationContext)o, (x,y)->x.method.equals(y.method));
+		return (o instanceof RestOpContext) && eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
 	}
 
 	@Override /* Object */
@@ -1401,7 +1401,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"RestOperationContext",
+				"RestOpContext",
 				OMap
 				.create()
 				.filtered()

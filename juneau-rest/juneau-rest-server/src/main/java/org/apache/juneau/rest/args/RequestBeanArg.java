@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>requestBeanMeta</jv>)</c>
  * with a {@link RequestBeanMeta meta} derived from the {@link Request} annotation and context configuration.
  */
-public class RequestBeanArg implements RestOperationArg {
+public class RequestBeanArg implements RestOpArg {
 	private final RequestBeanMeta meta;
 
 	/**
@@ -52,7 +52,7 @@ public class RequestBeanArg implements RestOperationArg {
 		this.meta = RequestBeanMeta.create(paramInfo, cp);
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getRequest(meta);
 	}

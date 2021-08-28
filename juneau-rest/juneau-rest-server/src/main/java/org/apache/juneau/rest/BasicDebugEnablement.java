@@ -47,7 +47,7 @@ public class BasicDebugEnablement implements DebugEnablement {
 	}
 
 	@Override
-	public boolean isDebug(RestOperationContext context, HttpServletRequest req) {
+	public boolean isDebug(RestOpContext context, HttpServletRequest req) {
 		Method m = context.getJavaMethod();
 		Enablement e = enablementMap.find(m).orElse(enablementMap.find(m.getDeclaringClass()).orElse(defaultEnablement));
 		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));

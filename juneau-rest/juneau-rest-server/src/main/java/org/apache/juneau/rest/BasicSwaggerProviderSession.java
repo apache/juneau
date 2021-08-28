@@ -208,7 +208,7 @@ public class BasicSwaggerProviderSession {
 			js.addBeanDef(defId, new OMap(definitions.getMap(defId)));
 
 		// Iterate through all the @RestOp methods.
-		for (RestOperationContext sm : context.getMethodContexts()) {
+		for (RestOpContext sm : context.getOpContexts()) {
 
 			BeanSession bs = sm.createBeanSession();
 
@@ -795,7 +795,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private void addBodyExamples(RestOperationContext sm, OMap piri, boolean response, Type type, Locale locale) throws Exception {
+	private void addBodyExamples(RestOpContext sm, OMap piri, boolean response, Type type, Locale locale) throws Exception {
 
 		String sex = piri.getString("example");
 
@@ -851,7 +851,7 @@ public class BasicSwaggerProviderSession {
 			piri.put(examplesKey, examples);
 	}
 
-	private void addParamExample(RestOperationContext sm, OMap piri, RestParamType in, Type type) throws Exception {
+	private void addParamExample(RestOpContext sm, OMap piri, RestParamType in, Type type) throws Exception {
 
 		String s = piri.getString("example");
 

@@ -43,7 +43,7 @@ import org.apache.juneau.rest.vars.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({RestAnnotation.RestContextApply.class,RestAnnotation.RestOperationContextApply.class})
+@ContextApply({RestAnnotation.RestContextApply.class,RestAnnotation.RestOpContextApply.class})
 public @interface Rest {
 
 	/**
@@ -946,13 +946,13 @@ public @interface Rest {
 	Class<? extends RestOperations> restOperationsClass() default RestOperations.Null.class;
 
 	/**
-	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
+	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_restOperationContextClass}
 	 * </ul>
 	 */
-	Class<? extends RestOperationContext> restOperationContextClass() default RestOperationContext.Null.class;
+	Class<? extends RestOpContext> restOpContextClass() default RestOpContext.Null.class;
 
 	/**
 	 * Java REST operation method parameter resolvers.
@@ -966,7 +966,7 @@ public @interface Rest {
 	 * 	<li class='jf'>{@link RestContext#REST_restOperationArgs}
 	 * </ul>
 	 */
-	Class<? extends RestOperationArg>[] restOperationArgs() default {};
+	Class<? extends RestOpArg>[] restOpArgs() default {};
 
 	/**
 	 * Role guard.

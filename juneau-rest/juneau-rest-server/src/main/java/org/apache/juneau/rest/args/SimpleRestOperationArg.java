@@ -18,9 +18,9 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
 /**
- * An implementation of a {@link RestOperationArg} that takes in a {@link ThrowingFunction} for resolving a parameter value.
+ * An implementation of a {@link RestOpArg} that takes in a {@link ThrowingFunction} for resolving a parameter value.
  */
-public class SimpleRestOperationArg implements RestOperationArg {
+public class SimpleRestOperationArg implements RestOpArg {
 
 	private final Function<RestCall,Object> function;
 
@@ -34,7 +34,7 @@ public class SimpleRestOperationArg implements RestOperationArg {
 		this.function = (Function<RestCall,Object>)function;
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		return function.apply(call);
 	}

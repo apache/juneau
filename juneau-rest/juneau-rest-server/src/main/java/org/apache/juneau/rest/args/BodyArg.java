@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#schema(HttpPartSchema) schema}(<jv>schema</jv>).{@link RequestBody#asType(Type,Type...) asType}(<jv>type</jv>)</c>.
  * with a {@link HttpPartSchema schema} derived from the {@link Body} annotation.
  */
-public class BodyArg implements RestOperationArg {
+public class BodyArg implements RestOpArg {
 
 	private final HttpPartSchema schema;
 	private final Type type;
@@ -54,7 +54,7 @@ public class BodyArg implements RestOperationArg {
 		this.schema = HttpPartSchema.create(Body.class, paramInfo);
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getBody().schema(schema).asType(type);
 	}

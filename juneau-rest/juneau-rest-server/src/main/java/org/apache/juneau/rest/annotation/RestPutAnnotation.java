@@ -58,7 +58,7 @@ public class RestPutAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOperationContext> contextClass = RestOperationContext.Null.class;
+		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", rolesDeclared="", roleGuard="", summary="", value="";
@@ -108,7 +108,7 @@ public class RestPutAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder contextClass(Class<? extends RestOperationContext> value) {
+		public Builder contextClass(Class<? extends RestOpContext> value) {
 			this.contextClass = value;
 			return this;
 		}
@@ -399,7 +399,7 @@ public class RestPutAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
-		private final Class<? extends RestOperationContext> contextClass;
+		private final Class<? extends RestOpContext> contextClass;
 		private final Class<?>[] encoders, parsers, serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, rolesDeclared, roleGuard, summary, value;
@@ -448,7 +448,7 @@ public class RestPutAnnotation {
 		}
 
 		@Override /* RestPut */
-		public Class<? extends RestOperationContext> contextClass() {
+		public Class<? extends RestOpContext> contextClass() {
 			return contextClass;
 		}
 
@@ -574,21 +574,21 @@ public class RestPutAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestPut} annotations to a {@link RestOperationContextBuilder}.
+	 * Applies {@link RestPut} annotations to a {@link RestOpContextBuilder}.
 	 */
-	public static class RestOperationContextApply extends AnnotationApplier<RestPut,RestOperationContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestPut,RestOpContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public RestOperationContextApply(VarResolverSession vr) {
-			super(RestPut.class, RestOperationContextBuilder.class, vr);
+		public RestOpContextApply(VarResolverSession vr) {
+			super(RestPut.class, RestOpContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestPut> ai, RestOperationContextBuilder b) {
+		public void apply(AnnotationInfo<RestPut> ai, RestOpContextBuilder b) {
 			RestPut a = ai.getAnnotation();
 
 			b.httpMethod("put");
@@ -596,7 +596,7 @@ public class RestPutAnnotation {
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			value(a.contextClass(), RestOperationContext.Null.class).ifPresent(x -> b.contextClass(x));
+			value(a.contextClass(), RestOpContext.Null.class).ifPresent(x -> b.contextClass(x));
 			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));

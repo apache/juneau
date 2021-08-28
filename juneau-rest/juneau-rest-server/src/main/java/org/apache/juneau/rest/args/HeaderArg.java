@@ -36,7 +36,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * If the {@link Header#multi()} flag is set, then the data type can be a {@link Collection} or array.
  */
-public class HeaderArg implements RestOperationArg {
+public class HeaderArg implements RestOpArg {
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
 	private final boolean multi;
@@ -95,7 +95,7 @@ public class HeaderArg implements RestOperationArg {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());

@@ -29,10 +29,10 @@ import org.apache.juneau.svl.*;
 import java.lang.reflect.Method;
 
 /**
- * Builder class for {@link RestOperationContext} objects.
+ * Builder class for {@link RestOpContext} objects.
  */
 @FluentSetters
-public class RestOperationContextBuilder extends BeanContextBuilder {
+public class RestOpContextBuilder extends BeanContextBuilder {
 
 	RestContext restContext;
 	Method restMethod;
@@ -47,16 +47,16 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	private BeanStore beanStore;
 
 	@Override /* ContextBuilder */
-	public RestOperationContextBuilder copy() {
+	public RestOpContextBuilder copy() {
 		throw new NoSuchMethodError("Not implemented.");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
-	public RestOperationContext build() {
+	public RestOpContext build() {
 		try {
-			Class<? extends RestOperationContext> ic = (Class<? extends RestOperationContext>) getContextClass().orElse(getDefaultImplClass());
-			return BeanStore.of(beanStore).addBean(RestOperationContextBuilder.class, this).createBean(ic);
+			Class<? extends RestOpContext> ic = (Class<? extends RestOpContext>) getContextClass().orElse(getDefaultImplClass());
+			return BeanStore.of(beanStore).addBean(RestOpContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -67,11 +67,11 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 *
 	 * @return The default implementation class if not specified via {@link #contextClass(Class)}.
 	 */
-	protected Class<? extends RestOperationContext> getDefaultImplClass() {
-		return RestOperationContext.class;
+	protected Class<? extends RestOpContext> getDefaultImplClass() {
+		return RestOpContext.class;
 	}
 
-	RestOperationContextBuilder(java.lang.reflect.Method method, RestContext context) {
+	RestOpContextBuilder(java.lang.reflect.Method method, RestContext context) {
 
 		this.restContext = context;
 		this.restMethod = method;
@@ -102,8 +102,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestOperationContextBuilder dotAll() {
-		set("RestOperationContext.dotAll.b", true);
+	public RestOpContextBuilder dotAll() {
+		set("RestOpContext.dotAll.b", true);
 		return this;
 	}
 
@@ -113,7 +113,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @param beanStore The bean store to use for resolving constructor arguments.
 	 * @return This object (for method chaining).
 	 */
-	public RestOperationContextBuilder beanStore(BeanStore beanStore) {
+	public RestOpContextBuilder beanStore(BeanStore beanStore) {
 		this.beanStore = beanStore;
 		return this;
 	}
@@ -194,14 +194,14 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder clientVersion(String value) {
+	public RestOpContextBuilder clientVersion(String value) {
 		clientVersion = value;
 		return this;
 	}
 
 	@Override
 	@FluentSetter
-	public RestOperationContextBuilder contextClass(Class<? extends Context> value) {
+	public RestOpContextBuilder contextClass(Class<? extends Context> value) {
 		super.contextClass(value);
 		return this;
 	}
@@ -223,7 +223,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder debug(Enablement value) {
+	public RestOpContextBuilder debug(Enablement value) {
 		debug = value;
 		return this;
 	}
@@ -249,7 +249,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultFormData(NameValuePair...values) {
+	public RestOpContextBuilder defaultFormData(NameValuePair...values) {
 		defaultFormData.setDefault(values);
 		return this;
 	}
@@ -281,7 +281,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultQueryData(NameValuePair...values) {
+	public RestOpContextBuilder defaultQueryData(NameValuePair...values) {
 		defaultQueryData.setDefault(values);
 		return this;
 	}
@@ -311,13 +311,13 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultRequestAttributes(NamedAttribute...values) {
+	public RestOpContextBuilder defaultRequestAttributes(NamedAttribute...values) {
 		defaultRequestAttributes.append(values);
 		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request headers.
+	 * <i><l>RestOpContext</l> configuration property:&emsp;</i>  Default request headers.
 	 *
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
@@ -341,7 +341,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultRequestHeaders(Header...values) {
+	public RestOpContextBuilder defaultRequestHeaders(Header...values) {
 		defaultRequestHeaders.setDefault(values);
 		return this;
 	}
@@ -371,7 +371,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultResponseHeaders(Header...values) {
+	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
 		defaultResponseHeaders.setDefault(values);
 		return this;
 	}
@@ -432,7 +432,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder httpMethod(String value) {
+	public RestOpContextBuilder httpMethod(String value) {
 		this.httpMethod = value;
 		return this;
 	}
@@ -459,7 +459,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder matchers(RestMatcher...values) {
+	public RestOpContextBuilder matchers(RestMatcher...values) {
 		restMatchers.append(values);
 		return this;
 	}
@@ -500,7 +500,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestOperationContextBuilder matchers(Class<? extends RestMatcher>...values) {
+	public RestOpContextBuilder matchers(Class<? extends RestMatcher>...values) {
 		restMatchers.append(values);
 		return this;
 	}
@@ -524,7 +524,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder path(String...values) {
+	public RestOpContextBuilder path(String...values) {
 		if (path == null)
 			path = new ArrayList<>(Arrays.asList(values));
 		else
@@ -535,433 +535,433 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder add(Map<String,Object> properties) {
+	public RestOpContextBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder addTo(String name, Object value) {
+	public RestOpContextBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder appendTo(String name, Object value) {
+	public RestOpContextBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder apply(ContextProperties copyFrom) {
+	public RestOpContextBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+	public RestOpContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder applyAnnotations(Method...fromMethods) {
+	public RestOpContextBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+	public RestOpContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder debug() {
+	public RestOpContextBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder locale(Locale value) {
+	public RestOpContextBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder mediaType(MediaType value) {
+	public RestOpContextBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder prependTo(String name, Object value) {
+	public RestOpContextBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder putAllTo(String name, Object value) {
+	public RestOpContextBuilder putAllTo(String name, Object value) {
 		super.putAllTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder putTo(String name, String key, Object value) {
+	public RestOpContextBuilder putTo(String name, String key, Object value) {
 		super.putTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder removeFrom(String name, Object value) {
+	public RestOpContextBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder set(String name) {
+	public RestOpContextBuilder set(String name) {
 		super.set(name);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder set(Map<String,Object> properties) {
+	public RestOpContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder set(String name, Object value) {
+	public RestOpContextBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder timeZone(TimeZone value) {
+	public RestOpContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder unset(String name) {
+	public RestOpContextBuilder unset(String name) {
 		super.unset(name);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder annotations(Annotation...values) {
+	public RestOpContextBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanClassVisibility(Visibility value) {
+	public RestOpContextBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanConstructorVisibility(Visibility value) {
+	public RestOpContextBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanFieldVisibility(Visibility value) {
+	public RestOpContextBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+	public RestOpContextBuilder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
 		super.beanInterceptor(on, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanMapPutReturnsOldValue() {
+	public RestOpContextBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanMethodVisibility(Visibility value) {
+	public RestOpContextBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanProperties(Map<String,Object> values) {
+	public RestOpContextBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanProperties(Class<?> beanClass, String properties) {
+	public RestOpContextBuilder beanProperties(Class<?> beanClass, String properties) {
 		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanProperties(String beanClassName, String properties) {
+	public RestOpContextBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
+	public RestOpContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
 		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+	public RestOpContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+	public RestOpContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
 		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+	public RestOpContextBuilder beanPropertiesReadOnly(Map<String,Object> values) {
 		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+	public RestOpContextBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+	public RestOpContextBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
 		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+	public RestOpContextBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
 		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+	public RestOpContextBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+	public RestOpContextBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
 		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beansRequireDefaultConstructor() {
+	public RestOpContextBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beansRequireSerializable() {
+	public RestOpContextBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder beansRequireSettersForGetters() {
+	public RestOpContextBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder dictionary(Object...values) {
+	public RestOpContextBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+	public RestOpContextBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 		super.dictionaryOn(on, values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder disableBeansRequireSomeProperties() {
+	public RestOpContextBuilder disableBeansRequireSomeProperties() {
 		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder disableIgnoreMissingSetters() {
+	public RestOpContextBuilder disableIgnoreMissingSetters() {
 		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder disableIgnoreTransientFields() {
+	public RestOpContextBuilder disableIgnoreTransientFields() {
 		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder disableIgnoreUnknownNullBeanProperties() {
+	public RestOpContextBuilder disableIgnoreUnknownNullBeanProperties() {
 		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder disableInterfaceProxies() {
+	public RestOpContextBuilder disableInterfaceProxies() {
 		super.disableInterfaceProxies();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RestOperationContextBuilder example(Class<T> pojoClass, T o) {
+	public <T> RestOpContextBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RestOperationContextBuilder example(Class<T> pojoClass, String json) {
+	public <T> RestOpContextBuilder example(Class<T> pojoClass, String json) {
 		super.example(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder findFluentSetters() {
+	public RestOpContextBuilder findFluentSetters() {
 		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder findFluentSetters(Class<?> on) {
+	public RestOpContextBuilder findFluentSetters(Class<?> on) {
 		super.findFluentSetters(on);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder ignoreInvocationExceptionsOnGetters() {
+	public RestOpContextBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder ignoreInvocationExceptionsOnSetters() {
+	public RestOpContextBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder ignoreUnknownBeanProperties() {
+	public RestOpContextBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
+	public RestOpContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder implClasses(Map<Class<?>,Class<?>> values) {
+	public RestOpContextBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder interfaceClass(Class<?> on, Class<?> value) {
+	public RestOpContextBuilder interfaceClass(Class<?> on, Class<?> value) {
 		super.interfaceClass(on, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder interfaces(java.lang.Class<?>...value) {
+	public RestOpContextBuilder interfaces(java.lang.Class<?>...value) {
 		super.interfaces(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder notBeanClasses(Object...values) {
+	public RestOpContextBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder notBeanPackages(Object...values) {
+	public RestOpContextBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+	public RestOpContextBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+	public RestOpContextBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(on, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder sortProperties() {
+	public RestOpContextBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder sortProperties(java.lang.Class<?>...on) {
+	public RestOpContextBuilder sortProperties(java.lang.Class<?>...on) {
 		super.sortProperties(on);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder stopClass(Class<?> on, Class<?> value) {
+	public RestOpContextBuilder stopClass(Class<?> on, Class<?> value) {
 		super.stopClass(on, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder swaps(Object...values) {
+	public RestOpContextBuilder swaps(Object...values) {
 		super.swaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder typeName(Class<?> on, String value) {
+	public RestOpContextBuilder typeName(Class<?> on, String value) {
 		super.typeName(on, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder typePropertyName(String value) {
+	public RestOpContextBuilder typePropertyName(String value) {
 		super.typePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder typePropertyName(Class<?> on, String value) {
+	public RestOpContextBuilder typePropertyName(Class<?> on, String value) {
 		super.typePropertyName(on, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder useEnumNames() {
+	public RestOpContextBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestOperationContextBuilder useJavaBeanIntrospector() {
+	public RestOpContextBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}

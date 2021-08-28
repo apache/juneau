@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The parameter type can be a <jk>boolean</jk> or anything convertible from a <jk>boolean</jk>.
  */
-public class HasQueryArg implements RestOperationArg {
+public class HasQueryArg implements RestOpArg {
 
 	private final String name;
 	private final Type type;
@@ -67,7 +67,7 @@ public class HasQueryArg implements RestOperationArg {
 		return n;
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		BeanSession bs = req.getBeanSession();

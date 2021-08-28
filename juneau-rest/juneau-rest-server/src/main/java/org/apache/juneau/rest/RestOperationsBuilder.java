@@ -26,8 +26,8 @@ import org.apache.juneau.http.response.*;
  */
 public class RestOperationsBuilder  {
 
-	TreeMap<String,TreeSet<RestOperationContext>> map = new TreeMap<>();
-	Set<RestOperationContext> set = ASet.of();
+	TreeMap<String,TreeSet<RestOpContext>> map = new TreeMap<>();
+	Set<RestOpContext> set = ASet.of();
 
 	private BeanStore beanStore;
 	private Class<? extends RestOperations> implClass;
@@ -61,7 +61,7 @@ public class RestOperationsBuilder  {
 	 * @param mc The REST method context to add.
 	 * @return Adds a method context to this builder.
 	 */
-	public RestOperationsBuilder add(RestOperationContext mc) {
+	public RestOperationsBuilder add(RestOpContext mc) {
 		return add(mc.getHttpMethod(), mc);
 	}
 
@@ -72,7 +72,7 @@ public class RestOperationsBuilder  {
 	 * @param mc The REST method context to add.
 	 * @return Adds a method context to this builder.
 	 */
-	public RestOperationsBuilder add(String httpMethodName, RestOperationContext mc) {
+	public RestOperationsBuilder add(String httpMethodName, RestOpContext mc) {
 		httpMethodName = httpMethodName.toUpperCase();
 		if (! map.containsKey(httpMethodName))
 			map.put(httpMethodName, new TreeSet<>());

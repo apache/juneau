@@ -25,9 +25,9 @@ import org.apache.juneau.utils.*;
 /**
  * A specialized invoker for methods that are called during a servlet request.
  */
-public class RestOperationInvoker extends MethodInvoker {
+public class RestOpInvoker extends MethodInvoker {
 
-	private final RestOperationArg[] opArgs;
+	private final RestOpArg[] opArgs;
 
 	/**
 	 * Constructor.
@@ -36,7 +36,7 @@ public class RestOperationInvoker extends MethodInvoker {
 	 * @param opArgs The parameter resolvers.
 	 * @param stats The instrumentor.
 	 */
-	public RestOperationInvoker(Method m, RestOperationArg[] opArgs, MethodExecStats stats) {
+	public RestOpInvoker(Method m, RestOpArg[] opArgs, MethodExecStats stats) {
 		super(m, stats);
 		this.opArgs = opArgs;
 	}

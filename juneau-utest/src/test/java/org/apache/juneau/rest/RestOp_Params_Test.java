@@ -367,7 +367,7 @@ public class RestOp_Params_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		restOperationArgs=B2a.class,
+		restOpArgs=B2a.class,
 		allowedHeaderParams="Custom"
 	)
 	public static class B2 {
@@ -377,7 +377,7 @@ public class RestOp_Params_Test {
 		}
 	}
 
-	public static class B2a implements RestOperationArg {
+	public static class B2a implements RestOpArg {
 
 		public static B2a create(ParamInfo pi) {
 			if (pi.isType(B2b.class))

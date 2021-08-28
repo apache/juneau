@@ -57,7 +57,7 @@ public class RestDeleteAnnotation {
 
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOperationContext> contextClass = RestOperationContext.Null.class;
+		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
 		Class<?>[] encoders=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
@@ -96,7 +96,7 @@ public class RestDeleteAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder contextClass(Class<? extends RestOperationContext> value) {
+		public Builder contextClass(Class<? extends RestOpContext> value) {
 			this.contextClass = value;
 			return this;
 		}
@@ -309,7 +309,7 @@ public class RestDeleteAnnotation {
 
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
-		private final Class<? extends RestOperationContext> contextClass;
+		private final Class<? extends RestOpContext> contextClass;
 		private final Class<?>[] encoders;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
@@ -345,7 +345,7 @@ public class RestDeleteAnnotation {
 		}
 
 		@Override /* RestDelete */
-		public Class<? extends RestOperationContext> contextClass() {
+		public Class<? extends RestOpContext> contextClass() {
 			return contextClass;
 		}
 
@@ -436,27 +436,27 @@ public class RestDeleteAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestDelete} annotations to a {@link RestOperationContextBuilder}.
+	 * Applies {@link RestDelete} annotations to a {@link RestOpContextBuilder}.
 	 */
-	public static class RestOperationContextApply extends AnnotationApplier<RestDelete,RestOperationContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestDelete,RestOpContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public RestOperationContextApply(VarResolverSession vr) {
-			super(RestDelete.class, RestOperationContextBuilder.class, vr);
+		public RestOpContextApply(VarResolverSession vr) {
+			super(RestDelete.class, RestOpContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestDelete> ai, RestOperationContextBuilder b) {
+		public void apply(AnnotationInfo<RestDelete> ai, RestOpContextBuilder b) {
 			RestDelete a = ai.getAnnotation();
 
 			b.httpMethod("delete");
 
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			value(a.contextClass(), RestOperationContext.Null.class).ifPresent(x -> b.contextClass(x));
+			value(a.contextClass(), RestOpContext.Null.class).ifPresent(x -> b.contextClass(x));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));

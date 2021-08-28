@@ -35,7 +35,7 @@ import org.apache.juneau.dto.swagger.*;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(RestDeleteAnnotation.RestOperationContextApply.class)
+@ContextApply(RestDeleteAnnotation.RestOpContextApply.class)
 @AnnotationGroup(RestOp.class)
 public @interface RestDelete {
 
@@ -100,13 +100,13 @@ public @interface RestDelete {
 	String clientVersion() default "";
 
 	/**
-	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
+	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOperationContextBuilder#contextClass(Class)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#contextClass(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestOperationContext> contextClass() default RestOperationContext.Null.class;
+	Class<? extends RestOpContext> contextClass() default RestOpContext.Null.class;
 
 	/**
 	 * Enable debug mode.

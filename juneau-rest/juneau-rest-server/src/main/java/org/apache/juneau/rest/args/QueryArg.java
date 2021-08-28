@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#get(String) get}(<jv>name</jv>).{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>)</c>
  * with a {@link HttpPartSchema schema} derived from the {@link Query} annotation.
  */
-public class QueryArg implements RestOperationArg {
+public class QueryArg implements RestOpArg {
 	private final boolean multi;
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
@@ -92,7 +92,7 @@ public class QueryArg implements RestOperationArg {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());

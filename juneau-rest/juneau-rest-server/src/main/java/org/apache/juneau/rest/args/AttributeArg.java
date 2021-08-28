@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String) get}(<jv>name</jv>).{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>.
  */
-public class AttributeArg implements RestOperationArg {
+public class AttributeArg implements RestOpArg {
 
 	private final String name;
 	private final Class<?> type;
@@ -62,7 +62,7 @@ public class AttributeArg implements RestOperationArg {
 		return n;
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getAttribute(name).asType(type).orElse(null);
 	}

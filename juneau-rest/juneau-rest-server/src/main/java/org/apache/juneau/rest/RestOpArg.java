@@ -12,31 +12,49 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * A list of {@link RestOperationArg} classes.
+ * REST java method parameter resolver.
+ *
+ * <p>
+ * Used to resolve parameter values when invoking {@link RestOp}-annotated methods.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// A simple parameter resolver that resolves TimeZone parameters.</jc>
+ * 	<jk>public class</jk> TimeZoneArg <jk>implements</jk> RestOpArg {
+ *
+ * 		<jc>// Implementers must provide a static creator method that returns a RestParam if it's
+ * 		// applicable to the specified parameter.</jc>
+ * 		<jk>public static</jk> TimeZoneArg <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
+ * 			<jk>if</jk> (<jv>paramInfo</jv>.isType(TimeZone.<jk>class</jk>))
+ * 				<jk>return new</jk> TimeZoneArg();
+ * 			<jk>return null</jk>;
+ * 		}
+ *
+ * 		<jk>protected</jk> TimeZoneArg() {}
+ *
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> <jv>call</jv>.getRestRequest().getHeaders().getTimeZone();
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='jf'>{@link RestContext#REST_restOperationArgs}
+ * 	<li class='link'>{@doc RestmParameters}
+ * </ul>
  */
-public class RestOperationArgList extends AList<Class<? extends RestOperationArg>> {
-
-	private static final long serialVersionUID = 1L;
+public interface RestOpArg {
 
 	/**
-	 * Static creator.
+	 * Resolves the parameter object.
 	 *
-	 * @return An empty list.
+	 * @param call The rest call.
+	 * @return The resolved object.
+	 * @throws Exception Generic error occurred.
 	 */
-	@SuppressWarnings("unchecked")
-	public static RestOperationArgList create() {
-		return new RestOperationArgList();
-	}
-
-	/**
-	 * Returns the contents of this list as a {@link Class} array.
-	 *
-	 * @return The contents of this list as a {@link Class} array.
-	 */
-	public Class<? extends RestOperationArg>[] asArray() {
-		return asArrayOf(Class.class);
-	}
+	public Object resolve(RestCall call) throws Exception;
 }

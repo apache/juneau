@@ -35,8 +35,8 @@ public class RestOperations {
 		}
 	}
 
-	private final Map<String,List<RestOperationContext>> map;
-	private List<RestOperationContext> list;
+	private final Map<String,List<RestOpContext>> map;
+	private List<RestOpContext> list;
 
 	/**
 	 * Creates a new builder.
@@ -53,8 +53,8 @@ public class RestOperations {
 	 * @param builder The builder containing the settings for this object.
 	 */
 	public RestOperations(RestOperationsBuilder builder) {
-		AMap<String,List<RestOperationContext>> m = AMap.create();
-		for (Map.Entry<String,TreeSet<RestOperationContext>> e : builder.map.entrySet())
+		AMap<String,List<RestOpContext>> m = AMap.create();
+		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
 			m.put(e.getKey(), AList.of(e.getValue()));
 		this.map = m;
 		this.list = AList.of(builder.set);
@@ -69,12 +69,12 @@ public class RestOperations {
 	 * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.
 	 * @throws NotFound HTTP method match was found but matching path was not.
 	 */
-	public RestOperationContext findOperation(RestCall call) throws MethodNotAllowed, PreconditionFailed, NotFound {
+	public RestOpContext findOperation(RestCall call) throws MethodNotAllowed, PreconditionFailed, NotFound {
 		String m = call.getMethod();
 
 		int rc = 0;
 		if (map.containsKey(m)) {
-			for (RestOperationContext oc : map.get(m)) {
+			for (RestOpContext oc : map.get(m)) {
 				int mrc = oc.match(call);
 				if (mrc == 2)
 					return oc;
@@ -83,7 +83,7 @@ public class RestOperations {
 		}
 
 		if (map.containsKey("*")) {
-			for (RestOperationContext oc : map.get("*")) {
+			for (RestOpContext oc : map.get("*")) {
 				int mrc = oc.match(call);
 				if (mrc == 2)
 					return oc;
@@ -94,7 +94,7 @@ public class RestOperations {
 		// If no paths matched, see if the path matches any other methods.
 		// Note that we don't want to match against "/*" patterns such as getOptions().
 		if (rc == 0) {
-			for (RestOperationContext oc : list) {
+			for (RestOpContext oc : list) {
 				if (! oc.getPathPattern().endsWith("/*")) {
 					int orc = oc.match(call);
 					if (orc == 2)
@@ -115,7 +115,7 @@ public class RestOperations {
 	 *
 	 * @return An unmodifiable list of method contexts in this object.
 	 */
-	public List<RestOperationContext> getOperationContexts() {
+	public List<RestOpContext> getOpContexts() {
 		return Collections.unmodifiableList(list);
 	}
 }

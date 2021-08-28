@@ -40,7 +40,7 @@ public class RestCall {
 	private RestRequest rreq;
 	private RestResponse rres;
 	private RestContext context;
-	private RestOperationContext opContext;
+	private RestOpContext opContext;
 	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
@@ -118,9 +118,9 @@ public class RestCall {
 	 * @return This object (for method chaining).
 	 * @throws Exception If thrown from the {@link RestRequest} or {@link RestResponse} constructors.
 	 */
-	public RestCall restOperationContext(RestOperationContext value) throws Exception {
+	public RestCall restOpContext(RestOpContext value) throws Exception {
 		opContext = value;
-		beanStore.addBean(RestOperationContext.class, value);
+		beanStore.addBean(RestOpContext.class, value);
 		rreq = context.createRequest(this);
 		beanStore.addBean(RestRequest.class, rreq);
 		rres = context.createResponse(this);
@@ -284,7 +284,7 @@ public class RestCall {
 	 *
 	 * @return The method context of this call.
 	 */
-	public RestOperationContext getRestOperationContext() {
+	public RestOpContext getRestOpContext() {
 		return opContext;
 	}
 

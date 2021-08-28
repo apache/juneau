@@ -69,7 +69,7 @@ public final class RestResponse {
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
 	private ResponseBeanMeta responseBeanMeta;
-	private RestOperationContext opContext;
+	private RestOpContext opContext;
 	private Optional<HttpPartSchema> bodySchema;
 	private Serializer serializer;
 	private Optional<SerializerMatch> serializerMatch;
@@ -84,7 +84,7 @@ public final class RestResponse {
 		inner = call.getResponse();
 		request = call.getRestRequest();
 
-		opContext = call.getRestOperationContext();
+		opContext = call.getRestOpContext();
 		responseBeanMeta = opContext.getResponseMeta();
 
 		RestContext context = call.getContext();
@@ -137,11 +137,11 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns access to the inner {@link RestOperationContext} of this method.
+	 * Returns access to the inner {@link RestOpContext} of this method.
 	 *
-	 * @return The {@link RestOperationContext} of this method.  Never <jk>null</jk>.
+	 * @return The {@link RestOpContext} of this method.  Never <jk>null</jk>.
 	 */
-	public RestOperationContext getOpContext() {
+	public RestOpContext getOpContext() {
 		return request.getOpContext();
 	}
 

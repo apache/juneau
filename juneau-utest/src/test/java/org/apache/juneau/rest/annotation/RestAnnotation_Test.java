@@ -74,8 +74,8 @@ public class RestAnnotation_Test {
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
-		.restOperationContextClass(RestOperationContext.class)
-		.restOperationArgs(RestOperationArg.class)
+		.restOpContextClass(RestOpContext.class)
+		.restOpArgs(RestOpArg.class)
 		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -129,8 +129,8 @@ public class RestAnnotation_Test {
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
-		.restOperationContextClass(RestOperationContext.class)
-		.restOperationArgs(RestOperationArg.class)
+		.restOpContextClass(RestOpContext.class)
+		.restOpArgs(RestOpArg.class)
 		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -187,8 +187,8 @@ public class RestAnnotation_Test {
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
 				+ "responseProcessors:['org.apache.juneau.rest.ResponseProcessor'],"
 				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
-				+ "restOperationArgs:['org.apache.juneau.rest.RestOperationArg'],"
-				+ "restOperationContextClass:'org.apache.juneau.rest.RestOperationContext',"
+				+ "restOpArgs:['org.apache.juneau.rest.RestOpArg'],"
+				+ "restOpContextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "restOperationsClass:'org.apache.juneau.rest.RestOperations',"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -287,8 +287,8 @@ public class RestAnnotation_Test {
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
-		restOperationContextClass=RestOperationContext.class,
-		restOperationArgs=RestOperationArg.class,
+		restOpContextClass=RestOpContext.class,
+		restOpArgs=RestOpArg.class,
 		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
@@ -344,8 +344,8 @@ public class RestAnnotation_Test {
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
-		restOperationContextClass=RestOperationContext.class,
-		restOperationArgs=RestOperationArg.class,
+		restOpContextClass=RestOpContext.class,
+		restOpArgs=RestOpArg.class,
 		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",

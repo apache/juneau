@@ -26,9 +26,9 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.parser.*;
 
 /**
- * A specialized {@link RestOperationContext} for handling <js>"RRPC"</js> HTTP methods.
+ * A specialized {@link RestOpContext} for handling <js>"RRPC"</js> HTTP methods.
  */
-public class RrpcRestOperationContext extends RestOperationContext {
+public class RrpcRestOpContext extends RestOpContext {
 
 	private final RrpcInterfaceMeta meta;
 
@@ -38,7 +38,7 @@ public class RrpcRestOperationContext extends RestOperationContext {
 	 * @param builder The builder for this method context.
 	 * @throws ServletException Problem with metadata was detected.
 	 */
-	public RrpcRestOperationContext(RestOperationContextBuilder builder) throws ServletException {
+	public RrpcRestOpContext(RestOpContextBuilder builder) throws ServletException {
 		super(builder);
 
 		ClassMeta<?> interfaceClass = getClassMeta(getJavaMethod().getGenericReturnType());

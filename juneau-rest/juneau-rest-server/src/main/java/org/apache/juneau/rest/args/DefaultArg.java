@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * This is the default parameter resolver if no other applicable parameter resolvers could be found.
  */
-public class DefaultArg implements RestOperationArg {
+public class DefaultArg implements RestOpArg {
 
 	private final Class<?> type;
 	private final ParamInfo paramInfo;
@@ -52,7 +52,7 @@ public class DefaultArg implements RestOperationArg {
 		this.paramInfo = paramInfo;
 	}
 
-	@Override /* RestOperationArg */
+	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getBeanStore().getBean(type).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}

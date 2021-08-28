@@ -91,9 +91,9 @@ public class RestAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Null.class;
-		Class<? extends RestOperationArg>[] restOperationArgs = new Class[0];
+		Class<? extends RestOpArg>[] restOpArgs = new Class[0];
 		Class<? extends BeanStore> beanStore = BeanStore.Null.class;
-		Class<? extends RestOperationContext> restOperationContextClass = RestOperationContext.Null.class;
+		Class<? extends RestOpContext> restOpContextClass = RestOpContext.Null.class;
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
 		Class<? extends RestOperations> restOperationsClass = RestOperations.Null.class;
 		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Null.class;
@@ -504,24 +504,24 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#restOperationContextClass()} property on this annotation.
+		 * Sets the {@link Rest#restOpContextClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder restOperationContextClass(Class<? extends RestOperationContext> value) {
-			this.restOperationContextClass = value;
+		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
+			this.restOpContextClass = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Rest#restOperationArgs()} property on this annotation.
+		 * Sets the {@link Rest#restOpArgs()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder restOperationArgs(Class<? extends RestOperationArg>...value) {
-			this.restOperationArgs = value;
+		public Builder restOpArgs(Class<? extends RestOpArg>...value) {
+			this.restOpArgs = value;
 			return this;
 		}
 
@@ -704,9 +704,9 @@ public class RestAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
-		private final Class<? extends RestOperationArg>[] restOperationArgs;
+		private final Class<? extends RestOpArg>[] restOpArgs;
 		private final Class<? extends BeanStore> beanStore;
-		private final Class<? extends RestOperationContext> restOperationContextClass;
+		private final Class<? extends RestOpContext> restOpContextClass;
 		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends RestOperations> restOperationsClass;
 		private final Class<? extends DebugEnablement> debugEnablement;
@@ -752,9 +752,9 @@ public class RestAnnotation {
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
 			this.responseProcessors = copyOf(b.responseProcessors);
 			this.restChildrenClass = b.restChildrenClass;
-			this.restOperationContextClass = b.restOperationContextClass;
+			this.restOpContextClass = b.restOpContextClass;
 			this.restOperationsClass = b.restOperationsClass;
-			this.restOperationArgs = copyOf(b.restOperationArgs);
+			this.restOpArgs = copyOf(b.restOpArgs);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
 			this.serializers = copyOf(b.serializers);
@@ -946,13 +946,13 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestOperationContext> restOperationContextClass() {
-			return restOperationContextClass;
+		public Class<? extends RestOpContext> restOpContextClass() {
+			return restOpContextClass;
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestOperationArg>[] restOperationArgs() {
-			return restOperationArgs;
+		public Class<? extends RestOpArg>[] restOpArgs() {
+			return restOpArgs;
 		}
 
 		@Override /* Rest */
@@ -1051,7 +1051,7 @@ public class RestAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			b.prependTo(REST_responseProcessors, a.responseProcessors());
 			b.prependTo(REST_children, a.children());
-			b.prependTo(REST_restOperationArgs, a.restOperationArgs());
+			b.prependTo(REST_restOperationArgs, a.restOpArgs());
 			b.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
 			b.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
 			b.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
@@ -1065,7 +1065,7 @@ public class RestAnnotation {
 			b.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
 			b.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
 			b.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
-			b.setIf(a.restOperationContextClass() != RestOperationContext.Null.class, REST_restOperationContextClass, a.restOperationContextClass());
+			b.setIf(a.restOpContextClass() != RestOpContext.Null.class, REST_restOperationContextClass, a.restOpContextClass());
 			b.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
 			b.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
 			b.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
@@ -1086,21 +1086,21 @@ public class RestAnnotation {
 	}
 
 	/**
-	 * Applies {@link Rest} annotations to a {@link RestOperationContextBuilder}.
+	 * Applies {@link Rest} annotations to a {@link RestOpContextBuilder}.
 	 */
-	public static class RestOperationContextApply extends AnnotationApplier<Rest,RestOperationContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<Rest,RestOpContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public RestOperationContextApply(VarResolverSession vr) {
-			super(Rest.class, RestOperationContextBuilder.class, vr);
+		public RestOpContextApply(VarResolverSession vr) {
+			super(Rest.class, RestOpContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestOperationContextBuilder b) {
+		public void apply(AnnotationInfo<Rest> ai, RestOpContextBuilder b) {
 			Rest a = ai.getAnnotation();
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));

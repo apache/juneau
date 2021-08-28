@@ -2451,29 +2451,29 @@ public class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_restOperationContextClass REST_restOperationContextClass}
 	 * 	<li><b>Name:</b>  <js>"RestContext.restOperationContextClass.c"</js>
-	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestOperationContext}&gt;</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestOperationContext}
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestOpContext}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestOpContext}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restOperationContextClass()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restOpContextClass()}
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#contextClass()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restOperationContextClass(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#contextClass(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restOpContextClass(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOpContextBuilder#contextClass(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
+	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <p>
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
-	 * 	<li>{@link RestOperationContextBuilder} - The builder for the object.
+	 * 	<li>{@link RestOpContextBuilder} - The builder for the object.
 	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
 	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
 	 * </ul>
@@ -2482,12 +2482,12 @@ public class RestContext extends BeanContext {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
 	 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
-	 * 	<jk>public</jk> MyRestOperationContext <jk>extends</jk> RestOperationContext {
+	 * 	<jk>public</jk> MyRestOperationContext <jk>extends</jk> RestOpContext {
 	 *
 	 * 		<jk>private final</jk> Optional&lt;? <jk>extends</jk> Supplier&lt;Object&gt;&gt; <jf>fooSupplier</jf>;
 	 *
 	 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
-	 * 		<jk>public</jk> MyRestOperationContext(RestOperationContextBuilder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
+	 * 		<jk>public</jk> MyRestOperationContext(RestOpContextBuilder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
 	 * 			<jk>super</jk>(<jv>builder</jv>);
 	 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-><jk>null</jk>);
 	 * 		}
@@ -2503,7 +2503,7 @@ public class RestContext extends BeanContext {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(restOperationContextClass=MyRestOperationContext.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(restOpContextClass=MyRestOperationContext.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 * 		...
 	 *
@@ -2565,7 +2565,7 @@ public class RestContext extends BeanContext {
 	 * 		<jc>// Override any methods.</jc>
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> RestOperationContext findMethod(RestCall <jv>call</jv>) <jk>throws</jk> MethodNotAllowed, PreconditionFailed, NotFound {
+	 * 		<jk>public</jk> RestOpContext findMethod(RestCall <jv>call</jv>) <jk>throws</jk> MethodNotAllowed, PreconditionFailed, NotFound {
 	 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
 	 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
 	 * 				<jc>// Do our own special handling.</jc>
@@ -2597,16 +2597,16 @@ public class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_restOperationArgs REST_restParams}
 	 * 	<li><b>Name:</b>  <js>"RestContext.restOperationsParams.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Class&lt;{@link org.apache.juneau.rest.RestOperationArg}&gt;&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Class&lt;{@link org.apache.juneau.rest.RestOpArg}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restOperationArgs()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restOpArgs()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restOperationArgs(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restOpArgs(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2621,7 +2621,7 @@ public class RestContext extends BeanContext {
 	 * the following resolver:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
-	 * 	<jk>public class</jk> MyRestParam <jk>implements</jk> RestOperationArg {
+	 * 	<jk>public class</jk> MyRestParam <jk>implements</jk> RestOpArg {
 	 *
 	 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
 	 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
@@ -2642,7 +2642,7 @@ public class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(restOperationArgs=MyRestParam.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(restOpArgs=MyRestParam.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -2673,7 +2673,7 @@ public class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
 	 * 	<li>
-	 * 		Refer to {@link RestOperationArg} for the list of predefined parameter resolvers.
+	 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
 	 * </ul>
 	 */
 	public static final String REST_restOperationArgs = PREFIX + ".restOperationArgs.lo";
@@ -3370,7 +3370,7 @@ public class RestContext extends BeanContext {
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
-	private final Class<? extends RestOperationArg>[] opArgs, hookMethodArgs;
+	private final Class<? extends RestOpArg>[] opArgs, hookMethodArgs;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -3405,7 +3405,7 @@ public class RestContext extends BeanContext {
 		endCallMethods,
 		destroyMethods;
 
-	private final RestOperationInvoker[]
+	private final RestOpInvoker[]
 		preCallMethods,
 		postCallMethods;
 
@@ -3524,7 +3524,7 @@ public class RestContext extends BeanContext {
 			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bf).build();
 			defaultRequestAttributes = createDefaultRequestAttributes(r, cp, bf);
 
-			opArgs = createRestOperationArgs(r, cp, bf).asArray();
+			opArgs = createOpArgs(r, cp, bf).asArray();
 			hookMethodArgs = createHookMethodArgs(r, cp, bf).asArray();
 
 			uriContext = nullIfEmpty(cp.getString(REST_uriContext).orElse(null));
@@ -3555,14 +3555,14 @@ public class RestContext extends BeanContext {
 			postInitChildFirstMethods = createPostInitChildFirstMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			destroyMethods = createDestroyMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 
-			preCallMethods = createPreCallMethods(r, cp, bf).stream().map(this::toRestOperationInvoker).toArray(RestOperationInvoker[]:: new);
-			postCallMethods = createPostCallMethods(r, cp, bf).stream().map(this::toRestOperationInvoker).toArray(RestOperationInvoker[]:: new);
+			preCallMethods = createPreCallMethods(r, cp, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			postCallMethods = createPostCallMethods(r, cp, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 
 			restOperations = createRestOperations(r, cp, bf);
 
 			List<MediaType> _produces = cp.getList(REST_produces, MediaType.class).orElse(null);
 			List<MediaType> _consumes = cp.getList(REST_consumes, MediaType.class).orElse(null);
-			List<RestOperationContext> opContexts = restOperations.getOperationContexts();
+			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
 			if (_produces != null)
 				produces = AList.unmodifiable(_produces);
@@ -3599,8 +3599,8 @@ public class RestContext extends BeanContext {
 		return new MethodInvoker(m, getMethodExecStats(m));
 	}
 
-	private MethodInvoker toRestOperationInvoker(Method m) {
-		return new RestOperationInvoker(m, findHookMethodArgs(m, getBeanStore()), getMethodExecStats(m));
+	private MethodInvoker toRestOpInvoker(Method m) {
+		return new RestOpInvoker(m, findHookMethodArgs(m, getBeanStore()), getMethodExecStats(m));
 	}
 
 	private Set<String> newCaseInsensitiveSet(String value) {
@@ -4330,8 +4330,8 @@ public class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li>Looks for {@link #REST_restOperationArgs} value set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#restOperationArgs(Class...)}/{@link RestContextBuilder#restOperationArgs(Class...)}
-	 * 			<li>{@link Rest#restOperationArgs()}.
+	 * 			<li>{@link RestContextBuilder#restOpArgs(Class...)}/{@link RestContextBuilder#restOpArgs(Class...)}
+	 * 			<li>{@link Rest#restOpArgs()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createRestParams()</> method that returns <c>{@link Class}[]</c>.
 	 * 	<li>Resolves it via the bean store registered in this context.
@@ -4350,12 +4350,12 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected RestOperationArgList createRestOperationArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestOpArgList createOpArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
-		RestOperationArgList x = RestOperationArgList.create();
+		RestOpArgList x = RestOpArgList.create();
 
 		for (Class<?> c : properties.getList(REST_restOperationArgs, Class.class).orElse(emptyList()))
-			x.append((Class<? extends RestOperationArg>)c);
+			x.append((Class<? extends RestOpArg>)c);
 
 		x.append(
 			AttributeArg.class,
@@ -4403,8 +4403,8 @@ public class RestContext extends BeanContext {
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestOperationArgList.class, x)
-			.beanCreateMethodFinder(RestOperationArgList.class, resource)
+			.addBean(RestOpArgList.class, x)
+			.beanCreateMethodFinder(RestOpArgList.class, resource)
 			.find("createRestOperationArgs")
 			.withDefault(x)
 			.run();
@@ -4427,9 +4427,9 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected RestOperationArgList createHookMethodArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestOpArgList createHookMethodArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
-		RestOperationArgList x = RestOperationArgList.create();
+		RestOpArgList x = RestOpArgList.create();
 
 		x.append(
 			ConfigArg.class,
@@ -4454,8 +4454,8 @@ public class RestContext extends BeanContext {
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestOperationArgList.class, x)
-			.beanCreateMethodFinder(RestOperationArgList.class, resource)
+			.addBean(RestOpArgList.class, x)
+			.beanCreateMethodFinder(RestOpArgList.class, resource)
 			.find("createHookMethodArgs")
 			.withDefault(x)
 			.run();
@@ -5237,7 +5237,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Creates the set of {@link RestOperationContext} objects that represent the methods on this resource.
+	 * Creates the set of {@link RestOpContext} objects that represent the methods on this resource.
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
@@ -5308,10 +5308,10 @@ public class RestContext extends BeanContext {
 					if (mi.isNotPublic())
 						throw new RestServletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
-					RestOperationContext roc = RestOperationContext
+					RestOpContext roc = RestOpContext
 						.create(mi.inner(), this)
 						.beanStore(beanStore)
-						.contextClass(properties.getClass(REST_restOperationContextClass, RestOperationContext.class).orElse(null))
+						.contextClass(properties.getClass(REST_restOperationContextClass, RestOpContext.class).orElse(null))
 						.build();
 
 					String httpMethod = roc.getHttpMethod();
@@ -5321,11 +5321,11 @@ public class RestContext extends BeanContext {
 					// We override the CallMethod.invoke() method to insert our logic.
 					if ("RRPC".equals(httpMethod)) {
 
-						RestOperationContext roc2 = RestOperationContext
+						RestOpContext roc2 = RestOpContext
 							.create(mi.inner(), this)
 							.dotAll()
 							.beanStore(rootBeanStore)
-							.contextClass(RrpcRestOperationContext.class)
+							.contextClass(RrpcRestOpContext.class)
 							.build();
 						x
 							.add("GET", roc2)
@@ -6267,8 +6267,8 @@ public class RestContext extends BeanContext {
 	 * @return
 	 * 	An unmodifiable map of Java method names to call method objects.
 	 */
-	public List<RestOperationContext> getMethodContexts() {
-		return restOperations.getOperationContexts();
+	public List<RestOpContext> getOpContexts() {
+		return restOperations.getOpContexts();
 	}
 
 	/**
@@ -6365,7 +6365,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Finds the {@link RestOperationArg} instances to handle resolving objects on the calls to the specified Java method.
+	 * Finds the {@link RestOpArg} instances to handle resolving objects on the calls to the specified Java method.
 	 *
 	 * @param m The Java method being called.
 	 * @param beanStore
@@ -6373,18 +6373,18 @@ public class RestContext extends BeanContext {
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The array of resolvers.
 	 */
-	protected RestOperationArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
+	protected RestOpArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
 
 		MethodInfo mi = MethodInfo.of(m);
 		List<ClassInfo> pt = mi.getParamTypes();
-		RestOperationArg[] ra = new RestOperationArg[pt.size()];
+		RestOpArg[] ra = new RestOpArg[pt.size()];
 
 		beanStore = BeanStore.of(beanStore, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
 			ParamInfo pi = mi.getParam(i);
 			beanStore.addBean(ParamInfo.class, pi);
-			for (Class<? extends RestOperationArg> c : opArgs) {
+			for (Class<? extends RestOpArg> c : opArgs) {
 				try {
 					ra[i] = beanStore.createBean(c);
 					if (ra[i] != null)
@@ -6401,7 +6401,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Finds the {@link RestOperationArg} instances to handle resolving objects on pre-call and post-call Java methods.
+	 * Finds the {@link RestOpArg} instances to handle resolving objects on pre-call and post-call Java methods.
 	 *
 	 * @param m The Java method being called.
 	 * @param beanStore
@@ -6409,17 +6409,17 @@ public class RestContext extends BeanContext {
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The array of resolvers.
 	 */
-	protected RestOperationArg[] findHookMethodArgs(Method m, BeanStore beanStore) {
+	protected RestOpArg[] findHookMethodArgs(Method m, BeanStore beanStore) {
 		MethodInfo mi = MethodInfo.of(m);
 		List<ClassInfo> pt = mi.getParamTypes();
-		RestOperationArg[] ra = new RestOperationArg[pt.size()];
+		RestOpArg[] ra = new RestOpArg[pt.size()];
 
 		beanStore = BeanStore.of(beanStore, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
 			ParamInfo pi = mi.getParam(i);
 			beanStore.addBean(ParamInfo.class, pi);
-			for (Class<? extends RestOperationArg> c : hookMethodArgs) {
+			for (Class<? extends RestOpArg> c : hookMethodArgs) {
 				try {
 					ra[i] = beanStore.createBean(c);
 					if (ra[i] != null)
@@ -6790,7 +6790,7 @@ public class RestContext extends BeanContext {
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
 	protected void preCall(RestCall call) throws BasicHttpException {
-		for (RestOperationInvoker m : preCallMethods)
+		for (RestOpInvoker m : preCallMethods)
 			m.invokeFromCall(call, getResource());
 	}
 
@@ -6801,7 +6801,7 @@ public class RestContext extends BeanContext {
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
 	protected void postCall(RestCall call) throws BasicHttpException {
-		for (RestOperationInvoker m : postCallMethods)
+		for (RestOpInvoker m : postCallMethods)
 			m.invokeFromCall(call, getResource());
 	}
 

@@ -58,7 +58,7 @@ public class RestGetAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOperationContext> contextClass = RestOperationContext.Null.class;
+		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
 		Class<?>[] encoders=new Class<?>[0], serializers=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
@@ -97,7 +97,7 @@ public class RestGetAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder contextClass(Class<? extends RestOperationContext> value) {
+		public Builder contextClass(Class<? extends RestOpContext> value) {
 			this.contextClass = value;
 			return this;
 		}
@@ -344,7 +344,7 @@ public class RestGetAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
-		private final Class<? extends RestOperationContext> contextClass;
+		private final Class<? extends RestOpContext> contextClass;
 		private final Class<?>[] encoders, serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
@@ -383,7 +383,7 @@ public class RestGetAnnotation {
 		}
 
 		@Override /* RestGet */
-		public Class<? extends RestOperationContext> contextClass() {
+		public Class<? extends RestOpContext> contextClass() {
 			return contextClass;
 		}
 
@@ -489,28 +489,28 @@ public class RestGetAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestGet} annotations to a {@link RestOperationContextBuilder}.
+	 * Applies {@link RestGet} annotations to a {@link RestOpContextBuilder}.
 	 */
-	public static class RestOperationContextApply extends AnnotationApplier<RestGet,RestOperationContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestGet,RestOpContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public RestOperationContextApply(VarResolverSession vr) {
-			super(RestGet.class, RestOperationContextBuilder.class, vr);
+		public RestOpContextApply(VarResolverSession vr) {
+			super(RestGet.class, RestOpContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestGet> ai, RestOperationContextBuilder b) {
+		public void apply(AnnotationInfo<RestGet> ai, RestOpContextBuilder b) {
 			RestGet a = ai.getAnnotation();
 
 			b.httpMethod("get");
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			value(a.contextClass(), RestOperationContext.Null.class).ifPresent(x -> b.contextClass(x));
+			value(a.contextClass(), RestOpContext.Null.class).ifPresent(x -> b.contextClass(x));
 			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
