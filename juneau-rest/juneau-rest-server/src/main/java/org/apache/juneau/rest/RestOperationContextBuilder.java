@@ -12,15 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static java.util.Arrays.*;
-import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
 
 import java.lang.annotation.*;
 import java.util.*;
-import java.util.function.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
@@ -47,6 +43,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	List<String> path;
 	PartListBuilder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
+	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
 
 	private BeanStore beanStore;
 
@@ -83,6 +80,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		this.defaultFormData = PartList.create();
 		this.defaultQueryData = PartList.create();
 		this.defaultRequestAttributes = NamedAttributeList.create();
+		this.defaultRequestHeaders = HeaderList.create();
+		this.defaultResponseHeaders = HeaderList.create();
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -233,60 +232,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * Default form data parameters.
 	 *
 	 * <p>
-	 * Sets a default value for a form data parameter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultFormData}
-	 * 	<li class='ja'>{@link RestPost#defaultFormData}
-	 * </ul>
-	 *
-	 * @param name The form data parameter name.
-	 * @param value The form data parameter value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultFormData(String name, Object value) {
-		defaultFormData.setDefault(name, value);
-		return this;
-	}
-
-	/**
-	 * Default form data parameters.
-	 *
-	 * <p>
-	 * Sets a default value for a form data parameter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultFormData}
-	 * 	<li class='ja'>{@link RestPost#defaultFormData}
-	 * </ul>
-	 *
-	 * @param name The form data parameter name.
-	 * @param value The form data parameter value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultFormData(String name, Supplier<?> value) {
-		defaultFormData.setDefault(name, value);
-		return this;
-	}
-
-	/**
-	 * Default form data parameters.
-	 *
-	 * <p>
 	 * Sets default values for form data parameters.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -306,72 +251,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestOperationContextBuilder defaultFormData(NameValuePair...values) {
 		defaultFormData.setDefault(values);
-		return this;
-	}
-
-	/**
-	 * Default query parameters.
-	 *
-	 * <p>
-	 * Sets a default value for a query data parameter.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
-	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
-	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
-	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
-	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
-	 * </ul>
-	 *
-	 * @param name The query parameter name.
-	 * @param value The query parameter value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultQueryData(String name, Object value) {
-		defaultQueryData.setDefault(name, value);
-		return this;
-	}
-
-	/**
-	 * Default query parameters.
-	 *
-	 * <p>
-	 * Sets a default value for a query data parameter.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
-	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
-	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
-	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
-	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
-	 * </ul>
-	 *
-	 * @param name The query parameter name.
-	 * @param value The query parameter value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultQueryData(String name, Supplier<?> value) {
-		defaultQueryData.setDefault(name, value);
 		return this;
 	}
 
@@ -411,66 +290,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * Default request attributes.
 	 *
 	 * <p>
-	 * Specifies a default value for a request attribute if it is not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
-	 * </ul>
-	 *
-	 * @param name The attribute name.
-	 * @param value The attribute value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultRequestAttribute(String name, Object value) {
-		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
-	}
-
-	/**
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies a default value for a request attribute if it is not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
-	 * </ul>
-	 *
-	 * @param name The attribute name.
-	 * @param value The attribute value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultRequestAttribute(String name, Supplier<?> value) {
-		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
-	}
-
-	/**
-	 * Default request attributes.
-	 *
-	 * <p>
 	 * Specifies default values for request attributes if they are not already set on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -501,48 +320,21 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request headers.
 	 *
 	 * <p>
-	 * Adds a single default request header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param name The request header name.
-	 * @param value The request header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultRequestHeader(String name, String value) {
-		return defaultRequestHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
-	 * Adds a single default request header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param name The request header name.
-	 * @param value The request header value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultRequestHeader(String name, Supplier<String> value) {
-		return defaultRequestHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
 	 * </ul>
 	 *
 	 * @param values The headers to add.
@@ -550,56 +342,29 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultRequestHeaders(Header...values) {
-		asList(values).stream().forEach(x -> appendTo(RESTOP_defaultRequestHeaders, x));
+		defaultRequestHeaders.setDefault(values);
 		return this;
 	}
 
 	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <p>
-	 * Adds a single default response header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param name The response header name.
-	 * @param value The response header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultResponseHeader(String name, String value) {
-		return defaultResponseHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <p>
-	 * Adds a single default response header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param name The response header name.
-	 * @param value The response header value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder defaultResponseHeader(String name, Supplier<String> value) {
-		return defaultResponseHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  Default response headers.
+	 * Default response headers.
 	 *
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
 	 * </ul>
 	 *
 	 * @param values The headers to add.
@@ -607,7 +372,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultResponseHeaders(Header...values) {
-		asList(values).stream().forEach(x -> appendTo(RESTOP_defaultResponseHeaders, x));
+		defaultResponseHeaders.setDefault(values);
 		return this;
 	}
 

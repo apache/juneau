@@ -29,7 +29,6 @@ import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -81,96 +80,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static final String PREFIX = "RestOperationContext";
-
-	/**
-	 * Configuration property:  Default request headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultRequestHeaders RESTOP_defaultRequestHeaders}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultRequestHeaders.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.Header}[]</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultRequestHeaders</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTREQUESTHEADERS</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultRequestHeaders()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultAccept()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultContentType()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeader(String,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeader(String,Supplier)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeaders(org.apache.http.Header...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
-	 */
-	public static final String RESTOP_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.lo";
-
-	/**
-	 * Configuration property:  Default response headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultResponseHeaders RESTOP_defaultResponseHeaders}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultResponseHeaders.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.Header}[]</c>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultResponseHeaders</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTRESPONSEHEADERS</c>
-	 * 	<li><b>Default:</b>  empty list.
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultRequestHeaders()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultAccept()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#defaultContentType()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeader(String,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeader(String,Supplier)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeaders(org.apache.http.Header...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * Default response headers.
-	 *
-	 * <p>
-	 * Specifies default values for response headers if they're not overwritten during the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
-	 * </ul>
-	 */
-	public static final String RESTOP_defaultResponseHeaders = PREFIX + ".defaultResponseHeaders.lo";
 
 	/**
 	 * Configuration property:  Method-level matchers.
@@ -333,8 +242,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			supportedAcceptTypes = unmodifiableList(cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes()));
 			supportedContentTypes = unmodifiableList(cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes()));
 
-			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bs, method, context).build();
-			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bs, method, context).build();
+			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bs, method, context).build();
+			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bs, method, context).build();
 			defaultRequestQuery = createDefaultRequestQuery(r, builder, bs, method).build();
 			defaultRequestFormData = createDefaultRequestFormData(r, builder, bs, method).build();
 			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, builder, bs, method, context));
@@ -931,20 +840,16 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates the default request headers for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @param method This Java method.
 	 * @param context The REST class context.
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderListBuilder x = HeaderList.create();
-
-		x.set(context.getDefaultRequestHeaders());
-
-		x.set(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		HeaderListBuilder x = HeaderList.create().setDefault(context.getDefaultRequestHeaders()).setDefault(builder.defaultRequestHeaders.build());
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -977,20 +882,16 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates the default request headers for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @param method This Java method.
 	 * @param context The REST class context.
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, RestOperationContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderListBuilder x = HeaderList.create();
-
-		x.set(context.getDefaultResponseHeaders().getAll());
-
-		x.set(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		HeaderListBuilder x = HeaderList.create().setDefault(context.getDefaultResponseHeaders()).setDefault(builder.defaultResponseHeaders.build());
 
 		x = BeanStore
 			.of(beanStore, resource)
