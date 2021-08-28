@@ -278,7 +278,7 @@ public @interface Rest {
 	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext#REST_contextClass}
+	 * 	<li class='jm'>{@link RestContextBuilder#contextClass(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestContext> contextClass() default RestContext.Null.class;
@@ -940,7 +940,7 @@ public @interface Rest {
 	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restChildrenClass}
+	 * 	<li class='jm'>{@link RestContextBuilder#restChildrenClass(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestChildren> restChildrenClass() default RestChildren.Null.class;
@@ -952,7 +952,7 @@ public @interface Rest {
 	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationsClass}
+	 * 	<li class='jm'>{@link RestContextBuilder#restOperationsClass(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestOperations> restOperationsClass() default RestOperations.Null.class;
@@ -961,7 +961,7 @@ public @interface Rest {
 	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationContextClass}
+	 * 	<li class='jm'>{@link RestContextBuilder#restOpContextClass(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestOpContext> restOpContextClass() default RestOpContext.Null.class;

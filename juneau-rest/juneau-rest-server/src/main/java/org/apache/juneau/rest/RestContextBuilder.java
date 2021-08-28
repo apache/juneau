@@ -118,9 +118,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Charset defaultCharset;
 	long maxInput;
 	List<MediaType> consumes, produces;
+	Class<? extends RestChildren> childrenClass = RestChildren.class;
+	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
+	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
+			contextClass(RestContext.class);
 
 			this.resourceClass = resourceClass;
 			this.inner = servletConfig.orElse(null);
@@ -210,29 +214,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		throw new NoSuchMethodError("Not implemented.");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			// Temporary.
-			Class<? extends RestContext> c = getContextProperties().getClass(REST_contextClass, RestContext.class).orElse(null);
-			if (c != null)
-				contextClass(c);
-
-			c = (Class<? extends RestContext>)getContextClass().orElse(getDefaultImplClass());
-			return BeanStore.of(beanStore, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
+			return (RestContext) BeanStore.of(beanStore, resource.get()).addBeans(RestContextBuilder.class, this).createBean(getContextClass().orElse(RestContext.class));
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
-	}
-
-	/**
-	 * Specifies the default implementation class if not specified via {@link RestContext#REST_contextClass}.
-	 *
-	 * @return The default implementation class if not specified via {@link RestContext#REST_contextClass}.
-	 */
-	protected Class<? extends RestContext> getDefaultImplClass() {
-		return RestContext.class;
 	}
 
 	/**
@@ -1870,39 +1858,125 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST children class.
+	 * REST children class.
 	 *
 	 * <p>
 	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restChildrenClass}
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestChildrenBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class</jc>
+	 * 	<jk>public</jk> MyRestChildren <jk>extends</jk> RestChildren {
+	 * 		<jk>public</jk> MyRestChildren(RestChildrenBuilder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 		}
+	 *
+	 * 		<jc>// Override any methods.</jc>
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Optional&lt;RestChildMatch&gt; findMatch(RestCall <jv>call</jv>) {
+	 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
+	 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
+	 * 				<jc>// Do our own special handling.</jc>
+	 * 			}
+	 * 			<jk>return super</jk>.findMatch(<jv>call</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restChildrenClass=MyRestChildren.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restChildrenClass(MyRestChildren.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder restChildrenClass(Class<? extends RestChildren> value) {
-		return set(REST_restChildrenClass, value);
+		childrenClass = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST method context class.
+	 * REST operation context class.
 	 *
 	 * <p>
 	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationContextClass}
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestOpContextBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
+	 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
+	 * 	<jk>public</jk> MyRestOperationContext <jk>extends</jk> RestOpContext {
+	 *
+	 * 		<jk>private final</jk> Optional&lt;? <jk>extends</jk> Supplier&lt;Object&gt;&gt; <jf>fooSupplier</jf>;
+	 *
+	 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
+	 * 		<jk>public</jk> MyRestOperationContext(RestOpContextBuilder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-><jk>null</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override the method used to create default request attributes.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>protected</jk> NamedAttributeList createDefaultRequestAttributes(Object <jv>resource</jv>, BeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return super</jk>
+	 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanStore</jv>, <jv>method</jv>, <jv>context</jv>)
+	 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-><jf>fooSupplier</jf>.get());
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restOpContextClass=MyRestOperationContext.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.methodContextClass(MyRestOperationContext.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<ja>@RestGet</ja>
+	 * 		<jk>public</jk> Object foo(RequestAttributes <jv>attributes</jv>) {
+	 * 			<jk>return</jk> <jv>attributes</jv>.get(<js>"foo"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder restOpContextClass(Class<? extends RestOpContext> value) {
-		return set(REST_restOperationContextClass, value);
+		opContextClass = value;
+		return this;
 	}
 
 	/**
@@ -1927,21 +2001,60 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST methods class.
+	 * REST operations class.
 	 *
 	 * <p>
 	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationsClass}
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestOperationsBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class</jc>
+	 * 	<jk>public</jk> MyRestOperations <jk>extends</jk> RestOperations {
+	 * 		<jk>public</jk> MyRestOperations(RestOperationsBuilder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 		}
+	 *
+	 * 		<jc>// Override any methods.</jc>
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> RestOpContext findMethod(RestCall <jv>call</jv>) <jk>throws</jk> MethodNotAllowed, PreconditionFailed, NotFound {
+	 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
+	 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
+	 * 				<jc>// Do our own special handling.</jc>
+	 * 			}
+	 * 			<jk>return super</jk>.findMethod(<jv>call</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restMethodsClass=MyRestOperations.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restMethodsClass(MyRestOperations.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder restOperationsClass(Class<? extends RestOperations> value) {
-		return set(REST_restOperationsClass, value);
+		operationsClass = value;
+		return this;
 	}
 
 	/**

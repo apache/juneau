@@ -1053,7 +1053,7 @@ public class RestAnnotation {
 			b.prependTo(REST_responseProcessors, a.responseProcessors());
 			b.prependTo(REST_children, a.children());
 			b.prependTo(REST_restOperationArgs, a.restOpArgs());
-			b.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
+			value(a.contextClass(), RestContext.Null.class).ifPresent(x -> b.contextClass(x));
 			value(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			value(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
 			value(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
@@ -1066,9 +1066,9 @@ public class RestAnnotation {
 			b.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
 			b.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
 			b.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
-			b.setIf(a.restOpContextClass() != RestOpContext.Null.class, REST_restOperationContextClass, a.restOpContextClass());
-			b.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
-			b.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
+			value(a.restOpContextClass(), RestOpContext.Null.class).ifPresent(x -> b.restOpContextClass(x));
+			value(a.restChildrenClass(), RestChildren.Null.class).ifPresent(x -> b.restChildrenClass(x));
+			value(a.restOperationsClass(), RestOperations.Null.class).ifPresent(x -> b.restOperationsClass(x));
 			b.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
 			b.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
 			value(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
