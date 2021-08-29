@@ -1076,7 +1076,7 @@ public class RestAnnotation {
 			value(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
 			b.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
 			value(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
-			b.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
+			value(a.debugOn()).ifPresent(x -> b.debugOn(x));
 		}
 	}
 

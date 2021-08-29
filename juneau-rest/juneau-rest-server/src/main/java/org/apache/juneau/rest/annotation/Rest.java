@@ -455,7 +455,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debugOn}
+	 * 	<li class='jm'>{@link RestContextBuilder#debugOn(String)}
 	 * </ul>
 	 */
 	String debugOn() default "";

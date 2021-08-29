@@ -42,7 +42,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(Class)}
  * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(RestLogger)}
  * 	<li class='jm'>{@link RestContextBuilder#debug(Enablement)}
- * 	<li class='jf'>{@link RestContext#REST_debugOn}
+ * 	<li class='jm'>{@link RestContextBuilder#debugOn(String)}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc RestLoggingAndDebugging}

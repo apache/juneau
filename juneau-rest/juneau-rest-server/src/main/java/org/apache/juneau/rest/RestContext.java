@@ -149,40 +149,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_beanStore = PREFIX + ".beanStore.o";
 
 	/**
-	 * Configuration property:  Debug mode on specified classes/methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debugOn REST_debugOn}
-	 * 	<li><b>Name:</b>  <js>"RestContext.debugOn.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
-	 * 	<li><b>System property:</b>  <c>RestContext.debugOn</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUGON</c>
-	 * 	<li><b>Default:</b>  Empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#debugOn()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugOn(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged always or per request.
-	 * </ul>
-	 */
-	public static final String REST_debugOn = PREFIX + ".debugOn.s";
-
-	/**
 	 * Configuration property:  Default request attributes.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3111,7 +3077,6 @@ public class RestContext extends BeanContext {
 	 */
 	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		ContextProperties properties = builder.getContextProperties();
 		Class<? extends DebugEnablement> c = builder.debugEnablementClass;
 
 		DebugEnablementBuilder x = DebugEnablement
@@ -3137,7 +3102,7 @@ public class RestContext extends BeanContext {
 
 		x.defaultEnable(defaultDebug);
 
-		for (Map.Entry<String,String> e : splitMap(properties.getString(REST_debugOn).orElse(""), true).entrySet()) {
+		for (Map.Entry<String,String> e : splitMap(ofNullable(builder.debugOn).orElse(""), true).entrySet()) {
 			String k = e.getKey(), v = e.getValue();
 			if (v.isEmpty())
 				v = "ALWAYS";

@@ -143,6 +143,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	DebugEnablement debugEnablement;
 	Class<? extends DebugEnablement> debugEnablementClass;
 
+	String debugOn = env("RestContext.debugOn", null);
+
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
 		ReaderProcessor.class,
@@ -1111,7 +1113,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug mode on specified classes/methods.
+	 * Debug mode on specified classes/methods.
 	 *
 	 * Enables the following:
 	 * <ul class='spaced-list'>
@@ -1122,7 +1124,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debugOn}
+	 * 	<li class='ja'>{@link Rest#debugOn}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -1130,7 +1132,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder debugOn(String value) {
-		return set(REST_debugOn, value);
+		debugOn = value;
+		return this;
 	}
 
 	/**
