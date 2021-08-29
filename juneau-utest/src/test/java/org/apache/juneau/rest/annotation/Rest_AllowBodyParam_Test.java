@@ -24,27 +24,27 @@ import org.junit.*;
 public class Rest_AllowBodyParam_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(disableAllowBodyParam)
+	// @Rest(disableBodyParam)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(disableAllowBodyParam="false")
+	@Rest(disableBodyParam="false")
 	public static class A1 {
 		@RestOp
 		public OMap put(@Body OMap body) {
 			return body;
 		}
 	}
-	@Rest(disableAllowBodyParam="true")
+	@Rest(disableBodyParam="true")
 	public static class A2 {
 		@RestOp
 		public OMap put(@Body OMap body) {
 			return body;
 		}
 	}
-	@Rest(disableAllowBodyParam="true")
+	@Rest(disableBodyParam="true")
 	public static class A3 extends A1 {}
 
-	@Rest(disableAllowBodyParam="false")
+	@Rest(disableBodyParam="false")
 	public static class A4 extends A2 {}
 
 

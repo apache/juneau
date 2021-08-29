@@ -100,7 +100,7 @@ public class RestAnnotation {
 		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
-		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
+		String disableBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
 		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, produces={}, title={};
 
 		/**
@@ -120,13 +120,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#disableAllowBodyParam()} property on this annotation.
+		 * Sets the {@link Rest#disableBodyParam()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder disableAllowBodyParam(String value) {
-			this.disableAllowBodyParam = value;
+		public Builder disableBodyParam(String value) {
+			this.disableBodyParam = value;
 			return this;
 		}
 
@@ -713,12 +713,12 @@ public class RestAnnotation {
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<?>[] children, parsers, serializers;
 		private final Swagger swagger;
-		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
+		private final String disableBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
 		private final String[] consumes, description, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
 
 		Impl(Builder b) {
 			super(b);
-			this.disableAllowBodyParam = b.disableAllowBodyParam;
+			this.disableBodyParam = b.disableBodyParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
 			this.allowedMethodParams = b.allowedMethodParams;
@@ -772,8 +772,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public String disableAllowBodyParam() {
-			return disableAllowBodyParam;
+		public String disableBodyParam() {
+			return disableBodyParam;
 		}
 
 		@Override /* Rest */
@@ -1070,7 +1070,7 @@ public class RestAnnotation {
 			value(a.restChildrenClass(), RestChildren.Null.class).ifPresent(x -> b.restChildrenClass(x));
 			value(a.restOperationsClass(), RestOperations.Null.class).ifPresent(x -> b.restOperationsClass(x));
 			b.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
-			b.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
+			value(a.disableBodyParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableBodyParam(x));
 			value(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
 			value(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
 			value(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));

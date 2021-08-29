@@ -112,12 +112,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	Config config;
 	VarResolverBuilder varResolverBuilder;
-	String allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, uriAuthority, uriContext, path;
-	UriRelativity uriRelativity;
-	UriResolution uriResolution;
-	Charset defaultCharset;
-	long maxInput;
+	String
+		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
+		allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
+		allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS"),
+		clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version"),
+		uriAuthority = env("RestContext.uriAuthority", (String)null),
+		uriContext = env("RestContext.uriContext", (String)null),
+		path;
+	UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
+	UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
+	Charset defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
+	long maxInput = parseLongWithSuffix(env("RestContext.maxInput", "100M"));
 	List<MediaType> consumes, produces;
+	Boolean disableBodyParam = env("RestContext.disableBodyParam", false);
 	Class<? extends RestChildren> childrenClass = RestChildren.class;
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
@@ -147,17 +155,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				PlainTextPojoProcessor.class,
 				SerializedPojoProcessor.class
 			);
-
-			allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type");
-			allowedMethodHeaders = env("RestContext.allowedMethodHeaders", "");
-			allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS");
-			clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
-			defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
-			maxInput = StringUtils.parseLongWithSuffix(env("RestContext.maxInput", "100M"));
-			uriAuthority = env("RestContext.uriAuthority", (String)null);
-			uriContext = env("RestContext.uriContext", (String)null);
-			uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
-			uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -1278,7 +1275,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow body URL parameter.
+	 * Disable body URL parameter.
 	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
@@ -1289,15 +1286,54 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(disableBodyParam=<js>"$C{REST/disableBodyParam,true}"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.disableBodyParam();
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.disableBodyParam();
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		<js>'body'</js> parameter name is case-insensitive.
+	 * 	<li>
+	 * 		Useful for debugging PUT and POST methods using only a browser.
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder disableAllowBodyParam() {
-		return set(REST_disableAllowBodyParam);
+	public RestContextBuilder disableBodyParam() {
+		return disableBodyParam(true);
+	}
+
+	/**
+	 * Disable body URL parameter.
+	 *
+	 * <p>
+	 * Same as {@link #disableBodyParam()} but allows you to set it as a boolean value.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder disableBodyParam(boolean value) {
+		disableBodyParam = value;
+		return this;
 	}
 
 	/**

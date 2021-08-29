@@ -37,7 +37,7 @@ public class RestAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Rest a1 = RestAnnotation.create()
-		.disableAllowBodyParam("disableAllowBodyParam")
+		.disableBodyParam("disableBodyParam")
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
@@ -92,7 +92,7 @@ public class RestAnnotation_Test {
 		.build();
 
 	Rest a2 = RestAnnotation.create()
-		.disableAllowBodyParam("disableAllowBodyParam")
+		.disableBodyParam("disableBodyParam")
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
@@ -171,7 +171,7 @@ public class RestAnnotation_Test {
 				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
 				+ "description:['description'],"
-				+ "disableAllowBodyParam:'disableAllowBodyParam',"
+				+ "disableBodyParam:'disableBodyParam',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "fileFinder:'org.apache.juneau.cp.FileFinder',"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
@@ -250,7 +250,7 @@ public class RestAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		disableAllowBodyParam="disableAllowBodyParam",
+		disableBodyParam="disableBodyParam",
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
@@ -307,7 +307,7 @@ public class RestAnnotation_Test {
 	Rest d1 = D1.class.getAnnotationsByType(Rest.class)[0];
 
 	@Rest(
-		disableAllowBodyParam="disableAllowBodyParam",
+		disableBodyParam="disableBodyParam",
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",

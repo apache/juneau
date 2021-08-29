@@ -49,7 +49,7 @@ import org.apache.juneau.rest.vars.*;
 public @interface Rest {
 
 	/**
-	 * Disable allow body URL parameter.
+	 * Disable body URL parameter.
 	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
@@ -67,10 +67,10 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
+	 * 	<li class='jm'>{@link RestContextBuilder#disableBodyParam()}
 	 * </ul>
 	 */
-	String disableAllowBodyParam() default "";
+	String disableBodyParam() default "";
 
 	/**
 	 * Configuration property:  Allowed header URL parameters.

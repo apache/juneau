@@ -815,71 +815,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_defaultResponseHeaders = PREFIX + ".defaultResponseHeaders.lo";
 
 	/**
-	 * Configuration property:  Disable allow body URL parameter.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_disableAllowBodyParam REST_disableAllowBodyParam}
-	 * 	<li><b>Name:</b>  <js>"RestContext.disableAllowBodyParam.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestContext.disableAllowBodyParam</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DISABLEALLOWBODYPARAM</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#disableAllowBodyParam()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#disableAllowBodyParam()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
-	 * URL parameter.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?body=(name='John%20Smith',age=45)
-	 * </p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(disableAllowBodyParam=<js>"$C{REST/disableAllowBodyParam,true}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.disableAllowBodyParam();
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_disableAllowBodyParam</jsf>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.disableAllowBodyParam();
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		<js>'body'</js> parameter name is case-insensitive.
-	 * 	<li>
-	 * 		Useful for debugging PUT and POST methods using only a browser.
-	 * </ul>
-	 */
-	public static final String REST_disableAllowBodyParam = PREFIX + ".disableAllowBodyParam.b";
-
-	/**
 	 * Configuration property:  Compression encoders.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2357,10 +2292,10 @@ public class RestContext extends BeanContext {
 			uriResolution = builder.uriResolution;
 			uriRelativity = builder.uriRelativity;
 
-			allowBodyParam = ! cp.getBoolean(REST_disableAllowBodyParam).orElse(false);
-			allowedHeaderParams = newCaseInsensitiveSet(Optional.of(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(Optional.of(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodHeaders = newCaseInsensitiveSet(Optional.of(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowBodyParam = ! builder.disableBodyParam;
+			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			renderResponseStackTraces = cp.getBoolean(REST_renderResponseStackTraces).orElse(false);
 			clientVersionHeader = builder.clientVersionHeader;
 			defaultCharset = builder.defaultCharset;
@@ -4755,7 +4690,7 @@ public class RestContext extends BeanContext {
 	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
+	 * 	<li class='jf'>{@link RestContextBuilder#disableBodyParam()}
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
