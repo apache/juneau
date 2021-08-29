@@ -1362,8 +1362,7 @@ public class RestContext extends BeanContext {
 	final Charset defaultCharset;
 	final long maxInput;
 
-	final RestLogger callLoggerDefault;
-	final Class<? extends RestLogger> callLoggerDefaultClass;
+	final BeanRef<RestLogger> callLoggerDefault;
 
 	final Enablement debugDefault;
 
@@ -1473,7 +1472,6 @@ public class RestContext extends BeanContext {
 			responseProcessors = createResponseProcessors(r, builder, bf).toArray();
 
 			callLoggerDefault = builder.callLoggerDefault;
-			callLoggerDefaultClass = builder.callLoggerDefaultClass;
 			debugDefault = builder.debugDefault;
 
 			callLogger = createCallLogger(r, builder, bf, l, ts);
@@ -2018,13 +2016,13 @@ public class RestContext extends BeanContext {
 			x = (RestLogger)resource;
 
 		if (x == null)
-			x = builder.callLogger;
+			x = builder.callLogger.value().orElse(null);
 
 		if (x == null)
 			x = beanStore.getBean(RestLogger.class).orElse(null);
 
 		if (x == null)
-			x = builder.callLoggerDefault;
+			x = builder.callLoggerDefault.value().orElse(null);
 
 		if (x == null)
 			x = createCallLoggerBuilder(resource, builder, beanStore, logger, thrownStore).build();
@@ -2064,10 +2062,10 @@ public class RestContext extends BeanContext {
 	 */
 	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
 
-		Class<? extends RestLogger> c = builder.callLoggerClass;
+		Class<? extends RestLogger> c = builder.callLogger.type().orElse(null);
 
 		if (c == null)
-			c = builder.callLoggerDefaultClass;
+			c = builder.callLoggerDefault.type().orElse(null);
 
 		RestLoggerBuilder x = RestLogger
 			.create()
@@ -2593,7 +2591,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected SwaggerProvider createSwaggerProvider(Object resource, RestContextBuilder builder, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
 
-		SwaggerProvider x = builder.swaggerProvider;
+		SwaggerProvider x = builder.swaggerProvider.value().orElse(null);
 
 		if (resource instanceof SwaggerProvider)
 			x = (SwaggerProvider)resource;
@@ -2637,7 +2635,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
 
-		Class<? extends SwaggerProvider> c = builder.swaggerProviderClass;
+		Class<? extends SwaggerProvider> c = builder.swaggerProvider.type().orElse(null);
 
 		SwaggerProviderBuilder x = SwaggerProvider
 				.create()
@@ -3042,7 +3040,7 @@ public class RestContext extends BeanContext {
 			x = (DebugEnablement)resource;
 
 		if (x == null)
-			x = builder.debugEnablement;
+			x = builder.debugEnablement.value().orElse(null);
 
 		if (x == null)
 			x = beanStore.getBean(DebugEnablement.class).orElse(null);
@@ -3077,7 +3075,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		Class<? extends DebugEnablement> c = builder.debugEnablementClass;
+		Class<? extends DebugEnablement> c = builder.debugEnablement.type().orElse(null);
 
 		DebugEnablementBuilder x = DebugEnablement
 			.create()

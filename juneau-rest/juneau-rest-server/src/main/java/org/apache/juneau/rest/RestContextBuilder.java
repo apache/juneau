@@ -117,33 +117,27 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
 		allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS"),
 		clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version"),
+		debugOn = env("RestContext.debugOn", null),
+		path = null,
 		uriAuthority = env("RestContext.uriAuthority", (String)null),
-		uriContext = env("RestContext.uriContext", (String)null),
-		path;
+		uriContext = env("RestContext.uriContext", (String)null);
 	UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
 	UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
 	Charset defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
 	long maxInput = parseLongWithSuffix(env("RestContext.maxInput", "100M"));
 	List<MediaType> consumes, produces;
 	Boolean disableBodyParam = env("RestContext.disableBodyParam", false);
+
 	Class<? extends RestChildren> childrenClass = RestChildren.class;
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
-	Class<? extends SwaggerProvider> swaggerProviderClass;
-	SwaggerProvider swaggerProvider;
 
-	RestLogger callLoggerDefault;
-	Class<? extends RestLogger> callLoggerDefaultClass;
-
-	RestLogger callLogger;
-	Class<? extends RestLogger> callLoggerClass;
+	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
+	BeanRef<RestLogger> callLoggerDefault = BeanRef.of(RestLogger.class);
+	BeanRef<RestLogger> callLogger = BeanRef.of(RestLogger.class);
+	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
 
 	Enablement debugDefault, debug;
-
-	DebugEnablement debugEnablement;
-	Class<? extends DebugEnablement> debugEnablementClass;
-
-	String debugOn = env("RestContext.debugOn", null);
 
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
@@ -179,7 +173,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			if (parentContext.isPresent()) {
 				RestContext pc = parentContext.get();
 				callLoggerDefault = pc.callLoggerDefault;
-				callLoggerDefaultClass = pc.callLoggerDefaultClass;
 				debugDefault = pc.debugDefault;
 				ContextProperties pcp = pc.getContextProperties();
 				set(REST_staticFilesDefault, pcp.get(REST_staticFilesDefault).orElse(null));
@@ -773,7 +766,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLogger(Class<? extends RestLogger> value) {
-		callLoggerClass = value;
+		callLogger.type(value);
 		return this;
 	}
 
@@ -795,7 +788,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLogger(RestLogger value) {
-		callLogger = value;
+		callLogger.value(value);
 		return this;
 	}
 
@@ -815,7 +808,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLoggerDefault(Class<? extends RestLogger> value) {
-		callLoggerDefaultClass = value;
+		callLoggerDefault.type(value);
 		return this;
 	}
 
@@ -835,7 +828,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLoggerDefault(RestLogger value) {
-		callLoggerDefault = value;
+		callLoggerDefault.value(value);
 		return this;
 	}
 
@@ -1085,7 +1078,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug enablement bean.
+	 * Debug enablement bean.
 	 *
 	 * TODO
 	 *
@@ -1094,12 +1087,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder debugEnablement(Class<? extends DebugEnablement> value) {
-		debugEnablementClass = value;
+		debugEnablement.type(value);
 		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug enablement bean.
+	 * Debug enablement bean.
 	 *
 	 * TODO
 	 *
@@ -1108,7 +1101,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder debugEnablement(DebugEnablement value) {
-		debugEnablement = value;
+		debugEnablement.value(value);
 		return this;
 	}
 
@@ -2546,7 +2539,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(Class<? extends SwaggerProvider> value) {
-		swaggerProviderClass = value;
+		swaggerProvider.type(value);
 		return this;
 	}
 
@@ -2562,7 +2555,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(SwaggerProvider value) {
-		swaggerProvider = value;
+		swaggerProvider.value(value);
 		return this;
 	}
 
