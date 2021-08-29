@@ -986,6 +986,9 @@ public @interface Rest {
 	 * <p>
 	 * An expression defining if a user with the specified roles are allowed to access methods on this class.
 	 *
+	 * <p>
+	 * This is a shortcut for specifying {@link RestOp#roleGuard()} on all the REST operations on a class.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@Rest</ja>(
@@ -1017,14 +1020,14 @@ public @interface Rest {
 	 * 	<li>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestOpContextBuilder#rolesDeclared(String...)}.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#roleGuard(String)}
 	 * </ul>
 	 */
 	String roleGuard() default "";
@@ -1038,6 +1041,9 @@ public @interface Rest {
 	 * <p>
 	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
 	 *
+	 * <p>
+	 * This is a shortcut for specifying {@link RestOp#rolesDeclared()} on all the REST operations on a class.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@Rest</ja>(
@@ -1049,8 +1055,8 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * <ul class='seealso'>Builder
+	 * 	<li class='jm'>{@link RestOpContextBuilder#rolesDeclared(String...)}
 	 * </ul>
 	 */
 	String rolesDeclared() default "";

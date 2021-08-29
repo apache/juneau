@@ -165,7 +165,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			converters = createConverters(r, cp, bs).asArray();
 			bs.addBean(RestConverter[].class, converters);
 
-			guards = createGuards(r, cp, bs).asArray();
+			guards = createGuards(r, builder, bs).asArray();
 			bs.addBean(RestGuard[].class, guards);
 
 			RestMatcherList matchers = createMatchers(r, builder, bs);
@@ -298,23 +298,23 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The guards for this REST resource method.
 	 * @throws Exception If guards could not be instantiated.
 	 * @see RestContext#REST_guards
 	 */
-	protected RestGuardList createGuards(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestGuardList createGuards(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		RestGuardList x = RestGuardList.create();
 
-		x.append(properties.getInstanceArray(REST_guards, RestGuard.class, beanStore).orElse(new RestGuard[0]));
+		x.append(builder.getContextProperties().getInstanceArray(REST_guards, RestGuard.class, beanStore).orElse(new RestGuard[0]));
 
 		if (x.isEmpty())
 			x = beanStore.getBean(RestGuardList.class).orElse(x);
 
-		Set<String> rolesDeclared = properties.getSet(REST_rolesDeclared, String.class).orElse(null);
-		Set<String> roleGuard = properties.getSet(REST_roleGuard, String.class).orElse(Collections.emptySet());
+		Set<String> rolesDeclared = builder.rolesDeclared;
+		Set<String> roleGuard = ofNullable(builder.roleGuard).orElseGet(()->new LinkedHashSet<>());
 
 		for (String rg : roleGuard) {
 			try {

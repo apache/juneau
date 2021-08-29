@@ -12,11 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static java.util.Arrays.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import java.lang.annotation.*;
 import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
@@ -45,6 +47,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
 	RestMatcherListBuilder restMatchers;
 	List<MediaType> produces, consumes;
+	Set<String> roleGuard, rolesDeclared;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -668,6 +671,96 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	/**
+	 * Declared roles.
+	 *
+	 * <p>
+	 * A comma-delimited list of all possible user roles.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link RestOpContextBuilder#roleGuard(String)} is used with patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#rolesDeclared}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder rolesDeclared(String...values) {
+		if (rolesDeclared == null)
+			rolesDeclared = ASet.of(values);
+		else
+			rolesDeclared.addAll(asList(values));
+		return this;
+	}
+
+	/**
+	 * Role guard.
+	 *
+	 * <p>
+	 * An expression defining if a user with the specified roles are allowed to access methods on this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/foo"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports any of the following expression constructs:
+	 * 		<ul>
+	 * 			<li><js>"foo"</js> - Single arguments.
+	 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
+	 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
+	 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+	 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
+	 * 			<li><js>"fo* &amp; *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+	 * 			<li><js>"fo* &amp;&amp; *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+	 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
+	 * 		</ul>
+	 * 	<li>
+	 * 		AND operations take precedence over OR operations (as expected).
+	 * 	<li>
+	 * 		Whitespace is ignored.
+	 * 	<li>
+	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
+	 * 	<li>
+	 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContextBuilder#rolesDeclared(String...)}.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * @param value The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder roleGuard(String value) {
+		if (roleGuard == null)
+			roleGuard = ASet.of(value);
+		else
+			roleGuard.add(value);
+		return this;
+	}
 	/**
 	 * Supported content media types.
 	 *

@@ -457,7 +457,7 @@ public @interface RestGet {
 	 * 	<li>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestOpContextBuilder#rolesDeclared(String...)}.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -466,7 +466,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#roleGuard(String)}
 	 * </ul>
 	 */
 	String roleGuard() default "";
@@ -495,7 +495,7 @@ public @interface RestGet {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#rolesDeclared(String...)}
 	 * </ul>
 	 */
 	String rolesDeclared() default "";

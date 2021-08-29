@@ -1109,8 +1109,8 @@ public class RestAnnotation {
 			b.prependTo(REST_guards, reverse(a.guards()));
 			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			value(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
-			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
+			cdStream(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			value(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
 		}
 	}
 }
