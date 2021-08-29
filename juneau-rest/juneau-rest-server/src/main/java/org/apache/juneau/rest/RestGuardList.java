@@ -12,31 +12,121 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link RestGuard} objects.
  */
-public class RestGuardList extends AList<RestGuard> {
+public class RestGuardList {
 
-	private static final long serialVersionUID = 1L;
+	private final List<RestGuard> entries;
 
 	/**
 	 * Static creator.
 	 *
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("unchecked")
-	public static RestGuardList create() {
-		return new RestGuardList();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
-	 * Returns the contents of this list as a {@link RestGuard} array.
+	 * Constructor.
 	 *
-	 * @return The contents of this list as a {@link RestGuard} array.
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestGuardList(Builder builder) {
+		entries = unmodifiableList(
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.collect(toList())
+		);
+	}
+
+	/**
+	 * Builder for {@link RestGuardList} objects.
+	 */
+	public static class Builder {
+
+		AList<Object> entries;
+		BeanStore beanStore;
+
+		/**
+		 * Create an empty builder.
+		 */
+		protected Builder() {
+			this.entries = AList.create();
+		}
+
+		/**
+		 * Creates a new {@link RestGuardList} object using a snapshot of the settings defined in this builder.
+		 *
+		 * @return A new {@link RestGuardList} object.
+		 */
+		public RestGuardList build() {
+			return new RestGuardList(this);
+		}
+
+		/**
+		 * Appends the specified rest matcher classes to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder append(Class<? extends RestGuard>...values) {
+			entries.append((Object[])values);
+			return this;
+		}
+
+		/**
+		 * Appends the specified rest matcher classes to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		public Builder append(RestGuard...values) {
+			entries.append((Object[])values);
+			return this;
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating rest matcher classes.
+		 *
+		 * @param value The bean store to use for instantiating rest matcher classes.
+		 * @return This object (for method chaining).
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+	}
+
+	private static RestGuard instantiate(Object o, BeanStore bs) {
+		if (o instanceof RestGuard)
+			return (RestGuard)o;
+		try {
+			return (RestGuard)bs.createBean((Class<?>)o);
+		} catch (ExecutableException e) {
+			throw new ConfigException(e, "Could not instantiate class {0}", o);
+		}
+	}
+
+	/**
+	 * Returns the entries in this list.
+	 *
+	 * @return The entries in this list.
 	 */
 	public RestGuard[] asArray() {
-		return asArrayOf(RestGuard.class);
+		return entries.toArray(new RestGuard[entries.size()]);
 	}
 }

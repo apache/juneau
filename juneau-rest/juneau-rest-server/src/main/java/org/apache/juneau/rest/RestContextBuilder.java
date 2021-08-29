@@ -1523,42 +1523,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level guards.
-	 *
-	 * <p>
-	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_guards}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder guards(Class<?>...values) {
-		return prependTo(REST_guards, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level guards.
-	 *
-	 * <p>
-	 * Same as {@link #guards(Class...)} except input is pre-constructed instances.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_guards}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder guards(RestGuard...values) {
-		return prependTo(REST_guards, values);
-	}
-
-	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>

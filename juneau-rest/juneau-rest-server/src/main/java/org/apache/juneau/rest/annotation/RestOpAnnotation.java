@@ -624,7 +624,7 @@ public class RestOpAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			b.prependTo(REST_converters, a.converters());
-			b.prependTo(REST_guards, reverse(a.guards()));
+			b.guards(a.guards());
 			b.matchers(a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));

@@ -169,8 +169,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			bs.addBean(RestGuard[].class, guards);
 
 			RestMatcherList matchers = createMatchers(r, builder, bs);
- 			requiredMatchers = matchers.getMatchers().stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
-			optionalMatchers = matchers.getMatchers().stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
+ 			requiredMatchers = matchers.getEntries().stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
+			optionalMatchers = matchers.getEntries().stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
 			pathMatchers = createPathMatchers(r, cp, builder, bs).asArray();
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
@@ -279,9 +279,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link RestContext#REST_guards} value set via any of the following:
+	 * 	<li>Looks for guards set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#guards(Class...)}/{@link RestContextBuilder#guards(RestGuard...)}
+	 * 			<li>{@link RestOpContextBuilder#guards(Class...)}/{@link RestOpContextBuilder#guards(RestGuard...)}
 	 * 			<li>{@link RestOp#guards()}.
 	 * 			<li>{@link Rest#guards()}.
 	 * 		</ul>
@@ -302,23 +302,17 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The guards for this REST resource method.
 	 * @throws Exception If guards could not be instantiated.
-	 * @see RestContext#REST_guards
 	 */
 	protected RestGuardList createGuards(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		RestGuardList x = RestGuardList.create();
-
-		x.append(builder.getContextProperties().getInstanceArray(REST_guards, RestGuard.class, beanStore).orElse(new RestGuard[0]));
-
-		if (x.isEmpty())
-			x = beanStore.getBean(RestGuardList.class).orElse(x);
+		RestGuardList.Builder x = builder.guards.beanStore(beanStore);
 
 		Set<String> rolesDeclared = builder.rolesDeclared;
 		Set<String> roleGuard = ofNullable(builder.roleGuard).orElseGet(()->new LinkedHashSet<>());
 
 		for (String rg : roleGuard) {
 			try {
-				x.add(new RoleBasedRestGuard(rolesDeclared, rg));
+				x.append(new RoleBasedRestGuard(rolesDeclared, rg));
 			} catch (java.text.ParseException e1) {
 				throw new ServletException(e1);
 			}
@@ -326,14 +320,14 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestGuardList.class, x)
-			.beanCreateMethodFinder(RestGuardList.class, resource)
+			.addBean(RestGuardList.Builder.class, x)
+			.beanCreateMethodFinder(RestGuardList.Builder.class, resource)
 			.find("createGuards", Method.class)
 			.thenFind("createGuards")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.build();
 	}
 
 	/**
@@ -366,7 +360,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 */
 	protected RestMatcherList createMatchers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		RestMatcherListBuilder x = builder.restMatchers.beanStore(beanStore);
+		RestMatcherList.Builder x = builder.restMatchers.beanStore(beanStore);
 
 		String clientVersion = builder.clientVersion;
 		if (clientVersion != null)
@@ -374,8 +368,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestMatcherListBuilder.class, x)
-			.beanCreateMethodFinder(RestMatcherListBuilder.class, resource)
+			.addBean(RestMatcherList.Builder.class, x)
+			.beanCreateMethodFinder(RestMatcherList.Builder.class, resource)
 			.find("createMatchers", Method.class)
 			.withDefault(x)
 			.run();

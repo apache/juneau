@@ -45,9 +45,10 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	PartListBuilder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
 	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
-	RestMatcherListBuilder restMatchers;
+	RestMatcherList.Builder restMatchers;
 	List<MediaType> produces, consumes;
 	Set<String> roleGuard, rolesDeclared;
+	RestGuardList.Builder guards = RestGuardList.create();
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -412,6 +413,93 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
 		defaultResponseHeaders.setDefault(values);
+		return this;
+	}
+
+	/**
+	 * Guards.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestGuard RestGuards} with this method.
+	 *
+	 * <p>
+	 * If multiple guards are specified, <b>ALL</b> guards must pass.
+	 * <br>Note that this is different than matchers where only ONE matcher needs to pass.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a guard that only lets Billy make a request.</jc>
+	 * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public boolean</jk> isRequestAllowed(RestRequest <jv>req</jv>) {
+	 * 			<jk>return</jk> <jv>req</jv>.getUserPrincipal().getName().equals(<js>"Billy"</js>);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(guards={BillyGuard.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.guards(BillyGuard.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.guards(BillyGuard.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(guards={SomeOtherGuard.<jk>class</jk>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestGuards}
+	 * 	<li class='ja'>{@link Rest#guards()}
+	 * 	<li class='ja'>{@link RestOp#guards()}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	@FluentSetter
+	public RestOpContextBuilder guards(Class<? extends RestGuard>...values) {
+		guards.append(values);
+		return this;
+	}
+
+	/**
+	 * Guards.
+	 *
+	 * <p>
+	 * Same as {@link #guards(Class...)} except input is pre-constructed instances.
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestOpContextBuilder guards(RestGuard...values) {
+		guards.append(values);
 		return this;
 	}
 

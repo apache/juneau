@@ -327,7 +327,7 @@ public @interface RestDelete {
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_guards}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#guards(Class...)}
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
