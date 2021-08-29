@@ -78,9 +78,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
 	private final RestOpArg[] opArgs;
-	private final RestGuard[] guards;
-	private final RestMatcher[] optionalMatchers;
-	private final RestMatcher[] requiredMatchers;
+	private final RestGuardList guards;
+	private final RestMatcherList matchers;
 	private final RestConverter[] converters;
 	private final RestContext context;
 	private final Method method;
@@ -165,12 +164,10 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			converters = createConverters(r, cp, bs).asArray();
 			bs.addBean(RestConverter[].class, converters);
 
-			guards = createGuards(r, builder, bs).asArray();
-			bs.addBean(RestGuard[].class, guards);
+			guards = createGuards(r, builder, bs);
+			bs.addBean(RestGuardList.class, guards);
 
-			RestMatcherList matchers = createMatchers(r, builder, bs);
- 			requiredMatchers = matchers.getEntries().stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
-			optionalMatchers = matchers.getEntries().stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
+			matchers = createMatchers(r, builder, bs);
 
 			pathMatchers = createPathMatchers(r, cp, builder, bs).asArray();
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
@@ -1217,7 +1214,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		if (pm == null)
 			return 0;
 
-		if (requiredMatchers.length == 0 && optionalMatchers.length == 0) {
+		if (matchers.isEmpty()) {
 			call.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
 		}
@@ -1226,12 +1223,12 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			HttpServletRequest req = call.getRequest();
 
 			// If the method implements matchers, test them.
-			for (RestMatcher m : requiredMatchers)
+			for (RestMatcher m :  matchers.getRequiredEntries())
 				if (! m.matches(req))
 					return 1;
-			if (optionalMatchers.length > 0) {
+			if (! matchers.getOptionalEntries().isEmpty()) {
 				boolean matches = false;
-				for (RestMatcher m : optionalMatchers)
+				for (RestMatcher m : matchers.getOptionalEntries())
 					matches |= m.matches(req);
 				if (! matches)
 					return 1;
@@ -1275,7 +1272,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 
 		try {
 
-			for (RestGuard guard : guards)
+			for (RestGuard guard : guards.getEntries())
 				if (! guard.guard(req, res))
 					return;
 
@@ -1348,15 +1345,16 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		if (c != 0)
 			return c;
 
-		c = compare(o.requiredMatchers.length, requiredMatchers.length);
+		c = compare(o.matchers.getRequiredEntries().size(), matchers.getRequiredEntries().size());
 		if (c != 0)
 			return c;
 
-		c = compare(o.optionalMatchers.length, optionalMatchers.length);
+		c = compare(o.matchers.getOptionalEntries().size(), matchers.getOptionalEntries().size());
 		if (c != 0)
 			return c;
 
-		c = compare(o.guards.length, guards.length);
+		c = compare(o.guards.getEntries().size(), guards.getEntries().size());
+
 		if (c != 0)
 			return c;
 

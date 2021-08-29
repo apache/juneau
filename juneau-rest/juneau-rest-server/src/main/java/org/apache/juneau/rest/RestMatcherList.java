@@ -27,6 +27,8 @@ import org.apache.juneau.cp.*;
 public class RestMatcherList {
 
 	private final List<RestMatcher> entries;
+	private final List<RestMatcher> optionalEntries;
+	private final List<RestMatcher> requiredEntries;
 
 	/**
 	 * Static creator.
@@ -50,6 +52,8 @@ public class RestMatcherList {
 				.map(x -> instantiate(x, builder.beanStore))
 				.collect(toList())
 		);
+		optionalEntries = unmodifiableList(entries.stream().filter(x -> ! x.required()).collect(toList()));
+		requiredEntries = unmodifiableList(entries.stream().filter(x -> x.required()).collect(toList()));
 	}
 
 	/**
@@ -124,9 +128,36 @@ public class RestMatcherList {
 	/**
 	 * Returns the entries in this list.
 	 *
-	 * @return The entries in this list.
+	 * @return An unmodifiable list of entries in this list.
 	 */
 	public List<RestMatcher> getEntries() {
 		return entries;
+	}
+
+	/**
+	 * Returns the entries in this list that are specified as optional.
+	 *
+	 * @return An unmodifiable list of entries in this list that are specified as optional.
+	 */
+	public List<RestMatcher> getOptionalEntries() {
+		return optionalEntries;
+	}
+
+	/**
+	 * Returns the entries in this list that are specified as required.
+	 *
+	 * @return An unmodifiable list of entries in this list that are specified as required.
+	 */
+	public List<RestMatcher> getRequiredEntries() {
+		return requiredEntries;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this list is empty.
+	 *
+	 * @return <jk>true</jk> if this list is empty.
+	 */
+	public boolean isEmpty() {
+		return entries.isEmpty();
 	}
 }

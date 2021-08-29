@@ -129,4 +129,13 @@ public class RestGuardList {
 	public RestGuard[] asArray() {
 		return entries.toArray(new RestGuard[entries.size()]);
 	}
+
+	/**
+	 * Returns the entries in this list.
+	 *
+	 * @return An unmodifiable list of entries in this list.
+	 */
+	public List<RestGuard> getEntries() {
+		return entries;
+	}
 }
