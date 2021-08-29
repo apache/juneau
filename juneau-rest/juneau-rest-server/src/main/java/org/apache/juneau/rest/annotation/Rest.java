@@ -337,7 +337,8 @@ public @interface Rest {
 	 * TODO
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debugEnablement}
+	 * 	<li class='jm'>{@link RestContextBuilder#debugEnablement(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#debugEnablement(DebugEnablement)}
 	 * </ul>
 	 */
 	Class<? extends DebugEnablement> debugEnablement() default DebugEnablement.Null.class;

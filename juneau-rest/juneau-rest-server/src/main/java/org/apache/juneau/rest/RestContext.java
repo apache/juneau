@@ -149,29 +149,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_beanStore = PREFIX + ".beanStore.o";
 
 	/**
-	 * Configuration property:  Debug enablement bean.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debugEnablement REST_debugEnablement}
-	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.DebugEnablement}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicDebugEnablement}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#debugEnablement()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugEnablement(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugEnablement(DebugEnablement)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String REST_debugEnablement = PREFIX + ".debugEnablement.o";
-
-	/**
 	 * Configuration property:  Debug mode on specified classes/methods.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3095,13 +3072,11 @@ public class RestContext extends BeanContext {
 	protected DebugEnablement createDebugEnablement(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		DebugEnablement x = null;
 
-		ContextProperties properties = builder.getContextProperties();
-
 		if (resource instanceof DebugEnablement)
 			x = (DebugEnablement)resource;
 
 		if (x == null)
-			x = properties.getIfType(REST_debugEnablement, DebugEnablement.class).orElse(null);
+			x = builder.debugEnablement;
 
 		if (x == null)
 			x = beanStore.getBean(DebugEnablement.class).orElse(null);
@@ -3137,7 +3112,7 @@ public class RestContext extends BeanContext {
 	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		ContextProperties properties = builder.getContextProperties();
-		Class<? extends DebugEnablement> c = properties.getIfClass(REST_debugEnablement, DebugEnablement.class).orElse(null);
+		Class<? extends DebugEnablement> c = builder.debugEnablementClass;
 
 		DebugEnablementBuilder x = DebugEnablement
 			.create()
