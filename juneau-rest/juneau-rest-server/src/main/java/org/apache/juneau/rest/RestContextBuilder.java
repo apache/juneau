@@ -135,6 +135,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestLogger callLoggerDefault;
 	Class<? extends RestLogger> callLoggerDefaultClass;
 
+	RestLogger callLogger;
+	Class<? extends RestLogger> callLoggerClass;
+
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
 		ReaderProcessor.class,
@@ -697,14 +700,62 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
+	 * REST call logger.
 	 *
 	 * <p>
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our customized logger.</jc>
+	 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicRestLogger {
+	 *
+	 * 		<ja>@Override</ja>
+	 * 			<jk>protected void</jk> log(Level <jv>level</jv>, String <jv>msg</jv>, Throwable <jv>e</jv>) {
+	 * 			<jc>// Handle logging ourselves.</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(callLogger=MyLogger.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default call logger if not specified is {@link BasicRestLogger} unless overwritten by {@link RestContextBuilder#callLoggerDefault(RestLogger)}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
+	 * 	<li class='ja'>{@link Rest#callLogger()}
 	 * </ul>
 	 *
 	 * @param value
@@ -714,18 +765,19 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLogger(Class<? extends RestLogger> value) {
-		return set(REST_callLogger, value);
+		callLoggerClass = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
+	 * REST call logger.
 	 *
 	 * <p>
-	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 * Same as {@link #callLogger(Class)} but specifies an already-instantiated call logger.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
+	 * 	<li class='ja'>{@link Rest#callLogger()}
 	 * </ul>
 	 *
 	 * @param value
@@ -735,7 +787,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLogger(RestLogger value) {
-		return set(REST_callLogger, value);
+		callLogger = value;
+		return this;
 	}
 
 	/**
@@ -743,7 +796,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * The default logger to use if one is not specified.
-	 * 
+	 *
 	 * <p>
 	 * This logger is inherited by child resources if not specified on those resources.
 	 *
@@ -766,7 +819,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * This logger is inherited by child resources if not specified on those resources.
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link BasicRestLogger}.

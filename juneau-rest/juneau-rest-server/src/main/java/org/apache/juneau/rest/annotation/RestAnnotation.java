@@ -1064,7 +1064,7 @@ public class RestAnnotation {
 			value(a.path()).ifPresent(x -> b.path(x));
 			value(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
 			b.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
-			b.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
+			value(a.callLogger()).ifPresent(x -> b.callLogger(x));
 			value(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
 			value(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));
 			value(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
