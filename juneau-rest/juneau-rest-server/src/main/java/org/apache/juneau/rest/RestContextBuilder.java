@@ -138,6 +138,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestLogger callLogger;
 	Class<? extends RestLogger> callLoggerClass;
 
+	Enablement debugDefault;
+
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
 		ReaderProcessor.class,
@@ -173,6 +175,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				RestContext pc = parentContext.get();
 				callLoggerDefault = pc.callLoggerDefault;
 				callLoggerDefaultClass = pc.callLoggerDefaultClass;
+				debugDefault = pc.debugDefault;
 				ContextProperties pcp = pc.getContextProperties();
 				set(REST_staticFilesDefault, pcp.get(REST_staticFilesDefault).orElse(null));
 				set(REST_fileFinderDefault, pcp.get(REST_fileFinderDefault).orElse(null));
@@ -1055,17 +1058,21 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Configuration property:  Default debug mode.
+	 * Default debug mode.
 	 *
 	 * <p>
-	 * The default value for the {@link RestContext#REST_debug} setting.
+	 * The default value for the {@link #debug(Enablement)} setting.
+	 *
+	 * <p>
+	 * This setting is inherited from parent contexts.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder debugDefault(Enablement value) {
-		return set(REST_debugDefault, value);
+		debugDefault = value;
+		return this;
 	}
 
 	/**

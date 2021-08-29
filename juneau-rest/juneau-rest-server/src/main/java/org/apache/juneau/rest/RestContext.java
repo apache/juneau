@@ -158,7 +158,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
 	 * 	<li><b>System property:</b>  <c>RestContext.debug</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  {@link #REST_debugDefault}
+	 * 	<li><b>Default:</b>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -179,36 +179,10 @@ public class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Request/response messages are automatically logged always or per request.
 	 * 	<li>
-	 * 		The default can be overwritten by {@link #REST_debugDefault}.
+	 * 		The default can be overwritten by {@link RestContextBuilder#debugDefault(Enablement)}.
 	 * </ul>
 	 */
 	public static final String REST_debug = PREFIX + ".debug.s";
-
-	/**
-	 * Configuration property:  Default debug mode.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debugDefault REST_debugDefault}
-	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
-	 * 	<li><b>System property:</b>  <c>RestContext.debugDefault</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUGDEFAULT</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Enablement#NEVER}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugDefault(Enablement)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The default value for the {@link #REST_debug} setting.
-	 * <p>
-	 * This setting is inherited from parent contexts.
-	 */
-	public static final String REST_debugDefault = PREFIX + ".debugDefault.s";
 
 	/**
 	 * Configuration property:  Debug enablement bean.
@@ -1490,6 +1464,8 @@ public class RestContext extends BeanContext {
 	final RestLogger callLoggerDefault;
 	final Class<? extends RestLogger> callLoggerDefaultClass;
 
+	final Enablement debugDefault;
+
 	// Lifecycle methods
 	private final MethodInvoker[]
 		postInitMethods,
@@ -1597,6 +1573,7 @@ public class RestContext extends BeanContext {
 
 			callLoggerDefault = builder.callLoggerDefault;
 			callLoggerDefaultClass = builder.callLoggerDefaultClass;
+			debugDefault = builder.debugDefault;
 
 			callLogger = createCallLogger(r, builder, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
@@ -1637,7 +1614,7 @@ public class RestContext extends BeanContext {
 			defaultCharset = builder.defaultCharset;
 			maxInput = builder.maxInput;
 
-			debugEnablement = createDebugEnablement(r, cp, bf);
+			debugEnablement = createDebugEnablement(r, builder, bf);
 
 			path = ofNullable(builder.path).orElse("");
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + path;
@@ -3149,17 +3126,18 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The debug enablement bean for this REST object.
 	 * @throws Exception If bean could not be created.
 	 */
-	protected DebugEnablement createDebugEnablement(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected DebugEnablement createDebugEnablement(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		DebugEnablement x = null;
+
+		ContextProperties properties = builder.getContextProperties();
 
 		if (resource instanceof DebugEnablement)
 			x = (DebugEnablement)resource;
@@ -3171,7 +3149,7 @@ public class RestContext extends BeanContext {
 			x = beanStore.getBean(DebugEnablement.class).orElse(null);
 
 		if (x == null)
-			x = createDebugEnablementBuilder(resource, properties, beanStore).build();
+			x = createDebugEnablementBuilder(resource, builder, beanStore).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -3189,8 +3167,8 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
+	 * @param builder
+	 * 	The builder for this object.
 	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -3198,8 +3176,9 @@ public class RestContext extends BeanContext {
 	 * @return The debug enablement bean builder for this REST object.
 	 * @throws Exception If bean builder could not be created.
 	 */
-	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
+		ContextProperties properties = builder.getContextProperties();
 		Class<? extends DebugEnablement> c = properties.getIfClass(REST_debugEnablement, DebugEnablement.class).orElse(null);
 
 		DebugEnablementBuilder x = DebugEnablement
@@ -3218,7 +3197,7 @@ public class RestContext extends BeanContext {
 		Enablement defaultDebug = properties.getInstance(REST_debug, Enablement.class).orElse(null);
 
 		if (defaultDebug == null)
-			defaultDebug = properties.getInstance(REST_debugDefault, Enablement.class).orElse(null);
+			defaultDebug = builder.debugDefault;
 
 		if (defaultDebug == null)
 			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
