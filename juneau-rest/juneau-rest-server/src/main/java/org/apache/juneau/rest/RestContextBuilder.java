@@ -140,6 +140,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	Enablement debugDefault, debug;
 
+	DebugEnablement debugEnablement;
+	Class<? extends DebugEnablement> debugEnablementClass;
+
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
 		ReaderProcessor.class,
@@ -1089,7 +1092,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder debugEnablement(Class<? extends DebugEnablement> value) {
-		return set(REST_debugEnablement, value);
+		debugEnablementClass = value;
+		return this;
 	}
 
 	/**
@@ -1102,7 +1106,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder debugEnablement(DebugEnablement value) {
-		return set(REST_debugEnablement, value);
+		debugEnablement = value;
+		return this;
 	}
 
 	/**
