@@ -129,6 +129,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Class<? extends RestChildren> childrenClass = RestChildren.class;
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
+	List<Object> children = new ArrayList<>();
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
@@ -762,47 +763,112 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Children.
+	 * Child REST resources.
 	 *
 	 * <p>
 	 * Defines children of this resource.
 	 *
 	 * <p>
-	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
-	 * servlet path directly under the parent servlet path.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_children}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder children(Class<?>...values) {
-		return prependTo(REST_children, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Children.
+	 * A REST child resource is simply another servlet or object that is initialized as part of the ascendant resource and has a
+	 * servlet path directly under the ascendant resource object path.
+	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
+	 * <c>web.xml</c> file of the web application.
+	 * <br>This can cut down on the number of entries that show up in the <c>web.xml</c> file if you are defining
+	 * large numbers of servlets.
 	 *
 	 * <p>
-	 * Same as {@link #children(Class...)} except input is pre-constructed instances.
+	 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
+	 * relative to the ascendant path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * <p>
+	 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
+	 *
+	 * <dl>
+	 * 	<dt>Servlet initialization:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			A child resource will be initialized immediately after the ascendant servlet/resource is initialized.
+	 * 			<br>The child resource receives the same servlet config as the ascendant servlet/resource.
+	 * 			<br>This allows configuration information such as servlet initialization parameters to filter to child
+	 * 			resources.
+	 * 		</p>
+	 * 	</dd>
+	 * 	<dt>Runtime behavior:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			As a rule, methods defined on the <c>HttpServletRequest</c> object will behave as if the child
+	 * 			servlet were deployed as a top-level resource under the child's servlet path.
+	 * 			<br>For example, the <c>getServletPath()</c> and <c>getPathInfo()</c> methods on the
+	 * 			<c>HttpServletRequest</c> object will behave as if the child resource were deployed using the
+	 * 			child's servlet path.
+	 * 			<br>Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
+	 * 			<c>web.xml</c> file of the web application.
+	 * 		</p>
+	 * 	</dd>
+	 * </dl>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our child resource.</jc>
+	 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
+	 * 	<jk>public class</jk> MyChildResource {...}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(children={MyChildResource.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
+	 *
+	 * 			<jc>// Use a pre-instantiated object instead.</jc>
+	 * 			<jv>builder</jv>.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as classes, instances are resolved using the registered {@link #REST_beanStore} which
+	 * 		by default is {@link BeanStore} which requires the class have one of the following
+	 * 		constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
 	 * </ul>
 	 *
-	 * @param values The values to add to this setting.
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestChildren}
+	 * 	<li class='ja'>{@link Rest#children()}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this setting.
+	 * 	<br>Objects can be any of the specified types:
+	 * 	<ul>
+	 * 		<li>A class that has a constructor described above.
+	 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
+	 * 		<li>An instance of {@link RestChild} containing an instantied resource object and a subpath.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder children(Object...values) {
-		return prependTo(REST_children, values);
+		children.addAll(asList(values));
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Children.
+	 * Add a child REST resource.
 	 *
 	 * <p>
 	 * Shortcut for adding a single child to this resource.
@@ -810,17 +876,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * This can be used for resources that don't have a {@link Rest#path() @Rest(path)} annotation.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_children}
-	 * </ul>
-	 *
 	 * @param path The child path relative to the parent resource URI.
 	 * @param child The child to add to this resource.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder child(String path, Object child) {
-		return prependTo(REST_children, new RestChild(path, child));
+		children.add(new RestChild(path, child));
+		return this;
 	}
 
 	/**

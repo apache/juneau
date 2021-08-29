@@ -1051,7 +1051,7 @@ public class RestAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			b.prependTo(REST_responseProcessors, a.responseProcessors());
-			b.prependTo(REST_children, a.children());
+			b.children((Object[])a.children());
 			b.prependTo(REST_restOperationArgs, a.restOpArgs());
 			value(a.contextClass(), RestContext.Null.class).ifPresent(x -> b.contextClass(x));
 			value(a.uriContext()).ifPresent(x -> b.uriContext(x));

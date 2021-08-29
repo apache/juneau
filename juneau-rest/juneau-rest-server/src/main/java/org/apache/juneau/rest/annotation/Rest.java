@@ -209,7 +209,7 @@ public @interface Rest {
 	 * Defines children of this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * 	<li class='jm'>{@link RestContextBuilder#children}
 	 * </ul>
 	 */
 	Class<?>[] children() default {};
