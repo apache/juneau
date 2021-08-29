@@ -132,6 +132,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Class<? extends SwaggerProvider> swaggerProviderClass;
 	SwaggerProvider swaggerProvider;
 
+	RestLogger callLoggerDefault;
+	Class<? extends RestLogger> callLoggerDefaultClass;
+
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
 		ReaderProcessor.class,
@@ -165,9 +168,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
 				RestContext pc = parentContext.get();
+				callLoggerDefault = pc.callLoggerDefault;
+				callLoggerDefaultClass = pc.callLoggerDefaultClass;
 				ContextProperties pcp = pc.getContextProperties();
-				set(REST_callLoggerDefault, pcp.get(REST_callLoggerDefault).orElse(null));
-				set(REST_debugDefault, pcp.get(REST_debugDefault).orElse(null));
 				set(REST_staticFilesDefault, pcp.get(REST_staticFilesDefault).orElse(null));
 				set(REST_fileFinderDefault, pcp.get(REST_fileFinderDefault).orElse(null));
 			}
@@ -736,10 +739,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Configuration property:  Default REST call logger.
+	 * Default REST call logger.
 	 *
 	 * <p>
 	 * The default logger to use if one is not specified.
+	 * 
+	 * <p>
+	 * This logger is inherited by child resources if not specified on those resources.
 	 *
 	 * @param value
 	 * 	The new value for this setting.
@@ -748,15 +754,19 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLoggerDefault(Class<? extends RestLogger> value) {
-		return set(REST_callLoggerDefault, value);
+		callLoggerDefaultClass = value;
+		return this;
 	}
 
 	/**
-	 * Configuration property:  Default REST call logger.
+	 * Default REST call logger.
 	 *
 	 * <p>
 	 * The default logger to use if one is not specified.
 	 *
+	 * <p>
+	 * This logger is inherited by child resources if not specified on those resources.
+	 * 
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link BasicRestLogger}.
@@ -764,7 +774,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder callLoggerDefault(RestLogger value) {
-		return set(REST_callLoggerDefault, value);
+		callLoggerDefault = value;
+		return this;
 	}
 
 	/**

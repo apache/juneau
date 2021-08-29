@@ -161,7 +161,6 @@ public class RestContext extends BeanContext {
 	 * 			<li>{@link org.apache.juneau.rest.logging.RestLogger}
 	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.logging.RestLogger}&gt;</c>
 	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link #REST_callLoggerDefault}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -213,7 +212,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default call logger if not specified is {@link BasicRestLogger} unless overwritten by {@link #REST_callLoggerDefault}.
+	 * 		The default call logger if not specified is {@link BasicRestLogger} unless overwritten by {@link RestContextBuilder#callLoggerDefault(RestLogger)}.
 	 * 	<li>
 	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.
@@ -234,39 +233,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_callLogger = PREFIX + ".callLogger.o";
-
-	/**
-	 * Configuration property:  Default REST call logger.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLoggerDefault REST_callLoggerDefault}
-	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerDefault.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link org.apache.juneau.rest.logging.RestLogger}
-	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.logging.RestLogger}&gt;</c>
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.logging.BasicRestLogger}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLoggerDefault(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLoggerDefault(RestLogger)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The default logger to use if one is not specified.
-	 * <p>
-	 * This setting is inherited from the parent context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * </ul>
-	 */
-	public static final String REST_callLoggerDefault = PREFIX + ".callLoggerDefault.o";
 
 	/**
 	 * Configuration property:  Class-level response converters.
@@ -1702,6 +1668,9 @@ public class RestContext extends BeanContext {
 	final Charset defaultCharset;
 	final long maxInput;
 
+	final RestLogger callLoggerDefault;
+	final Class<? extends RestLogger> callLoggerDefaultClass;
+
 	// Lifecycle methods
 	private final MethodInvoker[]
 		postInitMethods,
@@ -1807,7 +1776,10 @@ public class RestContext extends BeanContext {
 
 			responseProcessors = createResponseProcessors(r, builder, bf).toArray();
 
-			callLogger = createCallLogger(r, cp, bf, l, ts);
+			callLoggerDefault = builder.callLoggerDefault;
+			callLoggerDefaultClass = builder.callLoggerDefaultClass;
+
+			callLogger = createCallLogger(r, builder, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
 
 			partSerializer = createPartSerializer(r, cp, bf);
@@ -2316,7 +2288,7 @@ public class RestContext extends BeanContext {
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Looks for value in {@link #REST_callLoggerDefault} setting.
+	 * 	<li>Looks for {@link RestContextBuilder#callLoggerDefault(RestLogger)}.
 	 * 	<li>Instantiates a {@link BasicFileFinder}.
 	 * </ul>
 	 *
@@ -2326,9 +2298,8 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
@@ -2341,9 +2312,11 @@ public class RestContext extends BeanContext {
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
 	 */
-	protected RestLogger createCallLogger(Object resource, ContextProperties properties, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
+	protected RestLogger createCallLogger(Object resource, RestContextBuilder builder, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
 
 		RestLogger x = null;
+
+		ContextProperties properties = builder.getContextProperties();
 
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
@@ -2355,10 +2328,10 @@ public class RestContext extends BeanContext {
 			x = beanStore.getBean(RestLogger.class).orElse(null);
 
 		if (x == null)
-			x = properties.getIfType(REST_callLoggerDefault, RestLogger.class).orElse(null);
+			x = builder.callLoggerDefault;
 
 		if (x == null)
-			x = createCallLoggerBuilder(resource, properties, beanStore, logger, thrownStore).build();
+			x = createCallLoggerBuilder(resource, builder, beanStore, logger, thrownStore).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -2375,13 +2348,12 @@ public class RestContext extends BeanContext {
 	 * Instantiates the call logger builder for this REST resource.
 	 *
 	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createCallLogger(Object,ContextProperties,BeanStore,Logger,ThrownStore)} method.
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createCallLogger(Object,RestContextBuilder,BeanStore,Logger,ThrownStore)} method.
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
@@ -2394,12 +2366,13 @@ public class RestContext extends BeanContext {
 	 * @return The call logger builder for this REST resource.
 	 * @throws Exception If call logger builder could not be instantiated.
 	 */
-	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, ContextProperties properties, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
+	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
 
+		ContextProperties properties = builder.getContextProperties();
 		Class<? extends RestLogger> c = properties.getIfClass(REST_callLogger, RestLogger.class).orElse(null);
 
 		if (c == null)
-			c = properties.getIfClass(REST_callLoggerDefault, RestLogger.class).orElse(null);
+			c = builder.callLoggerDefaultClass;
 
 		RestLoggerBuilder x = RestLogger
 			.create()

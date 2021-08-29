@@ -38,7 +38,8 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_callLogger}
- * 	<li class='jf'>{@link RestContext#REST_callLoggerDefault}
+ * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(Class)}
+ * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(RestLogger)}
  * 	<li class='jf'>{@link RestContext#REST_debug}
  * 	<li class='jf'>{@link RestContext#REST_debugOn}
  * 	<li class='ja'>{@link Rest#debug}
