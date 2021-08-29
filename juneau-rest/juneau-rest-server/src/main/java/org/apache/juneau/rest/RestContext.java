@@ -149,42 +149,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_beanStore = PREFIX + ".beanStore.o";
 
 	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debug REST_debug}
-	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
-	 * 	<li><b>System property:</b>  <c>RestContext.debug</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#debug()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debug()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged always or per request.
-	 * 	<li>
-	 * 		The default can be overwritten by {@link RestContextBuilder#debugDefault(Enablement)}.
-	 * </ul>
-	 */
-	public static final String REST_debug = PREFIX + ".debug.s";
-
-	/**
 	 * Configuration property:  Debug enablement bean.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -204,12 +168,6 @@ public class RestContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugEnablement(DebugEnablement)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The default value for the {@link #REST_debug} setting.
-	 * <p>
-	 * This setting is inherited from parent contexts.
 	 */
 	public static final String REST_debugEnablement = PREFIX + ".debugEnablement.o";
 
@@ -3194,7 +3152,7 @@ public class RestContext extends BeanContext {
 			.withDefault(x)
 			.run();
 
-		Enablement defaultDebug = properties.getInstance(REST_debug, Enablement.class).orElse(null);
+		Enablement defaultDebug = builder.debug;
 
 		if (defaultDebug == null)
 			defaultDebug = builder.debugDefault;

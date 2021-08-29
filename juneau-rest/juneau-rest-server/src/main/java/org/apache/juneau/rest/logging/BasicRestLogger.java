@@ -86,7 +86,7 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='jm'>{@link RestContextBuilder#callLogger(RestLogger)}
  * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(Class)}
  * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(RestLogger)}
- * 	<li class='jf'>{@link RestContext#REST_debug}
+ * 	<li class='jm'>{@link RestContextBuilder#debug(Enablement)}
  * 	<li class='jf'>{@link RestContext#REST_debugOn}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
@@ -273,7 +273,7 @@ public class BasicRestLogger implements RestLogger {
 	 *
 	 * @param req The HTTP request being logged.
 	 * @return <jk>true</jk> if debug is enabled on this request.
-	 * @see RestContext#REST_debug
+	 * @see RestContextBuilder#debug(Enablement)
 	 * @see RestContext#REST_debugOn
 	 * @see Rest#debug()
 	 * @see RestOp#debug()

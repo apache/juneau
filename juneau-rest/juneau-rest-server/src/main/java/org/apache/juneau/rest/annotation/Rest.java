@@ -326,7 +326,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debug}
+	 * 	<li class='jm'>{@link RestContextBuilder#debug(Enablement)}
 	 * </ul>
 	 */
 	String debug() default "";

@@ -138,7 +138,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestLogger callLogger;
 	Class<? extends RestLogger> callLoggerClass;
 
-	Enablement debugDefault;
+	Enablement debugDefault, debug;
 
 	@SuppressWarnings("unchecked")
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
@@ -1038,7 +1038,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug mode.
+	 * Debug mode.
 	 *
 	 * <p>
 	 * Enables the following:
@@ -1049,12 +1049,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 		Request/response messages are automatically logged always or per request.
 	 * </ul>
 	 *
+	 * <p>
+	 * The default can be overwritten by {@link RestContextBuilder#debugDefault(Enablement)}.
+	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder debug(Enablement value) {
-		return set(REST_debug, value);
+		debug = value;
+		return this;
 	}
 
 	/**
