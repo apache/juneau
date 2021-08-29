@@ -12,31 +12,115 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link ResponseProcessor} objects.
  */
-public class ResponseProcessorList extends AList<ResponseProcessor> {
+public class ResponseProcessorList {
 
-	private static final long serialVersionUID = 1L;
+	private final ResponseProcessor[] entries;
 
 	/**
 	 * Static creator.
 	 *
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("unchecked")
-	public static ResponseProcessorList create() {
-		return new ResponseProcessorList();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
-	 * Returns the contents of this list as a {@link ResponseProcessor} array.
+	 * Constructor.
 	 *
-	 * @return The contents of this list as a {@link ResponseProcessor} array.
+	 * @param builder The builder containing the contents for this list.
 	 */
-	public ResponseProcessor[] asArray() {
-		return asArrayOf(ResponseProcessor.class);
+	protected ResponseProcessorList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.toArray(ResponseProcessor[]::new);
+	}
+
+	/**
+	 * Builder for {@link RestMatcherList} objects.
+	 */
+	public static class Builder {
+
+		AList<Object> entries;
+		BeanStore beanStore;
+
+		/**
+		 * Create an empty builder.
+		 */
+		protected Builder() {
+			this.entries = AList.create();
+		}
+
+		/**
+		 * Creates a new {@link ResponseProcessorList} object using a snapshot of the settings defined in this builder.
+		 *
+		 * @return A new {@link ResponseProcessorList} object.
+		 */
+		public ResponseProcessorList build() {
+			return new ResponseProcessorList(this);
+		}
+
+		/**
+		 * Appends the specified rest response processor classes to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder append(Class<? extends ResponseProcessor>...values) {
+			entries.append((Object[])values);
+			return this;
+		}
+
+		/**
+		 * Appends the specified rest response processor objects to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		public Builder append(ResponseProcessor...values) {
+			entries.append((Object[])values);
+			return this;
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating rest response processor classes.
+		 *
+		 * @param value The bean store to use for instantiating rest response processor classes.
+		 * @return This object (for method chaining).
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+	}
+
+	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
+		if (o instanceof ResponseProcessor)
+			return (ResponseProcessor)o;
+		try {
+			return (ResponseProcessor)bs.createBean((Class<?>)o);
+		} catch (ExecutableException e) {
+			throw new ConfigException(e, "Could not instantiate class {0}", o);
+		}
+	}
+
+	/**
+	 * Returns the entries in this list.
+	 *
+	 * @return The entries in this list.
+	 */
+	public ResponseProcessor[] toArray() {
+		return entries;
 	}
 }

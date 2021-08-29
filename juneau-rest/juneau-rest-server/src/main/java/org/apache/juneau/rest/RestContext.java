@@ -66,7 +66,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.args.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.logging.*;
-import org.apache.juneau.rest.processors.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
@@ -1310,114 +1309,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
 
 	/**
-	 * Configuration property:  Response processors.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_responseProcessors REST_responseHandlers}
-	 * 	<li><b>Name:</b>  <js>"RestContext.responseProcessors.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.ResponseProcessor}|Class&lt;{@link org.apache.juneau.rest.ResponseProcessor}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseProcessors()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseProcessors(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseProcessors(ResponseProcessor...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
-	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
-	 *
-	 * <p>
-	 * By default, the following response handlers are provided in the specified order:
-	 * <ul>
-	 * 	<li class='jc'>{@link ReaderProcessor}
-	 * 	<li class='jc'>{@link InputStreamProcessor}
-	 * 	<li class='jc'>{@link ThrowableProcessor}
-	 * 	<li class='jc'>{@link HttpResponseProcessor}
-	 * 	<li class='jc'>{@link HttpResourceProcessor}
-	 * 	<li class='jc'>{@link HttpEntityProcessor}
-	 * 	<li class='jc'>{@link ResponseBeanProcessor}
-	 * 	<li class='jc'>{@link PlainTextPojoProcessor}
-	 * 	<li class='jc'>{@link SerializedPojoProcessor}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our custom response processor for Foo objects. </jc>
-	 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
-	 *
-	 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
-	 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
-	 *
-	 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
-	 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
-	 *
-	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
-	 * 					<jc>//Pipe it to the writer ourselves.</jc>
-	 * 				}
-	 *
-	 * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
-	 *			}
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.addTo(<jsf>REST_responseProcessors</jsf>, MyResponseProcessor.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<ja>@RestGet</ja>(...)
-	 * 		<jk>public</jk> Object myMethod() {
-	 * 			<jc>// Return a special object for our handler.</jc>
-	 * 			<jk>return new</jk> MySpecialObject();
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Response processors are always inherited from ascendant resources.
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 */
-	public static final String REST_responseProcessors = PREFIX + ".responseProcessors.lo";
-
-	/**
 	 * Configuration property:  Java REST method parameter resolvers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1789,7 +1680,7 @@ public class RestContext extends BeanContext {
 	private final List<MediaType> consumes, produces;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
 	private final NamedAttributeList defaultRequestAttributes;
-	private final List<ResponseProcessor> responseProcessors;
+	private final ResponseProcessor[] responseProcessors;
 	private final Messages messages;
 	private final Config config;
 	private final VarResolver varResolver;
@@ -1914,7 +1805,7 @@ public class RestContext extends BeanContext {
 			config = builder.config.resolving(vr.createSession());
 			bf.addBean(Config.class, config);
 
-			responseProcessors = unmodifiableList(createResponseProcessors(r, cp, bf));
+			responseProcessors = createResponseProcessors(r, builder, bf).toArray();
 
 			callLogger = createCallLogger(r, cp, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
@@ -2555,7 +2446,7 @@ public class RestContext extends BeanContext {
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_responseProcessors} value set via any of the following:
+	 * 	<li>Looks for response processors set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#responseProcessors(Class...)}/{@link RestContextBuilder#responseProcessors(ResponseProcessor...)}
 	 * 			<li>{@link Rest#responseProcessors()}.
@@ -2571,39 +2462,29 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_responseProcessors}
-	 * </ul>
-	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The response handlers for this REST resource.
 	 * @throws Exception If response handlers could not be instantiated.
 	 */
-	protected ResponseProcessorList createResponseProcessors(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected ResponseProcessorList createResponseProcessors(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		ResponseProcessorList x = ResponseProcessorList.create();
-
-		x.append(properties.getInstanceArray(REST_responseProcessors, ResponseProcessor.class, beanStore).orElse(new ResponseProcessor[0]));
-
-		if (x.isEmpty())
-			x.append(beanStore.getBean(ResponseProcessorList.class).orElse(null));
+		ResponseProcessorList.Builder x = builder.responseProcessors.beanStore(beanStore);
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(ResponseProcessorList.class, x)
-			.beanCreateMethodFinder(ResponseProcessorList.class, resource)
+			.addBean(ResponseProcessorList.Builder.class, x)
+			.beanCreateMethodFinder(ResponseProcessorList.Builder.class, resource)
 			.find("createResponseProcessors")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.build();
 	}
 
 	/**
@@ -4588,21 +4469,6 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the response processors associated with this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The response processors associated with this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	protected List<ResponseProcessor> getResponseProcessors() {
-		return responseProcessors;
-	}
-
-	/**
 	 * Returns the authority path of the resource.
 	 *
 	 * <ul class='seealso'>
@@ -5025,10 +4891,9 @@ public class RestContext extends BeanContext {
 	public void processResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.
-		List<ResponseProcessor> l = getResponseProcessors();
 		int loops = 5;
-		for (int i = 0; i < l.size(); i++) {
-			int j = l.get(i).process(call);
+		for (int i = 0; i < responseProcessors.length; i++) {
+			int j = responseProcessors[i].process(call);
 			if (j == FINISHED)
 				return;
 			if (j == RESTART) {

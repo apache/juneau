@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static java.util.stream.Collectors.*;
-import static java.util.Collections.*;
 
 import java.util.*;
 
@@ -26,9 +25,8 @@ import org.apache.juneau.cp.*;
  */
 public class RestMatcherList {
 
-	private final List<RestMatcher> entries;
-	private final List<RestMatcher> optionalEntries;
-	private final List<RestMatcher> requiredEntries;
+	private final RestMatcher[] optionalEntries;
+	private final RestMatcher[] requiredEntries;
 
 	/**
 	 * Static creator.
@@ -45,15 +43,14 @@ public class RestMatcherList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestMatcherList(Builder builder) {
-		entries = unmodifiableList(
+		List<RestMatcher> l =
 			builder
 				.entries
 				.stream()
 				.map(x -> instantiate(x, builder.beanStore))
-				.collect(toList())
-		);
-		optionalEntries = unmodifiableList(entries.stream().filter(x -> ! x.required()).collect(toList()));
-		requiredEntries = unmodifiableList(entries.stream().filter(x -> x.required()).collect(toList()));
+				.collect(toList());
+		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
+		requiredEntries = l.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 	}
 
 	/**
@@ -93,7 +90,7 @@ public class RestMatcherList {
 		}
 
 		/**
-		 * Appends the specified rest matcher classes to the list.
+		 * Appends the specified rest matcher objects to the list.
 		 *
 		 * @param values The values to add.
 		 * @return This object (for method chaining).
@@ -126,20 +123,11 @@ public class RestMatcherList {
 	}
 
 	/**
-	 * Returns the entries in this list.
-	 *
-	 * @return An unmodifiable list of entries in this list.
-	 */
-	public List<RestMatcher> getEntries() {
-		return entries;
-	}
-
-	/**
 	 * Returns the entries in this list that are specified as optional.
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as optional.
 	 */
-	public List<RestMatcher> getOptionalEntries() {
+	public RestMatcher[] getOptionalEntries() {
 		return optionalEntries;
 	}
 
@@ -148,16 +136,7 @@ public class RestMatcherList {
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as required.
 	 */
-	public List<RestMatcher> getRequiredEntries() {
+	public RestMatcher[] getRequiredEntries() {
 		return requiredEntries;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this list is empty.
-	 *
-	 * @return <jk>true</jk> if this list is empty.
-	 */
-	public boolean isEmpty() {
-		return entries.isEmpty();
 	}
 }

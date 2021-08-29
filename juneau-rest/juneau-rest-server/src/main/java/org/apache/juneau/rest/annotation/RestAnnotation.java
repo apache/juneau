@@ -1050,7 +1050,7 @@ public class RestAnnotation {
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultResponseHeaders, x));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
-			b.prependTo(REST_responseProcessors, a.responseProcessors());
+			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.prependTo(REST_restOperationArgs, a.restOpArgs());
 			value(a.contextClass()).ifPresent(x -> b.contextClass(x));

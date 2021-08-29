@@ -12,11 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
-
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
@@ -26,7 +21,7 @@ import org.apache.juneau.cp.*;
  */
 public class RestGuardList {
 
-	private final List<RestGuard> entries;
+	private RestGuard[] entries;
 
 	/**
 	 * Static creator.
@@ -43,13 +38,12 @@ public class RestGuardList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestGuardList(Builder builder) {
-		entries = unmodifiableList(
+		entries =
 			builder
 				.entries
 				.stream()
 				.map(x -> instantiate(x, builder.beanStore))
-				.collect(toList())
-		);
+				.toArray(RestGuard[]::new);
 	}
 
 	/**
@@ -89,7 +83,7 @@ public class RestGuardList {
 		}
 
 		/**
-		 * Appends the specified rest matcher classes to the list.
+		 * Appends the specified rest matcher objects to the list.
 		 *
 		 * @param values The values to add.
 		 * @return This object (for method chaining).
@@ -127,15 +121,6 @@ public class RestGuardList {
 	 * @return The entries in this list.
 	 */
 	public RestGuard[] asArray() {
-		return entries.toArray(new RestGuard[entries.size()]);
-	}
-
-	/**
-	 * Returns the entries in this list.
-	 *
-	 * @return An unmodifiable list of entries in this list.
-	 */
-	public List<RestGuard> getEntries() {
 		return entries;
 	}
 }

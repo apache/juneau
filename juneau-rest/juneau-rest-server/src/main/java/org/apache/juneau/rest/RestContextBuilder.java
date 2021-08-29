@@ -132,6 +132,19 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Class<? extends SwaggerProvider> swaggerProviderClass;
 	SwaggerProvider swaggerProvider;
 
+	@SuppressWarnings("unchecked")
+	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
+		ReaderProcessor.class,
+		InputStreamProcessor.class,
+		ThrowableProcessor.class,
+		HttpResponseProcessor.class,
+		HttpResourceProcessor.class,
+		HttpEntityProcessor.class,
+		ResponseBeanProcessor.class,
+		PlainTextPojoProcessor.class,
+		SerializedPojoProcessor.class
+	);
+
 	List<Object> children = new ArrayList<>();
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
@@ -148,17 +161,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			partSerializer(OpenApiSerializer.class);
 			partParser(OpenApiParser.class);
 			encoders(IdentityEncoder.INSTANCE);
-			responseProcessors(
-				ReaderProcessor.class,
-				InputStreamProcessor.class,
-				ThrowableProcessor.class,
-				HttpResponseProcessor.class,
-				HttpResourceProcessor.class,
-				HttpEntityProcessor.class,
-				ResponseBeanProcessor.class,
-				PlainTextPojoProcessor.class,
-				SerializedPojoProcessor.class
-			);
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -1887,40 +1889,112 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response processors.
+	 * Response processors.
 	 *
 	 * <p>
 	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
+	 * <p>
+	 * By default, the following response handlers are provided in the specified order:
+	 * <ul>
+	 * 	<li class='jc'>{@link ReaderProcessor}
+	 * 	<li class='jc'>{@link InputStreamProcessor}
+	 * 	<li class='jc'>{@link ThrowableProcessor}
+	 * 	<li class='jc'>{@link HttpResponseProcessor}
+	 * 	<li class='jc'>{@link HttpResourceProcessor}
+	 * 	<li class='jc'>{@link HttpEntityProcessor}
+	 * 	<li class='jc'>{@link ResponseBeanProcessor}
+	 * 	<li class='jc'>{@link PlainTextPojoProcessor}
+	 * 	<li class='jc'>{@link SerializedPojoProcessor}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our custom response processor for Foo objects. </jc>
+	 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
+	 *
+	 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
+	 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
+	 *
+	 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
+	 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
+	 *
+	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
+	 * 					<jc>//Pipe it to the writer ourselves.</jc>
+	 * 				}
+	 *
+	 * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
+	 *			}
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<ja>@RestGet</ja>(...)
+	 * 		<jk>public</jk> Object myMethod() {
+	 * 			<jc>// Return a special object for our handler.</jc>
+	 * 			<jk>return new</jk> MySpecialObject();
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Response processors are always inherited from ascendant resources.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestContextBuilder responseProcessors(Class<?>...values) {
-		return prependTo(REST_responseProcessors, values);
+	public RestContextBuilder responseProcessors(Class<? extends ResponseProcessor>...values) {
+		responseProcessors.append(values);
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response processors.
+	 * Response processors.
 	 *
 	 * <p>
 	 * Same as {@link #responseProcessors(Class...)} except input is pre-constructed instances.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
-	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder responseProcessors(ResponseProcessor...values) {
-		return prependTo(REST_responseProcessors, values);
+		responseProcessors.append(values);
+		return this;
 	}
 
 	/**

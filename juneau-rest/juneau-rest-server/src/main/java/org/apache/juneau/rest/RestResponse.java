@@ -171,7 +171,7 @@ public final class RestResponse {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
+	 * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(Class...)}
 	 * 	<li class='link'>{@doc RestmReturnTypes}
 	 * </ul>
 	 *

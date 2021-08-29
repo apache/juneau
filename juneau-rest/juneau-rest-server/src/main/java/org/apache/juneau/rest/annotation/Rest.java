@@ -928,7 +928,7 @@ public @interface Rest {
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
+	 * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(Class...)}
 	 * </ul>
 	 */
 	Class<? extends ResponseProcessor>[] responseProcessors() default {};
