@@ -137,7 +137,7 @@ public @interface RestPost {
 	 * Associates one or more {@link RestConverter converters} with this method.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)} - Registering converters with REST resources.
 	 * </ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};

@@ -161,7 +161,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			partParser = createPartParser(r, cp, bs);
 			bs.addBean(HttpPartParser.class, partParser);
 
-			converters = createConverters(r, cp, bs).asArray();
+			converters = createConverters(r, builder, bs).asArray();
 			bs.addBean(RestConverter[].class, converters);
 
 			guards = createGuards(r, builder, bs).asArray();
@@ -225,9 +225,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link RestContext#REST_converters} value set via any of the following:
+	 * 	<li>Looks for REST conveters set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#converters(Class...)}/{@link RestContextBuilder#converters(RestConverter...)}
+	 * 			<li>{@link RestOpContextBuilder#converters(Class...)}/{@link RestOpContextBuilder#converters(RestConverter...)}
 	 * 			<li>{@link RestOp#converters()}.
 	 * 			<li>{@link Rest#converters()}.
 	 * 		</ul>
@@ -244,31 +244,26 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties TODO
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The result converters for this REST resource method.
 	 * @throws Exception If result converters could not be instantiated.
-	 * @see RestContext#REST_converters
+	 * @see RestOpContextBuilder#converters(Class...)
 	 */
-	protected RestConverterList createConverters(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestConverterList createConverters(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		RestConverterList x = RestConverterList.create();
-
-		x.append(properties.getInstanceArray(REST_converters, RestConverter.class, beanStore).orElse(new RestConverter[0]));
-
-		if (x.isEmpty())
-			x = beanStore.getBean(RestConverterList.class).orElse(x);
+		RestConverterList.Builder x = builder.converters.beanStore(beanStore);
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestConverterList.class, x)
-			.beanCreateMethodFinder(RestConverterList.class, resource)
+			.addBean(RestConverterList.Builder.class, x)
+			.beanCreateMethodFinder(RestConverterList.Builder.class, resource)
 			.find("createConverters", Method.class)
 			.thenFind("createConverters")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.build();
 	}
 
 	/**

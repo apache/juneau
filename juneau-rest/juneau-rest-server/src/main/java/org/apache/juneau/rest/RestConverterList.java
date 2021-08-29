@@ -12,23 +12,107 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link RestConverter} objects.
  */
-public class RestConverterList extends AList<RestConverter> {
+public class RestConverterList {
 
-	private static final long serialVersionUID = 1L;
+	private final RestConverter[] entries;
 
 	/**
 	 * Static creator.
 	 *
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("unchecked")
-	public static RestConverterList create() {
-		return new RestConverterList();
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestConverterList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.toArray(RestConverter[]::new);
+	}
+
+	/**
+	 * Builder for {@link RestConverterList} objects.
+	 */
+	public static class Builder {
+
+		AList<Object> entries;
+		BeanStore beanStore;
+
+		/**
+		 * Create an empty builder.
+		 */
+		protected Builder() {
+			this.entries = AList.create();
+		}
+
+		/**
+		 * Creates a new {@link RestConverterList} object using a snapshot of the settings defined in this builder.
+		 *
+		 * @return A new {@link RestConverterList} object.
+		 */
+		public RestConverterList build() {
+			return new RestConverterList(this);
+		}
+
+		/**
+		 * Appends the specified rest matcher classes to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder append(Class<? extends RestConverter>...values) {
+			entries.append((Object[])values);
+			return this;
+		}
+
+		/**
+		 * Appends the specified rest matcher objects to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		public Builder append(RestConverter...values) {
+			entries.append((Object[])values);
+			return this;
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating rest matcher classes.
+		 *
+		 * @param value The bean store to use for instantiating rest matcher classes.
+		 * @return This object (for method chaining).
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+	}
+
+	private static RestConverter instantiate(Object o, BeanStore bs) {
+		if (o instanceof RestConverter)
+			return (RestConverter)o;
+		try {
+			return (RestConverter)bs.createBean((Class<?>)o);
+		} catch (ExecutableException e) {
+			throw new ConfigException(e, "Could not instantiate class {0}", o);
+		}
 	}
 
 	/**
@@ -37,6 +121,6 @@ public class RestConverterList extends AList<RestConverter> {
 	 * @return The contents of this list as a {@link RestConverter} array.
 	 */
 	public RestConverter[] asArray() {
-		return asArrayOf(RestConverter.class);
+		return entries;
 	}
 }

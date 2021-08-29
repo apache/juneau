@@ -623,7 +623,7 @@ public class RestOpAnnotation {
 			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultFormData(x));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
-			b.prependTo(REST_converters, a.converters());
+			b.converters(a.converters());
 			b.guards(a.guards());
 			b.matchers(a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));

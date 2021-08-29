@@ -519,7 +519,7 @@ public class RestGetAnnotation {
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
 			stringStream(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
-			b.prependTo(REST_converters, a.converters());
+			b.converters(a.converters());
 			b.guards(a.guards());
 			b.matchers(a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));

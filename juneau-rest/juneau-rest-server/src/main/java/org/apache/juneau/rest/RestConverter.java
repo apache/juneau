@@ -29,9 +29,8 @@ import org.apache.juneau.serializer.*;
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Rest#converters()}
  * 	<li class='ja'>{@link RestOp#converters()}
- * 	<li class='jf'>{@link RestContext#REST_converters}
- * 	<li class='jm'>{@link RestContextBuilder#converters(Class...)}
- * 	<li class='jm'>{@link RestContextBuilder#converters(RestConverter...)}
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)}
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters(RestConverter...)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -74,7 +73,8 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)}
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters(RestConverter...)}
  * 	<li class='link'>{@doc RestConverters}
  * </ul>
  */

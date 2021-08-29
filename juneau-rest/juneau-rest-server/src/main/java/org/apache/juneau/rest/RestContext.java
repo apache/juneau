@@ -64,7 +64,6 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.args.*;
-import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -148,101 +147,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_beanStore = PREFIX + ".beanStore.o";
-
-	/**
-	 * Configuration property:  Class-level response converters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_converters REST_converters}
-	 * 	<li><b>Name:</b>  <js>"RestContext.converters.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestConverter}|Class&lt;{@link org.apache.juneau.rest.RestConverter}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#converters()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#converters()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(RestConverter...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * <br>These converters get called immediately after execution of the REST method in the same order specified in the
-	 * annotation.
-	 * <br>The object passed into this converter is the object returned from the Java method or passed into
-	 * the {@link RestResponse#setOutput(Object)} method.
-	 *
-	 * <p>
-	 * Can be used for performing post-processing on the response object before serialization.
-	 *
-	 * <p>
-	 * 	When multiple converters are specified, they're executed in the order they're specified in the annotation
-	 * 	(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our converter.</jc>
-	 * 	<jk>public class</jk> MyConverter <jk>implements</jk> RestConverter {
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> Object convert(RestRequest <jv>req</jv>, Object <jv>o</jv>) {
-	 * 			<jc>// Do something with object and return another object.</jc>
-	 * 			<jc>// Or just return the same object for a no-op.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(converters={MyConverter.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_converters</jsf>, MyConverter.<jk>class</jk>);
-	 *
-	 * 			<jc>// Pass in an instance instead.</jc>
-	 * 			<jv>builder</jv>.converters(<jk>new</jk> MyConverter());
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
-	 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
-	 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
-	 * 	<li class='link'>{@doc RestConverters}
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 */
-	public static final String REST_converters = PREFIX + ".converters.lo";
 
 	/**
 	 * Configuration property:  Debug mode.

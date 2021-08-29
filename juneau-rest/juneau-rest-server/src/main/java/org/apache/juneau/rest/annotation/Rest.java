@@ -291,7 +291,7 @@ public @interface Rest {
 	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)} - Registering converters with REST resources.
 	 * </ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};

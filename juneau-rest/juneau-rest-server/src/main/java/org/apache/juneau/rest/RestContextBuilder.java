@@ -1035,42 +1035,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level response converters.
-	 *
-	 * <p>
-	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_converters}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder converters(Class<?>...values) {
-		return prependTo(REST_converters, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response converters.
-	 *
-	 * <p>
-	 * Same as {@link #converters(Class...)} except input is pre-constructed instances.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_converters}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder converters(RestConverter...values) {
-		return prependTo(REST_converters, values);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug mode.
 	 *
 	 * <p>
