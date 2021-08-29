@@ -1154,12 +1154,10 @@ public @interface Rest {
 	Swagger swagger() default @Swagger;
 
 	/**
-	 * Configuration property:  Swagger provider.
-	 *
-	 * TODO
+	 * Swagger provider.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
 	 * </ul>
 	 */
 	Class<? extends SwaggerProvider> swaggerProvider() default SwaggerProvider.Null.class;

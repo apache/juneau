@@ -1952,34 +1952,6 @@ public class RestContext extends BeanContext {
 	 */
 	public static final String REST_staticFilesDefault = PREFIX + ".staticFilesDefault.o";
 
-	/**
-	 * Configuration property:  Swagger provider class.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_swaggerProvider REST_swaggerProvider}
-	 * 	<li><b>Name:</b>  <js>"RestContext.swaggerProvider.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.SwaggerProvider}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicSwaggerProvider}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#swaggerProvider()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#swaggerProvider(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#swaggerProvider(SwaggerProvider)}
-	 * 		</ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The swagger provider object or class.
-	 * <p>
-	 * This setting is inherited from the parent context.
-	 */
-	public static final String REST_swaggerProvider = PREFIX + ".swaggerProvider.o";
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
@@ -2229,7 +2201,7 @@ public class RestContext extends BeanContext {
 
 			restChildren = createRestChildren(r, builder, bf, builder.inner);
 
-			swaggerProvider = createSwaggerProvider(r, cp, bf, ff, m, vr);
+			swaggerProvider = createSwaggerProvider(r, builder, bf, ff, m, vr);
 
 		} catch (BasicHttpException e) {
 			_initException = e;
@@ -3241,7 +3213,7 @@ public class RestContext extends BeanContext {
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link SwaggerProvider}.
-	 * 	<li>Looks for {@link #REST_swaggerProvider} value set via any of the following:
+	 * 	<li>Looks for swagger provider set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#swaggerProvider(Class)}/{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
 	 * 			<li>{@link Rest#swaggerProvider()}.
@@ -3258,14 +3230,14 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_swaggerProvider}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
 	 * </ul>
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
@@ -3275,9 +3247,9 @@ public class RestContext extends BeanContext {
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
 	 */
-	protected SwaggerProvider createSwaggerProvider(Object resource, ContextProperties properties, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
+	protected SwaggerProvider createSwaggerProvider(Object resource, RestContextBuilder builder, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
 
-		SwaggerProvider x = null;
+		SwaggerProvider x = builder.swaggerProvider;
 
 		if (resource instanceof SwaggerProvider)
 			x = (SwaggerProvider)resource;
@@ -3286,10 +3258,7 @@ public class RestContext extends BeanContext {
 			x = beanStore.getBean(SwaggerProvider.class).orElse(null);
 
 		if (x == null)
-			 x = properties.getIfType(REST_swaggerProvider, SwaggerProvider.class).orElse(null);
-
-		if (x == null)
-			x = createSwaggerProviderBuilder(resource, properties, beanStore, fileFinder, messages, varResolver).build();
+			x = createSwaggerProviderBuilder(resource, builder, beanStore, fileFinder, messages, varResolver).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -3306,12 +3275,12 @@ public class RestContext extends BeanContext {
 	 * Instantiates the REST API builder for this REST resource.
 	 *
 	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createSwaggerProvider(Object,ContextProperties,BeanStore,FileFinder,Messages,VarResolver)} method.
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createSwaggerProvider(Object,RestContextBuilder,BeanStore,FileFinder,Messages,VarResolver)} method.
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
+	 * @param builder
+	 * 	The builder for this object.
 	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -3322,9 +3291,9 @@ public class RestContext extends BeanContext {
 	 * @return The REST API builder for this REST resource.
 	 * @throws Exception If REST API builder could not be instantiated.
 	 */
-	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, ContextProperties properties, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
+	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
 
-		Class<? extends SwaggerProvider> c = properties.getIfClass(REST_swaggerProvider, SwaggerProvider.class).orElse(null);
+		Class<? extends SwaggerProvider> c = builder.swaggerProviderClass;
 
 		SwaggerProviderBuilder x = SwaggerProvider
 				.create()
@@ -3332,7 +3301,7 @@ public class RestContext extends BeanContext {
 				.fileFinder(fileFinder)
 				.messages(messages)
 				.varResolver(varResolver)
-				.jsonSchemaGenerator(createJsonSchemaGenerator(resource, properties, beanStore))
+				.jsonSchemaGenerator(createJsonSchemaGenerator(resource, builder.getContextProperties(), beanStore))
 				.implClass(c);
 
 		x = BeanStore
@@ -4517,7 +4486,8 @@ public class RestContext extends BeanContext {
 	 * Returns the Swagger provider used by this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
 	 * </ul>
 	 *
 	 * @return

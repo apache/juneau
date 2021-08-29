@@ -108,14 +108,13 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	}
 
 	/**
-	 * Returns the specified value if it's not the specified default.
+	 * Returns the specified value if it's simple name is not <js>"Null"</js>.
 	 *
-	 * @param in The value to return if it's not the default.
-	 * @param def The default value.
-	 * @return An optional containing the specified value if it's not the default, or {@link Optional#empty()} if it does not.
+	 * @param in The value to return.
+	 * @return An optional containing the specified value.
 	 */
-	protected <T> Optional<T> value(T in, T def) {
-		return in != def ? Optional.of(in) : Optional.empty();
+	protected <T> Optional<Class<T>> value(Class<T> in) {
+		return in.getSimpleName().equals("Null") ? Optional.empty() : Optional.of(in);
 	}
 
 	/**

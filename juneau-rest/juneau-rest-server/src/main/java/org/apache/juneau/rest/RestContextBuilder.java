@@ -129,6 +129,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Class<? extends RestChildren> childrenClass = RestChildren.class;
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
+	Class<? extends SwaggerProvider> swaggerProviderClass;
+	SwaggerProvider swaggerProvider;
+
 	List<Object> children = new ArrayList<>();
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
@@ -2521,43 +2524,43 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Swagger provider.
+	 * Swagger provider.
 	 *
 	 * <p>
 	 * Class used to retrieve swagger information about a resource.
 	 *
+	 * <p>
+	 * This setting is inherited from the parent context if not specified.
+	 * <br>The default is {@link BasicSwaggerProvider}.
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
+	 * 	<li class='ja'>{@link Rest#swaggerProvider}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicSwaggerProvider}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(Class<? extends SwaggerProvider> value) {
-		return set(REST_swaggerProvider, value);
+		swaggerProviderClass = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Swagger provider.
+	 * Swagger provider.
 	 *
 	 * <p>
 	 * Same as {@link #swaggerProvider(Class)} except input is a pre-constructed instance.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicSwaggerProvider}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(SwaggerProvider value) {
-		return set(REST_swaggerProvider, value);
+		swaggerProvider = value;
+		return this;
 	}
 
 	/**

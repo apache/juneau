@@ -598,7 +598,7 @@ public class RestPutAnnotation {
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			value(a.contextClass(), RestOpContext.Null.class).ifPresent(x -> b.contextClass(x));
+			value(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));

@@ -1530,7 +1530,8 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_swaggerProvider}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
 	 * 	<li class='link'>{@doc RestSwagger}
 	 * </ul>
 	 *
