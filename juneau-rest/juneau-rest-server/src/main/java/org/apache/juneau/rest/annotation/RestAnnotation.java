@@ -1052,7 +1052,7 @@ public class RestAnnotation {
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
-			b.prependTo(REST_restOperationArgs, a.restOpArgs());
+			b.restOpArgs(a.restOpArgs());
 			value(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			value(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			value(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));

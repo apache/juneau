@@ -44,6 +44,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.args.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.processors.*;
 import org.apache.juneau.rest.vars.*;
@@ -153,6 +154,51 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	);
 
 	List<Object> children = new ArrayList<>();
+
+	@SuppressWarnings("unchecked")
+	RestOpArgList.Builder restOpArgs = RestOpArgList.create().append(
+		AttributeArg.class,
+		BodyArg.class,
+		ConfigArg.class,
+		FormDataArg.class,
+		HasFormDataArg.class,
+		HasQueryArg.class,
+		HeaderArg.class,
+		HttpServletRequestArg.class,
+		HttpServletResponseArg.class,
+		InputStreamArg.class,
+		InputStreamParserArg.class,
+		LocaleArg.class,
+		MessagesArg.class,
+		MethodArg.class,
+		OutputStreamArg.class,
+		ParserArg.class,
+		PathArg.class,
+		QueryArg.class,
+		ReaderArg.class,
+		ReaderParserArg.class,
+		RequestAttributesArg.class,
+		RequestBeanArg.class,
+		RequestBodyArg.class,
+		RequestFormDataArg.class,
+		RequestHeadersArg.class,
+		RequestPathArg.class,
+		RequestQueryArg.class,
+		ResourceBundleArg.class,
+		ResponseBeanArg.class,
+		ResponseHeaderArg.class,
+		ResponseStatusArg.class,
+		RestContextArg.class,
+		RestRequestArg.class,
+		ServetInputStreamArg.class,
+		ServletOutputStreamArg.class,
+		SwaggerArg.class,
+		TimeZoneArg.class,
+		UriContextArg.class,
+		UriResolverArg.class,
+		WriterArg.class,
+		DefaultArg.class
+	);
 
 	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
@@ -2160,15 +2206,68 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Java method parameter resolvers.
+	 * Java method parameter resolvers.
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationArgs}
+	 * <p>
+	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
+	 * 	<jk>public class</jk> MyRestOpArg <jk>implements</jk> RestOpArg {
+	 *
+	 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
+	 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
+	 *		<jk>public static</jk> MyRestOpArg <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
+	 *			<jk>if</jk> (<jv>paramInfo</jv>.isType(MySpecialObject.<jk>class</jk>)
+	 *				<jk>return new</jk> MyRestParam();
+	 *			<jk>return null</jk>;
+	 *		}
+	 *
+	 * 		<jk>public</jk> MyRestOpArg(ParamInfo <jv>paramInfo</jv>) {}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(<jv>call</jv>.getRestRequest().getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restOpArgs=MyRestParam.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Now pass it into your method.</jc>
+	 * 		<ja>@RestPost</ja>(...)
+	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject <jv>mySpecialObject</jv>) {
+	 * 			<jc>// Do something with it.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
@@ -2177,7 +2276,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	@SuppressWarnings("unchecked")
 	public RestContextBuilder restOpArgs(Class<? extends RestOpArg>...values) {
-		return prependTo(REST_restOperationArgs, values);
+		restOpArgs.append(values);
+		return this;
 	}
 
 	/**

@@ -43,7 +43,7 @@ import org.apache.juneau.rest.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jf'>{@link RestContext#REST_restOperationArgs}
+ * 	<li class='jm'>{@link RestContextBuilder#restOpArgs(Class...)}
  * 	<li class='link'>{@doc RestmParameters}
  * </ul>
  */

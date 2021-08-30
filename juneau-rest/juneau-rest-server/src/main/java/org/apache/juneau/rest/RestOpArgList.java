@@ -12,23 +12,75 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.util.*;
+
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link RestOpArg} classes.
  */
-public class RestOpArgList extends AList<Class<? extends RestOpArg>> {
+public class RestOpArgList {
 
-	private static final long serialVersionUID = 1L;
+	private final Class<? extends RestOpArg>[] entries;
 
 	/**
 	 * Static creator.
 	 *
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("unchecked")
-	public static RestOpArgList create() {
-		return new RestOpArgList();
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestOpArgList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.toArray(Class[]::new);
+	}
+
+	/**
+	 * Builder for {@link RestOpArgList} objects.
+	 */
+	public static class Builder {
+
+		AList<Class<? extends RestOpArg>> entries;
+		BeanStore beanStore;
+
+		/**
+		 * Create an empty builder.
+		 */
+		protected Builder() {
+			this.entries = AList.create();
+		}
+
+		/**
+		 * Creates a new {@link RestOpArgList} object using a snapshot of the settings defined in this builder.
+		 *
+		 * @return A new {@link RestOpArgList} object.
+		 */
+		public RestOpArgList build() {
+			return new RestOpArgList(this);
+		}
+
+		/**
+		 * Prepends the specified rest op arg classes to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder append(Class<? extends RestOpArg>...values) {
+			entries.addAll(0, Arrays.asList(values));
+			return this;
+		}
 	}
 
 	/**
@@ -37,6 +89,6 @@ public class RestOpArgList extends AList<Class<? extends RestOpArg>> {
 	 * @return The contents of this list as a {@link Class} array.
 	 */
 	public Class<? extends RestOpArg>[] asArray() {
-		return asArrayOf(Class.class);
+		return entries;
 	}
 }

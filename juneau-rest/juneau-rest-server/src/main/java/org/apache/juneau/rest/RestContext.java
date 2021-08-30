@@ -969,94 +969,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
 
 	/**
-	 * Configuration property:  Java REST method parameter resolvers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_restOperationArgs REST_restParams}
-	 * 	<li><b>Name:</b>  <js>"RestContext.restOperationsParams.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Class&lt;{@link org.apache.juneau.rest.RestOpArg}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restOpArgs()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restOpArgs(Class...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
-	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <p>
-	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
-	 * the following resolver:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
-	 * 	<jk>public class</jk> MyRestParam <jk>implements</jk> RestOpArg {
-	 *
-	 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
-	 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
-	 *		<jk>public static</jk> MyRestParam <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
-	 *			<jk>if</jk> (<jv>paramInfo</jv>.isType(MySpecialObject.<jk>class</jk>)
-	 *				<jk>return new</jk> MyRestParam();
-	 *			<jk>return null</jk>;
-	 *		}
-	 *
-	 * 		<jk>public</jk> MyRestParam() {}
-	 *
-	 * 		<jc>// The method that creates our object.
-	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
-	 * 			<jk>return new</jk> MySpecialObject(<jv>call</jv>.getRestRequest().getQuery().get(<js>"myparam"</js>));
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(restOpArgs=MyRestParam.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.restOperationParams(MyRestParam.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.addTo(<jsf>REST_restOperationArgs</jsf>, MyRestParam.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.restOperationParams(MyRestParam.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Now pass it into your method.</jc>
-	 * 		<ja>@RestPost</ja>(...)
-	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject <jv>mySpecialObject</jv>) {
-	 * 			<jc>// Do something with it.</jc>
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * 	<li>
-	 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
-	 * </ul>
-	 */
-	public static final String REST_restOperationArgs = PREFIX + ".restOperationArgs.lo";
-
-	/**
 	 * Configuration property:  Serializers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1496,7 +1408,7 @@ public class RestContext extends BeanContext {
 			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bf).build();
 			defaultRequestAttributes = createDefaultRequestAttributes(r, cp, bf);
 
-			opArgs = createOpArgs(r, cp, bf).asArray();
+			opArgs = createOpArgs(r, builder, bf).asArray();
 			hookMethodArgs = createHookMethodArgs(r, cp, bf).asArray();
 
 			uriContext = builder.uriContext;
@@ -2289,7 +2201,7 @@ public class RestContext extends BeanContext {
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_restOperationArgs} value set via any of the following:
+	 * 	<li>Looks for REST op args set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#restOpArgs(Class...)}/{@link RestContextBuilder#restOpArgs(Class...)}
 	 * 			<li>{@link Rest#restOpArgs()}.
@@ -2301,76 +2213,27 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The REST method parameter resolvers for this REST resource.
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 */
-	@SuppressWarnings("unchecked")
-	protected RestOpArgList createOpArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestOpArgList createOpArgs(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		RestOpArgList x = RestOpArgList.create();
-
-		for (Class<?> c : properties.getList(REST_restOperationArgs, Class.class).orElse(emptyList()))
-			x.append((Class<? extends RestOpArg>)c);
-
-		x.append(
-			AttributeArg.class,
-			BodyArg.class,
-			ConfigArg.class,
-			FormDataArg.class,
-			HasFormDataArg.class,
-			HasQueryArg.class,
-			HeaderArg.class,
-			HttpServletRequestArg.class,
-			HttpServletResponseArg.class,
-			InputStreamArg.class,
-			InputStreamParserArg.class,
-			LocaleArg.class,
-			MessagesArg.class,
-			MethodArg.class,
-			OutputStreamArg.class,
-			ParserArg.class,
-			PathArg.class,
-			QueryArg.class,
-			ReaderArg.class,
-			ReaderParserArg.class,
-			RequestAttributesArg.class,
-			RequestBeanArg.class,
-			RequestBodyArg.class,
-			RequestFormDataArg.class,
-			RequestHeadersArg.class,
-			RequestPathArg.class,
-			RequestQueryArg.class,
-			ResourceBundleArg.class,
-			ResponseBeanArg.class,
-			ResponseHeaderArg.class,
-			ResponseStatusArg.class,
-			RestContextArg.class,
-			RestRequestArg.class,
-			ServetInputStreamArg.class,
-			ServletOutputStreamArg.class,
-			SwaggerArg.class,
-			TimeZoneArg.class,
-			UriContextArg.class,
-			UriResolverArg.class,
-			WriterArg.class,
-			DefaultArg.class
-		);
+		RestOpArgList.Builder x = builder.restOpArgs;
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestOpArgList.class, x)
-			.beanCreateMethodFinder(RestOpArgList.class, resource)
+			.addBean(RestOpArgList.Builder.class, x)
+			.beanCreateMethodFinder(RestOpArgList.Builder.class, resource)
 			.find("createRestOperationArgs")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.build();
 	}
 
 	/**
@@ -2390,7 +2253,7 @@ public class RestContext extends BeanContext {
 	@SuppressWarnings("unchecked")
 	protected RestOpArgList createHookMethodArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
-		RestOpArgList x = RestOpArgList.create();
+		RestOpArgList.Builder x = RestOpArgList.create();
 
 		x.append(
 			ConfigArg.class,
@@ -2415,13 +2278,13 @@ public class RestContext extends BeanContext {
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(RestOpArgList.class, x)
-			.beanCreateMethodFinder(RestOpArgList.class, resource)
+			.addBean(RestOpArgList.Builder.class, x)
+			.beanCreateMethodFinder(RestOpArgList.Builder.class, resource)
 			.find("createHookMethodArgs")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.build();
 	}
 
 	/**

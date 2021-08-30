@@ -977,7 +977,7 @@ public @interface Rest {
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationArgs}
+	 * 	<li class='jm'>{@link RestContextBuilder#restOpArgs(Class...)}
 	 * </ul>
 	 */
 	Class<? extends RestOpArg>[] restOpArgs() default {};
