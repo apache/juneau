@@ -41,7 +41,7 @@ public class SoapXmlConfigAnnotation {
 		public void apply(AnnotationInfo<SoapXmlConfig> ai, ContextPropertiesBuilder b) {
 			SoapXmlConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(SOAPXML_SOAPAction, string(a.soapAction()));
+			string(a.soapAction()).ifPresent(x -> b.set(SOAPXML_SOAPAction, x));
 		}
 	}
 }

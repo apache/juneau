@@ -16,11 +16,8 @@ import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
-import java.nio.charset.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -46,44 +43,28 @@ public class SerializerConfigAnnotation {
 		public void apply(AnnotationInfo<SerializerConfig> ai, ContextPropertiesBuilder b) {
 			SerializerConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(SERIALIZER_addBeanTypes, bool(a.addBeanTypes()));
-			b.setIfNotEmpty(SERIALIZER_addRootType, bool(a.addRootType()));
-			b.setIfNotEmpty(SERIALIZER_keepNullProperties, bool(a.keepNullProperties()));
-			b.setIf(a.listener() != SerializerListener.Null.class, SERIALIZER_listener, a.listener());
-			b.setIfNotEmpty(SERIALIZER_sortCollections, bool(a.sortCollections()));
-			b.setIfNotEmpty(SERIALIZER_sortMaps, bool(a.sortMaps()));
-			b.setIfNotEmpty(SERIALIZER_trimEmptyCollections, bool(a.trimEmptyCollections()));
-			b.setIfNotEmpty(SERIALIZER_trimEmptyMaps, bool(a.trimEmptyMaps()));
-			b.setIfNotEmpty(SERIALIZER_trimStrings, bool(a.trimStrings()));
-			b.setIfNotEmpty(SERIALIZER_uriContext, string(a.uriContext()));
-			b.setIfNotEmpty(SERIALIZER_uriRelativity, string(a.uriRelativity()));
-			b.setIfNotEmpty(SERIALIZER_uriResolution, string(a.uriResolution()));
-			b.setIfNotEmpty(OSSERIALIZER_binaryFormat, string(a.binaryFormat()));
-			b.setIfNotEmpty(WSERIALIZER_fileCharset, charset(a.fileCharset()));
-			b.setIfNotEmpty(WSERIALIZER_maxIndent, integer(a.maxIndent(), "maxIndent"));
-			b.setIfNotEmpty(WSERIALIZER_quoteChar, character(a.quoteChar(), "quoteChar"));
-			b.setIfNotEmpty(WSERIALIZER_streamCharset, charset(a.streamCharset()));
-			b.setIfNotEmpty(WSERIALIZER_useWhitespace, bool(a.useWhitespace()));
-			b.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
-			b.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
-			b.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
-			b.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
-		}
-
-		private Object charset(String in) {
-			String s = string(in);
-			if ("default".equalsIgnoreCase(s))
-				return Charset.defaultCharset();
-			return s;
-		}
-
-		private Character character(String in, String loc) {
-			String s = string(in);
-			if (s == null)
-				return null;
-			if (s.length() != 1)
-				throw new ConfigException("Invalid syntax for character on annotation @{0}({1}): {2}", "SerializerConfig", loc, in);
-			return s.charAt(0);
+			bool(a.addBeanTypes()).ifPresent(x -> b.set(SERIALIZER_addBeanTypes, x));
+			bool(a.addRootType()).ifPresent(x -> b.set(SERIALIZER_addRootType, x));
+			bool(a.keepNullProperties()).ifPresent(x -> b.set(SERIALIZER_keepNullProperties, x));
+			type(a.listener()).ifPresent(x -> b.set(SERIALIZER_listener, x));
+			bool(a.sortCollections()).ifPresent(x -> b.set(SERIALIZER_sortCollections, x));
+			bool(a.sortMaps()).ifPresent(x -> b.set(SERIALIZER_sortMaps, x));
+			bool(a.trimEmptyCollections()).ifPresent(x -> b.set(SERIALIZER_trimEmptyCollections, x));
+			bool(a.trimEmptyMaps()).ifPresent(x -> b.set(SERIALIZER_trimEmptyMaps, x));
+			bool(a.trimStrings()).ifPresent(x -> b.set(SERIALIZER_trimStrings, x));
+			string(a.uriContext()).ifPresent(x -> b.set(SERIALIZER_uriContext, x));
+			string(a.uriRelativity()).ifPresent(x -> b.set(SERIALIZER_uriRelativity, x));
+			string(a.uriResolution()).ifPresent(x -> b.set(SERIALIZER_uriResolution, x));
+			string(a.binaryFormat()).ifPresent(x -> b.set(OSSERIALIZER_binaryFormat, x));
+			charset(a.fileCharset()).ifPresent(x -> b.set(WSERIALIZER_fileCharset, x));
+			integer(a.maxIndent(), "maxIndent").ifPresent(x -> b.set(WSERIALIZER_maxIndent, x));
+			character(a.quoteChar(), "quoteChar").ifPresent(x -> b.set(WSERIALIZER_quoteChar, x));
+			charset(a.streamCharset()).ifPresent(x -> b.set(WSERIALIZER_streamCharset, x));
+			bool(a.useWhitespace()).ifPresent(x -> b.set(WSERIALIZER_useWhitespace, x));
+			bool(a.detectRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_detectRecursions, x));
+			bool(a.ignoreRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_ignoreRecursions, x));
+			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.set(BEANTRAVERSE_initialDepth, x));
+			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.set(BEANTRAVERSE_maxDepth, x));
 		}
 	}
 }

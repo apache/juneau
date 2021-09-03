@@ -43,17 +43,17 @@ public class XmlConfigAnnotation {
 		public void apply(AnnotationInfo<XmlConfig> ai, ContextPropertiesBuilder b) {
 			XmlConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(XML_addBeanTypes, bool(a.addBeanTypes()));
-			b.setIfNotEmpty(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
-			b.setIfNotEmpty(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
-			b.setIfNotEmpty(XML_defaultNamespace, string(a.defaultNamespace()));
-			b.setIfNotEmpty(XML_enableNamespaces, bool(a.enableNamespaces()));
+			bool(a.addBeanTypes()).ifPresent(x -> b.set(XML_addBeanTypes, x));
+			bool(a.addNamespaceUrisToRoot()).ifPresent(x -> b.set(XML_addNamespaceUrisToRoot, x));
+			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.set(XML_disableAutoDetectNamespaces, x));
+			string(a.defaultNamespace()).ifPresent(x -> b.set(XML_defaultNamespace, x));
+			bool(a.enableNamespaces()).ifPresent(x -> b.set(XML_enableNamespaces, x));
 			b.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
-			b.setIf(a.eventAllocator() != XmlEventAllocator.Null.class, XML_eventAllocator, a.eventAllocator());
-			b.setIfNotEmpty(XML_preserveRootElement, bool(a.preserveRootElement()));
-			b.setIf(a.reporter() != XmlReporter.Null.class, XML_reporter, a.reporter());
-			b.setIf(a.resolver() != XmlResolver.Null.class, XML_resolver, a.resolver());
-			b.setIfNotEmpty(XML_validating, bool(a.validating()));
+			type(a.eventAllocator()).ifPresent(x -> b.set(XML_eventAllocator, x));
+			bool(a.preserveRootElement()).ifPresent(x -> b.set(XML_preserveRootElement, x));
+			type(a.reporter()).ifPresent(x -> b.set(XML_reporter, x));
+			type(a.resolver()).ifPresent(x -> b.set(XML_resolver, x));
+			bool(a.validating()).ifPresent(x -> b.set(XML_validating, x));
 		}
 	}
 }

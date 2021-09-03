@@ -41,8 +41,8 @@ public class OpenApiConfigAnnotation {
 		public void apply(AnnotationInfo<OpenApiConfig> ai, ContextPropertiesBuilder b) {
 			OpenApiConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(OAPI_format, string(a.format()));
-			b.setIfNotEmpty(OAPI_collectionFormat, string(a.collectionFormat()));
+			string(a.format()).ifPresent(x -> b.set(OAPI_format, x));
+			string(a.collectionFormat()).ifPresent(x -> b.set(OAPI_collectionFormat, x));
 		}
 	}
 }

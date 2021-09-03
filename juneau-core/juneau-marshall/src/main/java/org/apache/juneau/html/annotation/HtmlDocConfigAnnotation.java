@@ -54,8 +54,8 @@ public class HtmlDocConfigAnnotation {
 			b.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), b.peek(String[].class, HTMLDOC_header)));
 			b.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), b.peek(String[].class, HTMLDOC_nav)));
 			b.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), b.peek(String[].class, HTMLDOC_navlinks)));
-			b.setIfNotEmpty(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
-			b.setIfNotEmpty(HTMLDOC_nowrap, bool(a.nowrap()));
+			string(a.noResultsMessage()).ifPresent(x -> b.set(HTMLDOC_noResultsMessage, x));
+			bool(a.nowrap()).ifPresent(x -> b.set(HTMLDOC_nowrap, x));
 			b.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), b.peek(String[].class, HTMLDOC_script)));
 			b.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), b.peek(String[].class, HTMLDOC_style)));
 			b.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), b.peek(String[].class, HTMLDOC_stylesheet)));
@@ -68,7 +68,7 @@ public class HtmlDocConfigAnnotation {
 		private String[] resolveLinks(Object[] value, String[] prev) {
 			AList<String> list = AList.create();
 			for (Object v : value) {
-				String s = string(stringify(v));
+				String s = string(stringify(v)).orElse(null);
 				if (s == null)
 					return new String[0];
 				if ("INHERIT".equals(s)) {
@@ -91,7 +91,7 @@ public class HtmlDocConfigAnnotation {
 		private String[] resolveList(Object[] value, String[] prev) {
 			ASet<String> set = ASet.of();
 			for (Object v : value) {
-				String s = string(stringify(v));
+				String s = string(stringify(v)).orElse(null);
 				if ("INHERIT".equals(s)) {
 					if (prev != null)
 						set.a(prev);

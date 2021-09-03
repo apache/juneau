@@ -42,10 +42,10 @@ public class JsonConfigAnnotation {
 		public void apply(AnnotationInfo<JsonConfig> ai, ContextPropertiesBuilder b) {
 			JsonConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(JSON_addBeanTypes, bool(a.addBeanTypes()));
-			b.setIfNotEmpty(JSON_escapeSolidus, bool(a.escapeSolidus()));
-			b.setIfNotEmpty(JSON_simpleMode, bool(a.simpleMode()));
-			b.setIfNotEmpty(JSON_validateEnd, bool(a.validateEnd()));
+			bool(a.addBeanTypes()).ifPresent(x -> b.set(JSON_addBeanTypes, x));
+			bool(a.escapeSolidus()).ifPresent(x -> b.set(JSON_escapeSolidus, x));
+			bool(a.simpleMode()).ifPresent(x -> b.set(JSON_simpleMode, x));
+			bool(a.validateEnd()).ifPresent(x -> b.set(JSON_validateEnd, x));
 		}
 	}
 }

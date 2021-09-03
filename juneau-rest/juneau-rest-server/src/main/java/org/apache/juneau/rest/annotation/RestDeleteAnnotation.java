@@ -457,21 +457,21 @@ public class RestDeleteAnnotation {
 			b.httpMethod("delete");
 
 			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
-			value(a.contextClass()).ifPresent(x -> b.contextClass(x));
-			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
-			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
-			stringStream(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
-			value(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
+			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
+			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
+			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
+			strings(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
+			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.guards(a.guards());
 			b.matchers(a.matchers());
-			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			stringStream(a.path()).forEach(x -> b.path(x));
-			value(a.value()).ifPresent(x -> b.path(x));
-			cdStream(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			value(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
-			value(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			strings(a.path()).forEach(x -> b.path(x));
+			string(a.value()).ifPresent(x -> b.path(x));
+			strings_cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}
 	}
 }

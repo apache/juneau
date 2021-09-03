@@ -41,7 +41,7 @@ public class MsgPackConfigAnnotation {
 		public void apply(AnnotationInfo<MsgPackConfig> ai, ContextPropertiesBuilder b) {
 			MsgPackConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
+			bool(a.addBeanTypes()).ifPresent(x -> b.set(MSGPACK_addBeanTypes, x));
 		}
 	}
 }

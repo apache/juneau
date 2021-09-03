@@ -1041,42 +1041,42 @@ public class RestAnnotation {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
-			b.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
-			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
-			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
-			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
-			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
-			value(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
-			value(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
+			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
+			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
+			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
+			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
+			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
-			value(a.contextClass()).ifPresent(x -> b.contextClass(x));
-			value(a.uriContext()).ifPresent(x -> b.uriContext(x));
-			value(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
-			value(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
-			value(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
-			b.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
-			b.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
-			b.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
-			value(a.path()).ifPresent(x -> b.path(x));
-			value(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
-			b.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
-			value(a.callLogger()).ifPresent(x -> b.callLogger(x));
-			value(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
-			value(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));
-			value(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
-			value(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
-			value(a.debugEnablement()).ifPresent(x -> b.debugEnablement(x));
-			value(a.disableBodyParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableBodyParam(x));
-			value(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
-			value(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
-			value(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
-			b.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
-			value(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
-			value(a.debugOn()).ifPresent(x -> b.debugOn(x));
+			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
+			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
+			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
+			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
+			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
+			b.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages()).orElse(null)));
+			type(a.fileFinder()).ifPresent(x -> b.set(REST_fileFinder, x));
+			type(a.staticFiles()).ifPresent(x -> b.set(REST_staticFiles, x));
+			string(a.path()).ifPresent(x -> b.path(x));
+			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
+			type(a.beanStore()).ifPresent(x -> b.set(REST_beanStore, x));
+			type(a.callLogger()).ifPresent(x -> b.callLogger(x));
+			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
+			type(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));
+			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
+			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
+			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement(x));
+			string(a.disableBodyParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableBodyParam(x));
+			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
+			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
+			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
+			bool(a.renderResponseStackTraces()).ifPresent(x -> b.set(REST_renderResponseStackTraces, x));
+			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+			string(a.debugOn()).ifPresent(x -> b.debugOn(x));
 		}
 	}
 
@@ -1100,17 +1100,17 @@ public class RestAnnotation {
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
-			b.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
-			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
+			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
+			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
 			b.prependTo(REST_encoders, a.encoders());
-			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			b.converters(a.converters());
 			b.guards(a.guards());
-			value(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			value(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			cdStream(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			value(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
+			strings_cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
 		}
 	}
 }

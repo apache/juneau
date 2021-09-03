@@ -41,12 +41,12 @@ public class HtmlConfigAnnotation {
 		public void apply(AnnotationInfo<HtmlConfig> ai, ContextPropertiesBuilder b) {
 			HtmlConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(HTML_addBeanTypes, bool(a.addBeanTypes()));
-			b.setIfNotEmpty(HTML_addKeyValueTableHeaders, bool(a.addKeyValueTableHeaders()));
-			b.setIfNotEmpty(HTML_disableDetectLabelParameters, bool(a.disableDetectLabelParameters()));
-			b.setIfNotEmpty(HTML_disableDetectLinksInStrings, bool(a.disableDetectLinksInStrings()));
-			b.setIfNotEmpty(HTML_labelParameter, string(a.labelParameter()));
-			b.setIfNotEmpty(HTML_uriAnchorText, string(a.uriAnchorText()));
+			bool(a.addBeanTypes()).ifPresent(x -> b.set(HTML_addBeanTypes, x));
+			bool(a.addKeyValueTableHeaders()).ifPresent(x -> b.set(HTML_addKeyValueTableHeaders, x));
+			bool(a.disableDetectLabelParameters()).ifPresent(x -> b.set(HTML_disableDetectLabelParameters, x));
+			bool(a.disableDetectLinksInStrings()).ifPresent(x -> b.set(HTML_disableDetectLinksInStrings, x));
+			string(a.labelParameter()).ifPresent(x -> b.set(HTML_labelParameter, x));
+			string(a.uriAnchorText()).ifPresent(x -> b.set(HTML_uriAnchorText, x));
 		}
 	}
 }

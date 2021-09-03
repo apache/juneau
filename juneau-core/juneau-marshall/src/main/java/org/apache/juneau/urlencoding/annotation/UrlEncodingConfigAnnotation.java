@@ -40,10 +40,8 @@ public class UrlEncodingConfigAnnotation {
 		public void apply(AnnotationInfo<UrlEncodingConfig> ai, ContextPropertiesBuilder b) {
 			UrlEncodingConfig a = ai.getAnnotation();
 
-			if (! a.expandedParams().isEmpty()) {
-				b.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
-				b.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));
-			}
+			bool(a.expandedParams()).ifPresent(x -> b.set(UrlEncodingSerializer.URLENC_expandedParams, x));
+			bool(a.expandedParams()).ifPresent(x -> b.set(UrlEncodingParser.URLENC_expandedParams, x));
 		}
 	}
 }

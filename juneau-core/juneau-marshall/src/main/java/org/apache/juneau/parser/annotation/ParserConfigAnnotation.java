@@ -15,10 +15,7 @@ package org.apache.juneau.parser.annotation;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
 
-import java.nio.charset.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -45,22 +42,15 @@ public class ParserConfigAnnotation {
 		public void apply(AnnotationInfo<ParserConfig> ai, ContextPropertiesBuilder b) {
 			ParserConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));
-			b.setIfNotEmpty(PARSER_debugOutputLines, integer(a.debugOutputLines(), "debugOutputLines"));
-			b.setIf(a.listener() != ParserListener.Null.class, PARSER_listener, a.listener());
-			b.setIfNotEmpty(PARSER_strict, bool(a.strict()));
-			b.setIfNotEmpty(PARSER_trimStrings, bool(a.trimStrings()));
-			b.setIfNotEmpty(PARSER_unbuffered, bool(a.unbuffered()));
-			b.setIfNotEmpty(ISPARSER_binaryFormat, string(a.binaryFormat()));
-			b.setIfNotEmpty(RPARSER_fileCharset, charset(a.fileCharset()));
-			b.setIfNotEmpty(RPARSER_streamCharset, charset(a.streamCharset()));
-		}
-
-		private Object charset(String in) {
-			String s = string(in);
-			if ("default".equalsIgnoreCase(s))
-				return Charset.defaultCharset();
-			return s;
+			bool(a.autoCloseStreams()).ifPresent(x -> b.set(PARSER_autoCloseStreams, x));
+			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(x -> b.set(PARSER_debugOutputLines, x));
+			type(a.listener()).ifPresent(x -> b.set(PARSER_listener, x));
+			bool(a.strict()).ifPresent(x -> b.set(PARSER_strict, x));
+			bool(a.trimStrings()).ifPresent(x -> b.set(PARSER_trimStrings, x));
+			bool(a.unbuffered()).ifPresent(x -> b.set(PARSER_unbuffered, x));
+			string(a.binaryFormat()).ifPresent(x -> b.set(ISPARSER_binaryFormat, x));
+			charset(a.fileCharset()).ifPresent(x -> b.set(RPARSER_fileCharset, x));
+			charset(a.streamCharset()).ifPresent(x -> b.set(RPARSER_streamCharset, x));
 		}
 	}
 }

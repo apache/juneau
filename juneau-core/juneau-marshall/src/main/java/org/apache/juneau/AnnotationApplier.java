@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.lang.annotation.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -89,20 +87,9 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * Resolves the specified string.
 	 *
 	 * @param in The string containing variables to resolve.
-	 * @return The resolved string.
-	 */
-	protected String string(String in) {
-		in = vr.resolve(in);
-		return isEmpty(in) ? null : in;
-	}
-
-	/**
-	 * Resolves the specified string.
-	 *
-	 * @param in The string containing variables to resolve.
 	 * @return An optional containing the specified string if it exists, or {@link Optional#empty()} if it does not.
 	 */
-	protected Optional<String> value(String in) {
+	protected Optional<String> string(String in) {
 		in = vr.resolve(in);
 		return isEmpty(in) ? Optional.empty() : Optional.of(in);
 	}
@@ -113,7 +100,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The value to return.
 	 * @return An optional containing the specified value.
 	 */
-	protected <T> Optional<Class<T>> value(Class<T> in) {
+	protected <T> Optional<Class<T>> type(Class<T> in) {
 		return in.getSimpleName().equals("Null") ? Optional.empty() : Optional.of(in);
 	}
 
@@ -124,7 +111,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected List<String> stringList(String[] in) {
-		return stringStream(in).collect(Collectors.toList());
+		return strings(in).collect(Collectors.toList());
 	}
 
 	/**
@@ -133,7 +120,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The CDL string containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
-	protected Stream<String> stringStream(String[] in) {
+	protected Stream<String> strings(String[] in) {
 		return Arrays.asList(in).stream().map(x -> vr.resolve(x)).filter(x -> !StringUtils.isEmpty(x));
 	}
 
@@ -143,38 +130,8 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The CDL string containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
-	protected List<String> cdList(String in) {
-		return cdStream(in).collect(Collectors.toList());
-	}
-
-	/**
-	 * Resolves the specified string as a comma-delimited list of strings.
-	 *
-	 * @param in The CDL string containing variables to resolve.
-	 * @return An array with resolved strings.
-	 */
-	protected Stream<String> cdStream(String in) {
+	protected Stream<String> strings_cdl(String in) {
 		return Arrays.asList(StringUtils.split(vr.resolve(in))).stream().filter(x -> !StringUtils.isEmpty(x));
-	}
-
-	/**
-	 * Resolves the specified strings as a maps of strings-to-strings.
-	 *
-	 * @param in The string array containing variables to resolve.
-	 * @param loc The annotation field name.
-	 * @return A map of strings-to-strings.
-	 */
-	protected Map<String,String> stringsMap(String[] in, String loc) {
-		Map<String,String> m = new LinkedHashMap<>();
-		for (String s : stringList(in)) {
-			for (String s2 : split(s, ';')) {
-				int i = s2.indexOf(':');
-				if (i == -1)
-					throw new ConfigException("Invalid syntax for key/value pair on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, s2);
-				m.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
-			}
-		}
-		return m;
 	}
 
 	/**
@@ -183,9 +140,8 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The string containing variables to resolve.
 	 * @return The resolved boolean.
 	 */
-	public Boolean bool(String in) {
-		in = string(in);
-		return in == null ? null : Boolean.parseBoolean(in);
+	public Optional<Boolean> bool(String in) {
+		return string(in).map(Boolean::parseBoolean);
 	}
 
 	/**
@@ -195,10 +151,9 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param loc The annotation field name.
 	 * @return The resolved int.
 	 */
-	protected Integer integer(String in, String loc) {
+	protected Optional<Integer> integer(String in, String loc) {
 		try {
-			in = string(in);
-			return in == null ? null : Integer.parseInt(in);
+			return string(in).map(Integer::parseInt);
 		} catch (NumberFormatException e) {
 			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
@@ -211,41 +166,39 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param loc The annotation field name.
 	 * @return The resolved Visibility.
 	 */
-	protected Visibility visibility(String in, String loc) {
+	protected Optional<Visibility> visibility(String in, String loc) {
 		try {
-			in = string(in);
-			return in == null ? null : Visibility.valueOf(in);
+			return string(in).map(Visibility::valueOf);
 		} catch (IllegalArgumentException e) {
 			throw new ConfigException("Invalid syntax for visibility on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
 	}
 
 	/**
-	 * Resolves the specified strings and converts it to an OMap.
+	 * Resolves the specified string and converts it to a Charset.
 	 *
-	 * @param in The strings to be concatenated and parsed into an OMap.
-	 * @param loc The annotation field name.
-	 * @return The resolved OMap.
+	 * @param in The string containing variables to resolve.
+	 * @return The resolved Charset.
 	 */
-	protected OMap omap(String[] in, String loc) {
-		return omap(joinnl(stringList(in)), loc);
+	protected Optional<Charset> charset(String in) {
+		return string(in).map(x -> "default".equalsIgnoreCase(x) ? Charset.defaultCharset() : Charset.forName(x));
 	}
 
 	/**
-	 * Resolves the specified string and converts it to an OMap.
+	 * Resolves the specified string and converts it to a Character.
 	 *
-	 * @param in The string to be parsed into an OMap.
+	 * @param in The string containing variables to resolve.
 	 * @param loc The annotation field name.
-	 * @return The resolved OMap.
+	 * @return The resolved Character.
 	 */
-	protected OMap omap(String in, String loc) {
-		try {
-			if (! isJsonObject(in, true))
-				in = "{" + in + "}";
-			return OMap.ofJson(in);
-		} catch (Exception e) {
-			throw new ConfigException("Invalid syntax for Simple-JSON on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
-		}
+	protected Optional<Character> character(String in, String loc) {
+		return string(in).map(x -> toCharacter(x, loc));
+	}
+
+	private Character toCharacter(String in, String loc) {
+		if (in.length() != 1)
+			throw new ConfigException("Invalid syntax for character on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
+		return in.charAt(0);
 	}
 
 	/**

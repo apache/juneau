@@ -42,11 +42,11 @@ public class UonConfigAnnotation {
 		public void apply(AnnotationInfo<UonConfig> ai, ContextPropertiesBuilder b) {
 			UonConfig a = ai.getAnnotation();
 
-			b.setIfNotEmpty(UON_addBeanTypes, bool(a.addBeanTypes()));
-			b.setIfNotEmpty(UON_encoding, bool(a.encoding()));
-			b.setIfNotEmpty(UON_paramFormat, string(a.paramFormat()));
-			b.setIfNotEmpty(UON_decoding, bool(a.decoding()));
-			b.setIfNotEmpty(UON_validateEnd, bool(a.validateEnd()));
+			bool(a.addBeanTypes()).ifPresent(x -> b.set(UON_addBeanTypes, x));
+			bool(a.encoding()).ifPresent(x -> b.set(UON_encoding, x));
+			string(a.paramFormat()).ifPresent(x -> b.set(UON_paramFormat, x));
+			bool(a.decoding()).ifPresent(x -> b.set(UON_decoding, x));
+			bool(a.validateEnd()).ifPresent(x -> b.set(UON_validateEnd, x));
 		}
 	}
 }
