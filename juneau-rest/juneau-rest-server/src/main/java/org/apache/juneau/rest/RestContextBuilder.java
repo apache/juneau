@@ -137,6 +137,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	BeanRef<RestLogger> callLoggerDefault = BeanRef.of(RestLogger.class);
 	BeanRef<RestLogger> callLogger = BeanRef.of(RestLogger.class);
 	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
+	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
 
 	Enablement debugDefault, debug;
 
@@ -1258,51 +1259,48 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
+	 * Default request attributes.
 	 *
 	 * <p>
-	 * Adds a single default request attribute.
+	 * Specifies default values for request attributes if they're not already set on the request.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * Affects values returned by the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getAttribute(String)}.
+	 * 	<li class='jm'>{@link RestRequest#getAttributes()}.
 	 * </ul>
 	 *
-	 * @param name The attribute name.
-	 * @param value The attribute value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultRequestAttribute(String name, Object value) {
-		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
 	 *
-	 * <p>
-	 * Adds a single default request attribute.
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
-	 * </ul>
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>
+	 * 				.defaultRequestAttributes(
+	 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
+	 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Baz"</js>, <jk>true</jk>)
+	 * 				);
+	 * 		}
 	 *
-	 * @param name The attribute name.
-	 * @param value The attribute value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultRequestAttribute(String name, Supplier<?> value) {
-		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultRequestAttribute(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 		}
 	 *
-	 * <p>
-	 * Adds multiple default request attributes.
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * <ul class='notes'>
+	 * 	<li>Use {@link BasicNamedAttribute#of(String, Supplier)} to provide a dynamically changeable attribute value.
 	 * </ul>
 	 *
 	 * @param values The attributes.
@@ -1310,7 +1308,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-		asList(values).stream().forEach(x -> appendTo(REST_defaultRequestAttributes, x));
+		defaultRequestAttributes.appendUnique(values);
 		return this;
 	}
 

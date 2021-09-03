@@ -279,21 +279,35 @@ public @interface RestPut {
 	 * <p>
 	 * Specifies default values for request attributes if they're not already set on the request.
 	 *
+	 * <p>
+	 * Affects values returned by the following methods:
+	 * 	<ul>
+	 * 		<li class='jm'>{@link RestRequest#getAttribute(String)}.
+	 * 		<li class='jm'>{@link RestRequest#getAttributes()}.
+	 * 	</ul>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo: bar"</js>})
-	 * 	<jk>public</jk> String doPut()  {...}
+	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
 	 * </p>
 	 *
+	 * </ul>
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * 	<li class='jm'>{@link RestContextBuilder#defaultRequestAttributes(NamedAttribute...)}
+	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
 	 */
 	String[] defaultRequestAttributes() default {};

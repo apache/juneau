@@ -1045,7 +1045,7 @@ public class RestAnnotation {
 			b.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
 			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(REST_defaultRequestAttributes, x));
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
 			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultResponseHeaders, x));
 			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
