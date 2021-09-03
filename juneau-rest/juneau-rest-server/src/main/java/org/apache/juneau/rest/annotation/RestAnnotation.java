@@ -1046,10 +1046,10 @@ public class RestAnnotation {
 			stringStream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			stringStream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
-			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(REST_defaultResponseHeaders, x));
-			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
-			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
+			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
+			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
+			value(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			value(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());

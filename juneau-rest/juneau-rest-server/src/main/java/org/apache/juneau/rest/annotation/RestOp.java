@@ -330,7 +330,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li class='jm'>{@link RestContextBuilder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 */
 	String[] defaultRequestHeaders() default {};
@@ -355,7 +355,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li class='jm'>{@link RestContextBuilder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 */
 	String[] defaultResponseHeaders() default {};

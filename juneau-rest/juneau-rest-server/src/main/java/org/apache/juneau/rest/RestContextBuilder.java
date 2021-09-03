@@ -138,6 +138,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	BeanRef<RestLogger> callLogger = BeanRef.of(RestLogger.class);
 	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
 	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
+	HeaderListBuilder defaultRequestHeaders = HeaderList.create();
+	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
 
 	Enablement debugDefault, debug;
 
@@ -1313,51 +1315,55 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
-	 * Adds a single default request header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultRequestHeader(String name, String value) {
-		return defaultRequestHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
-	 * Adds a single default request header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultRequestHeader(String name, Supplier<String> value) {
-		return defaultRequestHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
+	 * Default request headers.
 	 *
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>
+	 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header=$C{REST/myHeaderValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>
+	 * 				.defaultRequestHeaders(
+	 * 					Accept.<jsm>of</jsm>(<js>"application/json"</js>),
+	 * 					BasicHeader.<jsm>of</jsm>(<js>"My-Header"</js>, <js>"foo"</js>)
+	 * 				);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultRequestHeaders(Accept.<jsm>of</jsm>(<js>"application/json"</js>));
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li class='ja'>{@link Rest#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
 	 * </ul>
 	 *
 	 * @param values The headers to add.
@@ -1365,56 +1371,56 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestHeaders(Header...values) {
-		asList(values).stream().forEach(x -> appendTo(REST_defaultRequestHeaders, x));
+		defaultRequestHeaders.setDefault(values);
 		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <p>
-	 * Adds a single default response header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param name The response header name.
-	 * @param value The response header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultResponseHeader(String name, String value) {
-		return defaultResponseHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <p>
-	 * Adds a single default response header.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param name The response header name.
-	 * @param value The response header value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultResponseHeader(String name, Supplier<String> value) {
-		return defaultResponseHeaders(stringHeader(name, value));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
+	 * Default response headers.
 	 *
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
+	 * 		the Java methods.
+	 * 	<li>
+	 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>
+	 * 				.defaultResponseHeaders(
+	 * 					ContentType.<jsm>of</jsm>(<js>"text/plain"</js>),
+	 * 					BasicHeader.<jsm>ofPair</jsm>(<js>"My-Header: foo"</js>)
+	 * 				);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultResponseHeaders(ContentType.<jsm>of</jsm>(<js>"text/plain"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li class='ja'>{@link Rest#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
 	 * </ul>
 	 *
 	 * @param values The headers to add.
@@ -1422,7 +1428,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultResponseHeaders(Header...values) {
-		asList(values).stream().forEach(x -> appendTo(REST_defaultResponseHeaders, x));
+		defaultResponseHeaders.setDefault(values);
 		return this;
 	}
 

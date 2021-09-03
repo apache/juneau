@@ -462,7 +462,7 @@ public class RestDeleteAnnotation {
 			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
 			stringStream(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
-			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
+			value(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.guards(a.guards());
 			b.matchers(a.matchers());
 			value(a.clientVersion()).ifPresent(x -> b.clientVersion(x));

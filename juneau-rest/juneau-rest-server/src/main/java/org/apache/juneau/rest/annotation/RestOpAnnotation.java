@@ -621,8 +621,8 @@ public class RestOpAnnotation {
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
 			stringStream(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
 			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultFormData(x));
-			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
-			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
+			value(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			value(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.converters(a.converters());
 			b.guards(a.guards());
 			b.matchers(a.matchers());
