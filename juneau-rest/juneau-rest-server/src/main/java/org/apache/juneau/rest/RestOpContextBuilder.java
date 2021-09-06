@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import java.lang.annotation.*;
 import java.util.*;
@@ -20,6 +21,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
@@ -51,6 +53,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	Set<String> roleGuard, rolesDeclared;
 	RestGuardList.Builder guards = RestGuardList.create();
 	RestConverterList.Builder converters = RestConverterList.create();
+	EncoderGroup.Builder encoders;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -93,6 +96,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		this.defaultRequestHeaders = HeaderList.create();
 		this.defaultResponseHeaders = HeaderList.create();
 		this.restMatchers = RestMatcherList.create();
+		this.encoders = EncoderGroup.create().inheritFrom(context.builder.encoders).beanStore(beanStore);
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -291,11 +295,11 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link RestConverter}.
 	 */
-	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestOpContextBuilder converters(Class<? extends RestConverter>...values) {
-		converters.append(values);
+	public RestOpContextBuilder converters(Class<?>...values) {
+		converters.append(assertClassArrayArgIsType("values", RestConverter.class, values));
 		return this;
 	}
 
@@ -516,6 +520,70 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Compression encoders.
+	 *
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(encoders={MySpecialEncoder.<jk>class</jk>}, inherit={<js>"ENCODERS"</js>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestEncoders}
+	 * 	<li class='ja'>{@link Rest#encoders()}
+	 * 	<li class='ja'>{@link RestOp#encoders()}
+	 * 	<li class='ja'>{@link RestGet#encoders()}
+	 * 	<li class='ja'>{@link RestPut#encoders()}
+	 * 	<li class='ja'>{@link RestPost#encoders()}
+	 * 	<li class='ja'>{@link RestDelete#encoders()}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
+	 */
+	@FluentSetter
+	public final RestOpContextBuilder encoders(Class<?>...values) {
+		encoders.add(assertClassArrayArgIsType("values", Encoder.class, values));
+		return this;
+	}
+
+	/**
 	 * Guards.
 	 *
 	 * <p>
@@ -579,11 +647,11 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link RestGuard}.
 	 */
-	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestOpContextBuilder guards(Class<? extends RestGuard>...values) {
-		guards.append(values);
+	public RestOpContextBuilder guards(Class<?>...values) {
+		guards.append(assertClassArrayArgIsType("values", RestGuard.class, values));
 		return this;
 	}
 
@@ -723,11 +791,11 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 *
 	 * @param values The new values for this setting.
 	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link RestMatcher}.
 	 */
-	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestOpContextBuilder matchers(Class<? extends RestMatcher>...values) {
-		restMatchers.append(values);
+	public RestOpContextBuilder matchers(Class<?>...values) {
+		restMatchers.append(assertClassArrayArgIsType("values", RestMatcher.class, values));
 		return this;
 	}
 

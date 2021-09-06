@@ -46,7 +46,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Response;
@@ -147,79 +146,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_beanStore = PREFIX + ".beanStore.o";
-
-	/**
-	 * Configuration property:  Compression encoders.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_encoders REST_encoders}
-	 * 	<li><b>Name:</b>  <js>"RestContext.encoders.o"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.encoders.Encoder}|Class&lt;{@link org.apache.juneau.encoders.Encoder}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#encoders()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#encoders()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#encoders(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#encoders(Encoder...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.addTo(<jsf>REST_encoders</jsf>, GzipEncoder.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(encoders={MySpecialEncoder.<jk>class</jk>}, inherit={<js>"ENCODERS"</js>})
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestEncoders}
-	 * </ul>
-	 */
-	public static final String REST_encoders = PREFIX + ".encoders.lo";
 
 	/**
 	 * Configuration property:  File finder.
@@ -1020,7 +946,7 @@ public class RestContext extends BeanContext {
 	private final Supplier<?> resource;
 	private final Class<?> resourceClass;
 
-	private final RestContextBuilder builder;
+	final RestContextBuilder builder;
 	private final boolean
 		allowBodyParam,
 		renderResponseStackTraces;
@@ -2038,12 +1964,11 @@ public class RestContext extends BeanContext {
 	 * @return The REST method parameter resolvers for this REST resource.
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 */
-	@SuppressWarnings("unchecked")
 	protected RestOpArgList createHookMethodArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
 		RestOpArgList.Builder x = RestOpArgList.create();
 
-		x.append(
+		x.add(
 			ConfigArg.class,
 			HeaderArg.class,
 			HttpServletRequestArg.class,

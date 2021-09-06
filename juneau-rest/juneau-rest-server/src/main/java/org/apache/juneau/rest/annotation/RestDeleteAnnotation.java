@@ -14,8 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.rest.RestContext.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
@@ -23,7 +21,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.encoders.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -59,7 +57,7 @@ public class RestDeleteAnnotation {
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
-		Class<?>[] encoders=new Class<?>[0];
+		Class<? extends Encoder>[] encoders = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
 		String[] defaultQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={};
@@ -196,7 +194,7 @@ public class RestDeleteAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder encoders(Class<?>...value) {
+		public Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
 			return this;
 		}
@@ -311,7 +309,7 @@ public class RestDeleteAnnotation {
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
 		private final Class<? extends RestOpContext> contextClass;
-		private final Class<?>[] encoders;
+		private final Class<? extends Encoder>[] encoders;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
 		private final String[] defaultQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path;
@@ -391,7 +389,7 @@ public class RestDeleteAnnotation {
 		}
 
 		@Override /* RestDelete */
-		public Class<?>[] encoders() {
+		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
@@ -456,7 +454,7 @@ public class RestDeleteAnnotation {
 
 			b.httpMethod("delete");
 
-			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
+			b.encoders(a.encoders());
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
 			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));

@@ -993,4 +993,22 @@ public class Assertions {
 		if (! expression)
 			throw illegalArgumentException(msg, args);
 	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
+	 *
+	 * @param name The argument name.
+	 * @param type The expected parent class.
+	 * @param value The array value being checked.
+	 * @return The value cast to the specified array type.
+	 * @throws IllegalArgumentException Constructed exception.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> Class<T>[] assertClassArrayArgIsType(String name, Class<T> type, Class<?>[] value) throws IllegalArgumentException {
+		for (int i = 0; i < value.length; i++)
+			if (! type.isAssignableFrom(value[i]))
+				throw illegalArgumentException("Arg {0} did not have arg of type {1} at index {2}: {3}", name, type.getName(), i, value[i].getName());
+		return (Class<T>[])value;
+	}
+
 }

@@ -621,7 +621,8 @@ public @interface Rest {
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * 	<li class='jm'>{@link RestContextBuilder#encoders(Class...)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#encoders(Class...)}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};

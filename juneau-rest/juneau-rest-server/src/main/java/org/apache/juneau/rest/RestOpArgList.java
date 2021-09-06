@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.assertions.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -75,10 +77,10 @@ public class RestOpArgList {
 		 *
 		 * @param values The values to add.
 		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 		 */
-		@SuppressWarnings("unchecked")
-		public Builder append(Class<? extends RestOpArg>...values) {
-			entries.addAll(0, Arrays.asList(values));
+		public Builder add(Class<?>...values) {
+			entries.addAll(0, Arrays.asList(assertClassArrayArgIsType("values", RestOpArg.class, values)));
 			return this;
 		}
 	}

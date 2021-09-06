@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.assertions.Assertions.*;
+import static java.util.Arrays.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
@@ -75,10 +78,10 @@ public class ResponseProcessorList {
 		 *
 		 * @param values The values to add.
 		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 		 */
-		@SuppressWarnings("unchecked")
-		public Builder append(Class<? extends ResponseProcessor>...values) {
-			entries.append((Object[])values);
+		public Builder add(Class<?>...values) {
+			entries.addAll(asList(assertClassArrayArgIsType("values", ResponseProcessor.class, values)));
 			return this;
 		}
 
@@ -89,7 +92,7 @@ public class ResponseProcessorList {
 		 * @return This object (for method chaining).
 		 */
 		public Builder append(ResponseProcessor...values) {
-			entries.append((Object[])values);
+			entries.addAll(asList(values));
 			return this;
 		}
 

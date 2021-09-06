@@ -23,6 +23,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -61,7 +62,8 @@ public class RestPutAnnotation {
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
-		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
+		Class<? extends Encoder>[] encoders = new Class[0];
+		Class<?>[] parsers=new Class<?>[0], serializers=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", rolesDeclared="", roleGuard="", summary="", value="";
 		String[] consumes={}, defaultFormData={}, defaultQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
@@ -242,7 +244,7 @@ public class RestPutAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder encoders(Class<?>...value) {
+		public Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
 			return this;
 		}
@@ -402,7 +404,8 @@ public class RestPutAnnotation {
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
 		private final Class<? extends RestOpContext> contextClass;
-		private final Class<?>[] encoders, parsers, serializers;
+		private final Class<? extends Encoder>[] encoders;
+		private final Class<?>[] parsers, serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, rolesDeclared, roleGuard, summary, value;
 		private final String[] consumes, defaultFormData, defaultQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
@@ -510,7 +513,7 @@ public class RestPutAnnotation {
 		}
 
 		@Override /* RestPut */
-		public Class<?>[] encoders() {
+		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
@@ -597,7 +600,7 @@ public class RestPutAnnotation {
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
-			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
+			b.encoders(a.encoders());
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));

@@ -174,7 +174,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			encoders = createEncoders(r, cp, bs);
+			encoders = createEncoders(r, builder, bs);
 			bs.addBean(EncoderGroup.class, encoders);
 
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, cp, bs);
@@ -376,9 +376,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link RestContext#REST_encoders} value set via any of the following:
+	 * 	<li>Looks for encoders set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#encoders(Class...)}/{@link RestContextBuilder#encoders(Encoder...)}
+	 * 			<li>{@link RestOpContextBuilder#encoders(Class...)}
 	 * 			<li>{@link RestOp#encoders()}.
 	 * 			<li>{@link Rest#encoders()}.
 	 * 		</ul>
@@ -395,38 +395,28 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The encoders for this REST resource method.
 	 * @throws Exception If encoders could not be instantiated.
-	 * @see RestContext#REST_encoders
 	 */
-	protected EncoderGroup createEncoders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected EncoderGroup createEncoders(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		Encoder[] x = properties.getInstanceArray(REST_encoders, Encoder.class, beanStore).orElse(null);
+		EncoderGroup.Builder x = builder.encoders;
 
-		if (x == null)
-			x = beanStore.getBean(Encoder[].class).orElse(null);
+		if (x.isEmpty())
+			x.add(EncoderGroup.Inherit.class);
 
-		if (x == null)
-			x = new Encoder[0];
-
-		EncoderGroup g = EncoderGroup
-			.create()
-			.append(IdentityEncoder.INSTANCE)
-			.append(x)
-			.build();
-
-		g = BeanStore
+		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(EncoderGroup.class, g)
-			.beanCreateMethodFinder(EncoderGroup.class, resource)
+			.addBean(EncoderGroup.Builder.class, x)
+			.beanCreateMethodFinder(EncoderGroup.Builder.class, resource)
 			.find("createEncoders", Method.class)
 			.thenFind("createEncoders")
-			.withDefault(g)
+			.withDefault(x)
 			.run();
 
-		return g;
+		return x.build();
 	}
 
 	/**

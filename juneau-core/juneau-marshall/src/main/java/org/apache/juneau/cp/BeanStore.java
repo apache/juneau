@@ -312,6 +312,21 @@ public class BeanStore {
 	}
 
 	/**
+	 * Same as {@link #createBean(Class)} but allows you to validate that the specified type is of the specified parent class.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param c The bean type to create.
+	 * @param type The bean subtype to create.
+	 * @return A newly-created bean.
+	 * @throws ExecutableException If bean could not be created.
+	 */
+	public <T> T createBean(Class<T> c, Class<? extends T> type) throws ExecutableException {
+		if (! c.isAssignableFrom(type))
+			throw new ExecutableException("Could not instantiate class of type {0} because it was not a subtype of the class: {1}.", c.getName(), type);
+		return createBean(type);
+	}
+
+	/**
 	 * Same as {@link #createBean(Class)} but returns the bean creation wrapped in a supplier.
 	 *
 	 * @param c The bean type to create.

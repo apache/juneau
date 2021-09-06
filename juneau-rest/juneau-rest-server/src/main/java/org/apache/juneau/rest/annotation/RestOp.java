@@ -24,6 +24,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.encoders.*;
 
 /**
  * Identifies a REST operation Java method on a {@link RestServlet} implementation class.
@@ -400,10 +401,10 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#encoders(Class...)}
 	 * </ul>
 	 */
-	Class<?>[] encoders() default {};
+	Class<? extends Encoder>[] encoders() default {};
 
 	/**
 	 * Method-level guards.

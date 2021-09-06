@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -140,11 +141,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
 	HeaderListBuilder defaultRequestHeaders = HeaderList.create();
 	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
+	EncoderGroup.Builder encoders = EncoderGroup.create();
 
 	Enablement debugDefault, debug;
 
-	@SuppressWarnings("unchecked")
-	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().append(
+	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().add(
 		ReaderProcessor.class,
 		InputStreamProcessor.class,
 		ThrowableProcessor.class,
@@ -158,8 +159,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	List<Object> children = new ArrayList<>();
 
-	@SuppressWarnings("unchecked")
-	RestOpArgList.Builder restOpArgs = RestOpArgList.create().append(
+	RestOpArgList.Builder restOpArgs = RestOpArgList.create().add(
 		AttributeArg.class,
 		BodyArg.class,
 		ConfigArg.class,
@@ -216,7 +216,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Default values.
 			partSerializer(OpenApiSerializer.class);
 			partParser(OpenApiParser.class);
-			encoders(IdentityEncoder.INSTANCE);
+			encoders(IdentityEncoder.class);
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -1495,39 +1495,67 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Compression encoders.
+	 * Compression encoders.
 	 *
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(encoders={MySpecialEncoder.<jk>class</jk>, EncoderGroup.Inherit.<jk>class</jk>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * 	<li class='link'>{@doc RestEncoders}
+	 * 	<li class='ja'>{@link Rest#encoders()}
+	 * 	<li class='ja'>{@link RestOp#encoders()}
+	 * 	<li class='ja'>{@link RestGet#encoders()}
+	 * 	<li class='ja'>{@link RestPut#encoders()}
+	 * 	<li class='ja'>{@link RestPost#encoders()}
+	 * 	<li class='ja'>{@link RestDelete#encoders()}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 	 */
 	@FluentSetter
-	public RestContextBuilder encoders(Class<?>...values) {
-		return prependTo(REST_encoders, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Compression encoders.
-	 *
-	 * <p>
-	 * Same as {@link #encoders(Class...)} except input a pre-constructed instances.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_encoders}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder encoders(Encoder...values) {
-		return prependTo(REST_encoders, values);
+	public final RestContextBuilder encoders(Class<?>...values) {
+		encoders.add(values);
+		return this;
 	}
 
 	/**
@@ -2064,11 +2092,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 	 */
-	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestContextBuilder responseProcessors(Class<? extends ResponseProcessor>...values) {
-		responseProcessors.append(values);
+	public RestContextBuilder responseProcessors(Class<?>...values) {
+		responseProcessors.add(assertClassArrayArgIsType("values", ResponseProcessor.class, values));
 		return this;
 	}
 
@@ -2276,11 +2304,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 	 */
 	@FluentSetter
-	@SuppressWarnings("unchecked")
-	public RestContextBuilder restOpArgs(Class<? extends RestOpArg>...values) {
-		restOpArgs.append(values);
+	public RestContextBuilder restOpArgs(Class<?>...values) {
+		restOpArgs.add(assertClassArrayArgIsType("values", RestOpArg.class, values));
 		return this;
 	}
 

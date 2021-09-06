@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.encoders.*;
 
 /**
  * Identifies a REST DELETE operation Java method on a {@link RestServlet} implementation class.
@@ -330,10 +331,10 @@ public @interface RestDelete {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#encoders(Class...)}
 	 * </ul>
 	 */
-	Class<?>[] encoders() default {};
+	Class<? extends Encoder>[] encoders() default {};
 
 	/**
 	 * Method-level guards.

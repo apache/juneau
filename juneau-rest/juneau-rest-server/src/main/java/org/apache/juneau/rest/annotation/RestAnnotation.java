@@ -1053,6 +1053,7 @@ public class RestAnnotation {
 			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
+			b.encoders(a.encoders());
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
@@ -1102,7 +1103,6 @@ public class RestAnnotation {
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
 			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
-			b.prependTo(REST_encoders, a.encoders());
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			b.converters(a.converters());
