@@ -13,16 +13,20 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
@@ -71,9 +75,24 @@ import org.apache.juneau.internal.*;
 public final class SerializerGroup {
 
 	/**
-	 * An unmodifiable empty serializer group.
+	 * An identifier that a group of serializers should be inherited.
 	 */
-	public static final SerializerGroup EMPTY = create().build();
+	@SuppressWarnings("javadoc")
+	public static abstract class Inherit extends Serializer {
+		protected Inherit(SerializerBuilder builder) {
+			super(builder);
+		}
+	}
+
+	/**
+	 * An identifier that a group of serializers should not be inherited.
+	 */
+	@SuppressWarnings("javadoc")
+	public static abstract class None extends Serializer {
+		protected None(SerializerBuilder builder) {
+			super(builder);
+		}
+	}
 
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
@@ -85,15 +104,12 @@ public final class SerializerGroup {
 	final Serializer[] serializers;
 
 	/**
-	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
+	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> SerializerGroupBuilder()</code>.
-	 *
-	 * @return A new {@link SerializerGroupBuilder} object.
+	 * @return A new {@link Builder} object.
 	 */
-	public static SerializerGroupBuilder create() {
-		return new SerializerGroupBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -101,17 +117,9 @@ public final class SerializerGroup {
 	 *
 	 * @param builder The builder for this bean.
 	 */
-	protected SerializerGroup(SerializerGroupBuilder builder) {
+	protected SerializerGroup(Builder builder) {
 
-		List<Serializer> x = new ArrayList<>();
-		for (Object s : builder.serializers) {
-			if (s instanceof SerializerBuilder) {
-				x.add(((SerializerBuilder)s).build());
-			} else {
-				x.add((Serializer)s);
-			}
-		}
-		this.serializers = ArrayUtils.toReverseArray(Serializer.class, x);
+		this.serializers = builder.serializers.stream().map(x -> build(x)).toArray(Serializer[]::new);
 
 		AList<MediaRange> lmtr = AList.create();
 		ASet<MediaType> lmt = ASet.of();
@@ -130,13 +138,275 @@ public final class SerializerGroup {
 		this.mediaTypeRangeSerializers = l.unmodifiable();
 	}
 
+	private Serializer build(Object o) {
+		if (o instanceof Serializer)
+			return (Serializer)o;
+		return ((SerializerBuilder)o).build();
+	}
+
 	/**
 	 * Creates a copy of this serializer group.
 	 *
 	 * @return A new copy of this serializer group.
 	 */
-	public SerializerGroupBuilder copy() {
-		return new SerializerGroupBuilder(this);
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	/**
+	 * Builder class for creating instances of {@link SerializerGroup}.
+	 */
+	public static class Builder {
+
+		List<Object> serializers;
+		private BeanContextBuilder bcBuilder;
+
+		/**
+		 * Create an empty serializer group builder.
+		 */
+		protected Builder() {
+			this.serializers = AList.create();
+		}
+
+		/**
+		 * Clone an existing serializer group.
+		 *
+		 * @param copyFrom The serializer group that we're copying settings and serializers from.
+		 */
+		protected Builder(SerializerGroup copyFrom) {
+			this.serializers = AList.create().append(asList(copyFrom.serializers));
+		}
+
+		/**
+		 * Clone an existing serializer group builder.
+		 *
+		 * <p>
+		 * Serializer builders will be cloned during this process.
+		 *
+		 * @param copyFrom The serializer group that we're copying settings and serializers from.
+		 */
+		protected Builder(Builder copyFrom) {
+			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
+			serializers = AList.create();
+			copyFrom.serializers.stream().map(x -> copyBuilder(x)).forEach(x -> serializers.add(x));
+		}
+
+		private Object copyBuilder(Object o) {
+			if (o instanceof SerializerBuilder) {
+				SerializerBuilder x = (SerializerBuilder)o;
+				x = x.copy();
+				if (bcBuilder != null)
+					x.beanContextBuilder(bcBuilder);
+				return x;
+			}
+			return o;
+		}
+
+		/**
+		 * Copy creator.
+		 *
+		 * @return A new mutable copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		/**
+		 * Creates a new {@link SerializerGroup} object using a snapshot of the settings defined in this builder.
+		 *
+		 * <p>
+		 * This method can be called multiple times to produce multiple serializer groups.
+		 *
+		 * @return A new {@link SerializerGroup} object.
+		 */
+		public SerializerGroup build() {
+			return new SerializerGroup(this);
+		}
+
+		/**
+		 * Associates an existing bean context builder with all serializer builders in this group.
+		 *
+		 * @param value The bean contest builder to associate.
+		 * @return This object (for method chaining).
+		 */
+		public Builder beanContextBuilder(BeanContextBuilder value) {
+			bcBuilder = value;
+			forEach(x -> x.beanContextBuilder(value));
+			return this;
+		}
+
+		/**
+		 * Adds the specified serializers to this group.
+		 *
+		 * <p>
+		 * Entries are added in-order to the beginning of the list in the group.
+		 *
+		 * @param values The serializers to add to this group.
+		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer}.
+		 */
+		public Builder add(Class<?>...values) {
+			List<Object> l = new ArrayList<>();
+			for (Class<?> e : values) {
+				if (Serializer.class.isAssignableFrom(e)) {
+					l.add(createBuilder(e));
+				} else {
+					throw runtimeException("Invalid type passed to SerializeGroup.Builder.add(): " + e.getName());
+				}
+			}
+			serializers.addAll(0, l);
+			return this;
+		}
+
+		/**
+		 * Sets the specified serializers for this group.
+		 *
+		 * <p>
+		 * Existing values are overwritten.
+		 *
+		 * <p>
+		 * If {@link Inherit} (or any other class whose simple name is <js>"Inherit"</js>) is specified, then the existing values are copied
+		 * into the final list in the position they appear in the values.
+		 *
+		 * @param values The serializers to set in this group.
+		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer} or named <js>"Inherit"</js>.
+		 */
+		public Builder set(Class<?>...values) {
+			List<Object> l = new ArrayList<>();
+			for (Class<?> e : values) {
+				if (e.getSimpleName().equals("Inherit")) {
+					l.addAll(serializers);
+				} else if (Serializer.class.isAssignableFrom(e)) {
+					l.add(createBuilder(e));
+				} else {
+					throw runtimeException("Invalid type passed to SerializeGroup.Builder.set(): " + e.getName());
+				}
+			}
+			serializers = l;
+			return this;
+		}
+
+		private Object createBuilder(Object o) {
+			if (o instanceof Class) {
+				@SuppressWarnings("unchecked")
+				SerializerBuilder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
+				if (bcBuilder != null)
+					b.beanContextBuilder(bcBuilder);
+				o = b;
+			}
+			return o;
+		}
+
+		/**
+		 * Registers the specified serializers with this group.
+		 *
+		 * <p>
+		 * When passing in pre-instantiated serializers to this group, applying properties and transforms to the group
+		 * do not affect them.
+		 *
+		 * @param s The serializers to append to this group.
+		 * @return This object (for method chaining).
+		 */
+		public Builder add(Serializer...s) {
+			serializers.addAll(0, asList(s));
+			return this;
+		}
+
+		/**
+		 * Clears out any existing serializers in this group.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder clear() {
+			serializers.clear();
+			return this;
+		}
+
+		/**
+		 * Returns <jk>true</jk> if at least one of the specified annotations can be applied to at least one serializer builder in this group.
+		 *
+		 * @param work The work to check.
+		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one serializer builder in this group.
+		 */
+		public boolean canApply(List<AnnotationWork> work) {
+			for (Object o : serializers)
+				if (o instanceof SerializerBuilder)
+					if (((SerializerBuilder)o).canApply(work))
+						return true;
+			return false;
+		}
+
+		/**
+		 * Applies the specified annotations to all applicable serializer builders in this group.
+		 *
+		 * @param work The annotations to apply.
+		 * @return This object (for method chaining).
+		 */
+		public Builder apply(List<AnnotationWork> work) {
+			return forEach(x -> x.apply(work));
+		}
+
+		/**
+		 * Performs an action on all serializer builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public Builder forEach(Consumer<SerializerBuilder> action) {
+			builders(SerializerBuilder.class).forEach(action);
+			return this;
+		}
+
+		/**
+		 * Performs an action on all writer serializer builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public Builder forEachWS(Consumer<WriterSerializerBuilder> action) {
+			return forEach(WriterSerializerBuilder.class, action);
+		}
+
+		/**
+		 * Performs an action on all output stream serializer builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public Builder forEachOSS(Consumer<OutputStreamSerializerBuilder> action) {
+			return forEach(OutputStreamSerializerBuilder.class, action);
+		}
+
+		/**
+		 * Performs an action on all serializer builders of the specified type in this group.
+		 *
+		 * @param type The serializer builder type.
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public <T extends SerializerBuilder> Builder forEach(Class<T> type, Consumer<T> action) {
+			builders(type).forEach(action);
+			return this;
+		}
+
+		@SuppressWarnings("unchecked")
+		private <T extends SerializerBuilder> Stream<T> builders(Class<T> type) {
+			return serializers.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return serializers.stream().map(x -> toString(x)).collect(joining(",","[","]"));
+		}
+
+		private String toString(Object o) {
+			if (o == null)
+				return "null";
+			if (o instanceof SerializerBuilder)
+				return "builder:" + o.getClass().getName();
+			return "serializer:" + o.getClass().getName();
+		}
 	}
 
 	/**

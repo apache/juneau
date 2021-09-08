@@ -24,8 +24,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;
 
@@ -414,8 +412,8 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public ParserBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

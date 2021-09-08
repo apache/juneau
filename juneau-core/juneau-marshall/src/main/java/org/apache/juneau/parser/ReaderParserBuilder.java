@@ -22,8 +22,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for building instances of reader-based parsers.
@@ -178,8 +176,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public ReaderParserBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

@@ -62,7 +62,6 @@ import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -97,7 +96,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private CloseableHttpClient httpClient;
 	private boolean pooled;
 
-	SerializerGroupBuilder serializerGroupBuilder;
+	SerializerGroup.Builder serializerGroupBuilder;
 	ParserGroupBuilder parserGroupBuilder;
 
 	SerializerBuilder partSerializerBuilder;
@@ -3366,7 +3365,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-		serializerGroupBuilder.append(value);
+		serializerGroupBuilder.add(value);
 		return this;
 	}
 
@@ -3405,7 +3404,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder serializers(Serializer...value) {
-		serializerGroupBuilder.append(value);
+		serializerGroupBuilder.add(value);
 		return this;
 	}
 
@@ -4847,8 +4846,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public RestClientBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

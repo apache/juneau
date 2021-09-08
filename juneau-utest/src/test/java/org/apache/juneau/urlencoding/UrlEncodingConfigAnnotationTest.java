@@ -15,6 +15,7 @@ package org.apache.juneau.urlencoding;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -54,15 +55,15 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().createSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().createSession();
 		check("true", x.isExpandedParams());
 	}
 
@@ -76,15 +77,15 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
@@ -97,15 +98,15 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 }

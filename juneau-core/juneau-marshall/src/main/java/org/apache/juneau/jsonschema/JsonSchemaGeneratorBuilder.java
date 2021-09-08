@@ -25,8 +25,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of JSON Schema generators.
@@ -35,8 +33,8 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 
-	JsonSerializerBuilder jsonSerializerBuilder;
-	JsonParserBuilder jsonParserBuilder;
+	final JsonSerializerBuilder jsonSerializerBuilder;
+	final JsonParserBuilder jsonParserBuilder;
 
 	/**
 	 * Constructor, default settings.
@@ -47,6 +45,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		jsonSerializerBuilder = JsonSerializer.create().beanContextBuilder(bc);
 		jsonParserBuilder = (JsonParserBuilder) JsonParser.create().beanContextBuilder(bc);
 		contextClass(JsonSchemaGenerator.class);
+		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
 
 	/**
@@ -59,6 +58,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		BeanContextBuilder bc = getBeanContextBuilder();
 		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContextBuilder(bc);
 		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParser.copy().beanContextBuilder(bc);
+		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
 
 	/**
@@ -71,6 +71,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		BeanContextBuilder bc = getBeanContextBuilder();
 		jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContextBuilder(bc);
 		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParserBuilder.copy().beanContextBuilder(bc);
+		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
 
 	@Override /* ContextBuilder */
@@ -371,8 +372,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public JsonSchemaGeneratorBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

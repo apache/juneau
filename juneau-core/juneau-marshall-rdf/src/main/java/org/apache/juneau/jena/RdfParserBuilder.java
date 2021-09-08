@@ -25,8 +25,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.Rdf;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -851,8 +849,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public RdfParserBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

@@ -14,6 +14,9 @@ package org.apache.juneau.jso;
 
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.jso.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
@@ -34,14 +37,14 @@ public class JsoConfigAnnotationTest {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		JsoSerializer.create().applyAnnotations(al, null).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(null);
+		JsoSerializer.create().apply(al).build().createSession();
 	}
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		JsoParser.create().applyAnnotations(al, null).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(null);
+		JsoParser.create().apply(al).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -53,13 +56,13 @@ public class JsoConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		JsoSerializer.create().applyAnnotations(al, null).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(null);
+		JsoSerializer.create().apply(al).build().createSession();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		JsoParser.create().applyAnnotations(al, null).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(null);
+		JsoParser.create().apply(al).build().createSession();
 	}
 }

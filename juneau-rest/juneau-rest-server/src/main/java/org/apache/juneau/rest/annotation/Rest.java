@@ -29,6 +29,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.vars.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
@@ -46,6 +47,7 @@ import org.apache.juneau.rest.vars.*;
 @Retention(RUNTIME)
 @Inherited
 @ContextApply({RestAnnotation.RestContextApply.class,RestAnnotation.RestOpContextApply.class})
+@AnnotationGroup(Rest.class)
 public @interface Rest {
 
 	/**
@@ -621,8 +623,8 @@ public @interface Rest {
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#encoders(Class...)}
-	 * 	<li class='jm'>{@link RestOpContextBuilder#encoders(Class...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
@@ -1090,23 +1092,45 @@ public @interface Rest {
 	String rolesDeclared() default "";
 
 	/**
-	 * Serializers.
+	 * The serializers to use to serialize POJOs into response bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Add support for serializing POJOs to JSON or XML.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		serializers={
+	 * 			JsonSerializer.<jk>class</jk>,
+	 * 			XmlSerializer.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 * 	}
+	 * </p>
 	 *
 	 * <p>
-	 * If no value is specified, the serializers are inherited from parent class.
-	 * <br>Otherwise, this value overrides the serializers defined on the parent class.
-	 *
-	 * <p>
-	 * Use {@link Inherit} to inherit serializers defined on the parent class.
-	 *
-	 * <p>
+	 * Values are added from parent-to-child order.  Child values are automatically inserted before parent values so that they take precedence.
+	 * <br>
 	 * Use {@link None} to suppress inheriting serializers defined on the parent class.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * 	<jc>// Don't inherit serializers from parent class.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		serializers={
+	 * 			None.<jk>class</jk>,
+	 * 			JsonSerializer.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyChildResource <jk>extends</jk> MyParentResource {
+	 * 		...
+	 * 	}
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * 	<li class='jm'>{@link RestContextBuilder#getSerializers()}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#getSerializers()}
 	 * </ul>
 	 */
-	Class<?>[] serializers() default {};
+	Class<? extends Serializer>[] serializers() default {};
 
 	/**
 	 * Optional site name.

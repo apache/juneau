@@ -27,8 +27,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -291,8 +289,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSchemaSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public HtmlSchemaSerializerBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

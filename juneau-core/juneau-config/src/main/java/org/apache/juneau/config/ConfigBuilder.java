@@ -24,7 +24,6 @@ import org.apache.juneau.config.store.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -377,8 +376,8 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public ConfigBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

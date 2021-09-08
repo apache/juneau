@@ -22,8 +22,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -62,6 +60,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	protected BeanContextableBuilder() {
 		super();
 		this.bcBuilder = BeanContext.create();
+		registerBuilders(bcBuilder);
 	}
 
 	/**
@@ -72,6 +71,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	protected BeanContextableBuilder(BeanContextable copyFrom) {
 		super(copyFrom);
 		this.bcBuilder = copyFrom.getBeanContext().copy();
+		registerBuilders(bcBuilder);
 	}
 
 	/**
@@ -82,6 +82,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	protected BeanContextableBuilder(BeanContextableBuilder copyFrom) {
 		super(copyFrom);
 		this.bcBuilder = copyFrom.bcBuilder.copy();
+		registerBuilders(bcBuilder);
 	}
 
 	@Override /* ContextBuilder */
@@ -2917,9 +2918,8 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	}
 
 	@Override
-	public BeanContextableBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		bcBuilder.applyAnnotations(al, r);
-		super.applyAnnotations(al, r);
+	public BeanContextableBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

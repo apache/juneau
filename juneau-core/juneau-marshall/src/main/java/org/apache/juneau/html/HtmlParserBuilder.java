@@ -23,8 +23,6 @@ import javax.xml.stream.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -113,8 +111,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public HtmlParserBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

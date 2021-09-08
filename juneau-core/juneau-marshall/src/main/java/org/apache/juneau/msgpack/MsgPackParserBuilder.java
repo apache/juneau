@@ -20,8 +20,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of MessagePack parsers.
@@ -109,8 +107,8 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MsgPackParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public MsgPackParserBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

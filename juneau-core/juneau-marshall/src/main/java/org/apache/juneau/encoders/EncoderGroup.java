@@ -13,12 +13,12 @@
 package org.apache.juneau.encoders;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.stream.Collectors.*;
+import static java.util.Collections.*;
 
 import java.util.*;
-import java.util.ArrayList;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -71,17 +71,12 @@ public final class EncoderGroup {
 	 */
 	public static abstract class Inherit extends Encoder {}
 
-	/**
-	 * A default encoder group consisting of identity and G-Zip encoding.
-	 */
-	public static final EncoderGroup DEFAULT = create().add(IdentityEncoder.class, GzipEncoder.class).build();
-
 	// Maps Accept-Encoding headers to matching encoders.
 	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
 
 	private final List<String> encodings;
 	private final Encoder[] encodingsEncoders;
-	private final List<Encoder> encoders;
+	private final Encoder[] encoders;
 
 	/**
 	 * Instantiates a new clean-slate {@link EncoderGroup.Builder} object.
@@ -101,20 +96,10 @@ public final class EncoderGroup {
 	 * @param builder The builder for this object.
 	 */
 	protected EncoderGroup(Builder builder) {
-		List<Encoder> x = new ArrayList<>();
-		BeanStore bs = builder.beanStore;
-		for (Object e : builder.encoders) {
-			if (e == EncoderGroup.Inherit.class && builder.inheritFrom != null) {
-				for (Object e2 : builder.inheritFrom.encoders)
-					x.add(instantiate(bs, e2));
-			} else {
-				x.add(instantiate(bs, e));
-			}
-		}
-		encoders = Collections.unmodifiableList(x);
+		encoders = builder.encoders.stream().map(x -> instantiate(builder.beanStore, x)).toArray(Encoder[]::new);
 
-		AList<String> lc = AList.create();
-		AList<Encoder> l = AList.create();
+		List<String> lc = AList.create();
+		List<Encoder> l = AList.create();
 		for (Encoder e : encoders) {
 			for (String c: e.getCodings()) {
 				lc.add(c);
@@ -122,8 +107,8 @@ public final class EncoderGroup {
 			}
 		}
 
-		this.encodings = lc.unmodifiable();
-		this.encodingsEncoders = l.asArrayOf(Encoder.class);
+		this.encodings = unmodifiableList(lc);
+		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -141,7 +126,7 @@ public final class EncoderGroup {
 	 * Builder class for this object.
 	 */
 	public static class Builder {
-		final AList<Object> encoders;
+		List<Object> encoders;
 		Builder inheritFrom;
 		BeanStore beanStore = BeanStore.create().build();
 
@@ -149,18 +134,59 @@ public final class EncoderGroup {
 			encoders = AList.create();
 		}
 
+		Builder(Builder copyFrom) {
+			encoders = AList.of(copyFrom.encoders);
+		}
+
 		/**
 		 * Registers the specified encoders with this group.
 		 *
 		 * <p>
-		 * Entries are added to the beginning of the list.
+		 * Entries are added in-order to the beginning of the list.
 		 *
 		 * @param values The encoders to add to this group.
 		 * @return This object (for method chaining).
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder add(Class<?>...values) {
-			encoders.addAll(0, asList(assertClassArrayArgIsType("values", Encoder.class, values)));
+			List<Object> l = AList.create();
+			for (Class<?> e : values) {
+				if (Encoder.class.isAssignableFrom(e)) {
+					l.add(e);
+				} else {
+					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.add(): " + e.getName());
+				}
+			}
+			encoders.addAll(0, l);
+			return this;
+		}
+
+		/**
+		 * Sets the encoders in this group.
+		 *
+		 * <p>
+		 * All encoders in this group are replaced with the specified values.
+		 *
+		 * <p>
+		 * If {@link Inherit} is specified (or any other class whose simple name is <js>"Inherit"</js>, the existing values are preserved
+		 * and inserted into the position in the values array.
+		 *
+		 * @param values The encoders to add to this group.
+		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
+		 */
+		public Builder set(Class<?>...values) {
+			List<Object> l = AList.create();
+			for (Class<?> e : values) {
+				if (e.getSimpleName().equals("Inherit")) {
+					l.addAll(encoders);
+				} else if (Encoder.class.isAssignableFrom(e)) {
+					l.add(e);
+				} else {
+					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.set(): " + e.getName());
+				}
+			}
+			encoders = l;
 			return this;
 		}
 
@@ -179,6 +205,16 @@ public final class EncoderGroup {
 		}
 
 		/**
+		 * Clears out any existing encoders in this group.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder clear() {
+			encoders.clear();
+			return this;
+		}
+
+		/**
 		 * Associates a bean store with this builder.
 		 *
 		 * <p>
@@ -189,38 +225,6 @@ public final class EncoderGroup {
 		 */
 		public Builder beanStore(BeanStore value) {
 			beanStore = value;
-			return this;
-		}
-
-		/**
-		 * Associates a parent builder with this builder.
-		 *
-		 * <p>
-		 * When {@link Inherit} is passed to {@link #add(Class...)}, the entries in the specified
-		 * group will be inserted into this group.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
-		 * 	<jc>// A group being inherited.</jc>
-		 * 	EncoderGroup <jv>group1</jv> = EncoderGroup
-		 * 		.<jsm>create</jsm>()
-		 * 		.add(GzipEncoder.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// A group inheriting another group.</jc>
-		 * 	<jc>// The group ends up containing [IdentityEncoder, GZipEncoder] in that order.</jc>
-		 * 	EncoderGroup <jv>group2</jv> = EncoderGroup
-		 * 		.<jsm>create</jsm>()
-		 * 		.inheritFrom(<jv>group1</jv>)
-		 * 		.add(IdentityEncoder.<jk>class</jk>, EncoderGroup.Inherit.<jk>class</jk>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value The group to inherit from.
-		 * @return This object (for method chaining).
-		 */
-		public Builder inheritFrom(EncoderGroup.Builder value) {
-			inheritFrom = value;
 			return this;
 		}
 
@@ -256,6 +260,15 @@ public final class EncoderGroup {
 			if (o instanceof Class)
 				return "class:" + ((Class<?>)o).getSimpleName();
 			return "object:" + o.getClass().getSimpleName();
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
 		}
 	}
 

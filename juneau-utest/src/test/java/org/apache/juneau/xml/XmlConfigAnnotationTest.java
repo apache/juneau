@@ -15,6 +15,7 @@ package org.apache.juneau.xml;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import javax.xml.stream.*;
@@ -104,8 +105,8 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		XmlSerializerSession x = XmlSerializer.create().apply(al).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddNamespaceUrisToRoot());
 		check("false", x.isAutoDetectNamespaces());
@@ -116,8 +117,8 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		XmlParserSession x = XmlParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		XmlParserSession x = XmlParser.create().apply(al).build().createSession();
 		check("AA", x.getEventAllocator());
 		check("true", x.isPreserveRootElement());
 		check("AB", x.getReporter());
@@ -135,8 +136,8 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		XmlSerializerSession x = XmlSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
 		check("true", x.isAutoDetectNamespaces());
@@ -147,8 +148,8 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		XmlParserSession x = XmlParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		XmlParserSession x = XmlParser.create().apply(al).build().createSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());
 		check(null, x.getReporter());
@@ -165,8 +166,8 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		XmlSerializerSession x = XmlSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
 		check("true", x.isAutoDetectNamespaces());
@@ -177,8 +178,8 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		XmlParserSession x = XmlParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		XmlParserSession x = XmlParser.create().apply(al).build().createSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());
 		check(null, x.getReporter());

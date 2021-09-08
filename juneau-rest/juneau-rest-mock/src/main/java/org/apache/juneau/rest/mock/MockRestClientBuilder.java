@@ -38,11 +38,9 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 
 import javax.net.ssl.*;
@@ -284,8 +282,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MockRestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public MockRestClientBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

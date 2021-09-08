@@ -15,10 +15,10 @@ package org.apache.juneau.rest.annotation;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
@@ -63,11 +63,11 @@ public class Restx_Serializers_Test {
 		public String b() {
 			return "test2";
 		}
-		@RestGet(serializers={SB.class,SC.class,Inherit.class})
+		@RestGet(serializers={SB.class,SC.class,SerializerGroup.Inherit.class})
 		public String c() {
 			return "test3";
 		}
-		@RestGet(serializers={SD.class,Inherit.class})
+		@RestGet(serializers={SD.class,SerializerGroup.Inherit.class})
 		public String d() {
 			return "test4";
 		}
@@ -145,7 +145,7 @@ public class Restx_Serializers_Test {
 	@Rest(serializers={S1.class,S2.class})
 	public static class B {}
 
-	@Rest(serializers={S3.class,S4.class,Inherit.class})
+	@Rest(serializers={S3.class,S4.class})
 	public static class B1 extends B {}
 
 	@Rest
@@ -160,7 +160,7 @@ public class Restx_Serializers_Test {
 			// Should show ['text/s5']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
-		@RestGet(serializers={S5.class,Inherit.class})
+		@RestGet(serializers={S5.class,SerializerGroup.Inherit.class})
 		public OList c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());

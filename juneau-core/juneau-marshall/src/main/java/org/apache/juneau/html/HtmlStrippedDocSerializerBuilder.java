@@ -20,8 +20,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -111,8 +109,8 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlStrippedDocSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public HtmlStrippedDocSerializerBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

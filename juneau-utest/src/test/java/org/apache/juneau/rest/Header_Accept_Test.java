@@ -18,6 +18,7 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
@@ -120,7 +121,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class C {
-		@RestOp(serializers={S3.class,Inherit.class})
+		@RestOp(serializers={S3.class,SerializerGroup.Inherit.class})
 		public String put(@Body String in) {
 			return in;
 		}
@@ -237,7 +238,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class F {
-		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers={Inherit.class, S3.class})
+		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers={SerializerGroup.Inherit.class, S3.class})
 		public String put(@Body String in) {
 			return in;
 		}

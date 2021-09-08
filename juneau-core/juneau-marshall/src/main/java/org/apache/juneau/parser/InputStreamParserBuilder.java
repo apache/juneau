@@ -21,8 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for building instances of stream-based parsers.
@@ -141,8 +139,8 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public InputStreamParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public InputStreamParserBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

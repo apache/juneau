@@ -30,6 +30,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
@@ -54,6 +55,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	RestGuardList.Builder guards = RestGuardList.create();
 	RestConverterList.Builder converters = RestConverterList.create();
 	EncoderGroup.Builder encoders;
+	SerializerGroup.Builder serializers;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -96,7 +98,6 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		this.defaultRequestHeaders = HeaderList.create();
 		this.defaultResponseHeaders = HeaderList.create();
 		this.restMatchers = RestMatcherList.create();
-		this.encoders = EncoderGroup.create().inheritFrom(context.builder.encoders).beanStore(beanStore);
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -104,8 +105,12 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();
+			List<AnnotationWork> al = mi.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
 
-			applyAnnotations(mi.getAnnotationList(ContextApplyFilter.INSTANCE), vrs);
+			apply(al);
+
+			if (context.builder.serializers.canApply(al))
+				getSerializers().apply(al);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -523,48 +528,16 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 * Compression encoders.
 	 *
 	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 * This method overwrites any encoders defined at the class level.
+	 * If never called, then the encoders are automatically inherited from the class level.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(encoders={MySpecialEncoder.<jk>class</jk>}, inherit={<js>"ENCODERS"</js>})
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
+	 * <p>
+	 * If {@link org.apache.juneau.encoders.EncoderGroup.Inherit} (or any other class whose simple name is <js>"Inherit"</js>) is specified, then the existing values are copied
+	 * into the final list in the position they appear in the values.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestEncoders}
+	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
 	 * 	<li class='ja'>{@link Rest#encoders()}
 	 * 	<li class='ja'>{@link RestOp#encoders()}
 	 * 	<li class='ja'>{@link RestGet#encoders()}
@@ -573,14 +546,12 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 * 	<li class='ja'>{@link RestDelete#encoders()}
 	 * </ul>
 	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
+	 * @return The encoder group builder for the context builder.
 	 */
-	@FluentSetter
-	public final RestOpContextBuilder encoders(Class<?>...values) {
-		encoders.add(assertClassArrayArgIsType("values", Encoder.class, values));
-		return this;
+	public EncoderGroup.Builder getEncoders() {
+		if (encoders == null)
+			encoders = restContext.builder.encoders.copy();
+		return encoders;
 	}
 
 	/**
@@ -1016,6 +987,30 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 			roleGuard.add(value);
 		return this;
 	}
+
+	/**
+	 * Specifies the serializers for this REST method.
+	 *
+	 * <p>
+	 * This method overwrites any serializers defined at the class level.
+	 * If never called, then the serializers are automatically inherited from the class level.
+	 *
+	 * <p>
+	 * If {@link org.apache.juneau.serializer.SerializerGroup.Inherit} (or any other class whose simple name is <js>"Inherit"</js>) is specified, then the existing values are copied
+	 * into the final list in the position they appear in the values.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestSerializers}
+	 * </ul>
+	 *
+	 * @return The serializer group builder for this context builder.
+	 */
+	public SerializerGroup.Builder getSerializers() {
+		if (serializers == null)
+			serializers = restContext.builder.serializers.copy();
+		return serializers;
+	}
+
 	/**
 	 * Supported content media types.
 	 *
@@ -1046,6 +1041,12 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 			consumes = new ArrayList<>(Arrays.asList(values));
 		else
 			consumes.addAll(Arrays.asList(values));
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestOpContextBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 
@@ -1084,12 +1085,6 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestOpContextBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestOpContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
 		return this;
 	}
 

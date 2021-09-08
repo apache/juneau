@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.nio.charset.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -71,8 +72,8 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void basicReaderParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		JsonParserSession x = JsonParser.create().apply(al).build().createSession();
 		check("true", x.isAutoCloseStreams());
 		check("1", x.getDebugOutputLines());
 		check("US-ASCII", x.getFileCharset());
@@ -85,8 +86,8 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void basicInputStreamParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		MsgPackParserSession x = MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		MsgPackParserSession x = MsgPackParser.create().apply(al).build().createSession();
 		check("true", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
 		check("1", x.getDebugOutputLines());
@@ -106,8 +107,8 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noValuesReaderParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		JsonParserSession x = JsonParser.create().apply(al).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
 		check(Charset.defaultCharset().toString(), x.getFileCharset());
@@ -120,8 +121,8 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noValuesInputStreamParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		MsgPackParserSession x = MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		MsgPackParserSession x = MsgPackParser.create().apply(al).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());
@@ -140,8 +141,8 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationReaderParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		JsonParserSession x = JsonParser.create().apply(al).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
 		check(Charset.defaultCharset().toString(), x.getFileCharset());
@@ -154,8 +155,8 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationInputStreamParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		MsgPackParserSession x = MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		MsgPackParserSession x = MsgPackParser.create().apply(al).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());

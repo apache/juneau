@@ -17,8 +17,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for {@link ConfigStore} objects.
@@ -101,8 +99,8 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public ConfigStoreBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

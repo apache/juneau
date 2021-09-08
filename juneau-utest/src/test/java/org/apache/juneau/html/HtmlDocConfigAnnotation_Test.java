@@ -77,8 +77,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("foo", x.getAside());
 		check("foo", x.getFooter());
 		check("foo", x.getHead());
@@ -103,8 +103,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void defaults() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("", x.getAside());
 		check("", x.getFooter());
 		check("", x.getHead());
@@ -128,8 +128,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("", x.getAside());
 		check("", x.getFooter());
 		check("", x.getHead());
@@ -164,8 +164,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void inheritance1() throws Exception {
-		AnnotationList al = d1.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = d1.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("foo2,foo", x.getAside());
 		check("foo2,foo", x.getFooter());
 		check("foo2,foo", x.getHead());
@@ -193,8 +193,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void inheritance2() throws Exception {
-		AnnotationList al = d2.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = d2.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("foo,foo2", x.getAside());
 		check("foo,foo2", x.getFooter());
 		check("foo,foo2", x.getHead());
@@ -222,8 +222,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void inheritance3() throws Exception {
-		AnnotationList al = d3.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = d3.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("foo2", x.getAside());
 		check("foo2", x.getFooter());
 		check("foo2", x.getHead());
@@ -251,8 +251,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void inheritance4() throws Exception {
-		AnnotationList al = d4.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = d4.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("", x.getAside());
 		check("", x.getFooter());
 		check("", x.getHead());
@@ -306,8 +306,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void widgets_basic() throws Exception {
-		AnnotationList al = e.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = e.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("$W{E}", x.getAside());
 		check("$W{E}", x.getFooter());
 		check("$W{E}", x.getHead());
@@ -324,8 +324,8 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void widgets_resolution() throws Exception {
-		AnnotationList al = e.getAnnotationList();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = e.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		String r = x.serialize(null).replaceAll("[\r\n]+", "|");
 		assertString(r).contains(
 			"<aside>xxx</aside>",
@@ -378,36 +378,36 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@Test
 	public void e01_rankedAnnotations_f1() throws Exception {
-		AnnotationList al = f1.getAnnotationList().sort();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = f1.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("f1", x.getAside());
 	}
 
 	@Test
 	public void e02_rankedAnnotations_f2() throws Exception {
-		AnnotationList al = f2.getAnnotationList().sort();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = f2.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("f1", x.getAside());
 	}
 
 	@Test
 	public void e03_rankedAnnotations_f3() throws Exception {
-		AnnotationList al = f3.getAnnotationList().sort();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = f3.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("f3", x.getAside());
 	}
 
 	@Test
 	public void e04_rankedAnnotations_f4() throws Exception {
-		AnnotationList al = f4.getAnnotationList().sort();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = f4.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("f3", x.getAside());
 	}
 
 	@Test
 	public void e05_rankedAnnotations_f5() throws Exception {
-		AnnotationList al = f5.getAnnotationList().sort();
-		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = f5.getAnnotationList().getWork(sr);
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().createSession();
 		check("f5", x.getAside());
 	}
 }

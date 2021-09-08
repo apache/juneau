@@ -15,6 +15,7 @@ package org.apache.juneau.soap;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -54,8 +55,8 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().createSession();
 		check("foo", x.getSoapAction());
 	}
 
@@ -69,8 +70,8 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().createSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
 
@@ -83,8 +84,8 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().createSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
 }

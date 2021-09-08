@@ -22,8 +22,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -510,8 +508,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public HtmlSerializerBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

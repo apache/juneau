@@ -14,6 +14,9 @@ package org.apache.juneau.csv.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
@@ -34,14 +37,14 @@ public class CsvConfig_Test {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		CsvSerializer.create().applyAnnotations(al, null).build();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(null);
+		CsvSerializer.create().apply(al).build();
 	}
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		CsvParser.create().applyAnnotations(al, null).build();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(null);
+		CsvParser.create().apply(al).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -53,13 +56,13 @@ public class CsvConfig_Test {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		CsvSerializer.create().applyAnnotations(al, null).build();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(null);
+		CsvSerializer.create().apply(al).build();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		CsvParser.create().applyAnnotations(al, null).build();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(null);
+		CsvParser.create().apply(al).build();
 	}
 }

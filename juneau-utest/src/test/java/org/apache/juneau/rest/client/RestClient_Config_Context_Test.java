@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.BeanContext.*;
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -23,7 +24,6 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
@@ -114,9 +114,8 @@ public class RestClient_Config_Context_Test {
 		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
-		AnnotationList al = ClassInfo.of(A6c.class).getAnnotationList(ContextApplyFilter.INSTANCE);
-		VarResolverSession vr = VarResolver.DEFAULT.createSession();
-		client().applyAnnotations(al,vr).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
+		List<AnnotationWork> al = ClassInfo.of(A6c.class).getAnnotationList(ContextApplyFilter.INSTANCE).getWork(null);
+		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 	}
 
 	@Test

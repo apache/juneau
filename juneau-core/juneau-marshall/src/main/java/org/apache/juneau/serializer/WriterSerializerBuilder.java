@@ -23,8 +23,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Base class for all writer-based serializer builders.
@@ -388,8 +386,8 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public WriterSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public WriterSerializerBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

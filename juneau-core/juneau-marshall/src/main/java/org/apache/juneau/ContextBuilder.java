@@ -16,6 +16,8 @@ import static org.apache.juneau.Context.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static org.apache.juneau.Visibility.*;
+import static java.util.stream.Collectors.*;
+import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -58,6 +60,8 @@ public abstract class ContextBuilder {
 	boolean debug;
 	Class<?> contextClass;
 
+	private final List<Object> builders = new ArrayList<>();
+
 	/**
 	 * Constructor.
 	 * Default settings.
@@ -65,6 +69,7 @@ public abstract class ContextBuilder {
 	protected ContextBuilder() {
 		cpb = ContextProperties.create();
 		debug = env("Context.debug", false);
+		registerBuilders(this, cpb);
 	}
 
 	/**
@@ -76,6 +81,7 @@ public abstract class ContextBuilder {
 		this.cpb = copyFrom.properties.copy();
 		this.debug = copyFrom.debug;
 		this.contextClass = copyFrom.getClass();
+		registerBuilders(this, cpb);
 	}
 
 	/**
@@ -86,7 +92,8 @@ public abstract class ContextBuilder {
 	protected ContextBuilder(ContextBuilder copyFrom) {
 		this.cpb =  new ContextPropertiesBuilder(copyFrom.cpb);
 		this.debug = copyFrom.debug;
-		this.contextClass = copyFrom.getClass();
+		this.contextClass = copyFrom.contextClass;
+		registerBuilders(this, cpb);
 	}
 
 	/**
@@ -170,10 +177,25 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Applies a set of annotations to this property store.
+	 * Returns <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
+	 *
+	 * @param work The work to check.
+	 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
+	 */
+	public boolean canApply(List<AnnotationWork> work) {
+		for (AnnotationWork w : work)
+			for (Object b : builders)
+				if (w.canApply(b))
+					return true;
+		return false;
+	}
+
+	/**
+	 * Applies a set of annotations to this builder.
 	 *
 	 * <p>
-	 * The {@link AnnotationList} object is an ordered list of annotations and the classes/methods/packages they were found on.
+	 * An {@link AnnotationWork} consists of a single pair of {@link AnnotationInfo} that represents an annotation instance,
+	 * and {@link AnnotationApplier} which represents the code used to apply the values in that annotation to a specific builder.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -182,40 +204,45 @@ public abstract class ContextBuilder {
 	 * 	<jk>public class</jk> MyClass {...}
 	 *
 	 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
-	 * 	AnnotationList <jv>al</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>)
-	 * 		.getAnnotationList(ConfigAnnotationFilter.<jsf>INSTANCE</jsf>);
-	 *
-	 * 	<jc>// Use the default VarResolver to resolve any variables in the annotation fields.</jc>
-	 * 	VarResolverSession <jv>vs</jv> = VarResolver.<jsf>DEFAULT</jsf>.createSession();
+	 * 	List&lt;AnnotationWork&gt; <jv>work</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>)
+	 * 		.getAnnotationList(ConfigAnnotationFilter.<jsf>INSTANCE</jsf>)
+	 * 		.getWork(VarResolver.<jsf>DEFAULT</jsf>.createSession());
 	 *
 	 * 	<jc>// Apply any settings found on the annotations.</jc>
 	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.applyAnnotations(<jv>al</jv>, <jv>vs</jv>)
+	 * 		.apply(<jv>work</jv>)
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param al The list of all annotations annotated with {@link ContextApply}.
-	 * @param vr The string resolver for resolving variables in annotation values.
+	 * @param work The list of annotations and appliers to apply to this builder.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FluentSetter
-	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
-		for (AnnotationInfo<?> ai : al.sort()) {
-			try {
-				for (AnnotationApplier ca : ai.getApplies(vr))
-					if (ca.canApply(this))
-						ca.apply(ai, this);
-					else if (ca.canApply(cpb))
-						ca.apply(ai, cpb);
-			} catch (ConfigException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new ConfigException(ex, "Could not instantiate ConfigApply class {0}", ai);
-			}
-		}
+	public ContextBuilder apply(List<AnnotationWork> work) {
+		for (AnnotationWork w : work)
+			for (Object b : builders)
+				w.apply(b);
 		return this;
+	}
+
+	/**
+	 * Registers the specified secondary builders with this context builder.
+	 *
+	 * <p>
+	 * When {@link #apply(List)} is called, it gets called on all registered builders.
+	 *
+	 * @param builders The builders to add to the list of builders.
+	 */
+	protected void registerBuilders(Object...builders) {
+		for (Object b : builders) {
+			if (b == this)
+				this.builders.add(b);
+			else if (b instanceof ContextBuilder)
+				this.builders.addAll(((ContextBuilder)b).builders);
+			else
+				this.builders.add(b);
+		}
 	}
 
 	/**
@@ -274,9 +301,13 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
-		for (Class<?> c : fromClasses)
-			applyAnnotations(ClassInfo.of(c).getAnnotationList(ContextApplyFilter.INSTANCE), VarResolver.DEFAULT.createSession());
-		return this;
+		VarResolverSession vrs = VarResolver.DEFAULT.createSession();
+		List<AnnotationWork> work = stream(fromClasses)
+			.map(ClassInfo::of)
+			.map(x -> x.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs))
+			.flatMap(Collection::stream)
+			.collect(toList());
+		return apply(work);
 	}
 
 	/**
@@ -338,9 +369,13 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder applyAnnotations(Method...fromMethods) {
-		for (Method m : fromMethods)
-			applyAnnotations(MethodInfo.of(m).getAnnotationList(ContextApplyFilter.INSTANCE), VarResolver.DEFAULT.createSession());
-		return this;
+		VarResolverSession vrs = VarResolver.DEFAULT.createSession();
+		List<AnnotationWork> work = stream(fromMethods)
+			.map(MethodInfo::of)
+			.map(x -> x.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs))
+			.flatMap(Collection::stream)
+			.collect(toList());
+		return apply(work);
 	}
 
 	/**

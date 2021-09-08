@@ -24,8 +24,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -2904,8 +2902,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public BeanContextBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

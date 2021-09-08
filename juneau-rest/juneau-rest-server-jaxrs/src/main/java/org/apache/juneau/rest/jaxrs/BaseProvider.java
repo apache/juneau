@@ -52,7 +52,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			JuneauProvider jp = getClass().getAnnotation(JuneauProvider.class);
 
 			serializers = SerializerGroup.create()
-				.append(jp.serializers())
+				.add(jp.serializers())
 				.forEach(x -> x.swaps((Object[])jp.swaps()))
 				.forEach(x -> x.set(properties))
 				.build();

@@ -145,8 +145,8 @@ public class BeanConfigAnnotation_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		BeanSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		BeanSession bc = JsonSerializer.create().apply(al).build().createSession();
 
 		check("PRIVATE", bc.getBeanClassVisibility());
 		check("PRIVATE", bc.getBeanConstructorVisibility());
@@ -189,8 +189,8 @@ public class BeanConfigAnnotation_Test {
 
 	@Test
 	public void b01_noValues() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().applyAnnotations(al, sr).build();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		JsonSerializer js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
@@ -235,8 +235,8 @@ public class BeanConfigAnnotation_Test {
 
 	@Test
 	public void c01_noAnnotation() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().applyAnnotations(al, sr).build();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		JsonSerializer js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());

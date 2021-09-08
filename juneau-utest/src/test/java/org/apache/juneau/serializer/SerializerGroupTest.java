@@ -27,7 +27,7 @@ public class SerializerGroupTest {
 	@Test
 	public void testSerializerGroupMatching() throws Exception {
 
-		SerializerGroup sg = SerializerGroup.create().append(SA1.class, SA2.class, SA3.class).build();
+		SerializerGroup sg = SerializerGroup.create().add(SA1.class, SA2.class, SA3.class).build();
 		assertObject(sg.getSerializer("text/foo")).isType(SA1.class);
 		assertObject(sg.getSerializer("text/foo_a")).isType(SA1.class);
 		assertObject(sg.getSerializer("text/xxx+foo_a")).isType(SA1.class);
@@ -73,18 +73,18 @@ public class SerializerGroupTest {
 	//====================================================================================================
 	@Test
 	public void testInheritence() throws Exception {
-		SerializerGroupBuilder gb = null;
+		SerializerGroup.Builder gb = null;
 		SerializerGroup g = null;
 
-		gb = SerializerGroup.create().append(SB1.class, SB2.class);
+		gb = SerializerGroup.create().add(SB1.class, SB2.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
 
-		gb = SerializerGroup.create().append(SB1.class, SB2.class).append(SB3.class, SB4.class);
+		gb = SerializerGroup.create().add(SB1.class, SB2.class).add(SB3.class, SB4.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
-		gb = SerializerGroup.create().append(SB1.class, SB2.class).append(SB3.class, SB4.class).append(SB5.class);
+		gb = SerializerGroup.create().add(SB1.class, SB2.class).add(SB3.class, SB4.class).add(SB5.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}
@@ -124,10 +124,10 @@ public class SerializerGroupTest {
 	//====================================================================================================
 	@Test
 	public void testMediaTypesWithMetaCharacters() throws Exception {
-		SerializerGroupBuilder gb = null;
+		SerializerGroup.Builder gb = null;
 		SerializerGroup g = null;
 
-		gb = SerializerGroup.create().append(SC1.class, SC2.class, SC3.class);
+		gb = SerializerGroup.create().add(SC1.class, SC2.class, SC3.class);
 		g = gb.build();
 		assertObject(g.getSerializer("text/foo")).isType(SC1.class);
 		assertObject(g.getSerializer("foo/json")).isType(SC2.class);

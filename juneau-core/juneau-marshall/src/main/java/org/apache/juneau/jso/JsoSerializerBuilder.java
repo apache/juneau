@@ -19,9 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of Java Serialized Object serializers.
@@ -121,8 +119,8 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsoSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public JsoSerializerBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

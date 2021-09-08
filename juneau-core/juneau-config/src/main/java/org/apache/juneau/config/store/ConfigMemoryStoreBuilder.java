@@ -17,8 +17,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link ConfigMemoryStore} objects.
@@ -105,8 +103,8 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigMemoryStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public ConfigMemoryStoreBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

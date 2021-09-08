@@ -75,7 +75,7 @@ public class PojoSwapTest {
 	public void doTest() throws Exception {
 
 		SerializerGroup g = SerializerGroup.create()
-			.append(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
+			.add(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
 			.forEach(WriterSerializerBuilder.class, x -> x.sq())
 			.forEach(SerializerBuilder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))
 			.build();

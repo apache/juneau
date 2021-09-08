@@ -24,7 +24,6 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static java.util.Optional.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
@@ -149,7 +148,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 				.addBean(ContextProperties.class, cp);
 			bs.addBean(BeanStore.class, bs);
 
-			serializers = createSerializers(r, cp, bs);
+			serializers = createSerializers(r, builder, bs);
 			bs.addBean(SerializerGroup.class, serializers);
 
 			parsers = createParsers(r, cp, bs);
@@ -378,7 +377,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * <ul>
 	 * 	<li>Looks for encoders set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestOpContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestOpContextBuilder#getEncoders()}
 	 * 			<li>{@link RestOp#encoders()}.
 	 * 			<li>{@link Rest#encoders()}.
 	 * 		</ul>
@@ -403,9 +402,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	protected EncoderGroup createEncoders(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		EncoderGroup.Builder x = builder.encoders;
-
-		if (x.isEmpty())
-			x.add(EncoderGroup.Inherit.class);
+		if (x == null)
+			x = builder.restContext.builder.encoders;
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -425,9 +423,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link RestContext#REST_serializers} value set via any of the following:
+	 * 	<li>Looks for serializers set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Serializer...)}
+	 * 			<li>{@link RestOpContextBuilder#getSerializers()}
 	 * 			<li>{@link Rest#serializers()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createSerializers()</> method that returns <c>{@link Serializer}[]</c> on the
@@ -442,42 +440,32 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties The property store of this method.
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
-	 * @see RestContext#REST_serializers
 	 */
-	protected SerializerGroup createSerializers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected SerializerGroup createSerializers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		SerializerGroup g = beanStore.getBean(SerializerGroup.class).orElse(null);
 
-		if (g == null) {
-			Object[] x = properties.getArray(REST_serializers, Object.class).orElse(null);
+		if (g != null)
+			return g;
 
-			if (x == null)
-				x = beanStore.getBean(Serializer[].class).orElse(null);
+		SerializerGroup.Builder x = builder.serializers;
+		if (x == null)
+			x = builder.restContext.builder.serializers;
 
-			if (x == null)
-				x = new Serializer[0];
-
-			g = SerializerGroup
-				.create()
-				.append(x)
-				.forEach(y -> y.apply(properties))
-				.build();
-		}
-
-		g = BeanStore
+		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(SerializerGroup.class, g)
-			.beanCreateMethodFinder(SerializerGroup.class, resource)
+			.addBean(SerializerGroup.Builder.class, x)
+			.beanCreateMethodFinder(SerializerGroup.Builder.class, resource)
 			.find("createSerializers", Method.class)
 			.thenFind("createSerializers")
-			.withDefault(g)
+			.withDefault(x)
 			.run();
 
-		return g;
+		return x.build();
 	}
 
 	/**

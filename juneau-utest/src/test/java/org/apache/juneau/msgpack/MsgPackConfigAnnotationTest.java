@@ -15,6 +15,7 @@ package org.apache.juneau.msgpack;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -54,15 +55,15 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
 		check("true", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		MsgPackParser.create().apply(al).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -75,15 +76,15 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		MsgPackParser.create().apply(al).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -95,14 +96,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		MsgPackParser.create().apply(al).build().createSession();
 	}
 }

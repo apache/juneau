@@ -30,6 +30,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -98,7 +99,8 @@ public class RestAnnotation {
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
 		Class<? extends RestOperations> restOperationsClass = RestOperations.Null.class;
 		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Null.class;
-		Class<?>[] children={}, parsers={}, serializers={};
+		Class<? extends Serializer>[] serializers = new Class[0];
+		Class<?>[] children={}, parsers={};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
 		String disableBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
 		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, produces={}, title={};
@@ -565,7 +567,7 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder serializers(Class<?>...value) {
+		public Builder serializers(Class<? extends Serializer>...value) {
 			this.serializers = value;
 			return this;
 		}
@@ -711,7 +713,8 @@ public class RestAnnotation {
 		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends RestOperations> restOperationsClass;
 		private final Class<? extends DebugEnablement> debugEnablement;
-		private final Class<?>[] children, parsers, serializers;
+		private final Class<? extends Serializer>[] serializers;
+		private final Class<?>[] children, parsers;
 		private final Swagger swagger;
 		private final String disableBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
 		private final String[] consumes, description, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
@@ -972,7 +975,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<?>[] serializers() {
+		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
@@ -1041,6 +1044,8 @@ public class RestAnnotation {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
+			none(a.serializers()).ifPresent(x -> b.getSerializers().clear());
+			classes(a.serializers()).ifPresent(x -> b.getSerializers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
 			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
@@ -1053,7 +1058,8 @@ public class RestAnnotation {
 			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
-			b.encoders(a.encoders());
+			none(a.encoders()).ifPresent(x -> b.getEncoders().clear());
+			classes(a.encoders()).ifPresent(x -> b.getEncoders().add(x));
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
@@ -1099,7 +1105,6 @@ public class RestAnnotation {
 		public void apply(AnnotationInfo<Rest> ai, RestOpContextBuilder b) {
 			Rest a = ai.getAnnotation();
 
-			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
 			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
 			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));

@@ -56,6 +56,14 @@ public class MockWriterSerializer extends WriterSerializer {
 		MockWriterSerializerFunction function = (s,o) -> StringUtils.stringify(o);
 		Function<SerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
 
+		public Builder() {
+			super();
+		}
+
+		public Builder(Builder copyFrom) {
+			super(copyFrom);
+		}
+
 		public Builder function(MockWriterSerializerFunction function) {
 			this.function = function;
 			return this;
@@ -80,7 +88,7 @@ public class MockWriterSerializer extends WriterSerializer {
 
 		@Override
 		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
+			return new Builder(this);
 		}
 	}
 

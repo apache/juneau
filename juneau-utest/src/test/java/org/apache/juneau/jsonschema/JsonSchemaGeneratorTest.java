@@ -22,7 +22,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
@@ -1537,8 +1536,8 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void schemaOnClass_onConfig() throws Exception {
-		AnnotationList al = bConfig.getAnnotationList();
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().applyAnnotations(al, VarResolver.DEFAULT.createSession()).build().createSession();
+		List<AnnotationWork> al = bConfig.getAnnotationList().getWork(null);
+		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().createSession();
 		assertObject(x.getSchema(new B())).asJson().contains("foo:'bar'");
 	}
 

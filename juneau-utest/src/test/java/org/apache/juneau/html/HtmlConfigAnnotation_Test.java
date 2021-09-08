@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -61,8 +62,8 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
 		check("false", x.isDetectLabelParameters());
@@ -73,8 +74,8 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
-		HtmlParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		HtmlParser.create().apply(al).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -87,8 +88,8 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
 		check("true", x.isDetectLabelParameters());
@@ -99,8 +100,8 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
-		HtmlParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		HtmlParser.create().apply(al).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,8 +113,8 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
 		check("true", x.isDetectLabelParameters());
@@ -124,7 +125,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
-		HtmlParser.create().applyAnnotations(al, sr).build().createSession();
+		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		HtmlParser.create().apply(al).build().createSession();
 	}
 }

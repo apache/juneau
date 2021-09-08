@@ -15,6 +15,8 @@ package org.apache.juneau.annotation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
@@ -71,9 +73,9 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationList al = a2ci.getAnnotationList();
-		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, null).build();
-		JsonParser jp = JsonParser.create().applyAnnotations(al, null).build();
+		List<AnnotationWork> al = a2ci.getAnnotationList().getWork(null);
+		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
+		JsonParser jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(A2.create());
 		assertEquals("{f1:1}", json);
@@ -157,9 +159,9 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationList al = b2ci.getAnnotationList();
-		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, null).build();
-		JsonParser jp = JsonParser.create().applyAnnotations(al, null).build();
+		List<AnnotationWork> al = b2ci.getAnnotationList().getWork(null);
+		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
+		JsonParser jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(B2.create());
 		assertEquals("{f1:1,f2:2}", json);
@@ -227,9 +229,9 @@ public class Bean_Test {
 
 	@Test
 	public void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
-		AnnotationList al = dConfig.getAnnotationList();
-		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
-		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+		List<AnnotationWork> al = dConfig.getAnnotationList().getWork(vr);
+		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
+		JsonParser jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(D1.create());
 		assertEquals("{b:2,d:4}", json);
@@ -240,9 +242,9 @@ public class Bean_Test {
 
 	@Test
 	public void d04_beanPXpCombined_beanConfigOverride() throws Exception {
-		AnnotationList al = dConfig.getAnnotationList();
-		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
-		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+		List<AnnotationWork> al = dConfig.getAnnotationList().getWork(vr);
+		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
+		JsonParser jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(D2.create());
 		assertEquals("{b:2,d:4}", json);
@@ -344,9 +346,9 @@ public class Bean_Test {
 
 	@Test
 	public void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		AnnotationList al = eConfig.getAnnotationList();
-		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
-		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+		List<AnnotationWork> al = eConfig.getAnnotationList().getWork(vr);
+		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
+		JsonParser jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(E1.create());
 		assertEquals("{b:2,d:4}", json);
@@ -357,9 +359,9 @@ public class Bean_Test {
 
 	@Test
 	public void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		AnnotationList al = eConfig.getAnnotationList();
-		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
-		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+		List<AnnotationWork> al = eConfig.getAnnotationList().getWork(vr);
+		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
+		JsonParser jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(E2.create());
 		assertEquals("{b:2,d:4}", json);

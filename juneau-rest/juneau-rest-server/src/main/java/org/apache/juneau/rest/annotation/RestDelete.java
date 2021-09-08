@@ -327,11 +327,12 @@ public @interface RestDelete {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
+	 * 		Use {@link org.apache.juneau.encoders.EncoderGroup.Inherit} to inherit encoders from the resource class.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#encoders(Class...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};

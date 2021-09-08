@@ -141,7 +141,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
 	HeaderListBuilder defaultRequestHeaders = HeaderList.create();
 	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
-	EncoderGroup.Builder encoders = EncoderGroup.create();
+	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
+	SerializerGroup.Builder serializers = SerializerGroup.create();
 
 	Enablement debugDefault, debug;
 
@@ -216,7 +217,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Default values.
 			partSerializer(OpenApiSerializer.class);
 			partParser(OpenApiParser.class);
-			encoders(IdentityEncoder.class);
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -261,7 +261,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				}
 			}
 
-			applyAnnotations(rci.getAnnotationList(ContextApplyFilter.INSTANCE), vr.createSession());
+			VarResolverSession vrs = vr.createSession();
+			List<AnnotationWork> al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
+			apply(al);
 
 		} catch (Exception e) {
 			throw new ServletException(e);
@@ -1510,13 +1512,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 *
 	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
+	 * 			<jv>builder</jv>.getEncoders().add(GzipEncoder.<jk>class</jk>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.encoders(GzipEncoder.<jk>class</jk>);
+	 * 			<jv>builder</jv>.getEncoders().add(GzipEncoder.<jk>class</jk>);
 	 * 		}
 	 *
 	 * 		<jc>// Override at the method level.</jc>
@@ -1540,6 +1542,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestEncoders}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
 	 * 	<li class='ja'>{@link Rest#encoders()}
 	 * 	<li class='ja'>{@link RestOp#encoders()}
 	 * 	<li class='ja'>{@link RestGet#encoders()}
@@ -1548,14 +1551,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='ja'>{@link RestDelete#encoders()}
 	 * </ul>
 	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
+	 * @return The encoder group builder for this context builder.
 	 */
-	@FluentSetter
-	public final RestContextBuilder encoders(Class<?>...values) {
-		encoders.add(values);
-		return this;
+	public EncoderGroup.Builder getEncoders() {
+		return encoders;
 	}
 
 	/**
@@ -2390,79 +2389,68 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
+	 * The serializers to use to serialize POJOs into response bodies.
 	 *
 	 * <p>
-	 * Adds class-level serializers to this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * Serializer are used to convert POJOs to HTTP response bodies.
+	 * <br>Any of the Juneau framework serializers can be used in this setting.
+	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
 	 * </ul>
 	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder serializers(Class<?>...values) {
-		return prependTo(REST_serializers, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
 	 *
-	 * <p>
-	 * Same as {@link #serializers(Class[])} but replaces any existing values.
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.getSerializers().add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+	 *
+	 * 			<jc>// Same, but use pre-instantiated serializers.</jc>
+	 * 			<jv>builder</jv>.getSerializers().add(JsonSerializer.<jsf>DEFAULT</jsf>, XmlSerializer.<jsf>DEFAULT</jsf>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.getSerializers().add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(serializers={HtmlSerializer.<jk>class</jk>})
+	 * 		<jk>public</jk> MyPojo myMethod() {
+	 * 			<jc>// Return a POJO to be serialized.</jc>
+	 * 			<jk>return new</jk> MyPojo();
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Typically, you'll want your resource to extend directly from {@link BasicRestServlet} which comes
+	 * 		preconfigured with a predefined set of serializers.
 	 * </ul>
 	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder serializersReplace(Class<?>...values) {
-		return prependTo(REST_serializers, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
-	 *
-	 * <p>
-	 * Same as {@link #serializers(Class...)} except input is pre-constructed instances.
-	 *
-	 * <p>
-	 * Serializer instances are considered set-in-stone and do NOT inherit properties and transforms defined on the
-	 * resource class or method.
-	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * 	<li class='link'>{@doc RestSerializers}
+	 * 	<li class='ja'>{@link RestOpContextBuilder#getSerializers()}
+	 * 	<li class='ja'>{@link Rest#serializers()}
+	 * 	<li class='ja'>{@link RestOp#serializers()}
+	 * 	<li class='ja'>{@link RestGet#serializers()}
+	 * 	<li class='ja'>{@link RestPut#serializers()}
+	 * 	<li class='ja'>{@link RestPost#serializers()}
 	 * </ul>
 	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
+	 * @return The serializer group builder for this context builder.
 	 */
-	@FluentSetter
-	public RestContextBuilder serializers(Serializer...values) {
-		return prependTo(REST_serializers, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
-	 *
-	 * <p>
-	 * Same as {@link #serializers(Class...)} except allows you to overwrite the previous value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder serializersReplace(Serializer...values) {
-		return set(REST_serializers, values);
+	public SerializerGroup.Builder getSerializers() {
+		return serializers;
 	}
 
 	/**
@@ -2941,6 +2929,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
+		serializers.apply(work);
+		return this;
+	}
+
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
@@ -2994,12 +2989,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
 		return this;
 	}
 

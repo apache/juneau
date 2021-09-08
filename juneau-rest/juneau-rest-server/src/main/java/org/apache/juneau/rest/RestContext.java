@@ -68,8 +68,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -681,108 +679,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
-
-	/**
-	 * Configuration property:  Serializers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_serializers REST_serializers}
-	 * 	<li><b>Name:</b>  <js>"RestContext.serializers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.serializer.Serializer}|Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#serializers()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#serializers()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Serializer...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Serializer...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Class...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Adds class-level serializers to this resource.
-	 *
-	 * <p>
-	 * Serializer are used to convert POJOs to HTTP response bodies.
-	 * <br>Any of the Juneau framework serializers can be used in this setting.
-	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
-	 * using a best-match algorithm:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but use pre-instantiated parsers.</jc>
-	 * 			<jv>builder</jv>.serializers(JsonSerializer.<jsf>DEFAULT</jsf>, XmlSerializer.<jsf>DEFAULT</jsf>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_serializers</jsf>, JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(serializers={HtmlSerializer.<jk>class</jk>})
-	 * 		<jk>public</jk> MyPojo myMethod() {
-	 * 			<jc>// Return a POJO to be serialized.</jc>
-	 * 			<jk>return new</jk> MyPojo();
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>
-	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * 	<li>
-	 * 		Typically, you'll want your resource to extend directly from {@link BasicRestServlet} which comes
-	 * 		preconfigured with the following serializers:
-	 * 		<ul>
-	 * 			<li class='jc'>{@link HtmlDocSerializer}
-	 * 			<li class='jc'>{@link HtmlStrippedDocSerializer}
-	 * 			<li class='jc'>{@link HtmlSchemaDocSerializer}
-	 * 			<li class='jc'>{@link JsonSerializer}
-	 * 			<li class='jc'>{@link SimpleJsonSerializer}
-	 * 			<li class='jc'>{@link JsonSchemaSerializer}
-	 * 			<li class='jc'>{@link XmlDocSerializer}
-	 * 			<li class='jc'>{@link UonSerializer}
-	 * 			<li class='jc'>{@link UrlEncodingSerializer}
-	 * 			<li class='jc'>{@link MsgPackSerializer}
-	 * 			<li class='jc'>{@link SoapXmlSerializer}
-	 * 			<li class='jc'>{@link PlainTextSerializer}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * </ul>
-	 * <p>
-	 */
-	public static final String REST_serializers = PREFIX + ".serializers.lo";
 
 	/**
 	 * Configuration property:  Static file finder.

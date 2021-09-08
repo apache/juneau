@@ -12,8 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
+import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.svl.*;
 
 /**
  * An ordered list of annotations and the classes/methods/packages they were found on.
@@ -22,15 +28,6 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;
 
 	private final Predicate<AnnotationInfo<?>> filter;
-
-	/**
-	 * Constructor.
-	 *
-	 * No filtering.
-	 */
-	public AnnotationList() {
-		this(null);
-	}
 
 	/**
 	 * Constructor with optional filter.
@@ -94,5 +91,23 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 		AnnotationList al = new AnnotationList(null);
 		stream().filter(test).forEach(x->al.add(x));
 		return al;
+	}
+
+	/**
+	 * Takes the annotations in this list and produces a list of {@link AnnotationWork} objects to be applied to context builders.
+	 *
+	 * @param vrs The variable resolver session that gets passed in to the constructor of the {@link AnnotationApplier} objects that get created.
+	 * @return A list of {@link AnnotationWork} objects.
+	 */
+	public List<AnnotationWork> getWork(VarResolverSession vrs) {
+		try {
+			List<AnnotationWork> l = new ArrayList<>();
+			for (AnnotationInfo<?> ai : sort())
+				for (AnnotationApplier<Annotation,Object> ca : ai.getApplies(vrs))
+					l.add(new AnnotationWork(ai, ca));
+			return l;
+		} catch (ExecutableException e) {
+			throw runtimeException(e.getCause());
+		}
 	}
 }

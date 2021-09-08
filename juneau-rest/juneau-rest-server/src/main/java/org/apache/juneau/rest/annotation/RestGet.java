@@ -21,6 +21,7 @@ import java.nio.charset.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
@@ -342,11 +343,12 @@ public @interface RestGet {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
+	 * 		Use {@link org.apache.juneau.encoders.EncoderGroup.Inherit} to inherit encoders from the resource class.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#encoders(Class...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
@@ -517,37 +519,50 @@ public @interface RestGet {
 	String rolesDeclared() default "";
 
 	/**
-	 * Serializers.
+	 * The serializers to use to serialize POJOs into response bodies.
 	 *
 	 * <p>
 	 * If no value is specified, the serializers are inherited from the class.
 	 * <br>Otherwise, this value overrides the serializers defined on the class.
 	 *
 	 * <p>
-	 * Use {@link Inherit} to inherit serializers defined on the class.
-	 *
-	 * <p>
-	 * Use {@link None} to suppress inheriting serializers defined on the class.
+	 * Use {@link org.apache.juneau.serializer.SerializerGroup.Inherit} to inherit serializers defined on the class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		serializers={
+	 * 			JsonSerializer.<jk>class</jk>
+	 * 		}
+	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestGet</ja>(
 	 * 			path=<js>"/foo"</js>,
-	 * 			serializers=MySpecialSerializer.<jk>class</jk>
+	 * 			serializers=XmlSerializer.<jk>class</jk>  <jc>// Override serializers on class.</jc>
 	 * 		)
-	 * 		<jk>public</jk> Object doGetWithSpecialAcceptType() {
-	 * 			<jc>// Handle request for special Accept type</jc>
+	 * 		<jk>public</jk> Object doGetOnlyXml() {
+	 * 			...
+	 * 		}
+	 *
+	 * 		<ja>@RestGet</ja>(
+	 * 			path=<js>"/bar"</js>,
+	 * 			serializers={SerializerGroup.Inherit.<jk>class<jk>, XmlSerializer.<jk>class</jk>}  <jc>// Add to serializers on class.</jc>
+	 * 		)
+	 * 		<jk>public</jk> Object doGetEither() {
+	 * 			...
 	 * 		}
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * 	<li class='link'>{@doc RestSerializers}
+	 * 	<li class='ja'>{@link Rest#serializers()}
+	 * 	<li class='jm'>{@link RestContextBuilder#getSerializers()}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#getSerializers()}
 	 * </ul>
 	 */
-	Class<?>[] serializers() default {};
+	Class<? extends Serializer>[] serializers() default {};
 
 	/**
 	 * Optional summary for the exposed API.

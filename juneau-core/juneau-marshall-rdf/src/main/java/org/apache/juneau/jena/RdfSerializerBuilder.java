@@ -24,9 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -950,8 +948,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		super.applyAnnotations(al, r);
+	public RdfSerializerBuilder apply(List<AnnotationWork> work) {
+		super.apply(work);
 		return this;
 	}
 

@@ -23,7 +23,6 @@ import org.apache.juneau.rest.annotation.*;
 @SuppressWarnings("serial")
 @Rest(
 	serializers={
-		Inherit.class,
 		RdfXmlSerializer.class,
 		RdfXmlAbbrevSerializer.class,
 		TurtleSerializer.class,
