@@ -10,18 +10,26 @@
 //* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
-package org.apache.juneau.testutils;
+package org.apache.juneau.internal;
 
 import java.util.*;
 import java.util.function.*;
 
+/**
+ * A function that takes in 2 arguments.
+ *
+ * @param <A> The first argument.
+ * @param <B> The second argument.
+ * @param <R> The return type.
+ */
+@SuppressWarnings("javadoc")
 @FunctionalInterface
-interface TriFunction<A,B,C,R> {
+public interface Function2<A,B,R> {
 
-	R apply(A a, B b, C c);
+	R apply(A a, B b);
 
-	default <V> TriFunction<A, B, C, V> andThen(Function<? super R, ? extends V> after) {
+	default <V> Function2<A, B, V> andThen(Function<? super R, ? extends V> after) {
 		Objects.requireNonNull(after);
-		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+		return (A a, B b) -> after.apply(apply(a, b));
 	}
 }

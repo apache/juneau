@@ -14,20 +14,24 @@
 package org.apache.juneau.testutils;
 
 import java.io.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 
 /**
  * Utility class for creating mocked reader parsers.
  */
-public class MockReaderParser extends ReaderParser {
+public class MockReaderParser extends ReaderParser implements HttpPartParser {
 
 	private final MockReaderParserFunction function;
+	private final MockReaderParserPartFunction partFunction;
 
 	protected MockReaderParser(Builder builder) {
 		super(builder);
 		this.function = builder.function;
+		this.partFunction = builder.partFunction;
 	}
 
 	public static Builder create() {
@@ -47,8 +51,31 @@ public class MockReaderParser extends ReaderParser {
 		};
 	}
 
+	@Override
+	public HttpPartParserSession createPartSession(ParserSessionArgs args) {
+		return new HttpPartParserSession() {
+
+			@Override
+			@SuppressWarnings("unchecked")
+			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+				return (T)partFunction.apply(partType, schema, in, toType);
+			}
+
+			@Override
+			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+				throw new NoSuchMethodError("Not implemented.");
+			}
+
+			@Override
+			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type... toTypeArgs) throws ParseException, SchemaValidationException {
+				throw new NoSuchMethodError("Not implemented.");
+			}
+		};
+	}
+
 	public static class Builder extends ReaderParserBuilder {
 		MockReaderParserFunction function;
+		MockReaderParserPartFunction partFunction;
 
 		public Builder() {
 			super();
@@ -58,8 +85,13 @@ public class MockReaderParser extends ReaderParser {
 			super(copyFrom);
 		}
 
-		public Builder function(MockReaderParserFunction function) {
-			this.function = function;
+		public Builder function(MockReaderParserFunction value) {
+			function = value;
+			return this;
+		}
+
+		public Builder partFunction(MockReaderParserPartFunction value) {
+			partFunction = value;
 			return this;
 		}
 
@@ -78,5 +110,15 @@ public class MockReaderParser extends ReaderParser {
 	@Override
 	public Builder copy() {
 		throw new NoSuchMethodError("Not implemented.");
+	}
+
+	@Override
+	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+		return this.getBeanContext().getClassMeta(c);
+	}
+
+	@Override
+	public <T> ClassMeta<T> getClassMeta(Type t, Type... args) {
+		return this.getBeanContext().getClassMeta(t, args);
 	}
 }

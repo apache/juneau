@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static java.util.Optional.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -330,7 +332,7 @@ public abstract class Parser extends BeanContextable {
 	protected Parser(ParserBuilder builder) {
 		super(builder);
 
-		_consumes = builder.consumes;
+		_consumes = ofNullable(builder.consumes).orElse("");
 		ContextProperties cp = getContextProperties();
 		trimStrings = cp.getBoolean(PARSER_trimStrings).orElse(false);
 		strict = cp.getBoolean(PARSER_strict).orElse(false);
@@ -339,7 +341,7 @@ public abstract class Parser extends BeanContextable {
 		unbuffered = cp.getBoolean(PARSER_unbuffered).orElse(false);
 		listener = cp.getClass(PARSER_listener, ParserListener.class).orElse(null);
 
-		String[] consumes = StringUtils.split(builder.consumes, ',');
+		String[] consumes = StringUtils.split(_consumes, ',');
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
 			this.consumes[i] = MediaType.of(consumes[i]);

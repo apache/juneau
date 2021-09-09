@@ -153,21 +153,9 @@ public class RestClient_Headers_Test {
 		x.get("/headers").header("Foo",s).run().assertBody().is("['bar','bar']");
 	}
 
-	public static class A8 extends SimplePartSerializer {
-		@Override
-		public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new SimplePartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-					return "x" + SimpleJson.DEFAULT.toString(value);
-				}
-			};
-		}
-	}
-
 	@Test
 	public void a09_headers_String_Object_Schema_Serializer() throws Exception {
-		checkFooClient().header(header("Foo",bean,null).serializer(new A8())).build().get("/headers").run().assertBody().is("['x{f:1}']");
+		checkFooClient().header(header("Foo",bean,null).serializer(MockWriterSerializer.X)).build().get("/headers").run().assertBody().is("['x{f:1}x']");
 	}
 
 	@Test

@@ -63,7 +63,7 @@ public class ThrownStore {
 	 */
 	public ThrownStore(ThrownStoreBuilder builder) {
 		this.parent = ofNullable(builder.parent);
-		this.beanStore = ofNullable(builder.beanStore).orElseGet(BeanStore::new);
+		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
 
 		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 

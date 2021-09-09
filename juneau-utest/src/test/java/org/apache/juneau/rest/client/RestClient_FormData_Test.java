@@ -26,7 +26,6 @@ import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -144,25 +143,13 @@ public class RestClient_FormData_Test {
 		x2.post("/formData").formData("foo",s).run().assertBody().asString().urlDecode().is("foo=bar,baz");
 	}
 
-	public static class A8 extends SimplePartSerializer {
-		@Override
-		public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new SimplePartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-					return "x" + SimpleJson.DEFAULT.toString(value);
-				}
-			};
-		}
-	}
-
 	@Test
 	public void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
 		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
-		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(new A8())).build();
-		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=x['foo','bar']");
+		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(MockWriterSerializer.X)).build();
+		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=xfoo|barx");
 		s.set(OList.of("bar","baz"));
-		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=x['bar','baz']");
+		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=xbar|bazx");
 	}
 
 	@Test

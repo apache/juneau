@@ -12,7 +12,8 @@
 //***************************************************************************************************************************
 package org.apache.juneau.testutils;
 
+import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 
-public interface MockWriterSerializerFunction extends Function2<SerializerSession,Object,String> {}
+public interface MockReaderParserPartFunction extends Function4<HttpPartType,HttpPartSchema,String,ClassMeta<?>,Object> {}

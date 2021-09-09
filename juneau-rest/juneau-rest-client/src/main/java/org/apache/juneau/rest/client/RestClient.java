@@ -1823,7 +1823,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		this.skipEmptyQueryData = cp.getBoolean(RESTCLIENT_skipEmptyQueryData).orElse(false);
 		this.skipEmptyFormData = cp.getBoolean(RESTCLIENT_skipEmptyFormData).orElse(false);
 
-		BeanStore bs = this.beanStore = new BeanStore()
+		BeanStore bs = this.beanStore = BeanStore.create().build()
 			.addBean(ContextProperties.class, cp)
 			.addBean(RestClient.class, this);
 

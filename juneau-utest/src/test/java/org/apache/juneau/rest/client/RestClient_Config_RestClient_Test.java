@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -37,12 +38,10 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -452,29 +451,25 @@ public class RestClient_Config_RestClient_Test {
 		}
 	}
 
-	public static class A12a extends SimplePartSerializer {
-		@Override
-		public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new SimplePartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-					return "x" + SimpleJson.DEFAULT.toString(value);
-				}
-			};
+	public static class A12a extends MockWriterSerializer {
+		public A12a(Builder builder) {
+			super(builder.partFunction((t,s,o)->"x" + SimpleJson.DEFAULT.toString(o)));
 		}
 	}
 
-	public static class A12b extends SimplePartParser {
-		@Override
-		public SimplePartParserSession createPartSession(ParserSessionArgs args) {
-			return new SimplePartParserSession() {
-				@Override
-				public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-					if (toType.isInstanceOf(ABean.class))
-						return SimpleJson.DEFAULT.read(in.substring(1),toType);
-					return super.parse(null,schema,in,toType);
-				}
-			};
+	public static class A12b extends MockReaderParser {
+		public A12b(Builder builder) {
+			super(builder.partFunction((t,s,in,c)->in(t,s,in,c)));
+		}
+
+		private static Object in(HttpPartType type, HttpPartSchema schema, String in, ClassMeta<?> c) {
+			try {
+				if (c.isInstanceOf(ABean.class))
+					return SimpleJson.DEFAULT.read(in.substring(1),c);
+				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
+			} catch (Exception e) {
+				throw runtimeException(e);
+			}
 		}
 	}
 
@@ -486,7 +481,7 @@ public class RestClient_Config_RestClient_Test {
 		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 
-		x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(new A12a()).partParser(new A12b()).build();
+		x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(new A12a(MockWriterSerializer.create())).partParser(new A12b(MockReaderParser.create())).build();
 		b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 	}

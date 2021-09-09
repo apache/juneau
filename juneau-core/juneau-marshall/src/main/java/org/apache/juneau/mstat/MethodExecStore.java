@@ -22,7 +22,7 @@ import org.apache.juneau.cp.*;
 
 /**
  * Method execution statistics database.
- * 
+ *
  * <p>
  * Used for tracking basic call statistics on Java methods.
  */
@@ -55,7 +55,7 @@ public class MethodExecStore {
 	 * @param builder The store to use for storing thrown exception statistics.
 	 */
 	public MethodExecStore(MethodExecStoreBuilder builder) {
-		this.beanStore = ofNullable(builder.beanStore).orElseGet(BeanStore::new);
+		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
 		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
 		this.statsImplClass = builder.statsImplClass;
 	}

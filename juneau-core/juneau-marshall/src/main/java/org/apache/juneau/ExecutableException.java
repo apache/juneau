@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
  */
-public class ExecutableException extends BasicException {
+public class ExecutableException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

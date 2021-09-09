@@ -13,6 +13,7 @@
 package org.apache.juneau.testutils;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
-public interface MockStreamParserFunction extends TriFunction<InputStreamParserSession,byte[],ClassMeta<?>,Object> {}
+public interface MockStreamParserFunction extends Function3<InputStreamParserSession,byte[],ClassMeta<?>,Object> {}

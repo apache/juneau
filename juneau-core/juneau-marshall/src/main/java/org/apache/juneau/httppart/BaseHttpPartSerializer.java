@@ -12,12 +12,43 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**
  * Base class for implementations of {@link HttpPartSerializer}
  */
-public abstract class BaseHttpPartSerializer implements HttpPartSerializer {
+public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected BaseHttpPartSerializer(Builder builder) {
+		super(builder);
+	}
+
+	/**
+	 * The builder class for this object.
+	 */
+	public abstract static class Builder extends BeanContextableBuilder {
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super();
+		}
+
+		/**
+		 * Copy constructor.
+		 * @param builder The existing builder to copy.
+		 */
+		protected Builder(Builder builder) {
+			super(builder);
+		}
+	}
 
 	/**
 	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,

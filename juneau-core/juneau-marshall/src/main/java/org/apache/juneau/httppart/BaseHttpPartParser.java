@@ -20,7 +20,38 @@ import org.apache.juneau.parser.*;
 /**
  * Base class for implementations of {@link HttpPartParser}
  */
-public abstract class BaseHttpPartParser implements HttpPartParser {
+public abstract class BaseHttpPartParser extends BeanContextable implements HttpPartParser {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected BaseHttpPartParser(Builder builder) {
+		super(builder);
+	}
+
+	/**
+	 * The builder class for this object.
+	 */
+	public abstract static class Builder extends BeanContextableBuilder {
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super();
+		}
+
+		/**
+		 * Copy constructor.
+		 * 
+		 * @param builder The builder to copy.
+		 */
+		protected Builder(Builder builder) {
+			super(builder);
+		}
+	}
 
 	/**
 	 * Converts the specified input to the specified class type.

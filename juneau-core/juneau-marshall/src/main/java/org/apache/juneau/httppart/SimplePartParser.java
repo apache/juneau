@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -45,7 +48,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
-	public static final SimplePartParser DEFAULT = new SimplePartParser();
+	public static final SimplePartParser DEFAULT = create().build();
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
 	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.createPartSession(null);
@@ -55,8 +58,56 @@ public class SimplePartParser extends BaseHttpPartParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected SimplePartParser(Builder builder) {
+		super(builder);
+	}
+
+	/**
+	 * The builder for this object.
+	 *
+	 */
+	public static class Builder extends BaseHttpPartParser.Builder {
+
+		Builder() {
+			super();
+		}
+
+		Builder(Builder builder) {
+			super(builder);
+		}
+
+		@Override
+		public SimplePartParser build() {
+			return new SimplePartParser(this);
+		}
+
+		@Override
+		public BeanContextableBuilder copy() {
+			return new Builder(this);
+		}
+	}
+
 	@Override
 	public SimplePartParserSession createPartSession(ParserSessionArgs args) {
 		return new SimplePartParserSession();
+	}
+
+	@Override
+	public Builder copy() {
+		throw unsupportedOperationException("Not implemented.");
 	}
 }

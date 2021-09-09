@@ -698,7 +698,7 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface J1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",serializer=XPartSerializer.class) String b);
+		@RemoteOp(path="/") String postX1(@FormData(n="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
 	@Test
@@ -726,7 +726,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K1 {
 		@RemoteOp(path="/") String postX1(@Request K1a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=XSerializer.class) K1a rb);
+		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K1a rb);
 	}
 
 	public static class K1a {
@@ -788,7 +788,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K2 {
 		@RemoteOp(path="/") String postX1(@Request K2a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=XSerializer.class) K2a rb);
+		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -826,7 +826,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K3 {
 		@RemoteOp(path="/") String postX1(@Request K3a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=XSerializer.class) K3a rb);
+		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -912,7 +912,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K6 {
 		@RemoteOp(path="/") String postX1(@Request K6a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=XSerializer.class) K6a rb);
+		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K6a rb);
 	}
 
 	public static class K6a {
@@ -924,7 +924,7 @@ public class Remote_FormDataAnnotation_Test {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@FormData(n="c",serializer=ListSerializer.class)
+		@FormData(n="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
@@ -940,7 +940,7 @@ public class Remote_FormDataAnnotation_Test {
 		public Object[] getX5() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@FormData(n="g",serializer=ListSerializer.class)
+		@FormData(n="g",serializer=MockWriterSerializer.X.class)
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
@@ -958,9 +958,9 @@ public class Remote_FormDataAnnotation_Test {
 	public void k06_requestBean_collections() throws Exception {
 		K6 x1 = remote(K.class,K6.class);
 		K6 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K6.class);
-		assertEquals("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'foo||true|123|null|true|123|null',d:'',f:'foo,,true,123,null,true,123,null',g:'foo||true|123|null|true|123|null',h:''}",x1.postX1(new K6a()));
-		assertEquals("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'foo||true|123|null|true|123|null',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'foo||true|123|null|true|123|null',h:'@()'}",x2.postX1(new K6a()));
-		assertEquals("{a:'fooXXtrueX123XnullXtrueX123Xnull',b:'fooXXtrueX123XnullXtrueX123Xnull',c:'foo||true|123|null|true|123|null',d:'',f:'fooXXtrueX123XnullXtrueX123Xnull',g:'foo||true|123|null|true|123|null',h:''}",x2.postX2(new K6a()));
+		assertString(x1.postX1(new K6a())).is("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'xfoo||true|123|null|true|123|nullx',d:'',f:'foo,,true,123,null,true,123,null',g:'xfoo||true|123|null|true|123|nullx',h:''}");
+		assertString(x2.postX1(new K6a())).is("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'xfoo||true|123|null|true|123|nullx',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'xfoo||true|123|null|true|123|nullx',h:'@()'}");
+		assertString(x2.postX2(new K6a())).is("{a:'xfoo||true|123|null|true|123|nullx',b:'xfoo||true|123|null|true|123|nullx',c:'xfoo||true|123|null|true|123|nullx',d:'xx',f:'xfoo||true|123|null|true|123|nullx',g:'xfoo||true|123|null|true|123|nullx',h:'xx'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

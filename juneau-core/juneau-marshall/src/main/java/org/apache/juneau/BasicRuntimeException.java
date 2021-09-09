@@ -112,6 +112,16 @@ public abstract class BasicRuntimeException extends RuntimeException {
 	}
 
 	/**
+	 * Returns the caused-by exception if there is one.
+	 *
+	 * @return The caused-by exception if there is one, or this exception if there isn't.
+	 */
+	public Throwable unwrap() {
+		Throwable t = getCause();
+		return t == null ? this : t;
+	}
+
+	/**
 	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
 	 */
 	protected final void assertModifiable() {

@@ -13,24 +13,60 @@
 
 package org.apache.juneau.testutils;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
  * Utility class for creating mocked writer serializers.
  */
-public class MockWriterSerializer extends WriterSerializer {
+public class MockWriterSerializer extends WriterSerializer implements HttpPartSerializer {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Predefined types
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static final X X = new X(create());
+
+	public static class X extends MockWriterSerializer {
+		protected X(Builder builder) {
+			super(builder
+				.function((s,o) -> out(o))
+				.partFunction((s,t,o) -> out(o))
+			);
+		}
+
+		private static String out(Object value) {
+			if (value instanceof List)
+				value = join((List<?>)value, '|');
+			if (value instanceof Collection)
+				value = join((Collection<?>)value, '|');
+			if (isArray(value))
+				value = join(toList(value, Object.class), "|");
+			return "x" + value + "x";
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final MockWriterSerializerFunction function;
+	private final MockWriterSerializerPartFunction partFunction;
 	private final Function<SerializerSession,Map<String,String>> headers;
+
 
 	protected MockWriterSerializer(Builder builder) {
 		super(builder);
 		this.function = builder.function;
+		this.partFunction = builder.partFunction;
 		this.headers = builder.headers;
 	}
 
@@ -52,8 +88,19 @@ public class MockWriterSerializer extends WriterSerializer {
 		};
 	}
 
+	@Override
+	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+		return new HttpPartSerializerSession() {
+			@Override
+			public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				return partFunction.apply(type, schema, value);
+			}
+		};
+	}
+
 	public static class Builder extends WriterSerializerBuilder {
 		MockWriterSerializerFunction function = (s,o) -> StringUtils.stringify(o);
+		MockWriterSerializerPartFunction partFunction = (t,s,o) -> StringUtils.stringify(o);
 		Function<SerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
 
 		public Builder() {
@@ -64,13 +111,18 @@ public class MockWriterSerializer extends WriterSerializer {
 			super(copyFrom);
 		}
 
-		public Builder function(MockWriterSerializerFunction function) {
-			this.function = function;
+		public Builder function(MockWriterSerializerFunction value) {
+			function = value;
 			return this;
 		}
 
-		public Builder headers(Function<SerializerSession,Map<String,String>> headers) {
-			this.headers = headers;
+		public Builder partFunction(MockWriterSerializerPartFunction value) {
+			partFunction = value;
+			return this;
+		}
+
+		public Builder headers(Function<SerializerSession,Map<String,String>> value) {
+			headers = value;
 			return this;
 		}
 

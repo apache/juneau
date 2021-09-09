@@ -24,6 +24,7 @@ import static org.apache.juneau.http.HttpParts.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.BeanContextableBuilder;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
@@ -2536,6 +2537,30 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	public static class DummyPartSerializer extends BaseHttpPartSerializer {
+		public DummyPartSerializer(Builder builder) {
+			super(builder);
+		}
+
+		public static Builder create() {
+			return new Builder();
+		}
+
+		public static class Builder extends BaseHttpPartSerializer.Builder {
+
+			Builder() {
+				super();
+			}
+
+			Builder(Builder builder) {
+				super(builder);
+			}
+
+			@Override
+			public Builder copy() {
+				return new Builder(this);
+			}
+		}
+
 		@Override
 		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
 			return new BaseHttpPartSerializerSession() {
@@ -2544,6 +2569,10 @@ public class ThirdPartyProxyTest extends RestTestcase {
 					return "dummy-"+value;
 				}
 			};
+		}
+		@Override
+		public BeanContextableBuilder copy() {
+			return null;
 		}
 	}
 }

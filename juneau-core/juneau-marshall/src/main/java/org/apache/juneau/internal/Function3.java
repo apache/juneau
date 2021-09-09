@@ -10,9 +10,27 @@
 //* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
-package org.apache.juneau.testutils;
+package org.apache.juneau.internal;
 
-import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
+import java.util.*;
+import java.util.function.*;
 
-public interface MockWriterSerializerFunction extends Function2<SerializerSession,Object,String> {}
+/**
+ * A function that takes in 3 arguments.
+ *
+ * @param <A> The first argument.
+ * @param <B> The second argument.
+ * @param <C> The third argument.
+ * @param <R> The return type.
+ */
+@SuppressWarnings("javadoc")
+@FunctionalInterface
+public interface Function3<A,B,C,R> {
+
+	R apply(A a, B b, C c);
+
+	default <V> Function3<A, B, C, V> andThen(Function<? super R, ? extends V> after) {
+		Objects.requireNonNull(after);
+		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+	}
+}

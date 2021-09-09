@@ -13,6 +13,7 @@
 package org.apache.juneau.testutils;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
-public interface MockReaderParserFunction extends TriFunction<ReaderParserSession,String,ClassMeta<?>,Object> {}
+public interface MockReaderParserFunction extends Function3<ReaderParserSession,String,ClassMeta<?>,Object> {}

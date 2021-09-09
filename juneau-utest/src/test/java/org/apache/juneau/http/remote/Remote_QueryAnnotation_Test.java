@@ -680,7 +680,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface J1 {
-		@RemoteOp(path="/") String getX1(@Query(n="x",serializer=XPartSerializer.class) String b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
 	@Test
@@ -708,7 +708,7 @@ public class Remote_QueryAnnotation_Test {
 	@Remote(path="/")
 	public static interface K1 {
 		@RemoteOp(path="/") String getX1(@Request K1b rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K1b rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K1b rb);
 	}
 
 	public static interface K1a {
@@ -753,7 +753,7 @@ public class Remote_QueryAnnotation_Test {
 	@Remote(path="/")
 	public static interface K2 {
 		@RemoteOp(path="/") String getX1(@Request K2a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K2a rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -791,7 +791,7 @@ public class Remote_QueryAnnotation_Test {
 	@Remote(path="/")
 	public static interface K3 {
 		@RemoteOp(path="/") String getX1(@Request K3a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K3a rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -876,7 +876,7 @@ public class Remote_QueryAnnotation_Test {
 	@Remote(path="/")
 	public static interface K6 {
 		@RemoteOp(path="/") String getX1(@Request K6a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K6a rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K6a rb);
 	}
 
 	public static class K6a {
@@ -888,7 +888,7 @@ public class Remote_QueryAnnotation_Test {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Query(n="c",serializer=ListSerializer.class)
+		@Query(n="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
@@ -904,7 +904,7 @@ public class Remote_QueryAnnotation_Test {
 		public Object[] getX5() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@Query(n="g",serializer=ListSerializer.class)
+		@Query(n="g",serializer=MockWriterSerializer.X.class)
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
@@ -922,9 +922,9 @@ public class Remote_QueryAnnotation_Test {
 	public void k06_requestBean_collections() throws Exception {
 		K6 x1 = remote(K.class,K6.class);
 		K6 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K6.class);
-		assertEquals("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'foo||true|123|null|true|123|null',d:'',f:'foo,,true,123,null,true,123,null',g:'foo||true|123|null|true|123|null',h:''}",x1.getX1(new K6a()));
-		assertEquals("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'foo||true|123|null|true|123|null',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'foo||true|123|null|true|123|null',h:'@()'}",x2.getX1(new K6a()));
-		assertEquals("{a:'fooXXtrueX123XnullXtrueX123Xnull',b:'fooXXtrueX123XnullXtrueX123Xnull',c:'foo||true|123|null|true|123|null',d:'',f:'fooXXtrueX123XnullXtrueX123Xnull',g:'foo||true|123|null|true|123|null',h:''}",x2.getX2(new K6a()));
+		assertString(x1.getX1(new K6a())).is("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'xfoo||true|123|null|true|123|nullx',d:'',f:'foo,,true,123,null,true,123,null',g:'xfoo||true|123|null|true|123|nullx',h:''}");
+		assertString(x2.getX1(new K6a())).is("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'xfoo||true|123|null|true|123|nullx',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'xfoo||true|123|null|true|123|nullx',h:'@()'}");
+		assertString(x2.getX2(new K6a())).is("{a:'xfoo||true|123|null|true|123|nullx',b:'xfoo||true|123|null|true|123|nullx',c:'xfoo||true|123|null|true|123|nullx',d:'xx',f:'xfoo||true|123|null|true|123|nullx',g:'xfoo||true|123|null|true|123|nullx',h:'xx'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

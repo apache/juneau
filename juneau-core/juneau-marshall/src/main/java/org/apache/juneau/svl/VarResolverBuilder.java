@@ -30,14 +30,14 @@ import org.apache.juneau.svl.vars.*;
 public class VarResolverBuilder {
 
 	private final List<Var> vars;
-	private BeanStore beanStore = new BeanStore();
+	private BeanStore beanStore;
 
 	/**
 	 * Constructor.
 	 */
 	public VarResolverBuilder() {
 		vars = AList.create();
-		beanStore = new BeanStore();
+		beanStore = BeanStore.create().build();
 	}
 
 	/**

@@ -12,9 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
+import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -41,17 +43,23 @@ public class BeanStore {
 	 */
 	public static final class Null extends BeanStore {}
 
+	/**
+	 * Static read-only reusable instance.
+	 */
+	public static final BeanStore INSTANCE = create().readOnly().build();
+
 	private final Map<String,Supplier<?>> beanMap = new ConcurrentHashMap<>();
 	private final Optional<BeanStore> parent;
 	private final Optional<Object> outer;
+	private final boolean readOnly;
 
 	/**
 	 * Static creator.
 	 *
-	 * @return A new {@link BeanStoreBuilder} object.
+	 * @return A new {@link Builder} object.
 	 */
-	public static BeanStoreBuilder create() {
-		return new BeanStoreBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -75,12 +83,10 @@ public class BeanStore {
 		return create().parent(parent).outer(outer).build();
 	}
 
-	/**
-	 * Default constructor.
-	 */
-	public BeanStore() {
-		this.parent = Optional.empty();
-		this.outer = Optional.empty();
+	BeanStore() {
+		this.parent = empty();
+		this.outer = empty();
+		this.readOnly = false;
 	}
 
 	/**
@@ -88,9 +94,95 @@ public class BeanStore {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public BeanStore(BeanStoreBuilder builder) {
-		this.parent = Optional.ofNullable(builder.parent);
-		this.outer = Optional.ofNullable(builder.outer);
+	public BeanStore(Builder builder) {
+		this.parent = ofNullable(builder.parent);
+		this.outer = ofNullable(builder.outer);
+		this.readOnly = builder.readOnly;
+	}
+
+	/**
+	 * The builder for this object.
+	 */
+	public static class Builder {
+
+		Class<? extends BeanStore> implClass = BeanStore.class;
+		Object outer;
+		BeanStore parent;
+		boolean readOnly;
+
+		/**
+		 * Create a new {@link BeanStore} using this builder.
+		 *
+		 * @return A new {@link BeanStore}
+		 */
+		public BeanStore build() {
+			try {
+				if (implClass == BeanStore.class)
+					return new BeanStore(this);
+				Class<? extends BeanStore> ic = isConcrete(implClass) ? implClass : BeanStore.class;
+				return new BeanStore().addBeans(Builder.class, this).createBean(ic);
+			} catch (ExecutableException e) {
+				throw runtimeException(e);
+			}
+		}
+
+		/**
+		 * Specifies a subclass of {@link BeanStore} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder implClass(Class<? extends BeanStore> value) {
+			implClass = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the parent bean store.
+		 *
+		 * <p>
+		 * Bean searches are performed recursively up this parent chain.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder parent(BeanStore value) {
+			parent = value;
+			return this;
+		}
+
+		/**
+		 * Specifies that the bean store is read-only.
+		 *
+		 * <p>
+		 * This means methods such as {@link BeanStore#addBean(Class, Object)} cannot be used.
+		 *
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder readOnly() {
+			readOnly = true;
+			return this;
+		}
+
+		/**
+		 * Specifies the outer bean context.
+		 *
+		 * <p>
+		 * Used when calling {@link BeanStore#createBean(Class)} on a non-static inner class.
+		 * This should be the instance of the outer object such as the servlet object when constructing inner classes
+		 * of the servlet class.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder outer(Object value) {
+			outer = value;
+			return this;
+		}
 	}
 
 	/**
@@ -131,6 +223,7 @@ public class BeanStore {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanStore addBean(Class<T> c, T t) {
+		assertCanWrite();
 		return addBean(c.getName(), t);
 	}
 
@@ -143,6 +236,7 @@ public class BeanStore {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanStore addBean(String name, T t) {
+		assertCanWrite();
 		if (t == null)
 			beanMap.remove(name);
 		else
@@ -160,6 +254,7 @@ public class BeanStore {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> BeanStore addBeans(Class<T> c, T t) {
+		assertCanWrite();
 		if (t == null)
 			beanMap.remove(c.getName());
 		else {
@@ -182,6 +277,7 @@ public class BeanStore {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanStore addSupplier(Class<T> c, Supplier<T> t) {
+		assertCanWrite();
 		return addSupplier(c.getName(), t);
 	}
 
@@ -194,6 +290,7 @@ public class BeanStore {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanStore addSupplier(String name, Supplier<T> t) {
+		assertCanWrite();
 		if (t == null)
 			beanMap.remove(name);
 		else
@@ -229,11 +326,14 @@ public class BeanStore {
 	 * Creates a bean of the specified type.
 	 *
 	 * @param <T> The bean type to create.
-	 * @param c The bean type to create.
-	 * @return A newly-created bean.
+	 * @param c The bean type to create.  Can be <jk>null</jk>.
+	 * @return A newly-created bean, or <jk>null</jk> if the type was <jk>null</jk>.
 	 * @throws ExecutableException If bean could not be created.
 	 */
 	public <T> T createBean(Class<T> c) throws ExecutableException {
+
+		if (c == null)
+			return null;
 
 		Optional<T> o = getBean(c);
 		if (o.isPresent())
@@ -320,8 +420,8 @@ public class BeanStore {
 	 * @return A newly-created bean.
 	 * @throws ExecutableException If bean could not be created.
 	 */
-	public <T> T createBean(Class<T> c, Class<? extends T> type) throws ExecutableException {
-		if (! c.isAssignableFrom(type))
+	public <T> T createBean(Class<T> c, Class<? extends T> type) {
+		if (type != null && ! c.isAssignableFrom(type))
 			throw new ExecutableException("Could not instantiate class of type {0} because it was not a subtype of the class: {1}.", c.getName(), type);
 		return createBean(type);
 	}
@@ -457,6 +557,11 @@ public class BeanStore {
 			.a("beanMap", beanMap.keySet())
 			.a("outer", ObjectUtils.identity(outer))
 			.a("parent", parent.orElse(null));
+	}
+
+	private void assertCanWrite() {
+		if (readOnly)
+			throw runtimeException("Method cannot be used because BeanStore is read-only.");
 	}
 
 	@Override /* Object */

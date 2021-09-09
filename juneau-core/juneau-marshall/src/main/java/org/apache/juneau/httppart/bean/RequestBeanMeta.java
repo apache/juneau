@@ -13,13 +13,13 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.httppart.bean.Utils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
@@ -71,8 +71,8 @@ public class RequestBeanMeta {
 
 	RequestBeanMeta(Builder b) {
 		this.cm = b.cm;
-		this.serializer = castOrCreate(HttpPartSerializer.class, b.serializer, true, b.cp);
-		this.parser = castOrCreate(HttpPartParser.class, b.parser, true, b.cp);
+		this.serializer = BeanStore.INSTANCE.createBean(HttpPartSerializer.class, b.serializer);
+		this.parser = BeanStore.INSTANCE.createBean(HttpPartParser.class, b.parser);
 		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>();
 		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
 			properties.put(e.getKey(), e.getValue().build(serializer, parser));

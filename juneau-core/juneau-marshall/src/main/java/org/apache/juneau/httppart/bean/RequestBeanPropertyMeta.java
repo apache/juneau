@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static java.util.Optional.*;
 
 import java.lang.annotation.*;
@@ -20,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
@@ -50,8 +50,8 @@ public class RequestBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = ofNullable(schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp));
-		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp);
+		this.serializer = ofNullable(schema.getSerializer() == null ? serializer : BeanStore.INSTANCE.createBean(HttpPartSerializer.class, schema.getSerializer()));
+		this.parser = schema.getParser() == null ? parser : BeanStore.INSTANCE.createBean(HttpPartParser.class, schema.getParser());
 	}
 
 	static class Builder {

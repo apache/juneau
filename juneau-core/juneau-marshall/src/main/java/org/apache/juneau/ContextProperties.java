@@ -914,15 +914,13 @@ public final class ContextProperties {
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static BeanStore DEFAULT_BEAN_STORE = BeanStore.create().build();
-
 	static <T> T instantiate(BeanStore beanStore, Class<T> c, Object value) {
 		if (ClassInfo.of(c).isParentOf(value.getClass()))
 			return (T)value;
 		try {
 			if (ClassInfo.of(value.getClass()).isChildOf(Class.class)) {
 				if (beanStore == null)
-					beanStore = DEFAULT_BEAN_STORE;
+					beanStore = BeanStore.INSTANCE;
 				return beanStore.createBean((Class<T>)value);
 			}
 		} catch (ExecutableException e) {

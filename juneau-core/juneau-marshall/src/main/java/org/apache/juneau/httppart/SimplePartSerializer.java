@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -28,14 +31,62 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
-	public static final SimplePartSerializer DEFAULT = new SimplePartSerializer();
+	public static final SimplePartSerializer DEFAULT = create().build();
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected SimplePartSerializer(Builder builder) {
+		super(builder);
+	}
+
+	/**
+	 * The builder for this object.
+	 *
+	 */
+	public static class Builder extends BaseHttpPartSerializer.Builder {
+
+		Builder() {
+			super();
+		}
+
+		Builder(Builder builder) {
+			super(builder);
+		}
+
+		@Override
+		public SimplePartSerializer build() {
+			return new SimplePartSerializer(this);
+		}
+
+		@Override
+		public BeanContextableBuilder copy() {
+			return new Builder(this);
+		}
+	}
+
 	@Override
 	public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
 		return new SimplePartSerializerSession();
+	}
+
+	@Override
+	public Builder copy() {
+		throw unsupportedOperationException("Not implemented.");
 	}
 }

@@ -25,11 +25,9 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
@@ -105,26 +103,14 @@ public class RestClient_Query_Test {
 		x.get("/query").queryData(part("bar",s,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=bar|baz&bar=bar|baz");
 	}
 
-	public static class A8 extends SimplePartSerializer {
-		@Override
-		public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new SimplePartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-					return "x" + SimpleJson.DEFAULT.toString(value);
-				}
-			};
-		}
-	}
-
 	@Test
 	public void a08_query_String_Supplier_Schema_Serializer() throws Exception {
 		List<String> l1 = AList.of("foo","bar"), l2 = AList.of("bar","baz");
 		TestSupplier s = TestSupplier.of(l1);
-		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(new A8())).build();
-		x.get("/query").run().assertBody().asString().urlDecode().is("foo=x['foo','bar']");
+		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(MockWriterSerializer.X)).build();
+		x.get("/query").run().assertBody().asString().urlDecode().is("foo=xfoo|barx");
 		s.set(l2);
-		x.get("/query").run().assertBody().asString().urlDecode().is("foo=x['bar','baz']");
+		x.get("/query").run().assertBody().asString().urlDecode().is("foo=xbar|bazx");
 	}
 
 	@Test

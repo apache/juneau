@@ -1105,13 +1105,13 @@ public class RestContext extends BeanContext {
 	 * @return The bean store builder for this REST resource.
 	 * @throws Exception If bean store could not be instantiated.
 	 */
-	protected BeanStoreBuilder createBeanStoreBuilder(Object resource, ContextProperties properties, RestContext parent) throws Exception {
+	protected BeanStore.Builder createBeanStoreBuilder(Object resource, ContextProperties properties, RestContext parent) throws Exception {
 
 		Class<? extends BeanStore> c = properties.getIfClass(REST_beanStore, BeanStore.class).orElse(null);
 
 		BeanStore root = parent == null ? null : parent.rootBeanStore;
 
-		BeanStoreBuilder x = BeanStore
+		BeanStore.Builder x = BeanStore
 			.create()
 			.parent(root)
 			.implClass(c)
@@ -1122,8 +1122,8 @@ public class RestContext extends BeanContext {
 			.parent(root)
 			.outer(resource)
 			.build()
-			.addBean(BeanStoreBuilder.class, x)
-			.beanCreateMethodFinder(BeanStoreBuilder.class, resource)
+			.addBean(BeanStore.Builder.class, x)
+			.beanCreateMethodFinder(BeanStore.Builder.class, resource)
 			.find("createBeanStoreBuilder")
 			.withDefault(x)
 			.run();
