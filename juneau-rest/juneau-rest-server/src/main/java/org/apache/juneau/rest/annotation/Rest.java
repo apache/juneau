@@ -672,10 +672,6 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link RestContext#getFileFinder()}
 	 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
 	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext#REST_fileFinder}
-	 * </ul>
 	 */
 	Class<? extends FileFinder> fileFinder() default FileFinder.Null.class;
 

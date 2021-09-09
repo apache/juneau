@@ -1795,10 +1795,6 @@ public final class RestRequest {
 	 * <p>
 	 * Used to retrieve localized files from the classpath for a variety of purposes.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_fileFinder}
-	 * </ul>
-	 *
 	 * @return The file finder associated with the REST resource object.
 	 */
 	public FileFinder getFileFinder() {
