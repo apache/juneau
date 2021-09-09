@@ -1229,10 +1229,6 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
 	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
 	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext#REST_staticFiles}
-	 * </ul>
 	 */
 	Class<? extends StaticFiles> staticFiles() default StaticFiles.Null.class;
 

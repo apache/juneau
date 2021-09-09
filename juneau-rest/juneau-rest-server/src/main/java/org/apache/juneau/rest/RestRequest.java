@@ -1811,10 +1811,6 @@ public final class RestRequest {
 	 * <p>
 	 * Used to retrieve localized files to be served up as static files through the REST API.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	public StaticFiles getStaticFiles() {

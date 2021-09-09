@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * Represents a holder for a bean or bean type.
- * 
+ *
  * @param <T> The bean type.
  */
 public class BeanRef<T> {
@@ -74,5 +74,14 @@ public class BeanRef<T> {
 	 */
 	public Optional<Class<? extends T>> type() {
 		return ofNullable(type);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if neither the value or type is specified on this reference.
+	 *
+	 * @return <jk>true</jk> if neither the value or type is specified on this reference.
+	 */
+	public boolean isEmpty() {
+		return type == null && value == null;
 	}
 }
