@@ -454,7 +454,6 @@ public class RestDeleteAnnotation {
 
 			b.httpMethod("delete");
 
-			none(a.encoders()).ifPresent(x -> b.getEncoders().clear());
 			classes(a.encoders()).ifPresent(x -> b.getEncoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));

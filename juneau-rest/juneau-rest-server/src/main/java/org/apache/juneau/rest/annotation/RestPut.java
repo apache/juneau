@@ -25,6 +25,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.parser.*;
 
 /**
  * Identifies a REST PUT operation Java method on a {@link RestServlet} implementation class.
@@ -389,23 +390,46 @@ public @interface RestPut {
 	String[] description() default {};
 
 	/**
-	 * Compression encoders.
+	 * Specifies the compression encoders for this method.
 	 *
 	 * <p>
-	 * Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at
-	 * the servlet level.
+	 * Encoders are used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
+	 * The {@link org.apache.juneau.encoders.EncoderGroup.Inherit} class can be used to include values from the parent class.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Use {@link org.apache.juneau.encoders.EncoderGroup.Inherit} to inherit encoders from the resource class.
-	 * </ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		encoders={
+	 * 			GzipEncoder.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Define a REST method that can also use a custom encoder.</jc>
+	 * 		<ja>@RestPut</ja>(
+	 * 			encoders={
+	 * 				EncoderGroup.Inherit.<jk>class</jk>, MyEncoder.<jk>class</jk>
+	 * 			}
+	 * 		)
+	 * 		<jk>public void</jk> doPut(MyBean <jv>bean</jv>) {
+	 * 			...
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is:
+	 * <p class='bcode w800'>
+	 * 	RestOpContextBuilder <jv>builder</jv> = RestOpContextBuilder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
-	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
+	 * 	<li class='link'>{@doc RestEncoders}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
@@ -476,33 +500,53 @@ public @interface RestPut {
 	String[] on() default {};
 
 	/**
-	 * Parsers.
+	 * Specifies the parsers for converting HTTP request bodies into POJOs for this method.
 	 *
 	 * <p>
-	 * If no value is specified, the parsers are inherited from the class.
-	 * <br>Otherwise, this value overrides the parsers defined on the class.
+	 * Parsers are used to convert the body of HTTP requests into POJOs.
+	 * <br>Any of the Juneau framework parsers can be used in this setting.
+	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
+	 * </ul>
 	 *
 	 * <p>
-	 * Use {@link Inherit} to inherit parsers defined on the class.
+	 * This value overrides parsers specified at the class level using {@link Rest#parsers()}.
+	 * The {@link org.apache.juneau.parser.ParserGroup.Inherit} class can be used to include values from the parent class.
 	 *
-	 * <p>
-	 * Use {@link None} to suppress inheriting parsers defined on the class.
-	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 	<jc>// Define a REST resource that can consume JSON and HTML.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		parsers={
+	 * 			JsonParser.<jk>class</jk>,
+	 * 			HtmlParser.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
 	 *
+	 * 		<jc>// Define a REST method that can also consume XML.</jc>
 	 * 		<ja>@RestPut</ja>(
-	 * 			path=<js>"/foo"</js>,
-	 * 			parsers=MySpecialParser.<jk>class</jk>
+	 * 			parsers={
+	 * 				ParserGroup.Inherit.<jk>class</jk>, XmlParser.<jk>class</jk>
+	 * 			}
 	 * 		)
-	 * 		<jk>public</jk> Object doPutWithSpecialAcceptType() {
-	 * 			<jc>// Handle request for special Accept type</jc>
+	 * 		<jk>public void</jk> doPut(MyBean <jv>bean</jv>) {
+	 * 			...
 	 * 		}
 	 * 	}
 	 * </p>
 	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is:
+	 * <p class='bcode w800'>
+	 * 	RestOpContextBuilder <jv>builder</jv> = RestOpContextBuilder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	<jv>builder</jv>.getParsers().set(<jv>classes</jv>);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * 	<li class='link'>{@doc RestParsers}
 	 * </ul>
 	 */
 	Class<?>[] parsers() default {};
@@ -646,47 +690,53 @@ public @interface RestPut {
 	String rolesDeclared() default "";
 
 	/**
-	 * The serializers to use to serialize POJOs into response bodies.
+	 * Specifies the serializers for marshalling POJOs into response bodies for this method.
 	 *
 	 * <p>
-	 * If no value is specified, the serializers are inherited from the class.
-	 * <br>Otherwise, this value overrides the serializers defined on the class.
+	 * Serializer are used to convert POJOs to HTTP response bodies.
+	 * <br>Any of the Juneau framework serializers can be used in this setting.
+	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
+	 * </ul>
 	 *
 	 * <p>
-	 * Use {@link org.apache.juneau.serializer.SerializerGroup.Inherit} to inherit serializers defined on the class.
+	 * This value overrides serializers specified at the class level using {@link Rest#serializers()}.
+	 * The {@link org.apache.juneau.serializer.SerializerGroup.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Define a REST resource that can produce JSON and HTML.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		serializers={
-	 * 			JsonSerializer.<jk>class</jk>
+	 * 			JsonParser.<jk>class</jk>,
+	 * 			HtmlParser.<jk>class</jk>
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 	<jk>public class</jk> MyResource {
 	 *
+	 * 		<jc>// Define a REST method that can also produce XML.</jc>
 	 * 		<ja>@RestPut</ja>(
-	 * 			path=<js>"/foo"</js>,
-	 * 			serializers=XmlSerializer.<jk>class</jk>  <jc>// Override serializers on class.</jc>
+	 * 			parsers={
+	 * 				SerializerGroup.Inherit.<jk>class</jk>, XmlParser.<jk>class</jk>
+	 * 			}
 	 * 		)
-	 * 		<jk>public</jk> Object doGetOnlyXml() {
-	 * 			...
-	 * 		}
-	 *
-	 * 		<ja>@RestPut</ja>(
-	 * 			path=<js>"/bar"</js>,
-	 * 			serializers={SerializerGroup.Inherit.<jk>class<jk>, XmlSerializer.<jk>class</jk>}  <jc>// Add to serializers on class.</jc>
-	 * 		)
-	 * 		<jk>public</jk> Object doGetEither() {
+	 * 		<jk>public</jk> MyBean doPut() {
 	 * 			...
 	 * 		}
 	 * 	}
 	 * </p>
 	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is:
+	 * <p class='bcode w800'>
+	 * 	RestOpContextBuilder <jv>builder</jv> = RestOpContextBuilder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	<jv>builder</jv>.getSerializers().set(<jv>classes</jv>);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestSerializers}
-	 * 	<li class='ja'>{@link Rest#serializers()}
-	 * 	<li class='jm'>{@link RestContextBuilder#getSerializers()}
-	 * 	<li class='jm'>{@link RestOpContextBuilder#getSerializers()}
 	 * </ul>
 	 */
 	Class<? extends Serializer>[] serializers() default {};

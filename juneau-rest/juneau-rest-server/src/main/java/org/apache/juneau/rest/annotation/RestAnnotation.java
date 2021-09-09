@@ -15,8 +15,6 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
-
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
@@ -26,7 +24,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logging.*;
@@ -1044,8 +1041,8 @@ public class RestAnnotation {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
-			none(a.serializers()).ifPresent(x -> b.getSerializers().clear());
 			classes(a.serializers()).ifPresent(x -> b.getSerializers().add(x));
+			classes(a.parsers()).ifPresent(x -> b.getParsers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
 			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
@@ -1058,7 +1055,6 @@ public class RestAnnotation {
 			b.responseProcessors(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
-			none(a.encoders()).ifPresent(x -> b.getEncoders().clear());
 			classes(a.encoders()).ifPresent(x -> b.getEncoders().add(x));
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
@@ -1105,7 +1101,6 @@ public class RestAnnotation {
 		public void apply(AnnotationInfo<Rest> ai, RestOpContextBuilder b) {
 			Rest a = ai.getAnnotation();
 
-			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
 			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
 			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));

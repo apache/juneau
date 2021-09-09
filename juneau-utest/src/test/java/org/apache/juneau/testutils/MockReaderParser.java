@@ -50,6 +50,14 @@ public class MockReaderParser extends ReaderParser {
 	public static class Builder extends ReaderParserBuilder {
 		MockReaderParserFunction function;
 
+		public Builder() {
+			super();
+		}
+
+		public Builder(Builder copyFrom) {
+			super(copyFrom);
+		}
+
 		public Builder function(MockReaderParserFunction function) {
 			this.function = function;
 			return this;
@@ -63,7 +71,7 @@ public class MockReaderParser extends ReaderParser {
 
 		@Override
 		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
+			return new Builder(this);
 		}
 	}
 

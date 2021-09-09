@@ -27,7 +27,7 @@ public class ParserGroupTest {
 	@Test
 	public void testParserGroupMatching() throws Exception {
 
-		ParserGroup g = ParserGroup.create().append(Parser1.class, Parser2.class, Parser3.class).build();
+		ParserGroup g = ParserGroup.create().add(Parser1.class, Parser2.class, Parser3.class).build();
 		assertObject(g.getParser("text/foo")).isType(Parser1.class);
 		assertObject(g.getParser("text/foo_a")).isType(Parser1.class);
 		assertObject(g.getParser("text/foo_a+xxx")).isType(Parser1.class);
@@ -54,18 +54,18 @@ public class ParserGroupTest {
 	//====================================================================================================
 	@Test
 	public void testInheritence() throws Exception {
-		ParserGroupBuilder gb = null;
+		ParserGroup.Builder gb = null;
 		ParserGroup g = null;
 
-		gb = ParserGroup.create().append(P1.class, P2.class);
+		gb = ParserGroup.create().add(P1.class, P2.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
 
-		gb = ParserGroup.create().append(P1.class, P2.class).append(P3.class, P4.class);
+		gb = ParserGroup.create().add(P1.class, P2.class).add(P3.class, P4.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
-		gb = ParserGroup.create().append(P1.class, P2.class).append(P3.class, P4.class).append(P5.class);
+		gb = ParserGroup.create().add(P1.class, P2.class).add(P3.class, P4.class).add(P5.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}

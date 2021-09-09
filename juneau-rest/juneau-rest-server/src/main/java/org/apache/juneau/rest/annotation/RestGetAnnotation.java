@@ -511,9 +511,7 @@ public class RestGetAnnotation {
 
 			b.httpMethod("get");
 
-			none(a.serializers()).ifPresent(x -> b.getSerializers().clear());
 			classes(a.serializers()).ifPresent(x -> b.getSerializers().set(x));
-			none(a.encoders()).ifPresent(x -> b.getEncoders().clear());
 			classes(a.encoders()).ifPresent(x -> b.getEncoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));

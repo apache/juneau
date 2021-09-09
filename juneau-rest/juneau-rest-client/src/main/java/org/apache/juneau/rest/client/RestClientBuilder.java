@@ -97,7 +97,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private boolean pooled;
 
 	SerializerGroup.Builder serializerGroupBuilder;
-	ParserGroupBuilder parserGroupBuilder;
+	ParserGroup.Builder parserGroupBuilder;
 
 	SerializerBuilder partSerializerBuilder;
 	ParserBuilder partParserBuilder;
@@ -3038,7 +3038,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-		parserGroupBuilder.append(value);
+		parserGroupBuilder.add(value);
 		return this;
 	}
 
@@ -3077,7 +3077,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder parsers(Parser...value) {
-		parserGroupBuilder.append(value);
+		parserGroupBuilder.add(value);
 		return this;
 	}
 

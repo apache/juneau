@@ -143,6 +143,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
+	ParserGroup.Builder parsers = ParserGroup.create();
 
 	Enablement debugDefault, debug;
 
@@ -503,6 +504,78 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public VarResolverBuilder getVarResolverBuilder() {
 		return varResolverBuilder;
+	}
+
+	/**
+	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
+	 *
+	 * <p>
+	 * Serializer are used to convert POJOs to HTTP response bodies.
+	 * <br>Any of the Juneau framework serializers can be used in this setting.
+	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The builder is initialized with serializers defined via the {@link Rest#serializers()} annotation.  That annotation is applied
+	 * from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestSerializers}
+	 * </ul>
+	 *
+	 * @return The serializer group builder for this context builder.
+	 */
+	public SerializerGroup.Builder getSerializers() {
+		return serializers;
+	}
+
+	/**
+	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
+	 *
+	 * <p>
+	 * Parsers are used to convert the body of HTTP requests into POJOs.
+	 * <br>Any of the Juneau framework parsers can be used in this setting.
+	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The builder is initialized with parsers defined via the {@link Rest#parsers()} annotation.  That annotation is applied
+	 * from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestParsers}
+	 * </ul>
+	 *
+	 * @return The parser group builder for this context builder.
+	 */
+	public ParserGroup.Builder getParsers() {
+		return parsers;
+	}
+
+	/**
+	 * Returns the encoder group builder containing the encoders for compressing/decompressing input and output streams.
+	 *
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <p>
+	 * The builder is initialized with encoders defined via the {@link Rest#encoders()} annotation.  That annotation is applied
+	 * from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestEncoders}
+	 * </ul>
+	 *
+	 * @return The encoder group builder for this context builder.
+	 */
+	public EncoderGroup.Builder getEncoders() {
+		return encoders;
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -1497,67 +1570,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Compression encoders.
-	 *
-	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.getEncoders().add(GzipEncoder.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.getEncoders().add(GzipEncoder.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(encoders={MySpecialEncoder.<jk>class</jk>, EncoderGroup.Inherit.<jk>class</jk>})
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestEncoders}
-	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
-	 * 	<li class='ja'>{@link Rest#encoders()}
-	 * 	<li class='ja'>{@link RestOp#encoders()}
-	 * 	<li class='ja'>{@link RestGet#encoders()}
-	 * 	<li class='ja'>{@link RestPut#encoders()}
-	 * 	<li class='ja'>{@link RestPost#encoders()}
-	 * 	<li class='ja'>{@link RestDelete#encoders()}
-	 * </ul>
-	 *
-	 * @return The encoder group builder for this context builder.
-	 */
-	public EncoderGroup.Builder getEncoders() {
-		return encoders;
-	}
-
-	/**
 	 * Configuration property:  File finder.
 	 *
 	 * <p>
@@ -1760,64 +1772,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (value != ParserListener.Null.class)
 			set(PARSER_listener, value);
 		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parsers.
-	 *
-	 * <p>
-	 * Adds class-level parsers to this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder parsers(Class<?>...values) {
-		return prependTo(REST_parsers, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parsers.
-	 *
-	 * <p>
-	 * Same as {@link #parsers(Class...)} except input is pre-constructed instances.
-	 *
-	 * <p>
-	 * Parser instances are considered set-in-stone and do NOT inherit properties and transforms defined on the
-	 * resource class or method.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder parsers(Parser...values) {
-		return prependTo(REST_parsers, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parsers.
-	 *
-	 * <p>
-	 * Same as {@link #parsers(Class...)} except allows you to overwrite the previous value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder parsersReplace(Parser...values) {
-		return set(REST_parsers, values);
 	}
 
 	/**
@@ -2389,71 +2343,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * The serializers to use to serialize POJOs into response bodies.
-	 *
-	 * <p>
-	 * Serializer are used to convert POJOs to HTTP response bodies.
-	 * <br>Any of the Juneau framework serializers can be used in this setting.
-	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
-	 * using a best-match algorithm:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.getSerializers().add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but use pre-instantiated serializers.</jc>
-	 * 			<jv>builder</jv>.getSerializers().add(JsonSerializer.<jsf>DEFAULT</jsf>, XmlSerializer.<jsf>DEFAULT</jsf>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.getSerializers().add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(serializers={HtmlSerializer.<jk>class</jk>})
-	 * 		<jk>public</jk> MyPojo myMethod() {
-	 * 			<jc>// Return a POJO to be serialized.</jc>
-	 * 			<jk>return new</jk> MyPojo();
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Typically, you'll want your resource to extend directly from {@link BasicRestServlet} which comes
-	 * 		preconfigured with a predefined set of serializers.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * 	<li class='ja'>{@link RestOpContextBuilder#getSerializers()}
-	 * 	<li class='ja'>{@link Rest#serializers()}
-	 * 	<li class='ja'>{@link RestOp#serializers()}
-	 * 	<li class='ja'>{@link RestGet#serializers()}
-	 * 	<li class='ja'>{@link RestPut#serializers()}
-	 * 	<li class='ja'>{@link RestPost#serializers()}
-	 * </ul>
-	 *
-	 * @return The serializer group builder for this context builder.
-	 */
-	public SerializerGroup.Builder getSerializers() {
-		return serializers;
-	}
-
-	/**
 	 * Supported accept media types.
 	 *
 	 * <p>
@@ -2933,6 +2822,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder apply(List<AnnotationWork> work) {
 		super.apply(work);
 		serializers.apply(work);
+		parsers.apply(work);
 		return this;
 	}
 

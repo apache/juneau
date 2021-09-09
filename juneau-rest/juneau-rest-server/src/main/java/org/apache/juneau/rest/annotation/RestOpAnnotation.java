@@ -14,8 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.rest.RestContext.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
@@ -616,10 +614,8 @@ public class RestOpAnnotation {
 		public void apply(AnnotationInfo<RestOp> ai, RestOpContextBuilder b) {
 			RestOp a = ai.getAnnotation();
 
-			none(a.serializers()).ifPresent(x -> b.getSerializers().clear());
 			classes(a.serializers()).ifPresent(x -> b.getSerializers().set(x));
-			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
-			none(a.encoders()).ifPresent(x -> b.getEncoders().clear());
+			classes(a.parsers()).ifPresent(x -> b.getParsers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.getEncoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));

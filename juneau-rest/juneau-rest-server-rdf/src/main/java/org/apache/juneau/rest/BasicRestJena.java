@@ -30,7 +30,6 @@ import org.apache.juneau.rest.annotation.*;
 		N3Serializer.class
 	},
 	parsers={
-		Inherit.class,
 		RdfXmlParser.class,
 		TurtleParser.class,
 		NTripleParser.class,

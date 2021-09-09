@@ -75,7 +75,9 @@ import org.apache.juneau.http.header.*;
 public final class SerializerGroup {
 
 	/**
-	 * An identifier that a group of serializers should be inherited.
+	 * An identifier that the previous entries in this group should be inherited.
+	 * <p>
+	 * Used by {@link Builder#set(Class...)}
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Serializer {
@@ -85,11 +87,13 @@ public final class SerializerGroup {
 	}
 
 	/**
-	 * An identifier that a group of serializers should not be inherited.
+	 * An identifier that the previous entries in this group should not be inherited.
+	 * <p>
+	 * Used by {@link Builder#add(Class...)}
 	 */
 	@SuppressWarnings("javadoc")
-	public static abstract class None extends Serializer {
-		protected None(SerializerBuilder builder) {
+	public static abstract class NoInherit extends Serializer {
+		protected NoInherit(SerializerBuilder builder) {
 			super(builder);
 		}
 	}
@@ -101,7 +105,7 @@ public final class SerializerGroup {
 	private final List<Serializer> mediaTypeRangeSerializers;
 
 	private final List<MediaType> mediaTypesList;
-	final Serializer[] serializers;
+	final Serializer[] entries;
 
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
@@ -119,17 +123,17 @@ public final class SerializerGroup {
 	 */
 	protected SerializerGroup(Builder builder) {
 
-		this.serializers = builder.serializers.stream().map(x -> build(x)).toArray(Serializer[]::new);
+		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
 
 		AList<MediaRange> lmtr = AList.create();
 		ASet<MediaType> lmt = ASet.of();
 		AList<Serializer> l = AList.create();
-		for (Serializer s : serializers) {
-			for (MediaRange m: s.getMediaTypeRanges().getRanges()) {
+		for (Serializer e : entries) {
+			for (MediaRange m: e.getMediaTypeRanges().getRanges()) {
 				lmtr.add(m);
-				l.add(s);
+				l.add(e);
 			}
-			for (MediaType mt : s.getAcceptMediaTypes())
+			for (MediaType mt : e.getAcceptMediaTypes())
 				lmt.add(mt);
 		}
 
@@ -158,14 +162,14 @@ public final class SerializerGroup {
 	 */
 	public static class Builder {
 
-		List<Object> serializers;
+		List<Object> entries;
 		private BeanContextBuilder bcBuilder;
 
 		/**
 		 * Create an empty serializer group builder.
 		 */
 		protected Builder() {
-			this.serializers = AList.create();
+			this.entries = AList.create();
 		}
 
 		/**
@@ -174,7 +178,7 @@ public final class SerializerGroup {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(SerializerGroup copyFrom) {
-			this.serializers = AList.create().append(asList(copyFrom.serializers));
+			this.entries = AList.create().append(asList(copyFrom.entries));
 		}
 
 		/**
@@ -187,8 +191,8 @@ public final class SerializerGroup {
 		 */
 		protected Builder(Builder copyFrom) {
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			serializers = AList.create();
-			copyFrom.serializers.stream().map(x -> copyBuilder(x)).forEach(x -> serializers.add(x));
+			entries = AList.create();
+			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
 		}
 
 		private Object copyBuilder(Object o) {
@@ -241,6 +245,20 @@ public final class SerializerGroup {
 		 * <p>
 		 * Entries are added in-order to the beginning of the list in the group.
 		 *
+		 * <p>
+		 * The {@link NoInherit} class can be used to clear out the existing list of serializers before adding the new entries.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	SerializerGroup.Builder <jv>builder</jv> = SerializerGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 *
+		 * 	<jv>builder</jv>.add(FooSerializer.<jk>class</jk>);  <jc>// Now contains:  [FooSerializer]</jc>
+		 *
+		 * 	<jv>builder</jv>.add(BarSerializer.<jk>class</jk>, BazSerializer.<jk>class</jk>);  <jc>// Now contains:  [BarParser,BazSerializer,FooSerializer]</jc>
+		 *
+		 * 	<jv>builder</jv>.add(NoInherit.<jk>class</jk>, QuxSerializer.<jk>class</jk>);  <jc>// Now contains:  [QuxSerializer]</jc>
+		 * </p>
+		 *
 		 * @param values The serializers to add to this group.
 		 * @return This object (for method chaining).
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer}.
@@ -254,7 +272,7 @@ public final class SerializerGroup {
 					throw runtimeException("Invalid type passed to SerializeGroup.Builder.add(): " + e.getName());
 				}
 			}
-			serializers.addAll(0, l);
+			entries.addAll(0, l);
 			return this;
 		}
 
@@ -265,8 +283,18 @@ public final class SerializerGroup {
 		 * Existing values are overwritten.
 		 *
 		 * <p>
-		 * If {@link Inherit} (or any other class whose simple name is <js>"Inherit"</js>) is specified, then the existing values are copied
-		 * into the final list in the position they appear in the values.
+		 * The {@link Inherit} class can be used to insert existing entries in this group into the position specified.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	SerializerGroup.Builder <jv>builder</jv> = SerializerGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 *
+		 * 	<jv>builder</jv>.set(FooSerializer.<jk>class</jk>);  <jc>// Now contains:  [FooSerializer]</jc>
+		 *
+		 * 	<jv>builder</jv>.set(BarSerializer.<jk>class</jk>, BazSerializer.<jk>class</jk>);  <jc>// Now contains:  [BarParser,BazSerializer]</jc>
+		 *
+		 * 	<jv>builder</jv>.set(Inherit.<jk>class</jk>, QuxSerializer.<jk>class</jk>);  <jc>// Now contains:  [BarParser,BazSerializer,QuxSerializer]</jc>
+		 * </p>
 		 *
 		 * @param values The serializers to set in this group.
 		 * @return This object (for method chaining).
@@ -276,14 +304,14 @@ public final class SerializerGroup {
 			List<Object> l = new ArrayList<>();
 			for (Class<?> e : values) {
 				if (e.getSimpleName().equals("Inherit")) {
-					l.addAll(serializers);
+					l.addAll(entries);
 				} else if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
 					throw runtimeException("Invalid type passed to SerializeGroup.Builder.set(): " + e.getName());
 				}
 			}
-			serializers = l;
+			entries = l;
 			return this;
 		}
 
@@ -309,7 +337,7 @@ public final class SerializerGroup {
 		 * @return This object (for method chaining).
 		 */
 		public Builder add(Serializer...s) {
-			serializers.addAll(0, asList(s));
+			entries.addAll(0, asList(s));
 			return this;
 		}
 
@@ -319,7 +347,7 @@ public final class SerializerGroup {
 		 * @return This object (for method chaining).
 		 */
 		public Builder clear() {
-			serializers.clear();
+			entries.clear();
 			return this;
 		}
 
@@ -330,7 +358,7 @@ public final class SerializerGroup {
 		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one serializer builder in this group.
 		 */
 		public boolean canApply(List<AnnotationWork> work) {
-			for (Object o : serializers)
+			for (Object o : entries)
 				if (o instanceof SerializerBuilder)
 					if (((SerializerBuilder)o).canApply(work))
 						return true;
@@ -390,14 +418,30 @@ public final class SerializerGroup {
 			return this;
 		}
 
+		/**
+		 * Returns direct access to the {@link Serializer} and {@link SerializerBuilder} objects in this builder.
+		 *
+		 * <p>
+		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
+		 * as re-ordering/adding/removing entries.
+		 *
+		 * <p>
+		 * Note that it is up to the user to ensure that the list only contains {@link Serializer} and {@link SerializerBuilder} objects.
+		 *
+		 * @return The inner list of entries in this builder.
+		 */
+		public List<Object> inner() {
+			return entries;
+		}
+
 		@SuppressWarnings("unchecked")
 		private <T extends SerializerBuilder> Stream<T> builders(Class<T> type) {
-			return serializers.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
+			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
 		}
 
 		@Override /* Object */
 		public String toString() {
-			return serializers.stream().map(x -> toString(x)).collect(joining(",","[","]"));
+			return entries.stream().map(x -> toString(x)).collect(joining(",","[","]"));
 		}
 
 		private String toString(Object o) {
@@ -540,7 +584,7 @@ public final class SerializerGroup {
 	 * @return An unmodifiable list of serializers in this group.
 	 */
 	public List<Serializer> getSerializers() {
-		return unmodifiableList(asList(serializers));
+		return unmodifiableList(asList(entries));
 	}
 
 	/**
@@ -549,6 +593,6 @@ public final class SerializerGroup {
 	 * @return <jk>true</jk> if this group contains no serializers.
 	 */
 	public boolean isEmpty() {
-		return serializers.length == 0;
+		return entries.length == 0;
 	}
 }

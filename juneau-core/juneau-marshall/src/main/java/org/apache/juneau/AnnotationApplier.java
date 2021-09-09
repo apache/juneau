@@ -211,23 +211,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<Class<?>[]> classes(Class<?>[] in) {
-		for (int i = 0; i < in.length; i++)
-			if (in[i].getSimpleName().equals("None"))
-				return Optional.of(Arrays.stream(in).filter(x -> ! x.getSimpleName().equals("None")).toArray(Class[]::new));
 		return Optional.ofNullable(in.length == 0 ? null : in);
-	}
-
-	/**
-	 * Returns a class entry if the class array contains a class with a simple name of <js>"None"</js>.
-	 *
-	 * @param in The class array.
-	 * @return The class entry with simple name <js>"None"</js>.
-	 */
-	protected Optional<Class<?>> none(Class<?>[] in) {
-		for (int i = 0; i < in.length; i++)
-			if (in[i].getSimpleName().equals("None"))
-				return Optional.of(in[i]);
-		return Optional.empty();
 	}
 
 	/**

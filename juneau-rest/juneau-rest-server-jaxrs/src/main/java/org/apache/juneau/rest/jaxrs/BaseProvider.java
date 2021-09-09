@@ -58,7 +58,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				.build();
 
 			parsers = ParserGroup.create()
-				.append(jp.parsers())
+				.add(jp.parsers())
 				.forEach(x -> x.swaps((Object[])jp.swaps()))
 				.forEach(x -> x.set(properties))
 				.build();

@@ -67,16 +67,25 @@ import org.apache.juneau.http.header.*;
 public final class EncoderGroup {
 
 	/**
-	 * An identifier that a group of encoders should inherit from another group.
+	 * An identifier that the previous encoders in this group should be inherited.
+	 * <p>
+	 * Used by {@link Builder#set(Class...)}
 	 */
 	public static abstract class Inherit extends Encoder {}
+
+	/**
+	 * An identifier that the previous encoders in this group should not be inherited.
+	 * <p>
+	 * Used by {@link Builder#add(Class...)}
+	 */
+	public static abstract class NoInherit extends Encoder {}
 
 	// Maps Accept-Encoding headers to matching encoders.
 	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
 
 	private final List<String> encodings;
 	private final Encoder[] encodingsEncoders;
-	private final Encoder[] encoders;
+	private final Encoder[] entries;
 
 	/**
 	 * Instantiates a new clean-slate {@link EncoderGroup.Builder} object.
@@ -96,11 +105,11 @@ public final class EncoderGroup {
 	 * @param builder The builder for this object.
 	 */
 	protected EncoderGroup(Builder builder) {
-		encoders = builder.encoders.stream().map(x -> instantiate(builder.beanStore, x)).toArray(Encoder[]::new);
+		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore, x)).toArray(Encoder[]::new);
 
 		List<String> lc = AList.create();
 		List<Encoder> l = AList.create();
-		for (Encoder e : encoders) {
+		for (Encoder e : entries) {
 			for (String c: e.getCodings()) {
 				lc.add(c);
 				l.add(e);
@@ -126,16 +135,16 @@ public final class EncoderGroup {
 	 * Builder class for this object.
 	 */
 	public static class Builder {
-		List<Object> encoders;
+		List<Object> entries;
 		Builder inheritFrom;
 		BeanStore beanStore = BeanStore.create().build();
 
 		Builder() {
-			encoders = AList.create();
+			entries = AList.create();
 		}
 
 		Builder(Builder copyFrom) {
-			encoders = AList.of(copyFrom.encoders);
+			entries = AList.of(copyFrom.entries);
 		}
 
 		/**
@@ -150,14 +159,17 @@ public final class EncoderGroup {
 		 */
 		public Builder add(Class<?>...values) {
 			List<Object> l = AList.create();
-			for (Class<?> e : values) {
-				if (Encoder.class.isAssignableFrom(e)) {
-					l.add(e);
-				} else {
-					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.add(): " + e.getName());
+			for (Class<?> v : values)
+				if (v.getSimpleName().equals("NoInherit"))
+					clear();
+			for (Class<?> v : values) {
+				if (Encoder.class.isAssignableFrom(v)) {
+					l.add(v);
+				} else if (! v.getSimpleName().equals("NoInherit")) {
+					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.add(): " + v.getName());
 				}
 			}
-			encoders.addAll(0, l);
+			entries.addAll(0, l);
 			return this;
 		}
 
@@ -177,16 +189,16 @@ public final class EncoderGroup {
 		 */
 		public Builder set(Class<?>...values) {
 			List<Object> l = AList.create();
-			for (Class<?> e : values) {
-				if (e.getSimpleName().equals("Inherit")) {
-					l.addAll(encoders);
-				} else if (Encoder.class.isAssignableFrom(e)) {
-					l.add(e);
+			for (Class<?> v : values) {
+				if (v.getSimpleName().equals("Inherit")) {
+					l.addAll(entries);
+				} else if (Encoder.class.isAssignableFrom(v)) {
+					l.add(v);
 				} else {
-					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.set(): " + e.getName());
+					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.set(): " + v.getName());
 				}
 			}
-			encoders = l;
+			entries = l;
 			return this;
 		}
 
@@ -200,7 +212,7 @@ public final class EncoderGroup {
 		 * @return This object (for method chaining).
 		 */
 		public Builder add(Encoder...values) {
-			encoders.addAll(0, asList(values));
+			entries.addAll(0, asList(values));
 			return this;
 		}
 
@@ -210,7 +222,7 @@ public final class EncoderGroup {
 		 * @return This object (for method chaining).
 		 */
 		public Builder clear() {
-			encoders.clear();
+			entries.clear();
 			return this;
 		}
 
@@ -246,12 +258,28 @@ public final class EncoderGroup {
 		 * @return <jk>true</jk> if this builder is empty.
 		 */
 		public boolean isEmpty() {
-			return encoders.isEmpty();
+			return entries.isEmpty();
+		}
+
+		/**
+		 * Returns direct access to the {@link Encoder} objects and classes in this builder.
+		 *
+		 * <p>
+		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
+		 * as re-ordering/adding/removing entries.
+		 *
+		 * <p>
+		 * Note that it is up to the user to ensure that the list only contains {@link Encoder} objects and classes.
+		 *
+		 * @return The inner list of entries in this builder.
+		 */
+		public List<Object> inner() {
+			return entries;
 		}
 
 		@Override /* Object */
 		public String toString() {
-			return encoders.stream().map(x -> toString(x)).collect(joining(",","[","]"));
+			return entries.stream().map(x -> toString(x)).collect(joining(",","[","]"));
 		}
 
 		private static String toString(Object o) {

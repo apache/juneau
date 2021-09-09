@@ -27,6 +27,7 @@ import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -56,6 +57,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	RestConverterList.Builder converters = RestConverterList.create();
 	EncoderGroup.Builder encoders;
 	SerializerGroup.Builder serializers;
+	ParserGroup.Builder parsers;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -111,6 +113,8 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 
 			if (context.builder.serializers.canApply(al))
 				getSerializers().apply(al);
+			if (context.builder.parsers.canApply(al))
+				getParsers().apply(al);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -136,6 +140,78 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	public RestOpContextBuilder beanStore(BeanStore beanStore) {
 		this.beanStore = beanStore;
 		return this;
+	}
+
+	/**
+	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
+	 *
+	 * <p>
+	 * This method can be used to override serializers defined at the class level via {@link RestContextBuilder#getSerializers()}.
+	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
+	 * If never called, then the builder from the class context is used.
+	 *
+	 * <p>
+	 * The builder is initialized with serializers defined via the {@link RestOp#serializers()} (and related) annotation.
+	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestSerializers}
+	 * </ul>
+	 *
+	 * @return The serializer group builder for this context builder.
+	 */
+	public SerializerGroup.Builder getSerializers() {
+		if (serializers == null)
+			serializers = restContext.builder.serializers.copy();
+		return serializers;
+	}
+
+	/**
+	 * Returns the parser group builder containing the parsers for converting request bodies into POJOs.
+	 *
+	 * <p>
+	 * This method can be used to override parsers defined at the class level via {@link RestContextBuilder#getParsers()}.
+	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
+	 * If never called, then the builder from the class context is used.
+	 *
+	 * <p>
+	 * The builder is initialized with parsers defined via the {@link RestOp#parsers()} (and related) annotation.
+	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestParsers}
+	 * </ul>
+	 *
+	 * @return The parser group builder for this context builder.
+	 */
+	public ParserGroup.Builder getParsers() {
+		if (parsers == null)
+			parsers = restContext.builder.parsers.copy();
+		return parsers;
+	}
+
+	/**
+	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
+	 *
+	 * <p>
+	 * This method can be used to override encoders defined at the class level via {@link RestContextBuilder#getEncoders()}.
+	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
+	 * If never called, then the builder from the class context is used.
+	 *
+	 * <p>
+	 * The builder is initialized with encoders defined via the {@link Rest#parsers()} annotation.
+	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestEncoders}
+	 * </ul>
+	 *
+	 * @return The encoder group builder for this context builder.
+	 */
+	public EncoderGroup.Builder getEncoders() {
+		if (encoders == null)
+			encoders = restContext.builder.encoders.copy();
+		return encoders;
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -522,36 +598,6 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
 		defaultResponseHeaders.setDefault(values);
 		return this;
-	}
-
-	/**
-	 * Compression encoders.
-	 *
-	 * <p>
-	 * This method overwrites any encoders defined at the class level.
-	 * If never called, then the encoders are automatically inherited from the class level.
-	 *
-	 * <p>
-	 * If {@link org.apache.juneau.encoders.EncoderGroup.Inherit} (or any other class whose simple name is <js>"Inherit"</js>) is specified, then the existing values are copied
-	 * into the final list in the position they appear in the values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestEncoders}
-	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
-	 * 	<li class='ja'>{@link Rest#encoders()}
-	 * 	<li class='ja'>{@link RestOp#encoders()}
-	 * 	<li class='ja'>{@link RestGet#encoders()}
-	 * 	<li class='ja'>{@link RestPut#encoders()}
-	 * 	<li class='ja'>{@link RestPost#encoders()}
-	 * 	<li class='ja'>{@link RestDelete#encoders()}
-	 * </ul>
-	 *
-	 * @return The encoder group builder for the context builder.
-	 */
-	public EncoderGroup.Builder getEncoders() {
-		if (encoders == null)
-			encoders = restContext.builder.encoders.copy();
-		return encoders;
 	}
 
 	/**
@@ -986,29 +1032,6 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		else
 			roleGuard.add(value);
 		return this;
-	}
-
-	/**
-	 * Specifies the serializers for this REST method.
-	 *
-	 * <p>
-	 * This method overwrites any serializers defined at the class level.
-	 * If never called, then the serializers are automatically inherited from the class level.
-	 *
-	 * <p>
-	 * If {@link org.apache.juneau.serializer.SerializerGroup.Inherit} (or any other class whose simple name is <js>"Inherit"</js>) is specified, then the existing values are copied
-	 * into the final list in the position they appear in the values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * </ul>
-	 *
-	 * @return The serializer group builder for this context builder.
-	 */
-	public SerializerGroup.Builder getSerializers() {
-		if (serializers == null)
-			serializers = restContext.builder.serializers.copy();
-		return serializers;
 	}
 
 	/**

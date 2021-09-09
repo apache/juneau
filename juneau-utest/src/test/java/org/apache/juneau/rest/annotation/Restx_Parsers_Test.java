@@ -153,7 +153,7 @@ public class Restx_Parsers_Test {
 	@Rest(parsers={P1.class,P2.class})
 	public static class B {}
 
-	@Rest(parsers={P3.class,P4.class,Inherit.class})
+	@Rest(parsers={P3.class,P4.class})
 	public static class B1 extends B {}
 
 	@Rest

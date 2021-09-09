@@ -151,7 +151,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			serializers = createSerializers(r, builder, bs);
 			bs.addBean(SerializerGroup.class, serializers);
 
-			parsers = createParsers(r, cp, bs);
+			parsers = createParsers(r, builder, bs);
 			bs.addBean(ParserGroup.class, parsers);
 
 			partSerializer = createPartSerializer(r, cp, bs);
@@ -370,7 +370,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	}
 
 	/**
-	 * Instantiates the encoders for this REST resource method.
+	 * Instantiates the entries for this REST resource method.
 	 *
 	 * <p>
 	 * Instantiates based on the following logic:
@@ -474,9 +474,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link RestContext#REST_parsers} value set via any of the following:
+	 * 	<li>Looks for parsers set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Parser...)}
+	 * 			<li>{@link RestContextBuilder#getParsers()}.
 	 * 			<li>{@link Rest#parsers()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createParsers()</> method that returns <c>{@link Parser}[]</c> on the
@@ -491,42 +491,32 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties The property store of this method.
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
-	 * @see RestContext#REST_parsers
 	 */
-	protected ParserGroup createParsers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected ParserGroup createParsers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		ParserGroup g = beanStore.getBean(ParserGroup.class).orElse(null);
 
-		if (g == null) {
-			Object[] x = properties.getArray(REST_parsers, Object.class).orElse(null);
+		if (g != null)
+			return g;
 
-			if (x == null)
-				x = beanStore.getBean(Parser[].class).orElse(null);
+		ParserGroup.Builder x = builder.parsers;
+		if (x == null)
+			x = builder.restContext.builder.parsers;
 
-			if (x == null)
-				x = new Parser[0];
-
-			g = ParserGroup
-				.create()
-				.append(x)
-				.forEach(y -> y.apply(properties))
-				.build();
-		}
-
-		g = BeanStore
+		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(ParserGroup.class, g)
-			.beanCreateMethodFinder(ParserGroup.class, resource)
+			.addBean(ParserGroup.Builder.class, x)
+			.beanCreateMethodFinder(ParserGroup.Builder.class, resource)
 			.find("createParsers", Method.class)
 			.thenFind("createParsers")
-			.withDefault(g)
+			.withDefault(x)
 			.run();
 
-		return g;
+		return x.build();
 	}
 
 	/**
@@ -1008,29 +998,28 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		return pathMatchers[0].toString();
 	}
 
-
 	/**
-	 * Bean property getter:  <property>serializers</property>.
+	 * Returns the serializers to use for this method.
 	 *
-	 * @return The value of the <property>serializers</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The serializers to use for this method.
 	 */
 	public SerializerGroup getSerializers() {
 		return serializers;
 	}
 
 	/**
-	 * Bean property getter:  <property>parsers</property>.
+	 * Returns the parsers to use for this method.
 	 *
-	 * @return The value of the <property>parsers</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The parsers to use for this method.
 	 */
 	public ParserGroup getParsers() {
 		return parsers;
 	}
 
 	/**
-	 * Bean property getter:  <property>encoders</property>.
+	 * Returns the compression encoders to use for this method.
 	 *
-	 * @return The value of the <property>encoders</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The compression encoders to use for this method.
 	 */
 	public EncoderGroup getEncoders() {
 		return encoders;

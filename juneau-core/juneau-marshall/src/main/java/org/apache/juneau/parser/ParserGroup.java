@@ -13,17 +13,20 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
-
+import static java.util.stream.Collectors.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
@@ -80,9 +83,28 @@ import org.apache.juneau.internal.*;
 public final class ParserGroup {
 
 	/**
-	 * An unmodifiable empty parser group.
+	 * An identifier that the previous entries in this group should be inherited.
+	 * <p>
+	 * Used by {@link Builder#set(Class...)}
 	 */
-	public static final ParserGroup EMPTY = create().build();
+	@SuppressWarnings("javadoc")
+	public static abstract class Inherit extends Parser {
+		protected Inherit(ParserBuilder builder) {
+			super(builder);
+		}
+	}
+
+	/**
+	 * An identifier that the previous entries in this group should not be inherited.
+	 * <p>
+	 * Used by {@link Builder#add(Class...)}
+	 */
+	@SuppressWarnings("javadoc")
+	public static abstract class NoInherit extends Parser {
+		protected NoInherit(ParserBuilder builder) {
+			super(builder);
+		}
+	}
 
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
@@ -90,18 +112,15 @@ public final class ParserGroup {
 	private final List<MediaType> mediaTypes;
 	private final List<Parser> mediaTypeParsers;
 
-	final Parser[] parsers;
+	final Parser[] entries;
 
 	/**
-	 * Instantiates a new clean-slate {@link ParserGroupBuilder} object.
+	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> ParserGroupBuilder()</code>.
-	 *
-	 * @return A new {@link ParserGroupBuilder} object.
+	 * @return A new {@link Builder} object.
 	 */
-	public static ParserGroupBuilder create() {
-		return new ParserGroupBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -109,24 +128,16 @@ public final class ParserGroup {
 	 *
 	 * @param builder The builder for this bean.
 	 */
-	public ParserGroup(ParserGroupBuilder builder) {
-		List<Parser> x = new ArrayList<>();
-		for (Object p : builder.parsers) {
-			if (p instanceof ParserBuilder) {
-				x.add(((ParserBuilder)p).build());
-			} else {
-				x.add((Parser)p);
-			}
-		}
+	public ParserGroup(Builder builder) {
 
-		this.parsers = ArrayUtils.toReverseArray(Parser.class, x);
+		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Parser[]::new);
 
 		AList<MediaType> lmt = AList.create();
 		AList<Parser> l = AList.create();
-		for (Parser p : parsers) {
-			for (MediaType m: p.getMediaTypes()) {
+		for (Parser e : entries) {
+			for (MediaType m: e.getMediaTypes()) {
 				lmt.add(m);
-				l.add(p);
+				l.add(e);
 			}
 		}
 
@@ -134,13 +145,318 @@ public final class ParserGroup {
 		this.mediaTypeParsers = l.unmodifiable();
 	}
 
+	private Parser build(Object o) {
+		if (o instanceof Parser)
+			return (Parser)o;
+		return ((ParserBuilder)o).build();
+	}
+
 	/**
 	 * Creates a copy of this parser group.
 	 *
 	 * @return A new copy of this parser group.
 	 */
-	public ParserGroupBuilder copy() {
-		return new ParserGroupBuilder(this);
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	/**
+	 * Builder class for creating instances of {@link ParserGroup}.
+	 */
+	public static class Builder {
+
+		List<Object> entries;
+		private BeanContextBuilder bcBuilder;
+
+		/**
+		 * Create an empty parser group builder.
+		 */
+		protected Builder() {
+			this.entries = AList.create();
+		}
+
+		/**
+		 * Clone an existing parser group.
+		 *
+		 * @param copyFrom The parser group that we're copying settings and parsers from.
+		 */
+		protected Builder(ParserGroup copyFrom) {
+			this.entries = AList.create().append(asList(copyFrom.entries));
+		}
+
+		/**
+		 * Clone an existing parser group builder.
+		 *
+		 * <p>
+		 * Parser builders will be cloned during this process.
+		 *
+		 * @param copyFrom The parser group that we're copying settings and parsers from.
+		 */
+		protected Builder(Builder copyFrom) {
+			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
+			entries = AList.create();
+			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
+		}
+
+		private Object copyBuilder(Object o) {
+			if (o instanceof ParserBuilder) {
+				ParserBuilder x = (ParserBuilder)o;
+				x = x.copy();
+				if (bcBuilder != null)
+					x.beanContextBuilder(bcBuilder);
+				return x;
+			}
+			return o;
+		}
+
+		/**
+		 * Copy creator.
+		 *
+		 * @return A new mutable copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		/**
+		 * Creates a new {@link ParserGroup} object using a snapshot of the settings defined in this builder.
+		 *
+		 * <p>
+		 * This method can be called multiple times to produce multiple parser groups.
+		 *
+		 * @return A new {@link ParserGroup} object.
+		 */
+		public ParserGroup build() {
+			return new ParserGroup(this);
+		}
+
+		/**
+		 * Associates an existing bean context builder with all parser builders in this group.
+		 *
+		 * @param value The bean contest builder to associate.
+		 * @return This object (for method chaining).
+		 */
+		public Builder beanContextBuilder(BeanContextBuilder value) {
+			bcBuilder = value;
+			forEach(x -> x.beanContextBuilder(value));
+			return this;
+		}
+
+		/**
+		 * Adds the specified parsers to this group.
+		 *
+		 * <p>
+		 * Entries are added in-order to the beginning of the list in the group.
+		 *
+		 * <p>
+		 * The {@link NoInherit} class can be used to clear out the existing list of parsers before adding the new entries.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	ParserGroup.Builder <jv>builder</jv> = ParserGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 *
+		 * 	<jv>builder</jv>.add(FooParser.<jk>class</jk>);  <jc>// Now contains:  [FooParser]</jc>
+		 *
+		 * 	<jv>builder</jv>.add(BarParser.<jk>class</jk>, BazParser.<jk>class</jk>);  <jc>// Now contains:  [BarParser,BazParser,FooParser]</jc>
+		 *
+		 * 	<jv>builder</jv>.add(NoInherit.<jk>class</jk>, QuxParser.<jk>class</jk>);  <jc>// Now contains:  [QuxParser]</jc>
+		 * </p>
+		 *
+		 * @param values The parsers to add to this group.
+		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser}.
+		 */
+		public Builder add(Class<?>...values) {
+			List<Object> l = new ArrayList<>();
+			for (Class<?> v : values)
+				if (v.getSimpleName().equals("NoInherit"))
+					clear();
+			for (Class<?> v : values) {
+				if (Parser.class.isAssignableFrom(v)) {
+					l.add(createBuilder(v));
+				} else if (! v.getSimpleName().equals("NoInherit")) {
+					throw runtimeException("Invalid type passed to ParserGroup.Builder.add(): " + v.getName());
+				}
+			}
+			entries.addAll(0, l);
+			return this;
+		}
+
+		/**
+		 * Sets the specified parsers for this group.
+		 *
+		 * <p>
+		 * Existing values are overwritten.
+		 *
+		 * <p>
+		 * The {@link Inherit} class can be used to insert existing entries in this group into the position specified.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	ParserGroup.Builder <jv>builder</jv> = ParserGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 *
+		 * 	<jv>builder</jv>.set(FooParser.<jk>class</jk>);  <jc>// Now contains:  [FooParser]</jc>
+		 *
+		 * 	<jv>builder</jv>.set(BarParser.<jk>class</jk>, BazParser.<jk>class</jk>);  <jc>// Now contains:  [BarParser,BazParser]</jc>
+		 *
+		 * 	<jv>builder</jv>.set(Inherit.<jk>class</jk>, QuxParser.<jk>class</jk>);  <jc>// Now contains:  [BarParser,BazParser,QuxParser]</jc>
+		 * </p>
+		 *
+		 * @param values The parsers to set in this group.
+		 * @return This object (for method chaining).
+		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser} or named <js>"Inherit"</js>.
+		 */
+		public Builder set(Class<?>...values) {
+			List<Object> l = new ArrayList<>();
+			for (Class<?> v : values) {
+				if (v.getSimpleName().equals("Inherit")) {
+					l.addAll(entries);
+				} else if (Parser.class.isAssignableFrom(v)) {
+					l.add(createBuilder(v));
+				} else {
+					throw runtimeException("Invalid type passed to ParserGrouup.Builder.set(): " + v.getName());
+				}
+			}
+			entries = l;
+			return this;
+		}
+
+		private Object createBuilder(Object o) {
+			if (o instanceof Class) {
+				@SuppressWarnings("unchecked")
+				ParserBuilder b = Parser.createParserBuilder((Class<? extends Parser>)o);
+				if (bcBuilder != null)
+					b.beanContextBuilder(bcBuilder);
+				o = b;
+			}
+			return o;
+		}
+
+		/**
+		 * Registers the specified parsers with this group.
+		 *
+		 * <p>
+		 * When passing in pre-instantiated parsers to this group, applying properties and transforms to the group
+		 * do not affect them.
+		 *
+		 * @param s The parsers to append to this group.
+		 * @return This object (for method chaining).
+		 */
+		public Builder add(Parser...s) {
+			entries.addAll(0, asList(s));
+			return this;
+		}
+
+		/**
+		 * Clears out any existing parsers in this group.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder clear() {
+			entries.clear();
+			return this;
+		}
+
+		/**
+		 * Returns <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
+		 *
+		 * @param work The work to check.
+		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
+		 */
+		public boolean canApply(List<AnnotationWork> work) {
+			for (Object o : entries)
+				if (o instanceof ParserBuilder)
+					if (((ParserBuilder)o).canApply(work))
+						return true;
+			return false;
+		}
+
+		/**
+		 * Applies the specified annotations to all applicable parser builders in this group.
+		 *
+		 * @param work The annotations to apply.
+		 * @return This object (for method chaining).
+		 */
+		public Builder apply(List<AnnotationWork> work) {
+			return forEach(x -> x.apply(work));
+		}
+
+		/**
+		 * Performs an action on all parser builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public Builder forEach(Consumer<ParserBuilder> action) {
+			builders(ParserBuilder.class).forEach(action);
+			return this;
+		}
+
+		/**
+		 * Performs an action on all writer parser builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public Builder forEachRP(Consumer<ReaderParserBuilder> action) {
+			return forEach(ReaderParserBuilder.class, action);
+		}
+
+		/**
+		 * Performs an action on all output stream parser builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public Builder forEachISP(Consumer<InputStreamParserBuilder> action) {
+			return forEach(InputStreamParserBuilder.class, action);
+		}
+
+		/**
+		 * Performs an action on all parser builders of the specified type in this group.
+		 *
+		 * @param type The parser builder type.
+		 * @param action The action to perform.
+		 * @return This object (for method chaining).
+		 */
+		public <T extends ParserBuilder> Builder forEach(Class<T> type, Consumer<T> action) {
+			builders(type).forEach(action);
+			return this;
+		}
+
+		/**
+		 * Returns direct access to the {@link Parser} and {@link ParserBuilder} objects in this builder.
+		 *
+		 * <p>
+		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
+		 * as re-ordering/adding/removing entries.
+		 *
+		 * <p>
+		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link ParserBuilder} objects.
+		 *
+		 * @return The inner list of entries in this builder.
+		 */
+		public List<Object> inner() {
+			return entries;
+		}
+
+		@SuppressWarnings("unchecked")
+		private <T extends ParserBuilder> Stream<T> builders(Class<T> type) {
+			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return entries.stream().map(x -> toString(x)).collect(joining(",","[","]"));
+		}
+
+		private String toString(Object o) {
+			if (o == null)
+				return "null";
+			if (o instanceof ParserBuilder)
+				return "builder:" + o.getClass().getName();
+			return "parser:" + o.getClass().getName();
+		}
 	}
 
 	/**
@@ -218,7 +534,7 @@ public final class ParserGroup {
 	 * @return An unmodifiable list of parsers in this group.
 	 */
 	public List<Parser> getParsers() {
-		return unmodifiableList(asList(parsers));
+		return unmodifiableList(asList(entries));
 	}
 
 	/**
@@ -227,6 +543,6 @@ public final class ParserGroup {
 	 * @return <jk>true</jk> if this group contains no parsers.
 	 */
 	public boolean isEmpty() {
-		return parsers.length == 0;
+		return entries.length == 0;
 	}
 }

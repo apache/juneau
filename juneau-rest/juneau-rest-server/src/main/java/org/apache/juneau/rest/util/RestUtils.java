@@ -23,10 +23,8 @@ import java.util.regex.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.uon.*;
 
@@ -377,49 +375,6 @@ public final class RestUtils {
 		if (isJson(s))
 			return JsonParser.DEFAULT.parse(s, Object.class);
 		return s;
-	}
-
-	/**
-	 * Merges the specified parent and child arrays.
-	 *
-	 * <p>
-	 * The general concept is to allow child values to override parent values.
-	 *
-	 * <p>
-	 * The rules are:
-	 * <ul>
-	 * 	<li>If the child array is not empty, then the child array is returned.
-	 * 	<li>If the child array is empty, then the parent array is returned.
-	 * 	<li>If the child array contains {@link None}, then an empty array is always returned.
-	 * 	<li>If the child array contains {@link Inherit}, then the contents of the parent array are inserted into the position of the {@link Inherit} entry.
-	 * </ul>
-	 *
-	 * @param fromParent The parent array.
-	 * @param fromChild The child array.
-	 * @return A new merged array.
-	 */
-	public static Object[] merge(Object[] fromParent, Object[] fromChild) {
-
-		if (fromParent == null)
-			fromParent = new Object[0];
-
-		if (ArrayUtils.contains(None.class, fromChild))
-			return new Object[0];
-
-		if (fromChild.length == 0)
-			return fromParent;
-
-		if (! ArrayUtils.contains(Inherit.class, fromChild))
-			return fromChild;
-
-		AList<Object> l = AList.create();
-		for (Object o : fromChild) {
-			if (o == Inherit.class)
-				l.a(fromParent);
-			else
-				l.add(o);
-		}
-		return l.asArrayOf(Object.class);
 	}
 
 	/**

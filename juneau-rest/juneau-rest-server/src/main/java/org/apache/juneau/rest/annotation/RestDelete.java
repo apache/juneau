@@ -316,23 +316,46 @@ public @interface RestDelete {
 	String[] description() default {};
 
 	/**
-	 * Compression encoders.
+	 * Specifies the compression encoders for this method.
 	 *
 	 * <p>
-	 * Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at
-	 * the servlet level.
+	 * Encoders are used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
+	 * The {@link org.apache.juneau.encoders.EncoderGroup.Inherit} class can be used to include values from the parent class.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Use {@link org.apache.juneau.encoders.EncoderGroup.Inherit} to inherit encoders from the resource class.
-	 * </ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		encoders={
+	 * 			GzipEncoder.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Define a REST method that can also use a custom encoder.</jc>
+	 * 		<ja>@RestDelete</ja>(
+	 * 			encoders={
+	 * 				EncoderGroup.Inherit.<jk>class</jk>, MyEncoder.<jk>class</jk>
+	 * 			}
+	 * 		)
+	 * 		<jk>public</jk> String doDelete() {
+	 * 			...
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is:
+	 * <p class='bcode w800'>
+	 * 	RestOpContextBuilder <jv>builder</jv> = RestOpContextBuilder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#getEncoders()}
-	 * 	<li class='jm'>{@link RestOpContextBuilder#getEncoders()}
+	 * 	<li class='link'>{@doc RestEncoders}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};

@@ -52,14 +52,11 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.msgpack.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.args.*;
@@ -70,9 +67,7 @@ import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
@@ -375,100 +370,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_messages = PREFIX + ".messages.lo";
-
-	/**
-	 * Configuration property:  Parsers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_parsers REST_parsers}
-	 * 	<li><b>Name:</b>  <js>"RestContext.parsers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.parser.Parser}|Class&lt;{@link org.apache.juneau.parser.Parser}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#parsers()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#parsers()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Parser...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsersReplace(Parser...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Adds class-level parsers to this resource.
-	 *
-	 * <p>
-	 * Parsers are used to convert the body of HTTP requests into POJOs.
-	 * <br>Any of the Juneau framework parsers can be used in this setting.
-	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
-	 * using a best-match algorithm:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but use pre-instantiated parsers.</jc>
-	 * 			<jv>builder</jv>.parsers(JsonParser.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_parsers</jsf>, JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestPost</ja>(parsers={HtmlParser.<jk>class</jk>})
-	 * 		<jk>public</jk> Object myMethod(<ja>@Body</ja> MyPojo <jv>myPojo</jv>) {
-	 * 			<jc>// Do something with your parsed POJO.</jc>
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>
-	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * 	<li>
-	 * 		Typically, you'll want your resource to extend directly from {@link BasicRestServlet} which comes
-	 * 		preconfigured with the following parsers:
-	 * 		<ul>
-	 * 			<li class='jc'>{@link JsonParser}
-	 * 			<li class='jc'>{@link XmlParser}
-	 * 			<li class='jc'>{@link HtmlParser}
-	 * 			<li class='jc'>{@link UonParser}
-	 * 			<li class='jc'>{@link UrlEncodingParser}
-	 * 			<li class='jc'>{@link MsgPackParser}
-	 * 			<li class='jc'>{@link PlainTextParser}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestParsers}
-	 * </ul>
-	 */
-	public static final String REST_parsers = PREFIX + ".parsers.lo";
 
 	/**
 	 * Configuration property:  HTTP part parser.
