@@ -35,7 +35,7 @@ public class OpenApiPartParser_Test {
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.createSession();
 
 	private static <T> T parse(HttpPartSchema schema, String input, Class<T> type) throws SchemaValidationException, ParseException {
-		return p.parse(null, schema, input, type);
+		return p.parse(null, schema, input, p.getClassMeta(type));
 	}
 
 	private static <T> T parse(HttpPartSchema schema, String input, Class<T> type, Type...args) throws SchemaValidationException, ParseException {

@@ -54,21 +54,10 @@ public class MockReaderParser extends ReaderParser implements HttpPartParser {
 	@Override
 	public HttpPartParserSession createPartSession(ParserSessionArgs args) {
 		return new HttpPartParserSession() {
-
 			@Override
 			@SuppressWarnings("unchecked")
 			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
 				return (T)partFunction.apply(partType, schema, in, toType);
-			}
-
-			@Override
-			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-				throw new NoSuchMethodError("Not implemented.");
-			}
-
-			@Override
-			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type... toTypeArgs) throws ParseException, SchemaValidationException {
-				throw new NoSuchMethodError("Not implemented.");
 			}
 		};
 	}

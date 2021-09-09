@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -30,18 +28,5 @@ public class SimplePartParserSession extends BaseHttpPartParserSession {
 	@Override /* HttpPartParserSession */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
 		return ClassUtils.fromString(toType.getInnerClass(), in);
-	}
-
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return ClassUtils.fromString(toType, in);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		if (toType instanceof Class)
-			return (T)ClassUtils.fromString((Class<?>)toType, in);
-		return null;
 	}
 }

@@ -133,16 +133,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 	}
 
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return parse(null, schema, in, getClassMeta(toType));
-	}
-
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return (T)parse(null, schema, in, getClassMeta(toType, toTypeArgs));
-	}
-
 	/**
 	 * Workhorse method.
 	 *

@@ -306,7 +306,7 @@ public class OpenApiParserSession extends UonParserSession {
 						BeanPropertyMeta bpm = m.getPropertyMeta(key);
 						if (bpm == null && ! isIgnoreUnknownBeanProperties())
 							throw new ParseException("Invalid input {0} for part type OBJECT.  Cannot find property {1}", in, key);
-						m.put(key, parse(partType, schema.getProperty(key), value, bpm == null ? object() : bpm.getClassMeta()));
+						m.put(key, parse(partType, schema.getProperty(key), value, ((ClassMeta<T>)(bpm == null ? object() : bpm.getClassMeta()))));
 					}
 					return m.getBean();
 				}

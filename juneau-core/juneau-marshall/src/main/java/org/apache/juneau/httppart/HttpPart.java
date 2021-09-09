@@ -15,7 +15,6 @@ package org.apache.juneau.httppart;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import org.apache.http.*;
-import org.apache.juneau.parser.ParseException;
 
 /**
  * Represents an instance of an HTTP part.
@@ -30,7 +29,6 @@ public class HttpPart implements NameValuePair {
 	private final HttpPartType partType;
 	private final HttpPartSchema schema;
 	private final HttpPartSerializerSession serializer;
-	private final HttpPartParserSession parser;
 
 	/**
 	 * Constructor.
@@ -51,29 +49,6 @@ public class HttpPart implements NameValuePair {
 		this.serializer = serializer;
 		this.opart = part;
 		this.spart = null;
-		this.parser = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Used when the part is in String form and needs to be converted to a POJO.
-	 *
-	 * @param name The HTTP part name (e.g. the header name).
-	 * @param partType The HTTP part type.
-	 * @param schema Schema information about the part.
-	 * @param parser The part parser to use to parse the part.
-	 * @param part The part string being parsed.
-	 */
-	public HttpPart(String name, HttpPartType partType, HttpPartSchema schema, HttpPartParserSession parser, String part) {
-		this.name = name;
-		this.partType = partType;
-		this.schema = schema;
-		this.parser = parser;
-		this.spart = part;
-		this.serializer = null;
-		this.opart = null;
 	}
 
 	@Override /* NameValuePair */
@@ -90,17 +65,5 @@ public class HttpPart implements NameValuePair {
 		} catch (Exception e) {
 			throw runtimeException(e);
 		}
-	}
-
-	/**
-	 * Returns the value of the part converted to a string.
-	 *
-	 * @param c The type to convert to.
-	 * @return The value of the part converted to a string.
-	 * @throws SchemaValidationException HTTP part failed schema validation.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public <T> T asType(Class<T> c) throws SchemaValidationException, ParseException {
-		return parser.parse(partType, schema, spart, c);
 	}
 }

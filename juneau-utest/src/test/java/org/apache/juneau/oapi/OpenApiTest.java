@@ -41,7 +41,7 @@ public class OpenApiTest {
 	}
 
 	private <T> T parse(HttpPartSchema schema, String in, Class<T> c, Class<?>...args) throws Exception {
-		return DP.createSession().parse(null, schema, in, c, args);
+		return DP.createSession().parse(null, schema, in, DP.getClassMeta(c, args));
 	}
 
 	@Before

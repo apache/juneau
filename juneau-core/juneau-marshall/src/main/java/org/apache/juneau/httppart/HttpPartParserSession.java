@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
@@ -41,37 +39,4 @@ public interface HttpPartParserSession {
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
-
-	/**
-	 * Converts the specified input to the specified class type.
-	 *
-	 * @param partType The part type being parsed.
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param toType The POJO type to transform the input into.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException;
-
-	/**
-	 * Converts the specified input to the specified class type.
-	 *
-	 * @param partType The part type being parsed.
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param toType The POJO type to transform the input into.
-	 * @param toTypeArgs The POJO type arguments for Collection and Map types.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;
 }
