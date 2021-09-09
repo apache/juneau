@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Builder for {@link RestLoggerRule} objects.
+ * Creator for {@link RestLoggerRule} objects.
  *
  * <p>
  * See the {@link BasicRestLogger} for usage.

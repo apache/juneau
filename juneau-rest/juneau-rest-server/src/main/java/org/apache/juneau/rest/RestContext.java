@@ -66,7 +66,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -370,151 +369,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_messages = PREFIX + ".messages.lo";
-
-	/**
-	 * Configuration property:  HTTP part parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser}
-	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.httppart.HttpPartParser}|Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiParser}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#partParser()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partParser(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partParser(HttpPartParser)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 *
-	 * <p>
-	 * The default value is {@link OpenApiParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
-	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to
-	 * {@link SimplePartParser} which treats everything as plain text.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(partParser=SimplePartParser.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.partParser(SimplePartParser.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_partParser</jsf>, SimplePartParser.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.partParser(SimplePartParser.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<ja>@RestPost</ja>(...)
-	 * 		<jk>public</jk> Object myMethod(<ja>@Header</ja>(<js>"My-Header"</js>) MyParsedHeader <jv>h</jv>, <ja>@Query</ja>(<js>"myquery"</js>) MyParsedQuery <jv>q</jv>) {
-	 * 			<jc>// Do something with your parsed parts.</jc>
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>
-	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	public static final String REST_partParser = PREFIX + ".partParser.o";
-
-	/**
-	 * Configuration property:  HTTP part serializer.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_partSerializer REST_partSerializer}
-	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link org.apache.juneau.httppart.HttpPartSerializer}
-	 * 			<li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c>
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiSerializer}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#partSerializer()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partSerializer(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partSerializer(HttpPartSerializer)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <p>
-	 * The default value is {@link OpenApiSerializer} which serializes based on OpenAPI rules, but defaults to UON notation for beans and maps, and
-	 * plain text for everything else.
-	 * <br>Other options include:
-	 * <ul>
-	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
-	 * 	<li class='jc'>{@link UonSerializer} - Always serializers to UON.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(partSerializer=SimplePartSerializer.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.partSerializer(SimplePartSerializer.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.set(<jsf>REST_partSerializer</jsf>, SimplePartSerializer.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.partSerializer(SimplePartSerializer.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<ja>@RestPost</ja>(...)
-	 * 		<jk>public</jk> Object myMethod(RestResponse <jv>res</jv>) {
-	 * 			<jc>// Set a header to a POJO.</jc>
-	 * 			<jv>res</jv>.setHeader(<js>"My-Header"</js>, <jk>new</jk> MyPojo());
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>
-	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	public static final String REST_partSerializer = PREFIX + ".partSerializer.o";
 
 	/**
 	 * Configuration property:  Render response stack traces in responses.
@@ -900,10 +754,10 @@ public class RestContext extends BeanContext {
 			callLogger = createCallLogger(r, builder, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
 
-			partSerializer = createPartSerializer(r, cp, bf);
+			partSerializer = createPartSerializer(r, builder, bf);
 			bf.addBean(HttpPartSerializer.class, partSerializer);
 
-			partParser = createPartParser(r, cp, bf);
+			partParser = createPartParser(r, builder, bf);
 			bf.addBean(HttpPartParser.class, partParser);
 
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, cp, bf);
@@ -1583,9 +1437,9 @@ public class RestContext extends BeanContext {
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-	 * 	<li>Looks for {@link #REST_partSerializer} value set via any of the following:
+	 * 	<li>Looks for part serializer set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}/{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 			<li>{@link RestContextBuilder#getPartSerializer()}
 	 * 			<li>{@link Rest#partSerializer()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
@@ -1599,46 +1453,32 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates an {@link OpenApiSerializer}.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_partSerializer}
-	 * </ul>
-	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
 	 */
-	protected HttpPartSerializer createPartSerializer(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected HttpPartSerializer createPartSerializer(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		HttpPartSerializer x = null;
+		HttpPartSerializer.Creator x = builder.partSerializer;
 
-		if (resource instanceof HttpPartSerializer)
-			x = (HttpPartSerializer)resource;
-
-		if (x == null)
-			x = properties.getInstance(REST_partSerializer, HttpPartSerializer.class, beanStore).orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(HttpPartSerializer.class).orElse(null);
-
-		if (x == null)
-			x = OpenApiSerializer.create().apply(properties).build();
+		if (beanStore.hasBean(HttpPartSerializer.class))
+			x.set(beanStore.getBean(HttpPartSerializer.class).orElse(null));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HttpPartSerializer.class, x)
-			.beanCreateMethodFinder(HttpPartSerializer.class, resource)
+			.addBean(HttpPartSerializer.Creator.class, x)
+			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, resource)
 			.find("createPartSerializer")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.create();
 	}
 
 	/**
@@ -1648,9 +1488,9 @@ public class RestContext extends BeanContext {
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
-	 * 	<li>Looks for {@link #REST_partParser} value set via any of the following:
+	 * 	<li>Looks for part parser value set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partParser(Class)}/{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 			<li>{@link RestContextBuilder#getPartParser()}
 	 * 			<li>{@link Rest#partParser()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
@@ -1664,46 +1504,32 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates an {@link OpenApiSerializer}.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_partParser}
-	 * </ul>
-	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 */
-	protected HttpPartParser createPartParser(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected HttpPartParser createPartParser(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		HttpPartParser x = null;
+		HttpPartParser.Creator x = builder.partParser;
 
-		if (resource instanceof HttpPartParser)
-			x = (HttpPartParser)resource;
-
-		if (x == null)
-			x = properties.getInstance(REST_partParser, HttpPartParser.class, beanStore).orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(HttpPartParser.class).orElse(null);
-
-		if (x == null)
-			x = OpenApiParser.create().apply(properties).build();
+		if (beanStore.hasBean(HttpPartParser.class))
+			x.set(beanStore.getBean(HttpPartParser.class).orElse(null));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HttpPartParser.class, x)
-			.beanCreateMethodFinder(HttpPartParser.class, resource)
+			.addBean(HttpPartParser.Creator.class, x)
+			.beanCreateMethodFinder(HttpPartParser.Creator.class, resource)
 			.find("createPartParser")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.create();
 	}
 
 	/**
@@ -3381,10 +3207,6 @@ public class RestContext extends BeanContext {
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
 	 * @return
 	 * 	The HTTP-part parser associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
@@ -3395,10 +3217,6 @@ public class RestContext extends BeanContext {
 
 	/**
 	 * Returns the HTTP-part serializer associated with this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
-	 * </ul>
 	 *
 	 * @return
 	 * 	The HTTP-part serializer associated with this resource.

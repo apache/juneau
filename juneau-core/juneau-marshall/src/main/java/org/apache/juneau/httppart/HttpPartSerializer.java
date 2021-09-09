@@ -55,6 +55,45 @@ public interface HttpPartSerializer {
 	public static interface Null extends HttpPartSerializer {}
 
 	/**
+	 * Instantiates a creator for a part serializer.
+	 * @return A new creator.
+	 */
+	public static Creator creator() {
+		return new Creator();
+	}
+
+	/**
+	 * A creator for a part serializer.
+	 */
+	public static class Creator extends ContextBeanCreator<HttpPartSerializer> {
+
+		Creator() {
+			super(HttpPartSerializer.class);
+		}
+
+		Creator(Creator builder) {
+			super(builder);
+		}
+
+		@Override
+		public Creator set(HttpPartSerializer value) {
+			super.set(value);
+			return this;
+		}
+
+		@Override
+		public Creator set(Class<? extends HttpPartSerializer> value) {
+			super.set(value);
+			return this;
+		}
+
+		@Override
+		public Creator copy() {
+			return new Creator(this);
+		}
+	}
+
+	/**
 	 * Creates a new serializer session.
 	 *
 	 * @param args The runtime arguments for the session.

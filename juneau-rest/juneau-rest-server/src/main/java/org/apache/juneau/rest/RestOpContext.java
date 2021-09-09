@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
@@ -154,10 +153,10 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			parsers = createParsers(r, builder, bs);
 			bs.addBean(ParserGroup.class, parsers);
 
-			partSerializer = createPartSerializer(r, cp, bs);
+			partSerializer = createPartSerializer(r, builder, bs);
 			bs.addBean(HttpPartSerializer.class, partSerializer);
 
-			partParser = createPartParser(r, cp, bs);
+			partParser = createPartParser(r, builder, bs);
 			bs.addBean(HttpPartParser.class, partParser);
 
 			converters = createConverters(r, builder, bs).asArray();
@@ -526,9 +525,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-	 * 	<li>Looks for {@link RestContext#REST_partSerializer} value set via any of the following:
+	 * 	<li>Looks for part serializer set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}/{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 			<li>{@link RestContextBuilder#getPartSerializer()}
 	 * 			<li>{@link Rest#partSerializer()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
@@ -543,38 +542,33 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties The property store of this method.
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
-	 * @see RestContext#REST_partSerializer
 	 */
-	protected HttpPartSerializer createPartSerializer(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected HttpPartSerializer createPartSerializer(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		HttpPartSerializer x = null;
+		HttpPartSerializer g = beanStore.getBean(HttpPartSerializer.class).orElse(null);
 
-		if (resource instanceof HttpPartSerializer)
-			x = (HttpPartSerializer)resource;
+		if (g != null)
+			return g;
 
-		if (x == null)
-			x = properties.getInstance(REST_partSerializer, HttpPartSerializer.class, beanStore).orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(HttpPartSerializer.class).orElse(null);
+		HttpPartSerializer.Creator x = builder.partSerializer;
 
 		if (x == null)
-			x = OpenApiSerializer.create().apply(properties).build();
+			x = builder.restContext.builder.partSerializer;
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HttpPartSerializer.class, x)
-			.beanCreateMethodFinder(HttpPartSerializer.class, resource)
+			.addBean(HttpPartSerializer.Creator.class, x)
+			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, resource)
 			.find("createPartSerializer", Method.class)
 			.thenFind("createPartSerializer")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.create();
 	}
 
 	/**
@@ -584,9 +578,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
-	 * 	<li>Looks for {@link RestContext#REST_partParser} value set via any of the following:
+	 * 	<li>Looks for part parser set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partParser(Class)}/{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 			<li>{@link RestContextBuilder#getPartParser()}
 	 * 			<li>{@link Rest#partParser()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
@@ -601,38 +595,33 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties The property store of this method.
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
-	 * @see RestContext#REST_partParser
 	 */
-	protected HttpPartParser createPartParser(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected HttpPartParser createPartParser(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		HttpPartParser x = null;
+		HttpPartParser g = beanStore.getBean(HttpPartParser.class).orElse(null);
 
-		if (resource instanceof HttpPartParser)
-			x = (HttpPartParser)resource;
+		if (g != null)
+			return g;
 
-		if (x == null)
-			x = properties.getInstance(REST_partParser, HttpPartParser.class, beanStore).orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(HttpPartParser.class).orElse(null);
+		HttpPartParser.Creator x = builder.partParser;
 
 		if (x == null)
-			x = OpenApiParser.create().apply(properties).build();
+			x = builder.restContext.builder.partParser;
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HttpPartParser.class, x)
-			.beanCreateMethodFinder(HttpPartParser.class, resource)
+			.addBean(HttpPartParser.Creator.class, x)
+			.beanCreateMethodFinder(HttpPartParser.Creator.class, resource)
 			.find("createPartParser", Method.class)
 			.thenFind("createPartParser")
 			.withDefault(x)
 			.run();
 
-		return x;
+		return x.create();
 	}
 
 	/**

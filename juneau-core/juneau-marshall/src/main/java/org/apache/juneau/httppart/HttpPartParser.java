@@ -43,6 +43,44 @@ public interface HttpPartParser {
 	public static interface Null extends HttpPartParser {}
 
 	/**
+	 * Instantiates a creator for a part parser.
+	 * @return A new creator.
+	 */
+	public static Creator creator() {
+		return new Creator();
+	}
+
+	/**
+	 * A creator for a part parser.
+	 */
+	public static class Creator extends ContextBeanCreator<HttpPartParser> {
+		Creator() {
+			super(HttpPartParser.class);
+		}
+
+		Creator(Creator creator) {
+			super(creator);
+		}
+
+		@Override
+		public Creator set(HttpPartParser value) {
+			super.set(value);
+			return this;
+		}
+
+		@Override
+		public Creator set(Class<? extends HttpPartParser> value) {
+			super.set(value);
+			return this;
+		}
+
+		@Override
+		public Creator copy() {
+			return new Creator(this);
+		}
+	}
+
+	/**
 	 * Creates a new parser session.
 	 *
 	 * @param args The runtime arguments for the session.

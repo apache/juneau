@@ -356,7 +356,7 @@ public final class RestRequest {
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
-	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 		Values are converted from strings using the registered part parser on the resource class.
 	 * 	<li>
 	 * 		The {@link RequestHeaders} object can also be passed as a parameter on the method.
 	 * 	<li>
@@ -1011,7 +1011,7 @@ public final class RestRequest {
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
-	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 		Values are converted from strings using the registered part parser on the resource class.
 	 * 	<li>
 	 * 		The {@link RequestAttributes} object can also be passed as a parameter on the method.
 	 * 	<li>
@@ -1148,7 +1148,7 @@ public final class RestRequest {
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
-	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 		Values are converted from strings using the registered part parser on the resource class.
 	 * 	<li>
 	 * 		The {@link RequestFormParams} object can also be passed as a parameter on the method.
 	 * 	<li>

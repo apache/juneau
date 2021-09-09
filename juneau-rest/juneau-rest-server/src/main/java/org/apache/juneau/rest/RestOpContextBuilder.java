@@ -26,13 +26,17 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.uon.*;
+
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 
@@ -58,6 +62,8 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	EncoderGroup.Builder encoders;
 	SerializerGroup.Builder serializers;
 	ParserGroup.Builder parsers;
+	HttpPartSerializer.Creator partSerializer;
+	HttpPartParser.Creator partParser;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -115,6 +121,10 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 				getSerializers().apply(al);
 			if (context.builder.parsers.canApply(al))
 				getParsers().apply(al);
+			if (context.builder.partSerializer.canApply(al))
+				getPartSerializer().apply(al);
+			if (context.builder.partParser.canApply(al))
+				getPartParser().apply(al);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -188,6 +198,44 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		if (parsers == null)
 			parsers = restContext.builder.parsers.copy();
 		return parsers;
+	}
+
+	/**
+	 * Returns the HTTP part parser creator containing the part parser for parsing HTTP parts into POJOs.
+	 *
+	 * <p>
+	 * The default value is {@link OpenApiParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
+	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to
+	 * {@link SimplePartParser} which treats everything as plain text.
+	 *
+	 * @return The HTTP part parser creator.
+	 */
+	public HttpPartParser.Creator getPartParser() {
+		if (partParser == null)
+			partParser = restContext.builder.partParser.copy();
+		return partParser;
+	}
+
+	/**
+	 * Returns the HTTP part serializer creator containing the part serializer for serializing POJOs to HTTP parts.
+	 *
+	 * <p>
+	 * The default value is {@link OpenApiSerializer} which serializes based on OpenAPI rules, but defaults to UON notation for beans and maps, and
+	 * plain text for everything else.
+	 *
+	 * <p>
+	 * <br>Other options include:
+	 * <ul>
+	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
+	 * 	<li class='jc'>{@link UonSerializer} - Always serializers to UON.
+	 * </ul>
+	 *
+	 * @return The HTTP part serializer creator.
+	 */
+	public HttpPartSerializer.Creator getPartSerializer() {
+		if (partSerializer == null)
+			partSerializer = restContext.builder.partSerializer.copy();
+		return partSerializer;
 	}
 
 	/**

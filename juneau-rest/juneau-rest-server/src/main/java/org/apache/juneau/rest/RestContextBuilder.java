@@ -52,6 +52,7 @@ import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -144,6 +145,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
+	HttpPartSerializer.Creator partSerializer = HttpPartSerializer.creator().set(OpenApiSerializer.class);
+	HttpPartParser.Creator partParser = HttpPartParser.creator().set(OpenApiParser.class);
 
 	Enablement debugDefault, debug;
 
@@ -214,10 +217,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			this.parentContext = parentContext.orElse(null);
 
 			ClassInfo rci = ClassInfo.of(resourceClass);
-
-			// Default values.
-			partSerializer(OpenApiSerializer.class);
-			partParser(OpenApiParser.class);
 
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
@@ -556,6 +555,48 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public ParserGroup.Builder getParsers() {
 		return parsers;
+	}
+
+	/**
+	 * Returns the HTTP part parser creator containing the part parser for parsing HTTP parts into POJOs.
+	 *
+	 * <p>
+	 * The default value is {@link OpenApiParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
+	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to
+	 * {@link SimplePartParser} which treats everything as plain text.
+	 *
+	 * <p>
+	 * When specified as a class, annotations on this class are applied to the parser.
+	 * Otherwise when specified as an already-instantiated {@link HttpPartParser}, annotations will not be applied.
+	 *
+	 * @return The HTTP part parser creator.
+	 */
+	public HttpPartParser.Creator getPartParser() {
+		return partParser;
+	}
+
+	/**
+	 * Returns the HTTP part serializer creator containing the part serializer for serializing POJOs to HTTP parts.
+	 *
+	 * <p>
+	 * The default value is {@link OpenApiSerializer} which serializes based on OpenAPI rules, but defaults to UON notation for beans and maps, and
+	 * plain text for everything else.
+	 *
+	 * <p>
+	 * <br>Other options include:
+	 * <ul>
+	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
+	 * 	<li class='jc'>{@link UonSerializer} - Always serializers to UON.
+	 * </ul>
+	 *
+	 * <p>
+	 * When specified as a class, annotations on this class are applied to the serializer.
+	 * Otherwise when specified as an already-instantiated {@link HttpPartSerializer}, annotations will not be applied.
+	 *
+	 * @return The HTTP part serializer creator.
+	 */
+	public HttpPartSerializer.Creator getPartSerializer() {
+		return partSerializer;
 	}
 
 	/**
@@ -1775,90 +1816,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part parser.
-	 *
-	 * <p>
-	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiParser}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder partParser(Class<? extends HttpPartParser> value) {
-		if (value != HttpPartParser.Null.class)
-			set(REST_partParser, value);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part parser.
-	 *
-	 * <p>
-	 * Same as {@link #partParser(Class)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiParser}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder partParser(HttpPartParser value) {
-		return set(REST_partParser, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part serializer.
-	 *
-	 * <p>
-	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
-		if (value != HttpPartSerializer.Null.class)
-			set(REST_partSerializer, value);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part serializer.
-	 *
-	 * <p>
-	 * Same as {@link #partSerializer(Class)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder partSerializer(HttpPartSerializer value) {
-		return set(REST_partSerializer, value);
-	}
-
-	/**
 	 * Resource path.
 	 *
 	 * <p>
@@ -2823,6 +2780,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		super.apply(work);
 		serializers.apply(work);
 		parsers.apply(work);
+		partSerializer.apply(work);
+		partParser.apply(work);
 		return this;
 	}
 

@@ -74,7 +74,7 @@ public abstract class RequestHttpPart {
 	 * Specifies the part parser to use for this part.
 	 *
 	 * <p>
-	 * If not specified, uses the part parser defined on the client by calling {@link RestContextBuilder#partParser(Class)}.
+	 * If not specified, uses the part parser defined on the client by calling {@link RestContextBuilder#getPartParser()}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this part.

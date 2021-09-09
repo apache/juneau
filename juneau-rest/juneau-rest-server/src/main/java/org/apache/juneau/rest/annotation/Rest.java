@@ -824,10 +824,6 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
 
@@ -836,10 +832,6 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
-	 * </ul>
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
 
@@ -1141,7 +1133,7 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>Builder
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestOpContextBuilder#rolesDeclared(String...)}
 	 * </ul>
 	 */
