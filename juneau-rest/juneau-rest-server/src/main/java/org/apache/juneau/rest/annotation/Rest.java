@@ -987,10 +987,6 @@ public @interface Rest {
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
-	 * </ul>
 	 */
 	String renderResponseStackTraces() default "";
 

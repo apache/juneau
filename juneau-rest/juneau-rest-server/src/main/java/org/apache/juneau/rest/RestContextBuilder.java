@@ -129,7 +129,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Charset defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
 	long maxInput = parseLongWithSuffix(env("RestContext.maxInput", "100M"));
 	List<MediaType> consumes, produces;
-	Boolean disableBodyParam = env("RestContext.disableBodyParam", false);
+	boolean disableBodyParam = env("RestContext.disableBodyParam", false);
+	boolean renderResponseStackTraces = env("RestContext.renderResponseStackTraces", false);
 
 	Class<? extends RestChildren> childrenClass = RestChildren.class;
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
@@ -1952,10 +1953,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is <jk>false</jk>.
@@ -1963,7 +1960,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder renderResponseStackTraces(boolean value) {
-		return set(REST_renderResponseStackTraces, value);
+		renderResponseStackTraces = value;
+		return this;
 	}
 
 	/**
@@ -1972,15 +1970,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder renderResponseStackTraces() {
-		return set(REST_renderResponseStackTraces);
+		renderResponseStackTraces = true;
+		return this;
 	}
 
 	/**

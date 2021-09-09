@@ -1077,7 +1077,7 @@ public class RestAnnotation {
 			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
 			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
 			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
-			bool(a.renderResponseStackTraces()).ifPresent(x -> b.set(REST_renderResponseStackTraces, x));
+			bool(a.renderResponseStackTraces()).ifPresent(x -> b.renderResponseStackTraces(x));
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 			string(a.debugOn()).ifPresent(x -> b.debugOn(x));
 		}
@@ -1101,8 +1101,6 @@ public class RestAnnotation {
 		public void apply(AnnotationInfo<Rest> ai, RestOpContextBuilder b) {
 			Rest a = ai.getAnnotation();
 
-//			type(a.partSerializer()).ifPresent(x -> b.set(REST_partSerializer, x));
-//			type(a.partParser()).ifPresent(x -> b.set(REST_partParser, x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			b.converters(a.converters());
