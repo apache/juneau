@@ -1913,7 +1913,8 @@ public final class RestRequest {
 	public <T> T getRequest(final RequestBeanMeta rbm) {
 		try {
 			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
-			final BeanMeta<T> bm = getBeanSession().getBeanMeta(c);
+			final BeanSession bs = getBeanSession();
+			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(
 				c.getClassLoader(),
 				new Class[] { c },
@@ -1925,7 +1926,7 @@ public final class RestRequest {
 							HttpPartParserSession pp = pm.getParser(getPartParserSession());
 							HttpPartSchema schema = pm.getSchema();
 							String name = pm.getPartName();
-							ClassMeta<?> type = getContext().getClassMeta(method.getGenericReturnType());
+							ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
 								return getBody().schema(schema).asType(type);

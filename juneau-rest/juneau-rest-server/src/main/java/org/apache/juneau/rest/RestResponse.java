@@ -25,6 +25,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
@@ -93,7 +94,7 @@ public final class RestResponse {
 			String passThroughHeaders = request.getHeader("x-response-headers").orElse(null);
 			if (passThroughHeaders != null) {
 				HttpPartParser p = context.getPartParser();
-				OMap m = p.createPartSession(request.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
+				OMap m = p.createPartSession(request.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(OMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					addHeader(e.getKey(), resolveUris(e.getValue()));
 			}

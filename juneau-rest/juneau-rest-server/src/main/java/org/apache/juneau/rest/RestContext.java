@@ -76,7 +76,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @ConfigurableContext(nocache=true)
-public class RestContext extends BeanContext {
+public class RestContext extends Context {
 
 	/**
 	 * Represents a null value for the {@link Rest#contextClass()} annotation.
@@ -217,7 +217,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If any initialization problems were encountered.
 	 */
 	public RestContext(RestContextBuilder builder) throws Exception {
-		super(builder.getContextProperties());
+		super(builder);
 
 		startTime = Instant.now();
 
@@ -3581,6 +3581,24 @@ public class RestContext extends BeanContext {
 					.a("uriRelativity", uriRelativity)
 					.a("uriResolution", uriResolution)
 			);
+	}
+
+	@Override
+	public ContextBuilder copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Session createSession(SessionArgs args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SessionArgs createDefaultSessionArgs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
