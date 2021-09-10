@@ -153,6 +153,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	HttpPartSerializer.Creator partSerializer = HttpPartSerializer.creator().set(OpenApiSerializer.class);
 	HttpPartParser.Creator partParser = HttpPartParser.creator().set(OpenApiParser.class);
 
+	List<Tuple2<Class<?>,String>> messages = new ArrayList<>();
+
 	Enablement debugDefault, debug;
 
 	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().add(
@@ -1828,10 +1830,82 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
+	 * Messages.
+	 *
+	 * <p>
+	 * Identifies the location of the resource bundle for this class if it's different from the class name.
+	 *
+	 * <p>
+	 * By default, the resource bundle name is assumed to match the class name.  For example, given the class
+	 * <c>MyClass.java</c>, the resource bundle is assumed to be <c>MyClass.properties</c>.  This property
+	 * allows you to override this setting to specify a different location such as <c>MyMessages.properties</c> by
+	 * specifying a value of <js>"MyMessages"</js>.
+	 *
+	 * <p>
+	 * 	Resource bundles are searched using the following base name patterns:
+	 * 	<ul>
+	 * 		<li><js>"{package}.{name}"</js>
+	 * 		<li><js>"{package}.i18n.{name}"</js>
+	 * 		<li><js>"{package}.nls.{name}"</js>
+	 * 		<li><js>"{package}.messages.{name}"</js>
+	 * 	</ul>
+	 *
+	 * <p>
+	 * This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
+	 * 	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
+	 * </ul>
+	 *
+	 * <p>
+	 * Request-localized messages are also available by passing either of the following parameter types into your Java method:
+	 * <ul class='javatree'>
+	 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
+	 * 	<li class='jc'>{@link Messages} - Extended resource bundle with several convenience methods.
+	 * </ul>
+	 *
+	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+	 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<cc># Contents of org/apache/foo/nls/MyMessages.properties</cc>
+	 *
+	 * 	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Contents of org/apache/foo/MyResource.java</jc>
+	 *
+	 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
+	 * 	<jk>public class</jk> MyResource {...}
+	 *
+	 * 		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
+	 * 		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
+	 * 			String <jv>s</jv>;
+	 *
+	 * 			<jc>// Get it from the RestRequest object.</jc>
+	 * 			<jv>s</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
+	 *
+	 * 			<jc>// Or get it from the method parameter.</jc>
+	 * 			<jv>s</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+	 *
+	 * 			<jc>// Or get the message in a locale different from the request.</jc>
+	 * 			<jv>s</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+	 *
+	 * 			<jk>return</jk> <jv>s</jv>;
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>Mappings are cumulative from super classes.
+	 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_messages}
+	 * 	<li class='jc'>{@link Messages}
+	 * 	<li class='link'>{@doc RestMessages}
 	 * </ul>
 	 *
 	 * @param baseClass
@@ -1842,25 +1916,23 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder messages(Class<?> baseClass, String bundlePath) {
-		return prependTo(REST_messages, Tuple2.of(baseClass, bundlePath));
+		messages.add(0, Tuple2.of(baseClass, bundlePath));
+		return this;
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
+	 * Messages.
 	 *
 	 * <p>
 	 * Same as {@link #messages(Class,String)} except assumes the base class is the resource class itself.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_messages}
-	 * </ul>
 	 *
 	 * @param bundlePath The bundle path relative to the base class.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestContextBuilder messages(String bundlePath) {
-		return prependTo(REST_messages, Tuple2.of(null, bundlePath));
+		messages.add(0, Tuple2.of(null, bundlePath));
+		return this;
 	}
 
 	/**

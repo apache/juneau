@@ -139,105 +139,6 @@ public class RestContext extends BeanContext {
 	 */
 	public static final String REST_beanStore = PREFIX + ".beanStore.o";
 
-	/**
-	 * Configuration property:  Messages.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_messages REST_messages}
-	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.utils.Tuple2}&lt;Class,String&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#messages()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(String)},
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies the location of the resource bundle for this class if it's different from the class name.
-	 *
-	 * <p>
-	 * By default, the resource bundle name is assumed to match the class name.  For example, given the class
-	 * <c>MyClass.java</c>, the resource bundle is assumed to be <c>MyClass.properties</c>.  This property
-	 * allows you to override this setting to specify a different location such as <c>MyMessages.properties</c> by
-	 * specifying a value of <js>"MyMessages"</js>.
-	 *
-	 * <p>
-	 * 	Resource bundles are searched using the following base name patterns:
-	 * 	<ul>
-	 * 		<li><js>"{package}.{name}"</js>
-	 * 		<li><js>"{package}.i18n.{name}"</js>
-	 * 		<li><js>"{package}.nls.{name}"</js>
-	 * 		<li><js>"{package}.messages.{name}"</js>
-	 * 	</ul>
-	 *
-	 * <p>
-	 * This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
-	 * 	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
-	 * </ul>
-	 *
-	 * <p>
-	 * Request-localized messages are also available by passing either of the following parameter types into your Java method:
-	 * <ul class='javatree'>
-	 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
-	 * 	<li class='jc'>{@link Messages} - Extended resource bundle with several convenience methods.
-	 * </ul>
-	 *
-	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
-	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
-	 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<cc># Contents of org/apache/foo/nls/MyMessages.properties</cc>
-	 *
-	 * 	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Contents of org/apache/foo/MyResource.java</jc>
-	 *
-	 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
-	 * 	<jk>public class</jk> MyResource {...}
-	 *
-	 * 		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
-	 * 		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
-	 * 			String <jv>s</jv>;
-	 *
-	 * 			<jc>// Get it from the RestRequest object.</jc>
-	 * 			<jv>s</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
-	 *
-	 * 			<jc>// Or get it from the method parameter.</jc>
-	 * 			<jv>s</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
-	 *
-	 * 			<jc>// Or get the message in a locale different from the request.</jc>
-	 * 			<jv>s</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
-	 *
-	 * 			<jk>return</jk> <jv>s</jv>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Mappings are cumulative from super classes.
-	 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link Messages}
-	 * 	<li class='link'>{@doc RestMessages}
-	 * </ul>
-	 */
-	public static final String REST_messages = PREFIX + ".messages.lo";
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
@@ -404,7 +305,7 @@ public class RestContext extends BeanContext {
 			methodExecStore = createMethodExecStore(r, cp, bf, ts);
 			bf.addBean(MethodExecStore.class, methodExecStore);
 
-			Messages m = messages = createMessages(r, cp);
+			Messages m = messages = createMessages(r, builder);
 
 			VarResolver vr = varResolver = createVarResolver(r, cp, bf, m);
 			bf.addBean(VarResolver.class, vr);
@@ -1439,7 +1340,7 @@ public class RestContext extends BeanContext {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
-	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,ContextProperties)}.
+	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
 	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,ContextProperties,BeanStore,Messages)}.
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
@@ -1483,7 +1384,7 @@ public class RestContext extends BeanContext {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,ContextProperties,RestContext)}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
-	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,ContextProperties)}.
+	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
 	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,ContextProperties,BeanStore,Messages)}.
 	 * @return The REST API builder for this REST resource.
 	 * @throws Exception If REST API builder could not be instantiated.
@@ -1968,15 +1869,14 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @return The messages for this REST object.
 	 * @throws Exception An error occurred.
 	 */
-	protected Messages createMessages(Object resource, ContextProperties properties) throws Exception {
+	protected Messages createMessages(Object resource, RestContextBuilder builder) throws Exception {
 
-		Messages x = createMessagesBuilder(resource, properties).build();
+		Messages x = createMessagesBuilder(resource, builder).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -1993,19 +1893,18 @@ public class RestContext extends BeanContext {
 	 * Instantiates the Messages builder for this REST resource.
 	 *
 	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createMessages(Object,ContextProperties)} method.
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createMessages(Object,RestContextBuilder)} method.
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @return The messages builder for this REST resource.
 	 * @throws Exception If messages builder could not be instantiated.
 	 */
-	protected MessagesBuilder createMessagesBuilder(Object resource, ContextProperties properties) throws Exception {
+	protected MessagesBuilder createMessagesBuilder(Object resource, RestContextBuilder builder) throws Exception {
 
-		Tuple2<Class<?>,String>[] mbl = properties.getInstanceArray(REST_messages, Tuple2.class).orElse(new Tuple2[0]);
+		Tuple2<Class<?>,String>[] mbl = builder.messages.toArray(new Tuple2[0]);
 		MessagesBuilder x = null;
 
 		for (int i = mbl.length-1; i >= 0; i--) {
@@ -2657,10 +2556,6 @@ public class RestContext extends BeanContext {
 
 	/**
 	 * Returns the resource bundle used by this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_messages}
-	 * </ul>
 	 *
 	 * @return
 	 * 	The resource bundle for this resource.

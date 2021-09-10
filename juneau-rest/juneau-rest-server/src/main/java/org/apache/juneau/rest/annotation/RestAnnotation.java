@@ -29,7 +29,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Utility classes and methods for the {@link Rest @Rest} annotation.
@@ -1061,7 +1060,7 @@ public class RestAnnotation {
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
 			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
 			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
-			b.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages()).orElse(null)));
+			b.messages(c.inner(), string(a.messages()).orElse(null));
 			type(a.fileFinder()).ifPresent(x -> b.fileFinder(x));
 			type(a.staticFiles()).ifPresent(x -> b.staticFiles(x));
 			string(a.path()).ifPresent(x -> b.path(x));

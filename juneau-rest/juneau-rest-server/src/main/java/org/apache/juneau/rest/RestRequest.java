@@ -1618,7 +1618,6 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
 	 * 	<li class='link'>{@doc RestMessages}
 	 * </ul>
