@@ -64,6 +64,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	ParserGroup.Builder parsers;
 	HttpPartSerializer.Creator partSerializer;
 	HttpPartParser.Creator partParser;
+	boolean dotAll;
 
 	Charset defaultCharset;
 	Long maxInput;
@@ -137,7 +138,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestOpContextBuilder dotAll() {
-		set("RestOpContext.dotAll.b", true);
+		dotAll = true;
 		return this;
 	}
 

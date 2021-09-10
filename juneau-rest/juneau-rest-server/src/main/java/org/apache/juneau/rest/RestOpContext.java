@@ -135,8 +135,6 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			else
 				debug = DebugEnablement.create().enable(builder.debug, "*").build();
 
-			ContextProperties cp = getContextProperties();
-
 			methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
 			mi = MethodInfo.of(method).accessible();
 			Object r = context.getResource();
@@ -144,9 +142,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			BeanStore bs = BeanStore.of(context.getRootBeanStore(), r)
 				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
-				.addBean(ContextProperties.class, cp);
+				.addBean(AnnotationWorkList.class, builder.getApplied());
 			bs.addBean(BeanStore.class, bs);
-			bs.addBean(AnnotationWorkList.class, builder.getApplied());
 
 			serializers = createSerializers(r, builder, bs);
 			bs.addBean(SerializerGroup.class, serializers);
@@ -169,14 +166,14 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			optionalMatchers = matchers.getOptionalEntries();
 			requiredMatchers = matchers.getRequiredEntries();
 
-			pathMatchers = createPathMatchers(r, cp, builder, bs).asArray();
+			pathMatchers = createPathMatchers(r, builder, bs).asArray();
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
 			encoders = createEncoders(r, builder, bs);
 			bs.addBean(EncoderGroup.class, encoders);
 
-			jsonSchemaGenerator = createJsonSchemaGenerator(r, cp, bs);
+			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
 			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
 			supportedAcceptTypes = unmodifiableList(ofNullable(builder.produces).orElse(serializers.getSupportedMediaTypes()));
@@ -629,16 +626,15 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * Instantiates the path matchers for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
 	 * @param builder The builder for this bean.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 */
-	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected UrlPathMatcherList createPathMatchers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		UrlPathMatcherList x = UrlPathMatcherList.create();
-		boolean dotAll = properties.getBoolean("RestOpContext.dotAll.b").orElse(false);
+		boolean dotAll = builder.dotAll;
 
 		if (builder.path != null) {
 			for (String p : builder.path) {
@@ -686,12 +682,12 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * Instantiates the JSON-schema generator for this method.
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties The property store of this method.
+	 * @param builder The builder for this object.
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The JSON-schema generator for this method.
 	 * @throws Exception If schema generator could not be instantiated.
 	 */
-	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		JsonSchemaGenerator x = null;
 
@@ -702,7 +698,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			x = beanStore.getBean(JsonSchemaGenerator.class).orElse(null);
 
 		if (x == null)
-			x = JsonSchemaGenerator.create().apply(properties).build();
+			x = JsonSchemaGenerator.create().apply(builder.getApplied()).build();
 
 		x = BeanStore
 			.of(beanStore, resource)

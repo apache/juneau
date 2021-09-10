@@ -1228,7 +1228,7 @@ public class RestContext extends BeanContext {
 	protected JsonSchemaGeneratorBuilder createJsonSchemaGeneratorBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		JsonSchemaGeneratorBuilder x = JsonSchemaGenerator
 			.create()
-			.apply(builder.getContextProperties());
+			.apply(builder.getApplied());
 
 		x = BeanStore
 			.of(beanStore, resource)

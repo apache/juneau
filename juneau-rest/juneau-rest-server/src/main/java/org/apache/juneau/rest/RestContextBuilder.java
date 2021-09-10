@@ -215,7 +215,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		DefaultArg.class
 	);
 
-	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
+	/**
+	 * Constructor.
+	 *
+	 * @param parentContext The parent context if this is a child of another resource.
+	 * @param servletConfig The servlet config if available.
+	 * @param resourceClass The resource class.
+	 * @param resource The resource object if available.
+	 * @throws ServletException Initialization failed.
+	 */
+	protected RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
 			contextClass(RestContext.class);
 
