@@ -14,7 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.rest.RestContext.*;
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
@@ -1065,7 +1064,7 @@ public class RestAnnotation {
 			type(a.staticFiles()).ifPresent(x -> b.staticFiles(x));
 			string(a.path()).ifPresent(x -> b.path(x));
 			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
-			type(a.beanStore()).ifPresent(x -> b.set(REST_beanStore, x));
+			type(a.beanStore()).ifPresent(x -> b.beanStore(x));
 			type(a.callLogger()).ifPresent(x -> b.callLogger(x));
 			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
 			type(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));

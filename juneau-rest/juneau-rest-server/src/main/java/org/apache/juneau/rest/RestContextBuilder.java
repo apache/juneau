@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
-import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static java.util.Arrays.*;
@@ -144,6 +143,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	BeanRef<StaticFiles> staticFilesDefault = BeanRef.of(StaticFiles.class);
 	BeanRef<FileFinder> fileFinder = BeanRef.of(FileFinder.class);
 	BeanRef<FileFinder> fileFinderDefault = BeanRef.of(FileFinder.class);
+	BeanRef<BeanStore> beanStoreRef = BeanRef.of(BeanStore.class);
 	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
 	HeaderListBuilder defaultRequestHeaders = HeaderList.create();
 	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
@@ -826,7 +826,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Spring beans to be injected into your REST resources.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_beanStore}
 	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 *
@@ -837,7 +836,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder beanStore(Class<? extends BeanStore> value) {
-		return set(REST_beanStore, value);
+		beanStoreRef.type(value);
+		return this;
 	}
 
 	/**
@@ -857,7 +857,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Spring beans to be injected into your REST resources.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_beanStore}
 	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 *
@@ -868,7 +867,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder beanStore(BeanStore value) {
-		return set(REST_beanStore, value);
+		beanStoreRef.value(value);
+		return this;
 	}
 
 	/**
@@ -1078,7 +1078,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		When defined as classes, instances are resolved using the registered {@link #REST_beanStore} which
+	 * 		When defined as classes, instances are resolved using the registered bean store which
 	 * 		by default is {@link BeanStore} which requires the class have one of the following
 	 * 		constructors:
 	 * 		<ul>
@@ -2169,8 +2169,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestChildrenBuilder} - The builder for the object.
-	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any beans found in the specified bean store.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2226,8 +2226,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestOpContextBuilder} - The builder for the object.
-	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any beans found in the specified bean store.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2366,8 +2366,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestOperationsBuilder} - The builder for the object.
-	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any beans found in the specified bean store.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>

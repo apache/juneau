@@ -200,7 +200,6 @@ public @interface Rest {
 	 * Spring beans to be injected into your REST resources.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_beanStore}
 	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 */
