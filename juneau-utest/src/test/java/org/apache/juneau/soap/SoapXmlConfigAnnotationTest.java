@@ -15,7 +15,6 @@ package org.apache.juneau.soap;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -55,7 +54,7 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().createSession();
 		check("foo", x.getSoapAction());
 	}
@@ -70,7 +69,7 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().createSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
@@ -84,7 +83,7 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().createSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}

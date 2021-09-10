@@ -103,7 +103,7 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigMemoryStoreBuilder apply(List<AnnotationWork> work) {
+	public ConfigMemoryStoreBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

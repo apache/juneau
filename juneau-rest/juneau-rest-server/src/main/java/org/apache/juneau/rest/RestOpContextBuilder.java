@@ -113,7 +113,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();
-			List<AnnotationWork> al = mi.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
+			AnnotationWorkList al = mi.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
 
 			apply(al);
 
@@ -1116,7 +1116,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOpContextBuilder apply(List<AnnotationWork> work) {
+	public RestOpContextBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

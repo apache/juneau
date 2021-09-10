@@ -136,7 +136,7 @@ public class RemoteOperationMeta {
 					else
 						bodyArg = rma;
 				}
-				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, ContextProperties.DEFAULT);
+				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, new AnnotationWorkList());
 				if (rmba != null) {
 					requestArgs.add(new RemoteOperationBeanArg(mpi.getIndex(), rmba));
 				}

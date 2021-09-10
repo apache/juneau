@@ -119,7 +119,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MsgPackSerializerBuilder apply(List<AnnotationWork> work) {
+	public MsgPackSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

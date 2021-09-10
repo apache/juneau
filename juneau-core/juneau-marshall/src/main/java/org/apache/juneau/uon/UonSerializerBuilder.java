@@ -263,7 +263,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UonSerializerBuilder apply(List<AnnotationWork> work) {
+	public UonSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

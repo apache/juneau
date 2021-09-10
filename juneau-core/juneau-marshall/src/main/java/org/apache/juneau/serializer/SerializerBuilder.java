@@ -672,7 +672,7 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public SerializerBuilder apply(List<AnnotationWork> work) {
+	public SerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

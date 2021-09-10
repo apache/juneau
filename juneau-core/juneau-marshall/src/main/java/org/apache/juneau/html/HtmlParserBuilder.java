@@ -111,7 +111,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlParserBuilder apply(List<AnnotationWork> work) {
+	public HtmlParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

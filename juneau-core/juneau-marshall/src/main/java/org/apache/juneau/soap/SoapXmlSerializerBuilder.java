@@ -140,7 +140,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public SoapXmlSerializerBuilder apply(List<AnnotationWork> work) {
+	public SoapXmlSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

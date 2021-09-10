@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -40,13 +40,13 @@ public class PathArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @param pathMatcher Path matcher for the specified method.
 	 * @return A new {@link PathArg}, or <jk>null</jk> if the parameter is not annotated with {@link Path}.
 	 */
-	public static PathArg create(ParamInfo paramInfo, ContextProperties cp, UrlPathMatcher pathMatcher) {
+	public static PathArg create(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		if (paramInfo.hasAnnotation(Path.class) || paramInfo.getParameterType().hasAnnotation(Path.class))
-			return new PathArg(paramInfo, cp, pathMatcher);
+			return new PathArg(paramInfo, annotations, pathMatcher);
 		return null;
 	}
 
@@ -54,14 +54,14 @@ public class PathArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @param pathMatcher Path matcher for the specified method.
 	 */
-	protected PathArg(ParamInfo paramInfo, ContextProperties cp, UrlPathMatcher pathMatcher) {
+	protected PathArg(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		this.name = getName(paramInfo, pathMatcher);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Path.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
 	}
 
 	private String getName(ParamInfo paramInfo, UrlPathMatcher pathMatcher) {

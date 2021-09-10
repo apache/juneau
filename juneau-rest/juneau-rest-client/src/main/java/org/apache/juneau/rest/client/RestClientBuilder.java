@@ -4846,7 +4846,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder apply(List<AnnotationWork> work) {
+	public RestClientBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

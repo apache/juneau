@@ -363,7 +363,7 @@ public final class ParserGroup {
 		 * @param work The work to check.
 		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
 		 */
-		public boolean canApply(List<AnnotationWork> work) {
+		public boolean canApply(AnnotationWorkList work) {
 			for (Object o : entries)
 				if (o instanceof ParserBuilder)
 					if (((ParserBuilder)o).canApply(work))
@@ -377,7 +377,7 @@ public final class ParserGroup {
 		 * @param work The annotations to apply.
 		 * @return This object (for method chaining).
 		 */
-		public Builder apply(List<AnnotationWork> work) {
+		public Builder apply(AnnotationWorkList work) {
 			return forEach(x -> x.apply(work));
 		}
 

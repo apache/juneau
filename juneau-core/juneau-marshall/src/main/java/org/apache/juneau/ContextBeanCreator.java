@@ -107,7 +107,7 @@ public class ContextBeanCreator<T> {
 	 * @param work The work to check.
 	 * @return This object.
 	 */
-	public boolean canApply(List<AnnotationWork> work) {
+	public boolean canApply(AnnotationWorkList work) {
 		if (builder != null)
 			return (builder.canApply(work));
 		return false;
@@ -119,7 +119,7 @@ public class ContextBeanCreator<T> {
 	 * @param work The annotations to apply.
 	 * @return This object (for method chaining).
 	 */
-	public ContextBeanCreator<T> apply(List<AnnotationWork> work) {
+	public ContextBeanCreator<T> apply(AnnotationWorkList work) {
 		if (builder != null)
 			builder.apply(work);
 		return this;

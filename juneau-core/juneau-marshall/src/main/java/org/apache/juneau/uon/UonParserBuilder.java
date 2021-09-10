@@ -172,7 +172,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UonParserBuilder apply(List<AnnotationWork> work) {
+	public UonParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

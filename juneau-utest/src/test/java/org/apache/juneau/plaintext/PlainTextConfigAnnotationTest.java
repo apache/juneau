@@ -14,8 +14,6 @@ package org.apache.juneau.plaintext;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -40,13 +38,13 @@ public class PlainTextConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		PlainTextSerializer.create().apply(al).build().createSession();
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		PlainTextParser.create().apply(al).build().createSession();
 	}
 
@@ -59,13 +57,13 @@ public class PlainTextConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		PlainTextSerializer.create().apply(al).build().createSession();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		PlainTextParser.create().apply(al).build().createSession();
 	}
 }

@@ -289,7 +289,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSchemaSerializerBuilder apply(List<AnnotationWork> work) {
+	public HtmlSchemaSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -107,7 +107,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MsgPackParserBuilder apply(List<AnnotationWork> work) {
+	public MsgPackParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

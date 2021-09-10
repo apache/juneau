@@ -287,7 +287,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigFileStoreBuilder apply(List<AnnotationWork> work) {
+	public ConfigFileStoreBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

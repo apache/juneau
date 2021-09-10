@@ -153,7 +153,7 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder apply(List<AnnotationWork> work) {
+	public OutputStreamSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

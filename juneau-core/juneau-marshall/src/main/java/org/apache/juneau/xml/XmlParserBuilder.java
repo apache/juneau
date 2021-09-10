@@ -288,7 +288,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder apply(List<AnnotationWork> work) {
+	public XmlParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -107,7 +107,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsoParserBuilder apply(List<AnnotationWork> work) {
+	public JsoParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

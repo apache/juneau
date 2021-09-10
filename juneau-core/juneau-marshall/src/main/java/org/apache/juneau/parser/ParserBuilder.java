@@ -412,7 +412,7 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ParserBuilder apply(List<AnnotationWork> work) {
+	public ParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

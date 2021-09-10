@@ -146,6 +146,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 				.addBean(Method.class, method)
 				.addBean(ContextProperties.class, cp);
 			bs.addBean(BeanStore.class, bs);
+			bs.addBean(AnnotationWorkList.class, builder.getApplied());
 
 			serializers = createSerializers(r, builder, bs);
 			bs.addBean(SerializerGroup.class, serializers);
@@ -205,7 +206,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			defaultCharset = ofNullable(builder.defaultCharset).orElse(context.defaultCharset);
 			maxInput = ofNullable(builder.maxInput).orElse(context.maxInput);
 
-			responseMeta = ResponseBeanMeta.create(mi, cp);
+			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 
 			opArgs = context.findRestOperationArgs(mi.inner(), bs);
 
@@ -905,7 +906,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		Class<?> c = o.getClass();
 		ResponseBeanMeta rbm = responseBeanMetas.get(c);
 		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, ContextProperties.DEFAULT);
+			rbm = ResponseBeanMeta.create(c, new AnnotationWorkList());
 			if (rbm == null)
 				rbm = ResponseBeanMeta.NULL;
 			responseBeanMetas.put(c, rbm);

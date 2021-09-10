@@ -245,7 +245,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OpenApiSerializerBuilder apply(List<AnnotationWork> work) {
+	public OpenApiSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

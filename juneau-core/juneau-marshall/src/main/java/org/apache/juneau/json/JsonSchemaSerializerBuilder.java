@@ -292,7 +292,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaSerializerBuilder apply(List<AnnotationWork> work) {
+	public JsonSchemaSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

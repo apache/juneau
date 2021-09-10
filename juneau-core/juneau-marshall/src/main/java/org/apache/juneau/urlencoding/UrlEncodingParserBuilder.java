@@ -158,7 +158,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder apply(List<AnnotationWork> work) {
+	public UrlEncodingParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

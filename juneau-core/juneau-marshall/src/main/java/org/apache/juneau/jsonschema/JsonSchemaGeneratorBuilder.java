@@ -372,7 +372,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder apply(List<AnnotationWork> work) {
+	public JsonSchemaGeneratorBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

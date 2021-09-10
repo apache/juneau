@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -44,12 +44,12 @@ public class FormDataArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link FormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link FormData}.
 	 */
-	public static FormDataArg create(ParamInfo paramInfo, ContextProperties cp) {
+	public static FormDataArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(FormData.class) || paramInfo.getParameterType().hasAnnotation(FormData.class))
-			return new FormDataArg(paramInfo, cp);
+			return new FormDataArg(paramInfo, annotations);
 		return null;
 	}
 
@@ -57,13 +57,13 @@ public class FormDataArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected FormDataArg(ParamInfo paramInfo, ContextProperties cp) {
+	protected FormDataArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(FormData.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
 		this.multi = getMulti(paramInfo) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

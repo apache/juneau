@@ -1901,7 +1901,7 @@ public final class RestRequest {
 	 * @return A new request bean proxy for this REST request.
 	 */
 	public <T> T getRequest(Class<T> c) {
-		return getRequest(RequestBeanMeta.create(c, getContext().getContextProperties()));
+		return getRequest(RequestBeanMeta.create(c, getContext().getAnnotations()));
 	}
 
 	/**

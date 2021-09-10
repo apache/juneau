@@ -222,7 +222,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder apply(List<AnnotationWork> work) {
+	public OpenApiParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -36,12 +36,12 @@ public class ResponseBeanArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link ResponseBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Response}.
 	 */
-	public static ResponseBeanArg create(ParamInfo paramInfo, ContextProperties cp) {
+	public static ResponseBeanArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Response.class) || paramInfo.getParameterType().hasAnnotation(Response.class))
-			return new ResponseBeanArg(paramInfo, cp);
+			return new ResponseBeanArg(paramInfo, annotations);
 		return null;
 	}
 
@@ -49,11 +49,11 @@ public class ResponseBeanArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected ResponseBeanArg(ParamInfo paramInfo, ContextProperties cp) {
+	protected ResponseBeanArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		this.type = paramInfo.getParameterType().innerType();
-		this.meta = ResponseBeanMeta.create(paramInfo, cp);
+		this.meta = ResponseBeanMeta.create(paramInfo, annotations);
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
 			throw new ArgException(paramInfo, "Type must be Value<?> on parameter annotated with @Response annotation");

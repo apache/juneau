@@ -113,7 +113,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public PlainTextParserBuilder apply(List<AnnotationWork> work) {
+	public PlainTextParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

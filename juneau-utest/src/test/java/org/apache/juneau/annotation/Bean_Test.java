@@ -15,8 +15,6 @@ package org.apache.juneau.annotation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
@@ -73,7 +71,7 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
-		List<AnnotationWork> al = a2ci.getAnnotationList().getWork(null);
+		AnnotationWorkList al = a2ci.getAnnotationList().getWork(null);
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -159,7 +157,7 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
-		List<AnnotationWork> al = b2ci.getAnnotationList().getWork(null);
+		AnnotationWorkList al = b2ci.getAnnotationList().getWork(null);
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -229,7 +227,7 @@ public class Bean_Test {
 
 	@Test
 	public void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
-		List<AnnotationWork> al = dConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = dConfig.getAnnotationList().getWork(vr);
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -242,7 +240,7 @@ public class Bean_Test {
 
 	@Test
 	public void d04_beanPXpCombined_beanConfigOverride() throws Exception {
-		List<AnnotationWork> al = dConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = dConfig.getAnnotationList().getWork(vr);
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -346,7 +344,7 @@ public class Bean_Test {
 
 	@Test
 	public void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		List<AnnotationWork> al = eConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = eConfig.getAnnotationList().getWork(vr);
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -359,7 +357,7 @@ public class Bean_Test {
 
 	@Test
 	public void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		List<AnnotationWork> al = eConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = eConfig.getAnnotationList().getWork(vr);
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 

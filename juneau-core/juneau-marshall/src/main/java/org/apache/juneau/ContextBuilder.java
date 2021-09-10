@@ -61,6 +61,7 @@ public abstract class ContextBuilder {
 	Class<?> contextClass;
 
 	private final List<Object> builders = new ArrayList<>();
+	private final AnnotationWorkList applied = new AnnotationWorkList();
 
 	/**
 	 * Constructor.
@@ -182,7 +183,7 @@ public abstract class ContextBuilder {
 	 * @param work The work to check.
 	 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 	 */
-	public boolean canApply(List<AnnotationWork> work) {
+	public boolean canApply(AnnotationWorkList work) {
 		for (AnnotationWork w : work)
 			for (Object b : builders)
 				if (w.canApply(b))
@@ -191,7 +192,7 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Applies a set of annotations to this builder.
+	 * Applies a set of applied to this builder.
 	 *
 	 * <p>
 	 * An {@link AnnotationWork} consists of a single pair of {@link AnnotationInfo} that represents an annotation instance,
@@ -219,7 +220,8 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public ContextBuilder apply(List<AnnotationWork> work) {
+	public ContextBuilder apply(AnnotationWorkList work) {
+		applied.addAll(work);
 		for (AnnotationWork w : work)
 			for (Object b : builders)
 				w.apply(b);
@@ -227,10 +229,19 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Returns all the annotations that have been applied to this builder.
+	 *
+	 * @return All the annotations that have been applied to this builder.
+	 */
+	public AnnotationWorkList getApplied() {
+		return applied;
+	}
+
+	/**
 	 * Registers the specified secondary builders with this context builder.
 	 *
 	 * <p>
-	 * When {@link #apply(List)} is called, it gets called on all registered builders.
+	 * When {@link #apply(AnnotationWorkList)} is called, it gets called on all registered builders.
 	 *
 	 * @param builders The builders to add to the list of builders.
 	 */
@@ -302,11 +313,11 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
 		VarResolverSession vrs = VarResolver.DEFAULT.createSession();
-		List<AnnotationWork> work = stream(fromClasses)
+		AnnotationWorkList work = stream(fromClasses)
 			.map(ClassInfo::of)
 			.map(x -> x.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs))
 			.flatMap(Collection::stream)
-			.collect(toList());
+			.collect(toCollection(AnnotationWorkList::new));
 		return apply(work);
 	}
 
@@ -370,11 +381,11 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder applyAnnotations(Method...fromMethods) {
 		VarResolverSession vrs = VarResolver.DEFAULT.createSession();
-		List<AnnotationWork> work = stream(fromMethods)
+		AnnotationWorkList work = stream(fromMethods)
 			.map(MethodInfo::of)
 			.map(x -> x.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs))
 			.flatMap(Collection::stream)
-			.collect(toList());
+			.collect(toCollection(AnnotationWorkList::new));
 		return apply(work);
 	}
 

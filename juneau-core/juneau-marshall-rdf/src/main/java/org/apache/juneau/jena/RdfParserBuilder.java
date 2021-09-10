@@ -849,7 +849,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfParserBuilder apply(List<AnnotationWork> work) {
+	public RdfParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

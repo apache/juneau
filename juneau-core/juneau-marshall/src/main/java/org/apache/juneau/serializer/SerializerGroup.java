@@ -357,7 +357,7 @@ public final class SerializerGroup {
 		 * @param work The work to check.
 		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one serializer builder in this group.
 		 */
-		public boolean canApply(List<AnnotationWork> work) {
+		public boolean canApply(AnnotationWorkList work) {
 			for (Object o : entries)
 				if (o instanceof SerializerBuilder)
 					if (((SerializerBuilder)o).canApply(work))
@@ -371,7 +371,7 @@ public final class SerializerGroup {
 		 * @param work The annotations to apply.
 		 * @return This object (for method chaining).
 		 */
-		public Builder apply(List<AnnotationWork> work) {
+		public Builder apply(AnnotationWorkList work) {
 			return forEach(x -> x.apply(work));
 		}
 

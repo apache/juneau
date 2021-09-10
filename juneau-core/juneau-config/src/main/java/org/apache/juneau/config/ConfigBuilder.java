@@ -376,7 +376,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigBuilder apply(List<AnnotationWork> work) {
+	public ConfigBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

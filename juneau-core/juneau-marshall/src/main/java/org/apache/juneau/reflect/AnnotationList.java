@@ -99,12 +99,12 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 * @param vrs The variable resolver session that gets passed in to the constructor of the {@link AnnotationApplier} objects that get created.
 	 * @return A list of {@link AnnotationWork} objects.
 	 */
-	public List<AnnotationWork> getWork(VarResolverSession vrs) {
+	public AnnotationWorkList getWork(VarResolverSession vrs) {
 		try {
-			List<AnnotationWork> l = new ArrayList<>();
+			AnnotationWorkList l = new AnnotationWorkList();
 			for (AnnotationInfo<?> ai : sort())
-				for (AnnotationApplier<Annotation,Object> ca : ai.getApplies(vrs))
-					l.add(new AnnotationWork(ai, ca));
+				for (AnnotationApplier<Annotation,Object> aa : ai.getApplies(vrs))
+					l.add(ai, aa);
 			return l;
 		} catch (ExecutableException e) {
 			throw runtimeException(e.getCause());

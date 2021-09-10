@@ -15,7 +15,6 @@ package org.apache.juneau.msgpack;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -55,14 +54,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
 		check("true", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		MsgPackParser.create().apply(al).build().createSession();
 	}
 
@@ -76,14 +75,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		MsgPackParser.create().apply(al).build().createSession();
 	}
 
@@ -96,14 +95,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		MsgPackParser.create().apply(al).build().createSession();
 	}
 }

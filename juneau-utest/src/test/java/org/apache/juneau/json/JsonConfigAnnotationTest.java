@@ -15,7 +15,6 @@ package org.apache.juneau.json;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -58,7 +57,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
@@ -67,7 +66,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		JsonParserSession x = JsonParser.create().apply(al).build().createSession();
 		check("true", x.isValidateEnd());
 	}
@@ -82,7 +81,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
@@ -91,7 +90,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		JsonParserSession x = JsonParser.create().apply(al).build().createSession();
 		check("false", x.isValidateEnd());
 	}
@@ -105,7 +104,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
@@ -114,7 +113,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		JsonParserSession x = JsonParser.create().apply(al).build().createSession();
 		check("false", x.isValidateEnd());
 	}

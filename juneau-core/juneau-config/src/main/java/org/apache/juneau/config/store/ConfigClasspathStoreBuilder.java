@@ -103,7 +103,7 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigClasspathStoreBuilder apply(List<AnnotationWork> work) {
+	public ConfigClasspathStoreBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

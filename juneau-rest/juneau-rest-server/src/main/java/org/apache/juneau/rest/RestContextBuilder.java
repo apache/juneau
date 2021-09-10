@@ -268,7 +268,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 
 			VarResolverSession vrs = vr.createSession();
-			List<AnnotationWork> al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
+			AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
 			apply(al);
 
 		} catch (Exception e) {
@@ -2988,7 +2988,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder apply(List<AnnotationWork> work) {
+	public RestContextBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		serializers.apply(work);
 		parsers.apply(work);

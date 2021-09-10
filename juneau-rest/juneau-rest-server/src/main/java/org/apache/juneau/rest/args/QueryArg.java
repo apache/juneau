@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -44,12 +44,12 @@ public class QueryArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link QueryArg}, or <jk>null</jk> if the parameter is not annotated with {@link Query}.
 	 */
-	public static QueryArg create(ParamInfo paramInfo, ContextProperties cp) {
+	public static QueryArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Query.class) || paramInfo.getParameterType().hasAnnotation(Query.class))
-			return new QueryArg(paramInfo, cp);
+			return new QueryArg(paramInfo, annotations);
 		return null;
 	}
 
@@ -57,13 +57,13 @@ public class QueryArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected QueryArg(ParamInfo paramInfo, ContextProperties cp) {
+	protected QueryArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
 		this.multi = getMulti(paramInfo) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

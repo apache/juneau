@@ -109,7 +109,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlStrippedDocSerializerBuilder apply(List<AnnotationWork> work) {
+	public HtmlStrippedDocSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

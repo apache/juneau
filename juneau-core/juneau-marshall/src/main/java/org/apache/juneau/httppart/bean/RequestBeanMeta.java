@@ -33,31 +33,27 @@ public class RequestBeanMeta {
 	 * Create metadata from specified parameter.
 	 *
 	 * @param mpi The method parameter.
-	 * @param cp
-	 * 	Configuration information used to instantiate part serializers and part parsers.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param annotations The annotations to apply to any new part serializers or parsers.
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(ParamInfo mpi, ContextProperties cp) {
+	public static RequestBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
 		if (! mpi.hasAnnotation(Request.class))
 			return null;
-		return new RequestBeanMeta.Builder(cp).apply(mpi).build();
+		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
 	}
 
 	/**
 	 * Create metadata from specified class.
 	 *
 	 * @param c The class annotated with {@link Request}.
-	 * @param cp
-	 * 	Configuration information used to instantiate part serializers and part parsers.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param annotations The annotations to apply to any new part serializers or parsers.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(Class<?> c, ContextProperties cp) {
+	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
 		ClassInfo ci = ClassInfo.of(c);
 		if (! ci.hasAnnotation(Request.class))
 			return null;
-		return new RequestBeanMeta.Builder(cp).apply(c).build();
+		return new RequestBeanMeta.Builder(annotations).apply(c).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -81,13 +77,13 @@ public class RequestBeanMeta {
 
 	static class Builder {
 		ClassMeta<?> cm;
-		ContextProperties cp;
+		AnnotationWorkList annotations;
 		Class<? extends HttpPartSerializer> serializer;
 		Class<? extends HttpPartParser> parser;
 		Map<String,RequestBeanPropertyMeta.Builder> properties = new LinkedHashMap<>();
 
-		Builder(ContextProperties cp) {
-			this.cp = cp;
+		Builder(AnnotationWorkList annotations) {
+			this.annotations = annotations;
 		}
 
 		Builder apply(ParamInfo mpi) {

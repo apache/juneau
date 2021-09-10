@@ -508,7 +508,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSerializerBuilder apply(List<AnnotationWork> work) {
+	public HtmlSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

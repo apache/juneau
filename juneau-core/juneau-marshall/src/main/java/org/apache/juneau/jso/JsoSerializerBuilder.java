@@ -119,7 +119,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsoSerializerBuilder apply(List<AnnotationWork> work) {
+	public JsoSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

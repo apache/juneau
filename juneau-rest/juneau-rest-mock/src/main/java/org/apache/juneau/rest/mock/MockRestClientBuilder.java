@@ -282,7 +282,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MockRestClientBuilder apply(List<AnnotationWork> work) {
+	public MockRestClientBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -15,7 +15,6 @@ package org.apache.juneau.uon;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -59,7 +58,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		UonSerializerSession x = UonSerializer.create().apply(al).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEncoding());
@@ -68,7 +67,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		List<AnnotationWork> al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
 		UonParserSession x = UonParser.create().apply(al).build().createSession();
 		check("true", x.isDecoding());
 		check("true", x.isValidateEnd());
@@ -84,7 +83,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		UonSerializerSession x = UonSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -93,7 +92,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		List<AnnotationWork> al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
 		UonParserSession x = UonParser.create().apply(al).build().createSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
@@ -108,7 +107,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		UonSerializerSession x = UonSerializer.create().apply(al).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -117,7 +116,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		List<AnnotationWork> al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
 		UonParserSession x = UonParser.create().apply(al).build().createSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());

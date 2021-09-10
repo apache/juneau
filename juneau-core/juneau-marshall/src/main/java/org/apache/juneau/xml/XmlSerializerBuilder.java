@@ -272,7 +272,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder apply(List<AnnotationWork> work) {
+	public XmlSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -42,12 +42,12 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link ResponseHeader}.
 	 */
-	public static ResponseHeaderArg create(ParamInfo paramInfo, ContextProperties cp) {
+	public static ResponseHeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(ResponseHeader.class) || paramInfo.getParameterType().hasAnnotation(ResponseHeader.class))
-			return new ResponseHeaderArg(paramInfo, cp);
+			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
 	}
 
@@ -55,13 +55,13 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected ResponseHeaderArg(ParamInfo paramInfo, ContextProperties cp) {
+	protected ResponseHeaderArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType().innerType();
 		HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, paramInfo);
-		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, cp));
+		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ofNullable(schema.getSerializer()).map(x -> HttpPartSerializer.creator().set(x).apply(annotations).create()).orElse(null));
 
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)

@@ -1536,7 +1536,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void schemaOnClass_onConfig() throws Exception {
-		List<AnnotationWork> al = bConfig.getAnnotationList().getWork(null);
+		AnnotationWorkList al = bConfig.getAnnotationList().getWork(null);
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().createSession();
 		assertObject(x.getSchema(new B())).asJson().contains("foo:'bar'");
 	}

@@ -108,7 +108,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder apply(List<AnnotationWork> work) {
+	public CsvParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

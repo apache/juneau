@@ -270,7 +270,7 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder apply(List<AnnotationWork> work) {
+	public BeanTraverseBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -120,7 +120,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvSerializerBuilder apply(List<AnnotationWork> work) {
+	public CsvSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -139,7 +139,7 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public InputStreamParserBuilder apply(List<AnnotationWork> work) {
+	public InputStreamParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

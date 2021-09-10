@@ -99,7 +99,7 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigStoreBuilder apply(List<AnnotationWork> work) {
+	public ConfigStoreBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -148,7 +148,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonParserBuilder apply(List<AnnotationWork> work) {
+	public JsonParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

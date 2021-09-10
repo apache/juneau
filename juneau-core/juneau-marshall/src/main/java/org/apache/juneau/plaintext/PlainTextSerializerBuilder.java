@@ -120,7 +120,7 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public PlainTextSerializerBuilder apply(List<AnnotationWork> work) {
+	public PlainTextSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

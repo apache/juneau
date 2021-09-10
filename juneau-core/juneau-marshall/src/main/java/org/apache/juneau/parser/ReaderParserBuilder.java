@@ -176,7 +176,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ReaderParserBuilder apply(List<AnnotationWork> work) {
+	public ReaderParserBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

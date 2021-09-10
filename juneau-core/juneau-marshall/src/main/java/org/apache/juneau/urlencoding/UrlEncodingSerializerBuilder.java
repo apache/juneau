@@ -160,7 +160,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder apply(List<AnnotationWork> work) {
+	public UrlEncodingSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

@@ -33,12 +33,12 @@ public class RequestBeanArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link RequestBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Request}.
 	 */
-	public static RequestBeanArg create(ParamInfo paramInfo, ContextProperties cp) {
+	public static RequestBeanArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Request.class))
-			return new RequestBeanArg(paramInfo, cp);
+			return new RequestBeanArg(paramInfo, annotations);
 		return null;
 	}
 
@@ -46,10 +46,10 @@ public class RequestBeanArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected RequestBeanArg(ParamInfo paramInfo, ContextProperties cp) {
-		this.meta = RequestBeanMeta.create(paramInfo, cp);
+	protected RequestBeanArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
+		this.meta = RequestBeanMeta.create(paramInfo, annotations);
 	}
 
 	@Override /* RestOpArg */

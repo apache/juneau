@@ -62,7 +62,7 @@ public final class RemoteOperationReturn {
 			rv = RemoteReturn.BODY;
 
 		if (rt.hasAnnotation(Response.class) && rt.isInterface()) {
-			this.meta = ResponseBeanMeta.create(m, ContextProperties.DEFAULT);
+			this.meta = ResponseBeanMeta.create(m, new AnnotationWorkList());
 			rv = RemoteReturn.BEAN;
 		} else {
 			this.meta = null;

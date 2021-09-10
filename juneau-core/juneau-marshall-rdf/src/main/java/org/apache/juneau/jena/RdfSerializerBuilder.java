@@ -948,7 +948,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder apply(List<AnnotationWork> work) {
+	public RdfSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

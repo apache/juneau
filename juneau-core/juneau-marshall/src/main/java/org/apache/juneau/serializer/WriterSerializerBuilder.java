@@ -386,7 +386,7 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public WriterSerializerBuilder apply(List<AnnotationWork> work) {
+	public WriterSerializerBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

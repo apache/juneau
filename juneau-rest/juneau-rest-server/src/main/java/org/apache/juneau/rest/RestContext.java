@@ -226,8 +226,6 @@ public class RestContext extends BeanContext {
 		BasicHttpException _initException = null;
 
 		try {
-			ContextProperties cp = getContextProperties();
-
 			this.builder = builder;
 
 			this.resourceClass = builder.resourceClass;
@@ -242,21 +240,21 @@ public class RestContext extends BeanContext {
 			bf.addBean(BeanStore.class, bf);
 			bf.addBean(RestContext.class, this);
 			bf.addBean(Object.class, r);
+			bf.addBean(RestContextBuilder.class, builder);
+			bf.addBean(AnnotationWorkList.class, builder.getApplied());
 
-			bf.addBean(ContextProperties.class, cp);
-
-			Logger l = logger = createLogger(r, cp, bf);
+			Logger l = logger = createLogger(r, builder, bf);
 			bf.addBean(Logger.class, l);
 
-			ThrownStore ts = thrownStore = createThrownStore(r, cp, parent, bf);
+			ThrownStore ts = thrownStore = createThrownStore(r, builder, parent, bf);
 			bf.addBean(ThrownStore.class, ts);
 
-			methodExecStore = createMethodExecStore(r, cp, bf, ts);
+			methodExecStore = createMethodExecStore(r, builder, bf, ts);
 			bf.addBean(MethodExecStore.class, methodExecStore);
 
 			Messages m = messages = createMessages(r, builder);
 
-			VarResolver vr = varResolver = createVarResolver(r, cp, bf, m);
+			VarResolver vr = varResolver = createVarResolver(r, builder, bf, m);
 			bf.addBean(VarResolver.class, vr);
 
 			config = builder.config.resolving(vr.createSession());
@@ -276,7 +274,7 @@ public class RestContext extends BeanContext {
 			partParser = createPartParser(r, builder, bf);
 			bf.addBean(HttpPartParser.class, partParser);
 
-			jsonSchemaGenerator = createJsonSchemaGenerator(r, cp, bf);
+			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bf);
 			bf.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
 			fileFinder = createFileFinder(r, builder, bf);
@@ -292,7 +290,7 @@ public class RestContext extends BeanContext {
 			defaultRequestAttributes = createDefaultRequestAttributes(r, builder, bf);
 
 			opArgs = createOpArgs(r, builder, bf).asArray();
-			hookMethodArgs = createHookMethodArgs(r, cp, bf).asArray();
+			hookMethodArgs = createHookMethodArgs(r, builder, bf).asArray();
 
 			uriContext = builder.uriContext;
 			uriAuthority = builder.uriAuthority;
@@ -318,14 +316,14 @@ public class RestContext extends BeanContext {
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
 
-			startCallMethods = createStartCallMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			endCallMethods = createEndCallMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			postInitMethods = createPostInitMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			postInitChildFirstMethods = createPostInitChildFirstMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			destroyMethods = createDestroyMethods(r, cp, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			startCallMethods = createStartCallMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			endCallMethods = createEndCallMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			postInitMethods = createPostInitMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			postInitChildFirstMethods = createPostInitChildFirstMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			destroyMethods = createDestroyMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 
-			preCallMethods = createPreCallMethods(r, cp, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
-			postCallMethods = createPostCallMethods(r, cp, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			preCallMethods = createPreCallMethods(r, builder, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			postCallMethods = createPostCallMethods(r, builder, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 
 			restOperations = createRestOperations(r, builder, bf);
 
@@ -778,10 +776,10 @@ public class RestContext extends BeanContext {
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param logger
 	 * 	The Java logger to use for logging messages.
-	 * 	<br>Created by {@link #createLogger(Object,ContextProperties,BeanStore)}.
+	 * 	<br>Created by {@link #createLogger(Object,RestContextBuilder,BeanStore)}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,ContextProperties,RestContext,BeanStore)}.
+	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
 	 */
@@ -830,10 +828,10 @@ public class RestContext extends BeanContext {
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param logger
 	 * 	The Java logger to use for logging messages.
-	 * 	<br>Created by {@link #createLogger(Object,ContextProperties,BeanStore)}.
+	 * 	<br>Created by {@link #createLogger(Object,RestContextBuilder,BeanStore)}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,ContextProperties,RestContext,BeanStore)}.
+	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The call logger builder for this REST resource.
 	 * @throws Exception If call logger builder could not be instantiated.
 	 */
@@ -1078,16 +1076,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The REST method parameter resolvers for this REST resource.
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 */
-	protected RestOpArgList createHookMethodArgs(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected RestOpArgList createHookMethodArgs(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		RestOpArgList.Builder x = RestOpArgList.create();
 
@@ -1142,16 +1139,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The logger for this REST resource.
 	 * @throws Exception If logger could not be instantiated.
 	 */
-	protected Logger createLogger(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected Logger createLogger(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		Logger x = beanStore.getBean(Logger.class).orElse(null);
 
@@ -1188,20 +1184,19 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The JSON schema generator for this REST resource.
 	 * @throws Exception If JSON schema generator could not be instantiated.
 	 */
-	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		JsonSchemaGenerator x = beanStore.getBean(JsonSchemaGenerator.class).orElse(null);
 
 		if (x == null)
-			x = createJsonSchemaGeneratorBuilder(resource, properties, beanStore).build();
+			x = createJsonSchemaGeneratorBuilder(resource, builder, beanStore).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -1218,23 +1213,22 @@ public class RestContext extends BeanContext {
 	 * Instantiates the JSON-schema generator builder for this REST resource.
 	 *
 	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createJsonSchemaGenerator(Object,ContextProperties,BeanStore)} method.
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createJsonSchemaGenerator(Object,RestContextBuilder,BeanStore)} method.
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The JSON-schema generator builder for this REST resource.
 	 * @throws Exception If JSON-schema generator builder could not be instantiated.
 	 */
-	protected JsonSchemaGeneratorBuilder createJsonSchemaGeneratorBuilder(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected JsonSchemaGeneratorBuilder createJsonSchemaGeneratorBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		JsonSchemaGeneratorBuilder x = JsonSchemaGenerator
 			.create()
-			.apply(properties);
+			.apply(builder.getContextProperties());
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -1284,7 +1278,7 @@ public class RestContext extends BeanContext {
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
 	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
-	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,ContextProperties,BeanStore,Messages)}.
+	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,RestContextBuilder,BeanStore,Messages)}.
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
 	 */
@@ -1328,7 +1322,7 @@ public class RestContext extends BeanContext {
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
 	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
-	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,ContextProperties,BeanStore,Messages)}.
+	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,RestContextBuilder,BeanStore,Messages)}.
 	 * @return The REST API builder for this REST resource.
 	 * @throws Exception If REST API builder could not be instantiated.
 	 */
@@ -1342,7 +1336,7 @@ public class RestContext extends BeanContext {
 				.fileFinder(fileFinder)
 				.messages(messages)
 				.varResolver(varResolver)
-				.jsonSchemaGenerator(createJsonSchemaGenerator(resource, builder.getContextProperties(), beanStore))
+				.jsonSchemaGenerator(createJsonSchemaGenerator(resource, builder, beanStore))
 				.implClass(c);
 
 		x = BeanStore
@@ -1371,14 +1365,13 @@ public class RestContext extends BeanContext {
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a new {@link VarResolver} using the variables returned by {@link #createVars(Object,ContextProperties,BeanStore)}.
+	 * 	<li>Instantiates a new {@link VarResolver} using the variables returned by {@link #createVars(Object,RestContextBuilder,BeanStore)}.
 	 * </ul>
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
@@ -1386,13 +1379,13 @@ public class RestContext extends BeanContext {
 	 * @return The variable resolver for this REST resource.
 	 * @throws Exception If variable resolver could not be instantiated.
 	 */
-	protected VarResolver createVarResolver(Object resource, ContextProperties properties, BeanStore beanStore, Messages messages) throws Exception {
+	protected VarResolver createVarResolver(Object resource, RestContextBuilder builder, BeanStore beanStore, Messages messages) throws Exception {
 
 		VarResolver x = beanStore.getBean(VarResolver.class).orElse(null);
 
 		if (x == null)
 			x = builder.varResolverBuilder
-				.vars(createVars(resource, properties, beanStore))
+				.vars(createVars(resource, builder, beanStore))
 				.bean(Messages.class, messages)
 				.build();
 
@@ -1426,9 +1419,8 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
@@ -1436,7 +1428,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If variable resolver variables could not be instantiated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected VarList createVars(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected VarList createVars(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		VarList x = beanStore.getBean(VarList.class).orElse(null);
 
@@ -1489,9 +1481,8 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param parent
 	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
 	 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
@@ -1501,12 +1492,12 @@ public class RestContext extends BeanContext {
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected ThrownStore createThrownStore(Object resource, ContextProperties properties, RestContext parent, BeanStore beanStore) throws Exception {
+	protected ThrownStore createThrownStore(Object resource, RestContextBuilder builder, RestContext parent, BeanStore beanStore) throws Exception {
 
 		ThrownStore x = beanStore.getBean(ThrownStore.class).orElse(null);
 
 		if (x == null)
-			x = createThrownStoreBuilder(resource, properties, parent, beanStore).build();
+			x = createThrownStoreBuilder(resource, builder, parent, beanStore).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -1524,9 +1515,8 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param parent
 	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
 	 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
@@ -1536,7 +1526,7 @@ public class RestContext extends BeanContext {
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected ThrownStoreBuilder createThrownStoreBuilder(Object resource, ContextProperties properties, RestContext parent, BeanStore beanStore) throws Exception {
+	protected ThrownStoreBuilder createThrownStoreBuilder(Object resource, RestContextBuilder builder, RestContext parent, BeanStore beanStore) throws Exception {
 
 		ThrownStore p = parent == null ? null : parent.thrownStore;
 
@@ -1561,24 +1551,23 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,ContextProperties,RestContext,BeanStore)}.
+	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected MethodExecStore createMethodExecStore(Object resource, ContextProperties properties, BeanStore beanStore, ThrownStore thrownStore) throws Exception {
+	protected MethodExecStore createMethodExecStore(Object resource, RestContextBuilder builder, BeanStore beanStore, ThrownStore thrownStore) throws Exception {
 
 		MethodExecStore x = beanStore.getBean(MethodExecStore.class).orElse(null);
 
 		if (x == null)
-			x = createMethodExecStoreBuilder(resource, properties, beanStore, thrownStore).build();
+			x = createMethodExecStoreBuilder(resource, builder, beanStore, thrownStore).build();
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -1596,19 +1585,18 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,ContextProperties,RestContext,BeanStore)}.
+	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected MethodExecStoreBuilder createMethodExecStoreBuilder(Object resource, ContextProperties properties, BeanStore beanStore, ThrownStore thrownStore) throws Exception {
+	protected MethodExecStoreBuilder createMethodExecStoreBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, ThrownStore thrownStore) throws Exception {
 
 		MethodExecStoreBuilder x = MethodExecStore
 			.create()
@@ -2105,16 +2093,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createStartCallMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createStartCallMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -2140,16 +2127,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createEndCallMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createEndCallMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -2175,16 +2161,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createPostInitMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createPostInitMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -2210,16 +2195,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createPostInitChildFirstMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createPostInitChildFirstMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -2245,16 +2229,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createDestroyMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createDestroyMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -2280,16 +2263,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createPreCallMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createPreCallMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -2315,16 +2297,15 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource
 	 * 	The REST servlet or bean that this context defines.
-	 * @param properties
-	 * 	The properties of this bean.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
+	 * @param builder
+	 * 	The builder for this object.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If list could not be instantiated.
 	 */
-	protected MethodList createPostCallMethods(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected MethodList createPostCallMethods(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
@@ -3538,7 +3519,7 @@ public class RestContext extends BeanContext {
 		Class<?> c = o.getClass();
 		ResponseBeanMeta rbm = responseBeanMetas.get(c);
 		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, getContextProperties());
+			rbm = ResponseBeanMeta.create(c, getAnnotations());
 			if (rbm == null)
 				rbm = ResponseBeanMeta.NULL;
 			responseBeanMetas.put(c, rbm);
@@ -3546,6 +3527,15 @@ public class RestContext extends BeanContext {
 		if (rbm == ResponseBeanMeta.NULL)
 			return null;
 		return rbm;
+	}
+
+	/**
+	 * Returns the annotations applied to this context.
+	 *
+	 * @return The annotations applied to this context.
+	 */
+	public AnnotationWorkList getAnnotations() {
+		return builder.getApplied();
 	}
 
 	/**

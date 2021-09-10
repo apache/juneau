@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 
@@ -47,12 +47,12 @@ public class HeaderArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
-	public static HeaderArg create(ParamInfo paramInfo, ContextProperties cp) {
+	public static HeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class))
-			return new HeaderArg(paramInfo, cp);
+			return new HeaderArg(paramInfo, annotations);
 		return null;
 	}
 
@@ -60,13 +60,13 @@ public class HeaderArg implements RestOpArg {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param cp The configuration properties of the {@link RestContext}.
+	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected HeaderArg(ParamInfo paramInfo, ContextProperties cp) {
+	protected HeaderArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
 		this.multi = getMulti(paramInfo);
 
 		if (multi && ! type.isCollectionOrArray())

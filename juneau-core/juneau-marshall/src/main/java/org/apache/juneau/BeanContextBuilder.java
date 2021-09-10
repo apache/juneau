@@ -2902,7 +2902,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder apply(List<AnnotationWork> work) {
+	public BeanContextBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}

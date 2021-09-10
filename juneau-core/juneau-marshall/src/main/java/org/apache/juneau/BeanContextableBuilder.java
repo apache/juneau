@@ -2918,7 +2918,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	}
 
 	@Override
-	public BeanContextableBuilder apply(List<AnnotationWork> work) {
+	public BeanContextableBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
 		return this;
 	}
