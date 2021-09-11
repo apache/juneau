@@ -13,11 +13,16 @@
 package org.apache.juneau;
 
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.reflect.*;
 
 /**
  * Represents a simple settable value.
+ *
+ * <p>
+ * Similar to an {@link Optional} but mutable.
  *
  * <p>
  * This object is not thread safe.
@@ -37,62 +42,19 @@ public class Value<T> {
 	}
 
 	/**
-	 * Returns the generic parameter type of the Value parameter at the specified position.
+	 * Static creator.
 	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public void</jk> doX(Value&lt;Foo&gt; foo) {...}
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	Class&lt;?&gt; t = Value.<jsm>getValueType</jsm>(A.<jk>class</jk>.getMethod(<js>"doX"</js>, Value.<jk>class</jk>));
-	 * 	<jsm>assertTrue</jsm>(t == Foo.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param m The method containing the parameter.
-	 * @param i The index of the parameter.
-	 * @return The parameter type of the value, or <jk>null</jk> if the method parameter is not of type <c>Value</c>.
+	 * @return An empty {@link Value} object.
 	 */
-	public static Type getParameterType(Method m, int i) {
-		return getParameterType(m.getGenericParameterTypes()[i]);
+	public static <T> Value<T> empty() {
+		return new Value<>(null);
 	}
 
-	/**
-	 * Returns the generic parameter type of the Value type.
-	 *
-	 * @param t The type to find the parameter type of.
-	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
-	 */
-	public static Type getParameterType(Type t) {
-		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
-			if (pt.getRawType() == Value.class) {
-				Type[] ta = pt.getActualTypeArguments();
-				if (ta.length > 0)
-					return ta[0];
-			}
-		} else if (t instanceof Class) {
-			Class<?> c = (Class<?>)t;
-			if (Value.class.isAssignableFrom(c)) {
-				return ClassInfo.of(c).getParameterType(0, Value.class);
-			}
-		}
 
-		return null;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Convenience method for checking if the specified type is this class.
-	 *
-	 * @param t The type to check.
-	 * @return <jk>true</jk> if the specified type is this class.
-	 */
-	public static boolean isType(Type t) {
-		return
-			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
-			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
-	}
 
 	private T t;
 	private ValueListener<T> listener;
@@ -100,8 +62,7 @@ public class Value<T> {
 	/**
 	 * Constructor.
 	 */
-	public Value() {
-	}
+	public Value() {}
 
 	/**
 	 * Constructor.
@@ -150,7 +111,88 @@ public class Value<T> {
 	 *
 	 * @return <jk>true</jk> if the value is set.
 	 */
-	public boolean isSet() {
+	public boolean isPresent() {
 		return get() != null;
 	}
+
+	/**
+	 * If a value is present, invoke the specified consumer with the value, otherwise do nothing.
+	 *
+	 * @param consumer Block to be executed if a value is present.
+	 */
+	public void ifPresent(Consumer<? super T> consumer) {
+		if (t != null)
+			consumer.accept(t);
+	}
+
+	/**
+	 * Applies a mapping function against the contents of this value.
+	 *
+	 * @param mapper The mapping function.
+	 * @return The mapped value.
+	 */
+	public <T2> Value<T2> map(Function<? super T, T2> mapper) {
+		if (t != null)
+			return Value.of(mapper.apply(t));
+		return Value.empty();
+	}
+
+	/**
+	 * Returns the contents of this value or the default value if <jk>null</jk>.
+	 *
+	 * @param def The default value.
+	 * @return The contents of this value or the default value if <jk>null</jk>.
+	 */
+	public T orElse(T def) {
+		return t == null ? def : t;
+	}
+	/**
+	 * Returns <jk>true</jk> if the value is empty.
+	 *
+	 * @return <jk>true</jk> if the value is empty.
+	 */
+	public boolean isEmpty() {
+		return t == null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the generic parameter type of the Value type.
+	 *
+	 * @param t The type to find the parameter type of.
+	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
+	 */
+	public static Type getParameterType(Type t) {
+		if (t instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			if (pt.getRawType() == Value.class) {
+				Type[] ta = pt.getActualTypeArguments();
+				if (ta.length > 0)
+					return ta[0];
+			}
+		} else if (t instanceof Class) {
+			Class<?> c = (Class<?>)t;
+			if (Value.class.isAssignableFrom(c)) {
+				return ClassInfo.of(c).getParameterType(0, Value.class);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Convenience method for checking if the specified type is this class.
+	 *
+	 * @param t The type to check.
+	 * @return <jk>true</jk> if the specified type is this class.
+	 */
+	public static boolean isType(Type t) {
+		return
+			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
+			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
+	}
+
 }

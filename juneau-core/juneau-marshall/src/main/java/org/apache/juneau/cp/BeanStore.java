@@ -49,9 +49,9 @@ public class BeanStore {
 	public static final BeanStore INSTANCE = create().readOnly().build();
 
 	private final Map<String,Supplier<?>> beanMap = new ConcurrentHashMap<>();
-	private final Optional<BeanStore> parent;
-	private final Optional<Object> outer;
-	private final boolean readOnly;
+	final Optional<BeanStore> parent;
+	final Optional<Object> outer;
+	final boolean readOnly;
 
 	/**
 	 * Static creator.
@@ -94,10 +94,19 @@ public class BeanStore {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public BeanStore(Builder builder) {
+	protected BeanStore(Builder builder) {
 		this.parent = ofNullable(builder.parent);
 		this.outer = ofNullable(builder.outer);
 		this.readOnly = builder.readOnly;
+	}
+
+	/**
+	 * Creates a copy of this bean store.
+	 *
+	 * @return A mutable copy of this bean store.
+	 */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**
@@ -106,9 +115,27 @@ public class BeanStore {
 	public static class Builder {
 
 		Class<? extends BeanStore> implClass = BeanStore.class;
+		BeanStore impl;
 		Object outer;
 		BeanStore parent;
 		boolean readOnly;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean store to copy from.
+		 */
+		protected Builder(BeanStore copyFrom) {
+			implClass = copyFrom.getClass();
+			outer = copyFrom.outer.orElse(null);
+			parent = copyFrom.parent.orElse(null);
+			readOnly = copyFrom.readOnly;
+		}
 
 		/**
 		 * Create a new {@link BeanStore} using this builder.
@@ -117,6 +144,8 @@ public class BeanStore {
 		 */
 		public BeanStore build() {
 			try {
+				if (impl != null)
+					return impl;
 				if (implClass == BeanStore.class)
 					return new BeanStore(this);
 				Class<? extends BeanStore> ic = isConcrete(implClass) ? implClass : BeanStore.class;
@@ -130,7 +159,7 @@ public class BeanStore {
 		 * Specifies a subclass of {@link BeanStore} to create when the {@link #build()} method is called.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return  This object.
 		 */
 		@FluentSetter
 		public Builder implClass(Class<? extends BeanStore> value) {
@@ -145,7 +174,7 @@ public class BeanStore {
 		 * Bean searches are performed recursively up this parent chain.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return  This object.
 		 */
 		@FluentSetter
 		public Builder parent(BeanStore value) {
@@ -159,7 +188,7 @@ public class BeanStore {
 		 * <p>
 		 * This means methods such as {@link BeanStore#addBean(Class, Object)} cannot be used.
 		 *
-		 * @return  This object (for method chaining).
+		 * @return  This object.
 		 */
 		@FluentSetter
 		public Builder readOnly() {
@@ -176,11 +205,25 @@ public class BeanStore {
 		 * of the servlet class.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return  This object.
 		 */
 		@FluentSetter
 		public Builder outer(Object value) {
 			outer = value;
+			return this;
+		}
+
+		/**
+		 * Specifies an implementation of a bean store.
+		 *
+		 * <p>
+		 * Causes the {@link #build()} method to return a predefined bean instead of a new one.
+		 *
+		 * @param value The bean that this builder should return.
+		 * @return  This object.
+		 */
+		public Builder impl(BeanStore value) {
+			this.impl = value;
 			return this;
 		}
 	}
@@ -220,7 +263,7 @@ public class BeanStore {
 	 * @param <T> The class to associate this bean with.
 	 * @param c The class to associate this bean with.
 	 * @param t The bean.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T> BeanStore addBean(Class<T> c, T t) {
 		assertCanWrite();
@@ -233,7 +276,7 @@ public class BeanStore {
 	 * @param <T> The class to associate this bean with.
 	 * @param t The bean.
 	 * @param name The bean name if this is a named bean.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T> BeanStore addBean(String name, T t) {
 		assertCanWrite();
@@ -250,7 +293,7 @@ public class BeanStore {
 	 * @param <T> The class to associate this bean with.
 	 * @param c The class to associate this bean with.
 	 * @param t The bean.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> BeanStore addBeans(Class<T> c, T t) {
@@ -274,7 +317,7 @@ public class BeanStore {
 	 * @param <T> The class to associate this bean with.
 	 * @param c The class to associate this bean with.
 	 * @param t The bean supplier.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T> BeanStore addSupplier(Class<T> c, Supplier<T> t) {
 		assertCanWrite();
@@ -287,7 +330,7 @@ public class BeanStore {
 	 * @param <T> The class to associate this bean with.
 	 * @param t The bean supplier.
 	 * @param name The bean name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T> BeanStore addSupplier(String name, Supplier<T> t) {
 		assertCanWrite();

@@ -15,10 +15,6 @@ package org.apache.juneau;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.lang.reflect.*;
-import java.util.*;
-
-import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -34,31 +30,5 @@ public class ValueTest {
 	@Test
 	public void testSubclass() {
 		assertEquals(A1.class, Value.getParameterType(A.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Value used in parameter.
-	//-----------------------------------------------------------------------------------------------------------------
-	public static class B {
-		public void b(Value<B1> b1) {};
-	}
-	public static class B1 {}
-
-	@Test
-	public void testOnParameter() throws Exception {
-		assertEquals(B1.class, Value.getParameterType(B.class.getMethod("b", Value.class), 0));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Value used on parameter of parameterized-type.
-	//-----------------------------------------------------------------------------------------------------------------
-	public interface C {
-		void m1(Value<List<Integer>> v);
-	}
-
-	@Test
-	public void testOnParameterType() throws Exception {
-		Type t = Value.getParameterType(C.class.getMethod("m1", Value.class), 0);
-		assertEquals("List<Integer>", ClassInfo.of(t).getShortName());
 	}
 }
