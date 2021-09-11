@@ -32,7 +32,7 @@ import java.io.*;
  *
  * <p>
  * Subclasses MUST implement a no-arg constructor so that class names can be passed to the
- * {@link VarResolverBuilder#vars(Class...)} method.
+ * {@link VarResolver.Builder#vars(Class...)} method.
  * <br><b>They must also be thread safe!</b>
  *
  * <p>

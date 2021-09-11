@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
  */
 public class VarResolverSession {
 
-	private final VarResolverContext context;
+	private final VarResolver context;
 	private final BeanStore beanStore;
 
 	/**
@@ -56,7 +56,7 @@ public class VarResolverSession {
 	 * @param beanStore The bean store to use for resolving beans needed by vars.
 	 *
 	 */
-	public VarResolverSession(VarResolverContext context, BeanStore beanStore) {
+	public VarResolverSession(VarResolver context, BeanStore beanStore) {
 		this.context = context;
 		this.beanStore = BeanStore.of(beanStore);
 	}

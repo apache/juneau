@@ -280,7 +280,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				boolean isClass = restBean instanceof Class;
 				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
 				RestContext rc = RestContext
-					.create(null, null, null, o)
+					.create(o.getClass(), null, null)
 					.init(o)
 					.callLoggerDefault(BasicTestRestLogger.class)
 					.debugDefault(CONDITIONAL)

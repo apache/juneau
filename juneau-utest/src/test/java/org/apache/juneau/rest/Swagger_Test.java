@@ -45,7 +45,7 @@ public class Swagger_Test {
 	public void testMethod() {}
 
 	private org.apache.juneau.dto.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
-		RestContext rc = RestContext.create(null,null,null,resource).init(resource).fileFinder(TestClasspathFileFinder.class).build();
+		RestContext rc = RestContext.create(resource.getClass(),null,null).init(resource).fileFinder(TestClasspathFileFinder.class).build();
 		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
 		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), new MockServletResponse()).restOpContext(roc));
 		SwaggerProvider ip = rc.getSwaggerProvider();
@@ -53,7 +53,7 @@ public class Swagger_Test {
 	}
 
 	private static org.apache.juneau.dto.swagger.Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(null,null,null,resource).init(resource).build();
+		RestContext rc = RestContext.create(resource.getClass(),null,null).init(resource).build();
 		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
 		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), new MockServletResponse()).restOpContext(roc));
 		SwaggerProvider ip = rc.getSwaggerProvider();

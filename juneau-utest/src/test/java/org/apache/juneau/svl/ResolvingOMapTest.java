@@ -27,7 +27,7 @@ public class ResolvingOMapTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
+		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", "$X{a}");
@@ -54,7 +54,7 @@ public class ResolvingOMapTest {
 	//====================================================================================================
 	@Test
 	public void testNulls() throws Exception {
-		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
+		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", null);
@@ -75,7 +75,7 @@ public class ResolvingOMapTest {
 	//====================================================================================================
 	@Test
 	public void testNonStrings() throws Exception {
-		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
+		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
@@ -100,7 +100,7 @@ public class ResolvingOMapTest {
 	//====================================================================================================
 	@Test
 	public void testInner() throws Exception {
-		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
+		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		OMap m = new ResolvingOMap(vr.createSession());
 		OMap m2 = new OMap();
 		OMap m3 = new OMap();

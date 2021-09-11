@@ -154,6 +154,7 @@ public class RestAnnotation_Test {
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"
 				+ "allowedMethodParams:'allowedMethodParams',"
 				+ "beanStore:'org.apache.juneau.cp.BeanStore',"
+				+ "builder:'org.apache.juneau.rest.RestContextBuilder$Null',"
 				+ "callLogger:'org.apache.juneau.rest.logging.BasicRestLogger',"
 				+ "children:['"+CNAME+"'],"
 				+ "clientVersionHeader:'clientVersionHeader',"

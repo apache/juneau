@@ -20,6 +20,7 @@ import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static java.util.Arrays.*;
+import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -64,7 +65,7 @@ import org.apache.juneau.utils.*;
  * Provides access to the following initialized resources:
  * <ul>
  * 	<li>{@link #getConfig()} - The external configuration for this resource.
- * 	<li>{@link #getVarResolverBuilder()} - The variable resolver for this resource.
+ * 	<li>{@link #varResolver()} - The variable resolver for this resource.
  * </ul>
  *
  * <p>
@@ -98,6 +99,16 @@ import org.apache.juneau.utils.*;
 @FluentSetters(ignore={"set"})
 public class RestContextBuilder extends ContextBuilder implements ServletConfig {
 
+	/**
+	 * Represents a <jk>null</jk> value for the {@link Rest#builder()} annotation.
+	 */
+	@SuppressWarnings("javadoc")
+	public static final class Null extends RestContextBuilder {
+		protected Null(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
+			super(resourceClass, parentContext, servletConfig);
+		}
+	}
+
 	final ServletConfig inner;
 	final Class<?> resourceClass;
 	final RestContext parentContext;
@@ -113,7 +124,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	ServletContext servletContext;
 
 	Config config;
-	VarResolverBuilder varResolverBuilder;
+	VarResolver.Builder varResolver;
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
 		allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
@@ -217,44 +228,38 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 	/**
 	 * Constructor.
-	 *
+	 * @param resourceClass The resource class.
 	 * @param parentContext The parent context if this is a child of another resource.
 	 * @param servletConfig The servlet config if available.
-	 * @param resourceClass The resource class.
-	 * @param resource The resource object if available.
+	 *
 	 * @throws ServletException Initialization failed.
 	 */
-	protected RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
+	protected RestContextBuilder(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 		try {
 			contextClass(RestContext.class);
 
 			this.resourceClass = resourceClass;
-			this.inner = servletConfig.orElse(null);
-			this.parentContext = parentContext.orElse(null);
+			this.inner = servletConfig;
+			this.parentContext = parentContext;
 
 			ClassInfo rci = ClassInfo.of(resourceClass);
 
 			// Pass-through default values.
-			if (parentContext.isPresent()) {
-				RestContext pc = parentContext.get();
-				callLoggerDefault = pc.callLoggerDefault;
-				debugDefault = pc.debugDefault;
-				staticFilesDefault.value(pc.staticFilesDefault);
-				fileFinderDefault.value(pc.fileFinderDefault);
+			if (parentContext != null) {
+				callLoggerDefault = parentContext.callLoggerDefault;
+				debugDefault = parentContext.debugDefault;
+				staticFilesDefault.value(parentContext.staticFilesDefault);
+				fileFinderDefault.value(parentContext.fileFinderDefault);
 			}
 
-			beanStore = createBeanStore(parentContext, resource);
+			beanStore = createBeanStore(resourceClass, parentContext);
 			beanStore.addBean(RestContextBuilder.class, this);
-			beanStore.addBean(ServletConfig.class, servletConfig.orElse(this));
-			beanStore.addBean(ServletContext.class, servletConfig.orElse(this).getServletContext());
+			beanStore.addBean(ServletConfig.class, ofNullable(servletConfig).orElse(this));
+			beanStore.addBean(ServletContext.class, ofNullable(servletConfig).orElse(this).getServletContext());
 
-			varResolverBuilder = new VarResolverBuilder()
-				.defaultVars()
-				.vars(ConfigVar.class)
-				.vars(FileVar.class)
-				.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build());
+			varResolver = createVarResolver(resourceClass, beanStore);
 
-			VarResolver vr = varResolverBuilder.build();
+			VarResolver vr = varResolver.build();
 			beanStore.addBean(VarResolver.class, vr);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
@@ -262,16 +267,15 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			beanStore.addBean(Config.class, config);
 
 			// Add our config file to the variable resolver.
-			varResolverBuilder.bean(Config.class, config);
-			vr = varResolverBuilder.build();
+			varResolver.bean(Config.class, config);
+			vr = varResolver.build();
 			beanStore.addBean(VarResolver.class, vr);
 
 			// Add the servlet init parameters to our properties.
-			if (servletConfig.isPresent()) {
-				ServletConfig sc = servletConfig.get();
-				for (Enumeration<String> ep = sc.getInitParameterNames(); ep.hasMoreElements();) {
+			if (servletConfig != null) {
+				for (Enumeration<String> ep = servletConfig.getInitParameterNames(); ep.hasMoreElements();) {
 					String p = ep.nextElement();
-					String initParam = sc.getInitParameter(p);
+					String initParam = servletConfig.getInitParameter(p);
 					set(vr.resolve(p), vr.resolve(initParam));
 				}
 			}
@@ -300,27 +304,152 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
+	 * Returns access to the bean store being used by this builder.
+	 *
+	 * <p>
+	 * Can be used to add more beans to the bean store.
+	 *
+	 * <p>
+	 * The bean store is created by the constructor using the {@link #createBeanStore(Class,RestContext)} method and is initialized with the following beans:
+	 * <ul>
+	 * 	<li>{@link RestContextBuilder}
+	 * 	<li>{@link ServletConfig}
+	 * 	<li>{@link ServletContext}
+	 * 	<li>{@link VarResolver}
+	 * 	<li>{@link Config}
+	 * </ul>
+	 *
+	 * @return The bean store being used by this builder.
+	 */
+	protected BeanStore beanStore() {
+		return beanStore;
+	}
+
+	/**
 	 * Creates the bean store for this builder.
 	 *
+	 * <p>
+	 * Gets called in the constructor to create the bean store used for finding other beans.
+	 *
+	 * <p>
+	 * The bean store is created with the parent root bean store as the parent, allowing any beans in the root bean store to be available
+	 * in this builder.  The root bean store typically pulls from an injection framework such as Spring to allow injected beans to be used.
+	 *
+	 * The resource class can optionally define a <c><jk>public static</jk> BeanStore <jsm>createBeanStore</jk>(...);</c> method to override
+	 * the default bean store created by this method.  The parameters can be any beans available in the root bean store (such as any available
+	 * Spring beans if the top level resource is an instance of SpringRestServlet).
+	 *
+	 * @param resourceClass The resource class.
 	 * @param parentContext The parent context if there is one.
-	 * @param resource The resource object if it's instantiated at this time.
 	 * @return A new bean store.
-	 * @throws Exception If bean store could not be instantiated.
 	 */
-	protected BeanStore createBeanStore(Optional<RestContext> parentContext, Optional<Object> resource) throws Exception {
-		BeanStore x = null;
-		if (resource.isPresent()) {
-			Object r = resource.get();
-			x = BeanStore
-				.of(parentContext.isPresent() ? parentContext.get().getRootBeanStore() : null, r)
-				.beanCreateMethodFinder(BeanStore.class, resource)
-				.find("createBeanStore")
-				.run();
+	protected BeanStore createBeanStore(Class<?> resourceClass, RestContext parentContext) {
+
+		BeanStore x = BeanStore
+			.of(parentContext == null ? null : parentContext.getRootBeanStore())
+			.beanCreateMethodFinder(BeanStore.class, resourceClass)
+			.find("createBeanStore")
+			.run();
+
+		if (x == null && parentContext != null)
+			x = parentContext.getRootBeanStore();
+
+		if (x == null)
+			x = BeanStore.create().build();
+
+		return x;
+	}
+
+	/**
+	 * Returns access to the variable resolver builder.
+	 *
+	 * <p>
+	 * Can be used to add more variables or context objects to the variable resolver.
+	 * These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()} which is
+	 * used to resolve string variables of the form <js>"$X{...}"</js> in various places such as annotations on the REST class and methods.
+	 *
+	 * <p>
+	 * The var resolver is created by the constructor using the {@link #createVarResolver(Class,BeanStore)} method and is initialized with the following beans:
+	 * <ul>
+	 * 	<li>{@link ConfigVar}
+	 * 	<li>{@link FileVar}
+	 * 	<li>{@link SystemPropertiesVar}
+	 * 	<li>{@link EnvVariablesVar}
+	 * 	<li>{@link ArgsVar}
+	 * 	<li>{@link ManifestFileVar}
+	 * 	<li>{@link SwitchVar}
+	 * 	<li>{@link IfVar}
+	 * 	<li>{@link CoalesceVar}
+	 * 	<li>{@link PatternMatchVar}
+	 * 	<li>{@link PatternReplaceVar}
+	 * 	<li>{@link PatternExtractVar}
+	 * 	<li>{@link UpperCaseVar}
+	 * 	<li>{@link LowerCaseVar}
+	 * 	<li>{@link NotEmptyVar}
+	 * 	<li>{@link LenVar}
+	 * 	<li>{@link SubstringVar}
+	 * </ul>
+	 *
+	 * @return The var resolver builder.
+	 */
+	protected VarResolver.Builder varResolver() {
+		return varResolver;
+	}
+
+	/**
+	 * Creates the var resolver builder.
+	 *
+	 * <p>
+	 * Gets called in the constructor to create the var resolver for performing variable resolution in strings.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ol>
+	 * 	<li>Looks for the following method on the resource class and sets it as the implementation bean:
+	 * 		<br><c><jk>public static</jk> VarResolver createVarResolver(<any-bean-types-in-bean-store>) {}</c>
+	 * 	<li>Looks for bean of type {@link org.apache.juneau.svl.VarResolver} in bean store and sets it as the implementation bean.
+	 * 	<li>Looks for the following method on the resource class:
+	 * 		<br><c><jk>public static</jk> VarResolver.Builder createVarResolver(<any-bean-types-in-bean-store>) {}</c>
+	 * 	<li>Looks for bean of type {@link org.apache.juneau.svl.VarResolver.Builder} in bean store and returns a copy of it.
+	 * 	<li>Creates a default builder with default variables.
+	 * </ol>
+	 *
+	 * @param resourceClass The resource class.
+	 * @param beanStore The bean store containing injected beans.
+	 * @return A new bean store.
+	 */
+	protected VarResolver.Builder createVarResolver(Class<?> resourceClass, BeanStore beanStore) {
+
+		VarResolver.Builder x = BeanStore
+			.of(beanStore)
+			.beanCreateMethodFinder(VarResolver.Builder.class, resourceClass)
+			.find("createVarResolver")
+			.run();
+
+		if (x == null) {
+			x = beanStore.getBean(VarResolver.Builder.class).map(y -> y.copy()).orElse(null);
 		}
-		if (x == null && parentContext.isPresent()) {
-			x = parentContext.get().getRootBeanStore();
+
+		if (x == null) {
+			x = VarResolver.create()
+				.defaultVars()
+				.vars(ConfigVar.class)
+				.vars(FileVar.class)
+				.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build());
 		}
-		return BeanStore.of(x, resource.orElse(null));
+
+		VarResolver.Builder x2 = x;
+
+		beanStore.getBean(VarResolver.class).ifPresent(y -> x2.impl(y));
+
+		BeanStore
+			.of(beanStore)
+			.beanCreateMethodFinder(VarResolver.class, resourceClass)
+			.find("createVarResolver")
+			.execute()
+			.ifPresent(y -> x2.impl(y));
+
+		return x2;
 	}
 
 	/**
@@ -371,9 +500,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 	/**
 	 * Performs initialization on this builder.
-	 * 
+	 *
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
-	 * 
+	 *
 	 * @param resource The resource bean. Required.
 	 * @return This object.
 	 * @throws ServletException If hook method calls failed.
@@ -409,49 +538,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Adds the specified {@link Var} classes to this config.
-	 *
-	 * <p>
-	 * These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()} which is
-	 * used to resolve string variables of the form <js>"$X{...}"</js>.
-	 *
-	 * <p>
-	 * See {@link RestContext#getVarResolver()} for a list of predefined variables.
-	 *
-	 * @param vars The {@link Var} classes to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder vars(Class<?>...vars) {
-		this.varResolverBuilder.vars(vars);
-		return this;
-	}
-
-	/**
-	 * Adds a var context object to this config.
-	 *
-	 * <p>
-	 * Var context objects are read-only objects associated with the variable resolver for vars that require external
-	 * information.
-	 *
-	 * <p>
-	 * For example, the {@link ConfigVar} needs access to this resource's {@link Config} object
-	 *
-	 * In this case, we call the following code to add it to the context map:
-	 * <p class='bcode w800'>
-	 * 	config.varBean(Config.<jk>class</jk>, configFile);
-	 * </p>
-	 *
-	 * @param beanType The bean type being added.
-	 * @param bean The bean being added.
-	 * @param <T> The bean type being added.
-	 * @return This object (for method chaining).
-	 */
-	public <T> RestContextBuilder varBean(Class<T> beanType, T bean) {
-		this.varResolverBuilder.bean(beanType, bean);
-		return this;
-	}
-
-	/**
 	 * Overwrites the default config file with a custom config file.
 	 *
 	 * <p>
@@ -466,16 +552,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		this.config = config;
 		return this;
 	}
-
-	/**
-	 * Creates a new {@link ContextProperties} object initialized with the properties defined in this config.
-	 *
-	 * @return A new property store.
-	 */
-	protected ContextPropertiesBuilder createContextPropertiesBuilder() {
-		return ContextProperties.create();
-	}
-
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
@@ -501,29 +577,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public Config getConfig() {
 		return config;
-	}
-
-	/**
-	 * Creates the variable resolver for this resource.
-	 *
-	 * <p>
-	 * The variable resolver returned by this method can resolve the following variables:
-	 * <ul>
-	 * 	<li>{@link SystemPropertiesVar}
-	 * 	<li>{@link EnvVariablesVar}
-	 * 	<li>{@link ConfigVar}
-	 * 	<li>{@link IfVar}
-	 * 	<li>{@link SwitchVar}
-	 * </ul>
-	 *
-	 * <p>
-	 * Note that the variables supported here are only a subset of those returned by
-	 * {@link RestRequest#getVarResolverSession()}.
-	 *
-	 * @return The variable resolver for this resource.  Never <jk>null</jk>.
-	 */
-	public VarResolverBuilder getVarResolverBuilder() {
-		return varResolverBuilder;
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class SwitchVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(SwitchVar.class, SystemPropertiesVar.class).build();
+		VarResolver vr = VarResolver.create().vars(SwitchVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("SwitchVarTest.test", "foobar");
 

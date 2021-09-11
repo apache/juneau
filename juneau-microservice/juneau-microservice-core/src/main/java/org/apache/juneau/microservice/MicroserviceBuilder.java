@@ -48,7 +48,7 @@ public class MicroserviceBuilder {
 	ConfigBuilder configBuilder = Config.create();
 	Boolean consoleEnabled;
 	List<ConsoleCommand> consoleCommands = new ArrayList<>();
-	VarResolverBuilder varResolverBuilder = VarResolver.create().defaultVars().vars(ConfigVar.class);
+	VarResolver.Builder varResolver = VarResolver.create().defaultVars().vars(ConfigVar.class);
 	Scanner consoleReader;
 	PrintWriter consoleWriter;
 	MicroserviceListener listener;
@@ -72,7 +72,7 @@ public class MicroserviceBuilder {
 		this.logConfig = copyFrom.logConfig == null ? null : copyFrom.logConfig.copy();
 		this.consoleEnabled = copyFrom.consoleEnabled;
 		this.configBuilder = copyFrom.configBuilder;
-		this.varResolverBuilder = copyFrom.varResolverBuilder;
+		this.varResolver = copyFrom.varResolver;
 		this.consoleReader = copyFrom.consoleReader;
 		this.consoleWriter = copyFrom.consoleWriter;
 		this.workingDir = copyFrom.workingDir;
@@ -367,7 +367,7 @@ public class MicroserviceBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public MicroserviceBuilder vars(Class<? extends Var>...vars) {
-		varResolverBuilder.vars(vars);
+		varResolver.vars(vars);
 		return this;
 	}
 
@@ -384,7 +384,7 @@ public class MicroserviceBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public <T> MicroserviceBuilder varBean(Class<T> c, T value) {
-		varResolverBuilder.bean(c, value);
+		varResolver.bean(c, value);
 		return this;
 	}
 

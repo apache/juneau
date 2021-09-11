@@ -132,4 +132,14 @@ public class BeanCreateMethodFinder<T> {
 			return (T)method.invoke(resource, args);
 		return def.get();
 	}
+
+	/**
+	 * Executes the matched method and returns the result as an optional.
+	 *
+	 * @return The object returned by the method invocation, or the default value if method was not found, or {@link Optional#empty()}.
+	 * @throws ExecutableException If method invocation threw an exception.
+	 */
+	public Optional<T> execute() throws ExecutableException {
+		return Optional.ofNullable(run());
+	}
 }

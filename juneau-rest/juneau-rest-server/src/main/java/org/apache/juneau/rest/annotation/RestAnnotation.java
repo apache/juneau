@@ -77,6 +77,7 @@ public class RestAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends TargetedAnnotationTBuilder {
 
+		Class<? extends RestContextBuilder> builder = RestContextBuilder.Null.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Null.class;
@@ -691,6 +692,7 @@ public class RestAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Rest {
 
+		private final Class<? extends RestContextBuilder> builder;
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;
 		private final Class<? extends HttpPartSerializer> partSerializer;
@@ -716,6 +718,7 @@ public class RestAnnotation {
 
 		Impl(Builder b) {
 			super(b);
+			this.builder = b.builder;
 			this.disableBodyParam = b.disableBodyParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
@@ -767,6 +770,11 @@ public class RestAnnotation {
 			this.uriRelativity = b.uriRelativity;
 			this.uriResolution = b.uriResolution;
 			postConstruct();
+		}
+
+		@Override /* Rest */
+		public Class<? extends RestContextBuilder> builder() {
+			return builder;
 		}
 
 		@Override /* Rest */

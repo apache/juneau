@@ -103,6 +103,52 @@ public class RestContext extends Context {
 		return Collections.unmodifiableMap(REGISTRY);
 	}
 
+	/**
+	 * Static create method.
+	 *
+	 * <p>
+	 * This is the primary method for creating {@link RestContextBuilder} objects.
+	 *
+	 * <p>
+	 * The builder class can be subclassed by using the {@link Rest#builder()} annotation.
+	 * This can be useful when you want to perform any customizations on the builder class, typically by overriding protected methods that create
+	 * 	the various builders used in the created {@link RestContext} object (which itself can be overridden via {@link RestContextBuilder#contextClass(Class)}).
+	 * The subclass must contain a public constructor that takes in the same arguments passed in to this method.
+	 *
+	 * @param resourceClass
+	 * 	The class annotated with <ja>@Rest</ja>.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param parentContext
+	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
+	 * 	<br>Can be <jk>null</jk> if the bean is a top-level resource.
+	 * @param servletConfig
+	 * 	The servlet config passed into the servlet by the servlet container.
+	 * 	<br>Can be <jk>null</jk> if not available.
+	 * 	<br>If <jk>null</jk>, then some features (such as access to servlet init params) will not be available.
+	 *
+	 * @return A new builder object.
+	 * @throws ServletException Something bad happened.
+	 */
+	public static RestContextBuilder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
+
+		Value<Class<? extends RestContextBuilder>> v = Value.of(RestContextBuilder.class);
+		ClassInfo.of(resourceClass)
+			.getAnnotations(Rest.class)
+			.stream()
+			.filter(x -> x.builder() != RestContextBuilder.Null.class)
+			.forEach(x -> v.set(x.builder()));
+
+		if (v.get() == RestContextBuilder.class)
+			return new RestContextBuilder(resourceClass, parentContext, servletConfig);
+
+		return BeanStore
+			.of(parentContext == null ? null : parentContext.getRootBeanStore())
+			.addBean(Class.class, resourceClass)
+			.addBean(RestContext.class, parentContext)
+			.addBean(ServletConfig.class, servletConfig)
+			.createBean(v.get());
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -181,27 +227,6 @@ public class RestContext extends Context {
 	final StaticFiles staticFilesDefault;
 	final FileFinder fileFinderDefault;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param parentContext
-	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
-	 * 	<br>Can be <jk>null</jk> if the bean is a top-level resource.
-	 * @param servletConfig
-	 * 	The servlet config passed into the servlet by the servlet container.
-	 * 	<br>Can be null if not available.,
-	 * @param resourceClass
-	 * 	The class annotated with <ja>@Rest</ja>.
-	 * 	<br>Can be <jk>null</jk> if the resource bean is provided.
-	 * @param resource
-	 * 	The resource bean.
-	 * 	<br>Can be <jk>null</jk> if not instantiated at the time of this method call.
-	 * @return A new builder object.
-	 * @throws ServletException Something bad happened.
-	 */
-	public static RestContextBuilder create(RestContext parentContext, ServletConfig servletConfig, Class<?> resourceClass, Object resource) throws ServletException {
-		return new RestContextBuilder(Optional.ofNullable(parentContext), Optional.ofNullable(servletConfig), resource == null ? resourceClass : resource.getClass(), Optional.ofNullable(resource));
-	}
 
 	/**
 	 * Constructor.
@@ -1377,7 +1402,7 @@ public class RestContext extends Context {
 		VarResolver x = beanStore.getBean(VarResolver.class).orElse(null);
 
 		if (x == null)
-			x = builder.varResolverBuilder
+			x = builder.varResolver
 				.vars(createVars(resource, builder, beanStore))
 				.bean(Messages.class, messages)
 				.build();
@@ -2047,7 +2072,7 @@ public class RestContext extends Context {
 				// Don't allow specifying yourself as a child.  Causes an infinite loop.
 				if (oc == builder.resourceClass)
 					continue;
-				cb = RestContext.create(this, servletConfig, oc, null);
+				cb = RestContext.create(oc, this, servletConfig);
 				BeanStore bf = BeanStore.of(beanStore, resource).addBean(RestContextBuilder.class, cb);
 				if (bf.getBean(oc).isPresent()) {
 					o = (Supplier<?>)()->bf.getBean(oc).get();  // If we resolved via injection, always get it this way.
@@ -2055,7 +2080,7 @@ public class RestContext extends Context {
 					o = bf.createBean(oc);
 				}
 			} else {
-				cb = RestContext.create(this, servletConfig, o.getClass(), o);
+				cb = RestContext.create(o.getClass(), this, servletConfig);
 			}
 
 			if (path != null)
@@ -2387,8 +2412,6 @@ public class RestContext extends Context {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} - For adding custom vars.
-	 * 	<li class='link'>{@doc RestSvlVariables}
 	 * 	<li class='link'>{@doc RestSvlVariables}
 	 * </ul>
 	 *

@@ -26,7 +26,7 @@ public class LenVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(LenVar.class, SystemPropertiesVar.class).build();
+		VarResolver vr = VarResolver.create().vars(LenVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("LenVarTest.test", "foo bar");
 		System.setProperty("LenVarTest.test2", "1.2.3.4.5");

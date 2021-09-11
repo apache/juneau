@@ -1462,7 +1462,7 @@ public class ConfigTest {
 		cf.set("d", "$B{$A{X}}");
 		cf.set("e", "$D{X}");
 
-		VarResolver vr = new VarResolverBuilder().defaultVars().vars(ALVar.class, BLVar.class).build();
+		VarResolver vr = VarResolver.create().defaultVars().vars(ALVar.class, BLVar.class).build();
 
 		cf = cf.resolving(vr.createSession());
 

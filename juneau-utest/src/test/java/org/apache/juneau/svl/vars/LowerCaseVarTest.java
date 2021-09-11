@@ -26,7 +26,7 @@ public class LowerCaseVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(LowerCaseVar.class, SystemPropertiesVar.class).build();
+		VarResolver vr = VarResolver.create().vars(LowerCaseVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("LowerCaseVar.test", "fooBAR");
 

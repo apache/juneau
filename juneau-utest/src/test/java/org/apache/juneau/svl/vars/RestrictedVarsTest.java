@@ -25,7 +25,7 @@ public class RestrictedVarsTest {
 
 	@Test
 	public void testNoNest() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(NoNestVar.class).build();
+		VarResolver vr = VarResolver.create().vars(NoNestVar.class).build();
 
 		test(vr, "$NoNest{foo}", "foo");
 		test(vr, "$NoNest{$NoNest{foo}}", "$NoNest{foo}");
@@ -63,7 +63,7 @@ public class RestrictedVarsTest {
 
 	@Test
 	public void testNoRecurse() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(XVar.class, NoRecurseVar.class).build();
+		VarResolver vr = VarResolver.create().vars(XVar.class, NoRecurseVar.class).build();
 
 		test(vr, "$NoRecurse{foo}", "$X{foo}");
 		test(vr, "$NoRecurse{$NoRecurse{foo}}", "$X{$X{foo}}");
@@ -89,7 +89,7 @@ public class RestrictedVarsTest {
 
 	@Test
 	public void testNoNestOrRecurse() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(XVar.class, NoEitherVar.class).build();
+		VarResolver vr = VarResolver.create().vars(XVar.class, NoEitherVar.class).build();
 
 		test(vr, "$NoEither{foo}", "$X{foo}");
 		test(vr, "$NoEither{$NoEither{foo}}", "$X{$NoEither{foo}}");

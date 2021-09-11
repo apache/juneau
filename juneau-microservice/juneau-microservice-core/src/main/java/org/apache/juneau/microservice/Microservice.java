@@ -195,7 +195,7 @@ public class Microservice implements ConfigEventListener {
 		// Try to resolve the configuration if not specified.
 		// --------------------------------------------------------------------------------
 		Config config = builder.config;
-		ConfigBuilder configBuilder = builder.configBuilder.varResolver(builder.varResolverBuilder.build()).store(ConfigMemoryStore.DEFAULT);
+		ConfigBuilder configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(ConfigMemoryStore.DEFAULT);
 		if (config == null) {
 			ConfigStore store = builder.configStore;
 			ConfigFileStore cfs = workingDir == null ? ConfigFileStore.DEFAULT : ConfigFileStore.create().directory(workingDir).build();
@@ -225,8 +225,7 @@ public class Microservice implements ConfigEventListener {
 		//-------------------------------------------------------------------------------------------------------------
 		// Var resolver.
 		//-------------------------------------------------------------------------------------------------------------
-		VarResolverBuilder varResolverBuilder = builder.varResolverBuilder;
-		this.varResolver = varResolverBuilder.bean(Config.class, config).build();
+		this.varResolver = builder.varResolver.bean(Config.class, config).build();
 
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.

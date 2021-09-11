@@ -28,7 +28,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(XVar.class).build();
+		VarResolver vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 
 		t = null;
@@ -101,7 +101,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void test2() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(BlankVar.class).build();
+		VarResolver vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
 		t = "${y}";
@@ -132,7 +132,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testEscaped$() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(BlankVar.class).build();
+		VarResolver vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
 		t = "${y}";
@@ -153,7 +153,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testEscapedSequences() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(XVar.class).build();
+		VarResolver vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 		char b = '\\';
 
@@ -193,7 +193,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testParent() throws Exception {
-		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XMultipartVar.class).build();
+		VarResolver vr = VarResolver.create().defaultVars().vars(XMultipartVar.class).build();
 		String t;
 		System.setProperty("a", "a1");
 		System.setProperty("b", "b1");
@@ -219,7 +219,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testFalseTriggers() throws Exception {
-		VarResolverBuilder vrb = new VarResolverBuilder().defaultVars();
+		VarResolver.Builder vrb = VarResolver.create().defaultVars();
 		String in = null;
 
 		// Should reject names with characters outside A-Za-z

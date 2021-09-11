@@ -26,7 +26,7 @@ public class UpperCaseVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(UpperCaseVar.class, SystemPropertiesVar.class).build();
+		VarResolver vr = VarResolver.create().vars(UpperCaseVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("UpperCaseVar.test", "fooBAR");
 

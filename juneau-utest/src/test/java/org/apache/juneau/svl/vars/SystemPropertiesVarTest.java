@@ -26,7 +26,7 @@ public class SystemPropertiesVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolverBuilder().vars(SystemPropertiesVar.class).build();
+		VarResolver vr = VarResolver.create().vars(SystemPropertiesVar.class).build();
 
 		System.setProperty("SystemPropertiesVar.x", "foo");
 		assertEquals("foo", vr.resolve("$S{SystemPropertiesVar.x}"));
