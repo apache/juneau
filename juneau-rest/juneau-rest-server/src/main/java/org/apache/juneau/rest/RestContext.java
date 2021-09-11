@@ -184,30 +184,23 @@ public class RestContext extends Context {
 	/**
 	 * Constructor.
 	 *
-	 * @param resource
-	 * 	The REST servlet or bean annotated with <ja>@Rest</ja>.
-	 * @return A new builder object.
-	 * @throws ServletException Something bad happened.
-	 */
-	public static RestContextBuilder create(Object resource) throws ServletException {
-		return new RestContextBuilder(Optional.empty(), Optional.empty(), resource.getClass(), Optional.of(resource)).init(resource);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param parent
+	 * @param parentContext
 	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
-	 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
+	 * 	<br>Can be <jk>null</jk> if the bean is a top-level resource.
 	 * @param servletConfig
 	 * 	The servlet config passed into the servlet by the servlet container.
+	 * 	<br>Can be null if not available.,
 	 * @param resourceClass
 	 * 	The class annotated with <ja>@Rest</ja>.
+	 * 	<br>Can be <jk>null</jk> if the resource bean is provided.
+	 * @param resource
+	 * 	The resource bean.
+	 * 	<br>Can be <jk>null</jk> if not instantiated at the time of this method call.
 	 * @return A new builder object.
 	 * @throws ServletException Something bad happened.
 	 */
-	static RestContextBuilder create(RestContext parentContext, ServletConfig servletConfig, Class<?> resourceClass, Object resource) throws ServletException {
-		return new RestContextBuilder(Optional.ofNullable(parentContext), Optional.ofNullable(servletConfig), resourceClass, Optional.ofNullable(resource));
+	public static RestContextBuilder create(RestContext parentContext, ServletConfig servletConfig, Class<?> resourceClass, Object resource) throws ServletException {
+		return new RestContextBuilder(Optional.ofNullable(parentContext), Optional.ofNullable(servletConfig), resource == null ? resourceClass : resource.getClass(), Optional.ofNullable(resource));
 	}
 
 	/**

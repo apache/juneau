@@ -369,10 +369,16 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return x;
 	}
 
-	/*
+	/**
+	 * Performs initialization on this builder.
+	 * 
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
+	 * 
+	 * @param resource The resource bean. Required.
+	 * @return This object.
+	 * @throws ServletException If hook method calls failed.
 	 */
-	RestContextBuilder init(Object resource) throws ServletException {
+	public RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource instanceof Supplier ? (Supplier<?>)resource : ()->resource;
 
 		ClassInfo rci = ClassInfo.ofProxy(resource);
