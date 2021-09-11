@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -105,7 +103,7 @@ public class VarResolver {
 	 * @param builder The builder for this object.
 	 */
 	protected VarResolver(Builder builder) {
-		this.vars = builder.vars.toArray(new Var[builder.vars.size()]);
+		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore,x)).toArray(Var[]::new);
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Var v : vars)
@@ -113,6 +111,13 @@ public class VarResolver {
 
 		this.varMap = AMap.unmodifiable(m);
 		this.beanStore = BeanStore.of(builder.beanStore);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Var toVar(BeanStore bs, Object o) {
+		if (o instanceof Class)
+			return bs.createBean(Var.class, (Class<? extends Var>)o);
+		return (Var)o;
 	}
 
 	/**
@@ -129,7 +134,7 @@ public class VarResolver {
 	 */
 	public static class Builder {
 
-		final List<Var> vars;
+		final VarList vars;
 		BeanStore beanStore;
 		VarResolver impl;
 
@@ -137,7 +142,7 @@ public class VarResolver {
 		 * Constructor.
 		 */
 		protected Builder() {
-			vars = AList.create();
+			vars = VarList.create();
 			beanStore = BeanStore.create().build();
 		}
 
@@ -147,7 +152,7 @@ public class VarResolver {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(VarResolver copyFrom) {
-			vars = new ArrayList<>(Arrays.asList(copyFrom.vars));
+			vars = VarList.of(copyFrom.vars);
 			beanStore = BeanStore.of(copyFrom.beanStore);
 		}
 
@@ -157,7 +162,7 @@ public class VarResolver {
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
-			vars = new ArrayList<>(copyFrom.vars);
+			vars = copyFrom.vars.copy();
 			beanStore = BeanStore.of(copyFrom.beanStore);
 			impl = copyFrom.impl;
 		}
@@ -170,9 +175,9 @@ public class VarResolver {
 		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
 		 * @return This object .
 		 */
-		public Builder vars(Class<?>...values) {
-			for (Class<?> v : values)
-				vars.add(castOrCreate(Var.class, v));
+		@SafeVarargs
+		public final Builder vars(Class<? extends Var>...values) {
+			vars.append(values);
 			return this;
 		}
 
@@ -185,7 +190,7 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public Builder vars(Var...values) {
-			vars.addAll(Arrays.asList(values));
+			vars.append(values);
 			return this;
 		}
 
@@ -198,8 +203,7 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public Builder vars(VarList values) {
-			for (Object o : values)
-				vars.add(castOrCreate(Var.class, o));
+			vars.append(values);
 			return this;
 		}
 
@@ -240,22 +244,8 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public Builder defaultVars() {
-			return vars(
-				SystemPropertiesVar.class,
-				EnvVariablesVar.class,
-				ManifestFileVar.class,
-				ArgsVar.class,
-				SwitchVar.class,
-				IfVar.class,
-				CoalesceVar.class,
-				PatternMatchVar.class,
-				PatternReplaceVar.class,
-				PatternExtractVar.class,
-				UpperCaseVar.class,
-				LowerCaseVar.class,
-				NotEmptyVar.class,
-				LenVar.class,
-				SubstringVar.class);
+			vars.addDefault();
+			return this;
 		}
 
 		/**

@@ -46,7 +46,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
@@ -64,7 +63,6 @@ import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -272,7 +270,10 @@ public class RestContext extends Context {
 
 			Messages m = messages = createMessages(r, builder);
 
-			VarResolver vr = varResolver = createVarResolver(r, builder, bf, m);
+			VarResolver vr = varResolver = builder
+				.varResolver()
+				.bean(Messages.class, messages)
+				.build();
 			bf.addBean(VarResolver.class, vr);
 
 			config = builder.config.resolving(vr.createSession());
@@ -1296,7 +1297,7 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
 	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
-	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,RestContextBuilder,BeanStore,Messages)}.
+	 * @param varResolver The variable resolver configured on this bean.
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
 	 */
@@ -1340,7 +1341,7 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
 	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
-	 * @param varResolver The variable resolver configured on this bean created by {@link #createVarResolver(Object,RestContextBuilder,BeanStore,Messages)}.
+	 * @param varResolver The variable resolver configured on this bean.
 	 * @return The REST API builder for this REST resource.
 	 * @throws Exception If REST API builder could not be instantiated.
 	 */
@@ -1367,117 +1368,6 @@ public class RestContext extends Context {
 
 		return x;
 
-	}
-
-	/**
-	 * Instantiates the variable resolver for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for a static or non-static <c>createVarResolver()</> method that returns <c>{@link VarResolver}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a new {@link VarResolver} using the variables returned by {@link #createVars(Object,RestContextBuilder,BeanStore)}.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
-	 * @param messages The localized messages of this bean.
-	 * @return The variable resolver for this REST resource.
-	 * @throws Exception If variable resolver could not be instantiated.
-	 */
-	protected VarResolver createVarResolver(Object resource, RestContextBuilder builder, BeanStore beanStore, Messages messages) throws Exception {
-
-		VarResolver x = beanStore.getBean(VarResolver.class).orElse(null);
-
-		if (x == null)
-			x = builder.varResolver
-				.vars(createVars(resource, builder, beanStore))
-				.bean(Messages.class, messages)
-				.build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(VarResolver.class, x)
-			.beanCreateMethodFinder(VarResolver.class, resource)
-			.find("createVarResolver")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the variable resolver variables for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for a static or non-static <c>createVars()</> method that returns <c>{@link VarList}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a new {@link VarList} using default variables.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link #createBeanStore(Object,RestContextBuilder,RestContext)}.
-	 * @return The variable resolver variables for this REST resource.
-	 * @throws Exception If variable resolver variables could not be instantiated.
-	 */
-	@SuppressWarnings("unchecked")
-	protected VarList createVars(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		VarList x = beanStore.getBean(VarList.class).orElse(null);
-
-		if (x == null)
-			x = VarList.of(
-				FileVar.class,
-				LocalizationVar.class,
-				RequestAttributeVar.class,
-				RequestFormDataVar.class,
-				RequestHeaderVar.class,
-				RequestPathVar.class,
-				RequestQueryVar.class,
-				RequestVar.class,
-				RequestSwaggerVar.class,
-				SerializedRequestAttrVar.class,
-				ServletInitParamVar.class,
-				SwaggerVar.class,
-				UrlVar.class,
-				UrlEncodeVar.class,
-				HtmlWidgetVar.class
-			);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(VarList.class, x)
-			.beanCreateMethodFinder(VarList.class, resource)
-			.find("createVars")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**

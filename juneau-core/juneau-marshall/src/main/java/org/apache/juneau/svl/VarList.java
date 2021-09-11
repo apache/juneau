@@ -12,7 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static java.util.Arrays.*;
+
 import java.util.*;
+
+import org.apache.juneau.svl.vars.*;
 
 /**
  * Simple list of variables that can consist of either variable classes or instances.
@@ -22,13 +26,22 @@ public class VarList extends ArrayList<Object> {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Returns an empty list of variables.
+	 *
+	 * @return A new empty list of variables.
+	 */
+	public static VarList create() {
+		return new VarList();
+	}
+
+	/**
 	 * Creates a new list of variables.
 	 *
 	 * @param vars The variables to create.
 	 * @return A new list of variables.
 	 */
 	public static VarList of(Var...vars) {
-		return new VarList().append(vars);
+		return create().append(vars);
 	}
 
 	/**
@@ -37,31 +50,112 @@ public class VarList extends ArrayList<Object> {
 	 * @param vars The variables to create.
 	 * @return A new list of variables.
 	 */
-	@SuppressWarnings("unchecked")
-	public static VarList of(Class<? extends Var>...vars) {
-		return new VarList().append(vars);
+	@SafeVarargs
+	public static final VarList of(Class<? extends Var>...vars) {
+		return create().append(vars);
 	}
 
 	/**
-	 * Appends a list of variables to this list.
+	 * Constructor.
+	 */
+	protected VarList() {
+		super();
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The list to copy.
+	 */
+	protected VarList(VarList copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
+	 * Adds a list of variables to this list.
 	 *
 	 * @param vars The variables to append to this list.
 	 * @return This object (for method chaining).
 	 */
-	private VarList append(Var...vars) {
-		addAll(Arrays.asList(vars));
+	public VarList append(Var...vars) {
+		addAll(asList(vars));
 		return this;
 	}
 
 	/**
-	 * Appends a list of variables to this list.
+	 * Adds a list of variables to this list.
 	 *
 	 * @param vars The variables to append to this list.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("unchecked")
-	private VarList append(Class<? extends Var>...vars) {
-		addAll(Arrays.asList(vars));
+	public VarList append(VarList vars) {
+		addAll(vars);
 		return this;
+	}
+
+	/**
+	 * Adds a list of variables to this list.
+	 *
+	 * @param vars The variables to append to this list.
+	 * @return This object (for method chaining).
+	 */
+	@SafeVarargs
+	public final VarList append(Class<? extends Var>...vars) {
+		addAll(asList(vars));
+		return this;
+	}
+
+	/**
+	 * Adds the default variables to this list.
+	 *
+	 * <p>
+	 * The default variables are:
+	 * <ul>
+	 * 	<li>{@link SystemPropertiesVar}
+	 * 	<li>{@link EnvVariablesVar}
+	 * 	<li>{@link ArgsVar}
+	 * 	<li>{@link ManifestFileVar}
+	 * 	<li>{@link SwitchVar}
+	 * 	<li>{@link IfVar}
+	 * 	<li>{@link CoalesceVar}
+	 * 	<li>{@link PatternMatchVar}
+	 * 	<li>{@link PatternReplaceVar}
+	 * 	<li>{@link PatternExtractVar}
+	 * 	<li>{@link UpperCaseVar}
+	 * 	<li>{@link LowerCaseVar}
+	 * 	<li>{@link NotEmptyVar}
+	 * 	<li>{@link LenVar}
+	 * 	<li>{@link SubstringVar}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public VarList addDefault() {
+		return append(
+			SystemPropertiesVar.class,
+			EnvVariablesVar.class,
+			ManifestFileVar.class,
+			ArgsVar.class,
+			SwitchVar.class,
+			IfVar.class,
+			CoalesceVar.class,
+			PatternMatchVar.class,
+			PatternReplaceVar.class,
+			PatternExtractVar.class,
+			UpperCaseVar.class,
+			LowerCaseVar.class,
+			NotEmptyVar.class,
+			LenVar.class,
+			SubstringVar.class
+		);
+	}
+
+	/**
+	 * Makes a copy of this list.
+	 *
+	 * @return A new copy of this list.
+	 */
+	public VarList copy() {
+		return new VarList(this);
 	}
 }

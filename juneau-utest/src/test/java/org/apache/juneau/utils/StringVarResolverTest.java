@@ -217,14 +217,15 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	// Test false triggers.
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testFalseTriggers() throws Exception {
 		VarResolver.Builder vrb = VarResolver.create().defaultVars();
 		String in = null;
 
 		// Should reject names with characters outside A-Za-z
-		for (Class<?> c : new Class[]{InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class}) {
-			assertThrown(()->vrb.vars(c)).exists();
+		for (Class<? extends Var> c : new Class[]{InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class}) {
+			assertThrown(()->vrb.copy().vars(c).build()).exists();
 		}
 
 		VarResolver vr = vrb.build();

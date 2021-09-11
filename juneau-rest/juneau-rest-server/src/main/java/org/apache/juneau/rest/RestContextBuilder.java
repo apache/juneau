@@ -37,6 +37,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
@@ -124,7 +125,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	ServletContext servletContext;
 
 	Config config;
-	VarResolver.Builder varResolver;
+	private VarResolver.Builder varResolver;
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
 		allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
@@ -405,18 +406,23 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ol>
-	 * 	<li>Looks for the following method on the resource class and sets it as the implementation bean:
+	 * 	<li>
+	 * 		Looks for the following method on the resource class and sets it as the implementation bean:
 	 * 		<br><c><jk>public static</jk> VarResolver createVarResolver(<any-bean-types-in-bean-store>) {}</c>
-	 * 	<li>Looks for bean of type {@link org.apache.juneau.svl.VarResolver} in bean store and sets it as the implementation bean.
-	 * 	<li>Looks for the following method on the resource class:
+	 * 	<li>
+	 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver} in bean store and sets it as the implementation bean.
+	 * 	<li>
+	 * 		Looks for the following method on the resource class:
 	 * 		<br><c><jk>public static</jk> VarResolver.Builder createVarResolver(<any-bean-types-in-bean-store>) {}</c>
-	 * 	<li>Looks for bean of type {@link org.apache.juneau.svl.VarResolver.Builder} in bean store and returns a copy of it.
-	 * 	<li>Creates a default builder with default variables.
+	 * 	<li>
+	 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver.Builder} in bean store and returns a copy of it.
+	 * 	<li>
+	 * 		Creates a default builder with default variables pulled from {@link #createVars(Class,BeanStore)}.
 	 * </ol>
 	 *
 	 * @param resourceClass The resource class.
 	 * @param beanStore The bean store containing injected beans.
-	 * @return A new bean store.
+	 * @return A new var resolver builder.
 	 */
 	protected VarResolver.Builder createVarResolver(Class<?> resourceClass, BeanStore beanStore) {
 
@@ -433,7 +439,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		if (x == null) {
 			x = VarResolver.create()
 				.defaultVars()
-				.vars(ConfigVar.class)
+				.vars(createVars(resourceClass, beanStore))
 				.vars(FileVar.class)
 				.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build());
 		}
@@ -444,12 +450,67 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		BeanStore
 			.of(beanStore)
+			.addBean(VarResolver.Builder.class, x)
 			.beanCreateMethodFinder(VarResolver.class, resourceClass)
 			.find("createVarResolver")
 			.execute()
 			.ifPresent(y -> x2.impl(y));
 
 		return x2;
+	}
+
+	/**
+	 * Instantiates the variable resolver variables for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ol>
+	 * 	<li>
+	 * 		Looks for the following method on the resource class:
+	 * 		<br><c><jk>public static</jk> VarList createVars(<any-bean-types-in-bean-store>) {}</c>
+	 * 	<li>
+	 * 		Looks for bean of type {@link org.apache.juneau.svl.VarList} in bean store and returns a copy of it.
+	 * 	<li>
+	 * 		Creates a default builder with default variables.
+	 * </ol>
+	 *
+	 * @param resourceClass The resource class.
+	 * @param beanStore The bean store containing injected beans.
+	 * @return A new var resolver variable list.
+	 */
+	protected VarList createVars(Class<?> resourceClass, BeanStore beanStore) {
+
+		VarList x = beanStore.getBean(VarList.class).map(y -> y.copy()).orElse(null);
+
+		if (x == null)
+			x = VarList.of(
+				ConfigVar.class,
+				FileVar.class,
+				LocalizationVar.class,
+				RequestAttributeVar.class,
+				RequestFormDataVar.class,
+				RequestHeaderVar.class,
+				RequestPathVar.class,
+				RequestQueryVar.class,
+				RequestVar.class,
+				RequestSwaggerVar.class,
+				SerializedRequestAttrVar.class,
+				ServletInitParamVar.class,
+				SwaggerVar.class,
+				UrlVar.class,
+				UrlEncodeVar.class,
+				HtmlWidgetVar.class
+			).addDefault();
+
+		x = BeanStore
+			.of(beanStore, resourceClass)
+			.addBean(VarList.class, x)
+			.beanCreateMethodFinder(VarList.class, resourceClass)
+			.find("createVars")
+			.withDefault(x)
+			.run();
+
+		return x;
 	}
 
 	/**
