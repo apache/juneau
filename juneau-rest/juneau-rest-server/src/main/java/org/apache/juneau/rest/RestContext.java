@@ -244,28 +244,25 @@ public class RestContext extends Context {
 		try {
 			this.builder = builder;
 
-			this.resourceClass = builder.resourceClass;
-			this.resource = builder.resource;
-			Object r = getResource();
-
+			resourceClass = builder.resourceClass;
+			resource = builder.resource;
 			parentContext = builder.parentContext;
-
 			rootBeanStore = builder.beanStore();
 
 			beanStore = rootBeanStore.copy().build();
 			beanStore
 				.addBean(BeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
-				.addBean(Object.class, r)
+				.addBean(Object.class, resource.get())
 				.addBean(RestContextBuilder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
-
 			BeanStore bs = beanStore;
 
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
 
+			Object r = resource.get();
 			Messages m = messages = createMessages(r, builder);
 
 			VarResolver vr = varResolver = builder
@@ -325,7 +322,7 @@ public class RestContext extends Context {
 			debugEnablement = createDebugEnablement(r, builder, bs);
 
 			path = ofNullable(builder.path).orElse("");
-			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + path;
+			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
 
 			String p = path;
 			if (! p.endsWith("/*"))
