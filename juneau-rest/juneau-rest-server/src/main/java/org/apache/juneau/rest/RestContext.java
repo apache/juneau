@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -52,7 +51,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -261,9 +259,9 @@ public class RestContext extends Context {
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
+			messages = bs.add(Messages.class, builder.messages().build());
 
 			Object r = resource.get();
-			Messages m = messages = createMessages(r, builder);
 
 			VarResolver vr = varResolver = builder
 				.varResolver()
@@ -360,7 +358,7 @@ public class RestContext extends Context {
 
 			restChildren = createRestChildren(r, builder, bs, builder.inner);
 
-			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, m, vr);
+			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, vr);
 
 		} catch (BasicHttpException e) {
 			_initException = e;
@@ -1127,7 +1125,7 @@ public class RestContext extends Context {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
-	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
+	 * @param messages The localized messages configured on this bean.
 	 * @param varResolver The variable resolver configured on this bean.
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
@@ -1171,7 +1169,7 @@ public class RestContext extends Context {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
-	 * @param messages The localized messages configured on this bean created by {@link #createMessages(Object,RestContextBuilder)}.
+	 * @param messages The localized messages configured on this bean.
 	 * @param varResolver The variable resolver configured on this bean.
 	 * @return The REST API builder for this REST resource.
 	 * @throws Exception If REST API builder could not be instantiated.
@@ -1380,80 +1378,6 @@ public class RestContext extends Context {
 		}
 
 		return x;
-	}
-
-	/**
-	 * Instantiates the messages for this REST object.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @return The messages for this REST object.
-	 * @throws Exception An error occurred.
-	 */
-	protected Messages createMessages(Object resource, RestContextBuilder builder) throws Exception {
-
-		Messages x = createMessagesBuilder(resource, builder).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(Messages.class, x)
-			.beanCreateMethodFinder(Messages.class, resource)
-			.find("createMessages")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the Messages builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createMessages(Object,RestContextBuilder)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @return The messages builder for this REST resource.
-	 * @throws Exception If messages builder could not be instantiated.
-	 */
-	protected MessagesBuilder createMessagesBuilder(Object resource, RestContextBuilder builder) throws Exception {
-
-		Tuple2<Class<?>,String>[] mbl = builder.messages.toArray(new Tuple2[0]);
-		MessagesBuilder x = null;
-
-		for (int i = mbl.length-1; i >= 0; i--) {
-			Class<?> c = firstNonNull(mbl[i].getA(), resource.getClass());
-			String value = mbl[i].getB();
-			if (isJsonObject(value,true)) {
-				MessagesString ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
-				x = Messages.create(c).name(ms.name).baseNames(split(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
-			} else {
-				x = Messages.create(c).name(value).parent(x == null ? null : x.build());
-			}
-		}
-
-		if (x == null)
-			x = Messages.create(resource.getClass());
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(MessagesBuilder.class, x)
-			.beanCreateMethodFinder(MessagesBuilder.class, resource)
-			.find("createMessagesBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	private static class MessagesString {
-		public String name;
-		public String[] baseNames;
-		public String locale;
 	}
 
 	/**

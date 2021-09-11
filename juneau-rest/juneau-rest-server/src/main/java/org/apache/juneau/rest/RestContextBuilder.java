@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -124,6 +125,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private Logger logger;
 	private ThrownStore.Builder thrownStore;
 	private MethodExecStore.Builder methodExecStore;
+	private Messages.Builder messages;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -162,8 +164,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	ParserGroup.Builder parsers = ParserGroup.create();
 	HttpPartSerializer.Creator partSerializer = HttpPartSerializer.creator().set(OpenApiSerializer.class);
 	HttpPartParser.Creator partParser = HttpPartParser.creator().set(OpenApiParser.class);
-
-	List<Tuple2<Class<?>,String>> messages = new ArrayList<>();
 
 	Enablement debugDefault, debug;
 
@@ -241,8 +241,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			this.inner = servletConfig;
 			this.parentContext = parentContext;
 
-			ClassInfo rci = ClassInfo.of(resourceClass);
-
 			// Pass-through default values.
 			if (parentContext != null) {
 				callLoggerDefault = parentContext.callLoggerDefault;
@@ -280,10 +278,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				}
 			}
 
-			VarResolverSession vrs = vr.createSession();
-			AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
-			apply(al);
-
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
@@ -315,10 +309,16 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	public RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource instanceof Supplier ? (Supplier<?>)resource : ()->resource;
 
+		ClassInfo rci = ClassInfo.of(resourceClass);
 		BeanStore bs = beanStore();
 
 		runInitHooks(bs, resource());
 		logger();
+		messages();
+
+		VarResolverSession vrs = varResolver().build().createSession();
+		AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
+		apply(al);
 
 		return this;
 	}
@@ -912,11 +912,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	/**
 	 * Instantiates the method execution statistics store for this REST resource.
 	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
 	 * @return The stack trace store for this REST resource.
 	 */
 	protected MethodExecStore.Builder createMethodExecStore(BeanStore beanStore, Supplier<?> resource) {
@@ -947,6 +946,68 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(MethodExecStore.Builder.class, v.get())
 			.beanCreateMethodFinder(MethodExecStore.class, r)
 			.find("createMethodExecStore")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the builder for the {@link Messages} object in the REST context.
+	 *
+	 * @return The builder for the {@link Messages} object in the REST context.
+	 */
+	public final Messages.Builder messages() {
+		if (messages == null)
+			messages = createMessages(beanStore(), resource());
+		return messages;
+	}
+
+	/**
+	 * Sets the builder for the {@link MethodExecStore} object in the REST context.
+	 *
+	 * @param value The builder for the {@link MethodExecStore} object in the REST context.
+	 * @return This object.
+	 * @throws RuntimeException If {@link #init(Object)} has not been called.
+	 */
+	public final RestContextBuilder messages(Messages value) {
+		messages().impl(value);
+		return this;
+	}
+
+	/**
+	 * Instantiates the messages for this REST object.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The messages builder for this REST object.
+	 */
+	protected Messages.Builder createMessages(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<Messages.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, resource)
+			.beanCreateMethodFinder(Messages.Builder.class, r)
+			.find("createMessages")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				Messages
+					.create(r.getClass())
+			);
+		}
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(Messages.Builder.class, v.get())
+			.beanCreateMethodFinder(Messages.class, r)
+			.find("createMessages")
 			.execute()
 			.ifPresent(x -> v.get().impl(x));
 
@@ -2300,7 +2361,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder messages(Class<?> baseClass, String bundlePath) {
-		messages.add(0, Tuple2.of(baseClass, bundlePath));
+		messages().location(baseClass, bundlePath);
 		return this;
 	}
 
@@ -2315,7 +2376,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder messages(String bundlePath) {
-		messages.add(0, Tuple2.of(null, bundlePath));
+		messages().location(null, bundlePath);
 		return this;
 	}
 

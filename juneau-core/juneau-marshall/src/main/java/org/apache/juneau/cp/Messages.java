@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ResourceBundleUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -20,6 +22,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.utils.*;
 
 /**
  * An enhanced {@link ResourceBundle}.
@@ -87,7 +93,7 @@ import org.apache.juneau.collections.*;
  * 	</ul>
  *
  * <p>
- * 	These patterns can be customized using the {@link MessagesBuilder#baseNames(String...)} method.
+ * 	These patterns can be customized using the {@link Builder#baseNames(String...)} method.
  *
  * <p>
  * 	Localized messages can be retrieved in the following way:
@@ -119,8 +125,8 @@ public class Messages extends ResourceBundle {
 	 * 	The class we're creating this object for.
 	 * @return A new builder.
 	 */
-	public static final MessagesBuilder create(Class<?> forClass) {
-		return new MessagesBuilder(forClass);
+	public static final Builder create(Class<?> forClass) {
+		return new Builder(forClass);
 	}
 
 	/**
@@ -152,15 +158,14 @@ public class Messages extends ResourceBundle {
 	/**
 	 * Constructor.
 	 *
-	 * @param forClass
-	 * 	The class we're creating this object for.
-	 * @param rb
-	 * 	The resource bundle we're encapsulating.  Can be <jk>null</jk>.
-	 * @param locale The locale of these messages.
-	 * @param parent
-	 * 	The parent resource.  Can be <jk>null</jk>.
+	 * @param builder
+	 * 	The builder for this object.
 	 */
-	public Messages(Class<?> forClass, ResourceBundle rb, Locale locale, Messages parent) {
+	protected Messages(Builder builder) {
+		this(builder.forClass, builder.getBundle(), builder.locale, builder.parent);
+	}
+
+	Messages(Class<?> forClass, ResourceBundle rb, Locale locale, Messages parent) {
 		this.c = forClass;
 		this.rb = rb;
 		this.parent = parent;
@@ -193,6 +198,178 @@ public class Messages extends ResourceBundle {
 		this.keyMap = Collections.unmodifiableMap(new LinkedHashMap<>(keyMap));
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
+
+	/**
+	 * The builder for this object.
+	 */
+	public static class Builder {
+
+		Class<?> forClass;
+		Locale locale = Locale.getDefault();
+		Messages impl;
+		String name;
+		Messages parent;
+		List<Tuple2<Class<?>,String>> locations = new ArrayList<>();
+
+		private String[] baseNames = {"{package}.{name}","{package}.i18n.{name}","{package}.nls.{name}","{package}.messages.{name}"};
+
+		/**
+		 * Constructor.
+		 *
+		 * @param forClass The base class.
+		 */
+		protected Builder(Class<?> forClass) {
+			this.forClass = forClass;
+			this.name = forClass.getSimpleName();
+		}
+
+		/**
+		 * Adds a parent bundle.
+		 *
+		 * @param parent The parent bundle.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder parent(Messages parent) {
+			this.parent = parent;
+			return this;
+		}
+
+		/**
+		 * Specifies the bundle name (e.g. <js>"Messages"</js>).
+		 *
+		 * @param name
+		 * 	The bundle name.
+		 * 	<br>If <jk>null</jk>, the forClass class name is used.
+		 * @return This object.
+		 */
+		public Builder name(String name) {
+			this.name = isEmpty(name) ? forClass.getSimpleName() : name;
+			return this;
+		}
+
+		/**
+		 * Specifies the base name patterns to use for finding the resource bundle.
+		 *
+		 * @param baseNames
+		 * 	The bundle base names.
+		 * 	<br>The default is the following:
+		 * 	<ul>
+		 * 		<li><js>"{package}.{name}"</js>
+		 * 		<li><js>"{package}.i18n.{name}"</js>
+		 * 		<li><js>"{package}.nls.{name}"</js>
+		 * 		<li><js>"{package}.messages.{name}"</js>
+		 * 	</ul>
+		 * @return This object.
+		 */
+		public Builder baseNames(String...baseNames) {
+			this.baseNames = baseNames == null ? new String[]{} : baseNames;
+			return this;
+		}
+
+		/**
+		 * Specifies the locale.
+		 *
+		 * @param locale
+		 * 	The locale.
+		 * 	If <jk>null</jk>, the default locale is used.
+		 * @return This object.
+		 */
+		public Builder locale(Locale locale) {
+			this.locale = locale == null ? Locale.getDefault() : locale;
+			return this;
+		}
+
+		/**
+		 * Specifies the locale.
+		 *
+		 * @param locale
+		 * 	The locale.
+		 * 	If <jk>null</jk>, the default locale is used.
+		 * @return This object.
+		 */
+		public Builder locale(String locale) {
+			return locale(locale == null ? null : Locale.forLanguageTag(locale));
+		}
+
+		/**
+		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(Messages value) {
+			this.impl = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a location of where to look for messages.
+		 *
+		 * @param baseClass The base class.
+		 * @param bundlePath The bundle path.
+		 * @return This object.
+		 */
+		public Builder location(Class<?> baseClass, String bundlePath) {
+			this.locations.add(0, Tuple2.of(baseClass, bundlePath));
+			return this;
+		}
+
+		/**
+		 * Creates a new {@link Messages} based on the setting of this builder.
+		 *
+		 * @return A new {@link Messages} object.
+		 */
+		public Messages build() {
+
+			if (impl != null)
+				return impl;
+
+			if (! locations.isEmpty()) {
+				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
+
+				Builder x = null;
+
+				for (int i = mbl.length-1; i >= 0; i--) {
+					Class<?> c = firstNonNull(mbl[i].getA(), forClass);
+					String value = mbl[i].getB();
+					if (isJsonObject(value, true)) {
+						MessagesString ms;
+						try {
+							ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
+						} catch (ParseException e) {
+							throw runtimeException(e);
+						}
+						x = Messages.create(c).name(ms.name).baseNames(split(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
+					} else {
+						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
+					}
+				}
+
+				return x == null ? null : x.build();  // Shouldn't be null.
+			}
+
+			return new Messages(this);
+		}
+
+		private static class MessagesString {
+			public String name;
+			public String[] baseNames;
+			public String locale;
+		}
+
+		ResourceBundle getBundle() {
+			ClassLoader cl = forClass.getClassLoader();
+			OMap m = OMap.of("name", name, "package", forClass.getPackage().getName());
+			for (String bn : baseNames) {
+				bn = StringUtils.replaceVars(bn, m);
+				ResourceBundle rb = findBundle(bn, locale, cl);
+				if (rb != null)
+					return rb;
+			}
+			return null;
+		}
+	}
+
 
 	/**
 	 * Returns this message bundle for the specified locale.

@@ -736,13 +736,13 @@ public @interface Rest {
 	 * <p>
 	 * There are two possible formats:
 	 * <ul>
-	 * 	<li>A simple string - Represents the {@link MessagesBuilder#name(String) name} of the resource bundle.
+	 * 	<li>A simple string - Represents the {@link org.apache.juneau.cp.Messages.Builder#name(String) name} of the resource bundle.
 	 * 		<br><br><i>Example:</i>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Bundle name is Messages.properties.</jc>
 	 * 	<ja>@Rest</ja>(messages=<js>"Messages"</js>)
 	 * 		</p>
-	 * 	<li>Simplified JSON - Represents parameters for the {@link MessagesBuilder} class.
+	 * 	<li>Simplified JSON - Represents parameters for the {@link org.apache.juneau.cp.Messages.Builder} class.
 	 * 		<br><br><i>Example:</i>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Bundles can be found in two packages.</jc>
