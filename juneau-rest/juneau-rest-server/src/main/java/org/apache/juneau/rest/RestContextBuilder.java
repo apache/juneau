@@ -123,6 +123,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private VarResolver.Builder varResolver;
 	private Logger logger;
 	private ThrownStore.Builder thrownStore;
+	private MethodExecStore.Builder methodExecStore;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -879,6 +880,73 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(ThrownStore.Builder.class, v.get())
 			.beanCreateMethodFinder(ThrownStore.class, r)
 			.find("createThrownStore")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the builder for the {@link MethodExecStore} object in the REST context.
+	 *
+	 * @return The builder for the {@link MethodExecStore} object in the REST context.
+	 */
+	public final MethodExecStore.Builder methodExecStore() {
+		if (methodExecStore == null)
+			methodExecStore = createMethodExecStore(beanStore(), resource());
+		return methodExecStore;
+	}
+
+	/**
+	 * Sets the builder for the {@link MethodExecStore} object in the REST context.
+	 *
+	 * @param value The builder for the {@link MethodExecStore} object in the REST context.
+	 * @return This object.
+	 * @throws RuntimeException If {@link #init(Object)} has not been called.
+	 */
+	public final RestContextBuilder methodExecStore(MethodExecStore value) {
+		methodExecStore().impl(value);
+		return this;
+	}
+
+	/**
+	 * Instantiates the method execution statistics store for this REST resource.
+	 *
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @return The stack trace store for this REST resource.
+	 */
+	protected MethodExecStore.Builder createMethodExecStore(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodExecStore.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(MethodExecStore.Builder.class).map(x -> x.copy()).ifPresent(x->v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodExecStore.Builder.class, v.get())
+			.beanCreateMethodFinder(MethodExecStore.Builder.class, r)
+			.find("createMethodExecStore")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				MethodExecStore
+					.create()
+					.beanStore(beanStore)
+			);
+		}
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodExecStore.Builder.class, v.get())
+			.beanCreateMethodFinder(MethodExecStore.class, r)
+			.find("createMethodExecStore")
 			.execute()
 			.ifPresent(x -> v.get().impl(x));
 

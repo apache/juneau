@@ -34,26 +34,20 @@ public class MethodExecStore_Test {
 		assertObject(MethodExecStore.create().build()).isType(MethodExecStore.class);
 	}
 
-	public static class A1 extends MethodExecStore{}
+	public static class A1 extends MethodExecStore{
+		protected A1(Builder builder) {
+			super(builder);
+		}
+	}
 
 	@Test
 	public void a02_builder_implClass() {
 		assertObject(MethodExecStore.create().implClass(A1.class).build()).isType(A1.class);
 	}
 
-	@Test
-	public void a03_builder_defaultImplClass() {
-		MethodExecStoreBuilder b = new MethodExecStoreBuilder() {
-			@Override
-			protected Class<? extends MethodExecStore> getDefaultImplClass() {
-				return A1.class;
-			}
-		};
-		assertObject(b.build()).isType(A1.class);
-	}
-
 	public static class A4 extends MethodExecStore {
-		public A4(MethodExecStoreBuilder b) throws Exception {
+		public A4(MethodExecStore.Builder b) throws Exception {
+			super(b);
 			throw new RuntimeException("foobar");
 		}
 	}
@@ -66,14 +60,16 @@ public class MethodExecStore_Test {
 	public static class A5a {}
 
 	public static class A5b extends MethodExecStore {
-		public A5b(MethodExecStoreBuilder b, A5a x) throws Exception {
+		public A5b(MethodExecStore.Builder b, A5a x) throws Exception {
+			super(b);
 			if (x == null)
 				throw new RuntimeException("Bad");
 		}
 	}
 
 	public static class A5c extends MethodExecStore {
-		public A5c(MethodExecStoreBuilder b, Optional<A5a> x) throws Exception {
+		public A5c(MethodExecStore.Builder b, Optional<A5a> x) throws Exception {
+			super(b);
 			if (x == null)
 				throw new RuntimeException("Bad");
 		}
@@ -95,7 +91,7 @@ public class MethodExecStore_Test {
 	public static class A6a {}
 
 	public static class A6b extends MethodExecStats {
-		public A6b(MethodExecStatsBuilder b, A6a x) throws Exception {
+		public A6b(MethodExecStats.Builder b, A6a x) throws Exception {
 			super(b);
 			if (x == null)
 				throw new RuntimeException("Bad");
@@ -103,7 +99,7 @@ public class MethodExecStore_Test {
 	}
 
 	public static class A6c extends MethodExecStats {
-		public A6c(MethodExecStatsBuilder b, Optional<A6a> x) throws Exception {
+		public A6c(MethodExecStats.Builder b, Optional<A6a> x) throws Exception {
 			super(b);
 			if (x == null)
 				throw new RuntimeException("Bad");

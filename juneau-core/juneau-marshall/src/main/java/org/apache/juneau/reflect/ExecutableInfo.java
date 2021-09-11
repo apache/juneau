@@ -381,6 +381,14 @@ public abstract class ExecutableInfo {
 					if (isPublic())
 						return false;
 					break;
+				case PROTECTED:
+					if (isNotProtected())
+						return false;
+					break;
+				case NOT_PROTECTED:
+					if (isProtected())
+						return false;
+					break;
 				case STATIC:
 					if (isNotStatic())
 						return false;
@@ -445,6 +453,14 @@ public abstract class ExecutableInfo {
 					break;
 				case NOT_PUBLIC:
 					if (isNotPublic())
+						return true;
+					break;
+				case PROTECTED:
+					if (isProtected())
+						return true;
+					break;
+				case NOT_PROTECTED:
+					if (isNotProtected())
 						return true;
 					break;
 				case STATIC:
@@ -669,6 +685,24 @@ public abstract class ExecutableInfo {
 	 */
 	public final boolean isNotPublic() {
 		return ! Modifier.isPublic(e.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is protected.
+	 *
+	 * @return <jk>true</jk> if this method is protected.
+	 */
+	public final boolean isProtected() {
+		return Modifier.isProtected(e.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is not protected.
+	 *
+	 * @return <jk>true</jk> if this method is not protected.
+	 */
+	public final boolean isNotProtected() {
+		return ! Modifier.isProtected(e.getModifiers());
 	}
 
 	/**

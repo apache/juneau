@@ -23,6 +23,12 @@ public enum ReflectFlags {
 	/** NOT_PUBLIC */
 	NOT_PUBLIC,
 
+	/** PROTECTED */
+	PROTECTED,
+
+	/** NOT_PROTECTED */
+	NOT_PROTECTED,
+
 	/** STATIC */
 	STATIC,
 

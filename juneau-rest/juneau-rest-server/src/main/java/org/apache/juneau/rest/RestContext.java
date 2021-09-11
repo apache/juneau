@@ -264,9 +264,7 @@ public class RestContext extends Context {
 
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
-
-			methodExecStore = createMethodExecStore(r, builder, bs, thrownStore);
-			bs.addBean(MethodExecStore.class, methodExecStore);
+			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
 
 			Messages m = messages = createMessages(r, builder);
 
@@ -1204,72 +1202,6 @@ public class RestContext extends Context {
 
 		return x;
 
-	}
-
-	/**
-	 * Instantiates the method execution statistics store for this REST resource.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param thrownStore
-	 * 	The thrown exception statistics store.
-	 * @return The stack trace store for this REST resource.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected MethodExecStore createMethodExecStore(Object resource, RestContextBuilder builder, BeanStore beanStore, ThrownStore thrownStore) throws Exception {
-
-		MethodExecStore x = beanStore.getBean(MethodExecStore.class).orElse(null);
-
-		if (x == null)
-			x = createMethodExecStoreBuilder(resource, builder, beanStore, thrownStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(MethodExecStore.class, x)
-			.beanCreateMethodFinder(MethodExecStore.class, resource)
-			.find("cxreateMethodExecStore")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the method execution statistics store for this REST resource.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param thrownStore
-	 * 	The thrown exception statistics store.
-	 * @return The stack trace store for this REST resource.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected MethodExecStoreBuilder createMethodExecStoreBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, ThrownStore thrownStore) throws Exception {
-
-		MethodExecStoreBuilder x = MethodExecStore
-			.create()
-			.thrownStore(thrownStore)
-			.beanStore(beanStore);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(MethodExecStoreBuilder.class, x)
-			.beanCreateMethodFinder(MethodExecStoreBuilder.class, resource)
-			.find("createMethodExecStoreBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**

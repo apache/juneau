@@ -13,11 +13,17 @@
 package org.apache.juneau.mstat;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Method execution statistics.
@@ -45,8 +51,8 @@ public class MethodExecStats {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static MethodExecStatsBuilder create() {
-		return new MethodExecStatsBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -54,11 +60,90 @@ public class MethodExecStats {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public MethodExecStats(MethodExecStatsBuilder builder) {
+	protected MethodExecStats(Builder builder) {
 		this.guid = new Random().nextLong();
 		this.method = builder.method;
 		this.thrownStore = ofNullable(builder.thrownStore).orElseGet(ThrownStore::new);
 	}
+
+	/**
+	 * Builder for this object.
+	 */
+	@FluentSetters
+	public static class Builder {
+
+		Method method;
+		ThrownStore thrownStore;
+
+		Class<? extends MethodExecStats> implClass;
+		BeanStore beanStore;
+
+		/**
+		 * Create a new {@link MethodExecStats} using this builder.
+		 *
+		 * @return A new {@link ThrownStats}
+		 */
+		public MethodExecStats build() {
+			try {
+				Class<? extends MethodExecStats> ic = isConcrete(implClass) ? implClass : MethodExecStats.class;
+				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+			} catch (ExecutableException e) {
+				throw runtimeException(e);
+			}
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating the {@link MethodExecStats} object.
+		 *
+		 * <p>
+		 * Can be used to instantiate {@link MethodExecStats} implementations with injected constructor argument beans.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link MethodExecStats} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder implClass(Class<? extends MethodExecStats> value) {
+			implClass = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the Java method.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder method(Method value) {
+			method = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the thrown store for tracking exceptions.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder thrownStore(ThrownStore value) {
+			thrownStore = value;
+			return this;
+		}
+	}
+
 
 	/**
 	 * Call when task is started.

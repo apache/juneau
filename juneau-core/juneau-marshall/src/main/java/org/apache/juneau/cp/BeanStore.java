@@ -444,6 +444,22 @@ public class BeanStore {
 			}
 		}
 
+		if (matchedConstructor == null) {
+			for (ConstructorInfo cc : ci.getDeclaredConstructors()) {
+				if (cc.isProtected()) {
+					List<ClassInfo> missing = getMissingParamTypes(cc.getParams());
+					if (missing.isEmpty()) {
+						if (cc.getParamCount() > matchedConstructorParams) {
+							matchedConstructorParams = cc.getParamCount();
+							matchedConstructor = cc.accessible();
+						}
+					} else {
+						msg = ()-> "Protected constructor found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+					}
+				}
+			}
+		}
+
 		// Look for static-builder/protected-constructor pair.
 		if (matchedConstructor == null) {
 			for (ConstructorInfo cc2 : ci.getDeclaredConstructors()) {
