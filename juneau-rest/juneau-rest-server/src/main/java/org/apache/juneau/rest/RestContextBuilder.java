@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
@@ -27,6 +28,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.logging.*;
 import java.util.stream.*;
 
 import javax.servlet.*;
@@ -117,8 +119,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Supplier<?> resource;
 	ServletContext servletContext;
 
-	Config config;
+	private Config config;
 	private VarResolver.Builder varResolver;
+	private Logger logger;
+
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
 		allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
@@ -309,8 +313,24 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	public RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource instanceof Supplier ? (Supplier<?>)resource : ()->resource;
 
-		ClassInfo rci = ClassInfo.ofProxy(resource);
 		BeanStore bs = beanStore();
+
+		runInitHooks(bs, resource());
+		logger();
+
+		return this;
+	}
+
+	private Supplier<?> resource() {
+		if (resource == null)
+			throw runtimeException("Resource not available.  init(Object) has not been called.");
+		return resource;
+	}
+
+	private void runInitHooks(BeanStore beanStore, Supplier<?> resource) throws ServletException {
+
+		Object r = resource.get();
+		ClassInfo rci = ClassInfo.ofProxy(r);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
@@ -321,20 +341,20 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 					map.put(sig, m);
 			}
 		}
+
 		for (MethodInfo m : map.values()) {
 			List<ParamInfo> params = m.getParams();
 
-			List<ClassInfo> missing = bs.getMissingParamTypes(params);
-			if (!missing.isEmpty())
+			List<ClassInfo> missing = beanStore.getMissingParamTypes(params);
+			if (! missing.isEmpty())
 				throw new RestServletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 
 			try {
-				m.invoke(resource, bs.getParams(params));
+				m.invoke(r, beanStore.getParams(params));
 			} catch (Exception e) {
 				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}
 		}
-		return this;
 	}
 
 	/**
@@ -704,6 +724,76 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				cb.name(cf);
 			v.set(cb.build());
 		}
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the logger to use for the REST resource.
+	 *
+	 * @return The logger to use for the REST resource.
+	 * @throws RuntimeException If {@link #init(Object)} has not been called.
+	 */
+	public final Logger logger() {
+		if (logger == null)
+			logger = createLogger(beanStore(), resource());
+		return logger;
+	}
+
+	/**
+	 * Sets the logger to use for the REST resource.
+	 *
+	 * <p>
+	 * If not specified, the logger used is created by {@link #createLogger(BeanStore, Supplier)}.
+	 *
+	 * @param value The logger to use for the REST resource.
+	 * @return This object.
+	 */
+	public final RestContextBuilder logger(Logger value) {
+		logger = value;
+		return this;
+	}
+
+	/**
+	 * Instantiates logger for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for a static or non-static <c>createLogger()</> method that returns <c>{@link Logger}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
+	 * </ul>
+	 *
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @return The logger for this REST resource.
+	 */
+	protected Logger createLogger(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<Logger> v = Value.empty();
+
+		beanStore.getBean(Logger.class).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty())
+			v.set(Logger.getLogger(className(resource.get())));
+
+		BeanStore
+			.of(beanStore, resource.get())
+			.addBean(Logger.class, v.get())
+			.beanCreateMethodFinder(Logger.class, resource)
+			.find("createLogger")
+			.execute()
+			.ifPresent(x -> v.set(x));
 
 		return v.get();
 	}

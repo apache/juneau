@@ -260,16 +260,15 @@ public class RestContext extends Context {
 				.addBean(RestContextBuilder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 
-			BeanStore bf = beanStore;
+			BeanStore bs = beanStore;
 
-			Logger l = logger = createLogger(r, builder, bf);
-			bf.addBean(Logger.class, l);
+			logger = bs.add(Logger.class, builder.logger());
 
-			ThrownStore ts = thrownStore = createThrownStore(r, builder, parent, bf);
-			bf.addBean(ThrownStore.class, ts);
+			ThrownStore ts = thrownStore = createThrownStore(r, builder, parent, bs);
+			bs.addBean(ThrownStore.class, ts);
 
-			methodExecStore = createMethodExecStore(r, builder, bf, ts);
-			bf.addBean(MethodExecStore.class, methodExecStore);
+			methodExecStore = createMethodExecStore(r, builder, bs, ts);
+			bs.addBean(MethodExecStore.class, methodExecStore);
 
 			Messages m = messages = createMessages(r, builder);
 
@@ -277,42 +276,41 @@ public class RestContext extends Context {
 				.varResolver()
 				.bean(Messages.class, messages)
 				.build();
-			bf.addBean(VarResolver.class, vr);
+			bs.addBean(VarResolver.class, vr);
 
-			config = builder.config.resolving(vr.createSession());
-			bf.addBean(Config.class, config);
+			config = bs.add(Config.class, builder.config().resolving(vr.createSession()));
 
-			responseProcessors = createResponseProcessors(r, builder, bf).toArray();
+			responseProcessors = createResponseProcessors(r, builder, bs).toArray();
 
 			callLoggerDefault = builder.callLoggerDefault;
 			debugDefault = builder.debugDefault;
 
-			callLogger = createCallLogger(r, builder, bf, l, ts);
-			bf.addBean(RestLogger.class, callLogger);
+			callLogger = createCallLogger(r, builder, bs, logger, ts);
+			bs.addBean(RestLogger.class, callLogger);
 
-			partSerializer = createPartSerializer(r, builder, bf);
-			bf.addBean(HttpPartSerializer.class, partSerializer);
+			partSerializer = createPartSerializer(r, builder, bs);
+			bs.addBean(HttpPartSerializer.class, partSerializer);
 
-			partParser = createPartParser(r, builder, bf);
-			bf.addBean(HttpPartParser.class, partParser);
+			partParser = createPartParser(r, builder, bs);
+			bs.addBean(HttpPartParser.class, partParser);
 
-			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bf);
-			bf.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
+			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
+			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
-			fileFinder = createFileFinder(r, builder, bf);
-			bf.addBean(FileFinder.class, fileFinder);
+			fileFinder = createFileFinder(r, builder, bs);
+			bs.addBean(FileFinder.class, fileFinder);
 			fileFinderDefault = builder.fileFinderDefault.value().orElse(fileFinder);
 
-			staticFiles = createStaticFiles(r, builder, bf);
-			bf.addBean(StaticFiles.class, staticFiles);
+			staticFiles = createStaticFiles(r, builder, bs);
+			bs.addBean(StaticFiles.class, staticFiles);
 			staticFilesDefault = builder.staticFilesDefault.value().orElse(staticFiles);
 
-			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bf).build();
-			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bf).build();
-			defaultRequestAttributes = createDefaultRequestAttributes(r, builder, bf);
+			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bs).build();
+			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bs).build();
+			defaultRequestAttributes = createDefaultRequestAttributes(r, builder, bs);
 
-			opArgs = createOpArgs(r, builder, bf).asArray();
-			hookMethodArgs = createHookMethodArgs(r, builder, bf).asArray();
+			opArgs = createOpArgs(r, builder, bs).asArray();
+			hookMethodArgs = createHookMethodArgs(r, builder, bs).asArray();
 
 			uriContext = builder.uriContext;
 			uriAuthority = builder.uriAuthority;
@@ -328,7 +326,7 @@ public class RestContext extends Context {
 			defaultCharset = builder.defaultCharset;
 			maxInput = builder.maxInput;
 
-			debugEnablement = createDebugEnablement(r, builder, bf);
+			debugEnablement = createDebugEnablement(r, builder, bs);
 
 			path = ofNullable(builder.path).orElse("");
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + path;
@@ -338,16 +336,16 @@ public class RestContext extends Context {
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
 
-			startCallMethods = createStartCallMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			endCallMethods = createEndCallMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			postInitMethods = createPostInitMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			postInitChildFirstMethods = createPostInitChildFirstMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			destroyMethods = createDestroyMethods(r, builder, bf).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			startCallMethods = createStartCallMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			endCallMethods = createEndCallMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			postInitMethods = createPostInitMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			postInitChildFirstMethods = createPostInitChildFirstMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			destroyMethods = createDestroyMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 
-			preCallMethods = createPreCallMethods(r, builder, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
-			postCallMethods = createPostCallMethods(r, builder, bf).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			preCallMethods = createPreCallMethods(r, builder, bs).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			postCallMethods = createPostCallMethods(r, builder, bs).stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 
-			restOperations = createRestOperations(r, builder, bf);
+			restOperations = createRestOperations(r, builder, bs);
 
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
@@ -367,9 +365,9 @@ public class RestContext extends Context {
 				consumes = AList.unmodifiable(s);
 			}
 
-			restChildren = createRestChildren(r, builder, bf, builder.inner);
+			restChildren = createRestChildren(r, builder, bs, builder.inner);
 
-			swaggerProvider = createSwaggerProvider(r, builder, bf, fileFinder, m, vr);
+			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, m, vr);
 
 		} catch (BasicHttpException e) {
 			_initException = e;
@@ -684,7 +682,6 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @param logger
 	 * 	The Java logger to use for logging messages.
-	 * 	<br>Created by {@link #createLogger(Object,RestContextBuilder,BeanStore)}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
 	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
@@ -736,7 +733,6 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @param logger
 	 * 	The Java logger to use for logging messages.
-	 * 	<br>Created by {@link #createLogger(Object,RestContextBuilder,BeanStore)}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
 	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
@@ -1026,51 +1022,6 @@ public class RestContext extends Context {
 			.run();
 
 		return x.build();
-	}
-
-	/**
-	 * Instantiates logger for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for a static or non-static <c>createLogger()</> method that returns <c>{@link Logger}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The logger for this REST resource.
-	 * @throws Exception If logger could not be instantiated.
-	 */
-	protected Logger createLogger(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		Logger x = beanStore.getBean(Logger.class).orElse(null);
-
-		if (x == null)
-			x = Logger.getLogger(className(resource));
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(Logger.class, x)
-			.beanCreateMethodFinder(Logger.class, resource)
-			.find("createLogger")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**
