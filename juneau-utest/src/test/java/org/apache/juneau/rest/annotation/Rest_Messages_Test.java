@@ -117,8 +117,7 @@ public class Rest_Messages_Test {
 	public static class B3 extends B1 {
 		 @RestHook(HookEvent.INIT)
 		 public void init(RestContextBuilder builder) throws Exception {
-			 builder.messages("B2x");
-			 builder.messages(B1.class, "B1x");
+			 builder.messages().location(null, "B2x").location(B1.class, "B1x");
 		 }
 	}
 
