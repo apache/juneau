@@ -14,6 +14,8 @@ package org.apache.juneau.mstat;
 
 import static java.util.stream.Collectors.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Optional.*;
 import static java.util.Comparator.*;
@@ -21,6 +23,8 @@ import static java.util.Comparator.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -45,8 +49,8 @@ public class ThrownStore {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static ThrownStoreBuilder create() {
-		return new ThrownStoreBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -61,7 +65,7 @@ public class ThrownStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public ThrownStore(ThrownStoreBuilder builder) {
+	public ThrownStore(Builder builder) {
 		this.parent = ofNullable(builder.parent);
 		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
 
@@ -76,6 +80,140 @@ public class ThrownStore {
 			s = Collections.emptySet();
 		this.ignoreClasses = unmodifiableSet(s);
 	}
+
+	/**
+	 * The builder for this object.
+	 */
+	public static class Builder {
+
+		ThrownStore parent;
+		Class<? extends ThrownStore> implClass;
+		ThrownStore impl;
+		BeanStore beanStore;
+		Class<? extends ThrownStats> statsImplClass;
+		Set<Class<?>> ignoreClasses;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy.
+		 */
+		protected Builder(Builder copyFrom) {
+			parent = copyFrom.parent;
+			implClass = copyFrom.implClass;
+			impl = copyFrom.impl;
+			beanStore = copyFrom.beanStore;
+			statsImplClass = copyFrom.statsImplClass;
+			ignoreClasses = copyFrom.ignoreClasses == null ? null : ASet.of(copyFrom.ignoreClasses);
+		}
+
+		/**
+		 * Create a new {@link ThrownStore} using this builder.
+		 *
+		 * @return A new {@link ThrownStore}
+		 */
+		public ThrownStore build() {
+			try {
+				if (impl != null)
+					return impl;
+				Class<? extends ThrownStore> ic = isConcrete(implClass) ? implClass : ThrownStore.class;
+				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+			} catch (ExecutableException e) {
+				throw runtimeException(e);
+			}
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating the {@link ThrownStore} object.
+		 *
+		 * <p>
+		 * Can be used to instantiate {@link ThrownStore} implementations with injected constructor argument beans.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		public Builder beanStore(BeanStore value) {
+			this.beanStore = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link ThrownStore} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		public Builder implClass(Class<? extends ThrownStore> value) {
+			this.implClass = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a pre-instantiated bean to return when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		public Builder impl(ThrownStore value) {
+			this.impl = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link ThrownStats} to use for individual method statistics.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		public Builder statsImplClass(Class<? extends ThrownStats> value) {
+			this.statsImplClass = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the parent store of this store.
+		 *
+		 * <p>
+		 * Parent stores are used for aggregating statistics across multiple child stores.
+		 * <br>The {@link ThrownStore#GLOBAL} store can be used for aggregating all thrown exceptions in a single JVM.
+		 *
+		 * @param value The parent store.  Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder parent(ThrownStore value) {
+			this.parent = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the list of classes to ignore when calculating stack traces.
+		 *
+		 * <p>
+		 * Stack trace elements that are the specified class will be ignored.
+		 *
+		 * @param value The list of classes to ignore.
+		 * @return This object (for method chaining).
+		 */
+		public Builder ignoreClasses(Class<?>...value) {
+			this.ignoreClasses = ASet.of(value);
+			return this;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+	}
+
 
 	/**
 	 * Adds the specified thrown exception to this database.

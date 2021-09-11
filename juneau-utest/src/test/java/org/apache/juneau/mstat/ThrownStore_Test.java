@@ -198,19 +198,8 @@ public class ThrownStore_Test {
 		assertObject(ThrownStore.create().implClass(B1.class).build()).isType(B1.class);
 	}
 
-	@Test
-	public void b03_builder_defaultImplClass() {
-		ThrownStoreBuilder b = new ThrownStoreBuilder() {
-			@Override
-			protected Class<? extends ThrownStore> getDefaultImplClass() {
-				return B1.class;
-			}
-		};
-		assertObject(b.build()).isType(B1.class);
-	}
-
 	public static class B4 extends ThrownStore {
-		public B4(ThrownStoreBuilder b) throws Exception {
+		public B4(ThrownStore.Builder b) throws Exception {
 			throw new RuntimeException("foobar");
 		}
 	}
@@ -223,14 +212,14 @@ public class ThrownStore_Test {
 	public static class B5a {}
 
 	public static class B5b extends ThrownStore {
-		public B5b(ThrownStoreBuilder b, B5a x) throws Exception {
+		public B5b(ThrownStore.Builder b, B5a x) throws Exception {
 			if (x == null)
 				throw new RuntimeException("Bad");
 		}
 	}
 
 	public static class B5c extends ThrownStore {
-		public B5c(ThrownStoreBuilder b, Optional<B5a> x) throws Exception {
+		public B5c(ThrownStore.Builder b, Optional<B5a> x) throws Exception {
 			if (x == null)
 				throw new RuntimeException("Bad");
 		}

@@ -248,7 +248,7 @@ public class RestContext extends Context {
 			this.resource = builder.resource;
 			Object r = getResource();
 
-			RestContext parent = parentContext = builder.parentContext;
+			parentContext = builder.parentContext;
 
 			rootBeanStore = builder.beanStore();
 
@@ -263,11 +263,9 @@ public class RestContext extends Context {
 			BeanStore bs = beanStore;
 
 			logger = bs.add(Logger.class, builder.logger());
+			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 
-			ThrownStore ts = thrownStore = createThrownStore(r, builder, parent, bs);
-			bs.addBean(ThrownStore.class, ts);
-
-			methodExecStore = createMethodExecStore(r, builder, bs, ts);
+			methodExecStore = createMethodExecStore(r, builder, bs, thrownStore);
 			bs.addBean(MethodExecStore.class, methodExecStore);
 
 			Messages m = messages = createMessages(r, builder);
@@ -285,7 +283,7 @@ public class RestContext extends Context {
 			callLoggerDefault = builder.callLoggerDefault;
 			debugDefault = builder.debugDefault;
 
-			callLogger = createCallLogger(r, builder, bs, logger, ts);
+			callLogger = createCallLogger(r, builder, bs, logger, thrownStore);
 			bs.addBean(RestLogger.class, callLogger);
 
 			partSerializer = createPartSerializer(r, builder, bs);
@@ -684,7 +682,6 @@ public class RestContext extends Context {
 	 * 	The Java logger to use for logging messages.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
 	 */
@@ -735,7 +732,6 @@ public class RestContext extends Context {
 	 * 	The Java logger to use for logging messages.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The call logger builder for this REST resource.
 	 * @throws Exception If call logger builder could not be instantiated.
 	 */
@@ -1211,90 +1207,6 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Instantiates the thrown exception store for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for a static or non-static <c>createThrownStore()</> method that returns <c>{@link ThrownStore}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Returns {@link ThrownStore#GLOBAL}.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param parent
-	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
-	 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The stack trace store for this REST resource.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected ThrownStore createThrownStore(Object resource, RestContextBuilder builder, RestContext parent, BeanStore beanStore) throws Exception {
-
-		ThrownStore x = beanStore.getBean(ThrownStore.class).orElse(null);
-
-		if (x == null)
-			x = createThrownStoreBuilder(resource, builder, parent, beanStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(ThrownStore.class, x)
-			.beanCreateMethodFinder(ThrownStore.class, resource)
-			.find("createThrownStore")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the thrown exception store builder for this REST resource.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param parent
-	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
-	 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The stack trace store for this REST resource.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected ThrownStoreBuilder createThrownStoreBuilder(Object resource, RestContextBuilder builder, RestContext parent, BeanStore beanStore) throws Exception {
-
-		ThrownStore p = parent == null ? null : parent.thrownStore;
-
-		ThrownStoreBuilder x = ThrownStore
-			.create()
-			.parent(p)
-			.beanStore(beanStore);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(ThrownStoreBuilder.class, x)
-			.beanCreateMethodFinder(ThrownStoreBuilder.class, resource)
-			.find("createThrownStoreBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
 	 * Instantiates the method execution statistics store for this REST resource.
 	 *
 	 * @param resource
@@ -1306,7 +1218,6 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
@@ -1340,7 +1251,6 @@ public class RestContext extends Context {
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @param thrownStore
 	 * 	The thrown exception statistics store.
-	 * 	<br>Created by {@link #createThrownStore(Object,RestContextBuilder,RestContext,BeanStore)}.
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */

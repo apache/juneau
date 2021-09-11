@@ -44,6 +44,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -105,11 +106,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		}
 	}
 
-	final ServletConfig inner;
-	final Class<?> resourceClass;
-	final RestContext parentContext;
-	BeanStore beanStore;
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
 	// They should not be declared final.
@@ -119,9 +115,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Supplier<?> resource;
 	ServletContext servletContext;
 
+	final ServletConfig inner;
+	final Class<?> resourceClass;
+	final RestContext parentContext;
+	private BeanStore beanStore;
 	private Config config;
 	private VarResolver.Builder varResolver;
 	private Logger logger;
+	private ThrownStore.Builder thrownStore;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -781,19 +782,105 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	protected Logger createLogger(BeanStore beanStore, Supplier<?> resource) {
 
 		Value<Logger> v = Value.empty();
+		Object r = resource.get();
 
 		beanStore.getBean(Logger.class).ifPresent(x -> v.set(x));
 
 		if (v.isEmpty())
-			v.set(Logger.getLogger(className(resource.get())));
+			v.set(Logger.getLogger(className(r)));
 
 		BeanStore
 			.of(beanStore, resource.get())
 			.addBean(Logger.class, v.get())
-			.beanCreateMethodFinder(Logger.class, resource)
+			.beanCreateMethodFinder(Logger.class, r)
 			.find("createLogger")
 			.execute()
 			.ifPresent(x -> v.set(x));
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the builder for the {@link ThrownStore} object in the REST context.
+	 *
+	 * @return The builder for the {@link ThrownStore} object in the REST context.
+	 */
+	public final ThrownStore.Builder thrownStore() {
+		if (thrownStore == null)
+			thrownStore = createThrownStore(beanStore(), resource(), parentContext);
+		return thrownStore;
+	}
+
+	/**
+	 * Sets the builder for the {@link ThrownStore} object in the REST context.
+	 *
+	 * @param value The builder for the {@link ThrownStore} object in the REST context.
+	 * @return This object.
+	 * @throws RuntimeException If {@link #init(Object)} has not been called.
+	 */
+	public final RestContextBuilder thrownStore(ThrownStore value) {
+		thrownStore().impl(value);
+		return this;
+	}
+
+	/**
+	 * Instantiates the thrown exception store for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for a static or non-static <c>createThrownStore()</> method that returns <c>{@link ThrownStore}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Returns {@link ThrownStore#GLOBAL}.
+	 * </ul>
+	 *
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @param parent
+	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
+	 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @return The stack trace store for this REST resource.
+	 */
+	protected ThrownStore.Builder createThrownStore(BeanStore beanStore, Supplier<?> resource, RestContext parent) {
+
+		Value<ThrownStore.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(ThrownStore.Builder.class).map(x -> x.copy()).ifPresent(x->v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(ThrownStore.Builder.class, v.get())
+			.beanCreateMethodFinder(ThrownStore.Builder.class, r)
+			.find("createThrownStore")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				ThrownStore
+					.create()
+					.beanStore(beanStore)
+					.impl(parent == null ? null : parent.getThrownStore())
+			);
+		}
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(ThrownStore.Builder.class, v.get())
+			.beanCreateMethodFinder(ThrownStore.class, r)
+			.find("createThrownStore")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
 
 		return v.get();
 	}
