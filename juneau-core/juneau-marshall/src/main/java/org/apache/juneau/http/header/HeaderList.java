@@ -244,6 +244,7 @@ public class HeaderList {
 
 		final List<Header> entries;
 		List<Header> defaultEntries;
+		HeaderList impl;
 		private VarResolver varResolver;
 		boolean caseSensitive;
 
@@ -293,6 +294,8 @@ public class HeaderList {
 		 * @return A new {@link HeaderList} bean.
 		 */
 		public HeaderList build() {
+			if (impl != null)
+				return impl;
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new HeaderList(this);
 		}
 
@@ -1152,6 +1155,17 @@ public class HeaderList {
 				}
 			}
 			return Optional.empty();
+		}
+
+		/**
+		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(HeaderList value) {
+			impl = value;
+			return this;
 		}
 
 		@Override /* Object */

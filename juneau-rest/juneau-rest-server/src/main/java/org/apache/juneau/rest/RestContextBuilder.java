@@ -137,6 +137,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private JsonSchemaGeneratorBuilder jsonSchemaGenerator;
 	private FileFinder.Builder fileFinder;
 	private StaticFiles.Builder staticFiles;
+	private HeaderList.Builder defaultRequestHeaders;
+	private HeaderList.Builder defaultResponseHeaders;
+	private NamedAttributeList defaultRequestAttributes;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -161,9 +164,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
 	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
-	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
-	HeaderList.Builder defaultRequestHeaders = HeaderList.create();
-	HeaderList.Builder defaultResponseHeaders = HeaderList.create();
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
@@ -1991,6 +1991,149 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	/**
+	 * Returns the builder for the default request headers in the REST context.
+	 *
+	 * @return The builder for the default request headers in the REST context.
+	 */
+	public final HeaderList.Builder defaultRequestHeaders() {
+		if (defaultRequestHeaders == null)
+			defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), resource());
+		return defaultRequestHeaders;
+	}
+
+	/**
+	 * Instantiates the default request headers for this REST object.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default request headers for this REST object.
+	 */
+	protected HeaderList.Builder createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<HeaderList.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean("RestContext.defaultRequestHeaders", HeaderList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty())
+			v.set(HeaderList.create());
+
+		beanStore.getBean("RestContext.defaultRequestHeaders", HeaderList.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HeaderList.Builder.class, v.get())
+			.beanCreateMethodFinder(HeaderList.Builder.class, r)
+			.find("createDefaultRequestHeaders")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HeaderList.Builder.class, v.get())
+			.beanCreateMethodFinder(HeaderList.class, r)
+			.find("createDefaultRequestHeaders")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the builder for the default response headers in the REST context.
+	 *
+	 * @return The builder for the default response headers in the REST context.
+	 */
+	public final HeaderList.Builder defaultResponseHeaders() {
+		if (defaultResponseHeaders == null)
+			defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), resource());
+		return defaultResponseHeaders;
+	}
+
+	/**
+	 * Instantiates the default response headers for this REST object.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected HeaderList.Builder createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<HeaderList.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean("RestContext.defaultResponseHeaders", HeaderList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty())
+			v.set(HeaderList.create());
+
+		beanStore.getBean("RestContext.defaultResponseHeaders", HeaderList.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HeaderList.Builder.class, v.get())
+			.beanCreateMethodFinder(HeaderList.Builder.class, r)
+			.find("createDefaultResponseHeaders")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HeaderList.Builder.class, v.get())
+			.beanCreateMethodFinder(HeaderList.class, r)
+			.find("createDefaultResponseHeaders")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the builder for the default requests attributes in the REST context.
+	 *
+	 * @return The builder for the default request attributer object in the REST context.
+	 */
+	public final NamedAttributeList defaultRequestAttributes() {
+		if (defaultRequestAttributes == null)
+			defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), resource());
+		return defaultRequestAttributes;
+	}
+
+	/**
+	 * Instantiates the default response headers for this REST object.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected NamedAttributeList createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<NamedAttributeList> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean("RestContext.defaultRequestAttributes", NamedAttributeList.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty())
+			v.set(NamedAttributeList.create());
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(NamedAttributeList.class, v.get())
+			.beanCreateMethodFinder(NamedAttributeList.class, r)
+			.find("createDefaultRequestAttributes")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		return v.get();
+	}
+
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
 	//----------------------------------------------------------------------------------------------------
@@ -2679,7 +2822,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-		defaultRequestAttributes.appendUnique(values);
+		defaultRequestAttributes().appendUnique(values);
 		return this;
 	}
 
@@ -2740,7 +2883,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestHeaders(Header...values) {
-		defaultRequestHeaders.setDefault(values);
+		defaultRequestHeaders().setDefault(values);
 		return this;
 	}
 
@@ -2797,7 +2940,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultResponseHeaders(Header...values) {
-		defaultResponseHeaders.setDefault(values);
+		defaultResponseHeaders().setDefault(values);
 		return this;
 	}
 

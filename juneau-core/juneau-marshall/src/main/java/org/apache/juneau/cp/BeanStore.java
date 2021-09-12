@@ -297,6 +297,19 @@ public class BeanStore {
 	}
 
 	/**
+	 * Same as {@link #addBean(String, Object)} but returns the bean instead of this object.
+	 *
+	 * @param name The name to associate this bean with.
+	 * @param t The bean.
+	 * @return The bean.
+	 */
+	public <T> T add(String name, T t) {
+		assertCanWrite();
+		addBean(name, t);
+		return t;
+	}
+
+	/**
 	 * Adds a named bean of the specified type to this factory.
 	 *
 	 * @param <T> The class to associate this bean with.

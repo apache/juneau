@@ -262,12 +262,11 @@ public class RestContext extends Context {
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
 			fileFinder = bs.add(FileFinder.class, builder.fileFinder().build());
 			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().build());
+			defaultRequestHeaders = bs.add("RestContext.defaultRequestHeaders", builder.defaultRequestHeaders().build());
+			defaultResponseHeaders = bs.add("RestContext.defaultResponseHeaders", builder.defaultResponseHeaders().build());
+			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes());
 
 			Object r = resource.get();
-
-			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bs).build();
-			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bs).build();
-			defaultRequestAttributes = createDefaultRequestAttributes(r, builder, bs);
 
 			opArgs = createOpArgs(r, builder, bs).asArray();
 			hookMethodArgs = createHookMethodArgs(r, builder, bs).asArray();
@@ -559,90 +558,6 @@ public class RestContext extends Context {
 
 		return x;
 
-	}
-
-	/**
-	 * Instantiates the default request headers for this REST object.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The default request headers for this REST object.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected HeaderList.Builder createDefaultRequestHeaders(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		HeaderList.Builder x = builder.defaultRequestHeaders;
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HeaderList.Builder.class, x)
-			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
-			.find("createDefaultRequestHeaders")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the default response headers for this REST object.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The default response headers for this REST object.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected HeaderList.Builder createDefaultResponseHeaders(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		HeaderList.Builder x = builder.defaultResponseHeaders;
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HeaderList.Builder.class, x)
-			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
-			.find("createDefaultResponseHeaders")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the default response headers for this REST object.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The default response headers for this REST object.
-	 * @throws Exception If stack trace store could not be instantiated.
-	 */
-	protected NamedAttributeList createDefaultRequestAttributes(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		NamedAttributeList x = builder.defaultRequestAttributes;
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(NamedAttributeList.class, x)
-			.beanCreateMethodFinder(NamedAttributeList.class, resource)
-			.find("createDefaultRequestAttributes")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**
