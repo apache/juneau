@@ -247,6 +247,19 @@ public class RestContext extends Context {
 				.addBean(RestContextBuilder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 
+			allowBodyParam = ! builder.disableBodyParam;
+			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			clientVersionHeader = builder.clientVersionHeader;
+			defaultCharset = builder.defaultCharset;
+			maxInput = builder.maxInput;
+			renderResponseStackTraces = builder.renderResponseStackTraces;
+			uriContext = builder.uriContext;
+			uriAuthority = builder.uriAuthority;
+			uriResolution = builder.uriResolution;
+			uriRelativity = builder.uriRelativity;
+
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
@@ -268,20 +281,6 @@ public class RestContext extends Context {
 			hookMethodArgs = builder.hookMethodArgs().build().asArray();
 
 			Object r = resource.get();
-
-			uriContext = builder.uriContext;
-			uriAuthority = builder.uriAuthority;
-			uriResolution = builder.uriResolution;
-			uriRelativity = builder.uriRelativity;
-
-			allowBodyParam = ! builder.disableBodyParam;
-			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			renderResponseStackTraces = builder.renderResponseStackTraces;
-			clientVersionHeader = builder.clientVersionHeader;
-			defaultCharset = builder.defaultCharset;
-			maxInput = builder.maxInput;
 
 			debugEnablement = createDebugEnablement(r, builder, bs);
 

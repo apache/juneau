@@ -2632,85 +2632,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
-	//----------------------------------------------------------------------------------------------------
-	// Methods that give access to the config file, var resolver, and properties.
-	//----------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
-	 *
-	 * <p>
-	 * Serializer are used to convert POJOs to HTTP response bodies.
-	 * <br>Any of the Juneau framework serializers can be used in this setting.
-	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
-	 * using a best-match algorithm:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
-	 * </ul>
-	 *
-	 * <p>
-	 * The builder is initialized with serializers defined via the {@link Rest#serializers()} annotation.  That annotation is applied
-	 * from parent-to-child order with child entries given priority over parent entries.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * </ul>
-	 *
-	 * @return The serializer group builder for this context builder.
-	 */
-	public SerializerGroup.Builder getSerializers() {
-		return serializers;
-	}
-
-	/**
-	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
-	 *
-	 * <p>
-	 * Parsers are used to convert the body of HTTP requests into POJOs.
-	 * <br>Any of the Juneau framework parsers can be used in this setting.
-	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
-	 * using a best-match algorithm:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
-	 * </ul>
-	 *
-	 * <p>
-	 * The builder is initialized with parsers defined via the {@link Rest#parsers()} annotation.  That annotation is applied
-	 * from parent-to-child order with child entries given priority over parent entries.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestParsers}
-	 * </ul>
-	 *
-	 * @return The parser group builder for this context builder.
-	 */
-	public ParserGroup.Builder getParsers() {
-		return parsers;
-	}
-
-	/**
-	 * Returns the encoder group builder containing the encoders for compressing/decompressing input and output streams.
-	 *
-	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
-	 * <p>
-	 * The builder is initialized with encoders defined via the {@link Rest#encoders()} annotation.  That annotation is applied
-	 * from parent-to-child order with child entries given priority over parent entries.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestEncoders}
-	 * </ul>
-	 *
-	 * @return The encoder group builder for this context builder.
-	 */
-	public EncoderGroup.Builder getEncoders() {
-		return encoders;
-	}
-
-	//----------------------------------------------------------------------------------------------------
-	// Properties
-	//----------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
+	// Miscellaneous settings
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Allowed header URL parameters.
@@ -2893,130 +2817,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Child REST resources.
-	 *
-	 * <p>
-	 * Defines children of this resource.
-	 *
-	 * <p>
-	 * A REST child resource is simply another servlet or object that is initialized as part of the ascendant resource and has a
-	 * servlet path directly under the ascendant resource object path.
-	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
-	 * <c>web.xml</c> file of the web application.
-	 * <br>This can cut down on the number of entries that show up in the <c>web.xml</c> file if you are defining
-	 * large numbers of servlets.
-	 *
-	 * <p>
-	 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
-	 * relative to the ascendant path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
-	 *
-	 * <p>
-	 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
-	 *
-	 * <dl>
-	 * 	<dt>Servlet initialization:</dt>
-	 * 	<dd>
-	 * 		<p>
-	 * 			A child resource will be initialized immediately after the ascendant servlet/resource is initialized.
-	 * 			<br>The child resource receives the same servlet config as the ascendant servlet/resource.
-	 * 			<br>This allows configuration information such as servlet initialization parameters to filter to child
-	 * 			resources.
-	 * 		</p>
-	 * 	</dd>
-	 * 	<dt>Runtime behavior:</dt>
-	 * 	<dd>
-	 * 		<p>
-	 * 			As a rule, methods defined on the <c>HttpServletRequest</c> object will behave as if the child
-	 * 			servlet were deployed as a top-level resource under the child's servlet path.
-	 * 			<br>For example, the <c>getServletPath()</c> and <c>getPathInfo()</c> methods on the
-	 * 			<c>HttpServletRequest</c> object will behave as if the child resource were deployed using the
-	 * 			child's servlet path.
-	 * 			<br>Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
-	 * 			<c>web.xml</c> file of the web application.
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our child resource.</jc>
-	 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
-	 * 	<jk>public class</jk> MyChildResource {...}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(children={MyChildResource.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
-	 *
-	 * 			<jc>// Use a pre-instantiated object instead.</jc>
-	 * 			<jv>builder</jv>.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as classes, instances are resolved using the registered bean store which
-	 * 		by default is {@link BeanStore} which requires the class have one of the following
-	 * 		constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestChildren}
-	 * 	<li class='ja'>{@link Rest#children()}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this setting.
-	 * 	<br>Objects can be any of the specified types:
-	 * 	<ul>
-	 * 		<li>A class that has a constructor described above.
-	 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
-	 * 		<li>An instance of {@link RestChild} containing an instantied resource object and a subpath.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder children(Object...values) {
-		children.addAll(asList(values));
-		return this;
-	}
-
-	/**
-	 * Add a child REST resource.
-	 *
-	 * <p>
-	 * Shortcut for adding a single child to this resource.
-	 *
-	 * <p>
-	 * This can be used for resources that don't have a {@link Rest#path() @Rest(path)} annotation.
-	 *
-	 * @param path The child path relative to the parent resource URI.
-	 * @param child The child to add to this resource.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder child(String path, Object child) {
-		children.add(new RestChild(path, child));
-		return this;
-	}
-
-	/**
 	 * Client version header.
 	 *
 	 * <p>
@@ -3085,106 +2885,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder clientVersionHeader(String value) {
 		clientVersionHeader = value;
-		return this;
-	}
-
-	@Override
-	public RestContextBuilder type(Class<? extends Context> value) {
-		super.type(value);
-		return this;
-	}
-
-	/**
-	 * Debug mode.
-	 *
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged always or per request.
-	 * </ul>
-	 *
-	 * <p>
-	 * The default can be overwritten by {@link RestContextBuilder#debugDefault(Enablement)}.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debug(Enablement value) {
-		debug = value;
-		return this;
-	}
-
-	/**
-	 * Default debug mode.
-	 *
-	 * <p>
-	 * The default value for the {@link #debug(Enablement)} setting.
-	 *
-	 * <p>
-	 * This setting is inherited from parent contexts.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugDefault(Enablement value) {
-		debugDefault = value;
-		return this;
-	}
-
-	/**
-	 * Debug enablement bean.
-	 *
-	 * TODO
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugEnablement(Class<? extends DebugEnablement> value) {
-		debugEnablement.type(value);
-		return this;
-	}
-
-	/**
-	 * Debug enablement bean.
-	 *
-	 * TODO
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugEnablement(DebugEnablement value) {
-		debugEnablement.value(value);
-		return this;
-	}
-
-	/**
-	 * Debug mode on specified classes/methods.
-	 *
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#debugOn}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugOn(String value) {
-		debugOn = value;
 		return this;
 	}
 
@@ -3368,6 +3068,592 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
+	 *
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder renderResponseStackTraces(boolean value) {
+		renderResponseStackTraces = value;
+		return this;
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder renderResponseStackTraces() {
+		renderResponseStackTraces = true;
+		return this;
+	}
+
+	/**
+	 * Resource authority path.
+	 *
+	 * <p>
+	 * Overrides the authority path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to resolve relative URIs to absolute paths and want to explicitly specify the hostname/port.
+	 *
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getAuthorityPath()}
+	 * </ul>
+	 *
+	 * <p>
+	 * If you do not specify the authority, it is automatically calculated via the following:
+	 *
+	 * <p class='bcode w800'>
+	 * 	String <jv>scheme</jv> = <jv>request</jv>.getScheme();
+	 * 	<jk>int</jk> <jv>port</jv> = <jv>request</jv>.getServerPort();
+	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<jv>request</jv>.getScheme()).append(<js>"://"</js>).append(<jv>request</jv>.getServerName());
+	 * 	<jk>if</jk> (! (<jv>port</jv> == 80 &amp;&amp; <js>"http"</js>.equals(<jv>scheme</jv>) || port == 443 &amp;&amp; <js>"https"</js>.equals(<jv>scheme</jv>)))
+	 * 		<jv>sb</jv>.append(<js>':'</js>).append(<jv>port</jv>);
+	 * 	<jv>authorityPath</jv> = <jv>sb</jv>.toString();
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriAuthority=<js>"$C{REST/authorityPathOverride,http://localhost:10000}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriAuthority}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriAuthority"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URIAUTHORITY"
+	 * 		<li><jk>null</jk>
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder uriAuthority(String value) {
+		uriAuthority = value;
+		return this;
+	}
+
+	/**
+	 * Resource context path.
+	 *
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 *
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getContextPath()} - Returns the overridden context path for the resource.
+	 * 	<li class='jm'>{@link RestRequest#getServletPath()} - Includes the overridden context path for the resource.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriContext=<js>"$C{REST/contextPathOverride,/foo}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriContext}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriContext"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URICONTEXT"
+	 * 		<li><jk>null</jk>
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder uriContext(String value) {
+		uriContext = value;
+		return this;
+	}
+
+	/**
+	 * URI resolution relativity.
+	 *
+	 * <p>
+	 * Specifies how relative URIs should be interpreted by serializers.
+	 *
+	 * <p>
+	 * See {@link UriResolution} for possible values.
+	 *
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriRelativity=<js>"$C{REST/uriRelativity,PATH_INFO}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriRelativity}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriRelativity"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URIRELATIVITY"
+	 * 		<li>{@link UriRelativity#RESOURCE}
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder uriRelativity(UriRelativity value) {
+		uriRelativity = value;
+		return this;
+	}
+
+	/**
+	 * URI resolution.
+	 *
+	 * <p>
+	 * Specifies how relative URIs should be interpreted by serializers.
+	 *
+	 * <p>
+	 * See {@link UriResolution} for possible values.
+	 *
+	 * <p>
+	 * Affects the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/servlet"</js>,
+	 * 		uriResolution=<js>"$C{REST/uriResolution,ABSOLUTE}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#uriResolution}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"RestContext.uriResolution"
+	 * 		<li>Environment variable <js>"RESTCONTEXT_URIRESOLUTION"
+	 * 		<li>{@link UriResolution#ROOT_RELATIVE}
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder uriResolution(UriResolution value) {
+		uriResolution = value;
+		return this;
+	}
+
+
+	//----------------------------------------------------------------------------------------------------
+	// Methods that give access to the config file, var resolver, and properties.
+	//----------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
+	 *
+	 * <p>
+	 * Serializer are used to convert POJOs to HTTP response bodies.
+	 * <br>Any of the Juneau framework serializers can be used in this setting.
+	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The builder is initialized with serializers defined via the {@link Rest#serializers()} annotation.  That annotation is applied
+	 * from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestSerializers}
+	 * </ul>
+	 *
+	 * @return The serializer group builder for this context builder.
+	 */
+	public SerializerGroup.Builder getSerializers() {
+		return serializers;
+	}
+
+	/**
+	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
+	 *
+	 * <p>
+	 * Parsers are used to convert the body of HTTP requests into POJOs.
+	 * <br>Any of the Juneau framework parsers can be used in this setting.
+	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
+	 * using a best-match algorithm:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The builder is initialized with parsers defined via the {@link Rest#parsers()} annotation.  That annotation is applied
+	 * from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestParsers}
+	 * </ul>
+	 *
+	 * @return The parser group builder for this context builder.
+	 */
+	public ParserGroup.Builder getParsers() {
+		return parsers;
+	}
+
+	/**
+	 * Returns the encoder group builder containing the encoders for compressing/decompressing input and output streams.
+	 *
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <p>
+	 * The builder is initialized with encoders defined via the {@link Rest#encoders()} annotation.  That annotation is applied
+	 * from parent-to-child order with child entries given priority over parent entries.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestEncoders}
+	 * </ul>
+	 *
+	 * @return The encoder group builder for this context builder.
+	 */
+	public EncoderGroup.Builder getEncoders() {
+		return encoders;
+	}
+
+	//----------------------------------------------------------------------------------------------------
+	// Properties
+	//----------------------------------------------------------------------------------------------------
+
+	/**
+	 * Child REST resources.
+	 *
+	 * <p>
+	 * Defines children of this resource.
+	 *
+	 * <p>
+	 * A REST child resource is simply another servlet or object that is initialized as part of the ascendant resource and has a
+	 * servlet path directly under the ascendant resource object path.
+	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
+	 * <c>web.xml</c> file of the web application.
+	 * <br>This can cut down on the number of entries that show up in the <c>web.xml</c> file if you are defining
+	 * large numbers of servlets.
+	 *
+	 * <p>
+	 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
+	 * relative to the ascendant path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
+	 *
+	 * <p>
+	 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
+	 *
+	 * <dl>
+	 * 	<dt>Servlet initialization:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			A child resource will be initialized immediately after the ascendant servlet/resource is initialized.
+	 * 			<br>The child resource receives the same servlet config as the ascendant servlet/resource.
+	 * 			<br>This allows configuration information such as servlet initialization parameters to filter to child
+	 * 			resources.
+	 * 		</p>
+	 * 	</dd>
+	 * 	<dt>Runtime behavior:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			As a rule, methods defined on the <c>HttpServletRequest</c> object will behave as if the child
+	 * 			servlet were deployed as a top-level resource under the child's servlet path.
+	 * 			<br>For example, the <c>getServletPath()</c> and <c>getPathInfo()</c> methods on the
+	 * 			<c>HttpServletRequest</c> object will behave as if the child resource were deployed using the
+	 * 			child's servlet path.
+	 * 			<br>Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
+	 * 			<c>web.xml</c> file of the web application.
+	 * 		</p>
+	 * 	</dd>
+	 * </dl>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our child resource.</jc>
+	 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
+	 * 	<jk>public class</jk> MyChildResource {...}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(children={MyChildResource.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
+	 *
+	 * 			<jc>// Use a pre-instantiated object instead.</jc>
+	 * 			<jv>builder</jv>.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as classes, instances are resolved using the registered bean store which
+	 * 		by default is {@link BeanStore} which requires the class have one of the following
+	 * 		constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestChildren}
+	 * 	<li class='ja'>{@link Rest#children()}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this setting.
+	 * 	<br>Objects can be any of the specified types:
+	 * 	<ul>
+	 * 		<li>A class that has a constructor described above.
+	 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
+	 * 		<li>An instance of {@link RestChild} containing an instantied resource object and a subpath.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder children(Object...values) {
+		children.addAll(asList(values));
+		return this;
+	}
+
+	/**
+	 * Add a child REST resource.
+	 *
+	 * <p>
+	 * Shortcut for adding a single child to this resource.
+	 *
+	 * <p>
+	 * This can be used for resources that don't have a {@link Rest#path() @Rest(path)} annotation.
+	 *
+	 * @param path The child path relative to the parent resource URI.
+	 * @param child The child to add to this resource.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder child(String path, Object child) {
+		children.add(new RestChild(path, child));
+		return this;
+	}
+
+	@Override
+	public RestContextBuilder type(Class<? extends Context> value) {
+		super.type(value);
+		return this;
+	}
+
+	/**
+	 * Debug mode.
+	 *
+	 * <p>
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged always or per request.
+	 * </ul>
+	 *
+	 * <p>
+	 * The default can be overwritten by {@link RestContextBuilder#debugDefault(Enablement)}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debug(Enablement value) {
+		debug = value;
+		return this;
+	}
+
+	/**
+	 * Default debug mode.
+	 *
+	 * <p>
+	 * The default value for the {@link #debug(Enablement)} setting.
+	 *
+	 * <p>
+	 * This setting is inherited from parent contexts.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugDefault(Enablement value) {
+		debugDefault = value;
+		return this;
+	}
+
+	/**
+	 * Debug enablement bean.
+	 *
+	 * TODO
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugEnablement(Class<? extends DebugEnablement> value) {
+		debugEnablement.type(value);
+		return this;
+	}
+
+	/**
+	 * Debug enablement bean.
+	 *
+	 * TODO
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugEnablement(DebugEnablement value) {
+		debugEnablement.value(value);
+		return this;
+	}
+
+	/**
+	 * Debug mode on specified classes/methods.
+	 *
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#debugOn}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugOn(String value) {
+		debugOn = value;
+		return this;
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parser listener.
 	 *
 	 * <p>
@@ -3448,37 +3734,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		value = trimLeadingSlashes(value);
 		if (! isEmpty(value))
 			path = value;
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
-	 *
-	 * <p>
-	 * Render stack traces in HTTP response bodies when errors occur.
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder renderResponseStackTraces(boolean value) {
-		renderResponseStackTraces = value;
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder renderResponseStackTraces() {
-		renderResponseStackTraces = true;
 		return this;
 	}
 
@@ -3828,256 +4083,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(SwaggerProvider value) {
 		swaggerProvider.value(value);
-		return this;
-	}
-
-	/**
-	 * Resource authority path.
-	 *
-	 * <p>
-	 * Overrides the authority path value for this resource and any child resources.
-	 *
-	 * <p>
-	 * This setting is useful if you want to resolve relative URIs to absolute paths and want to explicitly specify the hostname/port.
-	 *
-	 * <p>
-	 * Affects the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestRequest#getAuthorityPath()}
-	 * </ul>
-	 *
-	 * <p>
-	 * If you do not specify the authority, it is automatically calculated via the following:
-	 *
-	 * <p class='bcode w800'>
-	 * 	String <jv>scheme</jv> = <jv>request</jv>.getScheme();
-	 * 	<jk>int</jk> <jv>port</jv> = <jv>request</jv>.getServerPort();
-	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<jv>request</jv>.getScheme()).append(<js>"://"</js>).append(<jv>request</jv>.getServerName());
-	 * 	<jk>if</jk> (! (<jv>port</jv> == 80 &amp;&amp; <js>"http"</js>.equals(<jv>scheme</jv>) || port == 443 &amp;&amp; <js>"https"</js>.equals(<jv>scheme</jv>)))
-	 * 		<jv>sb</jv>.append(<js>':'</js>).append(<jv>port</jv>);
-	 * 	<jv>authorityPath</jv> = <jv>sb</jv>.toString();
-	 * </p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/servlet"</js>,
-	 * 		uriAuthority=<js>"$C{REST/authorityPathOverride,http://localhost:10000}"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#uriAuthority}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is the first value found:
-	 * 	<ul>
-	 * 		<li>System property <js>"RestContext.uriAuthority"
-	 * 		<li>Environment variable <js>"RESTCONTEXT_URIAUTHORITY"
-	 * 		<li><jk>null</jk>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder uriAuthority(String value) {
-		uriAuthority = value;
-		return this;
-	}
-
-	/**
-	 * Resource context path.
-	 *
-	 * <p>
-	 * Overrides the context path value for this resource and any child resources.
-	 *
-	 * <p>
-	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
-	 * the context path is not actually specified on the servlet container.
-	 *
-	 * <p>
-	 * Affects the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestRequest#getContextPath()} - Returns the overridden context path for the resource.
-	 * 	<li class='jm'>{@link RestRequest#getServletPath()} - Includes the overridden context path for the resource.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/servlet"</js>,
-	 * 		uriContext=<js>"$C{REST/contextPathOverride,/foo}"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#uriContext}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is the first value found:
-	 * 	<ul>
-	 * 		<li>System property <js>"RestContext.uriContext"
-	 * 		<li>Environment variable <js>"RESTCONTEXT_URICONTEXT"
-	 * 		<li><jk>null</jk>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder uriContext(String value) {
-		uriContext = value;
-		return this;
-	}
-
-	/**
-	 * URI resolution relativity.
-	 *
-	 * <p>
-	 * Specifies how relative URIs should be interpreted by serializers.
-	 *
-	 * <p>
-	 * See {@link UriResolution} for possible values.
-	 *
-	 * <p>
-	 * Affects the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/servlet"</js>,
-	 * 		uriRelativity=<js>"$C{REST/uriRelativity,PATH_INFO}"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#uriRelativity}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is the first value found:
-	 * 	<ul>
-	 * 		<li>System property <js>"RestContext.uriRelativity"
-	 * 		<li>Environment variable <js>"RESTCONTEXT_URIRELATIVITY"
-	 * 		<li>{@link UriRelativity#RESOURCE}
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder uriRelativity(UriRelativity value) {
-		uriRelativity = value;
-		return this;
-	}
-
-	/**
-	 * URI resolution.
-	 *
-	 * <p>
-	 * Specifies how relative URIs should be interpreted by serializers.
-	 *
-	 * <p>
-	 * See {@link UriResolution} for possible values.
-	 *
-	 * <p>
-	 * Affects the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/servlet"</js>,
-	 * 		uriResolution=<js>"$C{REST/uriResolution,ABSOLUTE}"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#uriResolution}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is the first value found:
-	 * 	<ul>
-	 * 		<li>System property <js>"RestContext.uriResolution"
-	 * 		<li>Environment variable <js>"RESTCONTEXT_URIRESOLUTION"
-	 * 		<li>{@link UriResolution#ROOT_RELATIVE}
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder uriResolution(UriResolution value) {
-		uriResolution = value;
 		return this;
 	}
 
