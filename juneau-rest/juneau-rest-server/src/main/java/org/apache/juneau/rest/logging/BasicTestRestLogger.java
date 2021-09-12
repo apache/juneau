@@ -58,7 +58,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 		super(builder().logger(context.getLogger()).thrownStore(context.getThrownStore()));
 	}
 
-	private static RestLoggerBuilder builder() {
+	private static RestLogger.Builder builder() {
 		return RestLogger.create()
 			.normalRules(  // Rules when debugging is not enabled.
 				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.

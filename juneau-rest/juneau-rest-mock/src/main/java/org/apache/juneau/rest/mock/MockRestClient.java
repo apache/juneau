@@ -282,7 +282,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				RestContext rc = RestContext
 					.create(o.getClass(), null, null)
 					.init(o)
-					.callLoggerDefault(BasicTestRestLogger.class)
+					.defaultClasses(BasicTestRestLogger.class)
 					.debugDefault(CONDITIONAL)
 					.build()
 					.postInit()

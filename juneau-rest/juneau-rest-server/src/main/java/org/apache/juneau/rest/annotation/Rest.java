@@ -198,8 +198,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#callLogger(Class)}
-	 * 	<li class='jm'>{@link RestContextBuilder#callLogger(RestLogger)}
+	 * 	<li class='jm'>{@link RestContextBuilder#callLogger()}
 	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */

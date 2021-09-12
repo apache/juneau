@@ -74,7 +74,7 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 	 *
 	 * @param builder The settings to use for this logger.
 	 */
-	public BasicTestCaptureRestLogger(RestLoggerBuilder builder) {
+	public BasicTestCaptureRestLogger(RestLogger.Builder builder) {
 		super(builder);
 	}
 
@@ -87,7 +87,7 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 		super(builder());
 	}
 
-	private static RestLoggerBuilder builder() {
+	private static RestLogger.Builder builder() {
 		return RestLogger.create()
 			.normalRules(  // Rules when debugging is not enabled.
 				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.

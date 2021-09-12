@@ -19,9 +19,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.ResponseProcessor.*;
-import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static java.util.Collections.*;
-import static java.util.logging.Level.*;
 import static java.util.Optional.*;
 
 import java.io.*;
@@ -194,9 +192,8 @@ public class RestContext extends Context {
 	final Charset defaultCharset;
 	final long maxInput;
 
-	final BeanRef<RestLogger> callLoggerDefault;
-
 	final Enablement debugDefault;
+	final DefaultClassList defaultClasses;
 
 	// Lifecycle methods
 	private final MethodInvoker[]
@@ -246,6 +243,7 @@ public class RestContext extends Context {
 			resource = builder.resource;
 			parentContext = builder.parentContext;
 			rootBeanStore = builder.beanStore();
+			defaultClasses = builder.defaultClasses();
 
 			BeanStore bs = beanStore = rootBeanStore.copy().build();
 			beanStore
@@ -262,14 +260,10 @@ public class RestContext extends Context {
 			varResolver = bs.add(VarResolver.class, builder.varResolver().bean(Messages.class, messages).build());
 			config = bs.add(Config.class, builder.config().resolving(varResolver.createSession()));
 			responseProcessors = bs.add(ResponseProcessor[].class, builder.responseProcessors().build().toArray());
+			debugDefault = builder.debugDefault;
+			callLogger = bs.add(RestLogger.class, builder.callLogger().beanStore(beanStore).loggerOnce(logger).thrownStoreOnce(thrownStore).build());
 
 			Object r = resource.get();
-
-			callLoggerDefault = builder.callLoggerDefault;
-			debugDefault = builder.debugDefault;
-
-			callLogger = createCallLogger(r, builder, bs, logger, thrownStore);
-			bs.addBean(RestLogger.class, callLogger);
 
 			partSerializer = createPartSerializer(r, builder, bs);
 			bs.addBean(HttpPartSerializer.class, partSerializer);
@@ -620,146 +614,6 @@ public class RestContext extends Context {
 			.addBean(StaticFilesBuilder.class, x)
 			.beanCreateMethodFinder(StaticFilesBuilder.class, resource)
 			.find("createStaticFilesBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the call logger this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of RestLogger.
-	 * 	<li>Looks for REST call logger set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#callLogger(Class)}/{@link RestContextBuilder#callLogger(RestLogger)}
-	 * 			<li>{@link Rest#callLogger()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createCallLogger()</> method that returns {@link RestLogger} on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>{@link BasicFileFinder}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Looks for {@link RestContextBuilder#callLoggerDefault(RestLogger)}.
-	 * 	<li>Instantiates a {@link BasicFileFinder}.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#callLogger(Class)}
-	 * 	<li class='jm'>{@link RestContextBuilder#callLogger(RestLogger)}
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param logger
-	 * 	The Java logger to use for logging messages.
-	 * @param thrownStore
-	 * 	The thrown exception statistics store.
-	 * @return The file finder for this REST resource.
-	 * @throws Exception If file finder could not be instantiated.
-	 */
-	protected RestLogger createCallLogger(Object resource, RestContextBuilder builder, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
-
-		RestLogger x = null;
-
-		if (resource instanceof RestLogger)
-			x = (RestLogger)resource;
-
-		if (x == null)
-			x = builder.callLogger.value().orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(RestLogger.class).orElse(null);
-
-		if (x == null)
-			x = builder.callLoggerDefault.value().orElse(null);
-
-		if (x == null)
-			x = createCallLoggerBuilder(resource, builder, beanStore, logger, thrownStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestLogger.class, x)
-			.beanCreateMethodFinder(RestLogger.class, resource)
-			.find("createCallLogger")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the call logger builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createCallLogger(Object,RestContextBuilder,BeanStore,Logger,ThrownStore)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param logger
-	 * 	The Java logger to use for logging messages.
-	 * @param thrownStore
-	 * 	The thrown exception statistics store.
-	 * @return The call logger builder for this REST resource.
-	 * @throws Exception If call logger builder could not be instantiated.
-	 */
-	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, Logger logger, ThrownStore thrownStore) throws Exception {
-
-		Class<? extends RestLogger> c = builder.callLogger.type().orElse(null);
-
-		if (c == null)
-			c = builder.callLoggerDefault.type().orElse(null);
-
-		RestLoggerBuilder x = RestLogger
-			.create()
-			.beanStore(beanStore)
-			.implClass(c)
-			.normalRules(  // Rules when debugging is not enabled.
-				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
-					.statusFilter(a -> a >= 500)
-					.level(SEVERE)
-					.requestDetail(HEADER)
-					.responseDetail(HEADER)
-					.build(),
-				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
-					.statusFilter(a -> a >= 400)
-					.level(WARNING)
-					.requestDetail(STATUS_LINE)
-					.responseDetail(STATUS_LINE)
-					.build()
-			)
-			.debugRules(  // Rules when debugging is enabled.
-				RestLoggerRule.create()  // Log everything with full details.
-					.level(SEVERE)
-					.requestDetail(ENTITY)
-					.responseDetail(ENTITY)
-					.build()
-			)
-			.logger(logger)
-			.thrownStore(thrownStore);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestLoggerBuilder.class, x)
-			.beanCreateMethodFinder(RestLoggerBuilder.class, resource)
-			.find("createCallLoggerBuilder")
 			.withDefault(x)
 			.run();
 
@@ -1916,8 +1770,7 @@ public class RestContext extends Context {
 	 * Returns the call logger to use for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#callLogger(Class)}
-	 * 	<li class='jm'>{@link RestContextBuilder#callLogger(RestLogger)}
+	 * 	<li class='jm'>{@link RestContextBuilder#callLogger()}
 	 * </ul>
 	 *
 	 * @return

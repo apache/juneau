@@ -82,10 +82,7 @@ import org.apache.juneau.rest.util.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jm'>{@link RestContextBuilder#callLogger(Class)}
- * 	<li class='jm'>{@link RestContextBuilder#callLogger(RestLogger)}
- * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(Class)}
- * 	<li class='jm'>{@link RestContextBuilder#callLoggerDefault(RestLogger)}
+ * 	<li class='jm'>{@link RestContextBuilder#callLogger()}
  * 	<li class='jm'>{@link RestContextBuilder#debug(Enablement)}
  * 	<li class='jm'>{@link RestContextBuilder#debugOn(String)}
  * 	<li class='ja'>{@link Rest#debug}
@@ -110,7 +107,7 @@ public class BasicRestLogger implements RestLogger {
 	 *
 	 * @param builder The builder object.
 	 */
-	public BasicRestLogger(RestLoggerBuilder builder) {
+	public BasicRestLogger(RestLogger.Builder builder) {
 		this.logger = firstNonNull(builder.logger, Logger.getLogger(getProperty(String.class, SP_logger, "global")));
 		this.thrownStore = builder.thrownStore;
 		this.normalRules = builder.normalRules.toArray(new RestLoggerRule[builder.normalRules.size()]);

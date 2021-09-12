@@ -20,9 +20,11 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.*;
+import static java.util.logging.Level.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -119,6 +121,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	final ServletConfig inner;
 	final Class<?> resourceClass;
 	final RestContext parentContext;
+
+	private DefaultClassList defaultClasses;
 	private BeanStore beanStore;
 	private Config config;
 	private VarResolver.Builder varResolver;
@@ -127,6 +131,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private MethodExecStore.Builder methodExecStore;
 	private Messages.Builder messages;
 	private ResponseProcessorList.Builder responseProcessors;
+	private RestLogger.Builder callLogger;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -150,8 +155,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
 	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
-	BeanRef<RestLogger> callLoggerDefault = BeanRef.of(RestLogger.class);
-	BeanRef<RestLogger> callLogger = BeanRef.of(RestLogger.class);
 	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
 	BeanRef<StaticFiles> staticFiles = BeanRef.of(StaticFiles.class);
 	BeanRef<StaticFiles> staticFilesDefault = BeanRef.of(StaticFiles.class);
@@ -233,10 +236,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 			// Pass-through default values.
 			if (parentContext != null) {
-				callLoggerDefault = parentContext.callLoggerDefault;
 				debugDefault = parentContext.debugDefault;
 				staticFilesDefault.value(parentContext.staticFilesDefault);
 				fileFinderDefault.value(parentContext.fileFinderDefault);
+				defaultClasses = parentContext.defaultClasses.copy();
+			} else {
+				defaultClasses = DefaultClassList.create();
 			}
 
 			beanStore = createBeanStore(resourceClass, parentContext)
@@ -348,6 +353,29 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}
 		}
+	}
+
+	/**
+	 * Returns access to the default classes list.
+	 *
+	 * <p>
+	 * This defines the implementation classes for a variety of bean types.
+	 *
+	 * @return The default classes list for this builder.
+	 */
+	public DefaultClassList defaultClasses() {
+		return defaultClasses;
+	}
+
+	/**
+	 * Adds default implementation classes to use.
+	 *
+	 * @param values The values to add to the list of default classes.
+	 * @return This object.
+	 */
+	public RestContextBuilder defaultClasses(Class<?>...values) {
+		defaultClasses().add(values);
+		return this;
 	}
 
 	/**
@@ -486,18 +514,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public final VarResolver.Builder varResolver() {
 		return varResolver;
-	}
-
-	/**
-	 * Sets the variable resolver for this builder.
-	 *
-	 * @param value The new variable resolver.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder varResolver(VarResolver.Builder value) {
-		varResolver = value;
-		return this;
 	}
 
 	/**
@@ -804,18 +820,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Sets the builder for the {@link ThrownStore} object in the REST context.
-	 *
-	 * @param value The builder for the {@link ThrownStore} object in the REST context.
-	 * @return This object.
-	 * @throws RuntimeException If {@link #init(Object)} has not been called.
-	 */
-	public final RestContextBuilder thrownStore(ThrownStore value) {
-		thrownStore().impl(value);
-		return this;
-	}
-
-	/**
 	 * Instantiates the thrown exception store for this REST resource.
 	 *
 	 * <p>
@@ -866,6 +870,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			);
 		}
 
+		// Specify the implementation class if its set as a default.
+		defaultClasses().get(ThrownStore.class).ifPresent(x -> v.get().implClass(x));
+
 		BeanStore
 			.of(beanStore, r)
 			.addBean(ThrownStore.Builder.class, v.get())
@@ -886,18 +893,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		if (methodExecStore == null)
 			methodExecStore = createMethodExecStore(beanStore(), resource());
 		return methodExecStore;
-	}
-
-	/**
-	 * Sets the builder for the {@link MethodExecStore} object in the REST context.
-	 *
-	 * @param value The builder for the {@link MethodExecStore} object in the REST context.
-	 * @return This object.
-	 * @throws RuntimeException If {@link #init(Object)} has not been called.
-	 */
-	public final RestContextBuilder methodExecStore(MethodExecStore value) {
-		methodExecStore().impl(value);
-		return this;
 	}
 
 	/**
@@ -932,6 +927,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			);
 		}
 
+		// Specify the implementation class if its set as a default.
+		defaultClasses().get(MethodExecStore.class).ifPresent(x -> v.get().implClass(x));
+
 		BeanStore
 			.of(beanStore, r)
 			.addBean(MethodExecStore.Builder.class, v.get())
@@ -952,18 +950,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		if (messages == null)
 			messages = createMessages(beanStore(), resource());
 		return messages;
-	}
-
-	/**
-	 * Sets the builder for the {@link MethodExecStore} object in the REST context.
-	 *
-	 * @param value The builder for the {@link MethodExecStore} object in the REST context.
-	 * @return This object.
-	 * @throws RuntimeException If {@link #init(Object)} has not been called.
-	 */
-	public final RestContextBuilder messages(Messages value) {
-		messages().impl(value);
-		return this;
 	}
 
 	/**
@@ -1171,18 +1157,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Sets the builder for the {@link ResponseProcessorList} object in the REST context.
-	 *
-	 * @param value The builder for the {@link ResponseProcessorList} object in the REST context.
-	 * @return This object.
-	 * @throws RuntimeException If {@link #init(Object)} has not been called.
-	 */
-	public final RestContextBuilder responseProcessors(ResponseProcessorList value) {
-		responseProcessors().impl(value);
-		return this;
-	}
-
-	/**
 	 * Instantiates the response handlers for this REST resource.
 	 *
 	 * <p>
@@ -1257,7 +1231,170 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	/**
+	 * Returns the builder for the {@link RestLogger} object in the REST context.
+	 *
+	 * <p>
+	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our customized logger.</jc>
+	 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicRestLogger {
+	 *
+	 * 		<ja>@Override</ja>
+	 * 			<jk>protected void</jk> log(Level <jv>level</jv>, String <jv>msg</jv>, Throwable <jv>e</jv>) {
+	 * 			<jc>// Handle logging ourselves.</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(callLogger=MyLogger.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default call logger if not specified is {@link BasicRestLogger}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
+	 * 	<li class='ja'>{@link Rest#callLogger()}
+	 * </ul>
+	 *
+	 * @return The builder for the {@link RestLogger} object in the REST context.
+	 * @throws RuntimeException If {@link #init(Object)} has not been called.
+	 */
+	public final RestLogger.Builder callLogger() {
+		if (callLogger == null)
+			callLogger = createCallLogger(beanStore(), resource());
+		return callLogger;
+	}
 
+	/**
+	 * Instantiates the call logger this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of RestLogger.
+	 * 	<li>Looks for REST call logger set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#callLogger()}
+	 * 			<li>{@link Rest#callLogger()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createCallLogger()</> method that returns {@link RestLogger} on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>{@link BasicFileFinder}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a {@link BasicFileFinder}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link RestContextBuilder#callLogger()}
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The call logger builder for this REST resource.
+	 */
+	protected RestLogger.Builder createCallLogger(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<RestLogger.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(RestLogger.Builder.class).map(x -> x.copy()).ifPresent(x-> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestLogger.Builder.class, v.get())
+			.beanCreateMethodFinder(RestLogger.Builder.class, resource)
+			.find("createCallLogger")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				RestLogger
+					.create()
+					.beanStore(beanStore)
+					.normalRules(  // Rules when debugging is not enabled.
+						RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
+							.statusFilter(a -> a >= 500)
+							.level(SEVERE)
+							.requestDetail(HEADER)
+							.responseDetail(HEADER)
+							.build(),
+						RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
+							.statusFilter(a -> a >= 400)
+							.level(WARNING)
+							.requestDetail(STATUS_LINE)
+							.responseDetail(STATUS_LINE)
+							.build()
+					)
+					.debugRules(  // Rules when debugging is enabled.
+						RestLoggerRule.create()  // Log everything with full details.
+							.level(SEVERE)
+							.requestDetail(ENTITY)
+							.responseDetail(ENTITY)
+							.build()
+					)
+			);
+		}
+
+		if (r instanceof RestLogger)
+			v.get().impl((RestLogger)r);
+
+		beanStore.getBean(RestLogger.class).ifPresent(x-> v.get().impl(x));
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses().get(RestLogger.class).ifPresent(x -> v.get().implClass(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestLogger.Builder.class, v.get())
+			.beanCreateMethodFinder(RestLogger.class, resource)
+			.find("createCallLogger")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
@@ -1558,138 +1695,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder allowedMethodParams(String value) {
 		allowedMethodParams = value;
-		return this;
-	}
-
-	/**
-	 * REST call logger.
-	 *
-	 * <p>
-	 * Specifies the logger to use for logging of HTTP requests and responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our customized logger.</jc>
-	 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicRestLogger {
-	 *
-	 * 		<ja>@Override</ja>
-	 * 			<jk>protected void</jk> log(Level <jv>level</jv>, String <jv>msg</jv>, Throwable <jv>e</jv>) {
-	 * 			<jc>// Handle logging ourselves.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(callLogger=MyLogger.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default call logger if not specified is {@link BasicRestLogger} unless overwritten by {@link RestContextBuilder#callLoggerDefault(RestLogger)}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * 	<li class='ja'>{@link Rest#callLogger()}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestLogger}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder callLogger(Class<? extends RestLogger> value) {
-		callLogger.type(value);
-		return this;
-	}
-
-	/**
-	 * REST call logger.
-	 *
-	 * <p>
-	 * Same as {@link #callLogger(Class)} but specifies an already-instantiated call logger.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * 	<li class='ja'>{@link Rest#callLogger()}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestLogger}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder callLogger(RestLogger value) {
-		callLogger.value(value);
-		return this;
-	}
-
-	/**
-	 * Default REST call logger.
-	 *
-	 * <p>
-	 * The default logger to use if one is not specified.
-	 *
-	 * <p>
-	 * This logger is inherited by child resources if not specified on those resources.
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestLogger}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder callLoggerDefault(Class<? extends RestLogger> value) {
-		callLoggerDefault.type(value);
-		return this;
-	}
-
-	/**
-	 * Default REST call logger.
-	 *
-	 * <p>
-	 * The default logger to use if one is not specified.
-	 *
-	 * <p>
-	 * This logger is inherited by child resources if not specified on those resources.
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestLogger}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder callLoggerDefault(RestLogger value) {
-		callLoggerDefault.value(value);
 		return this;
 	}
 
