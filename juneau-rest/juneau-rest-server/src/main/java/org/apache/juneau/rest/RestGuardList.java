@@ -21,7 +21,9 @@ import org.apache.juneau.cp.*;
  */
 public class RestGuardList {
 
-	private RestGuard[] entries;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -32,22 +34,12 @@ public class RestGuardList {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the contents for this list.
-	 */
-	protected RestGuardList(Builder builder) {
-		entries =
-			builder
-				.entries
-				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
-				.toArray(RestGuard[]::new);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for {@link RestGuardList} objects.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -103,6 +95,26 @@ public class RestGuardList {
 			beanStore = value;
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private RestGuard[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestGuardList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.toArray(RestGuard[]::new);
 	}
 
 	private static RestGuard instantiate(Object o, BeanStore bs) {

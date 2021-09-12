@@ -31,6 +31,10 @@ import org.apache.juneau.svl.*;
  */
 public class PathAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Path DEFAULT = create().build();
 
@@ -133,8 +137,12 @@ public class PathAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Path} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -696,6 +704,10 @@ public class PathAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Path {
 
 		private final boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -983,6 +995,10 @@ public class PathAnnotation {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Applies targeted {@link Path} annotations to a {@link BeanContextBuilder}.
 	 */
@@ -1007,6 +1023,10 @@ public class PathAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Path @Path annotations}.

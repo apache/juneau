@@ -26,6 +26,10 @@ import org.apache.juneau.svl.*;
  */
 public class NamePropertyAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final NameProperty DEFAULT = create().build();
 
@@ -62,8 +66,12 @@ public class NamePropertyAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link NameProperty} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -110,6 +118,10 @@ public class NamePropertyAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationImpl implements NameProperty {
 
 		Impl(Builder b) {
@@ -117,6 +129,10 @@ public class NamePropertyAnnotation {
 			postConstruct();
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link NameProperty} annotations to a {@link BeanContextBuilder}.
@@ -142,6 +158,10 @@ public class NamePropertyAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link NameProperty @NameProperty annotations}.

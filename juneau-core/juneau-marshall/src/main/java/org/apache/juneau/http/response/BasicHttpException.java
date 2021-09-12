@@ -48,8 +48,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	HeaderList headers;
 	BasicStatusLine statusLine;
-	HeaderListBuilder headersBuilder;
-	BasicStatusLineBuilder statusLineBuilder;
+	HeaderList.Builder headersBuilder;
+	BasicStatusLine.Builder statusLineBuilder;
 	HttpEntity body;
 
 	/**
@@ -389,7 +389,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return headers;
 	}
 
-	private BasicStatusLineBuilder statusLineBuilder() {
+	private BasicStatusLine.Builder statusLineBuilder() {
 		assertModifiable();
 		if (statusLineBuilder == null) {
 			statusLineBuilder = statusLine.copy();
@@ -398,7 +398,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return statusLineBuilder;
 	}
 
-	private HeaderListBuilder headersBuilder() {
+	private HeaderList.Builder headersBuilder() {
 		assertModifiable();
 		if (headersBuilder == null) {
 			headersBuilder = headers.copy();

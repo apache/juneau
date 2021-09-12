@@ -29,6 +29,10 @@ import org.apache.juneau.svl.*;
  */
 public class SoapXmlAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final SoapXml DEFAULT = create().build();
 
@@ -76,8 +80,12 @@ public class SoapXmlAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link SoapXml} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -136,6 +144,10 @@ public class SoapXmlAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements SoapXml {
 
 		Impl(Builder b) {
@@ -143,6 +155,10 @@ public class SoapXmlAnnotation {
 			postConstruct();
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link SoapXml} annotations to a {@link ContextPropertiesBuilder}.
@@ -168,6 +184,10 @@ public class SoapXmlAnnotation {
 			b.prependTo(CONTEXT_annotations, copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link SoapXml @SoapXml annotations}.

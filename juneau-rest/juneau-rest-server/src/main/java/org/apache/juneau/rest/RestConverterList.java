@@ -21,7 +21,9 @@ import org.apache.juneau.cp.*;
  */
 public class RestConverterList {
 
-	private final RestConverter[] entries;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -32,22 +34,12 @@ public class RestConverterList {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the contents for this list.
-	 */
-	protected RestConverterList(Builder builder) {
-		entries =
-			builder
-				.entries
-				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
-				.toArray(RestConverter[]::new);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for {@link RestConverterList} objects.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -103,6 +95,26 @@ public class RestConverterList {
 			beanStore = value;
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final RestConverter[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestConverterList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.toArray(RestConverter[]::new);
 	}
 
 	private static RestConverter instantiate(Object o, BeanStore bs) {

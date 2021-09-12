@@ -34,6 +34,9 @@ import org.apache.juneau.svl.*;
  */
 public class RestAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
 	public static final Rest DEFAULT = create().build();
@@ -67,8 +70,12 @@ public class RestAnnotation {
 		return create().on(on);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Rest} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -690,6 +697,10 @@ public class RestAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Rest {
 
 		private final Class<? extends RestContextBuilder> builder;
@@ -1027,6 +1038,10 @@ public class RestAnnotation {
 			return uriResolution;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies {@link Rest} annotations to a {@link RestContextBuilder}.

@@ -33,6 +33,10 @@ import org.apache.juneau.svl.*;
  */
 public class SchemaAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Schema DEFAULT = create().build();
 
@@ -226,8 +230,12 @@ public class SchemaAnnotation {
 		;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Schema} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -920,6 +928,10 @@ public class SchemaAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Schema {
 
 		private final boolean exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, ignore;
@@ -1277,6 +1289,10 @@ public class SchemaAnnotation {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Applies targeted {@link Schema} annotations to a {@link ContextPropertiesBuilder}.
 	 */
@@ -1301,6 +1317,10 @@ public class SchemaAnnotation {
 			b.prependTo(CONTEXT_annotations, copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Schema @Schema annotations}.

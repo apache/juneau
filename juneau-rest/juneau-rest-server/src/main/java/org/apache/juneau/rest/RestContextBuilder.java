@@ -162,8 +162,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
 	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
 	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
-	HeaderListBuilder defaultRequestHeaders = HeaderList.create();
-	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
+	HeaderList.Builder defaultRequestHeaders = HeaderList.create();
+	HeaderList.Builder defaultResponseHeaders = HeaderList.create();
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();

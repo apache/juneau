@@ -82,6 +82,10 @@ import org.apache.juneau.http.header.*;
 @ConfigurableContext(nocache=true)
 public final class ParserGroup {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * An identifier that the previous entries in this group should be inherited.
 	 * <p>
@@ -106,14 +110,6 @@ public final class ParserGroup {
 		}
 	}
 
-	// Maps Content-Type headers to matches.
-	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
-
-	private final List<MediaType> mediaTypes;
-	private final List<Parser> mediaTypeParsers;
-
-	final Parser[] entries;
-
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
@@ -123,45 +119,12 @@ public final class ParserGroup {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this bean.
-	 */
-	public ParserGroup(Builder builder) {
-
-		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Parser[]::new);
-
-		AList<MediaType> lmt = AList.create();
-		AList<Parser> l = AList.create();
-		for (Parser e : entries) {
-			for (MediaType m: e.getMediaTypes()) {
-				lmt.add(m);
-				l.add(e);
-			}
-		}
-
-		this.mediaTypes = lmt.unmodifiable();
-		this.mediaTypeParsers = l.unmodifiable();
-	}
-
-	private Parser build(Object o) {
-		if (o instanceof Parser)
-			return (Parser)o;
-		return ((ParserBuilder)o).build();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a copy of this parser group.
-	 *
-	 * @return A new copy of this parser group.
-	 */
-	public Builder copy() {
-		return new Builder(this);
-	}
-
-	/**
-	 * Builder class for creating instances of {@link ParserGroup}.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -457,6 +420,55 @@ public final class ParserGroup {
 				return "builder:" + o.getClass().getName();
 			return "parser:" + o.getClass().getName();
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// Maps Content-Type headers to matches.
+	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
+
+	private final List<MediaType> mediaTypes;
+	private final List<Parser> mediaTypeParsers;
+
+	final Parser[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this bean.
+	 */
+	public ParserGroup(Builder builder) {
+
+		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Parser[]::new);
+
+		AList<MediaType> lmt = AList.create();
+		AList<Parser> l = AList.create();
+		for (Parser e : entries) {
+			for (MediaType m: e.getMediaTypes()) {
+				lmt.add(m);
+				l.add(e);
+			}
+		}
+
+		this.mediaTypes = lmt.unmodifiable();
+		this.mediaTypeParsers = l.unmodifiable();
+	}
+
+	private Parser build(Object o) {
+		if (o instanceof Parser)
+			return (Parser)o;
+		return ((ParserBuilder)o).build();
+	}
+
+	/**
+	 * Creates a copy of this parser group.
+	 *
+	 * @return A new copy of this parser group.
+	 */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**

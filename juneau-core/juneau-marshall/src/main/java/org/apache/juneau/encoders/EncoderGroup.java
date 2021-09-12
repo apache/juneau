@@ -66,6 +66,10 @@ import org.apache.juneau.http.header.*;
  */
 public final class EncoderGroup {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * An identifier that the previous encoders in this group should be inherited.
 	 * <p>
@@ -80,13 +84,6 @@ public final class EncoderGroup {
 	 */
 	public static abstract class NoInherit extends Encoder {}
 
-	// Maps Accept-Encoding headers to matching encoders.
-	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
-
-	private final List<String> encodings;
-	private final Encoder[] encodingsEncoders;
-	private final Encoder[] entries;
-
 	/**
 	 * Instantiates a new clean-slate {@link EncoderGroup.Builder} object.
 	 *
@@ -99,40 +96,12 @@ public final class EncoderGroup {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected EncoderGroup(Builder builder) {
-		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore, x)).toArray(Encoder[]::new);
-
-		List<String> lc = AList.create();
-		List<Encoder> l = AList.create();
-		for (Encoder e : entries) {
-			for (String c: e.getCodings()) {
-				lc.add(c);
-				l.add(e);
-			}
-		}
-
-		this.encodings = unmodifiableList(lc);
-		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Encoder instantiate(BeanStore bs, Object o) {
-		if (o instanceof Encoder)
-			return (Encoder)o;
-		try {
-			return bs.createBean(Encoder.class, (Class<? extends Encoder>)o);
-		} catch (ExecutableException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder class for this object.
+	 * Builder class.
 	 */
 	public static class Builder {
 		List<Object> entries;
@@ -297,6 +266,49 @@ public final class EncoderGroup {
 		 */
 		public Builder copy() {
 			return new Builder(this);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// Maps Accept-Encoding headers to matching encoders.
+	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
+
+	private final List<String> encodings;
+	private final Encoder[] encodingsEncoders;
+	private final Encoder[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected EncoderGroup(Builder builder) {
+		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore, x)).toArray(Encoder[]::new);
+
+		List<String> lc = AList.create();
+		List<Encoder> l = AList.create();
+		for (Encoder e : entries) {
+			for (String c: e.getCodings()) {
+				lc.add(c);
+				l.add(e);
+			}
+		}
+
+		this.encodings = unmodifiableList(lc);
+		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Encoder instantiate(BeanStore bs, Object o) {
+		if (o instanceof Encoder)
+			return (Encoder)o;
+		try {
+			return bs.createBean(Encoder.class, (Class<? extends Encoder>)o);
+		} catch (ExecutableException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

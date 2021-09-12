@@ -54,7 +54,7 @@ public class RemoteMeta {
 				path = trimSlashes(r.path());
 
 		String versionHeader = "Client-Version", clientVersion = null;
-		HeaderListBuilder headersBuilder = HeaderList.create().resolving();
+		HeaderList.Builder headersBuilder = HeaderList.create().resolving();
 
 		for (Remote r : ci.getAnnotations(Remote.class)) {
 			if (! r.path().isEmpty())

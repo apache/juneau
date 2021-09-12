@@ -34,8 +34,8 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	BasicStatusLine statusLine;
 	HeaderList headers = HeaderList.EMPTY;
-	BasicStatusLineBuilder statusLineBuilder;
-	HeaderListBuilder headersBuilder;
+	BasicStatusLine.Builder statusLineBuilder;
+	HeaderList.Builder headersBuilder;
 	HttpEntity body;
 	boolean unmodifiable;
 
@@ -442,7 +442,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private BasicStatusLineBuilder statusLineBuilder() {
+	private BasicStatusLine.Builder statusLineBuilder() {
 		if (statusLineBuilder == null) {
 			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
 			statusLine = null;
@@ -450,7 +450,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		return statusLineBuilder;
 	}
 
-	private HeaderListBuilder headersBuilder() {
+	private HeaderList.Builder headersBuilder() {
 		if (headersBuilder == null) {
 			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
 			headers = null;

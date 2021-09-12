@@ -27,7 +27,7 @@ import org.apache.juneau.oapi.*;
 import org.junit.*;
 
 /**
- * Tests: {@link PartList}, {@link PartListBuilder}, {@link BasicPartIterator}
+ * Tests: {@link PartList}, {@link PartList.Builder}, {@link BasicPartIterator}
  */
 @FixMethodOrder(NAME_ASCENDING)
 public class PartList_Test {
@@ -71,7 +71,7 @@ public class PartList_Test {
 
 	@Test
 	public void a01_basic() {
-		PartListBuilder x = PartList.create();
+		PartList.Builder x = PartList.create();
 
 		assertObject(x.build()).isString("");
 		x.append(FOO_1);
@@ -138,7 +138,7 @@ public class PartList_Test {
 	public void a03_addMethods() {
 		String pname = "PartSupplierTest.x";
 
-		PartListBuilder x = PartList.create().resolving();
+		PartList.Builder x = PartList.create().resolving();
 		System.setProperty(pname, "y");
 
 		x.append("X1","bar");
@@ -158,7 +158,7 @@ public class PartList_Test {
 
 	@Test
 	public void a04_toArrayMethods() {
-		PartListBuilder x = PartList
+		PartList.Builder x = PartList
 			.create()
 			.append("X1","1")
 			.append(partList("X2","2").getAll());
@@ -335,7 +335,7 @@ public class PartList_Test {
 
 	@Test
 	public void b01_builder_clear() {
-		PartListBuilder x = PartList.create();
+		PartList.Builder x = PartList.create();
 		x.append(FOO_1);
 		x.clear();
 		assertObject(x.build()).isString("");

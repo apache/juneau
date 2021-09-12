@@ -25,6 +25,10 @@ import org.apache.juneau.jsonschema.annotation.*;
  */
 public class OpSwaggerAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final OpSwagger DEFAULT = create().build();
 
@@ -38,7 +42,21 @@ public class OpSwaggerAnnotation {
 	}
 
 	/**
-	 * Builder class for the {@link OpSwagger} annotation.
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(OpSwagger a) {
+		return a == null || DEFAULT.equals(a);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -203,6 +221,10 @@ public class OpSwaggerAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends AnnotationImpl implements OpSwagger {
 
 		private final ExternalDocs externalDocs;
@@ -285,15 +307,5 @@ public class OpSwaggerAnnotation {
 		public String[] value() {
 			return value;
 		}
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(OpSwagger a) {
-		return a == null || DEFAULT.equals(a);
 	}
 }

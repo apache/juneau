@@ -32,19 +32,9 @@ import org.apache.juneau.internal.*;
  */
 public class MethodExecStats {
 
-	private final long guid;
-	private final Method method;
-	private final ThrownStore thrownStore;
-
-	private volatile int minTime = -1, maxTime;
-
-	private AtomicInteger
-		starts = new AtomicInteger(),
-		finishes = new AtomicInteger(),
-		errors = new AtomicInteger();
-
-	private AtomicLong
-		totalTime = new AtomicLong();
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -55,19 +45,12 @@ public class MethodExecStats {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected MethodExecStats(Builder builder) {
-		this.guid = new Random().nextLong();
-		this.method = builder.method;
-		this.thrownStore = ofNullable(builder.thrownStore).orElseGet(ThrownStore::new);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for this object.
+	 * Builder class.
 	 */
 	@FluentSetters
 	public static class Builder {
@@ -142,6 +125,35 @@ public class MethodExecStats {
 			thrownStore = value;
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final long guid;
+	private final Method method;
+	private final ThrownStore thrownStore;
+
+	private volatile int minTime = -1, maxTime;
+
+	private AtomicInteger
+		starts = new AtomicInteger(),
+		finishes = new AtomicInteger(),
+		errors = new AtomicInteger();
+
+	private AtomicLong
+		totalTime = new AtomicLong();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected MethodExecStats(Builder builder) {
+		this.guid = new Random().nextLong();
+		this.method = builder.method;
+		this.thrownStore = ofNullable(builder.thrownStore).orElseGet(ThrownStore::new);
 	}
 
 

@@ -27,6 +27,10 @@ import org.apache.juneau.svl.*;
  */
 public class ResponseBodyAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final ResponseBody DEFAULT = create().build();
 
@@ -74,8 +78,12 @@ public class ResponseBodyAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link ResponseBody} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -128,6 +136,10 @@ public class ResponseBodyAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements ResponseBody {
 
 		Impl(Builder b) {
@@ -135,6 +147,10 @@ public class ResponseBodyAnnotation {
 			postConstruct();
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link ResponseBody} annotations to a {@link BeanContextBuilder}.
@@ -160,6 +176,10 @@ public class ResponseBodyAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link ResponseBody @ResponseBody annotations}.

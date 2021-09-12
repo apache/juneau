@@ -29,6 +29,10 @@ import org.apache.juneau.svl.*;
  */
 public class UrlEncodingAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final UrlEncoding DEFAULT = create().build();
 
@@ -77,8 +81,12 @@ public class UrlEncodingAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link UrlEncoding} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -151,6 +159,10 @@ public class UrlEncodingAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements UrlEncoding {
 
 		private final boolean expandedParams;
@@ -167,6 +179,10 @@ public class UrlEncodingAnnotation {
 			return expandedParams;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link UrlEncoding} annotations to a {@link ContextPropertiesBuilder}.
@@ -192,6 +208,10 @@ public class UrlEncodingAnnotation {
 			b.prependTo(CONTEXT_annotations, copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link UrlEncoding @UrlEncoding annotations}.

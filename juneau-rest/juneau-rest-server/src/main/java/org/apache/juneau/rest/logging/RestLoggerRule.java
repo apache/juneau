@@ -26,6 +26,10 @@ import org.apache.juneau.json.*;
  */
 public class RestLoggerRule {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -35,36 +39,12 @@ public class RestLoggerRule {
 		return new Builder();
 	}
 
-	private final Predicate<Integer> statusFilter;
-	private final Predicate<HttpServletRequest> requestFilter;
-	private final Predicate<HttpServletResponse> responseFilter;
-	private final Predicate<Throwable> exceptionFilter;
-	private final Level level;
-	private final Enablement enabled;
-	private final Predicate<HttpServletRequest> enabledTest;
-	private final RestLoggingDetail requestDetail, responseDetail;
-	private final boolean logStackTrace;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param b Builder
-	 */
-	RestLoggerRule(Builder b) {
-		this.statusFilter = b.statusFilter;
-		this.exceptionFilter = b.exceptionFilter;
-		this.requestFilter = b.requestFilter;
-		this.responseFilter = b.responseFilter;
-		this.level = b.level;
-		this.enabled = b.enabled;
-		this.enabledTest = b.enabledTest;
-		this.requestDetail = b.requestDetail;
-		this.responseDetail = b.responseDetail;
-		this.logStackTrace = b.logStackTrace;
-	}
-
-	/**
-	 * The builder for this object.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -311,6 +291,38 @@ public class RestLoggerRule {
 		public RestLoggerRule build() {
 			return new RestLoggerRule(this);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Predicate<Integer> statusFilter;
+	private final Predicate<HttpServletRequest> requestFilter;
+	private final Predicate<HttpServletResponse> responseFilter;
+	private final Predicate<Throwable> exceptionFilter;
+	private final Level level;
+	private final Enablement enabled;
+	private final Predicate<HttpServletRequest> enabledTest;
+	private final RestLoggingDetail requestDetail, responseDetail;
+	private final boolean logStackTrace;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param b Builder
+	 */
+	RestLoggerRule(Builder b) {
+		this.statusFilter = b.statusFilter;
+		this.exceptionFilter = b.exceptionFilter;
+		this.requestFilter = b.requestFilter;
+		this.responseFilter = b.responseFilter;
+		this.level = b.level;
+		this.enabled = b.enabled;
+		this.enabledTest = b.enabledTest;
+		this.requestDetail = b.requestDetail;
+		this.responseDetail = b.responseDetail;
+		this.logStackTrace = b.logStackTrace;
 	}
 
 	/**

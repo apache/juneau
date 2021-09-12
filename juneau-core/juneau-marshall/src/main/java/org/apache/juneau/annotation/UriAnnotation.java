@@ -26,6 +26,10 @@ import org.apache.juneau.svl.*;
  */
 public class UriAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Uri DEFAULT = create().build();
 
@@ -59,7 +63,26 @@ public class UriAnnotation {
 	}
 
 	/**
-	 * Builder class for the {@link Uri} annotation.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
+	 */
+	public static Uri copy(Uri a, VarResolverSession r) {
+		return
+			create()
+			.on(r.resolve(a.on()))
+			.onClass(a.onClass())
+			.build();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -118,20 +141,9 @@ public class UriAnnotation {
 		// </FluentSetters>
 	}
 
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Uri copy(Uri a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.build();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends TargetedAnnotationTImpl implements Uri {
 
@@ -140,6 +152,10 @@ public class UriAnnotation {
 			postConstruct();
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link Uri} annotations to a {@link BeanContextBuilder}.
@@ -165,6 +181,10 @@ public class UriAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Uri @Uri annotations}.

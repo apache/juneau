@@ -27,6 +27,10 @@ import org.apache.juneau.svl.*;
  */
 public class BeanIgnoreAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final BeanIgnore DEFAULT = create().build();
 
@@ -74,8 +78,12 @@ public class BeanIgnoreAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link BeanIgnore} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -140,6 +148,10 @@ public class BeanIgnoreAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements BeanIgnore {
 
 		Impl(Builder b) {
@@ -147,6 +159,10 @@ public class BeanIgnoreAnnotation {
 			postConstruct();
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link BeanIgnore} annotations to a {@link BeanContextBuilder}.
@@ -172,6 +188,10 @@ public class BeanIgnoreAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link BeanIgnore @BeanIgnore annotations}.

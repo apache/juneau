@@ -30,6 +30,10 @@ import org.apache.juneau.svl.*;
  */
 public class RdfAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Rdf DEFAULT = create().build();
 
@@ -81,8 +85,12 @@ public class RdfAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Rdf} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -189,6 +197,10 @@ public class RdfAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Rdf {
 
 		private final boolean beanUri;
@@ -224,6 +236,10 @@ public class RdfAnnotation {
 			return prefix;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link Rdf} annotations to a {@link RdfSerializerBuilder}.
@@ -276,6 +292,10 @@ public class RdfAnnotation {
 			b.prependTo(CONTEXT_annotations, copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Rdf @Rdf annotations}.

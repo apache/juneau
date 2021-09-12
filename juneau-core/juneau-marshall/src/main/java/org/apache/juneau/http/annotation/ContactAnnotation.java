@@ -25,6 +25,10 @@ import org.apache.juneau.svl.*;
  */
 public class ContactAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Contact DEFAULT = create().build();
 
@@ -64,8 +68,12 @@ public class ContactAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Contact} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -141,6 +149,10 @@ public class ContactAnnotation {
 
 		// </FluentSetters>
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends AnnotationImpl implements Contact {
 

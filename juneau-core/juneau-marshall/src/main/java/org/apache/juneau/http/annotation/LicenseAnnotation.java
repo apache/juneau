@@ -25,6 +25,10 @@ import org.apache.juneau.svl.*;
  */
 public class LicenseAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final License DEFAULT = create().build();
 
@@ -63,8 +67,12 @@ public class LicenseAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link License} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -129,6 +137,10 @@ public class LicenseAnnotation {
 
 		// </FluentSetters>
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends AnnotationImpl implements License {
 

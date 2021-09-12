@@ -51,9 +51,9 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	String httpMethod, clientVersion;
 	Enablement debug;
 	List<String> path;
-	PartListBuilder defaultFormData, defaultQueryData;
+	PartList.Builder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
-	HeaderListBuilder defaultRequestHeaders, defaultResponseHeaders;
+	HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 	RestMatcherList.Builder restMatchers;
 	List<MediaType> produces, consumes;
 	Set<String> roleGuard, rolesDeclared;

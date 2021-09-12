@@ -26,6 +26,10 @@ import org.apache.juneau.jsonschema.annotation.*;
  */
 public class SwaggerAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Swagger DEFAULT = create().build();
 
@@ -48,8 +52,12 @@ public class SwaggerAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Swagger} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -183,6 +191,10 @@ public class SwaggerAnnotation {
 
 		// </FluentSetters>
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends AnnotationImpl implements Swagger {
 

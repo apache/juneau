@@ -31,6 +31,9 @@ import org.apache.juneau.svl.*;
  */
 public class RestDeleteAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
 	public static final RestDelete DEFAULT = create().build();
@@ -44,8 +47,12 @@ public class RestDeleteAnnotation {
 		return new Builder();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link RestDelete} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -304,6 +311,10 @@ public class RestDeleteAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationImpl implements RestDelete {
 
 		private final Class<? extends RestGuard>[] guards;
@@ -433,6 +444,10 @@ public class RestDeleteAnnotation {
 			return value;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies {@link RestDelete} annotations to a {@link RestOpContextBuilder}.

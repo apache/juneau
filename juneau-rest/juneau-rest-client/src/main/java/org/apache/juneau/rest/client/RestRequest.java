@@ -84,8 +84,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private RestResponse response;                         // The response.
 	List<RestCallInterceptor> interceptors = new ArrayList<>();   // Used for intercepting and altering requests.
 
-	private final HeaderListBuilder headerDataBuilder;
-	private final PartListBuilder queryDataBuilder, formDataBuilder, pathDataBuilder;
+	private final HeaderList.Builder headerDataBuilder;
+	private final PartList.Builder queryDataBuilder, formDataBuilder, pathDataBuilder;
 
 	private HeaderList headerData;
 	private PartList queryData, formData, pathData;
@@ -807,7 +807,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The header data builder.
 	 */
-	public HeaderListBuilder getHeaderDataBuilder() {
+	public HeaderList.Builder getHeaderDataBuilder() {
 		headerData = null;
 		return headerDataBuilder;
 	}
@@ -832,7 +832,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The query data builder.
 	 */
-	public PartListBuilder getQueryDataBuilder() {
+	public PartList.Builder getQueryDataBuilder() {
 		queryData = null;
 		return queryDataBuilder;
 	}
@@ -857,7 +857,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The form data builder.
 	 */
-	public PartListBuilder getFormDataBuilder() {
+	public PartList.Builder getFormDataBuilder() {
 		formData = null;
 		return formDataBuilder;
 	}
@@ -882,7 +882,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The path data builder.
 	 */
-	public PartListBuilder getPathDataBuilder() {
+	public PartList.Builder getPathDataBuilder() {
 		pathData = null;
 		return pathDataBuilder;
 	}
@@ -1242,7 +1242,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into headerPairs(String...)");
-		HeaderListBuilder b = getHeaderDataBuilder();
+		HeaderList.Builder b = getHeaderDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1271,7 +1271,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		PartListBuilder b = getQueryDataBuilder();
+		PartList.Builder b = getQueryDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1300,7 +1300,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into formDataPairs(String...)");
-		PartListBuilder b = getFormDataBuilder();
+		PartList.Builder b = getFormDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1331,7 +1331,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		PartListBuilder b = getPathDataBuilder();
+		PartList.Builder b = getPathDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.set(pairs[i], pairs[i+1]);
 		return this;
@@ -1364,7 +1364,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headersBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into headersBean(Object) is not a bean.");
-		HeaderListBuilder b = getHeaderDataBuilder();
+		HeaderList.Builder b = getHeaderDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value, PropertyNamerDUCS.INSTANCE).entrySet())
 			b.append(createHeader(e.getKey(), e.getValue()));
 		return this;
@@ -1393,7 +1393,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into queryDataBean(Object) is not a bean.");
-		PartListBuilder b = getQueryDataBuilder();
+		PartList.Builder b = getQueryDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 			b.append(createPart(QUERY, e.getKey(), e.getValue()));
 		return this;
@@ -1422,7 +1422,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into formDataBean(Object) is not a bean.");
-		PartListBuilder b = getFormDataBuilder();
+		PartList.Builder b = getFormDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 			b.append(createPart(FORMDATA, e.getKey(), e.getValue()));
 		return this;
@@ -1451,7 +1451,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into pathDataBean(Object) is not a bean.");
-		PartListBuilder b = getPathDataBuilder();
+		PartList.Builder b = getPathDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 			b.set(createPart(PATH, e.getKey(), e.getValue()));
 		return this;
@@ -2467,7 +2467,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			request.setURI(uriBuilder.build());
 
 			// Pick the serializer if it hasn't been overridden.
-			HeaderListBuilder hl = getHeaderDataBuilder();
+			HeaderList.Builder hl = getHeaderDataBuilder();
 			Optional<Header> h = hl.getLast("Content-Type");
 			String contentType = h.isPresent() ? h.get().getValue() : null;
 			Serializer serializer = this.serializer;

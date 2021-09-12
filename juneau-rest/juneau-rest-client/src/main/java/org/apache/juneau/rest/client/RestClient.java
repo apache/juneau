@@ -1748,8 +1748,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	static final String RESTCLIENT_INTERNAL_queryDataBuilder = PREFIX + "queryBuilder.o";
 	static final String RESTCLIENT_INTERNAL_pathDataBuilder = PREFIX + "pathDataBuilder.o";
 
-	final HeaderListBuilder headerData;
-	final PartListBuilder queryData, formData, pathData;
+	final HeaderList.Builder headerData;
+	final PartList.Builder queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
 
 	private final HttpClientConnectionManager connectionManager;
@@ -1815,10 +1815,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		super(builder);
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 		this.httpClient = cp.getInstance(RESTCLIENT_INTERNAL_httpClient, CloseableHttpClient.class).orElse(null);
-		this.headerData = cp.getInstance(RESTCLIENT_INTERNAL_headerDataBuilder, HeaderListBuilder.class).orElseGet(HeaderListBuilder::new).copy();
-		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
-		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
-		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.headerData = cp.getInstance(RESTCLIENT_INTERNAL_headerDataBuilder, HeaderList.Builder.class).orElseGet(HeaderList.Builder::new).copy();
+		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
+		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
+		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.skipEmptyHeaders = cp.getBoolean(RESTCLIENT_skipEmptyHeaders).orElse(false);
 		this.skipEmptyQueryData = cp.getBoolean(RESTCLIENT_skipEmptyQueryData).orElse(false);
 		this.skipEmptyFormData = cp.getBoolean(RESTCLIENT_skipEmptyFormData).orElse(false);
@@ -3209,7 +3209,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public HeaderListBuilder createHeaderDataBuilder() {
+	public HeaderList.Builder createHeaderDataBuilder() {
 		return headerData.copy();
 	}
 
@@ -3224,7 +3224,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public PartListBuilder createQueryDataBuilder() {
+	public PartList.Builder createQueryDataBuilder() {
 		return queryData.copy();
 	}
 
@@ -3239,7 +3239,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public PartListBuilder createFormDataBuilder() {
+	public PartList.Builder createFormDataBuilder() {
 		return formData.copy();
 	}
 
@@ -3254,7 +3254,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public PartListBuilder createPathDataBuilder() {
+	public PartList.Builder createPathDataBuilder() {
 		return pathData.copy();
 	}
 

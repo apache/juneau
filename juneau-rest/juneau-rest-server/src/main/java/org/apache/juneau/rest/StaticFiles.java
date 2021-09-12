@@ -29,6 +29,10 @@ import org.apache.juneau.utils.*;
  */
 public interface StaticFiles extends FileFinder {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Represents no static files */
 	public abstract class Null implements StaticFiles {}
 
@@ -41,8 +45,12 @@ public interface StaticFiles extends FileFinder {
 		return new Builder();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * The builder for this object.
+	 * Builder class.
 	 */
 	@FluentSetters
 	public static class Builder extends FileFinder.Builder {
@@ -175,6 +183,10 @@ public interface StaticFiles extends FileFinder {
 
 		// </FluentSetters>
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Resolve the specified path.

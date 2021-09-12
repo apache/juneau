@@ -31,6 +31,10 @@ import org.apache.juneau.svl.*;
 @SuppressWarnings("rawtypes")
 public class HtmlAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Html DEFAULT = create().build();
 
@@ -84,8 +88,12 @@ public class HtmlAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Html} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -215,6 +223,10 @@ public class HtmlAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Html {
 
 		private boolean noTableHeaders, noTables;
@@ -264,6 +276,10 @@ public class HtmlAnnotation {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Applies targeted {@link Html} annotations to a {@link ContextPropertiesBuilder}.
 	 */
@@ -288,6 +304,10 @@ public class HtmlAnnotation {
 			b.prependTo(CONTEXT_annotations, copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Html @Html annotations}.

@@ -26,16 +26,12 @@ import org.apache.juneau.serializer.*;
  */
 public class SimplePartSerializer extends BaseHttpPartSerializer {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
-	//-------------------------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
 	public static final SimplePartSerializer DEFAULT = create().build();
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -46,18 +42,12 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected SimplePartSerializer(Builder builder) {
-		super(builder);
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * The builder for this object.
-	 *
+	 * Builder class.
 	 */
 	public static class Builder extends BaseHttpPartSerializer.Builder {
 
@@ -78,6 +68,19 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		public BeanContextableBuilder copy() {
 			return new Builder(this);
 		}
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected SimplePartSerializer(Builder builder) {
+		super(builder);
 	}
 
 	@Override

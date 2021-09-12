@@ -46,42 +46,9 @@ import org.apache.juneau.collections.*;
 @Bean(properties="v1,v2")
 public class BeanDiff {
 
-	private OMap v1 = new OMap(), v2 = new OMap();
-
-	/**
-	 * Constructor.
-	 *
-	 * @param bc The bean context to use for comparing beans.
-	 * @param first The first bean to compare.
-	 * @param second The second bean to compare.
-	 * @param include
-	 * 	Optional properties to include in the comparison.
-	 * 	<br>If <jk>null</jk>, all properties are included.
-	 * @param exclude
-	 * 	Optional properties to exclude in the comparison.
-	 * 	<br>If <jk>null</jk>, no properties are excluded.
-	 */
-	@SuppressWarnings("null")
-	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
-		if (first == null && second == null)
-			return;
-		BeanSession bs = bc.createBeanSession();
-		BeanMap<?> bm1 = first == null ? null : bs.toBeanMap(first);
-		BeanMap<?> bm2 = second == null ? null : bs.toBeanMap(second);
-		Set<String> keys = bm1 != null ? bm1.keySet() : bm2.keySet();
-		for (String k : keys) {
-			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {
-				Object o1 = bm1 == null ? null : bm1.get(k);
-				Object o2 = bm2 == null ? null : bm2.get(k);
-				if (ne(o1, o2)) {
-					if (o1 != null)
-						v1.put(k, o1);
-					if (o2 != null)
-						v2.put(k, o2);
-				}
-			}
-		}
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Create a new builder for this class.
@@ -93,6 +60,10 @@ public class BeanDiff {
 	public static <T> Builder<T> create(T first, T second) {
 		return new Builder<T>().first(first).second(second);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -199,6 +170,47 @@ public class BeanDiff {
 			return new BeanDiff(beanContext, first, second, include, exclude);
 		}
 
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private OMap v1 = new OMap(), v2 = new OMap();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param bc The bean context to use for comparing beans.
+	 * @param first The first bean to compare.
+	 * @param second The second bean to compare.
+	 * @param include
+	 * 	Optional properties to include in the comparison.
+	 * 	<br>If <jk>null</jk>, all properties are included.
+	 * @param exclude
+	 * 	Optional properties to exclude in the comparison.
+	 * 	<br>If <jk>null</jk>, no properties are excluded.
+	 */
+	@SuppressWarnings("null")
+	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
+		if (first == null && second == null)
+			return;
+		BeanSession bs = bc.createBeanSession();
+		BeanMap<?> bm1 = first == null ? null : bs.toBeanMap(first);
+		BeanMap<?> bm2 = second == null ? null : bs.toBeanMap(second);
+		Set<String> keys = bm1 != null ? bm1.keySet() : bm2.keySet();
+		for (String k : keys) {
+			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {
+				Object o1 = bm1 == null ? null : bm1.get(k);
+				Object o2 = bm2 == null ? null : bm2.get(k);
+				if (ne(o1, o2)) {
+					if (o1 != null)
+						v1.put(k, o1);
+					if (o2 != null)
+						v2.put(k, o2);
+				}
+			}
+		}
 	}
 
 	/**

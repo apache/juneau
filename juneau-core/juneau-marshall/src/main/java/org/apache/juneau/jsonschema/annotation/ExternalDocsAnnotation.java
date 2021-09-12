@@ -28,6 +28,10 @@ import org.apache.juneau.svl.*;
  */
 public class ExternalDocsAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final ExternalDocs DEFAULT = create().build();
 
@@ -85,8 +89,12 @@ public class ExternalDocsAnnotation {
 		;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link ExternalDocs} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -149,6 +157,10 @@ public class ExternalDocsAnnotation {
 		// <FluentSetters>
 		// </FluentSetters>
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends AnnotationImpl implements ExternalDocs {
 

@@ -366,11 +366,11 @@ public class HttpParts {
 	}
 
 	/**
-	 * Instantiates a new {@link PartListBuilder}.
+	 * Instantiates a new {@link org.apache.juneau.http.part.PartList.Builder}.
 	 *
 	 * @return A new empty builder.
 	 */
-	public static final PartListBuilder partListBuilder() {
+	public static final PartList.Builder partListBuilder() {
 		return PartList.create();
 	}
 

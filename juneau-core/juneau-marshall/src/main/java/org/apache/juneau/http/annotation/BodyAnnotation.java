@@ -30,6 +30,10 @@ import org.apache.juneau.svl.*;
  */
 public class BodyAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Body DEFAULT = create().build();
 
@@ -98,8 +102,12 @@ public class BodyAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Body} annotation.
+ 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -277,6 +285,10 @@ public class BodyAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Body {
 
 		private final String[] api, d, description, ex, example, examples, exs, value;
@@ -355,6 +367,10 @@ public class BodyAnnotation {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Applies targeted {@link Body} annotations to a {@link BeanContextBuilder}.
 	 */
@@ -379,6 +395,10 @@ public class BodyAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Body @Body annotations}.

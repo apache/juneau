@@ -42,8 +42,8 @@ public class BasicHttpResponse implements HttpResponse {
 
 	HeaderList headers;
 	BasicStatusLine statusLine;
-	HeaderListBuilder headersBuilder;
-	BasicStatusLineBuilder statusLineBuilder;
+	HeaderList.Builder headersBuilder;
+	BasicStatusLine.Builder statusLineBuilder;
 	HttpEntity body;
 	final boolean unmodifiable;
 
@@ -267,7 +267,7 @@ public class BasicHttpResponse implements HttpResponse {
 		return headers;
 	}
 
-	private BasicStatusLineBuilder statusLineBuilder() {
+	private BasicStatusLine.Builder statusLineBuilder() {
 		assertModifiable();
 		if (statusLineBuilder == null) {
 			statusLineBuilder = statusLine.copy();
@@ -276,7 +276,7 @@ public class BasicHttpResponse implements HttpResponse {
 		return statusLineBuilder;
 	}
 
-	private HeaderListBuilder headersBuilder() {
+	private HeaderList.Builder headersBuilder() {
 		assertModifiable();
 		if (headersBuilder == null) {
 			headersBuilder = headers.copy();

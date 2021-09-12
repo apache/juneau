@@ -20,11 +20,10 @@ import java.util.*;
  * Stores a set of ASCII characters for quick lookup.
  */
 public final class AsciiSet {
-	private final boolean[] store;
 
-	AsciiSet(boolean[] store) {
-		this.store = Arrays.copyOf(store, store.length);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates an ASCII set with the specified characters.
@@ -45,20 +44,12 @@ public final class AsciiSet {
 		return new Builder();
 	}
 
-	/**
-	 * Copies an existing {@link AsciiSet} so that you can augment it with additional values.
-	 *
-	 * @return A builder initialized to the same characters in the copied set.
-	 */
-	public AsciiSet.Builder copy() {
-		Builder b = new Builder();
-		for (int i = 0; i < 128; i++)
-			b.store[i] = store[i];
-		return b;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder class for {@link AsciiSet} objects.
+	 * Builder class.
 	 */
 	public static class Builder {
 		final boolean[] store = new boolean[128];
@@ -128,6 +119,28 @@ public final class AsciiSet {
 		public AsciiSet build() {
 			return new AsciiSet(store);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final boolean[] store;
+
+	AsciiSet(boolean[] store) {
+		this.store = Arrays.copyOf(store, store.length);
+	}
+
+	/**
+	 * Copies an existing {@link AsciiSet} so that you can augment it with additional values.
+	 *
+	 * @return A builder initialized to the same characters in the copied set.
+	 */
+	public AsciiSet.Builder copy() {
+		Builder b = new Builder();
+		for (int i = 0; i < 128; i++)
+			b.store[i] = store[i];
+		return b;
 	}
 
 

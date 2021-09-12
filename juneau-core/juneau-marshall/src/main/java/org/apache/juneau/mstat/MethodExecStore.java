@@ -31,10 +31,9 @@ import org.apache.juneau.cp.*;
  */
 public class MethodExecStore {
 
-	private final ThrownStore thrownStore;
-	private final BeanStore beanStore;
-	private final Class<? extends MethodExecStats> statsImplClass;
-	private final ConcurrentHashMap<Method,MethodExecStats> db = new ConcurrentHashMap<>();
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates a new builder for this object.
@@ -45,19 +44,12 @@ public class MethodExecStore {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The store to use for storing thrown exception statistics.
-	 */
-	protected MethodExecStore(Builder builder) {
-		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
-		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
-		this.statsImplClass = builder.statsImplClass;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * The builder for this object.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -185,6 +177,26 @@ public class MethodExecStore {
 		public Builder copy() {
 			return new Builder(this);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final ThrownStore thrownStore;
+	private final BeanStore beanStore;
+	private final Class<? extends MethodExecStats> statsImplClass;
+	private final ConcurrentHashMap<Method,MethodExecStats> db = new ConcurrentHashMap<>();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The store to use for storing thrown exception statistics.
+	 */
+	protected MethodExecStore(Builder builder) {
+		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
+		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
+		this.statsImplClass = builder.statsImplClass;
 	}
 
 	/**

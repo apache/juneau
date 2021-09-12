@@ -34,6 +34,9 @@ import org.apache.juneau.svl.*;
  */
 public class RestOpAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
 	public static final RestOp DEFAULT = create().build();
@@ -47,8 +50,12 @@ public class RestOpAnnotation {
 		return new Builder();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link RestOp} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -409,6 +416,10 @@ public class RestOpAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationImpl implements RestOp {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -595,6 +606,10 @@ public class RestOpAnnotation {
 			return value;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies {@link RestOp} annotations to a {@link RestOpContextBuilder}.

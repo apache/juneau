@@ -33,6 +33,9 @@ import org.apache.juneau.svl.*;
  */
 public class RestGetAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
 	public static final RestGet DEFAULT = create().build();
@@ -46,8 +49,12 @@ public class RestGetAnnotation {
 		return new Builder();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link RestGet} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -341,6 +348,10 @@ public class RestGetAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationImpl implements RestGet {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -490,6 +501,10 @@ public class RestGetAnnotation {
 			return value;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies {@link RestGet} annotations to a {@link RestOpContextBuilder}.

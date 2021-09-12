@@ -19,11 +19,148 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.message.*;
+import org.apache.juneau.http.BasicStatusLine;
+import org.apache.juneau.internal.*;
 
 /**
  * A basic implementation of the {@link StatusLine} interface.
  */
 public class BasicStatusLine implements StatusLine {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Instantiates a new builder for this bean.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
+
+		ProtocolVersion protocolVersion;
+		Integer statusCode;
+		String reasonPhrase;
+		Locale locale;
+		ReasonPhraseCatalog reasonPhraseCatalog;
+
+		/**
+		 * Constructor.
+		 */
+		public Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		public Builder(BasicStatusLine copyFrom) {
+			protocolVersion = copyFrom.protocolVersion;
+			statusCode = copyFrom.statusCode;
+			reasonPhrase = copyFrom.reasonPhrase;
+			locale = copyFrom.locale;
+		}
+
+		/**
+		 * Creates a new {@link BasicStatusLine} bean based on the contents of this builder.
+		 *
+		 * @return A new {@link BasicStatusLine} bean.
+		 */
+		public BasicStatusLine build() {
+			return new BasicStatusLine(this);
+		}
+
+		/**
+		 * Sets the protocol version on the status line.
+		 *
+		 * <p>
+		 * If not specified, <js>"HTTP/1.1"</js> will be used.
+		 *
+		 * @param value The new value.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder protocolVersion(ProtocolVersion value) {
+			this.protocolVersion = value;
+			return this;
+		}
+
+		/**
+		 * Sets the status code on the status line.
+		 *
+		 * <p>
+		 * If not specified, <c>0</c> will be used.
+		 *
+		 * @param value The new value.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder statusCode(int value) {
+			this.statusCode = value;
+			return this;
+		}
+
+		/**
+		 * Sets the reason phrase on the status line.
+		 *
+		 * <p>
+		 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
+		 * using the locale on this builder.
+		 *
+		 * @param value The new value.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder reasonPhrase(String value) {
+			this.reasonPhrase = value;
+			return this;
+		}
+
+		/**
+		 * Sets the reason phrase catalog used to retrieve reason phrases.
+		 *
+		 * <p>
+		 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
+		 *
+		 * @param value The new value.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder reasonPhraseCatalog(ReasonPhraseCatalog value) {
+			this.reasonPhraseCatalog = value;
+			return this;
+		}
+
+		/**
+		 * Sets the locale used to retrieve reason phrases.
+		 *
+		 * <p>
+		 * If not specified, uses {@link Locale#getDefault()}.
+		 *
+		 * @param value The new value.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder locale(Locale value) {
+			this.locale = value;
+			return this;
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
 
@@ -33,20 +170,11 @@ public class BasicStatusLine implements StatusLine {
 	final Locale locale;
 
 	/**
-	 * Instantiates a new builder for this bean.
-	 *
-	 * @return A new builder.
-	 */
-	public static BasicStatusLineBuilder create() {
-		return new BasicStatusLineBuilder();
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public BasicStatusLine(BasicStatusLineBuilder builder) {
+	public BasicStatusLine(Builder builder) {
 		this.protocolVersion = firstNonNull(builder.protocolVersion, DEFAULT_PROTOCOL_VERSION);
 		this.statusCode = firstNonNull(builder.statusCode, 0);
 		this.locale = firstNonNull(builder.locale, Locale.getDefault());
@@ -64,8 +192,8 @@ public class BasicStatusLine implements StatusLine {
 	 *
 	 * @return A new builder object.
 	 */
-	public BasicStatusLineBuilder copy() {
-		return new BasicStatusLineBuilder(this);
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	@Override /* StatusLine */

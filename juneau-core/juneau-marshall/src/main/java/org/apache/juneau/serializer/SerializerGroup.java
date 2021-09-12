@@ -74,6 +74,10 @@ import org.apache.juneau.http.header.*;
 @ConfigurableContext(nocache=true)
 public final class SerializerGroup {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * An identifier that the previous entries in this group should be inherited.
 	 * <p>
@@ -98,15 +102,6 @@ public final class SerializerGroup {
 		}
 	}
 
-	// Maps Accept headers to matching serializers.
-	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
-
-	private final List<MediaRange> mediaRanges;
-	private final List<Serializer> mediaTypeRangeSerializers;
-
-	private final List<MediaType> mediaTypesList;
-	final Serializer[] entries;
-
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
@@ -116,49 +111,12 @@ public final class SerializerGroup {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this bean.
-	 */
-	protected SerializerGroup(Builder builder) {
-
-		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
-
-		AList<MediaRange> lmtr = AList.create();
-		ASet<MediaType> lmt = ASet.of();
-		AList<Serializer> l = AList.create();
-		for (Serializer e : entries) {
-			for (MediaRange m: e.getMediaTypeRanges().getRanges()) {
-				lmtr.add(m);
-				l.add(e);
-			}
-			for (MediaType mt : e.getAcceptMediaTypes())
-				lmt.add(mt);
-		}
-
-		this.mediaRanges = lmtr.unmodifiable();
-		this.mediaTypesList = AList.of(lmt).unmodifiable();
-		this.mediaTypeRangeSerializers = l.unmodifiable();
-	}
-
-	private Serializer build(Object o) {
-		if (o instanceof Serializer)
-			return (Serializer)o;
-		return ((SerializerBuilder)o).build();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a copy of this serializer group.
-	 *
-	 * @return A new copy of this serializer group.
-	 */
-	public Builder copy() {
-		return new Builder(this);
-	}
-
-	/**
-	 * Builder class for creating instances of {@link SerializerGroup}.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -451,6 +409,60 @@ public final class SerializerGroup {
 				return "builder:" + o.getClass().getName();
 			return "serializer:" + o.getClass().getName();
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// Maps Accept headers to matching serializers.
+	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
+
+	private final List<MediaRange> mediaRanges;
+	private final List<Serializer> mediaTypeRangeSerializers;
+
+	private final List<MediaType> mediaTypesList;
+	final Serializer[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this bean.
+	 */
+	protected SerializerGroup(Builder builder) {
+
+		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
+
+		AList<MediaRange> lmtr = AList.create();
+		ASet<MediaType> lmt = ASet.of();
+		AList<Serializer> l = AList.create();
+		for (Serializer e : entries) {
+			for (MediaRange m: e.getMediaTypeRanges().getRanges()) {
+				lmtr.add(m);
+				l.add(e);
+			}
+			for (MediaType mt : e.getAcceptMediaTypes())
+				lmt.add(mt);
+		}
+
+		this.mediaRanges = lmtr.unmodifiable();
+		this.mediaTypesList = AList.of(lmt).unmodifiable();
+		this.mediaTypeRangeSerializers = l.unmodifiable();
+	}
+
+	private Serializer build(Object o) {
+		if (o instanceof Serializer)
+			return (Serializer)o;
+		return ((SerializerBuilder)o).build();
+	}
+
+	/**
+	 * Creates a copy of this serializer group.
+	 *
+	 * @return A new copy of this serializer group.
+	 */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**

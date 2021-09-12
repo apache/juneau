@@ -38,6 +38,10 @@ import org.apache.juneau.reflect.*;
  */
 public class BeanStore {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Non-existent bean store.
 	 */
@@ -47,11 +51,6 @@ public class BeanStore {
 	 * Static read-only reusable instance.
 	 */
 	public static final BeanStore INSTANCE = create().readOnly().build();
-
-	private final Map<String,Supplier<?>> beanMap = new ConcurrentHashMap<>();
-	final Optional<BeanStore> parent;
-	final Optional<Object> outer;
-	final boolean readOnly;
 
 	/**
 	 * Static creator.
@@ -83,34 +82,12 @@ public class BeanStore {
 		return create().parent(parent).outer(outer).build();
 	}
 
-	BeanStore() {
-		this.parent = empty();
-		this.outer = empty();
-		this.readOnly = false;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this bean.
-	 */
-	protected BeanStore(Builder builder) {
-		this.parent = ofNullable(builder.parent);
-		this.outer = ofNullable(builder.outer);
-		this.readOnly = builder.readOnly;
-	}
-
-	/**
-	 * Creates a copy of this bean store.
-	 *
-	 * @return A mutable copy of this bean store.
-	 */
-	public Builder copy() {
-		return new Builder(this);
-	}
-
-	/**
-	 * The builder for this object.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -226,6 +203,41 @@ public class BeanStore {
 			this.impl = value;
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Map<String,Supplier<?>> beanMap = new ConcurrentHashMap<>();
+	final Optional<BeanStore> parent;
+	final Optional<Object> outer;
+	final boolean readOnly;
+
+	BeanStore() {
+		this.parent = empty();
+		this.outer = empty();
+		this.readOnly = false;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the settings for this bean.
+	 */
+	protected BeanStore(Builder builder) {
+		this.parent = ofNullable(builder.parent);
+		this.outer = ofNullable(builder.outer);
+		this.readOnly = builder.readOnly;
+	}
+
+	/**
+	 * Creates a copy of this bean store.
+	 *
+	 * @return A mutable copy of this bean store.
+	 */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**

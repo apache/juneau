@@ -35,14 +35,12 @@ import org.apache.juneau.cp.*;
  */
 public class ThrownStore {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Identifies a single global store for the entire JVM. */
 	public static final ThrownStore GLOBAL = new ThrownStore();
-
-	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
-	private final Optional<ThrownStore> parent;
-	private final BeanStore beanStore;
-	private final Class<? extends ThrownStats> statsImplClass;
-	private final Set<String> ignoreClasses;
 
 	/**
 	 * Static creator.
@@ -53,36 +51,12 @@ public class ThrownStore {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 */
-	public ThrownStore() {
-		this(create());
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	public ThrownStore(Builder builder) {
-		this.parent = ofNullable(builder.parent);
-		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
-
-		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
-
-		Set<String> s = null;
-		if (builder.ignoreClasses != null)
-			s = builder.ignoreClasses.stream().map(x->x.getName()).collect(toSet());
-		if (s == null && parent.isPresent())
-			s = parent.get().ignoreClasses;
-		if (s == null)
-			s = Collections.emptySet();
-		this.ignoreClasses = unmodifiableSet(s);
-	}
-
-	/**
-	 * The builder for this object.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -212,6 +186,44 @@ public class ThrownStore {
 		public Builder copy() {
 			return new Builder(this);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
+	private final Optional<ThrownStore> parent;
+	private final BeanStore beanStore;
+	private final Class<? extends ThrownStats> statsImplClass;
+	private final Set<String> ignoreClasses;
+
+	/**
+	 * Constructor.
+	 */
+	public ThrownStore() {
+		this(create());
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	public ThrownStore(Builder builder) {
+		this.parent = ofNullable(builder.parent);
+		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
+
+		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
+
+		Set<String> s = null;
+		if (builder.ignoreClasses != null)
+			s = builder.ignoreClasses.stream().map(x->x.getName()).collect(toSet());
+		if (s == null && parent.isPresent())
+			s = parent.get().ignoreClasses;
+		if (s == null)
+			s = Collections.emptySet();
+		this.ignoreClasses = unmodifiableSet(s);
 	}
 
 

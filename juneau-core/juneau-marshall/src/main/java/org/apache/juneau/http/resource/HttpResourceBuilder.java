@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
 public class HttpResourceBuilder<T extends BasicResource> {
 
 	HeaderList headers = HeaderList.EMPTY;
-	HeaderListBuilder headersBuilder;
+	HeaderList.Builder headersBuilder;
 
 	BasicHttpEntity entity;
 	HttpEntityBuilder<?> entityBuilder;
@@ -456,7 +456,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private HeaderListBuilder headersBuilder() {
+	private HeaderList.Builder headersBuilder() {
 		if (headersBuilder == null) {
 			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
 			headers = null;

@@ -33,6 +33,9 @@ import org.apache.juneau.svl.*;
  */
 public class RestPostAnnotation {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
 	public static final RestPost DEFAULT = create().build();
@@ -46,8 +49,12 @@ public class RestPostAnnotation {
 		return new Builder();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link RestPost} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -397,6 +404,10 @@ public class RestPostAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationImpl implements RestPost {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -577,6 +588,10 @@ public class RestPostAnnotation {
 			return value;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies {@link RestPost} annotations to a {@link RestOpContextBuilder}.

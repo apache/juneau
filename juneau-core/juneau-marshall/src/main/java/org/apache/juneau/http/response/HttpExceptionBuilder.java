@@ -35,8 +35,8 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 
 	BasicStatusLine statusLine;
 	HeaderList headers = HeaderList.EMPTY;
-	BasicStatusLineBuilder statusLineBuilder;
-	HeaderListBuilder headersBuilder;
+	BasicStatusLine.Builder statusLineBuilder;
+	HeaderList.Builder headersBuilder;
 	HttpEntity body;
 
 	private final Class<? extends BasicHttpException> implClass;
@@ -412,7 +412,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private BasicStatusLineBuilder statusLineBuilder() {
+	private BasicStatusLine.Builder statusLineBuilder() {
 		if (statusLineBuilder == null) {
 			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
 			statusLine = null;
@@ -420,7 +420,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLineBuilder;
 	}
 
-	private HeaderListBuilder headersBuilder() {
+	private HeaderList.Builder headersBuilder() {
 		if (headersBuilder == null) {
 			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
 			headers = null;

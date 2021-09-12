@@ -46,7 +46,7 @@ public class HeaderList_Test {
 
 	@Test
 	public void a01_basic() {
-		HeaderListBuilder x = HeaderList.create();
+		HeaderList.Builder x = HeaderList.create();
 
 		assertObject(x.build()).isString("[]");
 		x.append(FOO_1);
@@ -113,7 +113,7 @@ public class HeaderList_Test {
 	public void a03_addMethods() {
 		String pname = "HeaderSupplierTest.x";
 
-		HeaderListBuilder x = HeaderList.create().resolving();
+		HeaderList.Builder x = HeaderList.create().resolving();
 		System.setProperty(pname, "y");
 
 		x.append("X1","bar");
@@ -133,7 +133,7 @@ public class HeaderList_Test {
 
 	@Test
 	public void a04_toArrayMethods() {
-		HeaderListBuilder x = HeaderList
+		HeaderList.Builder x = HeaderList
 			.create()
 			.append("X1","1")
 			.append(headerList("X2","2").getAll());
@@ -308,7 +308,7 @@ public class HeaderList_Test {
 
 	@Test
 	public void b01_builder_clear() {
-		HeaderListBuilder x = HeaderList.create();
+		HeaderList.Builder x = HeaderList.create();
 		x.append(FOO_1);
 		x.clear();
 		assertObject(x.build()).isString("[]");

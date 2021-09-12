@@ -24,6 +24,11 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Marshalled @Marshalled} annotation.
  */
 public class MarshalledAnnotation {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Default value */
 	public static final Marshalled DEFAULT = create().build();
 
@@ -73,8 +78,12 @@ public class MarshalledAnnotation {
 			.build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Builder class for the {@link Marshalled} annotation.
+	 * Builder class.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
@@ -146,6 +155,10 @@ public class MarshalledAnnotation {
 		// </FluentSetters>
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static class Impl extends TargetedAnnotationTImpl implements Marshalled {
 
 		private final Class<?> implClass;
@@ -168,6 +181,10 @@ public class MarshalledAnnotation {
 			return implClass;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Appliers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies targeted {@link Marshalled} annotations to a {@link BeanContextBuilder}.
@@ -193,6 +210,10 @@ public class MarshalledAnnotation {
 			b.annotations(copy(a, vr()));
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A collection of {@link Marshalled @Marshalled annotations}.

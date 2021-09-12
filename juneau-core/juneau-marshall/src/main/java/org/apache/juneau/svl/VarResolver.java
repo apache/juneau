@@ -61,6 +61,10 @@ import org.apache.juneau.svl.vars.*;
  */
 public class VarResolver {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Default string variable resolver with support for system properties and environment variables:
 	 *
@@ -84,10 +88,6 @@ public class VarResolver {
 	 */
 	public static final VarResolver DEFAULT = create().defaultVars().build();
 
-	final Var[] vars;
-	private final Map<String,Var> varMap;
-	final BeanStore beanStore;
-
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
@@ -97,40 +97,12 @@ public class VarResolver {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected VarResolver(Builder builder) {
-		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore,x)).toArray(Var[]::new);
-
-		Map<String,Var> m = new ConcurrentSkipListMap<>();
-		for (Var v : vars)
-			m.put(v.getName(), v);
-
-		this.varMap = AMap.unmodifiable(m);
-		this.beanStore = BeanStore.of(builder.beanStore);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Var toVar(BeanStore bs, Object o) {
-		if (o instanceof Class)
-			return bs.createBean(Var.class, (Class<? extends Var>)o);
-		return (Var)o;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns a new builder object using the settings in this resolver as a base.
-	 *
-	 * @return A new var resolver builder.
-	 */
-	public Builder copy() {
-		return new Builder(this);
-	}
-
-	/**
-	 * Builder class for building instances of {@link VarResolver}.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -289,6 +261,46 @@ public class VarResolver {
 		public Builder copy() {
 			return new Builder(this);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	final Var[] vars;
+	private final Map<String,Var> varMap;
+	final BeanStore beanStore;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected VarResolver(Builder builder) {
+		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore,x)).toArray(Var[]::new);
+
+		Map<String,Var> m = new ConcurrentSkipListMap<>();
+		for (Var v : vars)
+			m.put(v.getName(), v);
+
+		this.varMap = AMap.unmodifiable(m);
+		this.beanStore = BeanStore.of(builder.beanStore);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Var toVar(BeanStore bs, Object o) {
+		if (o instanceof Class)
+			return bs.createBean(Var.class, (Class<? extends Var>)o);
+		return (Var)o;
+	}
+
+	/**
+	 * Returns a new builder object using the settings in this resolver as a base.
+	 *
+	 * @return A new var resolver builder.
+	 */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**

@@ -24,7 +24,9 @@ import org.apache.juneau.cp.*;
  */
 public class RestOpArgList {
 
-	private final Class<? extends RestOpArg>[] entries;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -35,21 +37,12 @@ public class RestOpArgList {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the contents for this list.
-	 */
-	protected RestOpArgList(Builder builder) {
-		entries =
-			builder
-				.entries
-				.stream()
-				.toArray(Class[]::new);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for {@link RestOpArgList} objects.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -83,6 +76,25 @@ public class RestOpArgList {
 			entries.addAll(0, Arrays.asList(assertClassArrayArgIsType("values", RestOpArg.class, values)));
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Class<? extends RestOpArg>[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestOpArgList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.toArray(Class[]::new);
 	}
 
 	/**

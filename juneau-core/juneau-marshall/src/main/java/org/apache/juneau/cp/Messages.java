@@ -105,18 +105,9 @@ import org.apache.juneau.utils.*;
  */
 public class Messages extends ResourceBundle {
 
-	private ResourceBundle rb;
-	private Class<?> c;
-	private Messages parent;
-	private Locale locale;
-
-	// Cache of message bundles per locale.
-	private final ConcurrentHashMap<Locale,Messages> localizedMessages = new ConcurrentHashMap<>();
-
-	// Cache of virtual keys to actual keys.
-	private final Map<String,String> keyMap;
-
-	private final Set<String> rbKeys;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -154,53 +145,12 @@ public class Messages extends ResourceBundle {
 		return create(forClass).name(name).build();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param builder
-	 * 	The builder for this object.
-	 */
-	protected Messages(Builder builder) {
-		this(builder.forClass, builder.getBundle(), builder.locale, builder.parent);
-	}
-
-	Messages(Class<?> forClass, ResourceBundle rb, Locale locale, Messages parent) {
-		this.c = forClass;
-		this.rb = rb;
-		this.parent = parent;
-		if (parent != null)
-			setParent(parent);
-		this.locale = locale == null ? Locale.getDefault() : locale;
-
-		Map<String,String> keyMap = new TreeMap<>();
-
-		String cn = c.getSimpleName() + '.';
-		if (rb != null) {
-			for (String key : rb.keySet()) {
-				keyMap.put(key, key);
-				if (key.startsWith(cn)) {
-					String shortKey = key.substring(cn.length());
-					keyMap.put(shortKey, key);
-				}
-			}
-		}
-		if (parent != null) {
-			for (String key : parent.keySet()) {
-				keyMap.put(key, key);
-				if (key.startsWith(cn)) {
-					String shortKey = key.substring(cn.length());
-					keyMap.put(shortKey, key);
-				}
-			}
-		}
-
-		this.keyMap = Collections.unmodifiableMap(new LinkedHashMap<>(keyMap));
-		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
-	}
-
-	/**
-	 * The builder for this object.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -370,6 +320,67 @@ public class Messages extends ResourceBundle {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private ResourceBundle rb;
+	private Class<?> c;
+	private Messages parent;
+	private Locale locale;
+
+	// Cache of message bundles per locale.
+	private final ConcurrentHashMap<Locale,Messages> localizedMessages = new ConcurrentHashMap<>();
+
+	// Cache of virtual keys to actual keys.
+	private final Map<String,String> keyMap;
+
+	private final Set<String> rbKeys;
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder
+	 * 	The builder for this object.
+	 */
+	protected Messages(Builder builder) {
+		this(builder.forClass, builder.getBundle(), builder.locale, builder.parent);
+	}
+
+	Messages(Class<?> forClass, ResourceBundle rb, Locale locale, Messages parent) {
+		this.c = forClass;
+		this.rb = rb;
+		this.parent = parent;
+		if (parent != null)
+			setParent(parent);
+		this.locale = locale == null ? Locale.getDefault() : locale;
+
+		Map<String,String> keyMap = new TreeMap<>();
+
+		String cn = c.getSimpleName() + '.';
+		if (rb != null) {
+			for (String key : rb.keySet()) {
+				keyMap.put(key, key);
+				if (key.startsWith(cn)) {
+					String shortKey = key.substring(cn.length());
+					keyMap.put(shortKey, key);
+				}
+			}
+		}
+		if (parent != null) {
+			for (String key : parent.keySet()) {
+				keyMap.put(key, key);
+				if (key.startsWith(cn)) {
+					String shortKey = key.substring(cn.length());
+					keyMap.put(shortKey, key);
+				}
+			}
+		}
+
+		this.keyMap = Collections.unmodifiableMap(new LinkedHashMap<>(keyMap));
+		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
+	}
 
 	/**
 	 * Returns this message bundle for the specified locale.

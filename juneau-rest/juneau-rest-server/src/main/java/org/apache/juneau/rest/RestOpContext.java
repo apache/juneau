@@ -723,9 +723,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderList.Builder createDefaultRequestHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderListBuilder x = HeaderList.create().setDefault(context.getDefaultRequestHeaders()).setDefault(builder.defaultRequestHeaders.build());
+		HeaderList.Builder x = HeaderList.create().setDefault(context.getDefaultRequestHeaders()).setDefault(builder.defaultRequestHeaders.build());
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -745,8 +745,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderListBuilder.class, x)
-			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
+			.addBean(HeaderList.Builder.class, x)
+			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
 			.find("createDefaultRequestHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -765,14 +765,14 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderList.Builder createDefaultResponseHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderListBuilder x = HeaderList.create().setDefault(context.getDefaultResponseHeaders()).setDefault(builder.defaultResponseHeaders.build());
+		HeaderList.Builder x = HeaderList.create().setDefault(context.getDefaultResponseHeaders()).setDefault(builder.defaultResponseHeaders.build());
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderListBuilder.class, x)
-			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
+			.addBean(HeaderList.Builder.class, x)
+			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
 			.find("createDefaultResponseHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -816,9 +816,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * @return The default request query parameters for this method.
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
-	protected PartListBuilder createDefaultRequestQuery(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
+	protected PartList.Builder createDefaultRequestQuery(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
 
-		PartListBuilder x = builder.defaultQueryData;
+		PartList.Builder x = builder.defaultQueryData;
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -838,8 +838,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(PartListBuilder.class, x)
-			.beanCreateMethodFinder(PartListBuilder.class, resource)
+			.addBean(PartList.Builder.class, x)
+			.beanCreateMethodFinder(PartList.Builder.class, resource)
 			.find("createDefaultRequestQuery", Method.class)
 			.thenFind("createDefaultRequestQuery")
 			.withDefault(x)
@@ -858,9 +858,9 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * @return The default request form-data parameters for this method.
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
-	protected PartListBuilder createDefaultRequestFormData(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
+	protected PartList.Builder createDefaultRequestFormData(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
 
-		PartListBuilder x = builder.defaultFormData;
+		PartList.Builder x = builder.defaultFormData;
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -880,8 +880,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(PartListBuilder.class, x)
-			.beanCreateMethodFinder(PartListBuilder.class, resource)
+			.addBean(PartList.Builder.class, x)
+			.beanCreateMethodFinder(PartList.Builder.class, resource)
 			.find("createDefaultRequestFormData", Method.class)
 			.thenFind("createDefaultRequestFormData")
 			.withDefault(x)

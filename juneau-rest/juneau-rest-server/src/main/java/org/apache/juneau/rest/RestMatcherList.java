@@ -25,8 +25,9 @@ import org.apache.juneau.cp.*;
  */
 public class RestMatcherList {
 
-	private final RestMatcher[] optionalEntries;
-	private final RestMatcher[] requiredEntries;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -37,24 +38,12 @@ public class RestMatcherList {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the contents for this list.
-	 */
-	protected RestMatcherList(Builder builder) {
-		List<RestMatcher> l =
-			builder
-				.entries
-				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
-				.collect(toList());
-		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
-		requiredEntries = l.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for {@link RestMatcherList} objects.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -110,6 +99,29 @@ public class RestMatcherList {
 			beanStore = value;
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final RestMatcher[] optionalEntries;
+	private final RestMatcher[] requiredEntries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected RestMatcherList(Builder builder) {
+		List<RestMatcher> l =
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.collect(toList());
+		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
+		requiredEntries = l.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 	}
 
 	private static RestMatcher instantiate(Object o, BeanStore bs) {

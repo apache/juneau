@@ -574,14 +574,14 @@ public class RestContext extends Context {
 	 * @return The default request headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected HeaderList.Builder createDefaultRequestHeaders(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		HeaderListBuilder x = builder.defaultRequestHeaders;
+		HeaderList.Builder x = builder.defaultRequestHeaders;
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderListBuilder.class, x)
-			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
+			.addBean(HeaderList.Builder.class, x)
+			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
 			.find("createDefaultRequestHeaders")
 			.withDefault(x)
 			.run();
@@ -602,14 +602,14 @@ public class RestContext extends Context {
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected HeaderList.Builder createDefaultResponseHeaders(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
-		HeaderListBuilder x = builder.defaultResponseHeaders;
+		HeaderList.Builder x = builder.defaultResponseHeaders;
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderListBuilder.class, x)
-			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
+			.addBean(HeaderList.Builder.class, x)
+			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
 			.find("createDefaultResponseHeaders")
 			.withDefault(x)
 			.run();

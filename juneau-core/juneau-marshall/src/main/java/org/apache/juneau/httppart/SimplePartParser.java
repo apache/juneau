@@ -43,20 +43,15 @@ import org.apache.juneau.parser.*;
  */
 public class SimplePartParser extends BaseHttpPartParser {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
-	//-------------------------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
 	public static final SimplePartParser DEFAULT = create().build();
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
 	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.createPartSession(null);
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -67,18 +62,12 @@ public class SimplePartParser extends BaseHttpPartParser {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected SimplePartParser(Builder builder) {
-		super(builder);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * The builder for this object.
-	 *
+	 * Builder class.
 	 */
 	public static class Builder extends BaseHttpPartParser.Builder {
 
@@ -99,6 +88,19 @@ public class SimplePartParser extends BaseHttpPartParser {
 		public BeanContextableBuilder copy() {
 			return new Builder(this);
 		}
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected SimplePartParser(Builder builder) {
+		super(builder);
 	}
 
 	@Override

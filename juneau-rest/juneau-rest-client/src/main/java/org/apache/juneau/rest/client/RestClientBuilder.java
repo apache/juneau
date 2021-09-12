@@ -91,8 +91,8 @@ import org.apache.juneau.xml.*;
 public class RestClientBuilder extends BeanContextableBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
-	private HeaderListBuilder headerData;
-	private PartListBuilder queryData, formData, pathData;
+	private HeaderList.Builder headerData;
+	private PartList.Builder queryData, formData, pathData;
 	private CloseableHttpClient httpClient;
 	private boolean pooled;
 
@@ -189,7 +189,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * @return The header parameter list builder.
 	 */
-	public HeaderListBuilder getHeaderData() {
+	public HeaderList.Builder getHeaderData() {
 		return headerData;
 	}
 
@@ -202,7 +202,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * @return The query parameter list builder.
 	 */
-	public PartListBuilder getQueryData() {
+	public PartList.Builder getQueryData() {
 		return queryData;
 	}
 
@@ -215,7 +215,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * @return The form data parameter list builder.
 	 */
-	public PartListBuilder getFormData() {
+	public PartList.Builder getFormData() {
 		return formData;
 	}
 
@@ -228,7 +228,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * @return The form data parameter list builder.
 	 */
-	public PartListBuilder getPathData() {
+	public PartList.Builder getPathData() {
 		return pathData;
 	}
 
@@ -1749,7 +1749,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	public RestClientBuilder headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
-		HeaderListBuilder b  = getHeaderData();
+		HeaderList.Builder b  = getHeaderData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1773,7 +1773,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	public RestClientBuilder queryDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		PartListBuilder b  = getQueryData();
+		PartList.Builder b  = getQueryData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1797,7 +1797,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	public RestClientBuilder formDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
-		PartListBuilder b  = getFormData();
+		PartList.Builder b  = getFormData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1821,7 +1821,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	public RestClientBuilder pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		PartListBuilder b  = getPathData();
+		PartList.Builder b  = getPathData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;

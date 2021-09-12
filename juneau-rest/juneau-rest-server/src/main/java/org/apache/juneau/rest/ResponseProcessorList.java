@@ -27,7 +27,9 @@ import org.apache.juneau.cp.*;
  */
 public class ResponseProcessorList {
 
-	private final ResponseProcessor[] entries;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -38,22 +40,12 @@ public class ResponseProcessorList {
 		return new Builder();
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the contents for this list.
-	 */
-	protected ResponseProcessorList(Builder builder) {
-		entries =
-			builder
-				.entries
-				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
-				.toArray(ResponseProcessor[]::new);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Builder for {@link RestMatcherList} objects.
+	 * Builder class.
 	 */
 	public static class Builder {
 
@@ -141,6 +133,26 @@ public class ResponseProcessorList {
 		public Builder copy() {
 			return new Builder(this);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final ResponseProcessor[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the contents for this list.
+	 */
+	protected ResponseProcessorList(Builder builder) {
+		entries =
+			builder
+				.entries
+				.stream()
+				.map(x -> instantiate(x, builder.beanStore))
+				.toArray(ResponseProcessor[]::new);
 	}
 
 	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
