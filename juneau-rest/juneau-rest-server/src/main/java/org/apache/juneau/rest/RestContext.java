@@ -247,31 +247,23 @@ public class RestContext extends Context {
 			parentContext = builder.parentContext;
 			rootBeanStore = builder.beanStore();
 
-			beanStore = rootBeanStore.copy().build();
+			BeanStore bs = beanStore = rootBeanStore.copy().build();
 			beanStore
 				.addBean(BeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
 				.addBean(Object.class, resource.get())
 				.addBean(RestContextBuilder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
-			BeanStore bs = beanStore;
 
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
 			messages = bs.add(Messages.class, builder.messages().build());
+			varResolver = bs.add(VarResolver.class, builder.varResolver().bean(Messages.class, messages).build());
+			config = bs.add(Config.class, builder.config().resolving(varResolver.createSession()));
+			responseProcessors = bs.add(ResponseProcessor[].class, builder.responseProcessors().build().toArray());
 
 			Object r = resource.get();
-
-			VarResolver vr = varResolver = builder
-				.varResolver()
-				.bean(Messages.class, messages)
-				.build();
-			bs.addBean(VarResolver.class, vr);
-
-			config = bs.add(Config.class, builder.config().resolving(vr.createSession()));
-
-			responseProcessors = createResponseProcessors(r, builder, bs).toArray();
 
 			callLoggerDefault = builder.callLoggerDefault;
 			debugDefault = builder.debugDefault;
@@ -358,7 +350,7 @@ public class RestContext extends Context {
 
 			restChildren = createRestChildren(r, builder, bs, builder.inner);
 
-			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, vr);
+			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, varResolver);
 
 		} catch (BasicHttpException e) {
 			_initException = e;
@@ -772,53 +764,6 @@ public class RestContext extends Context {
 			.run();
 
 		return x;
-	}
-
-	/**
-	 * Instantiates the response handlers for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for response processors set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#responseProcessors(Class...)}/{@link RestContextBuilder#responseProcessors(ResponseProcessor...)}
-	 * 			<li>{@link Rest#responseProcessors()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</> method that returns <c>{@link ResponseProcessor}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The response handlers for this REST resource.
-	 * @throws Exception If response handlers could not be instantiated.
-	 */
-	protected ResponseProcessorList createResponseProcessors(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		ResponseProcessorList.Builder x = builder.responseProcessors.beanStore(beanStore);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(ResponseProcessorList.Builder.class, x)
-			.beanCreateMethodFinder(ResponseProcessorList.Builder.class, resource)
-			.find("createResponseProcessors")
-			.withDefault(x)
-			.run();
-
-		return x.build();
 	}
 
 	/**

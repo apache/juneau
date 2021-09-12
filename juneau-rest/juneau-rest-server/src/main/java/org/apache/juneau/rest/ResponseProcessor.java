@@ -30,8 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Response processors can be associated with REST resources via the following:
  * <ul>
  * 	<li class='ja'>{@link Rest#responseProcessors}
- * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(Class...)}
- * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(ResponseProcessor...)}
+ * 	<li class='jm'>{@link RestContextBuilder#responseProcessors()}
  * </ul>
  *
  * <p>

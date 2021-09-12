@@ -1012,7 +1012,7 @@ public @interface Rest {
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(Class...)}
+	 * 	<li class='jm'>{@link RestContextBuilder#responseProcessors()}
 	 * </ul>
 	 */
 	Class<? extends ResponseProcessor>[] responseProcessors() default {};

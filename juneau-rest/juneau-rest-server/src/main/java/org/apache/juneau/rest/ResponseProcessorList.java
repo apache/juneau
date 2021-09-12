@@ -13,6 +13,9 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.assertions.Assertions.*;
+
+import java.util.*;
+
 import static java.util.Arrays.*;
 
 import org.apache.juneau.*;
@@ -54,14 +57,24 @@ public class ResponseProcessorList {
 	 */
 	public static class Builder {
 
-		AList<Object> entries;
-		BeanStore beanStore;
+		List<Object> entries;
+		ResponseProcessorList impl;
+		BeanStore beanStore = BeanStore.INSTANCE;
 
 		/**
-		 * Create an empty builder.
+		 * Constructor.
 		 */
 		protected Builder() {
 			this.entries = AList.create();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy.
+		 */
+		protected Builder(Builder copyFrom) {
+			this.entries = AList.create().append(copyFrom.entries);
 		}
 
 		/**
@@ -70,6 +83,8 @@ public class ResponseProcessorList {
 		 * @return A new {@link ResponseProcessorList} object.
 		 */
 		public ResponseProcessorList build() {
+			if (impl != null)
+				return impl;
 			return new ResponseProcessorList(this);
 		}
 
@@ -77,7 +92,7 @@ public class ResponseProcessorList {
 		 * Appends the specified rest response processor classes to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 		 */
 		public Builder add(Class<?>...values) {
@@ -89,9 +104,9 @@ public class ResponseProcessorList {
 		 * Appends the specified rest response processor objects to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
-		public Builder append(ResponseProcessor...values) {
+		public Builder add(ResponseProcessor...values) {
 			entries.addAll(asList(values));
 			return this;
 		}
@@ -100,11 +115,31 @@ public class ResponseProcessorList {
 		 * Specifies the bean store to use for instantiating rest response processor classes.
 		 *
 		 * @param value The bean store to use for instantiating rest response processor classes.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder beanStore(BeanStore value) {
 			beanStore = value;
 			return this;
+		}
+
+		/**
+		 * Specifies a pre-instantiated bean to return from {@link #build()}.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(ResponseProcessorList value) {
+			this.impl = value;
+			return this;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
 		}
 	}
 

@@ -126,6 +126,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private ThrownStore.Builder thrownStore;
 	private MethodExecStore.Builder methodExecStore;
 	private Messages.Builder messages;
+	private ResponseProcessorList.Builder responseProcessors;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -167,17 +168,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 	Enablement debugDefault, debug;
 
-	ResponseProcessorList.Builder responseProcessors = ResponseProcessorList.create().add(
-		ReaderProcessor.class,
-		InputStreamProcessor.class,
-		ThrowableProcessor.class,
-		HttpResponseProcessor.class,
-		HttpResourceProcessor.class,
-		HttpEntityProcessor.class,
-		ResponseBeanProcessor.class,
-		PlainTextPojoProcessor.class,
-		SerializedPojoProcessor.class
-	);
 
 	List<Object> children = new ArrayList<>();
 
@@ -315,6 +305,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		runInitHooks(bs, resource());
 		logger();
 		messages();
+		responseProcessors();
 
 		VarResolverSession vrs = varResolver().build().createSession();
 		AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
@@ -1086,6 +1077,187 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	/**
+	 * Returns the builder for the {@link ResponseProcessorList} object in the REST context.
+	 *
+	 * <p>
+	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 *
+	 * <p>
+	 * By default, the following response handlers are provided in the specified order:
+	 * <ul>
+	 * 	<li class='jc'>{@link ReaderProcessor}
+	 * 	<li class='jc'>{@link InputStreamProcessor}
+	 * 	<li class='jc'>{@link ThrowableProcessor}
+	 * 	<li class='jc'>{@link HttpResponseProcessor}
+	 * 	<li class='jc'>{@link HttpResourceProcessor}
+	 * 	<li class='jc'>{@link HttpEntityProcessor}
+	 * 	<li class='jc'>{@link ResponseBeanProcessor}
+	 * 	<li class='jc'>{@link PlainTextPojoProcessor}
+	 * 	<li class='jc'>{@link SerializedPojoProcessor}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our custom response processor for Foo objects. </jc>
+	 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
+	 *
+	 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
+	 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
+	 *
+	 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
+	 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
+	 *
+	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
+	 * 					<jc>//Pipe it to the writer ourselves.</jc>
+	 * 				}
+	 *
+	 * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
+	 *			}
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<ja>@RestGet</ja>(...)
+	 * 		<jk>public</jk> Object myMethod() {
+	 * 			<jc>// Return a special object for our handler.</jc>
+	 * 			<jk>return new</jk> MySpecialObject();
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Response processors are always inherited from ascendant resources.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * @return The builder for the {@link ResponseProcessorList} object in the REST context.
+	 */
+	public final ResponseProcessorList.Builder responseProcessors() {
+		if (responseProcessors == null)
+			responseProcessors = createResponseProcessors(beanStore(), resource());
+		return responseProcessors;
+	}
+
+	/**
+	 * Sets the builder for the {@link ResponseProcessorList} object in the REST context.
+	 *
+	 * @param value The builder for the {@link ResponseProcessorList} object in the REST context.
+	 * @return This object.
+	 * @throws RuntimeException If {@link #init(Object)} has not been called.
+	 */
+	public final RestContextBuilder responseProcessors(ResponseProcessorList value) {
+		responseProcessors().impl(value);
+		return this;
+	}
+
+	/**
+	 * Instantiates the response handlers for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for response processors set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#responseProcessors()}
+	 * 			<li>{@link Rest#responseProcessors()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</> method that returns <c>{@link ResponseProcessor}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The response handler builder for this REST resource.
+	 */
+	protected ResponseProcessorList.Builder createResponseProcessors(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<ResponseProcessorList.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(ResponseProcessorList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				 ResponseProcessorList
+				 	.create()
+				 	.beanStore(beanStore)
+				 	.add(
+						ReaderProcessor.class,
+						InputStreamProcessor.class,
+						ThrowableProcessor.class,
+						HttpResponseProcessor.class,
+						HttpResourceProcessor.class,
+						HttpEntityProcessor.class,
+						ResponseBeanProcessor.class,
+						PlainTextPojoProcessor.class,
+						SerializedPojoProcessor.class
+					)
+			);
+		}
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(ResponseProcessorList.Builder.class, v.get())
+			.beanCreateMethodFinder(ResponseProcessorList.Builder.class, resource)
+			.find("createResponseProcessors")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		beanStore.getBean(ResponseProcessorList.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(ResponseProcessorList.Builder.class, v.get())
+			.beanCreateMethodFinder(ResponseProcessorList.class, resource)
+			.find("createResponseProcessors")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
@@ -2459,115 +2631,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder renderResponseStackTraces() {
 		renderResponseStackTraces = true;
-		return this;
-	}
-
-	/**
-	 * Response processors.
-	 *
-	 * <p>
-	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
-	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
-	 *
-	 * <p>
-	 * By default, the following response handlers are provided in the specified order:
-	 * <ul>
-	 * 	<li class='jc'>{@link ReaderProcessor}
-	 * 	<li class='jc'>{@link InputStreamProcessor}
-	 * 	<li class='jc'>{@link ThrowableProcessor}
-	 * 	<li class='jc'>{@link HttpResponseProcessor}
-	 * 	<li class='jc'>{@link HttpResourceProcessor}
-	 * 	<li class='jc'>{@link HttpEntityProcessor}
-	 * 	<li class='jc'>{@link ResponseBeanProcessor}
-	 * 	<li class='jc'>{@link PlainTextPojoProcessor}
-	 * 	<li class='jc'>{@link SerializedPojoProcessor}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our custom response processor for Foo objects. </jc>
-	 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
-	 *
-	 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
-	 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
-	 *
-	 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
-	 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
-	 *
-	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
-	 * 					<jc>//Pipe it to the writer ourselves.</jc>
-	 * 				}
-	 *
-	 * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
-	 *			}
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<ja>@RestGet</ja>(...)
-	 * 		<jk>public</jk> Object myMethod() {
-	 * 			<jc>// Return a special object for our handler.</jc>
-	 * 			<jk>return new</jk> MySpecialObject();
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Response processors are always inherited from ascendant resources.
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
-	 */
-	@FluentSetter
-	public RestContextBuilder responseProcessors(Class<?>...values) {
-		responseProcessors.add(assertClassArrayArgIsType("values", ResponseProcessor.class, values));
-		return this;
-	}
-
-	/**
-	 * Response processors.
-	 *
-	 * <p>
-	 * Same as {@link #responseProcessors(Class...)} except input is pre-constructed instances.
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder responseProcessors(ResponseProcessor...values) {
-		responseProcessors.append(values);
 		return this;
 	}
 

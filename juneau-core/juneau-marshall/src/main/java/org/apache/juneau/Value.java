@@ -194,5 +194,4 @@ public class Value<T> {
 			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
 			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
 	}
-
 }

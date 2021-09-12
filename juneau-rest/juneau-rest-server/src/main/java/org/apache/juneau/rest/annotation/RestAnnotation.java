@@ -1058,7 +1058,7 @@ public class RestAnnotation {
 			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
 			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
-			b.responseProcessors(a.responseProcessors());
+			b.responseProcessors().add(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
 			classes(a.encoders()).ifPresent(x -> b.getEncoders().add(x));
