@@ -63,7 +63,7 @@ public class BasicFileFinder implements FileFinder {
 	 *
 	 * @param builder The builder object.
 	 */
-	public BasicFileFinder(FileFinderBuilder builder) {
+	public BasicFileFinder(FileFinder.Builder builder) {
 		this.roots = builder.roots.toArray(new LocalDir[builder.roots.size()]);
 		this.cachingLimit = builder.cachingLimit;
 		this.include = builder.include.toArray(new Pattern[builder.include.size()]);

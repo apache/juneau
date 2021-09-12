@@ -12,8 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
+import java.util.regex.*;
+import java.util.stream.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Utility class for finding regular or localized files on the classpath and file system.
@@ -51,12 +62,12 @@ import java.util.*;
  *
  * <p>
  * The default implementation of this interface is {@link BasicFileFinder}.
- * The {@link FileFinderBuilder#implClass(Class)} method is provided for instantiating other instances.
+ * The {@link Builder#type(Class)} method is provided for instantiating other instances.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
- * 		<jk>public</jk> MyFileFinder(FileFinderBuilder <jv>builder</jv>) {
+ * 		<jk>public</jk> MyFileFinder(Builder <jv>builder</jv>) {
  * 			<jk>super</jk>(builder);
  * 		}
  * 	}
@@ -68,9 +79,9 @@ import java.util.*;
  * <p>
  * Subclasses must provide a public constructor that takes in any of the following arguments:
  * <ul>
- * 	<li>{@link FileFinderBuilder} - The builder object.
- * 	<li>Any beans present in the registered {@link FileFinderBuilder#beanStore(BeanStore) bean store}.
- * 	<li>Any {@link Optional} beans optionally present in the registered {@link FileFinderBuilder#beanStore(BeanStore) bean store}.
+ * 	<li>{@link Builder} - The builder object.
+ * 	<li>Any beans present in the registered {@link Builder#beanStore(BeanStore) bean store}.
+ * 	<li>Any {@link Optional} beans optionally present in the registered {@link Builder#beanStore(BeanStore) bean store}.
  * </ul>
  */
 public interface FileFinder {
@@ -83,8 +94,201 @@ public interface FileFinder {
 	 *
 	 * @return A new builder.
 	 */
-	public static FileFinderBuilder create() {
-		return new FileFinderBuilder();
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * The builder for this object.
+	 */
+	public static class Builder {
+
+		final Set<LocalDir> roots;
+		long cachingLimit;
+		List<Pattern> include, exclude;
+		Class<? extends FileFinder> type;
+		FileFinder impl;
+		BeanStore beanStore;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			roots = new LinkedHashSet<>();
+			cachingLimit = -1;
+			include = AList.of(Pattern.compile(".*"));
+			exclude = AList.create();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			roots = new LinkedHashSet<>(copyFrom.roots);
+			cachingLimit = copyFrom.cachingLimit;
+			include = AList.of(copyFrom.include);
+			exclude = AList.of(copyFrom.exclude);
+			beanStore = copyFrom.beanStore;
+			type = copyFrom.type;
+			impl = copyFrom.impl;
+		}
+
+		/**
+		 * Create a new {@link FileFinder} using this builder.
+		 *
+		 * @return A new {@link FileFinder}
+		 */
+		public FileFinder build() {
+			try {
+				if (impl != null)
+					return impl;
+				Class<? extends FileFinder> ic = isConcrete(type) ? type : getDefaultType();
+				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+			} catch (ExecutableException e) {
+				throw runtimeException(e);
+			}
+		}
+
+		/**
+		 * Returns the default bean type if not specified via {@link #type(Class)}.
+		 *
+		 * @return The default bean type.
+		 */
+		protected Class<? extends FileFinder> getDefaultType() {
+			return BasicFileFinder.class;
+		}
+
+		/**
+		 * Adds a class subpackage to the lookup paths.
+		 *
+		 * @param c The class whose package will be added to the lookup paths.  Must not be <jk>null</jk>.
+		 * @param path The absolute or relative subpath.
+		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder cp(Class<?> c, String path, boolean recursive) {
+			assertArgNotNull("c", c);
+			while (c != null) {
+				roots.add(new LocalDir(c, path));
+				c = recursive ? c.getSuperclass() : null;
+			}
+			return this;
+		}
+
+		/**
+		 * Adds a file system directory to the lookup paths.
+		 *
+		 * @param path The path relative to the working directory.  Must not be <jk>null</jk>
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder dir(String path) {
+			assertArgNotNull("path", path);
+			return path(Paths.get(".").resolve(path));
+		}
+
+		/**
+		 * Adds a file system directory to the lookup paths.
+		 *
+		 * @param path The directory path.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder path(Path path) {
+			roots.add(new LocalDir(path));
+			return this;
+		}
+
+		/**
+		 * Enables in-memory caching of files for quicker retrieval.
+		 *
+		 * @param cachingLimit The maximum file size in bytes.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder caching(long cachingLimit) {
+			this.cachingLimit = cachingLimit;
+			return this;
+		}
+
+		/**
+		 * Specifies the regular expression file name patterns to use to include files being retrieved from the file source.
+		 *
+		 * @param patterns
+		 * 	The regular expression include patterns.
+		 * 	<br>The default is <js>".*"</js>.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder include(String...patterns) {
+			this.include = Arrays.asList(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
+			return this;
+		}
+
+		/**
+		 * Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.
+		 *
+		 * @param patterns
+		 * 	The regular expression exclude patterns.
+		 * 	<br>If none are specified, no files will be excluded.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder exclude(String...patterns) {
+			this.exclude = Arrays.asList(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
+			return this;
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating the {@link FileFinder} object.
+		 *
+		 * <p>
+		 * Can be used to instantiate {@link FileFinder} implementations with injected constructor argument beans.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		@FluentSetter
+		public Builder beanStore(BeanStore value) {
+			this.beanStore = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link FileFinder} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		@FluentSetter
+		public Builder type(Class<? extends FileFinder> value) {
+			this.type = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder impl(FileFinder value) {
+			this.impl = value;
+			return this;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
 	}
 
 	/**

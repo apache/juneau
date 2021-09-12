@@ -667,12 +667,12 @@ public class FileFinder_Test {
 			.create()
 			.dir(".")
 			.caching(100_000_000)
-			.implClass(E03b.class)
+			.type(E03b.class)
 			.build();
 		assertObject(x).isType(E03b.class);
 	}
 
-	public static class E03a extends FileFinderBuilder {}
+	public static class E03a extends FileFinder.Builder {}
 	public static class E03b extends BasicFileFinder {
 		public static E03a create() {
 			return new E03a();

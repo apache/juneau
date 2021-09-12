@@ -217,8 +217,6 @@ public class RestContext extends Context {
 	private final AtomicBoolean initialized = new AtomicBoolean(false);
 
 	final StaticFiles staticFilesDefault;
-	final FileFinder fileFinderDefault;
-
 
 	/**
 	 * Constructor.
@@ -264,12 +262,9 @@ public class RestContext extends Context {
 			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
+			fileFinder = bs.add(FileFinder.class, builder.fileFinder().build());
 
 			Object r = resource.get();
-
-			fileFinder = createFileFinder(r, builder, bs);
-			bs.addBean(FileFinder.class, fileFinder);
-			fileFinderDefault = builder.fileFinderDefault.value().orElse(fileFinder);
 
 			staticFiles = createStaticFiles(r, builder, bs);
 			bs.addBean(StaticFiles.class, staticFiles);
@@ -372,136 +367,6 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Instantiates the file finder for this REST resource.
-	 *
-	 * <p>
-	 * The file finder is used to retrieve localized files from the classpath.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link FileFinder}.
-	 * 	<li>Looks for file finder value set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#fileFinder(Class)}/{@link RestContextBuilder#fileFinder(FileFinder)}
-	 * 			<li>{@link Rest#fileFinder()}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the {@link RestContextBuilder#beanStore() bean store} registered in this context (including Spring beans if using SpringRestServlet).
-	 * 	<li>Looks for file finder default setting.
-	 * 	<li>Instantiates via {@link #createFileFinderBuilder(Object,RestContextBuilder,BeanStore)}.
-	 * </ul>
-	 *
-	 * <p>
-	 * Your REST class can also implement a create method called <c>createFileFinder()</c> to instantiate your own
-	 * file finder.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bpcode w800'>
-	 * 	<ja>@Rest</ja>
-	 * 	<jk>public class</jk> MyRestClass {
-	 *
-	 * 		<jk>public</jk> FileFinder createFileFinder() <jk>throws</jk> Exception {
-	 * 			<jc>// Create your own file finder here.</jc>
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * The <c>createFileFinder()</c> method can be static or non-static can contain any of the following arguments:
-	 * <ul>
-	 * 	<li>{@link FileFinder} - The file finder that would have been returned by this method.
-	 * 	<li>{@link FileFinderBuilder} - The file finder returned by {@link #createFileFinderBuilder(Object,RestContextBuilder,BeanStore)}.
-	 * 	<li>{@link RestContext} - This REST context.
-	 * 	<li>{@link BeanStore} - The bean store of this REST context.
-	 * 	<li>Any {@doc RestInjection injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The file finder for this REST resource.
-	 * @throws Exception If file finder could not be instantiated.
-	 */
-	protected FileFinder createFileFinder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		FileFinder x = null;
-
-		if (resource instanceof FileFinder)
-			x = (FileFinder)resource;
-
-		if (x == null)
-			x = builder.fileFinder.value().orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(FileFinder.class).orElse(null);
-
-		if (x == null)
-			x = builder.fileFinderDefault.value().orElse(null);
-
-		if (x == null)
-			x = createFileFinderBuilder(resource, builder, beanStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(FileFinder.class, x)
-			.beanCreateMethodFinder(FileFinder.class, resource)
-			.find("createFileFinder")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the file finder builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createFileFinder(Object,RestContextBuilder,BeanStore)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The file finder builder for this REST resource.
-	 * @throws Exception If file finder builder could not be instantiated.
-	 */
-	protected FileFinderBuilder createFileFinderBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		Class<? extends FileFinder> c = builder.fileFinder.type().orElse(null);
-
-		if (c == null)
-			c = builder.fileFinderDefault.type().orElse(null);
-
-		FileFinderBuilder x = FileFinder
-			.create()
-			.beanStore(beanStore)
-			.implClass(c)
-			.dir("static")
-			.dir("htdocs")
-			.cp(getResourceClass(), "htdocs", true)
-			.cp(getResourceClass(), "/htdocs", true)
-			.caching(1_000_000)
-			.exclude("(?i).*\\.(class|properties)");
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(FileFinderBuilder.class, x)
-			.beanCreateMethodFinder(FileFinderBuilder.class, resource)
-			.find("createFileFinderBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
 	 * Instantiates the static files finder for this REST resource.
 	 *
 	 * <p>
@@ -583,17 +448,17 @@ public class RestContext extends Context {
 	 * @throws Exception If static files builder could not be instantiated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected StaticFilesBuilder createStaticFilesBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
+	protected StaticFiles.Builder createStaticFilesBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
 
 		Class<? extends StaticFiles> c = builder.staticFiles.type().orElse(null);
 
 		if (c == null)
 			c = builder.staticFilesDefault.type().orElse(null);
 
-		StaticFilesBuilder x = StaticFiles
+		StaticFiles.Builder x = StaticFiles
 			.create()
 			.beanStore(beanStore)
-			.implClass((Class<? extends FileFinder>)c)
+			.type((Class<? extends FileFinder>)c)
 			.dir("static")
 			.dir("htdocs")
 			.cp(getResourceClass(), "htdocs", true)
@@ -604,8 +469,8 @@ public class RestContext extends Context {
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(StaticFilesBuilder.class, x)
-			.beanCreateMethodFinder(StaticFilesBuilder.class, resource)
+			.addBean(StaticFiles.Builder.class, x)
+			.beanCreateMethodFinder(StaticFiles.Builder.class, resource)
 			.find("createStaticFilesBuilder")
 			.withDefault(x)
 			.run();
@@ -738,7 +603,7 @@ public class RestContext extends Context {
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
+	 * @param fileFinder The file finder configured on this bean created by {@link RestContextBuilder#createFileFinder(BeanStore,Supplier)}.
 	 * @param messages The localized messages configured on this bean.
 	 * @param varResolver The variable resolver configured on this bean.
 	 * @return The info provider for this REST resource.
@@ -782,7 +647,7 @@ public class RestContext extends Context {
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param fileFinder The file finder configured on this bean created by {@link #createFileFinder(Object,RestContextBuilder,BeanStore)}.
+	 * @param fileFinder The file finder configured on this bean created by {@link RestContextBuilder#createFileFinder(BeanStore,Supplier)}.
 	 * @param messages The localized messages configured on this bean.
 	 * @param varResolver The variable resolver configured on this bean.
 	 * @return The REST API builder for this REST resource.

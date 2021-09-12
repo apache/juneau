@@ -47,8 +47,8 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static StaticFilesBuilder create() {
-		return new StaticFilesBuilder();
+	public static StaticFiles.Builder create() {
+		return new StaticFiles.Builder();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 	 *
 	 * @param builder The builder object.
 	 */
-	public BasicStaticFiles(StaticFilesBuilder builder) {
+	public BasicStaticFiles(StaticFiles.Builder builder) {
 		super(builder);
 		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
 		this.mimeTypes = builder.mimeTypes;
