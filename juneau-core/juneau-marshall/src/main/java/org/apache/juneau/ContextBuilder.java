@@ -58,7 +58,7 @@ public abstract class ContextBuilder {
 	private final ContextPropertiesBuilder cpb;
 
 	boolean debug;
-	Class<?> contextClass;
+	Class<?> type;
 
 	private final List<Object> builders = new ArrayList<>();
 	private final AnnotationWorkList applied = new AnnotationWorkList();
@@ -81,7 +81,7 @@ public abstract class ContextBuilder {
 	protected ContextBuilder(Context copyFrom) {
 		this.cpb = copyFrom.properties.copy();
 		this.debug = copyFrom.debug;
-		this.contextClass = copyFrom.getClass();
+		this.type = copyFrom.getClass();
 		registerBuilders(this, cpb);
 	}
 
@@ -93,7 +93,7 @@ public abstract class ContextBuilder {
 	protected ContextBuilder(ContextBuilder copyFrom) {
 		this.cpb =  new ContextPropertiesBuilder(copyFrom.cpb);
 		this.debug = copyFrom.debug;
-		this.contextClass = copyFrom.contextClass;
+		this.type = copyFrom.type;
 		registerBuilders(this, cpb);
 	}
 
@@ -112,17 +112,17 @@ public abstract class ContextBuilder {
 	 * 	<br>Subsequent calls to this method will create new instances (unless context object is cacheable).
 	 */
 	public Context build() {
-		if (contextClass == null)
+		if (type == null)
 			throw runtimeException("Context class not specified.");
 		try {
-			ClassInfo ci = ClassInfo.of(contextClass);
+			ClassInfo ci = ClassInfo.of(type);
 			ConstructorInfo cc = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
 			if (cc != null)
 				return cc.invoke(this);
 			cc = ci.getPublicConstructor(cpb);
 			if (cc != null)
 				return cc.invoke(cpb);
-			throw runtimeException("Constructor not found for class {0}", contextClass);
+			throw runtimeException("Constructor not found for class {0}", type);
 		} catch (ExecutableException e) {
 			throw runtimeException(e, "Error occurred trying to create context.");
 		}
@@ -135,8 +135,8 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public ContextBuilder contextClass(Class<? extends Context> value) {
-		this.contextClass = value;
+	public ContextBuilder type(Class<? extends Context> value) {
+		this.type = value;
 		return this;
 	}
 
@@ -145,8 +145,8 @@ public abstract class ContextBuilder {
 	 *
 	 * @return The context class if it was specified.
 	 */
-	public Optional<Class<?>> getContextClass() {
-		return Optional.ofNullable(contextClass);
+	public Optional<Class<?>> getType() {
+		return Optional.ofNullable(type);
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	protected JsoSerializerBuilder() {
 		super();
 		produces("application/x-java-serialized-object");
-		contextClass(JsoSerializer.class);
+		type(JsoSerializer.class);
 	}
 
 	/**

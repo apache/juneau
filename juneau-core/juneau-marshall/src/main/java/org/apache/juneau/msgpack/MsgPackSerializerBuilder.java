@@ -33,7 +33,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	protected MsgPackSerializerBuilder() {
 		super();
 		produces("octal/msgpack");
-		contextClass(MsgPackSerializer.class);
+		type(MsgPackSerializer.class);
 	}
 
 	/**

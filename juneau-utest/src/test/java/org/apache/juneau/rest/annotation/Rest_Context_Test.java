@@ -64,7 +64,7 @@ public class Rest_Context_Test {
 	public static class A4 extends A1 {
 		 @RestHook(HookEvent.INIT)
 		 public void init(RestContextBuilder builder) throws Exception {
-			 builder.contextClass(X1.class);
+			 builder.type(X1.class);
 		 }
 	}
 

@@ -44,7 +44,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		BeanContextBuilder bc = getBeanContextBuilder();
 		jsonSerializerBuilder = JsonSerializer.create().beanContextBuilder(bc);
 		jsonParserBuilder = (JsonParserBuilder) JsonParser.create().beanContextBuilder(bc);
-		contextClass(JsonSchemaGenerator.class);
+		type(JsonSchemaGenerator.class);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
 

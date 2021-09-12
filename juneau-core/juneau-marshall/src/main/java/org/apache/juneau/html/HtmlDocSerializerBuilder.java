@@ -39,7 +39,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 		super();
 		produces("text/html");
 		accept("text/html");
-		contextClass(HtmlDocSerializer.class);
+		type(HtmlDocSerializer.class);
 	}
 
 	/**

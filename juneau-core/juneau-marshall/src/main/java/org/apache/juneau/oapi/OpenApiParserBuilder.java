@@ -37,7 +37,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	protected OpenApiParserBuilder() {
 		super();
 		consumes("text/openapi");
-		contextClass(OpenApiParser.class);
+		type(OpenApiParser.class);
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	protected PlainTextSerializerBuilder() {
 		super();
 		produces("text/plain");
-		contextClass(PlainTextSerializer.class);
+		type(PlainTextSerializer.class);
 	}
 
 	/**

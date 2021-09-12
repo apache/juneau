@@ -34,7 +34,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	protected CsvParserBuilder() {
 		super();
 		consumes("text/csv");
-		contextClass(CsvParser.class);
+		type(CsvParser.class);
 	}
 
 	/**

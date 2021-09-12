@@ -37,7 +37,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		super();
 		produces("text/xml");
 		accept("text/xml+soap");
-		contextClass(SoapXmlSerializer.class);
+		type(SoapXmlSerializer.class);
 	}
 
 	/**

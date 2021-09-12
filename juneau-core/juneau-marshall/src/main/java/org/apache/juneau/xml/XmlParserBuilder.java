@@ -41,7 +41,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	protected XmlParserBuilder() {
 		super();
 		consumes("text/xml,application/xml");
-		contextClass(XmlParser.class);
+		type(XmlParser.class);
 	}
 
 	/**

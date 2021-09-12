@@ -37,7 +37,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	protected XmlSerializerBuilder() {
 		super();
 		produces("text/xml");
-		contextClass(XmlSerializer.class);
+		type(XmlSerializer.class);
 	}
 
 	/**

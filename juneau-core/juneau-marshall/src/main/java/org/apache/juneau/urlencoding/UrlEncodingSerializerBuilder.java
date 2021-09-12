@@ -37,7 +37,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	protected UrlEncodingSerializerBuilder() {
 		super();
 		produces("application/x-www-form-urlencoded");
-		contextClass(UrlEncodingSerializer.class);
+		type(UrlEncodingSerializer.class);
 	}
 
 	/**

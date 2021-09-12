@@ -62,20 +62,20 @@ public abstract class Context implements MetaProvider {
 	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
 	 * or protected constructor of the class.
 	 *
-	 * @param c The builder to create.
+	 * @param type The builder to create.
 	 * @return A new builder.
 	 */
-	public static ContextBuilder createBuilder(Class<? extends Context> c) {
+	public static ContextBuilder createBuilder(Class<? extends Context> type) {
 		try {
-			MethodInfo mi = BUILDER_CREATE_METHODS.get(c);
+			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
 			if (mi == null) {
-				mi = ClassInfo.of(c).getBuilderCreateMethod();
+				mi = ClassInfo.of(type).getBuilderCreateMethod();
 				if (mi == null)
-					throw new RuntimeException("Could not find builder create method on class " + c);
-				BUILDER_CREATE_METHODS.put(c, mi);
+					throw new RuntimeException("Could not find builder create method on class " + type);
+				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			ContextBuilder b = (ContextBuilder)mi.invoke(null);
-			b.contextClass(c);
+			b.type(type);
 			return b;
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e);

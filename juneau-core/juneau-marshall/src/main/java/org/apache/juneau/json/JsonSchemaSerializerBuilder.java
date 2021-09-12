@@ -42,7 +42,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		super();
 		produces("application/json");
 		accept("application/json+schema,text/json+schema");
-		contextClass(JsonSchemaSerializer.class);
+		type(JsonSchemaSerializer.class);
 		generatorBuilder = (JsonSchemaGeneratorBuilder) JsonSchemaGenerator.create().beanContextBuilder(getBeanContextBuilder());
 	}
 

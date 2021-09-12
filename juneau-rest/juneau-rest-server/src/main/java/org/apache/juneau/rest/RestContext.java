@@ -106,7 +106,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * The builder class can be subclassed by using the {@link Rest#builder()} annotation.
 	 * This can be useful when you want to perform any customizations on the builder class, typically by overriding protected methods that create
-	 * 	the various builders used in the created {@link RestContext} object (which itself can be overridden via {@link RestContextBuilder#contextClass(Class)}).
+	 * 	the various builders used in the created {@link RestContext} object (which itself can be overridden via {@link RestContextBuilder#type(Class)}).
 	 * The subclass must contain a public constructor that takes in the same arguments passed in to this method.
 	 *
 	 * @param resourceClass
@@ -1199,7 +1199,7 @@ public class RestContext extends Context {
 					RestOpContext roc = RestOpContext
 						.create(mi.inner(), this)
 						.beanStore(beanStore)
-						.contextClass(builder.opContextClass)
+						.type(builder.opContextClass)
 						.build();
 
 					String httpMethod = roc.getHttpMethod();
@@ -1213,7 +1213,7 @@ public class RestContext extends Context {
 							.create(mi.inner(), this)
 							.dotAll()
 							.beanStore(rootBeanStore)
-							.contextClass(RrpcRestOpContext.class)
+							.type(RrpcRestOpContext.class)
 							.build();
 						x
 							.add("GET", roc2)

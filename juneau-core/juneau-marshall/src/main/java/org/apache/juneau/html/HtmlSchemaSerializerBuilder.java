@@ -42,7 +42,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		super();
 		produces("text/html");
 		accept("text/html+schema");
-		contextClass(HtmlSchemaSerializer.class);
+		type(HtmlSchemaSerializer.class);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	protected HtmlParserBuilder() {
 		super();
 		consumes("text/html,text/html+stripped");
-		contextClass(HtmlParser.class);
+		type(HtmlParser.class);
 	}
 
 	/**

@@ -75,7 +75,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	protected MockRestClientBuilder() {
 		super();
 		connectionManager(new MockHttpClientConnectionManager());
-		contextClass(MockRestClient.class);
+		type(MockRestClient.class);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	protected MockRestClientBuilder(MockRestClient copyFrom) {
 		super(copyFrom);
 		connectionManager(new MockHttpClientConnectionManager());
-		contextClass(MockRestClient.class);
+		type(MockRestClient.class);
 	}
 
 	@Override /* ContextBuilder */

@@ -37,7 +37,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	protected UonSerializerBuilder() {
 		super();
 		produces("text/uon");
-		contextClass(UonSerializer.class);
+		type(UonSerializer.class);
 	}
 
 	/**

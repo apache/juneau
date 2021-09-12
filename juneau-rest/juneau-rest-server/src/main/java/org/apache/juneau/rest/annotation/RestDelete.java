@@ -106,7 +106,7 @@ public @interface RestDelete {
 	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#contextClass(Class)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#type(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestOpContext> contextClass() default RestOpContext.Null.class;

@@ -33,7 +33,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	protected JsoParserBuilder() {
 		super();
 		consumes("application/x-java-serialized-object");
-		contextClass(JsoParser.class);
+		type(JsoParser.class);
 	}
 
 	/**

@@ -1062,7 +1062,7 @@ public class RestAnnotation {
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
 			classes(a.encoders()).ifPresent(x -> b.getEncoders().add(x));
-			type(a.contextClass()).ifPresent(x -> b.contextClass(x));
+			type(a.contextClass()).ifPresent(x -> b.type(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
 			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));

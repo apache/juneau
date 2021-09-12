@@ -38,7 +38,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		super();
 		produces("application/json");
 		accept("application/json,text/json");
-		contextClass(JsonSerializer.class);
+		type(JsonSerializer.class);
 	}
 
 	/**

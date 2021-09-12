@@ -37,7 +37,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	protected OpenApiSerializerBuilder() {
 		super();
 		produces("text/openapi");
-		contextClass(OpenApiSerializer.class);
+		type(OpenApiSerializer.class);
 	}
 
 	/**

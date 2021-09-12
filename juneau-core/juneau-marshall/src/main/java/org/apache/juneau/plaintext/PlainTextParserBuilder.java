@@ -34,7 +34,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	protected PlainTextParserBuilder() {
 		super();
 		consumes("text/plain");
-		contextClass(PlainTextParser.class);
+		type(PlainTextParser.class);
 	}
 
 	/**

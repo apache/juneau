@@ -37,7 +37,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	protected UonParserBuilder() {
 		super();
 		consumes("text/uon");
-		contextClass(UonParser.class);
+		type(UonParser.class);
 	}
 
 	/**

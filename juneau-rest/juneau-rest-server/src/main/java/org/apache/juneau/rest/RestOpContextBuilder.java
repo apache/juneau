@@ -80,7 +80,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestOpContext build() {
 		try {
-			Class<? extends RestOpContext> ic = (Class<? extends RestOpContext>) getContextClass().orElse(getDefaultImplClass());
+			Class<? extends RestOpContext> ic = (Class<? extends RestOpContext>) getType().orElse(getDefaultImplClass());
 			return BeanStore.of(beanStore).addBean(RestOpContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -88,9 +88,9 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Specifies the default implementation class if not specified via {@link #contextClass(Class)}.
+	 * Specifies the default implementation class if not specified via {@link #type(Class)}.
 	 *
-	 * @return The default implementation class if not specified via {@link #contextClass(Class)}.
+	 * @return The default implementation class if not specified via {@link #type(Class)}.
 	 */
 	protected Class<? extends RestOpContext> getDefaultImplClass() {
 		return RestOpContext.class;
@@ -346,8 +346,8 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 
 	@Override
 	@FluentSetter
-	public RestOpContextBuilder contextClass(Class<? extends Context> value) {
-		super.contextClass(value);
+	public RestOpContextBuilder type(Class<? extends Context> value) {
+		super.type(value);
 		return this;
 	}
 

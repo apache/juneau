@@ -120,7 +120,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		this.parserGroupBuilder = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
 		this.partSerializerBuilder = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
 		this.partParserBuilder = (ParserBuilder) OpenApiParser.create().beanContextBuilder(getBeanContextBuilder());
-		contextClass(RestClient.class);
+		type(RestClient.class);
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		} else {
 			this.simplePartParser = copyFrom.partParser;
 		}
-		contextClass(copyFrom.getClass());
+		type(copyFrom.getClass());
 	}
 
 	@Override /* ContextBuilder */
@@ -166,7 +166,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
 		contextProperties();
-		contextClass(c);
+		type(c);
 		return (T)super.build();
 	}
 

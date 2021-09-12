@@ -40,7 +40,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected RdfSerializerBuilder() {
 		super();
-		contextClass(RdfSerializer.class);
+		type(RdfSerializer.class);
 	}
 
 	/**

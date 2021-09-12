@@ -34,7 +34,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	protected CsvSerializerBuilder() {
 		super();
 		produces("text/csv");
-		contextClass(CsvSerializer.class);
+		type(CsvSerializer.class);
 	}
 
 	/**

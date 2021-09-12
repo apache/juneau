@@ -33,7 +33,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	protected MsgPackParserBuilder() {
 		super();
 		consumes("octal/msgpack");
-		contextClass(MsgPackParser.class);
+		type(MsgPackParser.class);
 	}
 
 	/**

@@ -227,7 +227,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestContextBuilder(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 		try {
-			contextClass(RestContext.class);
+			type(RestContext.class);
 
 			this.resourceClass = resourceClass;
 			this.inner = servletConfig;
@@ -285,7 +285,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			return (RestContext) BeanStore.of(beanStore(), resource.get()).addBeans(RestContextBuilder.class, this).createBean(getContextClass().orElse(RestContext.class));
+			return (RestContext) BeanStore.of(beanStore(), resource.get()).addBeans(RestContextBuilder.class, this).createBean(getType().orElse(RestContext.class));
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -1954,9 +1954,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	@Override
-	@FluentSetter
-	public RestContextBuilder contextClass(Class<? extends Context> value) {
-		super.contextClass(value);
+	public RestContextBuilder type(Class<? extends Context> value) {
+		super.type(value);
 		return this;
 	}
 

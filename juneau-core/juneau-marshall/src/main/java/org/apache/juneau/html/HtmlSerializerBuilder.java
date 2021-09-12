@@ -37,7 +37,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	protected HtmlSerializerBuilder() {
 		super();
 		produces("text/html");
-		contextClass(HtmlSerializer.class);
+		type(HtmlSerializer.class);
 	}
 
 	/**

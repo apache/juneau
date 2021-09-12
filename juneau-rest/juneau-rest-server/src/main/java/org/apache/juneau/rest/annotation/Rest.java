@@ -299,7 +299,7 @@ public @interface Rest {
 	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#contextClass(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#type(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestContext> contextClass() default RestContext.Null.class;

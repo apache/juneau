@@ -37,7 +37,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	protected JsonParserBuilder() {
 		super();
 		consumes("application/json,text/json");
-		contextClass(JsonParser.class);
+		type(JsonParser.class);
 	}
 
 	/**

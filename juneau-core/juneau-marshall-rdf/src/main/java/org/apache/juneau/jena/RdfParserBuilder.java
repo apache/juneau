@@ -39,7 +39,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	protected RdfParserBuilder() {
 		super();
-		contextClass(RdfParser.class);
+		type(RdfParser.class);
 	}
 
 	/**
