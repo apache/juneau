@@ -263,11 +263,9 @@ public class RestContext extends Context {
 			callLogger = bs.add(RestLogger.class, builder.callLogger().beanStore(beanStore).loggerOnce(logger).thrownStoreOnce(thrownStore).build());
 			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
+			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
 
 			Object r = resource.get();
-
-			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
-			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
 			fileFinder = createFileFinder(r, builder, bs);
 			bs.addBean(FileFinder.class, fileFinder);
@@ -706,82 +704,6 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Instantiates the JSON schema generator for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for a static or non-static <c>createJsonSchemaGenerator()</> method that returns <c>{@link JsonSchemaGenerator}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a new {@link JsonSchemaGenerator} using the property store of this context..
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The JSON schema generator for this REST resource.
-	 * @throws Exception If JSON schema generator could not be instantiated.
-	 */
-	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-		JsonSchemaGenerator x = beanStore.getBean(JsonSchemaGenerator.class).orElse(null);
-
-		if (x == null)
-			x = createJsonSchemaGeneratorBuilder(resource, builder, beanStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(JsonSchemaGenerator.class, x)
-			.beanCreateMethodFinder(JsonSchemaGenerator.class, resource)
-			.find("createJsonSchemaGenerator")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the JSON-schema generator builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createJsonSchemaGenerator(Object,RestContextBuilder,BeanStore)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The JSON-schema generator builder for this REST resource.
-	 * @throws Exception If JSON-schema generator builder could not be instantiated.
-	 */
-	protected JsonSchemaGeneratorBuilder createJsonSchemaGeneratorBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-		JsonSchemaGeneratorBuilder x = JsonSchemaGenerator
-			.create()
-			.apply(builder.getApplied());
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(JsonSchemaGeneratorBuilder.class, x)
-			.beanCreateMethodFinder(JsonSchemaGeneratorBuilder.class, resource)
-			.find("createJsonSchemaGeneratorBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
 	 * Instantiates the REST info provider for this REST resource.
 	 *
 	 * <p>
@@ -876,7 +798,7 @@ public class RestContext extends Context {
 				.fileFinder(fileFinder)
 				.messages(messages)
 				.varResolver(varResolver)
-				.jsonSchemaGenerator(createJsonSchemaGenerator(resource, builder, beanStore))
+				.jsonSchemaGenerator(beanStore.getBean(JsonSchemaGenerator.class).get())
 				.implClass(c);
 
 		x = BeanStore

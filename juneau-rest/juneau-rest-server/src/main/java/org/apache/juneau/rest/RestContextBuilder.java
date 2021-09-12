@@ -47,6 +47,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -133,6 +134,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private RestLogger.Builder callLogger;
 	private HttpPartSerializer.Creator partSerializer;
 	private HttpPartParser.Creator partParser;
+	private JsonSchemaGeneratorBuilder jsonSchemaGenerator;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -307,13 +309,13 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		BeanStore bs = beanStore();
 
 		runInitHooks(bs, resource());
-		logger();
-		messages();
-		responseProcessors();
 
 		VarResolverSession vrs = varResolver().build().createSession();
 		AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
 		apply(al);
+		partSerializer().apply(al);
+		partParser().apply(al);
+		jsonSchemaGenerator().apply(al);
 
 		return this;
 	}
@@ -1557,6 +1559,75 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(HttpPartParser.Creator.class, v.get())
 			.beanCreateMethodFinder(HttpPartParser.class, resource)
 			.find("createPartParser")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	/**
+	 * Returns the JSON schema generator builder for this context.
+	 *
+	 * @return The JSON schema generator builder for this context.
+	 */
+	public final JsonSchemaGeneratorBuilder jsonSchemaGenerator() {
+		if (jsonSchemaGenerator == null)
+			jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), resource());
+		return jsonSchemaGenerator;
+	}
+
+
+	/**
+	 * Instantiates the JSON schema generator for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for a static or non-static <c>createJsonSchemaGenerator()</> method that returns <c>{@link JsonSchemaGenerator}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a new {@link JsonSchemaGenerator} using the property store of this context..
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The JSON schema generator builder for this REST resource.
+	 */
+	protected JsonSchemaGeneratorBuilder createJsonSchemaGenerator(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<JsonSchemaGeneratorBuilder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(JsonSchemaGeneratorBuilder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				JsonSchemaGenerator.create()
+			);
+		}
+
+		beanStore.getBean(JsonSchemaGenerator.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
+			.beanCreateMethodFinder(JsonSchemaGeneratorBuilder.class, r)
+			.find("createJsonSchemaGenerator")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
+			.beanCreateMethodFinder(JsonSchemaGenerator.class, r)
+			.find("createJsonSchemaGenerator")
 			.execute()
 			.ifPresent(x -> v.get().impl(x));
 

@@ -59,6 +59,7 @@ public abstract class ContextBuilder {
 
 	boolean debug;
 	Class<?> type;
+	Context impl;
 
 	private final List<Object> builders = new ArrayList<>();
 	private final AnnotationWorkList applied = new AnnotationWorkList();
@@ -112,6 +113,8 @@ public abstract class ContextBuilder {
 	 * 	<br>Subsequent calls to this method will create new instances (unless context object is cacheable).
 	 */
 	public Context build() {
+		if (impl != null)
+			return impl;
 		if (type == null)
 			throw runtimeException("Context class not specified.");
 		try {
@@ -147,6 +150,18 @@ public abstract class ContextBuilder {
 	 */
 	public Optional<Class<?>> getType() {
 		return Optional.ofNullable(type);
+	}
+
+	/**
+	 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ContextBuilder impl(Context value) {
+		impl = value;
+		return this;
 	}
 
 	/**
