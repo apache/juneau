@@ -27,7 +27,7 @@ import org.apache.juneau.utils.*;
 /**
  * API for retrieving localized static files from either the classpath or file system.
  */
-public interface StaticFiles {
+public interface StaticFiles extends FileFinder {
 
 	/** Represents no static files */
 	public abstract class Null implements StaticFiles {}
@@ -47,8 +47,32 @@ public interface StaticFiles {
 	@FluentSetters
 	public static class Builder extends FileFinder.Builder {
 
-		List<Header> headers = AList.create();
-		MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
+		List<Header> headers;
+		MimetypesFileTypeMap mimeTypes;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			headers = AList.create();
+			mimeTypes = new ExtendedMimetypesFileTypeMap();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			headers = AList.of(copyFrom.headers);
+			mimeTypes = copyFrom.mimeTypes;
+		}
+
+		@Override
+		public StaticFiles build() {
+			return (StaticFiles)super.build();
+		}
 
 		@Override
 		protected Class<? extends FileFinder> getDefaultType() {
@@ -92,6 +116,11 @@ public interface StaticFiles {
 		public Builder mimeTypes(MimetypesFileTypeMap mimeTypes) {
 			this.mimeTypes = mimeTypes;
 			return this;
+		}
+
+		@Override
+		public Builder copy() {
+			return new Builder(this);
 		}
 
 		// <FluentSetters>

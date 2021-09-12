@@ -216,8 +216,6 @@ public class RestContext extends Context {
 	// Gets set when postInitChildFirst() gets called.
 	private final AtomicBoolean initialized = new AtomicBoolean(false);
 
-	final StaticFiles staticFilesDefault;
-
 	/**
 	 * Constructor.
 	 *
@@ -263,12 +261,9 @@ public class RestContext extends Context {
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
 			fileFinder = bs.add(FileFinder.class, builder.fileFinder().build());
+			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().build());
 
 			Object r = resource.get();
-
-			staticFiles = createStaticFiles(r, builder, bs);
-			bs.addBean(StaticFiles.class, staticFiles);
-			staticFilesDefault = builder.staticFilesDefault.value().orElse(staticFiles);
 
 			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bs).build();
 			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bs).build();
@@ -364,118 +359,6 @@ public class RestContext extends Context {
 		for (String v : StringUtils.split(value))
 			s.add(v);
 		return Collections.unmodifiableSet(s);
-	}
-
-	/**
-	 * Instantiates the static files finder for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of FileFinder.
-	 * 	<li>Looks for static files set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#staticFiles(Class)}/{@link RestContextBuilder#staticFiles(StaticFiles)}
-	 * 			<li>{@link Rest#staticFiles()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createStaticFiles()</> method that returns {@link StaticFiles} on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>{@link BasicFileFinder}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Looks for value in default static files setting.
-	 * 	<li>Instantiates a {@link BasicStaticFiles}.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The file finder for this REST resource.
-	 * @throws Exception If file finder could not be instantiated.
-	 */
-	protected StaticFiles createStaticFiles(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		StaticFiles x = null;
-
-		if (resource instanceof StaticFiles)
-			x = (StaticFiles)resource;
-
-		if (x == null)
-			x = builder.staticFiles.value().orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(StaticFiles.class).orElse(null);
-
-		if (x == null)
-			x = builder.staticFilesDefault.value().orElse(null);
-
-		if (x == null)
-			x = (StaticFiles)createStaticFilesBuilder(resource, builder, beanStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(StaticFiles.class, x)
-			.beanCreateMethodFinder(StaticFiles.class, resource)
-			.find("createStaticFiles")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the static files builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createStaticFiles(Object,RestContextBuilder,BeanStore)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The static files builder for this REST resource.
-	 * @throws Exception If static files builder could not be instantiated.
-	 */
-	@SuppressWarnings("unchecked")
-	protected StaticFiles.Builder createStaticFilesBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		Class<? extends StaticFiles> c = builder.staticFiles.type().orElse(null);
-
-		if (c == null)
-			c = builder.staticFilesDefault.type().orElse(null);
-
-		StaticFiles.Builder x = StaticFiles
-			.create()
-			.beanStore(beanStore)
-			.type((Class<? extends FileFinder>)c)
-			.dir("static")
-			.dir("htdocs")
-			.cp(getResourceClass(), "htdocs", true)
-			.cp(getResourceClass(), "/htdocs", true)
-			.caching(1_000_000)
-			.exclude("(?i).*\\.(class|properties)")
-			.headers(cacheControl("max-age=86400, public"));
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(StaticFiles.Builder.class, x)
-			.beanCreateMethodFinder(StaticFiles.Builder.class, resource)
-			.find("createStaticFilesBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**

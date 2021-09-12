@@ -1069,7 +1069,7 @@ public class RestAnnotation {
 			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
 			b.messages().location(c.inner(), string(a.messages()).orElse(null));
 			type(a.fileFinder()).ifPresent(x -> b.fileFinder().type(x));
-			type(a.staticFiles()).ifPresent(x -> b.staticFiles(x));
+			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
 			string(a.path()).ifPresent(x -> b.path(x));
 			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
 			type(a.callLogger()).ifPresent(x -> b.callLogger().implClass(x));

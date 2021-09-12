@@ -136,6 +136,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private HttpPartParser.Creator partParser;
 	private JsonSchemaGeneratorBuilder jsonSchemaGenerator;
 	private FileFinder.Builder fileFinder;
+	private StaticFiles.Builder staticFiles;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -160,8 +161,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
 	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
-	BeanRef<StaticFiles> staticFiles = BeanRef.of(StaticFiles.class);
-	BeanRef<StaticFiles> staticFilesDefault = BeanRef.of(StaticFiles.class);
 	NamedAttributeList defaultRequestAttributes = NamedAttributeList.create();
 	HeaderListBuilder defaultRequestHeaders = HeaderList.create();
 	HeaderListBuilder defaultResponseHeaders = HeaderList.create();
@@ -237,7 +236,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			// Pass-through default values.
 			if (parentContext != null) {
 				debugDefault = parentContext.debugDefault;
-				staticFilesDefault.value(parentContext.staticFilesDefault);
 				defaultClasses = parentContext.defaultClasses.copy();
 			} else {
 				defaultClasses = DefaultClassList.create();
@@ -1816,6 +1814,183 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	/**
+	 * Returns the static files builder for this context.
+	 *
+	 * @return The static files builder for this context.
+	 */
+	public StaticFiles.Builder staticFiles() {
+		if (staticFiles == null)
+			staticFiles = createStaticFiles(beanStore(), resource());
+		return staticFiles;
+	}
+
+
+	/**
+	 * Instantiates the static files finder for this REST resource.
+	 *
+	 * <p>
+	 * Used to retrieve localized files to be served up as static files through the REST API via the following
+	 * predefined methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
+	 * </ul>
+	 *
+	 * <p>
+	 * The static file finder can be accessed through the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
+	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The static file finder is instantiated via the {@link RestContextBuilder#createStaticFiles(BeanStore,Supplier)} method which in turn instantiates
+	 * based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
+	 * 	<li>Looks for a public <c>createStaticFiles()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 	<li>Instantiates a {@link BasicStaticFiles} which provides basic support for finding localized
+	 * 		resources on the classpath and JVM working directory..
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a static file finder that looks for files in the /files working subdirectory, but overrides the find()
+	 * 	// and resolve methods for special handling of special cases and adds a Foo header to all requests.</jc>
+	 * 	<jk>public class</jk> MyStaticFiles <jk>extends</jk> StaticFiles {
+	 *
+	 * 		<jk>public</jk> MyStaticFiles() <jk>extends</jk> BasicStaticFiles {
+	 * 			<jk>super</jk>(
+	 * 				<jk>new</jk> StaticFilesBuilder()
+	 * 					.dir(<js>"/files"</js>)
+	 * 					.headers(BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 			);
+	 * 		}
+	 *
+	 *		<ja>@Override</ja> <jc>// FileFinder</jc>
+	 * 		<jk>protected</jk> Optional&lt;InputStream&gt; find(String <jv>name</jv>, Locale <jv>locale</jv>) <jk>throws</jk> IOException {
+	 * 			<jc>// Do special handling or just call super.find().</jc>
+	 * 			<jk>return super</jk>.find(<jv>name</jv>, <jv>locale</jv>);
+	 * 		}
+	 *
+	 *		<ja>@Override</ja> <jc>// staticFiles</jc>
+	 * 		<jk>public</jk> Optional&lt;BasicHttpResource&gt; resolve(String <jv>path</jv>, Locale <jv>locale</jv>) {
+	 * 			<jc>// Do special handling or just call super.resolve().</jc>
+	 * 			<jk>return super</jk>.resolve(<jv>path</jv>, <jv>locale</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(staticFiles=MyStaticFiles.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Created via createStaticFiles() method.</jc>
+	 * 		<jk>public</jk> StaticFiles createStaticFiles(RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MyStaticFiles();
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.staticFiles(MyStaticFiles.<jk>class</jk>);
+	 *
+	 * 			<jc>// Use a pre-instantiated object instead.</jc>
+	 * 			<jv>builder</jv>.staticFiles(<jk>new</jk> MyStaticFiles());
+	 * 		}
+	 *
+	 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.staticFiles(MyStaticFiles.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Create a REST method that uses the static files finder.</jc>
+	 * 		<ja>@RestGet<ja>(<js>"/htdocs/*"</js>)
+	 * 		<jk>public</jk> HttpResource htdocs(RestRequest <jv>req</jv>, <ja>@Path</ja>("/*") String <jv>path</jv>, Locale <jv>locale</jv>) <jk>throws</jk> NotFound {
+	 * 			<jk>return</jk> <jv>req</jv>.getStaticFiles().resolve(<jv>path</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of FileFinder.
+	 * 	<li>Looks for static files set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#staticFiles()}
+	 * 			<li>{@link Rest#staticFiles()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createStaticFiles()</> method that returns {@link StaticFiles} on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>{@link BasicFileFinder}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Looks for value in default static files setting.
+	 * 	<li>Instantiates a {@link BasicStaticFiles}.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The file finder for this REST resource.
+	 */
+	protected StaticFiles.Builder createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<StaticFiles.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(StaticFiles.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				StaticFiles
+					.create()
+					.beanStore(beanStore)
+					.dir("static")
+					.dir("htdocs")
+					.cp(r.getClass(), "htdocs", true)
+					.cp(r.getClass(), "/htdocs", true)
+					.caching(1_000_000)
+					.exclude("(?i).*\\.(class|properties)")
+					.headers(cacheControl("max-age=86400, public"))
+			);
+		}
+
+		beanStore.getBean(StaticFiles.class).ifPresent(x -> v.get().impl(x));
+
+		if (r instanceof StaticFiles)
+			v.get().impl((StaticFiles)r);
+
+		defaultClasses.get(StaticFiles.class).ifPresent(x -> v.get().type(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(StaticFiles.Builder.class, v.get())
+			.beanCreateMethodFinder(StaticFiles.Builder.class, r)
+			.find("createStaticFiles")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(StaticFiles.Builder.class, v.get())
+			.beanCreateMethodFinder(StaticFiles.class, r)
+			.find("createStaticFiles")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
 	//----------------------------------------------------------------------------------------------------
@@ -3249,160 +3424,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			consumes = new ArrayList<>(Arrays.asList(values));
 		else
 			consumes.addAll(Arrays.asList(values));
-		return this;
-	}
-
-	/**
-	 * Static files finder.
-	 *
-	 * <p>
-	 * Used to retrieve localized files to be served up as static files through the REST API via the following
-	 * predefined methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
-	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
-	 * </ul>
-	 *
-	 * <p>
-	 * The static file finder can be accessed through the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
-	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
-	 * </ul>
-	 *
-	 * <p>
-	 * The static file finder is instantiated via the {@link RestContext#createStaticFiles(Object,RestContextBuilder,BeanStore)} method which in turn instantiates
-	 * based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
-	 * 	<li>Looks for a public <c>createStaticFiles()</> method on the resource class with an optional {@link RestContext} argument.
-	 * 	<li>Instantiates a {@link BasicStaticFiles} which provides basic support for finding localized
-	 * 		resources on the classpath and JVM working directory..
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a static file finder that looks for files in the /files working subdirectory, but overrides the find()
-	 * 	// and resolve methods for special handling of special cases and adds a Foo header to all requests.</jc>
-	 * 	<jk>public class</jk> MyStaticFiles <jk>extends</jk> StaticFiles {
-	 *
-	 * 		<jk>public</jk> MyStaticFiles() <jk>extends</jk> BasicStaticFiles {
-	 * 			<jk>super</jk>(
-	 * 				<jk>new</jk> StaticFilesBuilder()
-	 * 					.dir(<js>"/files"</js>)
-	 * 					.headers(BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 			);
-	 * 		}
-	 *
-	 *		<ja>@Override</ja> <jc>// FileFinder</jc>
-	 * 		<jk>protected</jk> Optional&lt;InputStream&gt; find(String <jv>name</jv>, Locale <jv>locale</jv>) <jk>throws</jk> IOException {
-	 * 			<jc>// Do special handling or just call super.find().</jc>
-	 * 			<jk>return super</jk>.find(<jv>name</jv>, <jv>locale</jv>);
-	 * 		}
-	 *
-	 *		<ja>@Override</ja> <jc>// staticFiles</jc>
-	 * 		<jk>public</jk> Optional&lt;BasicHttpResource&gt; resolve(String <jv>path</jv>, Locale <jv>locale</jv>) {
-	 * 			<jc>// Do special handling or just call super.resolve().</jc>
-	 * 			<jk>return super</jk>.resolve(<jv>path</jv>, <jv>locale</jv>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(staticFiles=MyStaticFiles.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Created via createStaticFiles() method.</jc>
-	 * 		<jk>public</jk> StaticFiles createStaticFiles(RestContext <jv>context</jv>) <jk>throws</jk> Exception {
-	 * 			<jk>return new</jk> MyStaticFiles();
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.staticFiles(MyStaticFiles.<jk>class</jk>);
-	 *
-	 * 			<jc>// Use a pre-instantiated object instead.</jc>
-	 * 			<jv>builder</jv>.staticFiles(<jk>new</jk> MyStaticFiles());
-	 * 		}
-	 *
-	 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.staticFiles(MyStaticFiles.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Create a REST method that uses the static files finder.</jc>
-	 * 		<ja>@RestGet<ja>(<js>"/htdocs/*"</js>)
-	 * 		<jk>public</jk> HttpResource htdocs(RestRequest <jv>req</jv>, <ja>@Path</ja>("/*") String <jv>path</jv>, Locale <jv>locale</jv>) <jk>throws</jk> NotFound {
-	 * 			<jk>return</jk> <jv>req</jv>.getStaticFiles().resolve(<jv>path</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(Class<? extends StaticFiles> value) {
-		staticFiles.type(value);
-		return this;
-	}
-
-	/**
-	 * Static files finder.
-	 *
-	 * <p>
-	 * Used to retrieve localized files to be served up as static files through the REST API via the following
-	 * predefined methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
-	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
-	 * </ul>
-	 *
-	 * <p>
-	 * Same as {@link #staticFiles(Class)} but takes in an instantated object.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(StaticFiles value) {
-		staticFiles.value(value);
-		return this;
-	}
-
-	/**
-	 * Static files finder default.
-	 *
-	 * <p>
-	 * The default static file finder.
-	 *
-	 * <p>
-	 * This setting is inherited from the parent context if not overrided by this context.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFilesDefault(Class<? extends StaticFiles> value) {
-		staticFilesDefault.type(value);
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Static files finder default.
-	 *
-	 * <p>
-	 * Same as {@link #staticFilesDefault(Class)} but takes in an instantated object.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFilesDefault(StaticFiles value) {
-		staticFilesDefault.value(value);
 		return this;
 	}
 
