@@ -63,14 +63,14 @@ public interface HttpPartParser {
 		}
 
 		@Override
-		public Creator set(HttpPartParser value) {
-			super.set(value);
+		public Creator impl(HttpPartParser value) {
+			super.impl(value);
 			return this;
 		}
 
 		@Override
-		public Creator set(Class<? extends HttpPartParser> value) {
-			super.set(value);
+		public Creator type(Class<? extends HttpPartParser> value) {
+			super.type(value);
 			return this;
 		}
 

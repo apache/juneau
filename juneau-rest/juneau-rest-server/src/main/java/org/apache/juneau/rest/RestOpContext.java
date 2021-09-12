@@ -525,7 +525,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
 	 * 	<li>Looks for part serializer set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#getPartSerializer()}
+	 * 			<li>{@link RestContextBuilder#partSerializer()}
 	 * 			<li>{@link Rest#partSerializer()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
@@ -555,7 +555,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		HttpPartSerializer.Creator x = builder.partSerializer;
 
 		if (x == null)
-			x = builder.restContext.builder.partSerializer;
+			x = builder.restContext.builder.partSerializer();
 
 		x = BeanStore
 			.of(beanStore, resource)

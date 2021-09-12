@@ -61,7 +61,7 @@ public class PathArg implements RestOpArg {
 		this.name = getName(paramInfo, pathMatcher);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Path.class, paramInfo);
-		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
 	}
 
 	private String getName(ParamInfo paramInfo, UrlPathMatcher pathMatcher) {

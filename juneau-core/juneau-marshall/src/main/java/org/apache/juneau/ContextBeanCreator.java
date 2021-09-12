@@ -39,7 +39,7 @@ public class ContextBeanCreator<T> {
 	}
 
 	private Class<T> type;
-	private T value;
+	private T impl;
 	private ContextBuilder builder;
 
 	/**
@@ -58,7 +58,7 @@ public class ContextBeanCreator<T> {
 	 */
 	protected ContextBeanCreator(ContextBeanCreator<T> copyFrom) {
 		this.type = copyFrom.type;
-		this.value = copyFrom.value;
+		this.impl = copyFrom.impl;
 		this.builder = copyFrom.builder == null ? null : copyFrom.builder.copy();
 	}
 
@@ -68,8 +68,8 @@ public class ContextBeanCreator<T> {
 	 * @param value The bean to set.
 	 * @return This object.
 	 */
-	public ContextBeanCreator<T> set(T value) {
-		this.value = value;
+	public ContextBeanCreator<T> impl(T value) {
+		this.impl = value;
 		return this;
 	}
 
@@ -83,7 +83,7 @@ public class ContextBeanCreator<T> {
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public ContextBeanCreator<T> set(Class<? extends T> value) {
+	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>) value);
 		if (builder == null)
 			throw runtimeException("Creator for class {0} not found." + value.getName());
@@ -141,8 +141,8 @@ public class ContextBeanCreator<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T create() {
-		if (value != null)
-			return value;
+		if (impl != null)
+			return impl;
 		if (builder != null)
 			return (T)builder.build();
 		return null;

@@ -63,7 +63,7 @@ public class QueryArg implements RestOpArg {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, paramInfo);
-		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
 		this.multi = getMulti(paramInfo) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

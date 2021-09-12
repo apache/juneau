@@ -262,11 +262,9 @@ public class RestContext extends Context {
 			responseProcessors = bs.add(ResponseProcessor[].class, builder.responseProcessors().build().toArray());
 			debugDefault = builder.debugDefault;
 			callLogger = bs.add(RestLogger.class, builder.callLogger().beanStore(beanStore).loggerOnce(logger).thrownStoreOnce(thrownStore).build());
+			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
 
 			Object r = resource.get();
-
-			partSerializer = createPartSerializer(r, builder, bs);
-			bs.addBean(HttpPartSerializer.class, partSerializer);
 
 			partParser = createPartParser(r, builder, bs);
 			bs.addBean(HttpPartParser.class, partParser);
@@ -621,57 +619,6 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Instantiates the HTTP part serializer for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-	 * 	<li>Looks for part serializer set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#getPartSerializer()}
-	 * 			<li>{@link Rest#partSerializer()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates an {@link OpenApiSerializer}.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The HTTP part serializer for this REST resource.
-	 * @throws Exception If serializer could not be instantiated.
-	 */
-	protected HttpPartSerializer createPartSerializer(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		HttpPartSerializer.Creator x = builder.partSerializer;
-
-		if (beanStore.hasBean(HttpPartSerializer.class))
-			x.set(beanStore.getBean(HttpPartSerializer.class).orElse(null));
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HttpPartSerializer.Creator.class, x)
-			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, resource)
-			.find("createPartSerializer")
-			.withDefault(x)
-			.run();
-
-		return x.create();
-	}
-
-	/**
 	 * Instantiates the HTTP part parser for this REST resource.
 	 *
 	 * <p>
@@ -709,7 +656,7 @@ public class RestContext extends Context {
 		HttpPartParser.Creator x = builder.partParser;
 
 		if (beanStore.hasBean(HttpPartParser.class))
-			x.set(beanStore.getBean(HttpPartParser.class).orElse(null));
+			x.impl(beanStore.getBean(HttpPartParser.class).orElse(null));
 
 		x = BeanStore
 			.of(beanStore, resource)

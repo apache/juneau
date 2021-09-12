@@ -76,14 +76,14 @@ public interface HttpPartSerializer {
 		}
 
 		@Override
-		public Creator set(HttpPartSerializer value) {
-			super.set(value);
+		public Creator impl(HttpPartSerializer value) {
+			super.impl(value);
 			return this;
 		}
 
 		@Override
-		public Creator set(Class<? extends HttpPartSerializer> value) {
-			super.set(value);
+		public Creator type(Class<? extends HttpPartSerializer> value) {
+			super.type(value);
 			return this;
 		}
 

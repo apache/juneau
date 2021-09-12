@@ -66,7 +66,7 @@ public class HeaderArg implements RestOpArg {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, paramInfo);
-		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().set(x).apply(annotations).create()).orElse(null);
+		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
 		this.multi = getMulti(paramInfo);
 
 		if (multi && ! type.isCollectionOrArray())

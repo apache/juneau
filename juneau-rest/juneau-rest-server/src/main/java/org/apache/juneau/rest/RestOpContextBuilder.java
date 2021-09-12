@@ -122,7 +122,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 				getSerializers().apply(al);
 			if (context.builder.parsers.canApply(al))
 				getParsers().apply(al);
-			if (context.builder.partSerializer.canApply(al))
+			if (context.builder.partSerializer().canApply(al))
 				getPartSerializer().apply(al);
 			if (context.builder.partParser.canApply(al))
 				getPartParser().apply(al);
@@ -235,7 +235,7 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	 */
 	public HttpPartSerializer.Creator getPartSerializer() {
 		if (partSerializer == null)
-			partSerializer = restContext.builder.partSerializer.copy();
+			partSerializer = restContext.builder.partSerializer().copy();
 		return partSerializer;
 	}
 

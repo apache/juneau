@@ -105,8 +105,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = ofNullable(b.partSerializer).map(x -> HttpPartSerializer.creator().set(x).apply(b.annotations).create());
-		this.partParser = ofNullable(b.partParser).map(x -> HttpPartParser.creator().set(x).apply(b.annotations).create());
+		this.partSerializer = ofNullable(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+		this.partParser = ofNullable(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();

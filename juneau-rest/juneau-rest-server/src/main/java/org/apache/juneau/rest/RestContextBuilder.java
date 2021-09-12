@@ -59,7 +59,6 @@ import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -132,6 +131,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private Messages.Builder messages;
 	private ResponseProcessorList.Builder responseProcessors;
 	private RestLogger.Builder callLogger;
+	private HttpPartSerializer.Creator partSerializer;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -166,8 +166,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
-	HttpPartSerializer.Creator partSerializer = HttpPartSerializer.creator().set(OpenApiSerializer.class);
-	HttpPartParser.Creator partParser = HttpPartParser.creator().set(OpenApiParser.class);
+	HttpPartParser.Creator partParser = HttpPartParser.creator().type(OpenApiParser.class);
 
 	Enablement debugDefault, debug;
 
@@ -1396,6 +1395,90 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	/**
+	 * Returns the part serializer builder for this context.
+	 *
+	 * @return The part serializer builder for this context.
+	 */
+	public final HttpPartSerializer.Creator partSerializer() {
+		if (partSerializer == null)
+			partSerializer = createPartSerializer(beanStore(), resource());
+		return partSerializer;
+	}
+
+	/**
+	 * Instantiates the HTTP part serializer for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
+	 * 	<li>Looks for part serializer set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer()}
+	 * 			<li>{@link Rest#partSerializer()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates an {@link OpenApiSerializer}.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The HTTP part serializer for this REST resource.
+	 */
+	protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<HttpPartSerializer.Creator> v = Value.empty();
+		Object r = resource.get();
+
+		// Get builder from bean store.
+		beanStore.getBean(HttpPartSerializer.Creator.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		// Create default.
+		if (v.isEmpty()) {
+			v.set(
+				HttpPartSerializer
+					.creator()
+					.type(OpenApiSerializer.class)
+			);
+		}
+
+		// Set implementation if in bean store.
+		beanStore.getBean(HttpPartSerializer.class).ifPresent(x -> v.get().impl(x));
+
+		// Set default type.
+		defaultClasses.get(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
+
+		// Call:  public [static] HttpPartSerializer.Creator createPartSerializer(<anything-in-bean-store>)
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HttpPartSerializer.Creator.class, v.get())
+			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, resource)
+			.find("createPartSerializer")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		// Call:  public [static] HttpPartSerializer createPartSerializer(<anything-in-bean-store>)
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HttpPartSerializer.Creator.class, v.get())
+			.beanCreateMethodFinder(HttpPartSerializer.class, resource)
+			.find("createPartSerializer")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
 	//----------------------------------------------------------------------------------------------------
@@ -1468,30 +1551,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public HttpPartParser.Creator getPartParser() {
 		return partParser;
-	}
-
-	/**
-	 * Returns the HTTP part serializer creator containing the part serializer for serializing POJOs to HTTP parts.
-	 *
-	 * <p>
-	 * The default value is {@link OpenApiSerializer} which serializes based on OpenAPI rules, but defaults to UON notation for beans and maps, and
-	 * plain text for everything else.
-	 *
-	 * <p>
-	 * <br>Other options include:
-	 * <ul>
-	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
-	 * 	<li class='jc'>{@link UonSerializer} - Always serializers to UON.
-	 * </ul>
-	 *
-	 * <p>
-	 * When specified as a class, annotations on this class are applied to the serializer.
-	 * Otherwise when specified as an already-instantiated {@link HttpPartSerializer}, annotations will not be applied.
-	 *
-	 * @return The HTTP part serializer creator.
-	 */
-	public HttpPartSerializer.Creator getPartSerializer() {
-		return partSerializer;
 	}
 
 	/**
@@ -3470,10 +3529,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder apply(AnnotationWorkList work) {
 		super.apply(work);
-		serializers.apply(work);
-		parsers.apply(work);
-		partSerializer.apply(work);
-		partParser.apply(work);
 		return this;
 	}
 

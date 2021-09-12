@@ -61,7 +61,7 @@ public class ResponseHeaderArg implements RestOpArg {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType().innerType();
 		HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, paramInfo);
-		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ofNullable(schema.getSerializer()).map(x -> HttpPartSerializer.creator().set(x).apply(annotations).create()).orElse(null));
+		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ofNullable(schema.getSerializer()).map(x -> HttpPartSerializer.creator().type(x).apply(annotations).create()).orElse(null));
 
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
