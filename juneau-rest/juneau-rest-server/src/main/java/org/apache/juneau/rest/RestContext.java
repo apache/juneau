@@ -50,7 +50,6 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.mstat.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -263,11 +262,9 @@ public class RestContext extends Context {
 			debugDefault = builder.debugDefault;
 			callLogger = bs.add(RestLogger.class, builder.callLogger().beanStore(beanStore).loggerOnce(logger).thrownStoreOnce(thrownStore).build());
 			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
+			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
 
 			Object r = resource.get();
-
-			partParser = createPartParser(r, builder, bs);
-			bs.addBean(HttpPartParser.class, partParser);
 
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
 			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
@@ -616,57 +613,6 @@ public class RestContext extends Context {
 			.run();
 
 		return x;
-	}
-
-	/**
-	 * Instantiates the HTTP part parser for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
-	 * 	<li>Looks for part parser value set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#getPartParser()}
-	 * 			<li>{@link Rest#partParser()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates an {@link OpenApiSerializer}.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The HTTP part parser for this REST resource.
-	 * @throws Exception If parser could not be instantiated.
-	 */
-	protected HttpPartParser createPartParser(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		HttpPartParser.Creator x = builder.partParser;
-
-		if (beanStore.hasBean(HttpPartParser.class))
-			x.impl(beanStore.getBean(HttpPartParser.class).orElse(null));
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HttpPartParser.Creator.class, x)
-			.beanCreateMethodFinder(HttpPartParser.Creator.class, resource)
-			.find("createPartParser")
-			.withDefault(x)
-			.run();
-
-		return x.create();
 	}
 
 	/**

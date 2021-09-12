@@ -132,6 +132,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private ResponseProcessorList.Builder responseProcessors;
 	private RestLogger.Builder callLogger;
 	private HttpPartSerializer.Creator partSerializer;
+	private HttpPartParser.Creator partParser;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -166,7 +167,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
-	HttpPartParser.Creator partParser = HttpPartParser.creator().type(OpenApiParser.class);
 
 	Enablement debugDefault, debug;
 
@@ -1479,6 +1479,90 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	/**
+	 * Returns the part parser builder for this context.
+	 *
+	 * @return The part parser builder for this context.
+	 */
+	public final HttpPartParser.Creator partParser() {
+		if (partParser == null)
+			partParser = createPartParser(beanStore(), resource());
+		return partParser;
+	}
+
+	/**
+	 * Instantiates the HTTP part parser for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
+	 * 	<li>Looks for part parser set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser()}
+	 * 			<li>{@link Rest#partParser()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates an {@link OpenApiParser}.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The HTTP part serializer for this REST resource.
+	 */
+	protected HttpPartParser.Creator createPartParser(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<HttpPartParser.Creator> v = Value.empty();
+		Object r = resource.get();
+
+		// Get builder from bean store.
+		beanStore.getBean(HttpPartParser.Creator.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		// Create default.
+		if (v.isEmpty()) {
+			v.set(
+				HttpPartParser
+					.creator()
+					.type(OpenApiParser.class)
+			);
+		}
+
+		// Set implementation if in bean store.
+		beanStore.getBean(HttpPartParser.class).ifPresent(x -> v.get().impl(x));
+
+		// Set default type.
+		defaultClasses.get(HttpPartParser.class).ifPresent(x -> v.get().type(x));
+
+		// Call:  public [static] HttpPartParser.Creator createPartParser(<anything-in-bean-store>)
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HttpPartParser.Creator.class, v.get())
+			.beanCreateMethodFinder(HttpPartParser.Creator.class, resource)
+			.find("createPartParser")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		// Call:  public [static] HttpPartParser createPartParser(<anything-in-bean-store>)
+		BeanStore
+			.of(beanStore, r)
+			.addBean(HttpPartParser.Creator.class, v.get())
+			.beanCreateMethodFinder(HttpPartParser.class, resource)
+			.find("createPartParser")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
 	//----------------------------------------------------------------------------------------------------
@@ -1533,24 +1617,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public ParserGroup.Builder getParsers() {
 		return parsers;
-	}
-
-	/**
-	 * Returns the HTTP part parser creator containing the part parser for parsing HTTP parts into POJOs.
-	 *
-	 * <p>
-	 * The default value is {@link OpenApiParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
-	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to
-	 * {@link SimplePartParser} which treats everything as plain text.
-	 *
-	 * <p>
-	 * When specified as a class, annotations on this class are applied to the parser.
-	 * Otherwise when specified as an already-instantiated {@link HttpPartParser}, annotations will not be applied.
-	 *
-	 * @return The HTTP part parser creator.
-	 */
-	public HttpPartParser.Creator getPartParser() {
-		return partParser;
 	}
 
 	/**

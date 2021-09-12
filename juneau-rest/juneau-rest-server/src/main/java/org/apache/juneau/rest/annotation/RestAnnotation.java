@@ -1050,7 +1050,7 @@ public class RestAnnotation {
 			classes(a.serializers()).ifPresent(x -> b.getSerializers().add(x));
 			classes(a.parsers()).ifPresent(x -> b.getParsers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
-			type(a.partParser()).ifPresent(x -> b.getPartParser().type(x));
+			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));

@@ -578,7 +578,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
 	 * 	<li>Looks for part parser set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#getPartParser()}
+	 * 			<li>{@link RestContextBuilder#partParser()}
 	 * 			<li>{@link Rest#partParser()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
@@ -608,7 +608,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		HttpPartParser.Creator x = builder.partParser;
 
 		if (x == null)
-			x = builder.restContext.builder.partParser;
+			x = builder.restContext.builder.partParser();
 
 		x = BeanStore
 			.of(beanStore, resource)
