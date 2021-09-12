@@ -162,7 +162,7 @@ public class RestContext extends Context {
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
-	private final Class<? extends RestOpArg>[] opArgs, hookMethodArgs;
+	private final Class<? extends RestOpArg>[] restOpArgs, hookMethodArgs;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -265,10 +265,10 @@ public class RestContext extends Context {
 			defaultRequestHeaders = bs.add("RestContext.defaultRequestHeaders", builder.defaultRequestHeaders().build());
 			defaultResponseHeaders = bs.add("RestContext.defaultResponseHeaders", builder.defaultResponseHeaders().build());
 			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes());
+			restOpArgs = builder.restOpArgs().build().asArray();
 
 			Object r = resource.get();
 
-			opArgs = createOpArgs(r, builder, bs).asArray();
 			hookMethodArgs = createHookMethodArgs(r, builder, bs).asArray();
 
 			uriContext = builder.uriContext;
@@ -358,47 +358,6 @@ public class RestContext extends Context {
 		for (String v : StringUtils.split(value))
 			s.add(v);
 		return Collections.unmodifiableSet(s);
-	}
-
-	/**
-	 * Instantiates the REST method parameter resolvers for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for REST op args set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#restOpArgs(Class...)}/{@link RestContextBuilder#restOpArgs(Class...)}
-	 * 			<li>{@link Rest#restOpArgs()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createRestParams()</> method that returns <c>{@link Class}[]</c>.
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a default set of parameters.
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The REST method parameter resolvers for this REST resource.
-	 * @throws Exception If parameter resolvers could not be instantiated.
-	 */
-	protected RestOpArgList createOpArgs(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestOpArgList.Builder x = builder.restOpArgs;
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestOpArgList.Builder.class, x)
-			.beanCreateMethodFinder(RestOpArgList.Builder.class, resource)
-			.find("createRestOperationArgs")
-			.withDefault(x)
-			.run();
-
-		return x.build();
 	}
 
 	/**
@@ -1758,7 +1717,7 @@ public class RestContext extends Context {
 		for (int i = 0; i < pt.size(); i++) {
 			ParamInfo pi = mi.getParam(i);
 			beanStore.addBean(ParamInfo.class, pi);
-			for (Class<? extends RestOpArg> c : opArgs) {
+			for (Class<? extends RestOpArg> c : restOpArgs) {
 				try {
 					ra[i] = beanStore.createBean(c);
 					if (ra[i] != null)
@@ -2353,7 +2312,7 @@ public class RestContext extends Context {
 					.a("defaultRequestHeaders", defaultRequestHeaders)
 					.a("defaultResponseHeaders", defaultResponseHeaders)
 					.a("fileFinder", fileFinder)
-					.a("opArgs", opArgs)
+					.a("restOpArgs", restOpArgs)
 					.a("partParser", partParser)
 					.a("partSerializer", partSerializer)
 					.a("produces", produces)

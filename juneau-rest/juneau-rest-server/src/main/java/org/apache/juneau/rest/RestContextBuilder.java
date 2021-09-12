@@ -140,6 +140,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private HeaderList.Builder defaultRequestHeaders;
 	private HeaderList.Builder defaultResponseHeaders;
 	private NamedAttributeList defaultRequestAttributes;
+	private RestOpArgList.Builder restOpArgs;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -172,50 +173,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 
 	List<Object> children = new ArrayList<>();
-
-	RestOpArgList.Builder restOpArgs = RestOpArgList.create().add(
-		AttributeArg.class,
-		BodyArg.class,
-		ConfigArg.class,
-		FormDataArg.class,
-		HasFormDataArg.class,
-		HasQueryArg.class,
-		HeaderArg.class,
-		HttpServletRequestArg.class,
-		HttpServletResponseArg.class,
-		InputStreamArg.class,
-		InputStreamParserArg.class,
-		LocaleArg.class,
-		MessagesArg.class,
-		MethodArg.class,
-		OutputStreamArg.class,
-		ParserArg.class,
-		PathArg.class,
-		QueryArg.class,
-		ReaderArg.class,
-		ReaderParserArg.class,
-		RequestAttributesArg.class,
-		RequestBeanArg.class,
-		RequestBodyArg.class,
-		RequestFormDataArg.class,
-		RequestHeadersArg.class,
-		RequestPathArg.class,
-		RequestQueryArg.class,
-		ResourceBundleArg.class,
-		ResponseBeanArg.class,
-		ResponseHeaderArg.class,
-		ResponseStatusArg.class,
-		RestContextArg.class,
-		RestRequestArg.class,
-		ServetInputStreamArg.class,
-		ServletOutputStreamArg.class,
-		SwaggerArg.class,
-		TimeZoneArg.class,
-		UriContextArg.class,
-		UriResolverArg.class,
-		WriterArg.class,
-		DefaultArg.class
-	);
 
 	/**
 	 * Constructor.
@@ -352,6 +309,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultClasses
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns access to the default classes list.
 	 *
@@ -374,6 +335,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		defaultClasses().add(values);
 		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// beanStore
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns access to the bean store being used by this builder.
@@ -476,6 +441,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// varResolver
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns access to the variable resolver builder.
@@ -646,6 +615,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// config
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the external configuration file for this resource.
 	 *
@@ -734,6 +707,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// logger
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the logger to use for the REST resource.
 	 *
@@ -804,6 +781,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// thrownStore
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the builder for the {@link ThrownStore} object in the REST context.
@@ -881,6 +862,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// methodExecStore
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the builder for the {@link MethodExecStore} object in the REST context.
 	 *
@@ -937,6 +922,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// messages
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the builder for the {@link Messages} object in the REST context.
@@ -1060,6 +1049,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// responseProcessors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the builder for the {@link ResponseProcessorList} object in the REST context.
@@ -1228,6 +1221,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// callLogger
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the builder for the {@link RestLogger} object in the REST context.
 	 *
@@ -1393,6 +1390,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// partSerializer
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the part serializer builder for this context.
 	 *
@@ -1476,6 +1477,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// partParser
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the part parser builder for this context.
@@ -1561,6 +1566,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// jsonSchemaGenerator
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the JSON schema generator builder for this context.
 	 *
@@ -1628,6 +1637,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// fileFinder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the file finder builder for this context.
@@ -1814,6 +1827,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// staticFiles
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the static files builder for this context.
 	 *
@@ -1991,6 +2008,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultRequestHeaders
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the builder for the default request headers in the REST context.
 	 *
@@ -2000,6 +2021,97 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		if (defaultRequestHeaders == null)
 			defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), resource());
 		return defaultRequestHeaders;
+	}
+
+	/**
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>
+	 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header=$C{REST/myHeaderValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>
+	 * 				.defaultRequestHeaders(
+	 * 					Accept.<jsm>of</jsm>(<js>"application/json"</js>),
+	 * 					BasicHeader.<jsm>of</jsm>(<js>"My-Header"</js>, <js>"foo"</js>)
+	 * 				);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultRequestHeaders(Accept.<jsm>of</jsm>(<js>"application/json"</js>));
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
+	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestHeaders(Header...values) {
+		defaultRequestHeaders().setDefault(values);
+		return this;
+	}
+
+	/**
+	 * Specifies a default <c>Accept</c> header value if not specified on a request.
+	 *
+	 * @param value
+	 * 	The default value of the <c>Accept</c> header.
+	 * 	<br>Ignored if <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultAccept(String value) {
+		if (isNotEmpty(value))
+			defaultRequestHeaders(accept(value));
+		return this;
+	}
+
+	/**
+	 * Specifies a default <c>Content-Type</c> header value if not specified on a request.
+	 *
+	 * @param value
+	 * 	The default value of the <c>Content-Type</c> header.
+	 * 	<br>Ignored if <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultContentType(String value) {
+		if (isNotEmpty(value))
+			defaultRequestHeaders(contentType(value));
+		return this;
 	}
 
 	/**
@@ -2042,6 +2154,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultResponseHeaders
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the builder for the default response headers in the REST context.
 	 *
@@ -2051,6 +2167,63 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		if (defaultResponseHeaders == null)
 			defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), resource());
 		return defaultResponseHeaders;
+	}
+
+	/**
+	 * Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
+	 * 		the Java methods.
+	 * 	<li>
+	 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>
+	 * 				.defaultResponseHeaders(
+	 * 					ContentType.<jsm>of</jsm>(<js>"text/plain"</js>),
+	 * 					BasicHeader.<jsm>ofPair</jsm>(<js>"My-Header: foo"</js>)
+	 * 				);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultResponseHeaders(ContentType.<jsm>of</jsm>(<js>"text/plain"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
+	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultResponseHeaders(Header...values) {
+		defaultResponseHeaders().setDefault(values);
+		return this;
 	}
 
 	/**
@@ -2093,6 +2266,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultRequestAttributes
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the builder for the default requests attributes in the REST context.
 	 *
@@ -2102,6 +2279,60 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		if (defaultRequestAttributes == null)
 			defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), resource());
 		return defaultRequestAttributes;
+	}
+
+	/**
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * Affects values returned by the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getAttribute(String)}.
+	 * 	<li class='jm'>{@link RestRequest#getAttributes()}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>
+	 * 				.defaultRequestAttributes(
+	 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
+	 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Baz"</js>, <jk>true</jk>)
+	 * 				);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.defaultRequestAttribute(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestGet</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>})
+	 * 		<jk>public</jk> Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>Use {@link BasicNamedAttribute#of(String, Supplier)} to provide a dynamically changeable attribute value.
+	 * </ul>
+	 *
+	 * @param values The attributes.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestAttributes(NamedAttribute...values) {
+		defaultRequestAttributes().appendUnique(values);
+		return this;
 	}
 
 	/**
@@ -2133,6 +2364,196 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// restOpArgs
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default requests attributes in the REST context.
+	 *
+	 * @return The builder for the default request attributer object in the REST context.
+	 */
+	public final RestOpArgList.Builder restOpArgs() {
+		if (restOpArgs == null)
+			restOpArgs = createRestOpArgs(beanStore(), resource());
+		return restOpArgs;
+	}
+
+	/**
+	 * Java method parameter resolvers.
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
+	 * 	<jk>public class</jk> MyRestOpArg <jk>implements</jk> RestOpArg {
+	 *
+	 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
+	 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
+	 *		<jk>public static</jk> MyRestOpArg <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
+	 *			<jk>if</jk> (<jv>paramInfo</jv>.isType(MySpecialObject.<jk>class</jk>)
+	 *				<jk>return new</jk> MyRestParam();
+	 *			<jk>return null</jk>;
+	 *		}
+	 *
+	 * 		<jk>public</jk> MyRestOpArg(ParamInfo <jv>paramInfo</jv>) {}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(<jv>call</jv>.getRestRequest().getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restOpArgs=MyRestParam.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Now pass it into your method.</jc>
+	 * 		<ja>@RestPost</ja>(...)
+	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject <jv>mySpecialObject</jv>) {
+	 * 			<jc>// Do something with it.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
+	 */
+	@FluentSetter
+	public RestContextBuilder restOpArgs(Class<?>...values) {
+		restOpArgs().add(assertClassArrayArgIsType("values", RestOpArg.class, values));
+		return this;
+	}
+
+	/**
+	 * Instantiates the REST method parameter resolvers for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for REST op args set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#restOpArgs(Class...)}/{@link RestContextBuilder#restOpArgs(Class...)}
+	 * 			<li>{@link Rest#restOpArgs()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createRestParams()</> method that returns <c>{@link Class}[]</c>.
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a default set of parameters.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The REST method parameter resolvers for this REST resource.
+	 */
+	protected RestOpArgList.Builder createRestOpArgs(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<RestOpArgList.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(RestOpArgList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				RestOpArgList
+					.of(
+						AttributeArg.class,
+						BodyArg.class,
+						ConfigArg.class,
+						FormDataArg.class,
+						HasFormDataArg.class,
+						HasQueryArg.class,
+						HeaderArg.class,
+						HttpServletRequestArg.class,
+						HttpServletResponseArg.class,
+						InputStreamArg.class,
+						InputStreamParserArg.class,
+						LocaleArg.class,
+						MessagesArg.class,
+						MethodArg.class,
+						OutputStreamArg.class,
+						ParserArg.class,
+						PathArg.class,
+						QueryArg.class,
+						ReaderArg.class,
+						ReaderParserArg.class,
+						RequestAttributesArg.class,
+						RequestBeanArg.class,
+						RequestBodyArg.class,
+						RequestFormDataArg.class,
+						RequestHeadersArg.class,
+						RequestPathArg.class,
+						RequestQueryArg.class,
+						ResourceBundleArg.class,
+						ResponseBeanArg.class,
+						ResponseHeaderArg.class,
+						ResponseStatusArg.class,
+						RestContextArg.class,
+						RestRequestArg.class,
+						ServetInputStreamArg.class,
+						ServletOutputStreamArg.class,
+						SwaggerArg.class,
+						TimeZoneArg.class,
+						UriContextArg.class,
+						UriResolverArg.class,
+						WriterArg.class,
+						DefaultArg.class
+					)
+			);
+		}
+
+		beanStore.getBean(RestOpArgList.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestOpArgList.Builder.class, v.get())
+			.beanCreateMethodFinder(RestOpArgList.Builder.class, r)
+			.find("createRestOpArgs")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestOpArgList.Builder.class, v.get())
+			.beanCreateMethodFinder(RestOpArgList.class, r)
+			.find("createRestOpArgs")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
@@ -2743,208 +3164,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Specifies a default <c>Accept</c> header value if not specified on a request.
-	 *
-	 * @param value
-	 * 	The default value of the <c>Accept</c> header.
-	 * 	<br>Ignored if <jk>null</jk> or empty.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultAccept(String value) {
-		if (isNotEmpty(value))
-			defaultRequestHeaders(accept(value));
-		return this;
-	}
-
-	/**
-	 * Specifies a default <c>Content-Type</c> header value if not specified on a request.
-	 *
-	 * @param value
-	 * 	The default value of the <c>Content-Type</c> header.
-	 * 	<br>Ignored if <jk>null</jk> or empty.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultContentType(String value) {
-		if (isNotEmpty(value))
-			defaultRequestHeaders(contentType(value));
-		return this;
-	}
-
-	/**
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * Affects values returned by the following methods:
-	 * <ul>
-	 * 	<li class='jm'>{@link RestRequest#getAttribute(String)}.
-	 * 	<li class='jm'>{@link RestRequest#getAttributes()}.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>
-	 * 				.defaultRequestAttributes(
-	 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
-	 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Baz"</js>, <jk>true</jk>)
-	 * 				);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.defaultRequestAttribute(<js>"Foo"</js>, <js>"bar"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>})
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Use {@link BasicNamedAttribute#of(String, Supplier)} to provide a dynamically changeable attribute value.
-	 * </ul>
-	 *
-	 * @param values The attributes.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-		defaultRequestAttributes().appendUnique(values);
-		return this;
-	}
-
-	/**
-	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-	 * 	<li>
-	 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
-	 * 		specified so that a particular default {@link Serializer} is picked.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header=$C{REST/myHeaderValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>
-	 * 				.defaultRequestHeaders(
-	 * 					Accept.<jsm>of</jsm>(<js>"application/json"</js>),
-	 * 					BasicHeader.<jsm>of</jsm>(<js>"My-Header"</js>, <js>"foo"</js>)
-	 * 				);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.defaultRequestHeaders(Accept.<jsm>of</jsm>(<js>"application/json"</js>));
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param values The headers to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultRequestHeaders(Header...values) {
-		defaultRequestHeaders().setDefault(values);
-		return this;
-	}
-
-	/**
-	 * Default response headers.
-	 *
-	 * <p>
-	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
-	 * 		the Java methods.
-	 * 	<li>
-	 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>
-	 * 				.defaultResponseHeaders(
-	 * 					ContentType.<jsm>of</jsm>(<js>"text/plain"</js>),
-	 * 					BasicHeader.<jsm>ofPair</jsm>(<js>"My-Header: foo"</js>)
-	 * 				);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.defaultResponseHeaders(ContentType.<jsm>of</jsm>(<js>"text/plain"</js>));
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param values The headers to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder defaultResponseHeaders(Header...values) {
-		defaultResponseHeaders().setDefault(values);
-		return this;
-	}
-
-	/**
 	 * Disable body URL parameter.
 	 *
 	 * <p>
@@ -3305,81 +3524,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder restOpContextClass(Class<? extends RestOpContext> value) {
 		opContextClass = value;
-		return this;
-	}
-
-	/**
-	 * Java method parameter resolvers.
-	 *
-	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
-	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <p>
-	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
-	 * the following resolver:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
-	 * 	<jk>public class</jk> MyRestOpArg <jk>implements</jk> RestOpArg {
-	 *
-	 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
-	 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
-	 *		<jk>public static</jk> MyRestOpArg <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
-	 *			<jk>if</jk> (<jv>paramInfo</jv>.isType(MySpecialObject.<jk>class</jk>)
-	 *				<jk>return new</jk> MyRestParam();
-	 *			<jk>return null</jk>;
-	 *		}
-	 *
-	 * 		<jk>public</jk> MyRestOpArg(ParamInfo <jv>paramInfo</jv>) {}
-	 *
-	 * 		<jc>// The method that creates our object.
-	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
-	 * 			<jk>return new</jk> MySpecialObject(<jv>call</jv>.getRestRequest().getQuery().get(<js>"myparam"</js>));
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(restOpArgs=MyRestParam.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Now pass it into your method.</jc>
-	 * 		<ja>@RestPost</ja>(...)
-	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject <jv>mySpecialObject</jv>) {
-	 * 			<jc>// Do something with it.</jc>
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * 	<li>
-	 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
-	 */
-	@FluentSetter
-	public RestContextBuilder restOpArgs(Class<?>...values) {
-		restOpArgs.add(assertClassArrayArgIsType("values", RestOpArg.class, values));
 		return this;
 	}
 

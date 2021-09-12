@@ -37,6 +37,17 @@ public class RestOpArgList {
 		return new Builder();
 	}
 
+	/**
+	 * Static creator.
+	 *
+	 * @param values The initial contents of the list.
+	 * @return A list initialized with the specified values.
+	 */
+	@SafeVarargs
+	public static Builder of(Class<? extends RestOpArg>...values) {
+		return new Builder().add(values);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -48,12 +59,22 @@ public class RestOpArgList {
 
 		AList<Class<? extends RestOpArg>> entries;
 		BeanStore beanStore;
+		RestOpArgList impl;
 
 		/**
-		 * Create an empty builder.
+		 * Constructor.
 		 */
 		protected Builder() {
 			this.entries = AList.create();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			this.entries = AList.of(copyFrom.entries);
 		}
 
 		/**
@@ -62,6 +83,8 @@ public class RestOpArgList {
 		 * @return A new {@link RestOpArgList} object.
 		 */
 		public RestOpArgList build() {
+			if (impl != null)
+				return impl;
 			return new RestOpArgList(this);
 		}
 
@@ -74,6 +97,26 @@ public class RestOpArgList {
 		 */
 		public Builder add(Class<?>...values) {
 			entries.addAll(0, Arrays.asList(assertClassArrayArgIsType("values", RestOpArg.class, values)));
+			return this;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		/**
+		 * Specifies an already instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(RestOpArgList value) {
+			impl = value;
 			return this;
 		}
 	}
