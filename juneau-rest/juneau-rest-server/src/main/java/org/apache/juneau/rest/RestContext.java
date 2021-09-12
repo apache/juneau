@@ -53,7 +53,6 @@ import org.apache.juneau.mstat.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.args.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -266,10 +265,9 @@ public class RestContext extends Context {
 			defaultResponseHeaders = bs.add("RestContext.defaultResponseHeaders", builder.defaultResponseHeaders().build());
 			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes());
 			restOpArgs = builder.restOpArgs().build().asArray();
+			hookMethodArgs = builder.hookMethodArgs().build().asArray();
 
 			Object r = resource.get();
-
-			hookMethodArgs = createHookMethodArgs(r, builder, bs).asArray();
 
 			uriContext = builder.uriContext;
 			uriAuthority = builder.uriAuthority;
@@ -358,55 +356,6 @@ public class RestContext extends Context {
 		for (String v : StringUtils.split(value))
 			s.add(v);
 		return Collections.unmodifiableSet(s);
-	}
-
-	/**
-	 * Instantiates the hook method parameter resolvers for this REST resource.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The REST method parameter resolvers for this REST resource.
-	 * @throws Exception If parameter resolvers could not be instantiated.
-	 */
-	protected RestOpArgList createHookMethodArgs(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestOpArgList.Builder x = RestOpArgList.create();
-
-		x.add(
-			ConfigArg.class,
-			HeaderArg.class,
-			HttpServletRequestArg.class,
-			HttpServletResponseArg.class,
-			InputStreamArg.class,
-			LocaleArg.class,
-			MessagesArg.class,
-			MethodArg.class,
-			OutputStreamArg.class,
-			ReaderArg.class,
-			ResourceBundleArg.class,
-			RestContextArg.class,
-			RestRequestArg.class,
-			ServetInputStreamArg.class,
-			ServletOutputStreamArg.class,
-			TimeZoneArg.class,
-			WriterArg.class,
-			DefaultArg.class
-		);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestOpArgList.Builder.class, x)
-			.beanCreateMethodFinder(RestOpArgList.Builder.class, resource)
-			.find("createHookMethodArgs")
-			.withDefault(x)
-			.run();
-
-		return x.build();
 	}
 
 	/**

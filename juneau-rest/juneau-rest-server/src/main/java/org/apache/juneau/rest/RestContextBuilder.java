@@ -137,10 +137,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private JsonSchemaGeneratorBuilder jsonSchemaGenerator;
 	private FileFinder.Builder fileFinder;
 	private StaticFiles.Builder staticFiles;
-	private HeaderList.Builder defaultRequestHeaders;
-	private HeaderList.Builder defaultResponseHeaders;
+	private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 	private NamedAttributeList defaultRequestAttributes;
-	private RestOpArgList.Builder restOpArgs;
+	private RestOpArgList.Builder restOpArgs, hookMethodArgs;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -2482,7 +2481,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		Value<RestOpArgList.Builder> v = Value.empty();
 		Object r = resource.get();
 
-		beanStore.getBean(RestOpArgList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+		beanStore.getBean("RestContext.restOpArgs", RestOpArgList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
 
 		if (v.isEmpty()) {
 			v.set(
@@ -2533,7 +2532,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			);
 		}
 
-		beanStore.getBean(RestOpArgList.class).ifPresent(x -> v.get().impl(x));
+		beanStore.getBean("RestContext.restOpArgs", RestOpArgList.class).ifPresent(x -> v.get().impl(x));
 
 		BeanStore
 			.of(beanStore, r)
@@ -2554,6 +2553,84 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// hookMethodArgs
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default requests attributes in the REST context.
+	 *
+	 * @return The builder for the default request attributer object in the REST context.
+	 */
+	public final RestOpArgList.Builder hookMethodArgs() {
+		if (hookMethodArgs == null)
+			hookMethodArgs = createHookMethodArgs(beanStore(), resource());
+		return hookMethodArgs;
+	}
+
+	/**
+	 * Instantiates the hook method parameter resolvers for this REST resource.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The REST method parameter resolvers for this REST resource.
+	 */
+	protected RestOpArgList.Builder createHookMethodArgs(BeanStore beanStore, Supplier<?> resource) {
+
+
+		Value<RestOpArgList.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean("RestContext.hookMethodArgs", RestOpArgList.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			v.set(
+				RestOpArgList
+					.of(
+						ConfigArg.class,
+						HeaderArg.class,
+						HttpServletRequestArg.class,
+						HttpServletResponseArg.class,
+						InputStreamArg.class,
+						LocaleArg.class,
+						MessagesArg.class,
+						MethodArg.class,
+						OutputStreamArg.class,
+						ReaderArg.class,
+						ResourceBundleArg.class,
+						RestContextArg.class,
+						RestRequestArg.class,
+						ServetInputStreamArg.class,
+						ServletOutputStreamArg.class,
+						TimeZoneArg.class,
+						WriterArg.class,
+						DefaultArg.class
+					)
+			);
+		}
+
+		beanStore.getBean("RestContext.hookMethodArgs", RestOpArgList.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestOpArgList.Builder.class, v.get())
+			.beanCreateMethodFinder(RestOpArgList.Builder.class, r)
+			.find("createHookMethodArgs")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestOpArgList.Builder.class, v.get())
+			.beanCreateMethodFinder(RestOpArgList.class, r)
+			.find("createHookMethodArgs")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.
