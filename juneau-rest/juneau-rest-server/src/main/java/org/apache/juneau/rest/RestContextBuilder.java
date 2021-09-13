@@ -145,6 +145,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private RestOpArgList.Builder restOpArgs, hookMethodArgs;
 	private DebugEnablement.Builder debugEnablement;
 	private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
+	private RestOperations.Builder restOperations;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -3069,6 +3070,107 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// restOperations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of rest operations.
+	 *
+	 * @param restContext The rest context.
+	 * @return The list of rest operations.
+	 * @throws RestServletException If a problem occurred instantiating one of the child rest contexts.
+	 */
+	public final RestOperations.Builder restOperations(RestContext restContext) throws RestServletException {
+		if (restOperations == null)
+			restOperations = createRestOperations(beanStore(), resource(), restContext);
+		return restOperations;
+	}
+
+	/**
+	 * Creates the set of {@link RestOpContext} objects that represent the methods on this resource.
+	 *
+	 * @param restContext The rest context.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 * @throws RestServletException If a problem occurred instantiating one of the child rest contexts.
+	 */
+	protected RestOperations.Builder createRestOperations(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws RestServletException {
+
+		Value<RestOperations.Builder> v = Value.of(RestOperations.create());
+		Object r = resource.get();
+
+		ClassInfo rci = ClassInfo.of(r);
+
+		for (MethodInfo mi : rci.getPublicMethods()) {
+			AnnotationList al = mi.getAnnotationGroupList(RestOp.class);
+
+			// Also include methods on @Rest-annotated interfaces.
+			if (al.size() == 0) {
+				for (Method mi2 : mi.getMatching()) {
+					Class<?> ci2 = mi2.getDeclaringClass();
+					if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null) {
+						al.add(AnnotationInfo.of(MethodInfo.of(mi2), RestOpAnnotation.DEFAULT));
+					}
+				}
+			}
+			if (al.size() > 0) {
+				try {
+					if (mi.isNotPublic())
+						throw new RestServletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
+
+					RestOpContext roc = RestOpContext
+						.create(mi.inner(), restContext)
+						.beanStore(beanStore)
+						.type(opContextClass)
+						.build();
+
+					String httpMethod = roc.getHttpMethod();
+
+					// RRPC is a special case where a method returns an interface that we
+					// can perform REST calls against.
+					// We override the CallMethod.invoke() method to insert our logic.
+					if ("RRPC".equals(httpMethod)) {
+
+						RestOpContext roc2 = RestOpContext
+							.create(mi.inner(), restContext)
+							.dotAll()
+							.beanStore(restContext.getRootBeanStore())
+							.type(RrpcRestOpContext.class)
+							.build();
+						v.get()
+							.add("GET", roc2)
+							.add("POST", roc2);
+
+					} else {
+						v.get().add(roc);
+					}
+				} catch (Throwable e) {
+					throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
+				}
+			}
+		}
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestOperations.Builder.class, v.get())
+			.beanCreateMethodFinder(RestOperations.Builder.class, r)
+			.find("createRestOperationsBuilder")
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestOperations.Builder.class, v.get())
+			.beanCreateMethodFinder(RestOperations.class, r)
+			.find("createRestOperations")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
 	private int TODO;
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4213,7 +4315,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * <p>
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
-	 * 	<li>{@link RestOperationsBuilder} - The builder for the object.
+	 * 	<li>{@link RestOperations.Builder} - The builder for the object.
 	 * 	<li>Any beans found in the specified bean store.
 	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
 	 * </ul>

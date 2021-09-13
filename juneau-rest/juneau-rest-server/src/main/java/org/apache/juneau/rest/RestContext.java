@@ -294,10 +294,9 @@ public class RestContext extends Context {
 			destroyMethods = builder.destroyMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			preCallMethods = builder.preCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 			postCallMethods = builder.postCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			restOperations = builder.restOperations(this).build();
 
 			Object r = resource.get();
-
-			restOperations = createRestOperations(r, builder, bs);
 
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
@@ -461,119 +460,6 @@ public class RestContext extends Context {
 
 		return x;
 
-	}
-
-	/**
-	 * Creates the set of {@link RestOpContext} objects that represent the methods on this resource.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The builder for the {@link RestOperations} object.
-	 * @throws Exception An error occurred.
-	 */
-	protected RestOperations createRestOperations(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestOperations x = createRestOperationsBuilder(resource, builder, beanStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestOperations.class, x)
-			.beanCreateMethodFinder(RestOperations.class, resource)
-			.find("createRestOperations")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the REST methods builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createRestOperations(Object,RestContextBuilder,BeanStore)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The REST methods builder for this REST resource.
-	 * @throws Exception If REST methods builder could not be instantiated.
-	 */
-	protected RestOperationsBuilder createRestOperationsBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestOperationsBuilder x = RestOperations
-			.create()
-			.beanStore(beanStore)
-			.implClass(builder.operationsClass);
-
-		ClassInfo rci = ClassInfo.of(resource);
-
-		for (MethodInfo mi : rci.getPublicMethods()) {
-			AnnotationList al = mi.getAnnotationGroupList(RestOp.class);
-
-			// Also include methods on @Rest-annotated interfaces.
-			if (al.size() == 0) {
-				for (Method mi2 : mi.getMatching()) {
-					Class<?> ci2 = mi2.getDeclaringClass();
-					if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null) {
-						al.add(AnnotationInfo.of(MethodInfo.of(mi2), RestOpAnnotation.DEFAULT));
-					}
-				}
-			}
-			if (al.size() > 0) {
-				try {
-					if (mi.isNotPublic())
-						throw new RestServletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
-
-					RestOpContext roc = RestOpContext
-						.create(mi.inner(), this)
-						.beanStore(beanStore)
-						.type(builder.opContextClass)
-						.build();
-
-					String httpMethod = roc.getHttpMethod();
-
-					// RRPC is a special case where a method returns an interface that we
-					// can perform REST calls against.
-					// We override the CallMethod.invoke() method to insert our logic.
-					if ("RRPC".equals(httpMethod)) {
-
-						RestOpContext roc2 = RestOpContext
-							.create(mi.inner(), this)
-							.dotAll()
-							.beanStore(rootBeanStore)
-							.type(RrpcRestOpContext.class)
-							.build();
-						x
-							.add("GET", roc2)
-							.add("POST", roc2);
-
-					} else {
-						x.add(roc);
-					}
-				} catch (Throwable e) {
-					throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
-				}
-			}
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestOperationsBuilder.class, x)
-			.beanCreateMethodFinder(RestOperationsBuilder.class, resource)
-			.find("createRestOperationsBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**

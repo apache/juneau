@@ -13,10 +13,13 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -25,34 +28,154 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class RestOperations {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Represents a null value for the {@link Rest#restOperationsClass()} annotation.
 	 */
 	@SuppressWarnings("javadoc")
 	public final class Null extends RestOperations {
-		public Null(RestOperationsBuilder builder) throws Exception {
+		public Null(Builder builder) throws Exception {
 			super(builder);
 		}
 	}
-
-	private final Map<String,List<RestOpContext>> map;
-	private List<RestOpContext> list;
 
 	/**
 	 * Creates a new builder.
 	 *
 	 * @return A new builder.
 	 */
-	public static RestOperationsBuilder create() {
-		return new RestOperationsBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder  {
+
+		TreeMap<String,TreeSet<RestOpContext>> map = new TreeMap<>();
+		Set<RestOpContext> set = ASet.of();
+
+		private BeanStore beanStore;
+		private Class<? extends RestOperations> type;
+		private RestOperations impl;
+
+		/**
+		 * Instantiates a {@link RestOperations} object based on the contents of this builder.
+		 *
+		 * @return A new {@link RestOperations} object.
+		 */
+		public RestOperations build() {
+			try {
+				if (impl != null)
+					return impl;
+				Class<? extends RestOperations> ic = firstNonNull(type, getDefaultImplClass());
+				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+			} catch (Exception e) {
+				throw toHttpException(e, InternalServerError.class);
+			}
+		}
+
+		/**
+		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
+		 *
+		 * @return The default implementation class if not specified via {@link #type(Class)}.
+		 */
+		protected Class<? extends RestOperations> getDefaultImplClass() {
+			return RestOperations.class;
+		}
+
+		/**
+		 * Adds a method context to this builder.
+		 *
+		 * @param value The REST method context to add.
+		 * @return Adds a method context to this builder.
+		 */
+		public Builder add(RestOpContext value) {
+			return add(value.getHttpMethod(), value);
+		}
+
+		/**
+		 * Adds a method context to this builder.
+		 *
+		 * @param httpMethodName The HTTP method name.
+		 * @param value The REST method context to add.
+		 * @return Adds a method context to this builder.
+		 */
+		public Builder add(String httpMethodName, RestOpContext value) {
+			httpMethodName = httpMethodName.toUpperCase();
+			if (! map.containsKey(httpMethodName))
+				map.put(httpMethodName, new TreeSet<>());
+			map.get(httpMethodName).add(value);
+			set.add(value);
+			return this;
+		}
+
+		/**
+		 * Specifies a {@link RestOperations} implementation subclass to use.
+		 *
+		 * <p>
+		 * When specified, the {@link #build()} method will create an instance of that class instead of the default {@link RestOperations}.
+		 *
+		 * <p>
+		 * The subclass must have a public constructor that takes in any of the following arguments:
+		 * <ul>
+		 * 	<li>{@link Builder} - This object.
+		 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
+		 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
+		 * </ul>
+		 *
+		 * @param value The implementation class to build.
+		 * @return This object.
+		 */
+		public Builder type(Class<? extends RestOperations> value) {
+			type = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
+		 *
+		 * @param value The bean store to use for resolving constructor arguments.
+		 * @return This object.
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+
+		/**
+		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(RestOperations value) {
+			impl = value;
+			return this;
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Map<String,List<RestOpContext>> map;
+	private List<RestOpContext> list;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this object.
 	 */
-	public RestOperations(RestOperationsBuilder builder) {
+	public RestOperations(Builder builder) {
 		AMap<String,List<RestOpContext>> m = AMap.create();
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
 			m.put(e.getKey(), AList.of(e.getValue()));
