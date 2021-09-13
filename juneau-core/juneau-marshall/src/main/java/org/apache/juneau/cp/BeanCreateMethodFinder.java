@@ -134,12 +134,16 @@ public class BeanCreateMethodFinder<T> {
 	}
 
 	/**
-	 * Executes the matched method and returns the result as an optional.
+	 * Same as {@link #run()} but also executes a consumer if the returned value was not <jk>null</jk>.
 	 *
+	 * @param consumer The consumer of the response.
 	 * @return The object returned by the method invocation, or the default value if method was not found, or {@link Optional#empty()}.
 	 * @throws ExecutableException If method invocation threw an exception.
 	 */
-	public Optional<T> execute() throws ExecutableException {
-		return Optional.ofNullable(run());
+	public T run(Consumer<? super T> consumer) throws ExecutableException {
+		T t = run();
+		Optional.ofNullable(t).ifPresent(consumer);
+		return t;
 	}
+
 }

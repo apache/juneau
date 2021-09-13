@@ -38,6 +38,7 @@ import javax.servlet.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
@@ -143,6 +144,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private NamedAttributeList defaultRequestAttributes;
 	private RestOpArgList.Builder restOpArgs, hookMethodArgs;
 	private DebugEnablement.Builder debugEnablement;
+	private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -485,15 +487,13 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		v.get().build()
 			.beanCreateMethodFinder(BeanStore.Builder.class, resourceClass)
 			.find("createBeanStore")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		// Replace with implementations:  public static BeanStore createBeanStore()
 		v.get().build()
 			.beanCreateMethodFinder(BeanStore.class, resourceClass)
 			.find("createBeanStore")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -574,8 +574,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.of(beanStore)
 			.beanCreateMethodFinder(VarResolver.Builder.class, resourceClass)
 			.find("createVarResolver")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		// Get builder from bean store.
 		if (v.isEmpty())
@@ -602,8 +601,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(VarResolver.Builder.class, v.get())
 			.beanCreateMethodFinder(VarResolver.class, resourceClass)
 			.find("createVarResolver")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -665,8 +663,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(VarList.class, v.get())
 			.beanCreateMethodFinder(VarList.class, resourceClass)
 			.find("createVars")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		return v.get();
 	}
@@ -730,8 +727,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		beanStore
 			.beanCreateMethodFinder(Config.class, resourceClass)
 			.find("createConfig")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		// Get implementation from bean store.
 		if (v.isEmpty())
@@ -828,12 +824,11 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			v.set(Logger.getLogger(className(r)));
 
 		BeanStore
-			.of(beanStore, resource.get())
+			.of(beanStore, r)
 			.addBean(Logger.class, v.get())
 			.beanCreateMethodFinder(Logger.class, r)
 			.find("createLogger")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		return v.get();
 	}
@@ -892,8 +887,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(ThrownStore.Builder.class, v.get())
 			.beanCreateMethodFinder(ThrownStore.Builder.class, r)
 			.find("createThrownStore")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		if (v.isEmpty()) {
 			v.set(
@@ -912,8 +906,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(ThrownStore.Builder.class, v.get())
 			.beanCreateMethodFinder(ThrownStore.class, r)
 			.find("createThrownStore")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -954,8 +947,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(MethodExecStore.Builder.class, v.get())
 			.beanCreateMethodFinder(MethodExecStore.Builder.class, r)
 			.find("createMethodExecStore")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		if (v.isEmpty()) {
 			v.set(
@@ -973,8 +965,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(MethodExecStore.Builder.class, v.get())
 			.beanCreateMethodFinder(MethodExecStore.class, r)
 			.find("createMethodExecStore")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1082,11 +1073,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		Object r = resource.get();
 
 		BeanStore
-			.of(beanStore, resource)
+			.of(beanStore, r)
 			.beanCreateMethodFinder(Messages.Builder.class, r)
 			.find("createMessages")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		if (v.isEmpty()) {
 			v.set(
@@ -1096,12 +1086,11 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		}
 
 		BeanStore
-			.of(beanStore, resource)
+			.of(beanStore, r)
 			.addBean(Messages.Builder.class, v.get())
 			.beanCreateMethodFinder(Messages.class, r)
 			.find("createMessages")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1259,20 +1248,18 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(ResponseProcessorList.Builder.class, v.get())
-			.beanCreateMethodFinder(ResponseProcessorList.Builder.class, resource)
+			.beanCreateMethodFinder(ResponseProcessorList.Builder.class, r)
 			.find("createResponseProcessors")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		beanStore.getBean(ResponseProcessorList.class).ifPresent(x -> v.get().impl(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(ResponseProcessorList.Builder.class, v.get())
-			.beanCreateMethodFinder(ResponseProcessorList.class, resource)
+			.beanCreateMethodFinder(ResponseProcessorList.class, r)
 			.find("createResponseProcessors")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1393,10 +1380,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(RestLogger.Builder.class, v.get())
-			.beanCreateMethodFinder(RestLogger.Builder.class, resource)
+			.beanCreateMethodFinder(RestLogger.Builder.class, r)
 			.find("createCallLogger")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		if (v.isEmpty()) {
 			v.set(
@@ -1438,10 +1424,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(RestLogger.Builder.class, v.get())
-			.beanCreateMethodFinder(RestLogger.class, resource)
+			.beanCreateMethodFinder(RestLogger.class, r)
 			.find("createCallLogger")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1517,19 +1502,17 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(HttpPartSerializer.Creator.class, v.get())
-			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, resource)
+			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, r)
 			.find("createPartSerializer")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		// Call:  public [static] HttpPartSerializer createPartSerializer(<anything-in-bean-store>)
 		BeanStore
 			.of(beanStore, r)
 			.addBean(HttpPartSerializer.Creator.class, v.get())
-			.beanCreateMethodFinder(HttpPartSerializer.class, resource)
+			.beanCreateMethodFinder(HttpPartSerializer.class, r)
 			.find("createPartSerializer")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1605,19 +1588,17 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(HttpPartParser.Creator.class, v.get())
-			.beanCreateMethodFinder(HttpPartParser.Creator.class, resource)
+			.beanCreateMethodFinder(HttpPartParser.Creator.class, r)
 			.find("createPartParser")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		// Call:  public [static] HttpPartParser createPartParser(<anything-in-bean-store>)
 		BeanStore
 			.of(beanStore, r)
 			.addBean(HttpPartParser.Creator.class, v.get())
-			.beanCreateMethodFinder(HttpPartParser.class, resource)
+			.beanCreateMethodFinder(HttpPartParser.class, r)
 			.find("createPartParser")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1680,16 +1661,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
 			.beanCreateMethodFinder(JsonSchemaGeneratorBuilder.class, r)
 			.find("createJsonSchemaGenerator")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
 			.beanCreateMethodFinder(JsonSchemaGenerator.class, r)
 			.find("createJsonSchemaGenerator")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -1869,16 +1848,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(FileFinder.Builder.class, v.get())
 			.beanCreateMethodFinder(FileFinder.Builder.class, r)
 			.find("createFileFinder")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(FileFinder.Builder.class, v.get())
 			.beanCreateMethodFinder(FileFinder.class, r)
 			.find("createFileFinder")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -2050,16 +2027,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(StaticFiles.Builder.class, v.get())
 			.beanCreateMethodFinder(StaticFiles.Builder.class, r)
 			.find("createStaticFiles")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(StaticFiles.Builder.class, v.get())
 			.beanCreateMethodFinder(StaticFiles.class, r)
 			.find("createStaticFiles")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -2196,16 +2171,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(HeaderList.Builder.class, v.get())
 			.beanCreateMethodFinder(HeaderList.Builder.class, r)
 			.find("createDefaultRequestHeaders")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(HeaderList.Builder.class, v.get())
 			.beanCreateMethodFinder(HeaderList.class, r)
 			.find("createDefaultRequestHeaders")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -2308,16 +2281,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(HeaderList.Builder.class, v.get())
 			.beanCreateMethodFinder(HeaderList.Builder.class, r)
 			.find("createDefaultResponseHeaders")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(HeaderList.Builder.class, v.get())
 			.beanCreateMethodFinder(HeaderList.class, r)
 			.find("createDefaultResponseHeaders")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -2415,8 +2386,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(NamedAttributeList.class, v.get())
 			.beanCreateMethodFinder(NamedAttributeList.class, r)
 			.find("createDefaultRequestAttributes")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		return v.get();
 	}
@@ -2596,16 +2566,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.beanCreateMethodFinder(RestOpArgList.Builder.class, r)
 			.find("createRestOpArgs")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.beanCreateMethodFinder(RestOpArgList.class, r)
 			.find("createRestOpArgs")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -2674,16 +2642,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.beanCreateMethodFinder(RestOpArgList.Builder.class, r)
 			.find("createHookMethodArgs")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.beanCreateMethodFinder(RestOpArgList.class, r)
 			.find("createHookMethodArgs")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -2703,7 +2669,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * 	<li>
 	 * 		Request/response messages are automatically logged always or per request.
 	 * </ul>
-	 * 
+	 *
 	 * @return The builder for the debug enablement bean in the REST context.
 	 */
 	public final DebugEnablement.Builder debugEnablement() {
@@ -2819,16 +2785,286 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.addBean(DebugEnablement.Builder.class, v.get())
 			.beanCreateMethodFinder(DebugEnablement.Builder.class, r)
 			.find("createDebugEnablement")
-			.execute()
-			.ifPresent(x -> v.set(x));
+			.run(x -> v.set(x));
 
 		BeanStore
 			.of(beanStore, r)
 			.addBean(DebugEnablement.Builder.class, v.get())
 			.beanCreateMethodFinder(DebugEnablement.class, r)
 			.find("createDebugEnablement")
-			.execute()
-			.ifPresent(x -> v.get().impl(x));
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.START_CALL methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that get executed at the start of an HTTP call.
+	 *
+	 * @return The list of methods that get executed at the start of an HTTP call.
+	 */
+	public final MethodList startCallMethods() {
+		if (startCallMethods == null)
+			startCallMethods = createStartCallMethods(beanStore(), resource());
+		return startCallMethods;
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#START_CALL} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createStartCallMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.START_CALL));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createStartCallMethods")
+			.run(x -> v.set(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.END_CALL methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that get executed at the end of an HTTP call.
+	 *
+	 * @return The list of methods that get executed at the end of an HTTP call.
+	 */
+	public final MethodList endCallMethods() {
+		if (endCallMethods == null)
+			endCallMethods = createEndCallMethods(beanStore(), resource());
+		return endCallMethods;
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#END_CALL} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createEndCallMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.END_CALL));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createEndCallMethods")
+			.run(x -> v.set(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.POST_INIT methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that get executed immediately after initialization.
+	 *
+	 * @return The list of methods that get executed immediately after initialization.
+	 */
+	public final MethodList postInitMethods() {
+		if (postInitMethods == null)
+			postInitMethods = createPostInitMethods(beanStore(), resource());
+		return postInitMethods;
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#POST_INIT} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createPostInitMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.POST_INIT));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createPostInitMethods")
+			.run(x -> v.set(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.POST_INIT_CHILD_FIRST methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that get executed immediately after initialization in child-to-parent order.
+	 *
+	 * @return The list of methods that get executed immediately after initialization in child-to-parent order.
+	 */
+	public final MethodList postInitChildFirstMethods() {
+		if (postInitChildFirstMethods == null)
+			postInitChildFirstMethods = createPostInitChildFirstMethods(beanStore(), resource());
+		return postInitChildFirstMethods;
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#POST_INIT_CHILD_FIRST} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createPostInitChildFirstMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.POST_INIT_CHILD_FIRST));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createPostInitChildFirstMethods")
+			.run(x -> v.set(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.DESTROY methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that get executed during servlet destruction.
+	 *
+	 * @return The list of methods that get executed during servlet destruction.
+	 */
+	public final MethodList destroyMethods() {
+		if (destroyMethods == null)
+			destroyMethods = createDestroyMethods(beanStore(), resource());
+		return destroyMethods;
+	}
+	/**
+	 * Instantiates the list of {@link HookEvent#DESTROY} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createDestroyMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.DESTROY));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createDestroyMethods")
+			.run(x -> v.set(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.PRE_CALL methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that gets called immediately before the <ja>@RestOp</ja> annotated method gets called..
+	 *
+	 * @return The list of methods that gets called immediately before the <ja>@RestOp</ja> annotated method gets called..
+	 */
+	public final MethodList preCallMethods() {
+		if (preCallMethods == null)
+			preCallMethods = createPreCallMethods(beanStore(), resource());
+		return preCallMethods;
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#PRE_CALL} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createPreCallMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.PRE_CALL));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createPreCallMethods")
+			.run(x -> v.set(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HookEvent.POST_CALL methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of methods that gets called immediately after the <ja>@RestOp</ja> annotated method gets called..
+	 *
+	 * @return The list of methods that gets called immediately after the <ja>@RestOp</ja> annotated method gets called..
+	 */
+	public final MethodList postCallMethods() {
+		if (postCallMethods == null)
+			postCallMethods = createPostCallMethods(beanStore(), resource());
+		return postCallMethods;
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#POST_CALL} methods.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 */
+	protected MethodList createPostCallMethods(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.POST_CALL));
+		Object r = resource.get();
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(MethodList.class, v.get())
+			.beanCreateMethodFinder(MethodList.class, r)
+			.find("createPostCallMethods")
+			.run(x -> v.set(x));
 
 		return v.get();
 	}
@@ -4300,6 +4536,23 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	// </FluentSetters>
+
+	//----------------------------------------------------------------------------------------------------
+	// Helper methods
+	//----------------------------------------------------------------------------------------------------
+
+	private static MethodList getHookMethods(Supplier<?> resource, HookEvent event) {
+		Map<String,Method> x = AMap.create();
+		Object r = resource.get();
+
+		for (MethodInfo m : ClassInfo.ofProxy(r).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == event)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		MethodList x2 = MethodList.of(x.values());
+		return x2;
+	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods inherited from ServletConfig
