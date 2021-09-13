@@ -1092,7 +1092,7 @@ public class RestAnnotation {
 			type(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));
 			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
 			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
-			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement(x));
+			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
 			string(a.disableBodyParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableBodyParam(x));
 			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
 			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));

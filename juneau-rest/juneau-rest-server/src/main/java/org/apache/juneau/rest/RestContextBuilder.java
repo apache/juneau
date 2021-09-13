@@ -123,6 +123,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	final RestContext parentContext;
 
 	private DefaultClassList defaultClasses;
+	private DefaultSettingsMap defaultSettings;
+
 	private BeanStore beanStore;
 	private Config config;
 	private VarResolver.Builder varResolver;
@@ -140,6 +142,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 	private NamedAttributeList defaultRequestAttributes;
 	private RestOpArgList.Builder restOpArgs, hookMethodArgs;
+	private DebugEnablement.Builder debugEnablement;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -163,13 +166,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
 	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
-	BeanRef<DebugEnablement> debugEnablement = BeanRef.of(DebugEnablement.class);
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
-
-	Enablement debugDefault, debug;
-
 
 	List<Object> children = new ArrayList<>();
 
@@ -191,10 +190,11 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 			// Pass-through default values.
 			if (parentContext != null) {
-				debugDefault = parentContext.debugDefault;
 				defaultClasses = parentContext.defaultClasses.copy();
+				defaultSettings = parentContext.defaultSettings.copy();
 			} else {
 				defaultClasses = DefaultClassList.create();
+				defaultSettings = DefaultSettingsMap.create();
 			}
 
 			beanStore = createBeanStore(resourceClass, parentContext)
@@ -313,10 +313,18 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns access to the default classes list.
+	 * Returns the default classes list.
 	 *
 	 * <p>
 	 * This defines the implementation classes for a variety of bean types.
+	 *
+	 * <p>
+	 * Default classes are inherited from the parent REST object.
+	 * Typically used on the top-level {@link RestContextBuilder} to affect class types for that REST object and all children.
+	 *
+	 * <p>
+	 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
+	 * here are inherited by child builders.
 	 *
 	 * @return The default classes list for this builder.
 	 */
@@ -327,11 +335,60 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	/**
 	 * Adds default implementation classes to use.
 	 *
+	 * <p>
+	 * A shortcut for the following code:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jv>builder</jv>.defaultClasses().add(<jv>values</jv>);
+	 * </p>
+	 *
 	 * @param values The values to add to the list of default classes.
 	 * @return This object.
+	 * @see #defaultClasses()
 	 */
 	public RestContextBuilder defaultClasses(Class<?>...values) {
 		defaultClasses().add(values);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultSettings
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the default settings map.
+	 *
+	 * <p>
+	 * Default settings are inherited from the parent REST object.
+	 * Typically used on the top-level {@link RestContextBuilder} to affect settings for that REST object and all children.
+	 *
+	 * <p>
+	 * Modifying the default settings map on this builder does not affect the default settings on the parent builder, but changes made
+	 * here are inherited by child builders.
+	 *
+	 * @return The default settings map for this builder.
+	 */
+	public DefaultSettingsMap defaultSettings() {
+		return defaultSettings;
+	}
+
+	/**
+	 * Sets a default setting.
+	 *
+	 * <p>
+	 * A shortcut for the following code:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jv>builder</jv>.defaultSettings().add(<jv>key</jv>, <jv>value</jv>);
+	 *
+	 * </p>
+	 * @param key The setting key.
+	 * @param value The setting value.
+	 * @return This object.
+	 * @see #defaultSettings()
+	 */
+	public RestContextBuilder defaultSetting(String key, Object value) {
+		defaultSettings().set(key, value);
 		return this;
 	}
 
@@ -2579,7 +2636,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestOpArgList.Builder createHookMethodArgs(BeanStore beanStore, Supplier<?> resource) {
 
-
 		Value<RestOpArgList.Builder> v = Value.empty();
 		Object r = resource.get();
 
@@ -2631,6 +2687,153 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		return v.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// debugEnablement
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the debug enablement bean in the REST context.
+	 *
+	 * <p>
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged always or per request.
+	 * </ul>
+	 * 
+	 * @return The builder for the debug enablement bean in the REST context.
+	 */
+	public final DebugEnablement.Builder debugEnablement() {
+		if (debugEnablement == null)
+			debugEnablement = createDebugEnablement(beanStore(), resource());
+		return debugEnablement;
+	}
+
+	/**
+	 * Sets the debug default value.
+	 *
+	 * <p>
+	 * The default debug value is the enablement value if not otherwise overridden at the class or method level.
+	 *
+	 * @param value The debug default value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public RestContextBuilder debugDefault(Enablement value) {
+		defaultSettings().set("RestContext.debugDefault", value);
+		return this;
+	}
+
+	/**
+	 * Specifies the debug level on this REST resource.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public RestContextBuilder debug(Enablement value) {
+		debugEnablement().enable(value, this.resourceClass);
+		return this;
+	}
+
+	/**
+	 * Debug mode on specified classes/methods.
+	 *
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Rest#debugOn}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugOn(String value) {
+		for (Map.Entry<String,String> e : splitMap(ofNullable(value).orElse(""), true).entrySet()) {
+			String k = e.getKey(), v = e.getValue();
+			if (v.isEmpty())
+				v = "ALWAYS";
+			if (! k.isEmpty())
+				debugEnablement().enable(Enablement.fromString(v), k);
+		}
+		return this;
+	}
+
+	/**
+	 * Instantiates the debug enablement bean for this REST object.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The debug enablement bean for this REST object.
+	 */
+	protected DebugEnablement.Builder createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
+
+		Value<DebugEnablement.Builder> v = Value.empty();
+		Object r = resource.get();
+
+		beanStore.getBean(DebugEnablement.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (v.isEmpty()) {
+			DebugEnablement.Builder b = DebugEnablement
+				.create()
+				.beanStore(beanStore);
+
+			// Default debug enablement if not overridden at class/method level.
+			Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+			b.defaultEnable(debugDefault);
+
+			// Gather @RestOp(debug) settings.
+			for (MethodInfo mi : ClassInfo.ofProxy(r).getPublicMethods()) {
+				mi
+					.getAnnotationGroupList(RestOp.class)
+					.getValues(String.class, "debug")
+					.stream()
+					.filter(y->!y.isEmpty())
+					.findFirst()
+					.ifPresent(x -> b.enable(Enablement.fromString(x), mi.getFullName()));
+			}
+
+			v.set(b);
+		}
+
+		if (r instanceof DebugEnablement)
+			v.get().impl((DebugEnablement)r);
+
+		defaultClasses.get(DebugEnablement.class).ifPresent(x -> v.get().type(x));
+
+		beanStore.getBean(DebugEnablement.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(DebugEnablement.Builder.class, v.get())
+			.beanCreateMethodFinder(DebugEnablement.Builder.class, r)
+			.find("createDebugEnablement")
+			.execute()
+			.ifPresent(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(DebugEnablement.Builder.class, v.get())
+			.beanCreateMethodFinder(DebugEnablement.class, r)
+			.find("createDebugEnablement")
+			.execute()
+			.ifPresent(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	private int TODO;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Miscellaneous settings
@@ -3556,100 +3759,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@Override
 	public RestContextBuilder type(Class<? extends Context> value) {
 		super.type(value);
-		return this;
-	}
-
-	/**
-	 * Debug mode.
-	 *
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged always or per request.
-	 * </ul>
-	 *
-	 * <p>
-	 * The default can be overwritten by {@link RestContextBuilder#debugDefault(Enablement)}.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debug(Enablement value) {
-		debug = value;
-		return this;
-	}
-
-	/**
-	 * Default debug mode.
-	 *
-	 * <p>
-	 * The default value for the {@link #debug(Enablement)} setting.
-	 *
-	 * <p>
-	 * This setting is inherited from parent contexts.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugDefault(Enablement value) {
-		debugDefault = value;
-		return this;
-	}
-
-	/**
-	 * Debug enablement bean.
-	 *
-	 * TODO
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugEnablement(Class<? extends DebugEnablement> value) {
-		debugEnablement.type(value);
-		return this;
-	}
-
-	/**
-	 * Debug enablement bean.
-	 *
-	 * TODO
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugEnablement(DebugEnablement value) {
-		debugEnablement.value(value);
-		return this;
-	}
-
-	/**
-	 * Debug mode on specified classes/methods.
-	 *
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Rest#debugOn}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder debugOn(String value) {
-		debugOn = value;
 		return this;
 	}
 

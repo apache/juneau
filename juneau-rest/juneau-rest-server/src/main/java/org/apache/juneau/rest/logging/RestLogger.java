@@ -47,7 +47,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='jm'>{@link RestContextBuilder#callLogger()}
- * 	<li class='jm'>{@link RestContextBuilder#debug(Enablement)}
+ * 	<li class='jm'>{@link RestContextBuilder#debugEnablement()}
  * 	<li class='jm'>{@link RestContextBuilder#debugOn(String)}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}

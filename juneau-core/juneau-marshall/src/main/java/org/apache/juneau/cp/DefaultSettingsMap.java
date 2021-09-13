@@ -12,19 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static java.util.Arrays.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static java.util.Optional.*;
 
 import java.util.*;
-
 import org.apache.juneau.annotation.*;
 
 /**
- * A list of default implementation classes.
+ * A list of default settings.
+ *
+ * <p>
+ * Consists of a simple string-keyed map of arbitrary objects.
  */
 @NotThreadSafe
-public class DefaultClassList {
+public class DefaultSettingsMap {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -35,31 +35,21 @@ public class DefaultClassList {
 	 *
 	 * @return A new object.
 	 */
-	public static DefaultClassList create() {
-		return new DefaultClassList();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param values Initial entries in this list.
-	 * @return A new object initialized with the specified values.
-	 */
-	public static DefaultClassList of(Class<?>...values) {
-		return new DefaultClassList().add(values);
+	public static DefaultSettingsMap create() {
+		return new DefaultSettingsMap();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final List<Class<?>> entries;
+	private final Map<String,Object> entries;
 
 	/**
 	 * Constructor.
 	 */
-	protected DefaultClassList() {
-		entries = new ArrayList<>();
+	protected DefaultSettingsMap() {
+		entries = new LinkedHashMap<>();
 	}
 
 	/**
@@ -67,42 +57,40 @@ public class DefaultClassList {
 	 *
 	 * @param value The object to copy.
 	 */
-	public DefaultClassList(DefaultClassList value) {
-		entries = new ArrayList<>(value.entries);
+	public DefaultSettingsMap(DefaultSettingsMap value) {
+		entries = new LinkedHashMap<>(value.entries);
 	}
 
 	/**
-	 * Prepends the specified values to the beginning of this list.
+	 * Sets the specified setting value.
 	 *
-	 * @param values The values to prepend to this list.
+	 * @param name The setting name.
+	 * @param value The setting value.
 	 * @return This object.
 	 */
-	public DefaultClassList add(Class<?>...values) {
-		entries.addAll(0, asList(values));
+	public DefaultSettingsMap set(String name, Object value) {
+		entries.put(name, value);
 		return this;
 	}
 
 	/**
-	 * Returns the first class in this list which is a subclass of (or same as) the specified type.
+	 * Returns the value of the specified setting if it exists.
 	 *
-	 * @param type The parent type to check for.
-	 * @return The first class in this list which is a subclass of the specified type.
+	 * @param type The setting type.
+	 * @param name The setting name.
+	 * @return The setting value.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Optional<Class<? extends T>> get(Class<T> type) {
-		assertArgNotNull("type", type);
-		for (Class<?> e : entries)
-			if (e != null && type.isAssignableFrom(e))
-				return Optional.of((Class<? extends T>)e);
-		return empty();
+	public <T> Optional<T> get(Class<T> type, String name) {
+		return ofNullable((T)entries.get(name));
 	}
 
 	/**
-	 * Creates a copy of this list.
+	 * Creates a copy of this map.
 	 *
-	 * @return A copy of this list.
+	 * @return A copy of this map.
 	 */
-	public DefaultClassList copy() {
-		return new DefaultClassList(this);
+	public DefaultSettingsMap copy() {
+		return new DefaultSettingsMap(this);
 	}
 }

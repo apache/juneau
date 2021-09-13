@@ -660,7 +660,17 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder debug() {
+		debug = true;
 		return set(CONTEXT_debug);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if debug is enabled.
+	 *
+	 * @return <jk>true</jk> if debug is enabled.
+	 */
+	public boolean isDebug() {
+		return debug;
 	}
 
 	/**

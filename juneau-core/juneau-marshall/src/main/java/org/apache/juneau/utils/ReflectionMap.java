@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static java.lang.Character.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -120,6 +122,129 @@ import org.apache.juneau.collections.*;
  */
 public class ReflectionMap<V> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static builder creator.
+	 *
+	 * @param <V> The type of object in this map.
+	 * @param c The type of object in this map.
+	 * @return A new instance of this object.
+	 */
+	public static <V> Builder<V> create(Class<V> c) {
+		return new Builder<>();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 * @param <V> The type of object in this map.
+	 */
+	public static class Builder<V> {
+		final List<ClassEntry<V>> classEntries;
+		final List<MethodEntry<V>> methodEntries;
+		final List<FieldEntry<V>> fieldEntries;
+		final List<ConstructorEntry<V>> constructorEntries;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			classEntries = new ArrayList<>();
+			methodEntries = new ArrayList<>();
+			fieldEntries = new ArrayList<>();
+			constructorEntries = new ArrayList<>();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder<V> copyFrom) {
+			classEntries = new ArrayList<>(copyFrom.classEntries);
+			methodEntries = new ArrayList<>(copyFrom.methodEntries);
+			fieldEntries = new ArrayList<>(copyFrom.fieldEntries);
+			constructorEntries = new ArrayList<>(copyFrom.constructorEntries);
+		}
+
+		/**
+		 * Adds a mapping to this builder.
+		 *
+		 * @param key
+		 * 	The mapping key.
+		 * 	<br>Can be any of the following:
+		 * 	<ul>
+		 * 		<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
+		 * 		<li>Simple class name (e.g. <js>"MyClass"</js>).
+		 * 		<li>All classes (e.g. <js>"*"</js>).
+		 * 		<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
+		 * 		<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
+		 * 		<li>A comma-delimited list of anything on this list.
+		 * 	</ul>
+		 * @param value The value for this mapping.
+		 * @return This object (for method chaining).
+		 */
+		public Builder<V> append(String key, V value) {
+			if (isEmpty(key))
+				throw runtimeException("Invalid reflection signature: [{0}]", key);
+			try {
+				for (String k : ReflectionMap.splitNames(key)) {
+					if (k.endsWith(")")) {
+						int i = k.substring(0, k.indexOf('(')).lastIndexOf('.');
+						if (i == -1 || isUpperCase(k.charAt(i+1))) {
+							constructorEntries.add(new ConstructorEntry<>(k, value));
+						} else {
+							methodEntries.add(new MethodEntry<>(k, value));
+						}
+					} else {
+						int i = k.lastIndexOf('.');
+						if (i == -1) {
+							classEntries.add(new ClassEntry<>(k, value));
+						} else if (isUpperCase(k.charAt(i+1))) {
+							classEntries.add(new ClassEntry<>(k, value));
+							fieldEntries.add(new FieldEntry<>(k, value));
+						} else {
+							methodEntries.add(new MethodEntry<>(k, value));
+							fieldEntries.add(new FieldEntry<>(k, value));
+						}
+					}
+				}
+			} catch (IndexOutOfBoundsException e) {
+				throw runtimeException("Invalid reflection signature: [{0}]", key);
+			}
+
+			return this;
+		}
+
+		/**
+		 * Create new instance of {@link ReflectionMap} based on the contents of this builder.
+		 *
+		 * @return A new {@link ReflectionMap} object.
+		 */
+		public ReflectionMap<V> build() {
+			return new ReflectionMap<>(this);
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder<V> copy() {
+			return new Builder<>(this);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final List<ClassEntry<V>> classEntries;
 	private final List<MethodEntry<V>> methodEntries;
 	private final List<FieldEntry<V>> fieldEntries;
@@ -131,7 +256,7 @@ public class ReflectionMap<V> {
 	 *
 	 * @param b Initializer object.
 	 */
-	protected ReflectionMap(ReflectionMapBuilder<V> b) {
+	protected ReflectionMap(Builder<V> b) {
 		this.classEntries = Collections.unmodifiableList(new ArrayList<>(b.classEntries));
 		this.methodEntries = Collections.unmodifiableList(new ArrayList<>(b.methodEntries));
 		this.fieldEntries = Collections.unmodifiableList(new ArrayList<>(b.fieldEntries));
@@ -140,17 +265,6 @@ public class ReflectionMap<V> {
 		this.noMethodEntries = methodEntries.isEmpty();
 		this.noFieldEntries = fieldEntries.isEmpty();
 		this.noConstructorEntries = constructorEntries.isEmpty();
-	}
-
-	/**
-	 * Static builder creator.
-	 *
-	 * @param <V> The type of object in this map.
-	 * @param c The type of object in this map.
-	 * @return A new instance of this object.
-	 */
-	public static <V> ReflectionMapBuilder<V> create(Class<V> c) {
-		return new ReflectionMapBuilder<>();
 	}
 
 	static List<String> splitNames(String key) {

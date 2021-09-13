@@ -190,8 +190,8 @@ public class RestContext extends Context {
 	final Charset defaultCharset;
 	final long maxInput;
 
-	final Enablement debugDefault;
 	final DefaultClassList defaultClasses;
+	final DefaultSettingsMap defaultSettings;
 
 	// Lifecycle methods
 	private final MethodInvoker[]
@@ -238,6 +238,7 @@ public class RestContext extends Context {
 			parentContext = builder.parentContext;
 			rootBeanStore = builder.beanStore();
 			defaultClasses = builder.defaultClasses();
+			defaultSettings = builder.defaultSettings();
 
 			BeanStore bs = beanStore = rootBeanStore.copy().build();
 			beanStore
@@ -246,6 +247,13 @@ public class RestContext extends Context {
 				.addBean(Object.class, resource.get())
 				.addBean(RestContextBuilder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
+
+			path = ofNullable(builder.path).orElse("");
+			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
+			String p = path;
+			if (! p.endsWith("/*"))
+				p += "/*";
+			pathMatcher = UrlPathMatcher.of(p);
 
 			allowBodyParam = ! builder.disableBodyParam;
 			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
@@ -267,7 +275,6 @@ public class RestContext extends Context {
 			varResolver = bs.add(VarResolver.class, builder.varResolver().bean(Messages.class, messages).build());
 			config = bs.add(Config.class, builder.config().resolving(varResolver.createSession()));
 			responseProcessors = bs.add(ResponseProcessor[].class, builder.responseProcessors().build().toArray());
-			debugDefault = builder.debugDefault;
 			callLogger = bs.add(RestLogger.class, builder.callLogger().beanStore(beanStore).loggerOnce(logger).thrownStoreOnce(thrownStore).build());
 			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
@@ -279,18 +286,9 @@ public class RestContext extends Context {
 			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes());
 			restOpArgs = builder.restOpArgs().build().asArray();
 			hookMethodArgs = builder.hookMethodArgs().build().asArray();
+			debugEnablement = builder.debugEnablement().build();
 
 			Object r = resource.get();
-
-			debugEnablement = createDebugEnablement(r, builder, bs);
-
-			path = ofNullable(builder.path).orElse("");
-			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
-
-			String p = path;
-			if (! p.endsWith("/*"))
-				p += "/*";
-			pathMatcher = UrlPathMatcher.of(p);
 
 			startCallMethods = createStartCallMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			endCallMethods = createEndCallMethods(r, builder, bs).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
@@ -465,103 +463,6 @@ public class RestContext extends Context {
 
 		return x;
 
-	}
-
-	/**
-	 * Instantiates the debug enablement bean for this REST object.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The debug enablement bean for this REST object.
-	 * @throws Exception If bean could not be created.
-	 */
-	protected DebugEnablement createDebugEnablement(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-		DebugEnablement x = null;
-
-		if (resource instanceof DebugEnablement)
-			x = (DebugEnablement)resource;
-
-		if (x == null)
-			x = builder.debugEnablement.value().orElse(null);
-
-		if (x == null)
-			x = beanStore.getBean(DebugEnablement.class).orElse(null);
-
-		if (x == null)
-			x = createDebugEnablementBuilder(resource, builder, beanStore).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(DebugEnablement.class, x)
-			.beanCreateMethodFinder(DebugEnablement.class, resource)
-			.find("createDebugEnablement")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the debug enablement bean builder for this REST object.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @return The debug enablement bean builder for this REST object.
-	 * @throws Exception If bean builder could not be created.
-	 */
-	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		Class<? extends DebugEnablement> c = builder.debugEnablement.type().orElse(null);
-
-		DebugEnablementBuilder x = DebugEnablement
-			.create()
-			.beanStore(beanStore)
-			.implClass(c);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(DebugEnablementBuilder.class, x)
-			.beanCreateMethodFinder(DebugEnablementBuilder.class, resource)
-			.find("createDebugEnablementBuilder")
-			.withDefault(x)
-			.run();
-
-		Enablement defaultDebug = builder.debug;
-
-		if (defaultDebug == null)
-			defaultDebug = builder.debugDefault;
-
-		if (defaultDebug == null)
-			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
-
-		x.defaultEnable(defaultDebug);
-
-		for (Map.Entry<String,String> e : splitMap(ofNullable(builder.debugOn).orElse(""), true).entrySet()) {
-			String k = e.getKey(), v = e.getValue();
-			if (v.isEmpty())
-				v = "ALWAYS";
-			if (! k.isEmpty())
-				x.enable(Enablement.fromString(v), k);
-		}
-
-		for (MethodInfo mi : ClassInfo.ofProxy(resource).getPublicMethods()) {
-			Optional<String> o = mi.getAnnotationGroupList(RestOp.class).getValues(String.class, "debug").stream().filter(y->!y.isEmpty()).findFirst();
-			if (o.isPresent())
-				x.enable(Enablement.fromString(o.get()), mi.getFullName());
-		}
-
-		return x;
 	}
 
 	/**

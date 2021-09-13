@@ -162,7 +162,7 @@ public abstract class Context implements MetaProvider {
 		this.identityCode = allowReuse ? new HashCode().add(className(this)).add(cp).get() : System.identityHashCode(this);
 		debug = cp.getBoolean(CONTEXT_debug).orElse(false);
 
-		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
+		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 		for (Annotation a : cp.getList(CONTEXT_annotations, Annotation.class).orElse(emptyList())) {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());
@@ -201,7 +201,7 @@ public abstract class Context implements MetaProvider {
 		identityCode = System.identityHashCode(this);
 		properties = builder.getContextProperties();
 
-		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
+		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 		for (Annotation a : builder.getContextProperties().getList(CONTEXT_annotations, Annotation.class).orElse(emptyList())) {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());

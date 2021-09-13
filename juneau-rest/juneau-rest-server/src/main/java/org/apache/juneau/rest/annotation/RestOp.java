@@ -18,7 +18,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
@@ -172,7 +171,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#debug(Enablement)}
+	 * 	<li class='jm'>{@link RestContextBuilder#debugEnablement()}
 	 * </ul>
 	 */
 	String debug() default "";
