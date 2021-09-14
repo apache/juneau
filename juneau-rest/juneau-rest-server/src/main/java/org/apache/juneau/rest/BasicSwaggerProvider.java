@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
 import org.apache.juneau.cp.*;
@@ -38,12 +37,12 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	 *
 	 * @param builder The builder containing the settings for this Swagger provider.
 	 */
-	public BasicSwaggerProvider(SwaggerProviderBuilder builder) {
+	public BasicSwaggerProvider(SwaggerProvider.Builder builder) {
 		BeanStore bs = builder.beanStore;
-		this.vr = firstNonNull(builder.varResolver, bs.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
-		this.js = firstNonNull(builder.jsonSchemaGenerator, bs.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
-		this.messages = builder.messages;
-		this.fileFinder = builder.fileFinder;
+		this.vr = builder.varResolver().orElse(bs.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
+		this.js = builder.jsonSchemaGenerator().orElse(bs.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
+		this.messages = builder.messages().orElse(null);
+		this.fileFinder = builder.fileFinder().orElse(null);
 	}
 
 	/**

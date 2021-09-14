@@ -12,15 +12,27 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import java.util.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Interface for retrieving Swagger on a REST resource.
  */
 public interface SwaggerProvider {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Represents no SwaggerProvider.
@@ -36,9 +48,203 @@ public interface SwaggerProvider {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static SwaggerProviderBuilder create() {
-		return new SwaggerProviderBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public class Builder {
+
+		Class<? extends SwaggerProvider> type;
+		BeanStore beanStore;
+		Class<?> resourceClass;
+		Supplier<VarResolver> varResolver;
+		Supplier<JsonSchemaGenerator> jsonSchemaGenerator;
+		Supplier<Messages> messages;
+		Supplier<FileFinder> fileFinder;
+		SwaggerProvider impl;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			type = copyFrom.type;
+			beanStore = copyFrom.beanStore;
+			resourceClass = copyFrom.resourceClass;
+			varResolver = copyFrom.varResolver;
+			jsonSchemaGenerator = copyFrom.jsonSchemaGenerator;
+			messages = copyFrom.messages;
+			fileFinder = copyFrom.fileFinder;
+			impl = copyFrom.impl;
+		}
+		/**
+		 * Creates a new {@link SwaggerProvider} object from this builder.
+		 *
+		 * <p>
+		 * Instantiates an instance of the {@link #type(Class) implementation class} or
+		 * else {@link BasicSwaggerProvider} if implementation class was not specified.
+		 *
+		 * @return A new {@link SwaggerProvider} object.
+		 */
+		public SwaggerProvider build() {
+			try {
+				if (impl != null)
+					return impl;
+				Class<? extends SwaggerProvider> ic = isConcrete(type) ? type : getDefaultType();
+				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+			} catch (Exception e) {
+				throw toHttpException(e, InternalServerError.class);
+			}
+		}
+
+		/**
+		 * Returns the var resolver in this builder if it's been specified.
+		 *
+		 * @return The var resolver.
+		 */
+		public Optional<VarResolver> varResolver() {
+			return Optional.ofNullable(varResolver == null ? null : varResolver.get());
+		}
+
+		/**
+		 * Returns the JSON schema generator in this builder if it's been specified.
+		 *
+		 * @return The JSON schema generator.
+		 */
+		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
+			return Optional.ofNullable(jsonSchemaGenerator == null ? null : jsonSchemaGenerator.get());
+		}
+
+		/**
+		 * Returns the messages in this builder if it's been specified.
+		 *
+		 * @return The messages.
+		 */
+		public Optional<Messages> messages() {
+			return Optional.ofNullable(messages == null ? null : messages.get());
+		}
+
+		/**
+		 * Returns the file finder in this builder if it's been specified.
+		 *
+		 * @return The file finder.
+		 */
+		public Optional<FileFinder> fileFinder() {
+			return Optional.ofNullable(fileFinder == null ? null : fileFinder.get());
+		}
+
+		/**
+		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
+		 *
+		 * @return The default implementation class if not specified via {@link #type(Class)}.
+		 */
+		protected Class<? extends SwaggerProvider> getDefaultType() {
+			return BasicSwaggerProvider.class;
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link SwaggerProvider} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder type(Class<? extends SwaggerProvider> value) {
+			type = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the variable resolver to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder varResolver(Supplier<VarResolver> value) {
+			varResolver = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the JSON-schema generator to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder jsonSchemaGenerator(Supplier<JsonSchemaGenerator> value) {
+			jsonSchemaGenerator = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the messages to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder messages(Supplier<Messages> value) {
+			messages = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the file-finder to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder fileFinder(Supplier<FileFinder> value) {
+			fileFinder = value;
+			return this;
+		}
+
+		/**
+		 * Specifies an already-instantiated bean for the {@link #build()} method too return.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder impl(SwaggerProvider value) {
+			impl = value;
+			return this;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the Swagger associated with the specified {@link Rest}-annotated class.

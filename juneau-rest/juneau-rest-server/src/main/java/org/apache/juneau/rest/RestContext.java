@@ -296,9 +296,7 @@ public class RestContext extends Context {
 			postCallMethods = builder.postCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 			restOperations = builder.restOperations(this).build();
 			restChildren = builder.restChildren(this).build();
-
-			Object r = resource.get();
-			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, varResolver);
+			swaggerProvider = builder.swaggerProvider().build();
 
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
@@ -347,116 +345,6 @@ public class RestContext extends Context {
 		for (String v : StringUtils.split(value))
 			s.add(v);
 		return Collections.unmodifiableSet(s);
-	}
-
-	/**
-	 * Instantiates the REST info provider for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link SwaggerProvider}.
-	 * 	<li>Looks for swagger provider set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#swaggerProvider(Class)}/{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
-	 * 			<li>{@link Rest#swaggerProvider()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createSwaggerProvider()</> method that returns {@link SwaggerProvider} on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
-	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
-	 * </ul>
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param fileFinder The file finder configured on this bean created by {@link RestContextBuilder#createFileFinder(BeanStore,Supplier)}.
-	 * @param messages The localized messages configured on this bean.
-	 * @param varResolver The variable resolver configured on this bean.
-	 * @return The info provider for this REST resource.
-	 * @throws Exception If info provider could not be instantiated.
-	 */
-	protected SwaggerProvider createSwaggerProvider(Object resource, RestContextBuilder builder, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
-
-		SwaggerProvider x = builder.swaggerProvider.value().orElse(null);
-
-		if (resource instanceof SwaggerProvider)
-			x = (SwaggerProvider)resource;
-
-		if (x == null)
-			x = beanStore.getBean(SwaggerProvider.class).orElse(null);
-
-		if (x == null)
-			x = createSwaggerProviderBuilder(resource, builder, beanStore, fileFinder, messages, varResolver).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(SwaggerProvider.class, x)
-			.beanCreateMethodFinder(SwaggerProvider.class, resource)
-			.find("createSwaggerProvider")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the REST API builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createSwaggerProvider(Object,RestContextBuilder,BeanStore,FileFinder,Messages,VarResolver)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * 	<br>Consists of all properties gathered through the builder and annotations on this class and all parent classes.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param fileFinder The file finder configured on this bean created by {@link RestContextBuilder#createFileFinder(BeanStore,Supplier)}.
-	 * @param messages The localized messages configured on this bean.
-	 * @param varResolver The variable resolver configured on this bean.
-	 * @return The REST API builder for this REST resource.
-	 * @throws Exception If REST API builder could not be instantiated.
-	 */
-	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
-
-		Class<? extends SwaggerProvider> c = builder.swaggerProvider.type().orElse(null);
-
-		SwaggerProviderBuilder x = SwaggerProvider
-				.create()
-				.beanStore(beanStore)
-				.fileFinder(fileFinder)
-				.messages(messages)
-				.varResolver(varResolver)
-				.jsonSchemaGenerator(beanStore.getBean(JsonSchemaGenerator.class).get())
-				.implClass(c);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(SwaggerProviderBuilder.class, x)
-			.beanCreateMethodFinder(SwaggerProviderBuilder.class, resource)
-			.find("createSwaggerProviderBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
-
 	}
 
 	/**

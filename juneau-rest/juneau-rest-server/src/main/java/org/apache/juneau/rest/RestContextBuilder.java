@@ -61,7 +61,6 @@ import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Defines the initial configuration of a <c>RestServlet</c> or <c>@Rest</c> annotated object.
@@ -147,6 +146,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 	private RestOperations.Builder restOperations;
 	private RestChildren.Builder restChildren;
+	private SwaggerProvider.Builder swaggerProvider;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -169,7 +169,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
-	BeanRef<SwaggerProvider> swaggerProvider = BeanRef.of(SwaggerProvider.class);
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
@@ -3267,8 +3266,92 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// swaggerProvider
+	//-----------------------------------------------------------------------------------------------------------------
 
-	private int TODO;
+	/**
+	 * Returns the list of rest operations.
+	 *
+	 * @return The list of rest operations.
+	 */
+	public final SwaggerProvider.Builder swaggerProvider() {
+		if (swaggerProvider == null)
+			swaggerProvider = createSwaggerProvider(beanStore(), resource());
+		return swaggerProvider;
+	}
+
+	/**
+	 * Instantiates the REST info provider for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link SwaggerProvider}.
+	 * 	<li>Looks for swagger provider set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#swaggerProvider(Class)}/{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
+	 * 			<li>{@link Rest#swaggerProvider()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createSwaggerProvider()</> method that returns {@link SwaggerProvider} on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
+	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The info provider for this REST resource.
+	 */
+	protected SwaggerProvider.Builder createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
+
+		Object r = resource.get();
+
+		Value<SwaggerProvider.Builder> v = Value.of(
+			SwaggerProvider
+				.create()
+				.beanStore(beanStore)
+				.varResolver(()->beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver bean not found.")))
+				.fileFinder(()->beanStore.getBean(FileFinder.class).orElseThrow(()->runtimeException("FileFinder bean not found.")))
+				.messages(()->beanStore.getBean(Messages.class).orElseThrow(()->runtimeException("Messages bean not found.")))
+				.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).orElseThrow(()->runtimeException("JsonSchemaGenerator bean not found.")))
+		);
+
+		beanStore.getBean(SwaggerProvider.Builder.class).map(x -> x.copy()).ifPresent(x -> v.set(x));
+
+		if (r instanceof SwaggerProvider)
+			v.get().impl((SwaggerProvider)r);
+
+		beanStore.getBean(SwaggerProvider.class).ifPresent(x -> v.get().impl(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(SwaggerProvider.Builder.class, v.get())
+			.beanCreateMethodFinder(SwaggerProvider.Builder.class, resource)
+			.find("createSwaggerProviderBuilder")
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(SwaggerProvider.Builder.class, v.get())
+			.beanCreateMethodFinder(SwaggerProvider.class, resource)
+			.find("createSwaggerProviderBuilder")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Miscellaneous settings
@@ -4628,7 +4711,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(Class<? extends SwaggerProvider> value) {
-		swaggerProvider.type(value);
+		swaggerProvider().type(value);
 		return this;
 	}
 
@@ -4644,7 +4727,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder swaggerProvider(SwaggerProvider value) {
-		swaggerProvider.value(value);
+		swaggerProvider().impl(value);
 		return this;
 	}
 
