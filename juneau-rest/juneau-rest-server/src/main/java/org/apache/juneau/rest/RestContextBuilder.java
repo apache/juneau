@@ -146,6 +146,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private DebugEnablement.Builder debugEnablement;
 	private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 	private RestOperations.Builder restOperations;
+	private RestChildren.Builder restChildren;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -3171,6 +3172,97 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// restChildren
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the list of rest operations.
+	 *
+	 * @param restContext The rest context.
+	 * @return The list of rest operations.
+	 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
+	 */
+	public final RestChildren.Builder restChildren(RestContext restContext) throws Exception {
+		if (restChildren == null)
+			restChildren = createRestChildren(beanStore(), resource(), restContext);
+		return restChildren;
+	}
+
+	/**
+	 * Instantiates the REST children builder for this REST resource.
+	 *
+	 * @param restContext The rest context.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet or bean that this context defines.
+	 * @return The default response headers for this REST object.
+	 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
+	 */
+	protected RestChildren.Builder createRestChildren(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
+
+		Value<RestChildren.Builder> v = Value.of(RestChildren.create().beanStore(beanStore).type(childrenClass));
+		Object r = resource.get();
+
+		// Initialize our child resources.
+		for (Object o : children) {
+			String path = null;
+
+			if (o instanceof RestChild) {
+				RestChild rc = (RestChild)o;
+				path = rc.path;
+				o = rc.resource;
+			}
+
+			RestContextBuilder cb = null;
+
+			if (o instanceof Class) {
+				Class<?> oc = (Class<?>)o;
+				// Don't allow specifying yourself as a child.  Causes an infinite loop.
+				if (oc == resourceClass)
+					continue;
+				cb = RestContext.create(oc, restContext, inner);
+				BeanStore bf = BeanStore.of(beanStore, resource).addBean(RestContextBuilder.class, cb);
+				if (bf.getBean(oc).isPresent()) {
+					o = (Supplier<?>)()->bf.getBean(oc).get();  // If we resolved via injection, always get it this way.
+				} else {
+					o = bf.createBean(oc);
+				}
+			} else {
+				cb = RestContext.create(o.getClass(), restContext, inner);
+			}
+
+			if (path != null)
+				cb.path(path);
+
+			RestContext cc = cb.init(o).build();
+
+			MethodInfo mi = ClassInfo.of(o).getMethod("setContext", RestContext.class);
+			if (mi != null)
+				mi.accessible().invoke(o, cc);
+
+			v.get().add(cc);
+		}
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestChildren.Builder.class, v.get())
+			.beanCreateMethodFinder(RestChildren.Builder.class, r)
+			.find("createRestChildrenBuilder")
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, r)
+			.addBean(RestChildren.Builder.class, v.get())
+			.beanCreateMethodFinder(RestChildren.class, r)
+			.find("createRestChildren")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+
 	private int TODO;
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4193,7 +4285,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * <p>
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
-	 * 	<li>{@link RestChildrenBuilder} - The builder for the object.
+	 * 	<li>{@link RestChildren.Builder} - The builder for the object.
 	 * 	<li>Any beans found in the specified bean store.
 	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
 	 * </ul>

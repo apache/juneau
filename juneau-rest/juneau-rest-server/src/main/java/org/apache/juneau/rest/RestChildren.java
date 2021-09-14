@@ -12,10 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
+
 import java.util.*;
 
 import javax.servlet.*;
 
+import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
 
@@ -24,33 +30,137 @@ import org.apache.juneau.rest.util.*;
  */
 public class RestChildren {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Represents a null value for the {@link Rest#restChildrenClass()} annotation.
 	 */
 	@SuppressWarnings("javadoc")
 	public final class Null extends RestChildren {
-		public Null(RestChildrenBuilder builder) throws Exception {
+		public Null(Builder builder) throws Exception {
 			super(builder);
 		}
 	}
-
-	private final Map<String,RestContext> children = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());
 
 	/**
 	 * Creates a new builder for this object.
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static RestChildrenBuilder create() {
-		return new RestChildrenBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
+
+		final List<RestContext> list = AList.create();
+
+		private BeanStore beanStore;
+		private Class<? extends RestChildren> type;
+		private RestChildren impl;
+
+		/**
+		 * Instantiates a {@link RestChildren} object based on the contents of this builder.
+		 *
+		 * @return A new {@link RestChildren} object.
+		 */
+		public RestChildren build() {
+			try {
+				if (impl != null)
+					return impl;
+				Class<? extends RestChildren> ic = firstNonNull(type, getDefaultImplClass());
+				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+			} catch (Exception e) {
+				throw toHttpException(e, InternalServerError.class);
+			}
+		}
+
+		/**
+		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
+		 *
+		 * @return The default implementation class if not specified via {@link #type(Class)}.
+		 */
+		protected Class<? extends RestChildren> getDefaultImplClass() {
+			return RestChildren.class;
+		}
+
+		/**
+		 * Adds a child resource to this builder.
+		 *
+		 * @param value The REST context of the child resource.
+		 * @return This object.
+		 */
+		public Builder add(RestContext value) {
+			list.add(value);
+			return this;
+		}
+
+		/**
+		 * Specifies a {@link RestChildren} implementation subclass to use.
+		 *
+		 * <p>
+		 * When specified, the {@link #build()} method will create an instance of that class instead of the default {@link RestChildren}.
+		 *
+		 * <p>
+		 * The subclass must have a public constructor that takes in any of the following arguments:
+		 * <ul>
+		 * 	<li>{@link Builder} - This object.
+		 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
+		 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
+		 * </ul>
+		 *
+		 * @param value The implementation class to build.
+		 * @return This object.
+		 */
+		public Builder type(Class<? extends RestChildren> value) {
+			type = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
+		 *
+		 * @param value The bean store to use for resolving constructor arguments.
+		 * @return This object.
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+
+		/**
+		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(RestChildren value) {
+			impl = value;
+			return this;
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Map<String,RestContext> children = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this object.
 	 */
-	public RestChildren(RestChildrenBuilder builder) {
+	public RestChildren(Builder builder) {
 		for (RestContext rc : builder.list)
 			children.put(rc.getPath(), rc);
 	}

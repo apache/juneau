@@ -295,6 +295,7 @@ public class RestContext extends Context {
 			preCallMethods = builder.preCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 			postCallMethods = builder.postCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
 			restOperations = builder.restOperations(this).build();
+			restChildren = builder.restChildren(this).build();
 
 			Object r = resource.get();
 
@@ -316,7 +317,6 @@ public class RestContext extends Context {
 				consumes = AList.unmodifiable(s);
 			}
 
-			restChildren = createRestChildren(r, builder, bs, builder.inner);
 
 			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, varResolver);
 
@@ -460,112 +460,6 @@ public class RestContext extends Context {
 
 		return x;
 
-	}
-
-	/**
-	 * Creates the builder for the children of this resource.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param servletConfig
-	 * 	The servlet config passed into the servlet by the servlet container.
-	 * @return The builder for the {@link RestChildren} object.
-	 * @throws Exception An error occurred.
-	 */
-	protected RestChildren createRestChildren(Object resource, RestContextBuilder builder, BeanStore beanStore, ServletConfig servletConfig) throws Exception {
-
-		RestChildren x = createRestChildrenBuilder(resource, builder, beanStore, servletConfig).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestChildren.class, x)
-			.beanCreateMethodFinder(RestChildren.class, resource)
-			.find("createRestChildren")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the REST children builder for this REST resource.
-	 *
-	 * <p>
-	 * Allows subclasses to intercept and modify the builder used by the {@link #createRestChildren(Object,RestContextBuilder,BeanStore,ServletConfig)} method.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param builder
-	 * 	The builder for this object.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
-	 * @param servletConfig
-	 * 	The servlet config passed into the servlet by the servlet container.
-	 * @return The REST children builder for this REST resource.
-	 * @throws Exception If REST children builder could not be instantiated.
-	 */
-	protected RestChildrenBuilder createRestChildrenBuilder(Object resource, RestContextBuilder builder, BeanStore beanStore, ServletConfig servletConfig) throws Exception {
-
-		RestChildrenBuilder x = RestChildren
-			.create()
-			.beanStore(beanStore)
-			.implClass(builder.childrenClass);
-
-		// Initialize our child resources.
-		for (Object o : builder.children) {
-			String path = null;
-
-			if (o instanceof RestChild) {
-				RestChild rc = (RestChild)o;
-				path = rc.path;
-				o = rc.resource;
-			}
-
-			RestContextBuilder cb = null;
-
-			if (o instanceof Class) {
-				Class<?> oc = (Class<?>)o;
-				// Don't allow specifying yourself as a child.  Causes an infinite loop.
-				if (oc == builder.resourceClass)
-					continue;
-				cb = RestContext.create(oc, this, servletConfig);
-				BeanStore bf = BeanStore.of(beanStore, resource).addBean(RestContextBuilder.class, cb);
-				if (bf.getBean(oc).isPresent()) {
-					o = (Supplier<?>)()->bf.getBean(oc).get();  // If we resolved via injection, always get it this way.
-				} else {
-					o = bf.createBean(oc);
-				}
-			} else {
-				cb = RestContext.create(o.getClass(), this, servletConfig);
-			}
-
-			if (path != null)
-				cb.path(path);
-
-			RestContext cc = cb.init(o).build();
-
-			MethodInfo mi = ClassInfo.of(o).getMethod("setContext", RestContext.class);
-			if (mi != null)
-				mi.accessible().invoke(o, cc);
-
-			x.add(cc);
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestChildrenBuilder.class, x)
-			.beanCreateMethodFinder(RestChildrenBuilder.class, resource)
-			.find("createRestChildrenBuilder")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**
