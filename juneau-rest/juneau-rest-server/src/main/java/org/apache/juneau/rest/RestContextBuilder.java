@@ -126,7 +126,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private DefaultClassList defaultClasses;
 	private DefaultSettingsMap defaultSettings;
 
-	private BeanStore beanStore;
+	private BeanStore rootBeanStore, beanStore;
 	private Config config;
 	private VarResolver.Builder varResolver;
 	private Logger logger;
@@ -196,6 +196,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			if (parentContext != null) {
 				defaultClasses = parentContext.defaultClasses.copy();
 				defaultSettings = parentContext.defaultSettings.copy();
+				rootBeanStore = parentContext.rootBeanStore;
 			} else {
 				defaultClasses = DefaultClassList.create();
 				defaultSettings = DefaultSettingsMap.create();
@@ -207,22 +208,17 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				.addBean(ServletConfig.class, ofNullable(servletConfig).orElse(this))
 				.addBean(ServletContext.class, ofNullable(servletConfig).orElse(this).getServletContext());
 
+			if (rootBeanStore == null)
+				rootBeanStore = beanStore.copy().build();
+
 			varResolver = createVarResolver(beanStore, resourceClass);
-
-			VarResolver vr = varResolver.build();
-			beanStore.addBean(VarResolver.class, vr);
-
-			// Find our config file.  It's the last non-empty @RestResource(config).
-			config = createConfig(beanStore, resourceClass);
-			beanStore.addBean(Config.class, config);
-
-			// Add our config file to the variable resolver.
-			varResolver.bean(Config.class, config);
-			vr = varResolver.build();
-			beanStore.addBean(VarResolver.class, vr);
+			beanStore.add(VarResolver.class, varResolver.build());
+			config = beanStore.add(Config.class, createConfig(beanStore, resourceClass));
+			beanStore.add(VarResolver.class, varResolver.bean(Config.class, config).build());
 
 			// Add the servlet init parameters to our properties.
 			if (servletConfig != null) {
+				VarResolver vr = beanStore.getBean(VarResolver.class).get();
 				for (Enumeration<String> ep = servletConfig.getInitParameterNames(); ep.hasMoreElements();) {
 					String p = ep.nextElement();
 					String initParam = servletConfig.getInitParameter(p);
@@ -420,6 +416,15 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public final BeanStore beanStore() {
 		return beanStore;
+	}
+
+	/**
+	 * Returns the root bean store.
+	 *
+	 * @return The root bean store.
+	 */
+	public final BeanStore rootBeanStore() {
+		return rootBeanStore;
 	}
 
 	/**

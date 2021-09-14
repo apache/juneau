@@ -178,7 +178,6 @@ public class RestContext extends Context {
 	private final SwaggerProvider swaggerProvider;
 	private final BasicHttpException initException;
 	private final RestContext parentContext;
-	private final BeanStore rootBeanStore;
 	private final BeanStore beanStore;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
@@ -192,6 +191,7 @@ public class RestContext extends Context {
 
 	final DefaultClassList defaultClasses;
 	final DefaultSettingsMap defaultSettings;
+	final BeanStore rootBeanStore;
 
 	// Lifecycle methods
 	private final MethodInvoker[]
@@ -236,11 +236,11 @@ public class RestContext extends Context {
 			resourceClass = builder.resourceClass;
 			resource = builder.resource;
 			parentContext = builder.parentContext;
-			rootBeanStore = builder.beanStore();
+			rootBeanStore = builder.rootBeanStore();
 			defaultClasses = builder.defaultClasses();
 			defaultSettings = builder.defaultSettings();
 
-			BeanStore bs = beanStore = rootBeanStore.copy().build();
+			BeanStore bs = beanStore = builder.beanStore();
 			beanStore
 				.addBean(BeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
