@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -171,6 +170,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
+	// TODO
 	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
@@ -468,8 +468,13 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected BeanStore.Builder createBeanStore(Class<?> resourceClass, Supplier<?> resource) {
 
-		// Create default builder.
-		Value<BeanStore.Builder> v = Value.of(BeanStore.create().parent(rootBeanStore()));
+		// Default value.
+		Value<BeanStore.Builder> v = Value.of(
+			BeanStore
+				.create()
+				.parent(rootBeanStore())
+				.outer(resource.get())
+		);
 
 		// Apply @Rest(beanStore).
 		ClassInfo.of(resourceClass)
@@ -478,17 +483,17 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.map(x -> x.beanStore())
 			.filter(x -> x != BeanStore.Null.class)
 			.reduce((x1,x2)->x2)
-			.ifPresent(x -> v.get().implClass(x));
+			.ifPresent(x -> v.get().type(x));
 
-		// Replace with builder:  public static BeanStore.Builder createBeanStore()
+		// Replace with builder from:  public [static] BeanStore.Builder createBeanStore(<args>)
 		v.get().build()
-			.beanCreateMethodFinder(BeanStore.Builder.class, resource.get())
+			.beanCreateMethodFinder(BeanStore.Builder.class)
 			.find("createBeanStore")
 			.run(x -> v.set(x));
 
-		// Replace with implementations:  public static BeanStore createBeanStore()
+		// Replace with bean from:  public [static] BeanStore createBeanStore(<args>)
 		v.get().build()
-			.beanCreateMethodFinder(BeanStore.class, resource.get())
+			.beanCreateMethodFinder(BeanStore.class)
 			.find("createBeanStore")
 			.run(x -> v.get().impl(x));
 
@@ -565,42 +570,36 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected VarResolver.Builder createVarResolver(BeanStore beanStore, Class<?> resourceClass) {
 
-		Value<VarResolver.Builder> v = Value.empty();
+		// Default value.
+		Value<VarResolver.Builder> v = Value.of(
+			VarResolver
+				.create()
+				.defaultVars()
+				.vars(createVars(beanStore, resourceClass))
+				.vars(FileVar.class)
+				.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build())
+		);
 
-		// Get builder from:  public static VarResolver.Builder createVarResolver()
+		// Replace with builder from bean store.
 		beanStore
-			.beanCreateMethodFinder(VarResolver.Builder.class, resourceClass)
-			.find("createVarResolver")
-			.run(x -> v.set(x));
+			.getBean(VarResolver.Builder.class)
+			.map(y -> y.copy())
+			.ifPresent(x -> v.set(x));
 
-		// Get builder from bean store.
-		if (v.isEmpty()) {
-			beanStore
-				.getBean(VarResolver.Builder.class)
-				.map(y -> y.copy())
-				.ifPresent(x -> v.set(x));
-		}
-
-		// Create default builder.
-		if (v.isEmpty()) {
-			v.set(
-				VarResolver
-					.create()
-					.defaultVars()
-					.vars(createVars(beanStore, resourceClass))
-					.vars(FileVar.class)
-					.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build())
-			);
-		}
-
-		// Get implementation from bean store.
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(VarResolver.class)
 			.ifPresent(x -> v.get().impl(x));
 
-		// Get implementation from:  public static VarResolver createVarResolver()
+		// Replace with builder from:  public [static] VarResolver.Builder createVarResolver(<args>)
 		beanStore
-			.beanCreateMethodFinder(VarResolver.class, resourceClass)
+			.beanCreateMethodFinder(VarResolver.Builder.class)
+			.find("createVarResolver")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] VarResolver createVarResolver(<args>)
+		beanStore
+			.beanCreateMethodFinder(VarResolver.class)
 			.addBean(VarResolver.Builder.class, v.get())
 			.find("createVarResolver")
 			.run(x -> v.get().impl(x));
@@ -630,42 +629,38 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected VarList createVars(BeanStore beanStore, Class<?> resourceClass) {
 
-		Value<VarList> v = Value.empty();
+		// Default value.
+		Value<VarList> v = Value.of(
+			VarList.of(
+				ConfigVar.class,
+				FileVar.class,
+				LocalizationVar.class,
+				RequestAttributeVar.class,
+				RequestFormDataVar.class,
+				RequestHeaderVar.class,
+				RequestPathVar.class,
+				RequestQueryVar.class,
+				RequestVar.class,
+				RequestSwaggerVar.class,
+				SerializedRequestAttrVar.class,
+				ServletInitParamVar.class,
+				SwaggerVar.class,
+				UrlVar.class,
+				UrlEncodeVar.class,
+				HtmlWidgetVar.class
+			)
+			.addDefault()
+		);
 
-		// Get implementation from bean store.
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(VarList.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		// Create default.
-		if (v.isEmpty()) {
-			v.set(
-				VarList.of(
-					ConfigVar.class,
-					FileVar.class,
-					LocalizationVar.class,
-					RequestAttributeVar.class,
-					RequestFormDataVar.class,
-					RequestHeaderVar.class,
-					RequestPathVar.class,
-					RequestQueryVar.class,
-					RequestVar.class,
-					RequestSwaggerVar.class,
-					SerializedRequestAttrVar.class,
-					ServletInitParamVar.class,
-					SwaggerVar.class,
-					UrlVar.class,
-					UrlEncodeVar.class,
-					HtmlWidgetVar.class
-				)
-				.addDefault()
-			);
-		}
-
-		// Get implementation from:  public static VarList createVars()
+		// Replace with bean from:  public [static] VarList createVars(<args>)
 		beanStore
-			.beanCreateMethodFinder(VarList.class, resourceClass)
+			.beanCreateMethodFinder(VarList.class)
 			.addBean(VarList.class, v.get())
 			.find("createVars")
 			.run(x -> v.set(x));
@@ -728,16 +723,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 
 		Value<Config> v = Value.empty();
 
-		// Get implementation from:  public static Config createConfig()
-		beanStore
-			.beanCreateMethodFinder(Config.class, resourceClass)
-			.find("createConfig")
-			.run(x -> v.set(x));
-
-		// Get implementation from bean store.
-		if (v.isEmpty())
-			beanStore.getBean(Config.class).ifPresent(x -> v.set(x));
-
 		// Find our config file.  It's the last non-empty @RestResource(config).
 		VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver not found."));
 		String cf = ClassInfo
@@ -762,6 +747,18 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			v.set(cb.build());
 		}
 
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(Config.class)
+			.ifPresent(x -> v.set(x));
+
+		// Replace with bean from:  public [static] Config createConfig(<args>)
+		beanStore
+			.beanCreateMethodFinder(Config.class)
+			.addBean(Config.class, v.get())
+			.find("createConfig")
+			.run(x -> v.set(x));
+
 		return v.get();
 	}
 
@@ -777,7 +774,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public final Logger logger() {
 		if (logger == null)
-			logger = createLogger(beanStore(), resource());
+			logger = createLogger(beanStore(), resourceClass);
 		return logger;
 	}
 
@@ -785,7 +782,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * Sets the logger to use for the REST resource.
 	 *
 	 * <p>
-	 * If not specified, the logger used is created by {@link #createLogger(BeanStore, Supplier)}.
+	 * If not specified, the logger used is created by {@link #createLogger(BeanStore, Class)}.
 	 *
 	 * @param value The logger to use for the REST resource.
 	 * @return This object.
@@ -812,25 +809,26 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
 	 * </ul>
 	 *
-	 * @param resource
-	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @param resourceClass
+	 * 	The REST servlet/bean class that this context is defined against.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
 	 * @return The logger for this REST resource.
 	 */
-	protected Logger createLogger(BeanStore beanStore, Supplier<?> resource) {
+	protected Logger createLogger(BeanStore beanStore, Class<?> resourceClass) {
 
-		Value<Logger> v = Value.empty();
-		Object r = resource.get();
+		// Default value.
+		Value<Logger> v = Value.of(
+			Logger.getLogger(resourceClass.getClass().getName())
+		);
 
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(Logger.class)
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty())
-			v.set(Logger.getLogger(className(r)));
-
+		// Replace with bean from:  public [static] Logger createLogger(<args>)
 		beanStore
 			.beanCreateMethodFinder(Logger.class)
 			.addBean(Logger.class, v.get())
@@ -884,33 +882,38 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected ThrownStore.Builder createThrownStore(BeanStore beanStore, Supplier<?> resource, RestContext parent) {
 
-		Value<ThrownStore.Builder> v = Value.empty();
-
-		beanStore
-			.getBean(ThrownStore.Builder.class)
-			.map(x -> x.copy())
-			.ifPresent(x->v.set(x));
-
-		beanStore
-			.beanCreateMethodFinder(ThrownStore.Builder.class)
-			.addBean(ThrownStore.Builder.class, v.get())
-			.find("createThrownStore")
-			.run(x -> v.set(x));
-
-		if (v.isEmpty()) {
-			v.set(
-				ThrownStore
-					.create()
-					.beanStore(beanStore)
-					.impl(parent == null ? null : parent.getThrownStore())
-			);
-		}
+		// Default value.
+		Value<ThrownStore.Builder> v = Value.of(
+			ThrownStore
+				.create()
+				.beanStore(beanStore)
+				.impl(parent == null ? null : parent.getThrownStore())
+		);
 
 		// Specify the implementation class if its set as a default.
 		defaultClasses()
 			.get(ThrownStore.class)
 			.ifPresent(x -> v.get().implClass(x));
 
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(ThrownStore.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(ThrownStore.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] ThrownStore.Builder createThrownStore(<args>)
+		beanStore
+			.beanCreateMethodFinder(ThrownStore.Builder.class)
+			.addBean(ThrownStore.Builder.class, v.get())
+			.find("createThrownStore")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] ThrownStore createThrownStore(<args>)
 		beanStore
 			.beanCreateMethodFinder(ThrownStore.class)
 			.addBean(ThrownStore.Builder.class, v.get())
@@ -946,32 +949,37 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodExecStore.Builder createMethodExecStore(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodExecStore.Builder> v = Value.empty();
-
-		beanStore
-			.getBean(MethodExecStore.Builder.class)
-			.map(x -> x.copy())
-			.ifPresent(x->v.set(x));
-
-		beanStore
-			.beanCreateMethodFinder(MethodExecStore.Builder.class)
-			.addBean(MethodExecStore.Builder.class, v.get())
-			.find("createMethodExecStore")
-			.run(x -> v.set(x));
-
-		if (v.isEmpty()) {
-			v.set(
-				MethodExecStore
-					.create()
-					.beanStore(beanStore)
-			);
-		}
+		// Default value.
+		Value<MethodExecStore.Builder> v = Value.of(
+			MethodExecStore
+				.create()
+				.beanStore(beanStore)
+		);
 
 		// Specify the implementation class if its set as a default.
 		defaultClasses()
 			.get(MethodExecStore.class)
 			.ifPresent(x -> v.get().implClass(x));
 
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(MethodExecStore.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(MethodExecStore.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] MethodExecStore.Builder createThrownStore(<args>)
+		beanStore
+			.beanCreateMethodFinder(MethodExecStore.Builder.class)
+			.addBean(MethodExecStore.Builder.class, v.get())
+			.find("createMethodExecStore")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] MethodExecStore createThrownStore(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodExecStore.class)
 			.addBean(MethodExecStore.Builder.class, v.get())
@@ -1080,20 +1088,30 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected Messages.Builder createMessages(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<Messages.Builder> v = Value.empty();
+		// Default value.
+		Value<Messages.Builder> v = Value.of(
+			Messages
+			.create(resourceClass)
+		);
 
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(Messages.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(Messages.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] Messages.Builder createMessages(<args>)
 		beanStore
 			.beanCreateMethodFinder(Messages.Builder.class)
 			.find("createMessages")
 			.run(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				Messages
-					.create(resourceClass)
-			);
-		}
-
+		// Replace with bean from:  public [static] Messages createMessages(<args>)
 		beanStore
 			.beanCreateMethodFinder(Messages.class)
 			.addBean(Messages.Builder.class, v.get())
@@ -1229,42 +1247,43 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected ResponseProcessorList.Builder createResponseProcessors(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<ResponseProcessorList.Builder> v = Value.empty();
+		// Default value.
+		Value<ResponseProcessorList.Builder> v = Value.of(
+			 ResponseProcessorList
+			 	.create()
+			 	.beanStore(beanStore)
+			 	.add(
+					ReaderProcessor.class,
+					InputStreamProcessor.class,
+					ThrowableProcessor.class,
+					HttpResponseProcessor.class,
+					HttpResourceProcessor.class,
+					HttpEntityProcessor.class,
+					ResponseBeanProcessor.class,
+					PlainTextPojoProcessor.class,
+					SerializedPojoProcessor.class
+				)
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(ResponseProcessorList.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				 ResponseProcessorList
-				 	.create()
-				 	.beanStore(beanStore)
-				 	.add(
-						ReaderProcessor.class,
-						InputStreamProcessor.class,
-						ThrowableProcessor.class,
-						HttpResponseProcessor.class,
-						HttpResourceProcessor.class,
-						HttpEntityProcessor.class,
-						ResponseBeanProcessor.class,
-						PlainTextPojoProcessor.class,
-						SerializedPojoProcessor.class
-					)
-			);
-		}
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(ResponseProcessorList.class)
+			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with builder from:  public [static] ResponseProcessorList.Builder createResponseProcessors(<args>)
 		beanStore
 			.beanCreateMethodFinder(ResponseProcessorList.Builder.class)
 			.addBean(ResponseProcessorList.Builder.class, v.get())
 			.find("createResponseProcessors")
 			.run(x -> v.set(x));
 
-		beanStore
-			.getBean(ResponseProcessorList.class)
-			.ifPresent(x -> v.get().impl(x));
-
+		// Replace with bean from:  public [static] ResponseProcessorList createResponseProcessors(<args>)
 		beanStore
 			.beanCreateMethodFinder(ResponseProcessorList.class)
 			.addBean(ResponseProcessorList.Builder.class, v.get())
@@ -1382,60 +1401,62 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestLogger.Builder createCallLogger(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<RestLogger.Builder> v = Value.empty();
+		// Default value.
+		Value<RestLogger.Builder> v = Value.of(
+			RestLogger
+				.create()
+				.beanStore(beanStore)
+				.normalRules(  // Rules when debugging is not enabled.
+					RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
+						.statusFilter(a -> a >= 500)
+						.level(SEVERE)
+						.requestDetail(HEADER)
+						.responseDetail(HEADER)
+						.build(),
+					RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
+						.statusFilter(a -> a >= 400)
+						.level(WARNING)
+						.requestDetail(STATUS_LINE)
+						.responseDetail(STATUS_LINE)
+						.build()
+				)
+				.debugRules(  // Rules when debugging is enabled.
+					RestLoggerRule.create()  // Log everything with full details.
+						.level(SEVERE)
+						.requestDetail(ENTITY)
+						.responseDetail(ENTITY)
+						.build()
+				)
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(RestLogger.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x-> v.set(x));
 
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(RestLogger.class)
+			.ifPresent(x-> v.get().impl(x));
+
+		// Replace with this bean.
+		resourceAs(RestLogger.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Specify the bean type if its set as a default.
+		defaultClasses()
+			.get(RestLogger.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from:  public [static] RestLogger.Builder createCallLogger(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestLogger.Builder.class)
 			.addBean(RestLogger.Builder.class, v.get())
 			.find("createCallLogger")
 			.run(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				RestLogger
-					.create()
-					.beanStore(beanStore)
-					.normalRules(  // Rules when debugging is not enabled.
-						RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
-							.statusFilter(a -> a >= 500)
-							.level(SEVERE)
-							.requestDetail(HEADER)
-							.responseDetail(HEADER)
-							.build(),
-						RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
-							.statusFilter(a -> a >= 400)
-							.level(WARNING)
-							.requestDetail(STATUS_LINE)
-							.responseDetail(STATUS_LINE)
-							.build()
-					)
-					.debugRules(  // Rules when debugging is enabled.
-						RestLoggerRule.create()  // Log everything with full details.
-							.level(SEVERE)
-							.requestDetail(ENTITY)
-							.responseDetail(ENTITY)
-							.build()
-					)
-			);
-		}
-
-		resourceAs(RestLogger.class)
-			.ifPresent(x -> v.get().impl(x));
-
-		beanStore
-			.getBean(RestLogger.class)
-			.ifPresent(x-> v.get().impl(x));
-
-		// Specify the implementation class if its set as a default.
-		defaultClasses()
-			.get(RestLogger.class)
-			.ifPresent(x -> v.get().implClass(x));
-
+		// Replace with bean from:  public [static] RestLogger createCallLogger(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestLogger.class)
 			.addBean(RestLogger.Builder.class, v.get())
@@ -1491,41 +1512,41 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<HttpPartSerializer.Creator> v = Value.empty();
+		// Default value.
+		Value<HttpPartSerializer.Creator> v = Value.of(
+			HttpPartSerializer
+				.creator()
+				.type(OpenApiSerializer.class)
+		);
 
-		// Get builder from bean store.
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(HttpPartSerializer.Creator.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		// Create default.
-		if (v.isEmpty()) {
-			v.set(
-				HttpPartSerializer
-					.creator()
-					.type(OpenApiSerializer.class)
-			);
-		}
-
-		// Set implementation if in bean store.
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(HttpPartSerializer.class)
 			.ifPresent(x -> v.get().impl(x));
 
-		// Set default type.
-		defaultClasses
+		// Replace with this bean.
+		resourceAs(HttpPartSerializer.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Specify the bean type if its set as a default.
+		defaultClasses()
 			.get(HttpPartSerializer.class)
 			.ifPresent(x -> v.get().type(x));
 
-		// Call:  public [static] HttpPartSerializer.Creator createPartSerializer(<anything-in-bean-store>)
+		// Replace with builder from:  public [static] HttpPartSerializer.Creator createPartSerializer(<args>)
 		beanStore
 			.beanCreateMethodFinder(HttpPartSerializer.Creator.class)
 			.addBean(HttpPartSerializer.Creator.class, v.get())
 			.find("createPartSerializer")
 			.run(x -> v.set(x));
 
-		// Call:  public [static] HttpPartSerializer createPartSerializer(<anything-in-bean-store>)
+		// Replace with bean from:  public [static] HttpPartSerializer createPartSerializer(<args>)
 		beanStore
 			.beanCreateMethodFinder(HttpPartSerializer.class)
 			.addBean(HttpPartSerializer.Creator.class, v.get())
@@ -1581,41 +1602,41 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected HttpPartParser.Creator createPartParser(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<HttpPartParser.Creator> v = Value.empty();
+		// Default value.
+		Value<HttpPartParser.Creator> v = Value.of(
+			HttpPartParser
+				.creator()
+				.type(OpenApiParser.class)
+		);
 
-		// Get builder from bean store.
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(HttpPartParser.Creator.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		// Create default.
-		if (v.isEmpty()) {
-			v.set(
-				HttpPartParser
-					.creator()
-					.type(OpenApiParser.class)
-			);
-		}
-
-		// Set implementation if in bean store.
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(HttpPartParser.class)
 			.ifPresent(x -> v.get().impl(x));
 
-		// Set default type.
-		defaultClasses
+		// Replace with this bean.
+		resourceAs(HttpPartParser.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Specify the bean type if its set as a default.
+		defaultClasses()
 			.get(HttpPartParser.class)
 			.ifPresent(x -> v.get().type(x));
 
-		// Call:  public [static] HttpPartParser.Creator createPartParser(<anything-in-bean-store>)
+		// Replace with builder from:  public [static] HttpPartParser.Creator createPartParser(<args>)
 		beanStore
 			.beanCreateMethodFinder(HttpPartParser.Creator.class)
 			.addBean(HttpPartParser.Creator.class, v.get())
 			.find("createPartParser")
 			.run(x -> v.set(x));
 
-		// Call:  public [static] HttpPartParser createPartParser(<anything-in-bean-store>)
+		// Replace with bean from:  public [static] HttpPartParser createPartParser(<args>)
 		beanStore
 			.beanCreateMethodFinder(HttpPartParser.class)
 			.addBean(HttpPartParser.Creator.class, v.get())
@@ -1665,29 +1686,30 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected JsonSchemaGeneratorBuilder createJsonSchemaGenerator(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<JsonSchemaGeneratorBuilder> v = Value.empty();
+		// Default value.
+		Value<JsonSchemaGeneratorBuilder> v = Value.of(
+			JsonSchemaGenerator.create()
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(JsonSchemaGeneratorBuilder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				JsonSchemaGenerator.create()
-			);
-		}
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(JsonSchemaGenerator.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with builder from:  public [static] JsonSchemaGeneratorBuilder createJsonSchemaGenerator(<args>)
 		beanStore
 			.beanCreateMethodFinder(JsonSchemaGeneratorBuilder.class)
 			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
 			.find("createJsonSchemaGenerator")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] JsonSchemaGenerator createJsonSchemaGenerator(<args>)
 		beanStore
 			.beanCreateMethodFinder(JsonSchemaGenerator.class)
 			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
@@ -1841,44 +1863,47 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected FileFinder.Builder createFileFinder(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<FileFinder.Builder> v = Value.empty();
+		// Default value.
+		Value<FileFinder.Builder> v = Value.of(
+			FileFinder
+				.create()
+				.beanStore(beanStore)
+				.dir("static")
+				.dir("htdocs")
+				.cp(resourceClass, "htdocs", true)
+				.cp(resourceClass, "/htdocs", true)
+				.caching(1_000_000)
+				.exclude("(?i).*\\.(class|properties)")
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(FileFinder.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				FileFinder
-					.create()
-					.beanStore(beanStore)
-					.dir("static")
-					.dir("htdocs")
-					.cp(resourceClass, "htdocs", true)
-					.cp(resourceClass, "/htdocs", true)
-					.caching(1_000_000)
-					.exclude("(?i).*\\.(class|properties)")
-			);
-		}
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(FileFinder.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with this bean.
 		resourceAs(FileFinder.class)
 			.ifPresent(x -> v.get().impl(x));
 
-		defaultClasses
+		// Specify the bean type if its set as a default.
+		defaultClasses()
 			.get(FileFinder.class)
 			.ifPresent(x -> v.get().type(x));
 
+		// Replace with builder from:  public [static] FileFinder.Builder createFileFinder(<args>)
 		beanStore
 			.beanCreateMethodFinder(FileFinder.Builder.class)
 			.addBean(FileFinder.Builder.class, v.get())
 			.find("createFileFinder")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] FileFinder createFileFinder(<args>)
 		beanStore
 			.beanCreateMethodFinder(FileFinder.class)
 			.addBean(FileFinder.Builder.class, v.get())
@@ -2023,45 +2048,48 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected StaticFiles.Builder createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<StaticFiles.Builder> v = Value.empty();
+		// Default value.
+		Value<StaticFiles.Builder> v = Value.of(
+			StaticFiles
+				.create()
+				.beanStore(beanStore)
+				.dir("static")
+				.dir("htdocs")
+				.cp(resourceClass, "htdocs", true)
+				.cp(resourceClass, "/htdocs", true)
+				.caching(1_000_000)
+				.exclude("(?i).*\\.(class|properties)")
+				.headers(cacheControl("max-age=86400, public"))
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(StaticFiles.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				StaticFiles
-					.create()
-					.beanStore(beanStore)
-					.dir("static")
-					.dir("htdocs")
-					.cp(resourceClass, "htdocs", true)
-					.cp(resourceClass, "/htdocs", true)
-					.caching(1_000_000)
-					.exclude("(?i).*\\.(class|properties)")
-					.headers(cacheControl("max-age=86400, public"))
-			);
-		}
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(StaticFiles.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with this bean.
 		resourceAs(StaticFiles.class)
 			.ifPresent(x -> v.get().impl(x));
 
-		defaultClasses
+		// Specify the bean type if its set as a default.
+		defaultClasses()
 			.get(StaticFiles.class)
 			.ifPresent(x -> v.get().type(x));
 
+		// Replace with builder from:  public [static] StaticFiles.Builder createStaticFiles(<args>)
 		beanStore
 			.beanCreateMethodFinder(StaticFiles.Builder.class)
 			.addBean(StaticFiles.Builder.class, v.get())
 			.find("createStaticFiles")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] StaticFiles createStaticFiles(<args>)
 		beanStore
 			.beanCreateMethodFinder(StaticFiles.class)
 			.addBean(StaticFiles.Builder.class, v.get())
@@ -2188,26 +2216,30 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected HeaderList.Builder createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<HeaderList.Builder> v = Value.empty();
+		// Default value.
+		Value<HeaderList.Builder> v = Value.of(
+			HeaderList.create()
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean("RestContext.defaultRequestHeaders", HeaderList.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty())
-			v.set(HeaderList.create());
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean("RestContext.defaultRequestHeaders", HeaderList.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with builder from:  public [static] HeaderList.Builder createDefaultRequestHeaders(<args>)
 		beanStore
 			.beanCreateMethodFinder(HeaderList.Builder.class)
 			.addBean(HeaderList.Builder.class, v.get())
 			.find("createDefaultRequestHeaders")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] HeaderList createDefaultRequestHeaders(<args>)
 		beanStore
 			.beanCreateMethodFinder(HeaderList.class)
 			.addBean(HeaderList.Builder.class, v.get())
@@ -2300,26 +2332,30 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected HeaderList.Builder createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<HeaderList.Builder> v = Value.empty();
+		// Default value.
+		Value<HeaderList.Builder> v = Value.of(
+			HeaderList.create()
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean("RestContext.defaultResponseHeaders", HeaderList.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty())
-			v.set(HeaderList.create());
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean("RestContext.defaultResponseHeaders", HeaderList.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with builder from:  public [static] HeaderList.Builder createDefaultResponseHeaders(<args>)
 		beanStore
 			.beanCreateMethodFinder(HeaderList.Builder.class)
 			.addBean(HeaderList.Builder.class, v.get())
 			.find("createDefaultResponseHeaders")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] HeaderList createDefaultResponseHeaders(<args>)
 		beanStore
 			.beanCreateMethodFinder(HeaderList.class)
 			.addBean(HeaderList.Builder.class, v.get())
@@ -2409,16 +2445,18 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected NamedAttributeList createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<NamedAttributeList> v = Value.empty();
+		// Default value.
+		Value<NamedAttributeList> v = Value.of(
+			NamedAttributeList.create()
+		);
 
+		// Replace with bean from bean store.
 		beanStore
 			.getBean("RestContext.defaultRequestAttributes", NamedAttributeList.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty())
-			v.set(NamedAttributeList.create());
-
+		// Replace with bean from:  public [static] NamedAttributeList createDefaultRequestAttributes(<args>)
 		beanStore
 			.beanCreateMethodFinder(NamedAttributeList.class)
 			.addBean(NamedAttributeList.class, v.get())
@@ -2542,72 +2580,73 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestOpArgList.Builder createRestOpArgs(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<RestOpArgList.Builder> v = Value.empty();
+		// Default value.
+		Value<RestOpArgList.Builder> v = Value.of(
+			RestOpArgList
+				.of(
+					AttributeArg.class,
+					BodyArg.class,
+					ConfigArg.class,
+					FormDataArg.class,
+					HasFormDataArg.class,
+					HasQueryArg.class,
+					HeaderArg.class,
+					HttpServletRequestArg.class,
+					HttpServletResponseArg.class,
+					InputStreamArg.class,
+					InputStreamParserArg.class,
+					LocaleArg.class,
+					MessagesArg.class,
+					MethodArg.class,
+					OutputStreamArg.class,
+					ParserArg.class,
+					PathArg.class,
+					QueryArg.class,
+					ReaderArg.class,
+					ReaderParserArg.class,
+					RequestAttributesArg.class,
+					RequestBeanArg.class,
+					RequestBodyArg.class,
+					RequestFormDataArg.class,
+					RequestHeadersArg.class,
+					RequestPathArg.class,
+					RequestQueryArg.class,
+					ResourceBundleArg.class,
+					ResponseBeanArg.class,
+					ResponseHeaderArg.class,
+					ResponseStatusArg.class,
+					RestContextArg.class,
+					RestRequestArg.class,
+					ServetInputStreamArg.class,
+					ServletOutputStreamArg.class,
+					SwaggerArg.class,
+					TimeZoneArg.class,
+					UriContextArg.class,
+					UriResolverArg.class,
+					WriterArg.class,
+					DefaultArg.class
+				)
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean("RestContext.restOpArgs", RestOpArgList.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				RestOpArgList
-					.of(
-						AttributeArg.class,
-						BodyArg.class,
-						ConfigArg.class,
-						FormDataArg.class,
-						HasFormDataArg.class,
-						HasQueryArg.class,
-						HeaderArg.class,
-						HttpServletRequestArg.class,
-						HttpServletResponseArg.class,
-						InputStreamArg.class,
-						InputStreamParserArg.class,
-						LocaleArg.class,
-						MessagesArg.class,
-						MethodArg.class,
-						OutputStreamArg.class,
-						ParserArg.class,
-						PathArg.class,
-						QueryArg.class,
-						ReaderArg.class,
-						ReaderParserArg.class,
-						RequestAttributesArg.class,
-						RequestBeanArg.class,
-						RequestBodyArg.class,
-						RequestFormDataArg.class,
-						RequestHeadersArg.class,
-						RequestPathArg.class,
-						RequestQueryArg.class,
-						ResourceBundleArg.class,
-						ResponseBeanArg.class,
-						ResponseHeaderArg.class,
-						ResponseStatusArg.class,
-						RestContextArg.class,
-						RestRequestArg.class,
-						ServetInputStreamArg.class,
-						ServletOutputStreamArg.class,
-						SwaggerArg.class,
-						TimeZoneArg.class,
-						UriContextArg.class,
-						UriResolverArg.class,
-						WriterArg.class,
-						DefaultArg.class
-					)
-			);
-		}
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean("RestContext.restOpArgs", RestOpArgList.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with builder from:  public [static] RestOpArgList.Builder createRestOpArgs(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestOpArgList.Builder.class)
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.find("createRestOpArgs")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] RestOpArgList createRestOpArgs(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestOpArgList.class)
 			.addBean(RestOpArgList.Builder.class, v.get())
@@ -2643,49 +2682,50 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestOpArgList.Builder createHookMethodArgs(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<RestOpArgList.Builder> v = Value.empty();
+		// Default value.
+		Value<RestOpArgList.Builder> v = Value.of(
+			RestOpArgList
+				.of(
+					ConfigArg.class,
+					HeaderArg.class,
+					HttpServletRequestArg.class,
+					HttpServletResponseArg.class,
+					InputStreamArg.class,
+					LocaleArg.class,
+					MessagesArg.class,
+					MethodArg.class,
+					OutputStreamArg.class,
+					ReaderArg.class,
+					ResourceBundleArg.class,
+					RestContextArg.class,
+					RestRequestArg.class,
+					ServetInputStreamArg.class,
+					ServletOutputStreamArg.class,
+					TimeZoneArg.class,
+					WriterArg.class,
+					DefaultArg.class
+				)
+		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean("RestContext.hookMethodArgs", RestOpArgList.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			v.set(
-				RestOpArgList
-					.of(
-						ConfigArg.class,
-						HeaderArg.class,
-						HttpServletRequestArg.class,
-						HttpServletResponseArg.class,
-						InputStreamArg.class,
-						LocaleArg.class,
-						MessagesArg.class,
-						MethodArg.class,
-						OutputStreamArg.class,
-						ReaderArg.class,
-						ResourceBundleArg.class,
-						RestContextArg.class,
-						RestRequestArg.class,
-						ServetInputStreamArg.class,
-						ServletOutputStreamArg.class,
-						TimeZoneArg.class,
-						WriterArg.class,
-						DefaultArg.class
-					)
-			);
-		}
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean("RestContext.hookMethodArgs", RestOpArgList.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with builder from:  public [static] RestOpArgList.Builder createHookMethodArgs(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestOpArgList.Builder.class)
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.find("createHookMethodArgs")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] RestOpArgList createHookMethodArgs(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestOpArgList.class)
 			.addBean(RestOpArgList.Builder.class, v.get())
@@ -2786,53 +2826,56 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected DebugEnablement.Builder createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<DebugEnablement.Builder> v = Value.empty();
+		// Default value.
+		Value<DebugEnablement.Builder> v = Value.of(
+			DebugEnablement
+				.create()
+				.beanStore(beanStore)
+		);
 
+		// Default debug enablement if not overridden at class/method level.
+		Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+		v.get().defaultEnable(debugDefault);
+
+		// Gather @RestOp(debug) settings.
+		for (MethodInfo mi : ClassInfo.ofProxy(resource.get()).getPublicMethods()) {
+			mi
+				.getAnnotationGroupList(RestOp.class)
+				.getValues(String.class, "debug")
+				.stream()
+				.filter(y->!y.isEmpty())
+				.findFirst()
+				.ifPresent(x -> v.get().enable(Enablement.fromString(x), mi.getFullName()));
+		}
+
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(DebugEnablement.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		if (v.isEmpty()) {
-			DebugEnablement.Builder b = DebugEnablement
-				.create()
-				.beanStore(beanStore);
-
-			// Default debug enablement if not overridden at class/method level.
-			Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
-			b.defaultEnable(debugDefault);
-
-			// Gather @RestOp(debug) settings.
-			for (MethodInfo mi : ClassInfo.ofProxy(resource.get()).getPublicMethods()) {
-				mi
-					.getAnnotationGroupList(RestOp.class)
-					.getValues(String.class, "debug")
-					.stream()
-					.filter(y->!y.isEmpty())
-					.findFirst()
-					.ifPresent(x -> b.enable(Enablement.fromString(x), mi.getFullName()));
-			}
-
-			v.set(b);
-		}
-
-		resourceAs(DebugEnablement.class)
-			.ifPresent(x -> v.get().impl(x));
-
-		defaultClasses
-			.get(DebugEnablement.class)
-			.ifPresent(x -> v.get().type(x));
-
+		// Replace with bean from bean store.
 		beanStore
 			.getBean(DebugEnablement.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with this bean.
+		resourceAs(DebugEnablement.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(DebugEnablement.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from:  public [static] DebugEnablement.Builder createDebugEnablement(<args>)
 		beanStore
 			.beanCreateMethodFinder(DebugEnablement.Builder.class)
 			.addBean(DebugEnablement.Builder.class, v.get())
 			.find("createDebugEnablement")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] DebugEnablement createDebugEnablement(<args>)
 		beanStore
 			.beanCreateMethodFinder(DebugEnablement.class)
 			.addBean(DebugEnablement.Builder.class, v.get())
@@ -2868,8 +2911,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createStartCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.START_CALL));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.START_CALL)
+		);
 
+		// Replace with bean from:  public [static] MethodList createStartCallMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -2905,8 +2952,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createEndCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.END_CALL));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.END_CALL)
+		);
 
+		// Replace with bean from:  public [static] MethodList createEndCallMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -2942,8 +2993,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createPostInitMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.POST_INIT));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.POST_INIT)
+		);
 
+		// Replace with bean from:  public [static] MethodList createPostInitMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -2979,8 +3034,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createPostInitChildFirstMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.POST_INIT_CHILD_FIRST));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.POST_INIT_CHILD_FIRST)
+		);
 
+		// Replace with bean from:  public [static] MethodList createPostInitChildFirstMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -3015,8 +3074,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createDestroyMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.DESTROY));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.DESTROY)
+		);
 
+		// Replace with bean from:  public [static] MethodList createDestroyMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -3052,8 +3115,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createPreCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.PRE_CALL));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.PRE_CALL)
+		);
 
+		// Replace with bean from:  public [static] MethodList createPreCallMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -3089,8 +3156,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected MethodList createPostCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
-		Value<MethodList> v = Value.of(getHookMethods(resource, HookEvent.POST_CALL));
+		// Default value.
+		Value<MethodList> v = Value.of(
+			getHookMethods(resource, HookEvent.POST_CALL)
+		);
 
+		// Replace with bean from:  public [static] MethodList createPostCallMethods(<args>)
 		beanStore
 			.beanCreateMethodFinder(MethodList.class)
 			.addBean(MethodList.class, v.get())
@@ -3130,7 +3201,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestOperations.Builder createRestOperations(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws RestServletException {
 
-		Value<RestOperations.Builder> v = Value.of(RestOperations.create());
+		// Default value.
+		Value<RestOperations.Builder> v = Value.of(
+			RestOperations.create()
+		);
 
 		ClassInfo rci = ClassInfo.of(resource.get());
 
@@ -3183,12 +3257,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			}
 		}
 
+		// Replace with builder from:  public [static] RestOperations.Builder createRestOperations(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestOperations.Builder.class)
 			.addBean(RestOperations.Builder.class, v.get())
-			.find("createRestOperationsBuilder")
+			.find("createRestOperations")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] RestOperations createRestOperations(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestOperations.class)
 			.addBean(RestOperations.Builder.class, v.get())
@@ -3228,7 +3304,13 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected RestChildren.Builder createRestChildren(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
-		Value<RestChildren.Builder> v = Value.of(RestChildren.create().beanStore(beanStore).type(childrenClass));
+		// Default value.
+		Value<RestChildren.Builder> v = Value.of(
+			RestChildren
+				.create()
+				.beanStore(beanStore)
+				.type(childrenClass)
+			);
 
 		// Initialize our child resources.
 		for (Object o : children) {
@@ -3274,12 +3356,14 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			v.get().add(cc);
 		}
 
+		// Replace with builder from:  public [static] RestChildren.Builder createRestChildren(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestChildren.Builder.class)
 			.addBean(RestChildren.Builder.class, v.get())
-			.find("createRestChildrenBuilder")
+			.find("createRestChildren")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] RestChildren createRestChildren(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestChildren.class)
 			.addBean(RestChildren.Builder.class, v.get())
@@ -3340,6 +3424,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	protected SwaggerProvider.Builder createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
 
+		// Default value.
 		Value<SwaggerProvider.Builder> v = Value.of(
 			SwaggerProvider
 				.create()
@@ -3350,28 +3435,33 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).orElseThrow(()->runtimeException("JsonSchemaGenerator bean not found.")))
 		);
 
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(SwaggerProvider.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
 
-		resourceAs(SwaggerProvider.class)
-			.ifPresent(x -> v.get().impl(x));
-
+		// Replace with builder from bean store.
 		beanStore
 			.getBean(SwaggerProvider.class)
 			.ifPresent(x -> v.get().impl(x));
 
+		// Replace with this bean.
+		resourceAs(SwaggerProvider.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Replace with builder from:  public [static] SwaggerProvider.Builder createSwaggerProvider(<args>)
 		beanStore
 			.beanCreateMethodFinder(SwaggerProvider.Builder.class)
 			.addBean(SwaggerProvider.Builder.class, v.get())
-			.find("createSwaggerProviderBuilder")
+			.find("createSwaggerProvider")
 			.run(x -> v.set(x));
 
+		// Replace with bean from:  public [static] SwaggerProvider createSwaggerProvider(<args>)
 		beanStore
 			.beanCreateMethodFinder(SwaggerProvider.class)
 			.addBean(SwaggerProvider.Builder.class, v.get())
-			.find("createSwaggerProviderBuilder")
+			.find("createSwaggerProvider")
 			.run(x -> v.get().impl(x));
 
 		return v.get();
@@ -4092,7 +4182,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		uriResolution = value;
 		return this;
 	}
-
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods that give access to the config file, var resolver, and properties.

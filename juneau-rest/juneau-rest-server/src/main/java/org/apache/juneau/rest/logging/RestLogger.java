@@ -34,7 +34,7 @@ import org.apache.juneau.rest.annotation.*;
  * Interface class used for logging HTTP requests.
  *
  * <p>
- * The {@link Builder#implClass(Class)} method has been provided for easy extension of this class.
+ * The {@link Builder#type(Class)} method has been provided for easy extension of this class.
  *
  * <p>
  * The following default implementations are also provided:
@@ -159,7 +159,7 @@ public interface RestLogger {
 		RestLoggingDetail requestDetail, responseDetail;
 		Level level;
 		BeanStore beanStore;
-		Class<? extends RestLogger> implClass;
+		Class<? extends RestLogger> type;
 		RestLogger impl;
 
 		/**
@@ -183,7 +183,7 @@ public interface RestLogger {
 			responseDetail = copyFrom.responseDetail;
 			level = copyFrom.level;
 			beanStore = copyFrom.beanStore;
-			implClass = copyFrom.implClass;
+			type = copyFrom.type;
 			impl = copyFrom.impl;
 		}
 
@@ -191,7 +191,7 @@ public interface RestLogger {
 		 * Creates a new {@link RestLogger} object from this builder.
 		 *
 		 * <p>
-		 * Instantiates an instance of the {@link #implClass(Class) implementation class} or
+		 * Instantiates an instance of the {@link #type(Class) implementation class} or
 		 * else {@link BasicRestLogger} if implementation class was not specified.
 		 *
 		 * @return A new {@link RestLogger} object.
@@ -200,7 +200,7 @@ public interface RestLogger {
 			try {
 				if (impl != null)
 					return impl;
-				Class<? extends RestLogger> ic = isConcrete(implClass) ? implClass : BasicRestLogger.class;
+				Class<? extends RestLogger> ic = isConcrete(type) ? type : BasicRestLogger.class;
 				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
@@ -224,8 +224,8 @@ public interface RestLogger {
 		 * @param value The new value for this setting.
 		 * @return  This object.
 		 */
-		public Builder implClass(Class<? extends RestLogger> value) {
-			implClass = value;
+		public Builder type(Class<? extends RestLogger> value) {
+			type = value;
 			return this;
 		}
 

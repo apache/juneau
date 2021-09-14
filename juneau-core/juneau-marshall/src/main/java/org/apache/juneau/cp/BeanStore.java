@@ -91,7 +91,7 @@ public class BeanStore {
 	 */
 	public static class Builder {
 
-		Class<? extends BeanStore> implClass = BeanStore.class;
+		Class<? extends BeanStore> type = BeanStore.class;
 		BeanStore impl;
 		Object outer;
 		BeanStore parent;
@@ -108,7 +108,7 @@ public class BeanStore {
 		 * @param copyFrom The bean store to copy from.
 		 */
 		protected Builder(BeanStore copyFrom) {
-			implClass = copyFrom.getClass();
+			type = copyFrom.getClass();
 			outer = copyFrom.outer.orElse(null);
 			parent = copyFrom.parent.orElse(null);
 			readOnly = copyFrom.readOnly;
@@ -123,9 +123,9 @@ public class BeanStore {
 			try {
 				if (impl != null)
 					return impl;
-				if (implClass == BeanStore.class)
+				if (type == BeanStore.class)
 					return new BeanStore(this);
-				Class<? extends BeanStore> ic = isConcrete(implClass) ? implClass : BeanStore.class;
+				Class<? extends BeanStore> ic = isConcrete(type) ? type : BeanStore.class;
 				return new BeanStore().addBeans(Builder.class, this).createBean(ic);
 			} catch (ExecutableException e) {
 				throw runtimeException(e);
@@ -139,8 +139,8 @@ public class BeanStore {
 		 * @return  This object.
 		 */
 		@FluentSetter
-		public Builder implClass(Class<? extends BeanStore> value) {
-			implClass = value;
+		public Builder type(Class<? extends BeanStore> value) {
+			type = value;
 			return this;
 		}
 

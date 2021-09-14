@@ -155,11 +155,11 @@ public class Messages extends ResourceBundle {
 	public static class Builder {
 
 		Class<?> forClass;
-		Locale locale = Locale.getDefault();
+		Locale locale;
 		Messages impl;
 		String name;
 		Messages parent;
-		List<Tuple2<Class<?>,String>> locations = new ArrayList<>();
+		List<Tuple2<Class<?>,String>> locations;
 
 		private String[] baseNames = {"{package}.{name}","{package}.i18n.{name}","{package}.nls.{name}","{package}.messages.{name}"};
 
@@ -171,6 +171,22 @@ public class Messages extends ResourceBundle {
 		protected Builder(Class<?> forClass) {
 			this.forClass = forClass;
 			this.name = forClass.getSimpleName();
+			locations = new ArrayList<>();
+			locale = Locale.getDefault();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			forClass = copyFrom.forClass;
+			locale = copyFrom.locale;
+			impl = copyFrom.impl;
+			name = copyFrom.name;
+			parent = copyFrom.parent;
+			locations = new ArrayList<>(copyFrom.locations);
 		}
 
 		/**
@@ -317,6 +333,15 @@ public class Messages extends ResourceBundle {
 					return rb;
 			}
 			return null;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
 		}
 	}
 

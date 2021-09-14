@@ -1087,7 +1087,7 @@ public class RestAnnotation {
 			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
 			string(a.path()).ifPresent(x -> b.path(x));
 			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
-			type(a.callLogger()).ifPresent(x -> b.callLogger().implClass(x));
+			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
 			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
 			type(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));
 			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
