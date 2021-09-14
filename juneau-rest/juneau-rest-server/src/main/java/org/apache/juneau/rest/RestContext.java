@@ -298,27 +298,24 @@ public class RestContext extends Context {
 			restChildren = builder.restChildren(this).build();
 
 			Object r = resource.get();
+			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, varResolver);
 
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
-			if (builder.produces != null)
-				produces = AList.unmodifiable(builder.produces);
-			else {
-				Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getSerializers().getSupportedMediaTypes());
-				opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-				produces = AList.unmodifiable(s);
-			}
-
-			if (builder.consumes != null)
-				consumes = AList.unmodifiable(builder.consumes);
-			else {
-				Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getParsers().getSupportedMediaTypes());
-				opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-				consumes = AList.unmodifiable(s);
-			}
-
-
-			swaggerProvider = createSwaggerProvider(r, builder, bs, fileFinder, messages, varResolver);
+			produces = builder.produces().orElseGet(
+				()->{
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
+					return AList.unmodifiable(s);
+				}
+			);
+			consumes = builder.consumes().orElseGet(
+				()->{
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getParsers().getSupportedMediaTypes());
+					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
+					return AList.unmodifiable(s);
+				}
+			);
 
 		} catch (BasicHttpException e) {
 			_initException = e;

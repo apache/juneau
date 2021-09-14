@@ -4532,6 +4532,15 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
+	 * Returns the media types produced by this resource if it's manually specified.
+	 *
+	 * @return The media types.
+	 */
+	public Optional<List<MediaType>> produces() {
+		return ofNullable(produces);
+	}
+
+	/**
 	 * Supported content media types.
 	 *
 	 * <p>
@@ -4583,6 +4592,15 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		else
 			consumes.addAll(Arrays.asList(values));
 		return this;
+	}
+
+	/**
+	 * Returns the media types consumed by this resource if it's manually specified.
+	 *
+	 * @return The media types.
+	 */
+	public Optional<List<MediaType>> consumes() {
+		return ofNullable(consumes);
 	}
 
 	/**
