@@ -583,6 +583,29 @@ public class BeanStore {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param c The bean type to create.
+	 * @param resourceClass The class containing the bean creator method.
+	 * @return The created bean or the default value if method could not be found.
+	 */
+	public <T> BeanCreateMethodFinder<T> beanCreateMethodFinder(Class<T> c, Class<?> resourceClass) {
+		return new BeanCreateMethodFinder<>(c, resourceClass, this);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param c The bean type to create.
+	 * @return The created bean or the default value if method could not be found.
+	 */
+	public <T> BeanCreateMethodFinder<T> beanCreateMethodFinder(Class<T> c) {
+		if (outer == null)
+			throw runtimeException("Method cannot be used without outer bean definition.");
+		return new BeanCreateMethodFinder<>(c, outer, this);
+	}
+
+	/**
 	 * Given the list of param types, returns a list of types that are missing from this factory.
 	 *
 	 * @param params The param types to chec.

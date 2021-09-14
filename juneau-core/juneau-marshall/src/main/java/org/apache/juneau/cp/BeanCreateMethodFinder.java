@@ -32,6 +32,7 @@ import org.apache.juneau.reflect.*;
 public class BeanCreateMethodFinder<T> {
 
 	private Class<T> beanType;
+	private final Class<?> resourceClass;
 	private final Object resource;
 	private final BeanStore beanStore;
 
@@ -43,7 +44,27 @@ public class BeanCreateMethodFinder<T> {
 	BeanCreateMethodFinder(Class<T> beanType, Object resource, BeanStore beanStore) {
 		this.beanType = beanType;
 		this.resource = resource;
-		this.beanStore = beanStore;
+		this.resourceClass = resource.getClass();
+		this.beanStore = BeanStore.of(beanStore, resource);
+	}
+
+	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BeanStore beanStore) {
+		this.beanType = beanType;
+		this.resource = null;
+		this.resourceClass = resourceClass;
+		this.beanStore = BeanStore.of(beanStore);
+	}
+
+	/**
+	 * Adds a bean to the lookup for parameters.
+	 *
+	 * @param c The bean type.
+	 * @param t The bean.
+	 * @return This object.
+	 */
+	public <T2> BeanCreateMethodFinder<T> addBean(Class<T2> c, T2 t) {
+		beanStore.addBean(c, t);
+		return this;
 	}
 
 	/**
@@ -73,11 +94,11 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public BeanCreateMethodFinder<T> find(String methodName, Class<?>...requiredParams) {
 		if (method == null) {
-			ClassInfo ci = ClassInfo.of(resource);
+			ClassInfo ci = ClassInfo.of(resourceClass);
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(beanType) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
 					List<ClassInfo> missing = beanStore.getMissingParamTypes(m.getParams());
-					if (missing.isEmpty() && m.hasAllArgs(requiredParams)) {
+					if (missing.isEmpty() && m.hasAllArgs(requiredParams) && (m.isNotStatic() || resource != null)) {
 						this.method = m;
 						this.args = beanStore.getParams(m.getParams());
 					}
