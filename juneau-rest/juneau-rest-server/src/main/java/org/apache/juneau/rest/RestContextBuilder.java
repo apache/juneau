@@ -115,6 +115,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	// Read-only snapshots of these will be made in RestServletContext.
 	//-----------------------------------------------------------------------------------------------------------------
 
+	private boolean initialized;
+
 	Supplier<?> resource;
 	ServletContext servletContext;
 
@@ -224,6 +226,11 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * @throws ServletException If hook method calls failed.
 	 */
 	public RestContextBuilder init(Supplier<?> resource) throws ServletException {
+
+		if (initialized)
+			return this;
+		initialized = true;
+
 		this.resource = resource;
 		Supplier<?> r = this.resource;
 		Class<?> rc = resourceClass;
