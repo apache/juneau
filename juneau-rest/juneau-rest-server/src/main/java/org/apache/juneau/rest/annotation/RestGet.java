@@ -383,7 +383,7 @@ public @interface RestGet {
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#guards(Class...)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#guards()}
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};

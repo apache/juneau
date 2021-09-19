@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Optional.*;
 
@@ -36,6 +37,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.guards.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -57,6 +59,12 @@ public class RestOpContextBuilder extends ContextBuilder {
 
 	private RestConverterList.Builder converters;
 	private BeanContextBuilder beanContext;
+	private RestGuardList.Builder guards;
+	private EncoderGroup.Builder encoders;
+	private SerializerGroup.Builder serializers;
+	private ParserGroup.Builder parsers;
+	private HttpPartSerializer.Creator partSerializer;
+	private HttpPartParser.Creator partParser;
 
 	PartList.Builder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
@@ -64,12 +72,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 	RestMatcherList.Builder restMatchers;
 	List<MediaType> produces, consumes;
 	Set<String> roleGuard, rolesDeclared;
-	RestGuardList.Builder guards = RestGuardList.create();
-	EncoderGroup.Builder encoders;
-	SerializerGroup.Builder serializers;
-	ParserGroup.Builder parsers;
-	HttpPartSerializer.Creator partSerializer;
-	HttpPartParser.Creator partParser;
 	boolean dotAll;
 
 	Charset defaultCharset;
@@ -561,6 +563,108 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return v.get();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// guards
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link RestGuardList} object in the REST context.
+	 *
+	 * @return The builder for the {@link RestGuardList} object in the REST context.
+	 */
+	public final RestGuardList.Builder guards() {
+		if (guards == null)
+			guards = createGuards(beanStore(), resource());
+		return guards;
+	}
+
+	/**
+	 * Instantiates the guards for this REST resource method.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for guards set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestOpContextBuilder#guards()}}
+	 * 			<li>{@link RestOp#guards()}.
+	 * 			<li>{@link Rest#guards()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createGuards()</> method that returns <c>{@link RestGuard}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a <c>RestGuard[0]</c>.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The rest converter list builder for this REST method.
+	 */
+	protected RestGuardList.Builder createGuards(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<RestGuardList.Builder> v = Value.of(
+			RestGuardList
+				.create()
+				.beanStore(beanStore)
+		);
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(RestGuardList.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(RestGuardList.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(RestGuardList.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] RestGuardList.Builder createGuards(<args>)
+		beanStore
+			.beanCreateMethodFinder(RestGuardList.Builder.class)
+			.addBean(RestGuardList.Builder.class, v.get())
+			.find("createGuards")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] RestGuardList createConverters(<args>)
+		beanStore
+			.beanCreateMethodFinder(RestGuardList.class)
+			.addBean(RestGuardList.Builder.class, v.get())
+			.find("createGuards")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	final RestGuardList getGuards() {
+		RestGuardList.Builder b = guards();
+		Set<String> roleGuard = ofNullable(this.roleGuard).orElseGet(()->new LinkedHashSet<>());
+
+		for (String rg : roleGuard) {
+			try {
+				b.append(new RoleBasedRestGuard(rolesDeclared, rg));
+			} catch (java.text.ParseException e1) {
+				throw runtimeException(e1);
+			}
+		}
+
+		return guards.build();
+	}
+
 	/**
 	 * When enabled, append <js>"/*"</js> to path patterns if not already present.
 	 *
@@ -868,93 +972,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
 		defaultResponseHeaders.setDefault(values);
-		return this;
-	}
-
-	/**
-	 * Guards.
-	 *
-	 * <p>
-	 * Associates one or more {@link RestGuard RestGuards} with this method.
-	 *
-	 * <p>
-	 * If multiple guards are specified, <b>ALL</b> guards must pass.
-	 * <br>Note that this is different than matchers where only ONE matcher needs to pass.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a guard that only lets Billy make a request.</jc>
-	 * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public boolean</jk> isRequestAllowed(RestRequest <jv>req</jv>) {
-	 * 			<jk>return</jk> <jv>req</jv>.getUserPrincipal().getName().equals(<js>"Billy"</js>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(guards={BillyGuard.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.guards(BillyGuard.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.guards(BillyGuard.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestGet</ja>(guards={SomeOtherGuard.<jk>class</jk>})
-	 * 		<jk>public</jk> Object myMethod() {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestGuards}
-	 * 	<li class='ja'>{@link Rest#guards()}
-	 * 	<li class='ja'>{@link RestOp#guards()}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link RestGuard}.
-	 */
-	@FluentSetter
-	public RestOpContextBuilder guards(Class<?>...values) {
-		guards.append(assertClassArrayArgIsType("values", RestGuard.class, values));
-		return this;
-	}
-
-	/**
-	 * Guards.
-	 *
-	 * <p>
-	 * Same as {@link #guards(Class...)} except input is pre-constructed instances.
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder guards(RestGuard...values) {
-		guards.append(values);
 		return this;
 	}
 

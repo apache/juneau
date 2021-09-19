@@ -52,7 +52,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.guards.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
@@ -153,8 +152,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
 			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
 			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
-
-			guards = createGuards(r, builder, bs).asArray();
+			guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
 
 			RestMatcherList matchers = createMatchers(r, builder, bs);
 			optionalMatchers = matchers.getOptionalEntries();
@@ -214,63 +212,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
-	}
-
-	/**
-	 * Instantiates the guards for this REST resource method.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for guards set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestOpContextBuilder#guards(Class...)}/{@link RestOpContextBuilder#guards(RestGuard...)}
-	 * 			<li>{@link RestOp#guards()}.
-	 * 			<li>{@link Rest#guards()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createGuards()</> method that returns <c>{@link RestGuard}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link Method} - The Java method this context belongs to.
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>RestGuard[0]</c>.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The guards for this REST resource method.
-	 * @throws Exception If guards could not be instantiated.
-	 */
-	protected RestGuardList createGuards(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestGuardList.Builder x = builder.guards.beanStore(beanStore);
-
-		Set<String> rolesDeclared = builder.rolesDeclared;
-		Set<String> roleGuard = ofNullable(builder.roleGuard).orElseGet(()->new LinkedHashSet<>());
-
-		for (String rg : roleGuard) {
-			try {
-				x.append(new RoleBasedRestGuard(rolesDeclared, rg));
-			} catch (java.text.ParseException e1) {
-				throw new ServletException(e1);
-			}
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestGuardList.Builder.class, x)
-			.createMethodFinder(RestGuardList.Builder.class, resource)
-			.find("createGuards", Method.class)
-			.thenFind("createGuards")
-			.withDefault(x)
-			.run();
-
-		return x.build();
 	}
 
 	/**

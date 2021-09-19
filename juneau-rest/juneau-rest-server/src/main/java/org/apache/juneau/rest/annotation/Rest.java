@@ -698,7 +698,7 @@ public @interface Rest {
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#guards(Class...)}
+	 * 	<li class='jm'>{@link RestOpContextBuilder#guards()}
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
