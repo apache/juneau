@@ -614,7 +614,7 @@ public class RestPutAnnotation {
 			b.httpMethod("put");
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
-			classes(a.parsers()).ifPresent(x -> b.getParsers().set(x));
+			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.type(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));

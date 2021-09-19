@@ -151,6 +151,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private BeanContextBuilder beanContext;
 	private EncoderGroup.Builder encoders;
 	private SerializerGroup.Builder serializers;
+	private ParserGroup.Builder parsers;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -172,9 +173,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestChildren> childrenClass = RestChildren.class;
 	Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
-
-	// TODO
-	ParserGroup.Builder parsers = ParserGroup.create();
 
 	List<Object> children = new ArrayList<>();
 
@@ -1076,6 +1074,73 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.beanCreateMethodFinder(SerializerGroup.class)
 			.addBean(SerializerGroup.Builder.class, v.get())
 			.find("createSerializers")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// parsers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link ParserGroup} object in the REST context.
+	 *
+	 * @return The builder for the {@link ParserGroup} object in the REST context.
+	 */
+	public final ParserGroup.Builder parsers() {
+		if (parsers == null)
+			parsers = createParsers(beanStore(), resource());
+		return parsers;
+	}
+
+	/**
+	 * Instantiates the parser group builder for this REST object.
+	 *
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @return The parser group builder for this REST resource.
+	 */
+	protected ParserGroup.Builder createParsers(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<ParserGroup.Builder> v = Value.of(
+			ParserGroup
+				.create()
+				.beanStore(beanStore)
+		);
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(ParserGroup.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(ParserGroup.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(ParserGroup.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] ParserGroup.Builder createParsers(<args>)
+		beanStore
+			.beanCreateMethodFinder(ParserGroup.Builder.class)
+			.addBean(ParserGroup.Builder.class, v.get())
+			.find("createParsers")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] ParserGroup createParsers(<args>)
+		beanStore
+			.beanCreateMethodFinder(ParserGroup.class)
+			.addBean(ParserGroup.Builder.class, v.get())
+			.find("createParsers")
 			.run(x -> v.get().impl(x));
 
 		return v.get();

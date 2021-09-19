@@ -170,6 +170,7 @@ public class RestContext extends Context {
 	private final BeanContext beanContext;
 	private final EncoderGroup encoders;
 	private final SerializerGroup serializers;
+	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -279,6 +280,7 @@ public class RestContext extends Context {
 			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
 			encoders = bs.add(EncoderGroup.class, builder.encoders().build());
 			serializers = bs.add(SerializerGroup.class, builder.serializers().build());
+			parsers = bs.add(ParserGroup.class, builder.parsers().build());
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
@@ -395,6 +397,15 @@ public class RestContext extends Context {
 	 */
 	public SerializerGroup getSerializers() {
 		return serializers;
+	}
+
+	/**
+	 * Returns the parsers associated with this context.
+	 *
+	 * @return The parsers associated with this context.
+	 */
+	public ParserGroup getParsers() {
+		return parsers;
 	}
 
 	/**

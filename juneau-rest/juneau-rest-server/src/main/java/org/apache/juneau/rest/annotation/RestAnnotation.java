@@ -1063,7 +1063,7 @@ public class RestAnnotation {
 			ClassInfo c = ai.getClassOn();
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
-			classes(a.parsers()).ifPresent(x -> b.getParsers().add(x));
+			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
 			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));

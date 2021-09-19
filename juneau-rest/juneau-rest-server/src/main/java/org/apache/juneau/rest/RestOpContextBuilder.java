@@ -132,8 +132,8 @@ public class RestOpContextBuilder extends ContextBuilder {
 				beanContext().apply(al);
 			if (context.builder.serializers().canApply(al))
 				serializers().apply(al);
-			if (context.builder.parsers.canApply(al))
-				getParsers().apply(al);
+			if (context.builder.parsers().canApply(al))
+				parsers().apply(al);
 			if (context.builder.partSerializer().canApply(al))
 				getPartSerializer().apply(al);
 			if (context.builder.partParser().canApply(al))
@@ -310,6 +310,46 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// parsers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link ParserGroup} object in the REST context.
+	 *
+	 * @return The builder for the {@link ParserGroup} object in the REST context.
+	 */
+	public final ParserGroup.Builder parsers() {
+		if (parsers == null)
+			parsers = createParsers(beanStore(), parent, resource());
+		return parsers;
+	}
+
+	/**
+	 * Constructs the parser group builder for this REST method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The serializer group builder for this REST resource.
+	 */
+	protected ParserGroup.Builder createParsers(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		// Default value.
+		Value<ParserGroup.Builder> v = Value.of(
+			parent.parsers().copy()
+		);
+
+		return v.get();
+	}
+
+	final Optional<ParserGroup> getParsers() {
+		return parsers == null ? empty() : of(parsers.build());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// converters
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -443,11 +483,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return v.get();
 	}
 
-
-
-
-	private int TODO;
-
 	/**
 	 * When enabled, append <js>"/*"</js> to path patterns if not already present.
 	 *
@@ -467,54 +502,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 	public RestOpContextBuilder beanStore(BeanStore beanStore) {
 		this.beanStore = beanStore;
 		return this;
-	}
-
-//	/**
-//	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
-//	 *
-//	 * <p>
-//	 * This method can be used to override serializers defined at the class level via {@link RestContextBuilder#getSerializers()}.
-//	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
-//	 * If never called, then the builder from the class context is used.
-//	 *
-//	 * <p>
-//	 * The builder is initialized with serializers defined via the {@link RestOp#serializers()} (and related) annotation.
-//	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='link'>{@doc RestSerializers}
-//	 * </ul>
-//	 *
-//	 * @return The serializer group builder for this context builder.
-//	 */
-//	public SerializerGroup.Builder getSerializers() {
-//		if (serializers == null)
-//			serializers = restContext.builder.serializers.copy();
-//		return serializers;
-//	}
-
-	/**
-	 * Returns the parser group builder containing the parsers for converting request bodies into POJOs.
-	 *
-	 * <p>
-	 * This method can be used to override parsers defined at the class level via {@link RestContextBuilder#getParsers()}.
-	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
-	 * If never called, then the builder from the class context is used.
-	 *
-	 * <p>
-	 * The builder is initialized with parsers defined via the {@link RestOp#parsers()} (and related) annotation.
-	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestParsers}
-	 * </ul>
-	 *
-	 * @return The parser group builder for this context builder.
-	 */
-	public ParserGroup.Builder getParsers() {
-		if (parsers == null)
-			parsers = restContext.builder.parsers.copy();
-		return parsers;
 	}
 
 	/**

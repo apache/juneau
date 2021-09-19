@@ -150,9 +150,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
 			encoders = bs.add(EncoderGroup.class, builder.getEncoders().orElse(context.getEncoders()));
 			serializers = bs.add(SerializerGroup.class, builder.getSerializers().orElse(context.getSerializers()));
-
-			parsers = createParsers(r, builder, bs);
-			bs.addBean(ParserGroup.class, parsers);
+			parsers = bs.add(ParserGroup.class, builder.getParsers().orElse(context.getParsers()));
 
 			partSerializer = createPartSerializer(r, builder, bs);
 			bs.addBean(HttpPartSerializer.class, partSerializer);
@@ -322,108 +320,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			.addBean(RestMatcherList.Builder.class, x)
 			.createMethodFinder(RestMatcherList.Builder.class, resource)
 			.find("createMatchers", Method.class)
-			.withDefault(x)
-			.run();
-
-		return x.build();
-	}
-
-//	/**
-//	 * Instantiates the serializers for this REST resource.
-//	 *
-//	 * <p>
-//	 * Instantiates based on the following logic:
-//	 * <ul>
-//	 * 	<li>Looks for serializers set via any of the following:
-//	 * 		<ul>
-//	 * 			<li>{@link RestOpContext#getSerializers()}
-//	 * 			<li>{@link Rest#serializers()}.
-//	 * 		</ul>
-//	 * 	<li>Looks for a static or non-static <c>createSerializers()</> method that returns <c>{@link Serializer}[]</c> on the
-//	 * 		resource class with any of the following arguments:
-//	 * 		<ul>
-//	 * 			<li>{@link RestContext}
-//	 * 			<li>{@link BeanStore}
-//	 * 			<li>Any {@doc RestInjection injected beans}.
-//	 * 		</ul>
-//	 * 	<li>Resolves it via the bean store registered in this context.
-//	 * 	<li>Instantiates a <c>Serializer[0]</c>.
-//	 * </ul>
-//	 *
-//	 * @param resource The REST resource object.
-//	 * @param builder The builder for this object.
-//	 * @param beanStore The bean store to use for retrieving and creating beans.
-//	 * @return The serializers for this REST resource.
-//	 * @throws Exception If serializers could not be instantiated.
-//	 */
-//	protected SerializerGroup createSerializers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-//
-//		SerializerGroup g = beanStore.getBean(SerializerGroup.class).orElse(null);
-//
-//		if (g != null)
-//			return g;
-//
-//		SerializerGroup.Builder x = builder.serializers;
-//		if (x == null)
-//			x = builder.restContext.builder.serializers;
-//
-//		x = BeanStore
-//			.of(beanStore, resource)
-//			.addBean(SerializerGroup.Builder.class, x)
-//			.createMethodFinder(SerializerGroup.Builder.class, resource)
-//			.find("createSerializers", Method.class)
-//			.thenFind("createSerializers")
-//			.withDefault(x)
-//			.run();
-//
-//		return x.build();
-//	}
-
-	/**
-	 * Instantiates the parsers for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for parsers set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#getParsers()}.
-	 * 			<li>{@link Rest#parsers()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createParsers()</> method that returns <c>{@link Parser}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>Parser[0]</c>.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The parsers for this REST resource.
-	 * @throws Exception If parsers could not be instantiated.
-	 */
-	protected ParserGroup createParsers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		ParserGroup g = beanStore.getBean(ParserGroup.class).orElse(null);
-
-		if (g != null)
-			return g;
-
-		ParserGroup.Builder x = builder.parsers;
-		if (x == null)
-			x = builder.restContext.builder.parsers;
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(ParserGroup.Builder.class, x)
-			.createMethodFinder(ParserGroup.Builder.class, resource)
-			.find("createParsers", Method.class)
-			.thenFind("createParsers")
 			.withDefault(x)
 			.run();
 
