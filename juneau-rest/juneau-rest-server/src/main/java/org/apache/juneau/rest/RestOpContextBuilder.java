@@ -32,7 +32,6 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -136,7 +135,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 			if (context.builder.partSerializer().canApply(al))
 				partSerializer().apply(al);
 			if (context.builder.partParser().canApply(al))
-				getPartParser().apply(al);
+				partParser().apply(al);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -389,6 +388,46 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// partParser
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link HttpPartParser} object in the REST context.
+	 *
+	 * @return The builder for the {@link HttpPartParser} object in the REST context.
+	 */
+	public final HttpPartParser.Creator partParser() {
+		if (partParser == null)
+			partParser = createPartParser(beanStore(), parent, resource());
+		return partParser;
+	}
+
+	/**
+	 * Constructs the part parser builder for this REST method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The part serializer builder for this REST resource.
+	 */
+	protected HttpPartParser.Creator createPartParser(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		// Default value.
+		Value<HttpPartParser.Creator> v = Value.of(
+			parent.partParser().copy()
+		);
+
+		return v.get();
+	}
+
+	final Optional<HttpPartParser> getPartParser() {
+		return partParser == null ? empty() : of(partParser.create());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// converters
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -541,22 +580,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 	public RestOpContextBuilder beanStore(BeanStore beanStore) {
 		this.beanStore = beanStore;
 		return this;
-	}
-
-	/**
-	 * Returns the HTTP part parser creator containing the part parser for parsing HTTP parts into POJOs.
-	 *
-	 * <p>
-	 * The default value is {@link OpenApiParser} which allows for both plain-text and URL-Encoded-Object-Notation values.
-	 * <br>If your parts contain text that can be confused with UON (e.g. <js>"(foo)"</js>), you can switch to
-	 * {@link SimplePartParser} which treats everything as plain text.
-	 *
-	 * @return The HTTP part parser creator.
-	 */
-	public HttpPartParser.Creator getPartParser() {
-		if (partParser == null)
-			partParser = restContext.builder.partParser().copy();
-		return partParser;
 	}
 
 	//----------------------------------------------------------------------------------------------------

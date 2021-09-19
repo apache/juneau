@@ -48,7 +48,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -152,10 +151,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			serializers = bs.add(SerializerGroup.class, builder.getSerializers().orElse(context.getSerializers()));
 			parsers = bs.add(ParserGroup.class, builder.getParsers().orElse(context.getParsers()));
 			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
-
-			partParser = createPartParser(r, builder, bs);
-			bs.addBean(HttpPartParser.class, partParser);
-
+			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
 			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
 
 			guards = createGuards(r, builder, bs).asArray();
@@ -322,59 +318,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			.run();
 
 		return x.build();
-	}
-
-	/**
-	 * Instantiates the HTTP part parser for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
-	 * 	<li>Looks for part parser set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partParser()}
-	 * 			<li>{@link Rest#partParser()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates an {@link OpenApiSerializer}.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The HTTP part parser for this REST resource.
-	 * @throws Exception If parser could not be instantiated.
-	 */
-	protected HttpPartParser createPartParser(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		HttpPartParser g = beanStore.getBean(HttpPartParser.class).orElse(null);
-
-		if (g != null)
-			return g;
-
-		HttpPartParser.Creator x = builder.partParser;
-
-		if (x == null)
-			x = builder.restContext.builder.partParser();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HttpPartParser.Creator.class, x)
-			.createMethodFinder(HttpPartParser.Creator.class, resource)
-			.find("createPartParser", Method.class)
-			.thenFind("createPartParser")
-			.withDefault(x)
-			.run();
-
-		return x.create();
 	}
 
 	/**
