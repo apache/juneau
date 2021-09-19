@@ -154,7 +154,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
 			guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
 
-			RestMatcherList matchers = createMatchers(r, builder, bs);
+			RestMatcherList matchers = builder.getMatchers(context);
 			optionalMatchers = matchers.getOptionalEntries();
 			requiredMatchers = matchers.getRequiredEntries();
 
@@ -212,53 +212,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
-	}
-
-	/**
-	 * Instantiates the method matchers for this REST resource method.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for matchers set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestOp#matchers()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createMatchers()</> method that returns <c>{@link RestMatcher}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The method matchers for this REST resource method.
-	 * @throws Exception If method matchers could not be instantiated.
-	 */
-	protected RestMatcherList createMatchers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestMatcherList.Builder x = builder.restMatchers.beanStore(beanStore);
-
-		String clientVersion = builder.clientVersion;
-		if (clientVersion != null)
-			x.append(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestMatcherList.Builder.class, x)
-			.createMethodFinder(RestMatcherList.Builder.class, resource)
-			.find("createMatchers", Method.class)
-			.withDefault(x)
-			.run();
-
-		return x.build();
 	}
 
 	/**

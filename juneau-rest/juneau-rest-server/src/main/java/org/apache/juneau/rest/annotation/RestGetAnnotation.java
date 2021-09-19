@@ -537,7 +537,7 @@ public class RestGetAnnotation {
 			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
-			b.matchers(a.matchers());
+			b.matchers().append(a.matchers());
 			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			strings(a.path()).forEach(x -> b.path(x));

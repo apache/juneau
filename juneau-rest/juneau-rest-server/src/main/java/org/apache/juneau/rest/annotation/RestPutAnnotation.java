@@ -628,7 +628,7 @@ public class RestPutAnnotation {
 			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
-			b.matchers(a.matchers());
+			b.matchers().append(a.matchers());
 			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			string(a.maxInput()).ifPresent(x -> b.maxInput(x));

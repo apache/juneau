@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Optional.*;
@@ -65,6 +64,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	private ParserGroup.Builder parsers;
 	private HttpPartSerializer.Creator partSerializer;
 	private HttpPartParser.Creator partParser;
+	private RestMatcherList.Builder matchers;
 
 	PartList.Builder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
@@ -640,7 +640,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 			.find("createGuards")
 			.run(x -> v.set(x));
 
-		// Replace with bean from:  public [static] RestGuardList createConverters(<args>)
+		// Replace with bean from:  public [static] RestGuardList createGuards(<args>)
 		beanStore
 			.beanCreateMethodFinder(RestGuardList.class)
 			.addBean(RestGuardList.Builder.class, v.get())
@@ -663,6 +663,127 @@ public class RestOpContextBuilder extends ContextBuilder {
 		}
 
 		return guards.build();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// matchers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link RestMatcherList} object in the REST context.
+	 *
+	 * @return The builder for the {@link RestMatcherList} object in the REST context.
+	 */
+	public final RestMatcherList.Builder matchers() {
+		if (matchers == null)
+			matchers = createMatchers(beanStore(), resource());
+		return matchers;
+	}
+
+	/**
+	 * Instantiates the method matchers for this REST resource method.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
+	 *
+	 * <p>
+	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
+	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link RestOp#matchers()}
+	 * 	<li class='ja'>{@link RestGet#matchers()}
+	 * 	<li class='ja'>{@link RestPut#matchers()}
+	 * 	<li class='ja'>{@link RestPost#matchers()}
+	 * 	<li class='ja'>{@link RestDelete#matchers()}
+	 * </ul>
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for matchers set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestOp#matchers()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createMatchers()</> method that returns <c>{@link RestMatcher}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The rest converter list builder for this REST method.
+	 */
+	protected RestMatcherList.Builder createMatchers(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<RestMatcherList.Builder> v = Value.of(
+			RestMatcherList
+				.create()
+				.beanStore(beanStore)
+		);
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(RestMatcherList.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(RestMatcherList.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(RestMatcherList.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] RestMatcherList.Builder createMatchers(<args>)
+		beanStore
+			.beanCreateMethodFinder(RestMatcherList.Builder.class)
+			.addBean(RestMatcherList.Builder.class, v.get())
+			.find("createMatchers")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] RestMatcherList createMatchers(<args>)
+		beanStore
+			.beanCreateMethodFinder(RestMatcherList.class)
+			.addBean(RestMatcherList.Builder.class, v.get())
+			.find("createMatchers")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	final RestMatcherList getMatchers(RestContext restContext) {
+		RestMatcherList.Builder b = matchers();
+		if (clientVersion != null)
+			b.append(new ClientVersionMatcher(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
+
+		return b.build();
 	}
 
 	/**
@@ -1033,74 +1154,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public RestOpContextBuilder httpMethod(String value) {
 		this.httpMethod = value;
-		return this;
-	}
-
-	/**
-	 * Method-level matchers.
-	 *
-	 * <p>
-	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
-	 *
-	 * <p>
-	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
-	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#matchers()}
-	 * 	<li class='ja'>{@link RestGet#matchers()}
-	 * 	<li class='ja'>{@link RestPut#matchers()}
-	 * 	<li class='ja'>{@link RestPost#matchers()}
-	 * 	<li class='ja'>{@link RestDelete#matchers()}
-	 * </ul>
-	 *
-	 * @param values The new values for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder matchers(RestMatcher...values) {
-		restMatchers.append(values);
-		return this;
-	}
-
-	/**
-	 * Method-level matchers.
-	 *
-	 * <p>
-	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
-	 *
-	 * <p>
-	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
-	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#matchers()}
-	 * 	<li class='ja'>{@link RestGet#matchers()}
-	 * 	<li class='ja'>{@link RestPut#matchers()}
-	 * 	<li class='ja'>{@link RestPost#matchers()}
-	 * 	<li class='ja'>{@link RestDelete#matchers()}
-	 * </ul>
-	 *
-	 * @param values The new values for this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link RestMatcher}.
-	 */
-	@FluentSetter
-	public RestOpContextBuilder matchers(Class<?>...values) {
-		restMatchers.append(assertClassArrayArgIsType("values", RestMatcher.class, values));
 		return this;
 	}
 
