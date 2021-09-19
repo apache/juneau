@@ -158,10 +158,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			optionalMatchers = matchers.getOptionalEntries();
 			requiredMatchers = matchers.getRequiredEntries();
 
-			pathMatchers = createPathMatchers(r, builder, bs).asArray();
-			bs.addBean(UrlPathMatcher[].class, pathMatchers);
+			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
-
 
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
 			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
@@ -212,62 +210,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
-	}
-
-	/**
-	 * Instantiates the path matchers for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this bean.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The HTTP part parser for this REST resource.
-	 * @throws Exception If parser could not be instantiated.
-	 */
-	protected UrlPathMatcherList createPathMatchers(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		UrlPathMatcherList x = UrlPathMatcherList.create();
-		boolean dotAll = builder.dotAll;
-
-		if (builder.path != null) {
-			for (String p : builder.path) {
-				if (dotAll && ! p.endsWith("/*"))
-					p += "/*";
-				x.add(UrlPathMatcher.of(p));
-			}
-		}
-
-		if (x.isEmpty()) {
-			MethodInfo mi = MethodInfo.of(method);
-			String p = null;
-			String httpMethod = null;
-			if (mi.hasAnnotation(RestGet.class))
-				httpMethod = "get";
-			else if (mi.hasAnnotation(RestPut.class))
-				httpMethod = "put";
-			else if (mi.hasAnnotation(RestPost.class))
-				httpMethod = "post";
-			else if (mi.hasAnnotation(RestDelete.class))
-				httpMethod = "delete";
-			else if (mi.hasAnnotation(RestOp.class))
-				httpMethod = mi.getAnnotations(RestOp.class).stream().map(y -> y.method()).filter(y -> ! y.isEmpty()).findFirst().orElse(null);
-
-			p = HttpUtils.detectHttpPath(method, httpMethod);
-
-			if (dotAll && ! p.endsWith("/*"))
-				p += "/*";
-
-			x.add(UrlPathMatcher.of(p));
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(UrlPathMatcherList.class, x)
-			.createMethodFinder(UrlPathMatcherList.class, resource)
-			.find("createPathMatchers", Method.class)
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**

@@ -37,6 +37,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.guards.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -784,6 +785,61 @@ public class RestOpContextBuilder extends ContextBuilder {
 			b.append(new ClientVersionMatcher(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
 
 		return b.build();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// pathMatchers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Instantiates the path matchers for this method.
+	 *
+	 * @return The path matchers for this method.
+	 */
+	protected UrlPathMatcherList getPathMatchers() {
+
+		Value<UrlPathMatcherList> v = Value.of(
+			UrlPathMatcherList.create()
+		);
+
+		if (path != null) {
+			for (String p : path) {
+				if (dotAll && ! p.endsWith("/*"))
+					p += "/*";
+				v.get().add(UrlPathMatcher.of(p));
+			}
+		}
+
+		if (v.get().isEmpty()) {
+			MethodInfo mi = MethodInfo.of(restMethod);
+			String p = null;
+			String httpMethod = null;
+			if (mi.hasAnnotation(RestGet.class))
+				httpMethod = "get";
+			else if (mi.hasAnnotation(RestPut.class))
+				httpMethod = "put";
+			else if (mi.hasAnnotation(RestPost.class))
+				httpMethod = "post";
+			else if (mi.hasAnnotation(RestDelete.class))
+				httpMethod = "delete";
+			else if (mi.hasAnnotation(RestOp.class))
+				httpMethod = mi.getAnnotations(RestOp.class).stream().map(y -> y.method()).filter(y -> ! y.isEmpty()).findFirst().orElse(null);
+
+			p = HttpUtils.detectHttpPath(restMethod, httpMethod);
+
+			if (dotAll && ! p.endsWith("/*"))
+				p += "/*";
+
+			v.get().add(UrlPathMatcher.of(p));
+		}
+
+		beanStore
+			.createMethodFinder(UrlPathMatcherList.class, resource().get())
+			.addBean(UrlPathMatcherList.class, v.get())
+			.find("createPathMatchers", Method.class)
+			.run(x -> v.set(x));
+
+		return v.get();
 	}
 
 	/**
