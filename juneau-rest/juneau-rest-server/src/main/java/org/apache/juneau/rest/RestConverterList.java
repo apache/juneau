@@ -121,7 +121,7 @@ public class RestConverterList {
 		if (o instanceof RestConverter)
 			return (RestConverter)o;
 		try {
-			return (RestConverter)bs.createBean((Class<?>)o);
+			return BeanCreator.create(RestConverter.class).type((Class<?>)o).store(bs).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}

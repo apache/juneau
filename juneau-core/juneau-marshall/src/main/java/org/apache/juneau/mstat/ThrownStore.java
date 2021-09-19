@@ -14,8 +14,6 @@ package org.apache.juneau.mstat;
 
 import static java.util.stream.Collectors.*;
 import static java.util.Collections.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Optional.*;
 import static java.util.Comparator.*;
@@ -58,19 +56,18 @@ public class ThrownStore {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<ThrownStore> {
 
 		ThrownStore parent;
-		Class<? extends ThrownStore> implClass;
-		ThrownStore impl;
-		BeanStore beanStore;
 		Class<? extends ThrownStats> statsImplClass;
 		Set<Class<?>> ignoreClasses;
 
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {}
+		protected Builder() {
+			super(ThrownStore.class);
+		}
 
 		/**
 		 * Copy constructor.
@@ -78,64 +75,15 @@ public class ThrownStore {
 		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			parent = copyFrom.parent;
-			implClass = copyFrom.implClass;
-			impl = copyFrom.impl;
-			beanStore = copyFrom.beanStore;
 			statsImplClass = copyFrom.statsImplClass;
 			ignoreClasses = copyFrom.ignoreClasses == null ? null : ASet.of(copyFrom.ignoreClasses);
 		}
 
-		/**
-		 * Create a new {@link ThrownStore} using this builder.
-		 *
-		 * @return A new {@link ThrownStore}
-		 */
-		public ThrownStore build() {
-			try {
-				if (impl != null)
-					return impl;
-				Class<? extends ThrownStore> ic = isConcrete(implClass) ? implClass : ThrownStore.class;
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
-			} catch (ExecutableException e) {
-				throw runtimeException(e);
-			}
-		}
-
-		/**
-		 * Specifies the bean store to use for instantiating the {@link ThrownStore} object.
-		 *
-		 * <p>
-		 * Can be used to instantiate {@link ThrownStore} implementations with injected constructor argument beans.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
-		 */
-		public Builder beanStore(BeanStore value) {
-			this.beanStore = value;
-			return this;
-		}
-
-		/**
-		 * Specifies a subclass of {@link ThrownStore} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
-		 */
-		public Builder implClass(Class<? extends ThrownStore> value) {
-			this.implClass = value;
-			return this;
-		}
-
-		/**
-		 * Specifies a pre-instantiated bean to return when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
-		 */
-		public Builder impl(ThrownStore value) {
-			this.impl = value;
-			return this;
+		@Override /* BeanBuilder */
+		protected ThrownStore buildDefault() {
+			return new ThrownStore(this);
 		}
 
 		/**
@@ -178,14 +126,38 @@ public class ThrownStore {
 			return this;
 		}
 
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends ThrownStore> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(ThrownStore value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -212,7 +184,7 @@ public class ThrownStore {
 	 */
 	public ThrownStore(Builder builder) {
 		this.parent = ofNullable(builder.parent);
-		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
+		this.beanStore = builder.beanStore().orElseGet(()->BeanStore.create().build());
 
 		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 

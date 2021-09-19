@@ -42,7 +42,7 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a02_builder_implClass() {
-		assertObject(MethodExecStore.create().implClass(A1.class).build()).isType(A1.class);
+		assertObject(MethodExecStore.create().type(A1.class).build()).isType(A1.class);
 	}
 
 	public static class A4 extends MethodExecStore {
@@ -54,7 +54,7 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a04_builder_implClass_bad() {
-		assertThrown(()->MethodExecStore.create().implClass(A4.class).build()).messages().contains("foobar");
+		assertThrown(()->MethodExecStore.create().type(A4.class).build()).messages().contains("foobar");
 	}
 
 	public static class A5a {}
@@ -79,12 +79,12 @@ public class MethodExecStore_Test {
 	public void a05_builder_beanFactory() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->MethodExecStore.create().beanStore(bs).implClass(A5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: A5a"));
-		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5c.class).build()).isType(A5c.class);
+		assertThrown(()->MethodExecStore.create().beanStore(bs).type(A5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: A5a"));
+		assertObject(MethodExecStore.create().beanStore(bs).type(A5c.class).build()).isType(A5c.class);
 
 		bs.addBean(A5a.class, new A5a());
-		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5b.class).build()).isType(A5b.class);
-		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5c.class).build()).isType(A5c.class);
+		assertObject(MethodExecStore.create().beanStore(bs).type(A5b.class).build()).isType(A5b.class);
+		assertObject(MethodExecStore.create().beanStore(bs).type(A5c.class).build()).isType(A5c.class);
 	}
 
 

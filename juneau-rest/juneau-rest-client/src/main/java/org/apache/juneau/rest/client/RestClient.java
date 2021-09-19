@@ -1852,7 +1852,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
-		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.createBeanSupplier(BasicRestCallHandler.class));
+		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.creator(BasicRestCallHandler.class).supplier());
 
 		this.interceptors = cp.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 
@@ -3139,7 +3139,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		HttpPartSerializer x = partSerializers.get(c);
 		if (x == null) {
 			try {
-				x = beanStore.createBean(c);
+				x = beanStore.creator(c).run();
 			} catch (ExecutableException e) {
 				throw new RuntimeException(e);
 			}
@@ -3158,7 +3158,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		HttpPartParser x = partParsers.get(c);
 		if (x == null) {
 			try {
-				x = beanStore.createBean(c);
+				x = beanStore.creator(c).run();
 			} catch (ExecutableException e) {
 				throw new RuntimeException(e);
 			}

@@ -13,8 +13,6 @@
 package org.apache.juneau.mstat;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -53,53 +51,32 @@ public class MethodExecStats {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder {
+	public static class Builder extends BeanBuilder<MethodExecStats> {
 
 		Method method;
 		ThrownStore thrownStore;
 
-		Class<? extends MethodExecStats> implClass;
-		BeanStore beanStore;
-
 		/**
-		 * Create a new {@link MethodExecStats} using this builder.
-		 *
-		 * @return A new {@link ThrownStats}
+		 * Constructor.
 		 */
-		public MethodExecStats build() {
-			try {
-				Class<? extends MethodExecStats> ic = isConcrete(implClass) ? implClass : MethodExecStats.class;
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
-			} catch (ExecutableException e) {
-				throw runtimeException(e);
-			}
+		protected Builder() {
+			super(MethodExecStats.class);
 		}
 
 		/**
-		 * Specifies the bean store to use for instantiating the {@link MethodExecStats} object.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * Can be used to instantiate {@link MethodExecStats} implementations with injected constructor argument beans.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @param copyFrom The builder being copied.
 		 */
-		@FluentSetter
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
-			return this;
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			method = copyFrom.method;
+			thrownStore = copyFrom.thrownStore;
 		}
 
-		/**
-		 * Specifies a subclass of {@link MethodExecStats} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
-		 */
-		@FluentSetter
-		public Builder implClass(Class<? extends MethodExecStats> value) {
-			implClass = value;
-			return this;
+		@Override /* BeanBuilder */
+		protected MethodExecStats buildDefault() {
+			return new MethodExecStats(this);
 		}
 
 		/**
@@ -125,6 +102,39 @@ public class MethodExecStats {
 			thrownStore = value;
 			return this;
 		}
+
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends MethodExecStats> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(MethodExecStats value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

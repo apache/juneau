@@ -12,20 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
 import static java.util.Optional.*;
-
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -89,18 +83,17 @@ public class BeanStore {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<BeanStore> {
 
-		Class<? extends BeanStore> type = BeanStore.class;
-		BeanStore impl;
-		Object outer;
 		BeanStore parent;
 		boolean readOnly;
 
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {}
+		protected Builder() {
+			super(BeanStore.class);
+		}
 
 		/**
 		 * Copy constructor.
@@ -108,40 +101,25 @@ public class BeanStore {
 		 * @param copyFrom The bean store to copy from.
 		 */
 		protected Builder(BeanStore copyFrom) {
-			type = copyFrom.getClass();
-			outer = copyFrom.outer.orElse(null);
+			super(copyFrom.getClass());
 			parent = copyFrom.parent.orElse(null);
 			readOnly = copyFrom.readOnly;
 		}
 
 		/**
-		 * Create a new {@link BeanStore} using this builder.
+		 * Copy constructor.
 		 *
-		 * @return A new {@link BeanStore}
+		 * @param copyFrom The bean store to copy from.
 		 */
-		public BeanStore build() {
-			try {
-				if (impl != null)
-					return impl;
-				if (type == BeanStore.class)
-					return new BeanStore(this);
-				Class<? extends BeanStore> ic = isConcrete(type) ? type : BeanStore.class;
-				return new BeanStore().addBeans(Builder.class, this).createBean(ic);
-			} catch (ExecutableException e) {
-				throw runtimeException(e);
-			}
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			parent = copyFrom.parent;
+			readOnly = copyFrom.readOnly;
 		}
 
-		/**
-		 * Specifies a subclass of {@link BeanStore} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		@FluentSetter
-		public Builder type(Class<? extends BeanStore> value) {
-			type = value;
-			return this;
+		@Override /* BeanBuilder */
+		protected BeanStore buildDefault() {
+			return new BeanStore(this);
 		}
 
 		/**
@@ -150,7 +128,7 @@ public class BeanStore {
 		 * <p>
 		 * Bean searches are performed recursively up this parent chain.
 		 *
-		 * @param value The new value for this setting.
+		 * @param value The setting value.
 		 * @return  This object.
 		 */
 		@FluentSetter
@@ -173,36 +151,38 @@ public class BeanStore {
 			return this;
 		}
 
-		/**
-		 * Specifies the outer bean context.
-		 *
-		 * <p>
-		 * Used when calling {@link BeanStore#createBean(Class)} on a non-static inner class.
-		 * This should be the instance of the outer object such as the servlet object when constructing inner classes
-		 * of the servlet class.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		@FluentSetter
-		public Builder outer(Object value) {
-			outer = value;
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends BeanStore> value) {
+			super.type(value);
 			return this;
 		}
 
-		/**
-		 * Specifies an implementation of a bean store.
-		 *
-		 * <p>
-		 * Causes the {@link #build()} method to return a predefined bean instead of a new one.
-		 *
-		 * @param value The bean that this builder should return.
-		 * @return  This object.
-		 */
+		@Override /* BeanBuilder */
 		public Builder impl(BeanStore value) {
-			this.impl = value;
+			super.impl(value);
 			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -227,7 +207,7 @@ public class BeanStore {
 	 */
 	protected BeanStore(Builder builder) {
 		this.parent = ofNullable(builder.parent);
-		this.outer = ofNullable(builder.outer);
+		this.outer = builder.outer();
 		this.readOnly = builder.readOnly;
 	}
 
@@ -381,6 +361,19 @@ public class BeanStore {
 	}
 
 	/**
+	 * Removes a bean from this store.
+	 *
+	 * <p>
+	 * This is equivalent to setting the bean type bean to <jk>null</jk>.
+	 *
+	 * @param c The bean type being removed.
+	 * @return This object.
+	 */
+	public BeanStore removeBean(Class<?> c) {
+		return addBean(c.getName(), null);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this factory contains the specified bean type instance.
 	 *
 	 * @param c The bean type to check.
@@ -405,139 +398,13 @@ public class BeanStore {
 	}
 
 	/**
-	 * Creates a bean of the specified type.
-	 *
-	 * @param <T> The bean type to create.
-	 * @param c The bean type to create.  Can be <jk>null</jk>.
-	 * @return A newly-created bean, or <jk>null</jk> if the type was <jk>null</jk>.
-	 * @throws ExecutableException If bean could not be created.
-	 */
-	public <T> T createBean(Class<T> c) throws ExecutableException {
-
-		if (c == null)
-			return null;
-
-		Optional<T> o = getBean(c);
-		if (o.isPresent())
-			return o.get();
-
-		ClassInfo ci = ClassInfo.of(c);
-
-		Supplier<String> msg = null;
-
-		MethodInfo matchedCreator = null;
-		int matchedCreatorParams = -1;
-
-		for (MethodInfo m : ci.getPublicMethods()) {
-
-			if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(c) && (!m.hasAnnotation(BeanIgnore.class))) {
-				String n = m.getSimpleName();
-				if (isOneOf(n, "create","getInstance")) {
-					List<ClassInfo> missing = getMissingParamTypes(m.getParams());
-					if (missing.isEmpty()) {
-						if (m.getParamCount() > matchedCreatorParams) {
-							matchedCreatorParams = m.getParamCount();
-							matchedCreator = m;
-						}
-					} else {
-						msg = ()-> "Static creator found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
-					}
-				}
-			}
-		}
-
-		if (matchedCreator != null)
-			return matchedCreator.invoke(null, getParams(matchedCreator.getParams()));
-
-		if (ci.isInterface())
-			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is an interface");
-		if (ci.isAbstract())
-			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is abstract");
-
-		ConstructorInfo matchedConstructor = null;
-		int matchedConstructorParams = -1;
-
-		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			List<ClassInfo> missing = getMissingParamTypes(cc.getParams());
-			if (missing.isEmpty()) {
-				if (cc.getParamCount() > matchedConstructorParams) {
-					matchedConstructorParams = cc.getParamCount();
-					matchedConstructor = cc;
-				}
-			} else {
-				msg = ()-> "Public constructor found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
-			}
-		}
-
-		if (matchedConstructor == null) {
-			for (ConstructorInfo cc : ci.getDeclaredConstructors()) {
-				if (cc.isProtected()) {
-					List<ClassInfo> missing = getMissingParamTypes(cc.getParams());
-					if (missing.isEmpty()) {
-						if (cc.getParamCount() > matchedConstructorParams) {
-							matchedConstructorParams = cc.getParamCount();
-							matchedConstructor = cc.accessible();
-						}
-					} else {
-						msg = ()-> "Protected constructor found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
-					}
-				}
-			}
-		}
-
-		// Look for static-builder/protected-constructor pair.
-		if (matchedConstructor == null) {
-			for (ConstructorInfo cc2 : ci.getDeclaredConstructors()) {
-				if (cc2.getParamCount() == 1 && cc2.isVisible(Visibility.PROTECTED)) {
-					Class<?> pt = cc2.getParam(0).getParameterType().inner();
-					for (MethodInfo m : ci.getPublicMethods()) {
-						if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(pt) && (!m.hasAnnotation(BeanIgnore.class))) {
-							Object builder = m.invoke(null);
-							return cc2.accessible().invoke(builder);
-						}
-					}
-				}
-			}
-		}
-
-		if (matchedConstructor != null)
-			return matchedConstructor.invoke(getParams(matchedConstructor.getParams()));
-
-		if (msg == null)
-			msg = () -> "Public constructor or creator not found";
-
-		throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg.get());
-	}
-
-	/**
-	 * Same as {@link #createBean(Class)} but allows you to validate that the specified type is of the specified parent class.
-	 *
-	 * @param <T> The bean type to create.
-	 * @param c The bean type to create.
-	 * @param type The bean subtype to create.
-	 * @return A newly-created bean.
-	 * @throws ExecutableException If bean could not be created.
-	 */
-	public <T> T createBean(Class<T> c, Class<? extends T> type) {
-		if (type != null && ! c.isAssignableFrom(type))
-			throw new ExecutableException("Could not instantiate class of type {0} because it was not a subtype of the class: {1}.", c.getName(), type);
-		return createBean(type);
-	}
-
-	/**
-	 * Same as {@link #createBean(Class)} but returns the bean creation wrapped in a supplier.
+	 * Instantiates a bean creator.
 	 *
 	 * @param c The bean type to create.
-	 * @return A supplier for the newly-created bean.
+	 * @return A new bean creator.
 	 */
-	public <T> Supplier<T> createBeanSupplier(Class<T> c) {
-		return () -> {
-			try {
-				return createBean(c);
-			} catch (ExecutableException e) {
-				throw runtimeException(e);
-			}
-		};
+	public <T> BeanCreator<T> creator(Class<T> c) {
+		return new BeanCreator<>(c).store(this).outer(outer.orElse(null));
 	}
 
 	/**
@@ -578,7 +445,7 @@ public class BeanStore {
 	 * @param resource The class containing the bean creator method.
 	 * @return The created bean or the default value if method could not be found.
 	 */
-	public <T> BeanCreateMethodFinder<T> beanCreateMethodFinder(Class<T> c, Object resource) {
+	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> c, Object resource) {
 		return new BeanCreateMethodFinder<>(c, resource, this);
 	}
 
@@ -589,7 +456,7 @@ public class BeanStore {
 	 * @param resourceClass The class containing the bean creator method.
 	 * @return The created bean or the default value if method could not be found.
 	 */
-	public <T> BeanCreateMethodFinder<T> beanCreateMethodFinder(Class<T> c, Class<?> resourceClass) {
+	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> c, Class<?> resourceClass) {
 		return new BeanCreateMethodFinder<>(c, resourceClass, this);
 	}
 
@@ -613,14 +480,14 @@ public class BeanStore {
 	 */
 	public List<ClassInfo> getMissingParamTypes(List<ParamInfo> params) {
 		List<ClassInfo> l = AList.create();
-		for (int i = 0; i < params.size(); i++) {
+		loop: for (int i = 0; i < params.size(); i++) {
 			ParamInfo pi = params.get(i);
 			ClassInfo pt = pi.getParameterType();
 			ClassInfo ptu = pt.unwrap(Optional.class);
 			if (i == 0 && ptu.isInstance(outer.orElse(null)))
-				continue;
+				continue loop;
 			if (pt.is(Optional.class))
-				continue;
+				continue loop;
 			String beanName = findBeanName(pi);
 			if (beanName == null)
 				beanName = ptu.inner().getName();

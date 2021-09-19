@@ -18,6 +18,7 @@ import java.util.*;
 import javax.activation.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
@@ -53,16 +54,19 @@ public interface StaticFiles extends FileFinder {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends FileFinder.Builder {
+	public static class Builder extends BeanBuilder<StaticFiles> {
 
 		List<Header> headers;
 		MimetypesFileTypeMap mimeTypes;
+		FileFinder.Builder fileFinder;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
+			super(BasicStaticFiles.class);
 			headers = AList.create();
+			fileFinder = FileFinder.create();
 			mimeTypes = new ExtendedMimetypesFileTypeMap();
 		}
 
@@ -77,14 +81,9 @@ public interface StaticFiles extends FileFinder {
 			mimeTypes = copyFrom.mimeTypes;
 		}
 
-		@Override
-		public StaticFiles build() {
-			return (StaticFiles)super.build();
-		}
-
-		@Override
-		protected Class<? extends FileFinder> getDefaultType() {
-			return BasicStaticFiles.class;
+		@Override /* BeanBuilder */
+		protected StaticFiles buildDefault() {
+			return new BasicStaticFiles(this);
 		}
 
 		/**
@@ -126,58 +125,112 @@ public interface StaticFiles extends FileFinder {
 			return this;
 		}
 
-		@Override
-		public Builder copy() {
-			return new Builder(this);
+		/**
+		 * Enables in-memory caching of files for quicker retrieval.
+		 *
+		 * @param cachingLimit The maximum file size in bytes.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder caching(long cachingLimit) {
+			fileFinder.caching(cachingLimit);
+			return this;
+		}
+
+		/**
+		 * Adds a class subpackage to the lookup paths.
+		 *
+		 * @param c The class whose package will be added to the lookup paths.  Must not be <jk>null</jk>.
+		 * @param path The absolute or relative subpath.
+		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder cp(Class<?> c, String path, boolean recursive) {
+			fileFinder.cp(c, path, recursive);
+			return this;
+		}
+
+		/**
+		 * Adds a file system directory to the lookup paths.
+		 *
+		 * @param path The path relative to the working directory.  Must not be <jk>null</jk>
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder dir(String path) {
+			fileFinder.dir(path);
+			return this;
+		}
+
+		/**
+		 * Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.
+		 *
+		 * @param patterns
+		 * 	The regular expression exclude patterns.
+		 * 	<br>If none are specified, no files will be excluded.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder exclude(String...patterns) {
+			fileFinder.exclude(patterns);
+			return this;
+		}
+
+		/**
+		 * Specifies the regular expression file name patterns to use to include files being retrieved from the file source.
+		 *
+		 * @param patterns
+		 * 	The regular expression include patterns.
+		 * 	<br>The default is <js>".*"</js>.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder include(String...patterns) {
+			fileFinder.include(patterns);
+			return this;
+		}
+
+		/**
+		 * Adds a file system directory to the lookup paths.
+		 *
+		 * @param path The directory path.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder path(Path path) {
+			fileFinder.path(path);
+			return this;
 		}
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
 		}
 
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder caching(long cachingLimit) {
-			super.caching(cachingLimit);
-			return this;
-		}
-
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder cp(Class<?> c, String path, boolean recursive) {
-			super.cp(c, path, recursive);
-			return this;
-		}
-
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder dir(String path) {
-			super.dir(path);
-			return this;
-		}
-
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder exclude(String...patterns) {
-			super.exclude(patterns);
-			return this;
-		}
-
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder type(Class<? extends org.apache.juneau.cp.FileFinder> value) {
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends StaticFiles> value) {
 			super.type(value);
 			return this;
 		}
 
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder include(String...patterns) {
-			super.include(patterns);
+		@Override /* BeanBuilder */
+		public Builder impl(StaticFiles value) {
+			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - FileFinderBuilder */
-		public Builder path(Path path) {
-			super.path(path);
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
 			return this;
 		}
 

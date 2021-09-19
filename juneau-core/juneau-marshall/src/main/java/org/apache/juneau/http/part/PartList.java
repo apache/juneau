@@ -24,6 +24,7 @@ import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.HttpParts;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
@@ -228,7 +229,7 @@ public class PartList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<PartList> {
 
 		final List<NameValuePair> entries;
 		List<NameValuePair> defaultEntries;
@@ -239,6 +240,7 @@ public class PartList {
 		 * Constructor.
 		 */
 		public Builder() {
+			super(PartList.class);
 			entries = new ArrayList<>();
 		}
 
@@ -248,6 +250,7 @@ public class PartList {
 		 * @param copyFrom The bean to copy from.
 		 */
 		public Builder(PartList copyFrom) {
+			super(copyFrom.getClass());
 			entries = new ArrayList<>(copyFrom.entries.length);
 			for (int i = 0; i < copyFrom.entries.length; i++)
 				entries.add(copyFrom.entries[i]);
@@ -260,27 +263,15 @@ public class PartList {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			entries = new ArrayList<>(copyFrom.entries);
 			defaultEntries = copyFrom.defaultEntries == null ? null : new ArrayList<>(copyFrom.defaultEntries);
 			varResolver = copyFrom.varResolver;
 			caseInsensitive = copyFrom.caseInsensitive;
 		}
 
-		/**
-		 * Creates a modifiable copy of this builder.
-		 *
-		 * @return A shallow copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		/**
-		 * Creates a new {@link PartList} bean based on the contents of this builder.
-		 *
-		 * @return A new {@link PartList} bean.
-		 */
-		public PartList build() {
+		@Override /* BeanBuilder */
+		protected PartList buildDefault() {
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new PartList(this);
 		}
 
@@ -1136,10 +1127,42 @@ public class PartList {
 			return Optional.empty();
 		}
 
+		// <FluentSetters>
+
 		@Override /* Object */
 		public String toString() {
 			return "[" + join(entries, ", ") + "]";
 		}
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends PartList> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(PartList value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

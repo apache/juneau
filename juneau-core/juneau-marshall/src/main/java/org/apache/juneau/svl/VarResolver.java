@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
@@ -104,18 +105,17 @@ public class VarResolver {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<VarResolver> {
 
 		final VarList vars;
-		BeanStore beanStore;
-		VarResolver impl;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
+			super(VarResolver.class);
 			vars = VarList.create();
-			beanStore = BeanStore.create().build();
+			beanStore(BeanStore.create().build());
 		}
 
 		/**
@@ -124,8 +124,9 @@ public class VarResolver {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(VarResolver copyFrom) {
+			super(copyFrom.getClass());
 			vars = VarList.of(copyFrom.vars);
-			beanStore = BeanStore.of(copyFrom.beanStore);
+			beanStore(copyFrom.beanStore.copy().build());
 		}
 
 		/**
@@ -134,9 +135,13 @@ public class VarResolver {
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			vars = copyFrom.vars.copy();
-			beanStore = BeanStore.of(copyFrom.beanStore);
-			impl = copyFrom.impl;
+		}
+
+		@Override /* BeanBuilder */
+		protected VarResolver buildDefault() {
+			return new VarResolver(this);
 		}
 
 		/**
@@ -180,17 +185,6 @@ public class VarResolver {
 		}
 
 		/**
-		 * Specify a pre-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The pre-instantiated bean.
-		 * @return This object.
-		 */
-		public Builder impl(VarResolver value) {
-			this.impl = value;
-			return this;
-		}
-
-		/**
 		 * Adds the default variables to this builder.
 		 *
 		 * <p>
@@ -221,17 +215,6 @@ public class VarResolver {
 		}
 
 		/**
-		 * Associates a bean store with this builder.
-		 *
-		 * @param value The bean store to associate with this var resolver.
-		 * @return This object .
-		 */
-		public Builder beanStore(BeanStore value) {
-			this.beanStore = BeanStore.of(value);
-			return this;
-		}
-
-		/**
 		 * Adds a bean to the bean store in this session.
 		 *
 		 * @param <T> The bean type.
@@ -240,27 +223,42 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public <T> Builder bean(Class<T> c, T value) {
-			beanStore.addBean(c, value);
+			beanStore().get().addBean(c, value);
 			return this;
 		}
 
-		/**
-		 * Create a new var resolver using the settings in this builder.
-		 *
-		 * @return A new var resolver.
-		 */
-		public VarResolver build() {
-			return impl != null ? impl : new VarResolver(this);
-		}
+		// <FluentSetters>
 
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A new copy of this builder.
-		 */
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends VarResolver> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(VarResolver value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -277,20 +275,19 @@ public class VarResolver {
 	 * @param builder The builder for this object.
 	 */
 	protected VarResolver(Builder builder) {
-		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore,x)).toArray(Var[]::new);
+		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore().get(),x)).toArray(Var[]::new);
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Var v : vars)
 			m.put(v.getName(), v);
 
 		this.varMap = AMap.unmodifiable(m);
-		this.beanStore = BeanStore.of(builder.beanStore);
+		this.beanStore = BeanStore.of(builder.beanStore().get());
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class)
-			return bs.createBean(Var.class, (Class<? extends Var>)o);
+			return bs.creator(Var.class).type((Class<?>)o).run();
 		return (Var)o;
 	}
 

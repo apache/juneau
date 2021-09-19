@@ -302,7 +302,19 @@ public abstract class ExecutableInfo {
 	 */
 	public final Annotation[] getParameterAnnotations(int index) {
 		checkIndex(index);
-		return e.getParameterAnnotations()[index];
+		Annotation[][] x = e.getParameterAnnotations();
+		int c = e.getParameterCount();
+		if (c != x.length) {
+			// Seems to be a JVM bug where getParameterAnnotations() don't take mandated parameters into account.
+			Annotation[][] x2 = new Annotation[c][];
+			int diff = c - x.length;
+			for (int i = 0; i < diff; i++)
+				x2[i] = new Annotation[0];
+			for (int i = diff; i < c; i++)
+				x2[i] = x[i-diff];
+			x = x2;
+		}
+		return x[index];
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

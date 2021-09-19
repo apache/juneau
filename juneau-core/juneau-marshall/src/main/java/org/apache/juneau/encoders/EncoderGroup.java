@@ -103,17 +103,31 @@ public final class EncoderGroup {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<EncoderGroup> {
 		List<Object> entries;
 		Builder inheritFrom;
-		BeanStore beanStore = BeanStore.create().build();
 
-		Builder() {
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(EncoderGroup.class);
 			entries = AList.create();
 		}
 
-		Builder(Builder copyFrom) {
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			entries = AList.of(copyFrom.entries);
+		}
+
+		@Override /* BeanBuilder */
+		protected EncoderGroup buildDefault() {
+			return new EncoderGroup(this);
 		}
 
 		/**
@@ -196,32 +210,6 @@ public final class EncoderGroup {
 		}
 
 		/**
-		 * Associates a bean store with this builder.
-		 *
-		 * <p>
-		 * Used for instantiating encoders specified via classes.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
-		 */
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
-			return this;
-		}
-
-		/**
-		 * Creates a new {@link EncoderGroup} object using a snapshot of the settings defined in this builder.
-		 *
-		 * <p>
-		 * This method can be called multiple times to produce multiple encoder groups.
-		 *
-		 * @return A new {@link EncoderGroup} object.
-		 */
-		public EncoderGroup build() {
-			return new EncoderGroup(this);
-		}
-
-		/**
 		 * Returns <jk>true</jk> if this builder is empty.
 		 *
 		 * @return <jk>true</jk> if this builder is empty.
@@ -246,6 +234,39 @@ public final class EncoderGroup {
 			return entries;
 		}
 
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends EncoderGroup> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(EncoderGroup value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
+
 		@Override /* Object */
 		public String toString() {
 			return entries.stream().map(x -> toString(x)).collect(joining(",","[","]"));
@@ -257,15 +278,6 @@ public final class EncoderGroup {
 			if (o instanceof Class)
 				return "class:" + ((Class<?>)o).getSimpleName();
 			return "object:" + o.getClass().getSimpleName();
-		}
-
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
 		}
 	}
 
@@ -286,7 +298,7 @@ public final class EncoderGroup {
 	 * @param builder The builder for this object.
 	 */
 	protected EncoderGroup(Builder builder) {
-		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore, x)).toArray(Encoder[]::new);
+		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore().orElse(BeanStore.INSTANCE), x)).toArray(Encoder[]::new);
 
 		List<String> lc = AList.create();
 		List<Encoder> l = AList.create();
@@ -301,12 +313,11 @@ public final class EncoderGroup {
 		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Encoder instantiate(BeanStore bs, Object o) {
 		if (o instanceof Encoder)
 			return (Encoder)o;
 		try {
-			return bs.createBean(Encoder.class, (Class<? extends Encoder>)o);
+			return bs.creator(Encoder.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e);
 		}

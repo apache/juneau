@@ -36,11 +36,12 @@ import org.apache.juneau.internal.*;
  * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link HttpResource}
  * objects with arbitrary headers.
  */
-public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
+public class BasicStaticFiles implements StaticFiles {
 
 	private final Header[] headers;
 	private final MimetypesFileTypeMap mimeTypes;
 	private final int hashCode;
+	private final FileFinder fileFinder;
 
 	/**
 	 * Creates a new builder for this object.
@@ -57,10 +58,10 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 	 * @param builder The builder object.
 	 */
 	public BasicStaticFiles(StaticFiles.Builder builder) {
-		super(builder);
 		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
 		this.mimeTypes = builder.mimeTypes;
 		this.hashCode = HashCode.of(hashCode(), headers);
+		this.fileFinder = builder.fileFinder.build();
 	}
 
 	/**
@@ -74,6 +75,7 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 		this.headers = new Header[0];
 		this.mimeTypes = null;
 		this.hashCode = HashCode.of(hashCode(), headers);
+		this.fileFinder = null;
 	}
 
 	/**
@@ -103,9 +105,13 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 		}
 	}
 
-	@Override /* FileFinder */
+	/**
+	 * Returns a map representation of this bean.
+	 *
+	 * @return A map representation of this bean.
+	 */
 	public OMap toMap() {
-		return super.toMap()
+		return OMap.create()
 			.a("headers", headers)
 		;
 	}
@@ -118,5 +124,25 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 	@Override /* Object */
 	public boolean equals(Object o) {
 		return super.equals(o) && o instanceof BasicStaticFiles && eq(this, (BasicStaticFiles)o, (x,y)->eq(x.headers, y.headers));
+	}
+
+	@Override /* FileFinder */
+	public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
+		return fileFinder.getStream(name, locale);
+	}
+
+	@Override /* FileFinder */
+	public Optional<InputStream> getStream(String name) throws IOException {
+		return fileFinder.getStream(name);
+	}
+
+	@Override /* FileFinder */
+	public Optional<String> getString(String name) throws IOException {
+		return fileFinder.getString(name);
+	}
+
+	@Override /* FileFinder */
+	public Optional<String> getString(String name, Locale locale) throws IOException {
+		return fileFinder.getString(name, locale);
 	}
 }

@@ -76,12 +76,10 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		throw new NoSuchMethodError("Not implemented.");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
 	public RestOpContext build() {
 		try {
-			Class<? extends RestOpContext> ic = (Class<? extends RestOpContext>) getType().orElse(getDefaultImplClass());
-			return BeanStore.of(beanStore).addBean(RestOpContextBuilder.class, this).createBean(ic);
+			return BeanCreator.create(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).store(beanStore).builder(this).run();
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}

@@ -76,8 +76,7 @@ public class RestOperations {
 			try {
 				if (impl != null)
 					return impl;
-				Class<? extends RestOperations> ic = firstNonNull(type, getDefaultImplClass());
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+				return BeanCreator.create(RestOperations.class).type(firstNonNull(type, getDefaultImplClass())).store(beanStore).builder(this).run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}

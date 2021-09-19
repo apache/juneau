@@ -13,8 +13,6 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -109,19 +107,17 @@ public interface FileFinder {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<FileFinder> {
 
 		final Set<LocalDir> roots;
 		long cachingLimit;
 		List<Pattern> include, exclude;
-		Class<? extends FileFinder> type;
-		FileFinder impl;
-		BeanStore beanStore;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
+			super(BasicFileFinder.class);
 			roots = new LinkedHashSet<>();
 			cachingLimit = -1;
 			include = AList.of(Pattern.compile(".*"));
@@ -134,38 +130,16 @@ public interface FileFinder {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			roots = new LinkedHashSet<>(copyFrom.roots);
 			cachingLimit = copyFrom.cachingLimit;
 			include = AList.of(copyFrom.include);
 			exclude = AList.of(copyFrom.exclude);
-			beanStore = copyFrom.beanStore;
-			type = copyFrom.type;
-			impl = copyFrom.impl;
 		}
 
-		/**
-		 * Create a new {@link FileFinder} using this builder.
-		 *
-		 * @return A new {@link FileFinder}
-		 */
-		public FileFinder build() {
-			try {
-				if (impl != null)
-					return impl;
-				Class<? extends FileFinder> ic = isConcrete(type) ? type : getDefaultType();
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
-			} catch (ExecutableException e) {
-				throw runtimeException(e);
-			}
-		}
-
-		/**
-		 * Returns the default bean type if not specified via {@link #type(Class)}.
-		 *
-		 * @return The default bean type.
-		 */
-		protected Class<? extends FileFinder> getDefaultType() {
-			return BasicFileFinder.class;
+		@Override /* BeanBuilder */
+		protected FileFinder buildDefault() {
+			return new BasicFileFinder(this);
 		}
 
 		/**
@@ -250,53 +224,38 @@ public interface FileFinder {
 			return this;
 		}
 
-		/**
-		 * Specifies the bean store to use for instantiating the {@link FileFinder} object.
-		 *
-		 * <p>
-		 * Can be used to instantiate {@link FileFinder} implementations with injected constructor argument beans.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		@FluentSetter
-		public Builder beanStore(BeanStore value) {
-			this.beanStore = value;
-			return this;
-		}
+		// <FluentSetters>
 
-		/**
-		 * Specifies a subclass of {@link FileFinder} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		@FluentSetter
-		public Builder type(Class<? extends FileFinder> value) {
-			this.type = value;
-			return this;
-		}
-
-		/**
-		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder impl(FileFinder value) {
-			this.impl = value;
-			return this;
-		}
-
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends FileFinder> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(FileFinder value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

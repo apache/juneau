@@ -24,6 +24,7 @@ import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
@@ -240,11 +241,10 @@ public class HeaderList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<HeaderList> {
 
 		final List<Header> entries;
 		List<Header> defaultEntries;
-		HeaderList impl;
 		private VarResolver varResolver;
 		boolean caseSensitive;
 
@@ -252,6 +252,7 @@ public class HeaderList {
 		 * Constructor.
 		 */
 		public Builder() {
+			super(HeaderList.class);
 			entries = new ArrayList<>();
 		}
 
@@ -261,6 +262,7 @@ public class HeaderList {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(HeaderList copyFrom) {
+			super(copyFrom.getClass());
 			entries = new ArrayList<>(copyFrom.entries.length);
 			for (int i = 0; i < copyFrom.entries.length; i++)
 				entries.add(copyFrom.entries[i]);
@@ -273,29 +275,15 @@ public class HeaderList {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			entries = new ArrayList<>(copyFrom.entries);
 			defaultEntries = copyFrom.defaultEntries == null ? null : new ArrayList<>(copyFrom.defaultEntries);
 			varResolver = copyFrom.varResolver;
 			caseSensitive = copyFrom.caseSensitive;
 		}
 
-		/**
-		 * Creates a modifiable copy of this builder.
-		 *
-		 * @return A shallow copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		/**
-		 * Creates a new {@link HeaderList} bean based on the contents of this builder.
-		 *
-		 * @return A new {@link HeaderList} bean.
-		 */
-		public HeaderList build() {
-			if (impl != null)
-				return impl;
+		@Override /* BeanBuilder */
+		protected HeaderList buildDefault() {
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new HeaderList(this);
 		}
 
@@ -1157,16 +1145,38 @@ public class HeaderList {
 			return Optional.empty();
 		}
 
-		/**
-		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder impl(HeaderList value) {
-			impl = value;
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends HeaderList> value) {
+			super.type(value);
 			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(HeaderList value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 
 		@Override /* Object */
 		public String toString() {

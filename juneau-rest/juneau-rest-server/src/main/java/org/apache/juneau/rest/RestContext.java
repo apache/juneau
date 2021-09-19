@@ -138,7 +138,9 @@ public class RestContext extends Context {
 			.addBean(Class.class, resourceClass)
 			.addBean(RestContext.class, parentContext)
 			.addBean(ServletConfig.class, servletConfig)
-			.createBean(v.get());
+			.creator(RestContextBuilder.class)
+			.type(v.get())
+			.run();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -993,7 +995,7 @@ public class RestContext extends Context {
 			beanStore.addBean(ParamInfo.class, pi);
 			for (Class<? extends RestOpArg> c : restOpArgs) {
 				try {
-					ra[i] = beanStore.createBean(c);
+					ra[i] = beanStore.creator(RestOpArg.class).type(c).run();
 					if (ra[i] != null)
 						break;
 				} catch (ExecutableException e) {
@@ -1028,7 +1030,7 @@ public class RestContext extends Context {
 			beanStore.addBean(ParamInfo.class, pi);
 			for (Class<? extends RestOpArg> c : hookMethodArgs) {
 				try {
-					ra[i] = beanStore.createBean(c);
+					ra[i] = beanStore.creator(RestOpArg.class).type(c).run();
 					if (ra[i] != null)
 						break;
 				} catch (ExecutableException e) {

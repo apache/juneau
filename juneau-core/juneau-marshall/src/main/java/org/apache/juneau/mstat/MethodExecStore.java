@@ -13,8 +13,6 @@
 package org.apache.juneau.mstat;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -51,18 +49,17 @@ public class MethodExecStore {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<MethodExecStore> {
 
 		ThrownStore thrownStore;
-		private Class<? extends MethodExecStore> implClass;
-		MethodExecStore impl;
-		BeanStore beanStore;
 		Class<? extends MethodExecStats> statsImplClass;
 
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {}
+		protected Builder() {
+			super(MethodExecStore.class);
+		}
 
 		/**
 		 * Copy constructor.
@@ -70,52 +67,14 @@ public class MethodExecStore {
 		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			thrownStore = copyFrom.thrownStore;
-			implClass = copyFrom.implClass;
-			impl = copyFrom.impl;
-			beanStore = copyFrom.beanStore;
 			statsImplClass = copyFrom.statsImplClass;
 		}
 
-		/**
-		 * Create a new {@link MethodExecStore} using this builder.
-		 *
-		 * @return A new {@link MethodExecStore}
-		 */
-		public MethodExecStore build() {
-			try {
-				if (impl != null)
-					return impl;
-				Class<? extends MethodExecStore> ic = isConcrete(implClass) ? implClass : MethodExecStore.class;
-				return BeanStore.of(beanStore).addBean(Builder.class, this).createBean(ic);
-			} catch (ExecutableException e) {
-				throw runtimeException(e);
-			}
-		}
-
-		/**
-		 * Specifies the bean store to use for instantiating the {@link MethodExecStore} object.
-		 *
-		 * <p>
-		 * Can be used to instantiate {@link MethodExecStore} implementations with injected constructor argument beans.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
-			return this;
-		}
-
-		/**
-		 * Specifies a subclass of {@link MethodExecStore} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder implClass(Class<? extends MethodExecStore> value) {
-			implClass = value;
-			return this;
+		@Override /* BeanBuilder */
+		protected MethodExecStore buildDefault() {
+			return new MethodExecStore(this);
 		}
 
 		/**
@@ -158,25 +117,38 @@ public class MethodExecStore {
 			return this;
 		}
 
-		/**
-		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder impl(MethodExecStore value) {
-			impl = value;
-			return this;
-		}
+		// <FluentSetters>
 
-		/**
-		 * Returns a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends MethodExecStore> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(MethodExecStore value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -194,7 +166,7 @@ public class MethodExecStore {
 	 * @param builder The store to use for storing thrown exception statistics.
 	 */
 	protected MethodExecStore(Builder builder) {
-		this.beanStore = ofNullable(builder.beanStore).orElseGet(()->BeanStore.create().build());
+		this.beanStore = builder.beanStore().orElseGet(()->BeanStore.create().build());
 		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
 		this.statsImplClass = builder.statsImplClass;
 	}
@@ -214,7 +186,7 @@ public class MethodExecStore {
 			stats = MethodExecStats
 				.create()
 				.beanStore(beanStore)
-				.implClass(statsImplClass)
+				.type(statsImplClass)
 				.method(m)
 				.thrownStore(ThrownStore.create().parent(thrownStore).build())
 				.build();

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.*;
@@ -77,8 +77,7 @@ public class RestChildren {
 			try {
 				if (impl != null)
 					return impl;
-				Class<? extends RestChildren> ic = firstNonNull(type, getDefaultImplClass());
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+				return BeanCreator.create(RestChildren.class).type(isConcrete(type) ? type : getDefaultImplClass()).store(beanStore).builder(this).run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}

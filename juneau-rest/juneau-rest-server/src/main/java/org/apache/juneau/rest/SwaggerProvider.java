@@ -103,8 +103,7 @@ public interface SwaggerProvider {
 			try {
 				if (impl != null)
 					return impl;
-				Class<? extends SwaggerProvider> ic = isConcrete(type) ? type : getDefaultType();
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+				return BeanCreator.create(SwaggerProvider.class).type(isConcrete(type) ? type : getDefaultType()).store(beanStore).builder(this).run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}

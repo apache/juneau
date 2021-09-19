@@ -200,8 +200,7 @@ public interface RestLogger {
 			try {
 				if (impl != null)
 					return impl;
-				Class<? extends RestLogger> ic = isConcrete(type) ? type : BasicRestLogger.class;
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+				return BeanCreator.create(RestLogger.class).type(isConcrete(type) ? type : BasicRestLogger.class).store(beanStore).builder(this).findSingleton().run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}

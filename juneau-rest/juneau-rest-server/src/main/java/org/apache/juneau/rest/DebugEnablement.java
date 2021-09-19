@@ -101,8 +101,7 @@ public interface DebugEnablement {
 			try {
 				if (impl != null)
 					return impl;
-				Class<? extends DebugEnablement> ic = isConcrete(type) ? type : getDefaultImplClass();
-				return BeanStore.of(beanStore).addBeans(Builder.class, this).createBean(ic);
+				return BeanCreator.create(DebugEnablement.class).type(isConcrete(type) ? type : getDefaultImplClass()).store(beanStore).builder(this).run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}

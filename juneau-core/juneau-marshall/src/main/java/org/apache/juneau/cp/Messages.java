@@ -21,6 +21,7 @@ import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
@@ -152,11 +153,10 @@ public class Messages extends ResourceBundle {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<Messages> {
 
 		Class<?> forClass;
 		Locale locale;
-		Messages impl;
 		String name;
 		Messages parent;
 		List<Tuple2<Class<?>,String>> locations;
@@ -169,6 +169,7 @@ public class Messages extends ResourceBundle {
 		 * @param forClass The base class.
 		 */
 		protected Builder(Class<?> forClass) {
+			super(Messages.class);
 			this.forClass = forClass;
 			this.name = forClass.getSimpleName();
 			locations = new ArrayList<>();
@@ -181,12 +182,48 @@ public class Messages extends ResourceBundle {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			forClass = copyFrom.forClass;
 			locale = copyFrom.locale;
-			impl = copyFrom.impl;
 			name = copyFrom.name;
 			parent = copyFrom.parent;
 			locations = new ArrayList<>(copyFrom.locations);
+		}
+
+		@Override /* BeanBuilder */
+		protected Messages buildDefault() {
+
+			if (! locations.isEmpty()) {
+				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
+
+				Builder x = null;
+
+				for (int i = mbl.length-1; i >= 0; i--) {
+					Class<?> c = firstNonNull(mbl[i].getA(), forClass);
+					String value = mbl[i].getB();
+					if (isJsonObject(value, true)) {
+						MessagesString ms;
+						try {
+							ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
+						} catch (ParseException e) {
+							throw runtimeException(e);
+						}
+						x = Messages.create(c).name(ms.name).baseNames(split(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
+					} else {
+						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
+					}
+				}
+
+				return x == null ? null : x.build();  // Shouldn't be null.
+			}
+
+			return new Messages(this);
+		}
+
+		private static class MessagesString {
+			public String name;
+			public String[] baseNames;
+			public String locale;
 		}
 
 		/**
@@ -258,17 +295,6 @@ public class Messages extends ResourceBundle {
 		}
 
 		/**
-		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder impl(Messages value) {
-			this.impl = value;
-			return this;
-		}
-
-		/**
 		 * Specifies a location of where to look for messages.
 		 *
 		 * @param baseClass The base class.
@@ -278,49 +304,6 @@ public class Messages extends ResourceBundle {
 		public Builder location(Class<?> baseClass, String bundlePath) {
 			this.locations.add(0, Tuple2.of(baseClass, bundlePath));
 			return this;
-		}
-
-		/**
-		 * Creates a new {@link Messages} based on the setting of this builder.
-		 *
-		 * @return A new {@link Messages} object.
-		 */
-		public Messages build() {
-
-			if (impl != null)
-				return impl;
-
-			if (! locations.isEmpty()) {
-				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
-
-				Builder x = null;
-
-				for (int i = mbl.length-1; i >= 0; i--) {
-					Class<?> c = firstNonNull(mbl[i].getA(), forClass);
-					String value = mbl[i].getB();
-					if (isJsonObject(value, true)) {
-						MessagesString ms;
-						try {
-							ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
-						} catch (ParseException e) {
-							throw runtimeException(e);
-						}
-						x = Messages.create(c).name(ms.name).baseNames(split(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
-					} else {
-						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
-					}
-				}
-
-				return x == null ? null : x.build();  // Shouldn't be null.
-			}
-
-			return new Messages(this);
-		}
-
-		private static class MessagesString {
-			public String name;
-			public String[] baseNames;
-			public String locale;
 		}
 
 		ResourceBundle getBundle() {
@@ -335,14 +318,38 @@ public class Messages extends ResourceBundle {
 			return null;
 		}
 
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends Messages> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(Messages value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// <FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -253,7 +253,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(RestConverterList.Builder.class, x)
-			.beanCreateMethodFinder(RestConverterList.Builder.class, resource)
+			.createMethodFinder(RestConverterList.Builder.class, resource)
 			.find("createConverters", Method.class)
 			.thenFind("createConverters")
 			.withDefault(x)
@@ -310,7 +310,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(RestGuardList.Builder.class, x)
-			.beanCreateMethodFinder(RestGuardList.Builder.class, resource)
+			.createMethodFinder(RestGuardList.Builder.class, resource)
 			.find("createGuards", Method.class)
 			.thenFind("createGuards")
 			.withDefault(x)
@@ -358,7 +358,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(RestMatcherList.Builder.class, x)
-			.beanCreateMethodFinder(RestMatcherList.Builder.class, resource)
+			.createMethodFinder(RestMatcherList.Builder.class, resource)
 			.find("createMatchers", Method.class)
 			.withDefault(x)
 			.run();
@@ -405,7 +405,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(EncoderGroup.Builder.class, x)
-			.beanCreateMethodFinder(EncoderGroup.Builder.class, resource)
+			.createMethodFinder(EncoderGroup.Builder.class, resource)
 			.find("createEncoders", Method.class)
 			.thenFind("createEncoders")
 			.withDefault(x)
@@ -456,7 +456,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(SerializerGroup.Builder.class, x)
-			.beanCreateMethodFinder(SerializerGroup.Builder.class, resource)
+			.createMethodFinder(SerializerGroup.Builder.class, resource)
 			.find("createSerializers", Method.class)
 			.thenFind("createSerializers")
 			.withDefault(x)
@@ -507,7 +507,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(ParserGroup.Builder.class, x)
-			.beanCreateMethodFinder(ParserGroup.Builder.class, resource)
+			.createMethodFinder(ParserGroup.Builder.class, resource)
 			.find("createParsers", Method.class)
 			.thenFind("createParsers")
 			.withDefault(x)
@@ -560,7 +560,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(HttpPartSerializer.Creator.class, x)
-			.beanCreateMethodFinder(HttpPartSerializer.Creator.class, resource)
+			.createMethodFinder(HttpPartSerializer.Creator.class, resource)
 			.find("createPartSerializer", Method.class)
 			.thenFind("createPartSerializer")
 			.withDefault(x)
@@ -613,7 +613,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(HttpPartParser.Creator.class, x)
-			.beanCreateMethodFinder(HttpPartParser.Creator.class, resource)
+			.createMethodFinder(HttpPartParser.Creator.class, resource)
 			.find("createPartParser", Method.class)
 			.thenFind("createPartParser")
 			.withDefault(x)
@@ -670,7 +670,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(UrlPathMatcherList.class, x)
-			.beanCreateMethodFinder(UrlPathMatcherList.class, resource)
+			.createMethodFinder(UrlPathMatcherList.class, resource)
 			.find("createPathMatchers", Method.class)
 			.withDefault(x)
 			.run();
@@ -703,7 +703,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(JsonSchemaGenerator.class, x)
-			.beanCreateMethodFinder(JsonSchemaGenerator.class, resource)
+			.createMethodFinder(JsonSchemaGenerator.class, resource)
 			.find("createJsonSchemaGenerator", Method.class)
 			.thenFind("createJsonSchemaGenerator")
 			.withDefault(x)
@@ -746,7 +746,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(HeaderList.Builder.class, x)
-			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
+			.createMethodFinder(HeaderList.Builder.class, resource)
 			.find("createDefaultRequestHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -772,7 +772,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(HeaderList.Builder.class, x)
-			.beanCreateMethodFinder(HeaderList.Builder.class, resource)
+			.createMethodFinder(HeaderList.Builder.class, resource)
 			.find("createDefaultResponseHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -798,7 +798,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(NamedAttributeList.class, x)
-			.beanCreateMethodFinder(NamedAttributeList.class, resource)
+			.createMethodFinder(NamedAttributeList.class, resource)
 			.find("createDefaultRequestAttributes", Method.class)
 			.withDefault(x)
 			.run();
@@ -839,7 +839,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(PartList.Builder.class, x)
-			.beanCreateMethodFinder(PartList.Builder.class, resource)
+			.createMethodFinder(PartList.Builder.class, resource)
 			.find("createDefaultRequestQuery", Method.class)
 			.thenFind("createDefaultRequestQuery")
 			.withDefault(x)
@@ -881,7 +881,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		x = BeanStore
 			.of(beanStore, resource)
 			.addBean(PartList.Builder.class, x)
-			.beanCreateMethodFinder(PartList.Builder.class, resource)
+			.createMethodFinder(PartList.Builder.class, resource)
 			.find("createDefaultRequestFormData", Method.class)
 			.thenFind("createDefaultRequestFormData")
 			.withDefault(x)

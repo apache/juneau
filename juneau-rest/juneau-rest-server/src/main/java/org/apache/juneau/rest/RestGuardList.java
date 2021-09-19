@@ -121,7 +121,7 @@ public class RestGuardList {
 		if (o instanceof RestGuard)
 			return (RestGuard)o;
 		try {
-			return (RestGuard)bs.createBean((Class<?>)o);
+			return BeanCreator.create(RestGuard.class).type((Class<?>)o).store(bs).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}

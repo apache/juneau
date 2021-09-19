@@ -195,7 +195,7 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b02_builder_implClass() {
-		assertObject(ThrownStore.create().implClass(B1.class).build()).isType(B1.class);
+		assertObject(ThrownStore.create().type(B1.class).build()).isType(B1.class);
 	}
 
 	public static class B4 extends ThrownStore {
@@ -206,7 +206,7 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b04_builder_implClass_bad() {
-		assertThrown(()->ThrownStore.create().implClass(B4.class).build()).messages().contains("foobar");
+		assertThrown(()->ThrownStore.create().type(B4.class).build()).messages().contains("foobar");
 	}
 
 	public static class B5a {}
@@ -229,12 +229,12 @@ public class ThrownStore_Test {
 	public void b05_builder_beanFactory() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->ThrownStore.create().beanStore(bs).implClass(B5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: B5a"));
-		assertObject(ThrownStore.create().beanStore(bs).implClass(B5c.class).build()).isType(B5c.class);
+		assertThrown(()->ThrownStore.create().beanStore(bs).type(B5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: B5a"));
+		assertObject(ThrownStore.create().beanStore(bs).type(B5c.class).build()).isType(B5c.class);
 
 		bs.addBean(B5a.class, new B5a());
-		assertObject(ThrownStore.create().beanStore(bs).implClass(B5b.class).build()).isType(B5b.class);
-		assertObject(ThrownStore.create().beanStore(bs).implClass(B5c.class).build()).isType(B5c.class);
+		assertObject(ThrownStore.create().beanStore(bs).type(B5b.class).build()).isType(B5b.class);
+		assertObject(ThrownStore.create().beanStore(bs).type(B5c.class).build()).isType(B5c.class);
 	}
 
 	public static class B6a {}

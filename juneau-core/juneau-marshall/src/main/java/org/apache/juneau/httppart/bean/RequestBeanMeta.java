@@ -67,8 +67,8 @@ public class RequestBeanMeta {
 
 	RequestBeanMeta(Builder b) {
 		this.cm = b.cm;
-		this.serializer = BeanStore.INSTANCE.createBean(HttpPartSerializer.class, b.serializer);
-		this.parser = BeanStore.INSTANCE.createBean(HttpPartParser.class, b.parser);
+		this.serializer = BeanCreator.create(HttpPartSerializer.class).type(b.serializer).run();
+		this.parser = BeanCreator.create(HttpPartParser.class).type(b.parser).run();
 		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>();
 		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
 			properties.put(e.getKey(), e.getValue().build(serializer, parser));

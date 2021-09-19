@@ -40,7 +40,7 @@ public final class RemoteOperationArg {
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = ofNullable(BeanStore.INSTANCE.createBean(schema.getSerializer()));
+		this.serializer = ofNullable(BeanCreator.create(schema.getSerializer()).run());
 		this.schema = schema;
 	}
 

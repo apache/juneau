@@ -244,6 +244,16 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Applies a transform on the inner object and returns a new inner object.
+	 *
+	 * @param function The function to apply.
+	 * @return This object (for method chaining).
+	 */
+	public <T2> FluentObjectAssertion<T2,R> transform(Function<T,T2> function) {
+		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
+	/**
 	 * Converts this assertion into an {@link FluentAnyAssertion} so that it can be converted to other assertion types.
 	 *
 	 * @return This object (for method chaining).

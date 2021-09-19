@@ -25,7 +25,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Used for finding methods on an object that take in arbitrary parameters and returns bean instances.
  *
- * See {@link BeanStore#beanCreateMethodFinder(Class, Object)} for usage.
+ * See {@link BeanStore#createMethodFinder(Class, Object)} for usage.
  *
  * @param <T> The bean type being created.
  */
@@ -86,7 +86,7 @@ public class BeanCreateMethodFinder<T> {
 	 * This method can be called multiple times with different method names or required parameters until a match is found.
 	 * <br>Once a method is found, subsequent calls to this method will be no-ops.
 	 *
-	 * See {@link BeanStore#beanCreateMethodFinder(Class, Object)} for usage.
+	 * See {@link BeanStore#createMethodFinder(Class, Object)} for usage.
 	 *
 	 * @param methodName The method name.
 	 * @param requiredParams Optional required parameters.

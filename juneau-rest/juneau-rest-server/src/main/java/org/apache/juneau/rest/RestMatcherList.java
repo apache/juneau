@@ -128,7 +128,7 @@ public class RestMatcherList {
 		if (o instanceof RestMatcher)
 			return (RestMatcher)o;
 		try {
-			return (RestMatcher)bs.createBean((Class<?>)o);
+			return BeanCreator.create(RestMatcher.class).type((Class<?>)o).store(bs).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}

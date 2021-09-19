@@ -43,7 +43,7 @@ public class ThrownStatsBuilder {
 	public ThrownStats build() {
 		try {
 			Class<? extends ThrownStats> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanStore.of(beanStore).addBeans(ThrownStatsBuilder.class, this).createBean(ic);
+			return BeanCreator.create(ic).store(beanStore).builder(this).run();
 		} catch (ExecutableException e) {
 			throw runtimeException(e);
 		}

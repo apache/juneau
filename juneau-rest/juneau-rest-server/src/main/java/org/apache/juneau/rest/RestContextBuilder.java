@@ -211,7 +211,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			return (RestContext) BeanStore.of(beanStore(), resource.get()).addBeans(RestContextBuilder.class, this).createBean(getType().orElse(RestContext.class));
+			return BeanCreator.create(RestContext.class).outer(resource.get()).store(beanStore()).builder(this).type(getType().orElse(RestContext.class)).run();
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -893,7 +893,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		// Specify the implementation class if its set as a default.
 		defaultClasses()
 			.get(ThrownStore.class)
-			.ifPresent(x -> v.get().implClass(x));
+			.ifPresent(x -> v.get().type(x));
 
 		// Replace with builder from bean store.
 		beanStore
@@ -959,7 +959,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		// Specify the implementation class if its set as a default.
 		defaultClasses()
 			.get(MethodExecStore.class)
-			.ifPresent(x -> v.get().implClass(x));
+			.ifPresent(x -> v.get().type(x));
 
 		// Replace with builder from bean store.
 		beanStore
@@ -3332,11 +3332,10 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				if (oc == resourceClass)
 					continue;
 				cb = RestContext.create(oc, restContext, inner);
-				BeanStore bf = BeanStore.of(beanStore, resource).addBean(RestContextBuilder.class, cb);
-				if (bf.getBean(oc).isPresent()) {
-					so = ()->bf.getBean(oc).get();  // If we resolved via injection, always get it this way.
+				if (beanStore.getBean(oc).isPresent()) {
+					so = ()->beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
 				} else {
-					Object o2 = bf.createBean(oc);
+					Object o2 = beanStore.creator(oc).builder(cb).outer(resource).run();
 					so = ()->o2;
 				}
 			} else {
