@@ -32,6 +32,7 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -66,6 +67,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	private HttpPartSerializer.Creator partSerializer;
 	private HttpPartParser.Creator partParser;
 	private RestMatcherList.Builder matchers;
+	private JsonSchemaGeneratorBuilder jsonSchemaGenerator;
 
 	PartList.Builder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
@@ -139,6 +141,8 @@ public class RestOpContextBuilder extends ContextBuilder {
 				partSerializer().apply(al);
 			if (context.builder.partParser().canApply(al))
 				partParser().apply(al);
+			if (context.builder.jsonSchemaGenerator().canApply(al))
+				jsonSchemaGenerator().apply(al);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -428,6 +432,46 @@ public class RestOpContextBuilder extends ContextBuilder {
 
 	final Optional<HttpPartParser> getPartParser() {
 		return partParser == null ? empty() : of(partParser.create());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// jsonSchemaGenerator
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link JsonSchemaGenerator} object in the REST context.
+	 *
+	 * @return The builder for the {@link JsonSchemaGenerator} object in the REST context.
+	 */
+	public final JsonSchemaGeneratorBuilder jsonSchemaGenerator() {
+		if (jsonSchemaGenerator == null)
+			jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), parent, resource());
+		return jsonSchemaGenerator;
+	}
+
+	/**
+	 * Constructs the JSON schema generator builder for this REST method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The part serializer builder for this REST resource.
+	 */
+	protected JsonSchemaGeneratorBuilder createJsonSchemaGenerator(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		// Default value.
+		Value<JsonSchemaGeneratorBuilder> v = Value.of(
+			parent.jsonSchemaGenerator().copy()
+		);
+
+		return v.get();
+	}
+
+	final Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
+		return jsonSchemaGenerator == null ? empty() : of(jsonSchemaGenerator.build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -852,6 +896,10 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return this;
 	}
 
+	//----------------------------------------------------------------------------------------------------
+	// Properties
+	//----------------------------------------------------------------------------------------------------
+
 	/**
 	 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
 	 *
@@ -862,10 +910,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 		this.beanStore = beanStore;
 		return this;
 	}
-
-	//----------------------------------------------------------------------------------------------------
-	// Properties
-	//----------------------------------------------------------------------------------------------------
 
 	/**
 	 * Client version pattern matcher.

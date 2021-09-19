@@ -151,6 +151,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			parsers = bs.add(ParserGroup.class, builder.getParsers().orElse(context.getParsers()));
 			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
 			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
+			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
 			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
 			guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
 
@@ -160,9 +161,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
-
-			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
-			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
 			supportedAcceptTypes = unmodifiableList(ofNullable(builder.produces).orElse(serializers.getSupportedMediaTypes()));
 			supportedContentTypes = unmodifiableList(ofNullable(builder.consumes).orElse(parsers.getSupportedMediaTypes()));
@@ -210,40 +208,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
-	}
-
-	/**
-	 * Instantiates the JSON-schema generator for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The JSON-schema generator for this method.
-	 * @throws Exception If schema generator could not be instantiated.
-	 */
-	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		JsonSchemaGenerator x = null;
-
-		if (resource instanceof JsonSchemaGenerator)
-			x = (JsonSchemaGenerator)resource;
-
-		if (x == null)
-			x = beanStore.getBean(JsonSchemaGenerator.class).orElse(null);
-
-		if (x == null)
-			x = JsonSchemaGenerator.create().apply(builder.getApplied()).build();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(JsonSchemaGenerator.class, x)
-			.createMethodFinder(JsonSchemaGenerator.class, resource)
-			.find("createJsonSchemaGenerator", Method.class)
-			.thenFind("createJsonSchemaGenerator")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**
