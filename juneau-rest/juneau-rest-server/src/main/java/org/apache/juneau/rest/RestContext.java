@@ -358,7 +358,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The resource resolver associated with this context.
 	 */
-	protected BeanStore getBeanStore() {
+	public BeanStore getBeanStore() {
 		return beanStore;
 	}
 
@@ -1061,7 +1061,7 @@ public class RestContext extends Context {
 	 * @param res The rest response.
 	 * @return The wrapped request/response pair.
 	 */
-	protected RestCall createCall(Object resource, HttpServletRequest req, HttpServletResponse res) {
+	public RestCall createCall(Object resource, HttpServletRequest req, HttpServletResponse res) {
 		return new RestCall(resource, this, req, res).logger(getCallLogger());
 	}
 
@@ -1220,7 +1220,7 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException Non-200 response.
 	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
-	public void processResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
+	protected void processResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.
 		int loops = 5;
@@ -1253,7 +1253,7 @@ public class RestContext extends Context {
 	 * @param t The thrown object.
 	 * @return The converted thrown object.
 	 */
-	public Throwable convertThrowable(Throwable t) {
+	protected Throwable convertThrowable(Throwable t) {
 
 		ClassInfo ci = ClassInfo.ofc(t);
 		if (ci.is(InvocationTargetException.class)) {
@@ -1293,7 +1293,7 @@ public class RestContext extends Context {
 	 * @param call The HTTP call.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void handleNotFound(RestCall call) throws Exception {
+	protected void handleNotFound(RestCall call) throws Exception {
 		String pathInfo = call.getPathInfo();
 		String methodUC = call.getMethod();
 		int rc = call.getStatus();
@@ -1318,7 +1318,7 @@ public class RestContext extends Context {
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
-	public synchronized void handleError(RestCall call, Throwable e) throws IOException {
+	protected synchronized void handleError(RestCall call, Throwable e) throws IOException {
 
 		call.exception(e);
 
