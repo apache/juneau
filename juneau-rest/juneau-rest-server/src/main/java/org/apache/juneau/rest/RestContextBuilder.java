@@ -148,6 +148,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private RestOperations.Builder restOperations;
 	private RestChildren.Builder restChildren;
 	private SwaggerProvider.Builder swaggerProvider;
+	private BeanContextBuilder beanContext;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -265,6 +266,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		VarResolverSession vrs = varResolver().build().createSession();
 		AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
 		apply(al);
+		beanContext().apply(al);
 		partSerializer().apply(al);
 		partParser().apply(al);
 		jsonSchemaGenerator().apply(al);
@@ -1461,6 +1463,85 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.beanCreateMethodFinder(RestLogger.class)
 			.addBean(RestLogger.Builder.class, v.get())
 			.find("createCallLogger")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// partSerializer
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the part serializer builder for this context.
+	 *
+	 * @return The part serializer builder for this context.
+	 */
+	public final BeanContextBuilder beanContext() {
+		if (beanContext == null)
+			beanContext = createBeanContext(beanStore(), resource());
+		return beanContext;
+	}
+
+	/**
+	 * Instantiates the HTTP part serializer for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
+	 * 	<li>Looks for part serializer set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer()}
+	 * 			<li>{@link Rest#partSerializer()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates an {@link OpenApiSerializer}.
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The HTTP part serializer for this REST resource.
+	 */
+	protected BeanContextBuilder createBeanContext(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<BeanContextBuilder> v = Value.of(
+			BeanContext.create()
+		);
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(BeanContextBuilder.class)
+			.map(x -> x.copy())
+			.ifPresent(x -> v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(BeanContext.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Replace with builder from:  public [static] BeanContextBuilder createBeanContext(<args>)
+		beanStore
+			.beanCreateMethodFinder(BeanContextBuilder.class)
+			.addBean(BeanContextBuilder.class, v.get())
+			.find("createBeanContext")
+			.run(x -> v.set(x));
+
+		// Replace with builder from:  public [static] BeanContext createBeanContext(<args>)
+		beanStore
+			.beanCreateMethodFinder(BeanContext.class)
+			.addBean(BeanContextBuilder.class, v.get())
+			.find("createBeanContext")
 			.run(x -> v.get().impl(x));
 
 		return v.get();

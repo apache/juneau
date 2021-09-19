@@ -210,7 +210,7 @@ public class BasicSwaggerProviderSession {
 		// Iterate through all the @RestOp methods.
 		for (RestOpContext sm : context.getOpContexts()) {
 
-			BeanSession bs = sm.createBeanSession();
+			BeanSession bs = sm.getBeanContext().createBeanSession();
 
 			Method m = sm.getJavaMethod();
 			MethodInfo mi = MethodInfo.of(m);

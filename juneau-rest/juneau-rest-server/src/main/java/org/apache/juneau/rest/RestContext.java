@@ -165,6 +165,7 @@ public class RestContext extends Context {
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
 	private final Class<? extends RestOpArg>[] restOpArgs, hookMethodArgs;
+	private final BeanContext beanContext;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -271,6 +272,7 @@ public class RestContext extends Context {
 			uriResolution = builder.uriResolution;
 			uriRelativity = builder.uriRelativity;
 
+			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
@@ -360,6 +362,15 @@ public class RestContext extends Context {
 	 */
 	public BeanStore getBeanStore() {
 		return beanStore;
+	}
+
+	/**
+	 * Returns the bean context associated with this context.
+	 *
+	 * @return The bean store associated with this context.
+	 */
+	public BeanContext getBeanContext() {
+		return beanContext;
 	}
 
 	/**

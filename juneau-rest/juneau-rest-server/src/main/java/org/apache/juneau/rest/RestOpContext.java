@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
@@ -63,7 +64,7 @@ import org.apache.juneau.utils.*;
  * {@review}
  */
 @ConfigurableContext(nocache=true)
-public class RestOpContext extends BeanContext implements Comparable<RestOpContext>  {
+public class RestOpContext extends Context implements Comparable<RestOpContext>  {
 
 	/** Represents a null value for the {@link RestOp#contextClass()} annotation.*/
 	@SuppressWarnings("javadoc")
@@ -83,6 +84,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	private final Method method;
 	private final MethodInvoker methodInvoker;
 	private final MethodInfo mi;
+	private final BeanContext beanContext;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final EncoderGroup encoders;
@@ -124,7 +126,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	 * @throws ServletException If context could not be created.
 	 */
 	public RestOpContext(RestOpContextBuilder builder) throws ServletException {
-		super(builder.getContextProperties());
+		super(builder);
 
 		try {
 			context = builder.restContext;
@@ -144,6 +146,8 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 				.addBean(Method.class, method)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 			bs.addBean(BeanStore.class, bs);
+
+			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
 
 			serializers = createSerializers(r, builder, bs);
 			bs.addBean(SerializerGroup.class, serializers);
@@ -212,6 +216,15 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
+	}
+
+	/**
+	 * Returns the bean context associated with this context.
+	 *
+	 * @return The bean context associated with this context.
+	 */
+	public BeanContext getBeanContext() {
+		return beanContext;
 	}
 
 	/**
@@ -1228,6 +1241,21 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Context */
+	public ContextBuilder copy() {
+		throw unsupportedOperationException("Method not implemented.");
+	}
+
+	@Override /* Context */
+	public Session createSession(SessionArgs args) {
+		throw unsupportedOperationException("Method not implemented.");
+	}
+
+	@Override /* Context */
+	public SessionArgs createDefaultSessionArgs() {
+		throw unsupportedOperationException("Method not implemented.");
+	}
+
 	/*
 	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.
@@ -1289,6 +1317,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 	public int hashCode() {
 		return method.hashCode();
 	}
+
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()

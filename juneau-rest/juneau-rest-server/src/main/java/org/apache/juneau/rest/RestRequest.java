@@ -163,7 +163,7 @@ public final class RestRequest {
 
 		pathParams = new RequestPathParams(call, this, true);
 
-		beanSession = opContext.createSession();
+		beanSession = opContext.getBeanContext().createSession();
 
 		parserSessionArgs =
 			ParserSessionArgs
