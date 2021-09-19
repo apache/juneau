@@ -1076,7 +1076,7 @@ public class RestAnnotation {
 			b.responseProcessors().add(a.responseProcessors());
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
-			classes(a.encoders()).ifPresent(x -> b.getEncoders().add(x));
+			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
 			type(a.contextClass()).ifPresent(x -> b.type(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));

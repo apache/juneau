@@ -149,6 +149,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private RestChildren.Builder restChildren;
 	private SwaggerProvider.Builder swaggerProvider;
 	private BeanContextBuilder beanContext;
+	private EncoderGroup.Builder encoders;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -172,7 +173,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
 	// TODO
-	EncoderGroup.Builder encoders = EncoderGroup.create().add(IdentityEncoder.INSTANCE);
 	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
 
@@ -920,6 +920,95 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.beanCreateMethodFinder(ThrownStore.class)
 			.addBean(ThrownStore.Builder.class, v.get())
 			.find("createThrownStore")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// encoders
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link EncoderGroup} object in the REST context.
+	 *
+	 * @return The builder for the {@link EncoderGroup} object in the REST context.
+	 */
+	public final EncoderGroup.Builder encoders() {
+		if (encoders == null)
+			encoders = createEncoders(beanStore(), resource());
+		return encoders;
+	}
+
+	/**
+	 * Instantiates the entries for this REST resource method.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for encoders set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestOpContextBuilder#encoders()}
+	 * 			<li>{@link RestOp#encoders()}.
+	 * 			<li>{@link Rest#encoders()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createEncoders()</> method that returns <c>{@link Encoder}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanStore}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean store registered in this context.
+	 * 	<li>Instantiates a <c>Encoder[0]</c>.
+	 * </ul>
+	 *
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @return The encoder group builder for this REST resource.
+	 */
+	protected EncoderGroup.Builder createEncoders(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<EncoderGroup.Builder> v = Value.of(
+			EncoderGroup
+				.create()
+				.beanStore(beanStore)
+				.add(IdentityEncoder.INSTANCE)
+		);
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(EncoderGroup.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(EncoderGroup.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(EncoderGroup.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] EncoderGroup.Builder createEncoders(<args>)
+		beanStore
+			.beanCreateMethodFinder(EncoderGroup.Builder.class)
+			.addBean(EncoderGroup.Builder.class, v.get())
+			.find("createEncoders")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] EncoderGroup createEncoders(<args>)
+		beanStore
+			.beanCreateMethodFinder(EncoderGroup.class)
+			.addBean(EncoderGroup.Builder.class, v.get())
+			.find("createEncoders")
 			.run(x -> v.get().impl(x));
 
 		return v.get();

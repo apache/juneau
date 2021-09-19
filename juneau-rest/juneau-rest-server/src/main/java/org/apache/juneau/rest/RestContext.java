@@ -44,6 +44,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
@@ -166,6 +167,7 @@ public class RestContext extends Context {
 
 	private final Class<? extends RestOpArg>[] restOpArgs, hookMethodArgs;
 	private final BeanContext beanContext;
+	private final EncoderGroup encoders;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -273,6 +275,7 @@ public class RestContext extends Context {
 			uriRelativity = builder.uriRelativity;
 
 			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
+			encoders = bs.add(EncoderGroup.class, builder.encoders().build());
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
@@ -371,6 +374,15 @@ public class RestContext extends Context {
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
+	}
+
+	/**
+	 * Returns the encoders associated with this context.
+	 *
+	 * @return The encoders associated with this context.
+	 */
+	public EncoderGroup getEncoders() {
+		return encoders;
 	}
 
 	/**

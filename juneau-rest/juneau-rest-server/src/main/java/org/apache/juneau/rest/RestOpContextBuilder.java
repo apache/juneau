@@ -226,7 +226,47 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	final Optional<BeanContext> getBeanContext() {
-		return beanContext == null ? empty() : of(beanContext().build());
+		return beanContext == null ? empty() : of(beanContext.build());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// encoders
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link EncoderGroup} object in the REST context.
+	 *
+	 * @return The builder for the {@link EncoderGroup} object in the REST context.
+	 */
+	public final EncoderGroup.Builder encoders() {
+		if (encoders == null)
+			encoders = createEncoders(beanStore(), parent, resource());
+		return encoders;
+	}
+
+	/**
+	 * Constructs the encoder group builder for this REST method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The encoder group builder for this REST resource.
+	 */
+	protected EncoderGroup.Builder createEncoders(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		// Default value.
+		Value<EncoderGroup.Builder> v = Value.of(
+			parent.encoders().copy()
+		);
+
+		return v.get();
+	}
+
+	final Optional<EncoderGroup> getEncoders() {
+		return encoders == null ? empty() : of(encoders.build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -363,6 +403,11 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return v.get();
 	}
 
+
+
+
+	private int TODO;
+
 	/**
 	 * When enabled, append <js>"/*"</js> to path patterns if not already present.
 	 *
@@ -470,29 +515,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return partSerializer;
 	}
 
-	/**
-	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
-	 *
-	 * <p>
-	 * This method can be used to override encoders defined at the class level via {@link RestContextBuilder#getEncoders()}.
-	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
-	 * If never called, then the builder from the class context is used.
-	 *
-	 * <p>
-	 * The builder is initialized with encoders defined via the {@link Rest#parsers()} annotation.
-	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestEncoders}
-	 * </ul>
-	 *
-	 * @return The encoder group builder for this context builder.
-	 */
-	public EncoderGroup.Builder getEncoders() {
-		if (encoders == null)
-			encoders = restContext.builder.encoders.copy();
-		return encoders;
-	}
+//	/**
+//	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
+//	 *
+//	 * <p>
+//	 * This method can be used to override encoders defined at the class level via {@link RestContextBuilder#getEncoders()}.
+//	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
+//	 * If never called, then the builder from the class context is used.
+//	 *
+//	 * <p>
+//	 * The builder is initialized with encoders defined via the {@link Rest#parsers()} annotation.
+//	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
+//	 *
+//	 * <ul class='seealso'>
+//	 * 	<li class='link'>{@doc RestEncoders}
+//	 * </ul>
+//	 *
+//	 * @return The encoder group builder for this context builder.
+//	 */
+//	public EncoderGroup.Builder getEncoders() {
+//		if (encoders == null)
+//			encoders = restContext.builder.encoders().copy();
+//		return encoders;
+//	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Properties

@@ -615,7 +615,7 @@ public class RestPostAnnotation {
 
 			classes(a.serializers()).ifPresent(x -> b.getSerializers().set(x));
 			classes(a.parsers()).ifPresent(x -> b.getParsers().set(x));
-			classes(a.encoders()).ifPresent(x -> b.getEncoders().set(x));
+			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.type(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));

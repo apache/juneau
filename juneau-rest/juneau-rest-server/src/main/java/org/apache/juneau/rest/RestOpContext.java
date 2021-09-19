@@ -148,6 +148,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.addBean(BeanStore.class, bs);
 
 			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
+			encoders = bs.add(EncoderGroup.class, builder.getEncoders().orElse(context.getEncoders()));
 
 			serializers = createSerializers(r, builder, bs);
 			bs.addBean(SerializerGroup.class, serializers);
@@ -173,8 +174,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.addBean(UrlPathMatcher[].class, pathMatchers);
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			encoders = createEncoders(r, builder, bs);
-			bs.addBean(EncoderGroup.class, encoders);
 
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, builder, bs);
 			bs.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
@@ -332,54 +331,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Instantiates the entries for this REST resource method.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for encoders set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestOpContextBuilder#getEncoders()}
-	 * 			<li>{@link RestOp#encoders()}.
-	 * 			<li>{@link Rest#encoders()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createEncoders()</> method that returns <c>{@link Encoder}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link Method} - The Java method this context belongs to.
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>Encoder[0]</c>.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The encoders for this REST resource method.
-	 * @throws Exception If encoders could not be instantiated.
-	 */
-	protected EncoderGroup createEncoders(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		EncoderGroup.Builder x = builder.encoders;
-		if (x == null)
-			x = builder.restContext.builder.encoders;
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(EncoderGroup.Builder.class, x)
-			.createMethodFinder(EncoderGroup.Builder.class, resource)
-			.find("createEncoders", Method.class)
-			.thenFind("createEncoders")
-			.withDefault(x)
-			.run();
-
-		return x.build();
-	}
-
-	/**
 	 * Instantiates the serializers for this REST resource.
 	 *
 	 * <p>
@@ -387,7 +338,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * <ul>
 	 * 	<li>Looks for serializers set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestOpContextBuilder#getSerializers()}
+	 * 			<li>{@link RestOpContext#getSerializers()}
 	 * 			<li>{@link Rest#serializers()}.
 	 * 		</ul>
 	 * 	<li>Looks for a static or non-static <c>createSerializers()</> method that returns <c>{@link Serializer}[]</c> on the
