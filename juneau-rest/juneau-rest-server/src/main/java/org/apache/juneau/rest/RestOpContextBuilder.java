@@ -17,6 +17,8 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import java.lang.annotation.*;
 import java.util.*;
+import java.util.function.*;
+
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -51,6 +53,9 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	String httpMethod, clientVersion;
 	Enablement debug;
 	List<String> path;
+
+	private RestConverterList.Builder converters;
+
 	PartList.Builder defaultFormData, defaultQueryData;
 	NamedAttributeList defaultRequestAttributes;
 	HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
@@ -58,7 +63,6 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	List<MediaType> produces, consumes;
 	Set<String> roleGuard, rolesDeclared;
 	RestGuardList.Builder guards = RestGuardList.create();
-	RestConverterList.Builder converters = RestConverterList.create();
 	EncoderGroup.Builder encoders;
 	SerializerGroup.Builder serializers;
 	ParserGroup.Builder parsers;
@@ -98,7 +102,10 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 
 		this.restContext = context;
 		this.restMethod = method;
-		this.beanStore = context.getRootBeanStore();
+		this.beanStore = BeanStore
+			.of(context.getRootBeanStore(), context.builder.resource().get())
+			.addBean(java.lang.reflect.Method.class, method);
+
 		this.defaultFormData = PartList.create();
 		this.defaultQueryData = PartList.create();
 		this.defaultRequestAttributes = NamedAttributeList.create();
@@ -128,6 +135,185 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
+	}
+
+	/**
+	 * Returns the REST servlet/bean instance that this context is defined against.
+	 *
+	 * @return The REST servlet/bean instance that this context is defined against.
+	 */
+	public final Supplier<?> resource() {
+		return restContext.builder.resource();
+	}
+
+	/**
+	 * Returns the default classes list.
+	 *
+	 * <p>
+	 * This defines the implementation classes for a variety of bean types.
+	 *
+	 * <p>
+	 * Default classes are inherited from the parent REST object.
+	 * Typically used on the top-level {@link RestContextBuilder} to affect class types for that REST object and all children.
+	 *
+	 * <p>
+	 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
+	 * here are inherited by child builders.
+	 *
+	 * @return The default classes list for this builder.
+	 */
+	public final DefaultClassList defaultClasses() {
+		return restContext.builder.defaultClasses();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// beanStore
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns access to the bean store being used by this builder.
+	 *
+	 * <p>
+	 * Can be used to add more beans to the bean store.
+	 *
+	 * @return The bean store being used by this builder.
+	 */
+	public final BeanStore beanStore() {
+		return beanStore;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// converters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link RestConverterList} object in the REST context.
+	 *
+	 * @return The builder for the {@link RestConverterList} object in the REST context.
+	 */
+	public final RestConverterList.Builder converters() {
+		if (converters == null)
+			converters = createConverters(beanStore(), resource());
+		return converters;
+	}
+
+	/**
+	 * Response converters.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestConverter converters} with a resource class.
+	 * <br>These converters get called immediately after execution of the REST method in the same order specified in the
+	 * annotation.
+	 * <br>The object passed into this converter is the object returned from the Java method or passed into
+	 * the {@link RestResponse#setOutput(Object)} method.
+	 *
+	 * <p>
+	 * Can be used for performing post-processing on the response object before serialization.
+	 *
+	 * <p>
+	 * 	When multiple converters are specified, they're executed in the order they're specified in the annotation
+	 * 	(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our converter.</jc>
+	 * 	<jk>public class</jk> MyConverter <jk>implements</jk> RestConverter {
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Object convert(RestRequest <jv>req</jv>, Object <jv>o</jv>) {
+	 * 			<jc>// Do something with object and return another object.</jc>
+	 * 			<jc>// Or just return the same object for a no-op.</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(converters={MyConverter.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
+	 *
+	 * 			<jc>// Pass in an instance instead.</jc>
+	 * 			<jv>builder</jv>.converters(<jk>new</jk> MyConverter());
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
+	 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
+	 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
+	 * 	<li class='ja'>{@link Rest#converters()}
+	 * 	<li class='link'>{@doc RestConverters}
+	 * </ul>
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The rest converter list builder for this REST method.
+	 */
+	protected RestConverterList.Builder createConverters(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<RestConverterList.Builder> v = Value.of(
+			RestConverterList
+				.create()
+				.beanStore(beanStore)
+		);
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(RestConverterList.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(RestConverterList.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(RestConverterList.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] RestConverterList.Builder createConverters(<args>)
+		beanStore
+			.beanCreateMethodFinder(RestConverterList.Builder.class)
+			.addBean(RestConverterList.Builder.class, v.get())
+			.find("createConverters")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] RestConverterList createConverters(<args>)
+		beanStore
+			.beanCreateMethodFinder(RestConverterList.class)
+			.addBean(RestConverterList.Builder.class, v.get())
+			.find("createConverters")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
 	}
 
 	/**
@@ -346,103 +532,6 @@ public class RestOpContextBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestOpContextBuilder type(Class<? extends Context> value) {
 		super.type(value);
-		return this;
-	}
-
-	/**
-	 * Response converters.
-	 *
-	 * <p>
-	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * <br>These converters get called immediately after execution of the REST method in the same order specified in the
-	 * annotation.
-	 * <br>The object passed into this converter is the object returned from the Java method or passed into
-	 * the {@link RestResponse#setOutput(Object)} method.
-	 *
-	 * <p>
-	 * Can be used for performing post-processing on the response object before serialization.
-	 *
-	 * <p>
-	 * 	When multiple converters are specified, they're executed in the order they're specified in the annotation
-	 * 	(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our converter.</jc>
-	 * 	<jk>public class</jk> MyConverter <jk>implements</jk> RestConverter {
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> Object convert(RestRequest <jv>req</jv>, Object <jv>o</jv>) {
-	 * 			<jc>// Do something with object and return another object.</jc>
-	 * 			<jc>// Or just return the same object for a no-op.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(converters={MyConverter.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
-	 *
-	 * 			<jc>// Pass in an instance instead.</jc>
-	 * 			<jv>builder</jv>.converters(<jk>new</jk> MyConverter());
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
-	 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
-	 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
-	 * 	<li class='ja'>{@link Rest#converters()}
-	 * 	<li class='link'>{@doc RestConverters}
-	 * </ul>
-	 *
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 * @throws IllegalArgumentException if any class does not extend from {@link RestConverter}.
-	 */
-	@FluentSetter
-	public RestOpContextBuilder converters(Class<?>...values) {
-		converters.append(assertClassArrayArgIsType("values", RestConverter.class, values));
-		return this;
-	}
-
-	/**
-	 * Response converters.
-	 *
-	 * <p>
-	 * Same as {@link #converters(Class...)} except input is pre-constructed instances.
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder converters(RestConverter...values) {
-		converters.append(values);
 		return this;
 	}
 

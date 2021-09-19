@@ -1123,7 +1123,7 @@ public class RestAnnotation {
 
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			b.converters(a.converters());
+			b.converters().append(a.converters());
 			b.guards(a.guards());
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			string(a.maxInput()).ifPresent(x -> b.maxInput(x));

@@ -29,8 +29,7 @@ import org.apache.juneau.serializer.*;
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Rest#converters()}
  * 	<li class='ja'>{@link RestOp#converters()}
- * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)}
- * 	<li class='jm'>{@link RestOpContextBuilder#converters(RestConverter...)}
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters()}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -73,8 +72,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)}
- * 	<li class='jm'>{@link RestOpContextBuilder#converters(RestConverter...)}
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters()}
  * 	<li class='link'>{@doc RestConverters}
  * </ul>
  */

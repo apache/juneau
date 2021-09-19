@@ -626,7 +626,7 @@ public class RestPutAnnotation {
 			strings(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultFormData(x));
 			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
-			b.converters(a.converters());
+			b.converters().append(a.converters());
 			b.guards(a.guards());
 			b.matchers(a.matchers());
 			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));

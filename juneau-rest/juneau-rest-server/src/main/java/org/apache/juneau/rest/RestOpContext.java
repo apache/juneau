@@ -157,8 +157,7 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 			partParser = createPartParser(r, builder, bs);
 			bs.addBean(HttpPartParser.class, partParser);
 
-			converters = createConverters(r, builder, bs).asArray();
-			bs.addBean(RestConverter[].class, converters);
+			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
 
 			guards = createGuards(r, builder, bs).asArray();
 
@@ -213,53 +212,6 @@ public class RestOpContext extends BeanContext implements Comparable<RestOpConte
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
-	}
-
-	/**
-	 * Instantiates the result converters for this REST resource method.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Looks for REST conveters set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestOpContextBuilder#converters(Class...)}/{@link RestOpContextBuilder#converters(RestConverter...)}
-	 * 			<li>{@link RestOp#converters()}.
-	 * 			<li>{@link Rest#converters()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createConverters()</> method that returns <c>{@link RestConverter}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link Method} - The Java method this context belongs to.
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>RestConverter[0]</c>.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The result converters for this REST resource method.
-	 * @throws Exception If result converters could not be instantiated.
-	 * @see RestOpContextBuilder#converters(Class...)
-	 */
-	protected RestConverterList createConverters(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		RestConverterList.Builder x = builder.converters.beanStore(beanStore);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(RestConverterList.Builder.class, x)
-			.createMethodFinder(RestConverterList.Builder.class, resource)
-			.find("createConverters", Method.class)
-			.thenFind("createConverters")
-			.withDefault(x)
-			.run();
-
-		return x.build();
 	}
 
 	/**

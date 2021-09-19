@@ -43,7 +43,7 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='jc'>{@link PojoIntrospector} - Additional information on introspection of POJO methods.
- * 	<li class='jm'>{@link RestOpContextBuilder#converters(Class...)} - Registering converters with REST resources.
+ * 	<li class='jm'>{@link RestOpContextBuilder#converters()} - Registering converters with REST resources.
  * 	<li class='link'>{@doc RestConverters}
  * </ul>
  */

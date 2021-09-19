@@ -535,7 +535,7 @@ public class RestGetAnnotation {
 			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
 			strings(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
 			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
-			b.converters(a.converters());
+			b.converters().append(a.converters());
 			b.guards(a.guards());
 			b.matchers(a.matchers());
 			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
