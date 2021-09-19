@@ -439,7 +439,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private BasicStatusLine.Builder statusLineBuilder() {

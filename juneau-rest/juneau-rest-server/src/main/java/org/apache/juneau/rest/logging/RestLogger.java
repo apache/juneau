@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.logging;
 
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -25,7 +23,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -149,7 +146,7 @@ public interface RestLogger {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<RestLogger> {
 
 		Logger logger;
 		ThrownStore thrownStore;
@@ -158,14 +155,13 @@ public interface RestLogger {
 		Predicate<HttpServletRequest> enabledTest;
 		RestLoggingDetail requestDetail, responseDetail;
 		Level level;
-		BeanStore beanStore;
-		Class<? extends RestLogger> type;
-		RestLogger impl;
 
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {}
+		protected Builder() {
+			super(BasicRestLogger.class);
+		}
 
 		/**
 		 * Copy constuctor.
@@ -173,6 +169,7 @@ public interface RestLogger {
 		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			logger = copyFrom.logger;
 			thrownStore = copyFrom.thrownStore;
 			normalRules = AList.<RestLoggerRule>create().append(copyFrom.normalRules);
@@ -182,51 +179,26 @@ public interface RestLogger {
 			requestDetail = copyFrom.requestDetail;
 			responseDetail = copyFrom.responseDetail;
 			level = copyFrom.level;
-			beanStore = copyFrom.beanStore;
-			type = copyFrom.type;
-			impl = copyFrom.impl;
 		}
 
-		/**
-		 * Creates a new {@link RestLogger} object from this builder.
-		 *
-		 * <p>
-		 * Instantiates an instance of the {@link #type(Class) implementation class} or
-		 * else {@link BasicRestLogger} if implementation class was not specified.
-		 *
-		 * @return A new {@link RestLogger} object.
-		 */
-		public RestLogger build() {
-			try {
-				if (impl != null)
-					return impl;
-				return BeanCreator.create(RestLogger.class).type(isConcrete(type) ? type : BasicRestLogger.class).store(beanStore).builder(this).findSingleton().run();
-			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
-			}
+		@Override /* BeanBuilder */
+		protected RestLogger buildDefault() {
+			return new BasicRestLogger(this);
 		}
 
-		/**
-		 * Specifies the bean store to use for instantiating the {@link RestLogger} object.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
-			return this;
+		@Override /* BeanBuilder */
+		protected BeanCreator<? extends RestLogger> creator() {
+			return super.creator().findSingleton();
 		}
 
-		/**
-		 * Specifies a subclass of {@link RestLogger} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder type(Class<? extends RestLogger> value) {
-			type = value;
-			return this;
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
 		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Specifies the logger to use for logging the request.
@@ -505,25 +477,33 @@ public interface RestLogger {
 			return normalRules(values).debugRules(values);
 		}
 
-		/**
-		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder impl(RestLogger value) {
-			impl = value;
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends RestLogger> value) {
+			super.type(value);
 			return this;
 		}
 
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
+		@Override /* BeanBuilder */
+		public Builder impl(RestLogger value) {
+			super.impl(value);
+			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

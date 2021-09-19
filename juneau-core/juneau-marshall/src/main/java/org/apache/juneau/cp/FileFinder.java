@@ -142,6 +142,15 @@ public interface FileFinder {
 			return new BasicFileFinder(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Adds a class subpackage to the lookup paths.
 		 *
@@ -225,11 +234,6 @@ public interface FileFinder {
 		}
 
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends FileFinder> value) {

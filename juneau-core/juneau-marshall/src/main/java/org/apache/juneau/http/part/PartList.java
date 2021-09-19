@@ -275,6 +275,15 @@ public class PartList {
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new PartList(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Allows part values to contain SVL variables.
 		 *
@@ -1129,15 +1138,6 @@ public class PartList {
 
 		// <FluentSetters>
 
-		@Override /* Object */
-		public String toString() {
-			return "[" + join(entries, ", ") + "]";
-		}
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends PartList> value) {
 			super.type(value);
@@ -1163,6 +1163,15 @@ public class PartList {
 		}
 
 		// </FluentSetters>
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Other methods
+		//-------------------------------------------------------------------------------------------------------------
+
+		@Override /* Object */
+		public String toString() {
+			return "[" + join(entries, ", ") + "]";
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

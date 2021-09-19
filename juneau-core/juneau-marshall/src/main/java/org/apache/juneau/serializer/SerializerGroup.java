@@ -26,6 +26,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -118,7 +119,7 @@ public final class SerializerGroup {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<SerializerGroup> {
 
 		List<Object> entries;
 		private BeanContextBuilder bcBuilder;
@@ -127,6 +128,7 @@ public final class SerializerGroup {
 		 * Create an empty serializer group builder.
 		 */
 		protected Builder() {
+			super(SerializerGroup.class);
 			this.entries = AList.create();
 		}
 
@@ -136,6 +138,7 @@ public final class SerializerGroup {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(SerializerGroup copyFrom) {
+			super(copyFrom.getClass());
 			this.entries = AList.create().append(asList(copyFrom.entries));
 		}
 
@@ -148,6 +151,7 @@ public final class SerializerGroup {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
 			entries = AList.create();
 			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
@@ -164,26 +168,19 @@ public final class SerializerGroup {
 			return o;
 		}
 
-		/**
-		 * Copy creator.
-		 *
-		 * @return A new mutable copy of this builder.
-		 */
+		@Override /* BeanBuilder */
+		protected SerializerGroup buildDefault() {
+			return new SerializerGroup(this);
+		}
+
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		/**
-		 * Creates a new {@link SerializerGroup} object using a snapshot of the settings defined in this builder.
-		 *
-		 * <p>
-		 * This method can be called multiple times to produce multiple serializer groups.
-		 *
-		 * @return A new {@link SerializerGroup} object.
-		 */
-		public SerializerGroup build() {
-			return new SerializerGroup(this);
-		}
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Associates an existing bean context builder with all serializer builders in this group.
@@ -396,6 +393,38 @@ public final class SerializerGroup {
 		private <T extends SerializerBuilder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
 		}
+
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends SerializerGroup> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(SerializerGroup value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Other methods
+		//-------------------------------------------------------------------------------------------------------------
 
 		@Override /* Object */
 		public String toString() {

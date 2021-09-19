@@ -35,7 +35,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	private Method[] matching;
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation.
+	// Instantiation
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

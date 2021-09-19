@@ -471,7 +471,7 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods.
+	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static ServletContextHandler getServletContextHandler(Handler h) {

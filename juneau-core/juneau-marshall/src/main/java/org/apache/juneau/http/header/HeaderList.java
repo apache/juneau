@@ -287,6 +287,15 @@ public class HeaderList {
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new HeaderList(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Allows header values to contain SVL variables.
 		 *
@@ -1148,11 +1157,6 @@ public class HeaderList {
 		// <FluentSetters>
 
 		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* BeanBuilder */
 		public Builder type(Class<? extends HeaderList> value) {
 			super.type(value);
 			return this;
@@ -1177,6 +1181,10 @@ public class HeaderList {
 		}
 
 		// </FluentSetters>
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Other methods
+		//-------------------------------------------------------------------------------------------------------------
 
 		@Override /* Object */
 		public String toString() {

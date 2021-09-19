@@ -453,7 +453,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private HeaderList.Builder headersBuilder() {

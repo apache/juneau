@@ -86,6 +86,15 @@ public class ThrownStore {
 			return new ThrownStore(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Specifies a subclass of {@link ThrownStats} to use for individual method statistics.
 		 *
@@ -127,11 +136,6 @@ public class ThrownStore {
 		}
 
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends ThrownStore> value) {

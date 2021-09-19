@@ -47,16 +47,15 @@ public class ResponseProcessorList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<ResponseProcessorList> {
 
 		List<Object> entries;
-		ResponseProcessorList impl;
-		BeanStore beanStore = BeanStore.INSTANCE;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
+			super(ResponseProcessorList.class);
 			this.entries = AList.create();
 		}
 
@@ -66,19 +65,23 @@ public class ResponseProcessorList {
 		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			this.entries = AList.create().append(copyFrom.entries);
 		}
 
-		/**
-		 * Creates a new {@link ResponseProcessorList} object using a snapshot of the settings defined in this builder.
-		 *
-		 * @return A new {@link ResponseProcessorList} object.
-		 */
-		public ResponseProcessorList build() {
-			if (impl != null)
-				return impl;
+		@Override /* BeanBuilder */
+		protected ResponseProcessorList buildDefault() {
 			return new ResponseProcessorList(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Appends the specified rest response processor classes to the list.
@@ -103,36 +106,33 @@ public class ResponseProcessorList {
 			return this;
 		}
 
-		/**
-		 * Specifies the bean store to use for instantiating rest response processor classes.
-		 *
-		 * @param value The bean store to use for instantiating rest response processor classes.
-		 * @return This object.
-		 */
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends ResponseProcessorList> value) {
+			super.type(value);
 			return this;
 		}
 
-		/**
-		 * Specifies a pre-instantiated bean to return from {@link #build()}.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
+		@Override /* BeanBuilder */
 		public Builder impl(ResponseProcessorList value) {
-			this.impl = value;
+			super.impl(value);
 			return this;
 		}
 
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -147,11 +147,12 @@ public class ResponseProcessorList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected ResponseProcessorList(Builder builder) {
+		BeanStore bs = builder.beanStore().orElse(BeanStore.INSTANCE);
 		entries =
 			builder
 				.entries
 				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
+				.map(x -> instantiate(x, bs))
 				.toArray(ResponseProcessor[]::new);
 	}
 

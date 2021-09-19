@@ -526,7 +526,7 @@ public abstract class RestServlet extends HttpServlet {
 	public void onEndCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

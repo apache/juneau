@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -1567,8 +1568,23 @@ public class RestContext extends Context {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ContextBuilder copy() {
+		throw unsupportedOperationException("Method not implemented.");
+	}
+
+	@Override /* Context */
+	public Session createSession(SessionArgs args) {
+		throw unsupportedOperationException("Method not implemented.");
+	}
+
+	@Override /* Context */
+	public SessionArgs createDefaultSessionArgs() {
+		throw unsupportedOperationException("Method not implemented.");
+	}
 
 	@Override /* Context */
 	public OMap toMap() {
@@ -1602,27 +1618,4 @@ public class RestContext extends Context {
 					.a("uriResolution", uriResolution)
 			);
 	}
-
-	@Override
-	public ContextBuilder copy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Session createSession(SessionArgs args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SessionArgs createDefaultSessionArgs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helpers.
-	//-----------------------------------------------------------------------------------------------------------------
-
 }

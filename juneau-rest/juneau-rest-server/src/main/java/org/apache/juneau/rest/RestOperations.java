@@ -13,11 +13,9 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
@@ -58,38 +56,44 @@ public class RestOperations {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder  {
+	public static class Builder extends BeanBuilder<RestOperations> {
 
-		TreeMap<String,TreeSet<RestOpContext>> map = new TreeMap<>();
-		Set<RestOpContext> set = ASet.of();
-
-		private BeanStore beanStore;
-		private Class<? extends RestOperations> type;
-		private RestOperations impl;
+		TreeMap<String,TreeSet<RestOpContext>> map;
+		Set<RestOpContext> set;
 
 		/**
-		 * Instantiates a {@link RestOperations} object based on the contents of this builder.
-		 *
-		 * @return A new {@link RestOperations} object.
+		 * Constructor.
 		 */
-		public RestOperations build() {
-			try {
-				if (impl != null)
-					return impl;
-				return BeanCreator.create(RestOperations.class).type(firstNonNull(type, getDefaultImplClass())).store(beanStore).builder(this).run();
-			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
-			}
+		protected Builder() {
+			super(RestOperations.class);
+			map = new TreeMap<>();
+			set = ASet.of();
 		}
 
 		/**
-		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
+		 * Copy constructor.
 		 *
-		 * @return The default implementation class if not specified via {@link #type(Class)}.
+		 * @param copyFrom The builder being copied.
 		 */
-		protected Class<? extends RestOperations> getDefaultImplClass() {
-			return RestOperations.class;
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			map = new TreeMap<>(copyFrom.map);
+			set = ASet.of(copyFrom.set);
 		}
+
+		@Override /* BeanBuilder */
+		protected RestOperations buildDefault() {
+			return new RestOperations(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Adds a method context to this builder.
@@ -117,49 +121,33 @@ public class RestOperations {
 			return this;
 		}
 
-		/**
-		 * Specifies a {@link RestOperations} implementation subclass to use.
-		 *
-		 * <p>
-		 * When specified, the {@link #build()} method will create an instance of that class instead of the default {@link RestOperations}.
-		 *
-		 * <p>
-		 * The subclass must have a public constructor that takes in any of the following arguments:
-		 * <ul>
-		 * 	<li>{@link Builder} - This object.
-		 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
-		 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
-		 * </ul>
-		 *
-		 * @param value The implementation class to build.
-		 * @return This object.
-		 */
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
 		public Builder type(Class<? extends RestOperations> value) {
-			type = value;
+			super.type(value);
 			return this;
 		}
 
-		/**
-		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
-		 *
-		 * @param value The bean store to use for resolving constructor arguments.
-		 * @return This object.
-		 */
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
-			return this;
-		}
-
-		/**
-		 * Specifies an already-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
+		@Override /* BeanBuilder */
 		public Builder impl(RestOperations value) {
-			impl = value;
+			super.impl(value);
 			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -226,6 +226,15 @@ public class Messages extends ResourceBundle {
 			public String locale;
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Adds a parent bundle.
 		 *
@@ -306,24 +315,7 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
-		ResourceBundle getBundle() {
-			ClassLoader cl = forClass.getClassLoader();
-			OMap m = OMap.of("name", name, "package", forClass.getPackage().getName());
-			for (String bn : baseNames) {
-				bn = StringUtils.replaceVars(bn, m);
-				ResourceBundle rb = findBundle(bn, locale, cl);
-				if (rb != null)
-					return rb;
-			}
-			return null;
-		}
-
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends Messages> value) {
@@ -350,6 +342,22 @@ public class Messages extends ResourceBundle {
 		}
 
 		// <FluentSetters>
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Other methods
+		//-------------------------------------------------------------------------------------------------------------
+
+		ResourceBundle getBundle() {
+			ClassLoader cl = forClass.getClassLoader();
+			OMap m = OMap.of("name", name, "package", forClass.getPackage().getName());
+			for (String bn : baseNames) {
+				bn = StringUtils.replaceVars(bn, m);
+				ResourceBundle rb = findBundle(bn, locale, cl);
+				if (rb != null)
+					return rb;
+			}
+			return null;
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

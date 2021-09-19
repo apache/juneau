@@ -72,11 +72,22 @@ public class BeanBuilder<T> {
 			return impl;
 		if (type == null || type == defaultType)
 			return buildDefault();
+		return creator().run();
+	}
+
+	/**
+	 * Instantiates the creator for this bean.
+	 *
+	 * <p>
+	 * Subclasses can override this to provide specialized handling.
+	 *
+	 * @return The creator for this bean.
+	 */
+	protected BeanCreator<? extends T> creator() {
 		return beanStore
 			.creator(type().orElseThrow(()->runtimeException("Type not specified.")))
 			.outer(outer)
-			.builder(this)
-			.run();
+			.builder(this);
 	}
 
 	/**

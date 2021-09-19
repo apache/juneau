@@ -122,6 +122,15 @@ public class BeanStore {
 			return new BeanStore(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Specifies the parent bean store.
 		 *
@@ -152,11 +161,6 @@ public class BeanStore {
 		}
 
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends BeanStore> value) {

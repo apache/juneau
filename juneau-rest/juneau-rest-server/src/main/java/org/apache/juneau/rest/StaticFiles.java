@@ -86,6 +86,15 @@ public interface StaticFiles extends FileFinder {
 			return new BasicStaticFiles(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Appends headers to add to HTTP responses.
 		 *
@@ -204,11 +213,6 @@ public interface StaticFiles extends FileFinder {
 		}
 
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends StaticFiles> value) {

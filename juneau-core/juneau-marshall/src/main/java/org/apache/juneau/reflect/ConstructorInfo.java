@@ -29,7 +29,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	private final Constructor<?> c;
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation.
+	// Instantiation
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

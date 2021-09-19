@@ -41,26 +41,41 @@ public class RestConverterList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<RestConverterList> {
 
 		AList<Object> entries;
-		BeanStore beanStore;
 
 		/**
 		 * Create an empty builder.
 		 */
 		protected Builder() {
+			super(RestConverterList.class);
 			this.entries = AList.create();
 		}
 
 		/**
-		 * Creates a new {@link RestConverterList} object using a snapshot of the settings defined in this builder.
+		 * Copy constructor.
 		 *
-		 * @return A new {@link RestConverterList} object.
+		 * @param copyFrom The builder being copied.
 		 */
-		public RestConverterList build() {
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			entries = AList.of(copyFrom.entries);
+		}
+
+		@Override /* BeanBuilder */
+		protected RestConverterList buildDefault() {
 			return new RestConverterList(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Appends the specified rest matcher classes to the list.
@@ -85,16 +100,33 @@ public class RestConverterList {
 			return this;
 		}
 
-		/**
-		 * Specifies the bean store to use for instantiating rest matcher classes.
-		 *
-		 * @param value The bean store to use for instantiating rest matcher classes.
-		 * @return This object (for method chaining).
-		 */
-		public Builder beanStore(BeanStore value) {
-			beanStore = value;
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends RestConverterList> value) {
+			super.type(value);
 			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(RestConverterList value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -109,11 +141,12 @@ public class RestConverterList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestConverterList(Builder builder) {
+		BeanStore bs = builder.beanStore().orElse(BeanStore.INSTANCE);
 		entries =
 			builder
 				.entries
 				.stream()
-				.map(x -> instantiate(x, builder.beanStore))
+				.map(x -> instantiate(x, bs))
 				.toArray(RestConverter[]::new);
 	}
 

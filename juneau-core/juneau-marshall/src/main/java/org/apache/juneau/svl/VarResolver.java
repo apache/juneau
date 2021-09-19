@@ -144,6 +144,15 @@ public class VarResolver {
 			return new VarResolver(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Register new variables with this resolver.
 		 *
@@ -228,11 +237,6 @@ public class VarResolver {
 		}
 
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends VarResolver> value) {

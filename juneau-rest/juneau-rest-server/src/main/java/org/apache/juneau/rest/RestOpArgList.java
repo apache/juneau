@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 
@@ -55,17 +56,16 @@ public class RestOpArgList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<RestOpArgList> {
 
 		AList<Class<? extends RestOpArg>> entries;
-		BeanStore beanStore;
-		RestOpArgList impl;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			this.entries = AList.create();
+			super(RestOpArgList.class);
+			entries = AList.create();
 		}
 
 		/**
@@ -74,19 +74,23 @@ public class RestOpArgList {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder copyFrom) {
-			this.entries = AList.of(copyFrom.entries);
+			super(copyFrom);
+			entries = AList.of(copyFrom.entries);
 		}
 
-		/**
-		 * Creates a new {@link RestOpArgList} object using a snapshot of the settings defined in this builder.
-		 *
-		 * @return A new {@link RestOpArgList} object.
-		 */
-		public RestOpArgList build() {
-			if (impl != null)
-				return impl;
+		@Override /* BeanBuilder */
+		protected RestOpArgList buildDefault() {
 			return new RestOpArgList(this);
 		}
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Prepends the specified rest op arg classes to the list.
@@ -100,25 +104,33 @@ public class RestOpArgList {
 			return this;
 		}
 
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
-		}
+		// <FluentSetters>
 
-		/**
-		 * Specifies an already instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder impl(RestOpArgList value) {
-			impl = value;
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends RestOpArgList> value) {
+			super.type(value);
 			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(RestOpArgList value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

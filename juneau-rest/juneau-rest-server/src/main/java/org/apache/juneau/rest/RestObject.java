@@ -420,7 +420,7 @@ public abstract class RestObject {
 	public void onEndCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

@@ -3576,7 +3576,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");

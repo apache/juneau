@@ -77,6 +77,15 @@ public class MethodExecStore {
 			return new MethodExecStore(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Specifies a subclass of {@link MethodExecStats} to use for individual method statistics.
 		 *
@@ -118,11 +127,6 @@ public class MethodExecStore {
 		}
 
 		// <FluentSetters>
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
 
 		@Override /* BeanBuilder */
 		public Builder type(Class<? extends MethodExecStore> value) {

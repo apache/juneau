@@ -19,6 +19,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -46,7 +47,7 @@ public class RestLoggerRule {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<RestLoggerRule> {
 
 		Predicate<Integer> statusFilter;
 		Predicate<HttpServletRequest> requestFilter;
@@ -57,6 +58,46 @@ public class RestLoggerRule {
 		Level level;
 		RestLoggingDetail requestDetail, responseDetail;
 		boolean logStackTrace;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(RestLoggerRule.class);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			statusFilter = copyFrom.statusFilter;
+			requestFilter = copyFrom.requestFilter;
+			responseFilter = copyFrom.responseFilter;
+			exceptionFilter = copyFrom.exceptionFilter;
+			enabled = copyFrom.enabled;
+			enabledTest = copyFrom.enabledTest;
+			level = copyFrom.level;
+			requestDetail = copyFrom.requestDetail;
+			responseDetail = copyFrom.responseDetail;
+			logStackTrace = copyFrom.logStackTrace;
+		}
+
+		@Override /* BeanBuilder */
+		protected RestLoggerRule buildDefault() {
+			return new RestLoggerRule(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Apply a status-based predicate check for this rule to match against.
@@ -283,14 +324,33 @@ public class RestLoggerRule {
 			return this;
 		}
 
-		/**
-		 * Instantiates a new {@link RestLoggerRule} object using the settings in this builder.
-		 *
-		 * @return A new {@link RestLoggerRule} object.
-		 */
-		public RestLoggerRule build() {
-			return new RestLoggerRule(this);
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends RestLoggerRule> value) {
+			super.type(value);
+			return this;
 		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(RestLoggerRule value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

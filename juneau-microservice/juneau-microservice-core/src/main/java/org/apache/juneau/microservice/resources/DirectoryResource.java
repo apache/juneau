@@ -103,7 +103,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 	private final File rootDir;     // The root directory
 
-	// Settings enabled through servlet init parameters
+	// Properties enabled through servlet init parameters
 	final boolean allowDeletes, allowUploads, allowViews;
 
 	public DirectoryResource(Config c) throws Exception {

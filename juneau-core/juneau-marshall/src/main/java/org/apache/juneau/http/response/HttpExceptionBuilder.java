@@ -409,7 +409,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private BasicStatusLine.Builder statusLineBuilder() {

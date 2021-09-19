@@ -130,6 +130,15 @@ public final class EncoderGroup {
 			return new EncoderGroup(this);
 		}
 
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Registers the specified encoders with this group.
 		 *
@@ -237,11 +246,6 @@ public final class EncoderGroup {
 		// <FluentSetters>
 
 		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* BeanBuilder */
 		public Builder type(Class<? extends EncoderGroup> value) {
 			super.type(value);
 			return this;
@@ -266,6 +270,10 @@ public final class EncoderGroup {
 		}
 
 		// </FluentSetters>
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Other methods
+		//-------------------------------------------------------------------------------------------------------------
 
 		@Override /* Object */
 		public String toString() {

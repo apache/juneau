@@ -26,6 +26,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -126,7 +127,7 @@ public final class ParserGroup {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder extends BeanBuilder<ParserGroup> {
 
 		List<Object> entries;
 		private BeanContextBuilder bcBuilder;
@@ -135,6 +136,7 @@ public final class ParserGroup {
 		 * Create an empty parser group builder.
 		 */
 		protected Builder() {
+			super(ParserGroup.class);
 			this.entries = AList.create();
 		}
 
@@ -144,6 +146,7 @@ public final class ParserGroup {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(ParserGroup copyFrom) {
+			super(copyFrom.getClass());
 			this.entries = AList.create().append(asList(copyFrom.entries));
 		}
 
@@ -156,6 +159,7 @@ public final class ParserGroup {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
 			entries = AList.create();
 			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
@@ -172,26 +176,19 @@ public final class ParserGroup {
 			return o;
 		}
 
-		/**
-		 * Copy creator.
-		 *
-		 * @return A new mutable copy of this builder.
-		 */
+		@Override /* BeanBuilder */
+		protected ParserGroup buildDefault() {
+			return new ParserGroup(this);
+		}
+
+		@Override /* BeanBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		/**
-		 * Creates a new {@link ParserGroup} object using a snapshot of the settings defined in this builder.
-		 *
-		 * <p>
-		 * This method can be called multiple times to produce multiple parser groups.
-		 *
-		 * @return A new {@link ParserGroup} object.
-		 */
-		public ParserGroup build() {
-			return new ParserGroup(this);
-		}
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Associates an existing bean context builder with all parser builders in this group.
@@ -407,6 +404,34 @@ public final class ParserGroup {
 		private <T extends ParserBuilder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
 		}
+
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends ParserGroup> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(ParserGroup value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
 
 		@Override /* Object */
 		public String toString() {
