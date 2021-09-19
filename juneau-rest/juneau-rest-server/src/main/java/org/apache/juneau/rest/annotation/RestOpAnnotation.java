@@ -629,7 +629,7 @@ public class RestOpAnnotation {
 		public void apply(AnnotationInfo<RestOp> ai, RestOpContextBuilder b) {
 			RestOp a = ai.getAnnotation();
 
-			classes(a.serializers()).ifPresent(x -> b.getSerializers().set(x));
+			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
 			classes(a.parsers()).ifPresent(x -> b.getParsers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.type(x));

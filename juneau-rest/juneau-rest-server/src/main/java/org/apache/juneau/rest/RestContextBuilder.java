@@ -150,6 +150,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private SwaggerProvider.Builder swaggerProvider;
 	private BeanContextBuilder beanContext;
 	private EncoderGroup.Builder encoders;
+	private SerializerGroup.Builder serializers;
 
 	String
 		allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -173,7 +174,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	Class<? extends RestOperations> operationsClass = RestOperations.class;
 
 	// TODO
-	SerializerGroup.Builder serializers = SerializerGroup.create();
 	ParserGroup.Builder parsers = ParserGroup.create();
 
 	List<Object> children = new ArrayList<>();
@@ -1009,6 +1009,73 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 			.beanCreateMethodFinder(EncoderGroup.class)
 			.addBean(EncoderGroup.Builder.class, v.get())
 			.find("createEncoders")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// serializers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link SerializerGroup} object in the REST context.
+	 *
+	 * @return The builder for the {@link SerializerGroup} object in the REST context.
+	 */
+	public final SerializerGroup.Builder serializers() {
+		if (serializers == null)
+			serializers = createSerializers(beanStore(), resource());
+		return serializers;
+	}
+
+	/**
+	 * Instantiates the serializer group builder for this REST object.
+	 *
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * 	<br>Created by {@link RestContextBuilder#beanStore()}.
+	 * @return The serializer group builder for this REST resource.
+	 */
+	protected SerializerGroup.Builder createSerializers(BeanStore beanStore, Supplier<?> resource) {
+
+		// Default value.
+		Value<SerializerGroup.Builder> v = Value.of(
+			SerializerGroup
+				.create()
+				.beanStore(beanStore)
+		);
+
+		// Specify the implementation class if its set as a default.
+		defaultClasses()
+			.get(SerializerGroup.class)
+			.ifPresent(x -> v.get().type(x));
+
+		// Replace with builder from bean store.
+		beanStore
+			.getBean(SerializerGroup.Builder.class)
+			.map(x -> x.copy())
+			.ifPresent(x->v.set(x));
+
+		// Replace with bean from bean store.
+		beanStore
+			.getBean(SerializerGroup.class)
+			.ifPresent(x->v.get().impl(x));
+
+		// Replace with builder from:  public [static] SerializerGroup.Builder createSerializers(<args>)
+		beanStore
+			.beanCreateMethodFinder(SerializerGroup.Builder.class)
+			.addBean(SerializerGroup.Builder.class, v.get())
+			.find("createSerializers")
+			.run(x -> v.set(x));
+
+		// Replace with bean from:  public [static] SerializerGroup createSerializers(<args>)
+		beanStore
+			.beanCreateMethodFinder(SerializerGroup.class)
+			.addBean(SerializerGroup.Builder.class, v.get())
+			.find("createSerializers")
 			.run(x -> v.get().impl(x));
 
 		return v.get();

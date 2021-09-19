@@ -1062,7 +1062,7 @@ public class RestAnnotation {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
-			classes(a.serializers()).ifPresent(x -> b.getSerializers().add(x));
+			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
 			classes(a.parsers()).ifPresent(x -> b.getParsers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
 			type(a.partParser()).ifPresent(x -> b.partParser().type(x));

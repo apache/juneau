@@ -130,8 +130,8 @@ public class RestOpContextBuilder extends ContextBuilder {
 
 			if (context.builder.beanContext().canApply(al))
 				beanContext().apply(al);
-			if (context.builder.serializers.canApply(al))
-				getSerializers().apply(al);
+			if (context.builder.serializers().canApply(al))
+				serializers().apply(al);
 			if (context.builder.parsers.canApply(al))
 				getParsers().apply(al);
 			if (context.builder.partSerializer().canApply(al))
@@ -267,6 +267,46 @@ public class RestOpContextBuilder extends ContextBuilder {
 
 	final Optional<EncoderGroup> getEncoders() {
 		return encoders == null ? empty() : of(encoders.build());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// serializers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link SerializerGroup} object in the REST context.
+	 *
+	 * @return The builder for the {@link SerializerGroup} object in the REST context.
+	 */
+	public final SerializerGroup.Builder serializers() {
+		if (serializers == null)
+			serializers = createSerializers(beanStore(), parent, resource());
+		return serializers;
+	}
+
+	/**
+	 * Constructs the serializer group builder for this REST method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The serializer group builder for this REST resource.
+	 */
+	protected SerializerGroup.Builder createSerializers(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		// Default value.
+		Value<SerializerGroup.Builder> v = Value.of(
+			parent.serializers().copy()
+		);
+
+		return v.get();
+	}
+
+	final Optional<SerializerGroup> getSerializers() {
+		return serializers == null ? empty() : of(serializers.build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -429,29 +469,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return this;
 	}
 
-	/**
-	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
-	 *
-	 * <p>
-	 * This method can be used to override serializers defined at the class level via {@link RestContextBuilder#getSerializers()}.
-	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
-	 * If never called, then the builder from the class context is used.
-	 *
-	 * <p>
-	 * The builder is initialized with serializers defined via the {@link RestOp#serializers()} (and related) annotation.
-	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * </ul>
-	 *
-	 * @return The serializer group builder for this context builder.
-	 */
-	public SerializerGroup.Builder getSerializers() {
-		if (serializers == null)
-			serializers = restContext.builder.serializers.copy();
-		return serializers;
-	}
+//	/**
+//	 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
+//	 *
+//	 * <p>
+//	 * This method can be used to override serializers defined at the class level via {@link RestContextBuilder#getSerializers()}.
+//	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
+//	 * If never called, then the builder from the class context is used.
+//	 *
+//	 * <p>
+//	 * The builder is initialized with serializers defined via the {@link RestOp#serializers()} (and related) annotation.
+//	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
+//	 *
+//	 * <ul class='seealso'>
+//	 * 	<li class='link'>{@doc RestSerializers}
+//	 * </ul>
+//	 *
+//	 * @return The serializer group builder for this context builder.
+//	 */
+//	public SerializerGroup.Builder getSerializers() {
+//		if (serializers == null)
+//			serializers = restContext.builder.serializers.copy();
+//		return serializers;
+//	}
 
 	/**
 	 * Returns the parser group builder containing the parsers for converting request bodies into POJOs.

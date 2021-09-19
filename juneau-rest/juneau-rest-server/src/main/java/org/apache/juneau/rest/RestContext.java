@@ -59,6 +59,7 @@ import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -168,6 +169,7 @@ public class RestContext extends Context {
 	private final Class<? extends RestOpArg>[] restOpArgs, hookMethodArgs;
 	private final BeanContext beanContext;
 	private final EncoderGroup encoders;
+	private final SerializerGroup serializers;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -276,6 +278,7 @@ public class RestContext extends Context {
 
 			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
 			encoders = bs.add(EncoderGroup.class, builder.encoders().build());
+			serializers = bs.add(SerializerGroup.class, builder.serializers().build());
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
@@ -383,6 +386,15 @@ public class RestContext extends Context {
 	 */
 	public EncoderGroup getEncoders() {
 		return encoders;
+	}
+
+	/**
+	 * Returns the serializers associated with this context.
+	 *
+	 * @return The serializers associated with this context.
+	 */
+	public SerializerGroup getSerializers() {
+		return serializers;
 	}
 
 	/**
