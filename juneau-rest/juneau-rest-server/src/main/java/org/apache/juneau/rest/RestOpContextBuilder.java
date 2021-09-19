@@ -39,7 +39,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.uon.*;
 
 import java.lang.reflect.Method;
 import java.nio.charset.*;
@@ -135,7 +134,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 			if (context.builder.parsers().canApply(al))
 				parsers().apply(al);
 			if (context.builder.partSerializer().canApply(al))
-				getPartSerializer().apply(al);
+				partSerializer().apply(al);
 			if (context.builder.partParser().canApply(al))
 				getPartParser().apply(al);
 
@@ -350,6 +349,46 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// partSerializer
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the {@link HttpPartSerializer} object in the REST context.
+	 *
+	 * @return The builder for the {@link HttpPartSerializer} object in the REST context.
+	 */
+	public final HttpPartSerializer.Creator partSerializer() {
+		if (partSerializer == null)
+			partSerializer = createPartSerializer(beanStore(), parent, resource());
+		return partSerializer;
+	}
+
+	/**
+	 * Constructs the part serializer builder for this REST method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The part serializer builder for this REST resource.
+	 */
+	protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		// Default value.
+		Value<HttpPartSerializer.Creator> v = Value.of(
+			parent.partSerializer().copy()
+		);
+
+		return v.get();
+	}
+
+	final Optional<HttpPartSerializer> getPartSerializer() {
+		return partSerializer == null ? empty() : of(partSerializer.create());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// converters
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -519,52 +558,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 			partParser = restContext.builder.partParser().copy();
 		return partParser;
 	}
-
-	/**
-	 * Returns the HTTP part serializer creator containing the part serializer for serializing POJOs to HTTP parts.
-	 *
-	 * <p>
-	 * The default value is {@link OpenApiSerializer} which serializes based on OpenAPI rules, but defaults to UON notation for beans and maps, and
-	 * plain text for everything else.
-	 *
-	 * <p>
-	 * <br>Other options include:
-	 * <ul>
-	 * 	<li class='jc'>{@link SimplePartSerializer} - Always serializes to plain text.
-	 * 	<li class='jc'>{@link UonSerializer} - Always serializers to UON.
-	 * </ul>
-	 *
-	 * @return The HTTP part serializer creator.
-	 */
-	public HttpPartSerializer.Creator getPartSerializer() {
-		if (partSerializer == null)
-			partSerializer = restContext.builder.partSerializer().copy();
-		return partSerializer;
-	}
-
-//	/**
-//	 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
-//	 *
-//	 * <p>
-//	 * This method can be used to override encoders defined at the class level via {@link RestContextBuilder#getEncoders()}.
-//	 * On first call, the builder from the class context is copied into a modifiable builder for this method.
-//	 * If never called, then the builder from the class context is used.
-//	 *
-//	 * <p>
-//	 * The builder is initialized with encoders defined via the {@link Rest#parsers()} annotation.
-//	 * That annotation is applied from parent-to-child order with child entries given priority over parent entries.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='link'>{@doc RestEncoders}
-//	 * </ul>
-//	 *
-//	 * @return The encoder group builder for this context builder.
-//	 */
-//	public EncoderGroup.Builder getEncoders() {
-//		if (encoders == null)
-//			encoders = restContext.builder.encoders().copy();
-//		return encoders;
-//	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Properties

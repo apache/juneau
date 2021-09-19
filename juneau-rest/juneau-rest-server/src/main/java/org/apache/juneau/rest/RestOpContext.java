@@ -151,9 +151,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			encoders = bs.add(EncoderGroup.class, builder.getEncoders().orElse(context.getEncoders()));
 			serializers = bs.add(SerializerGroup.class, builder.getSerializers().orElse(context.getSerializers()));
 			parsers = bs.add(ParserGroup.class, builder.getParsers().orElse(context.getParsers()));
-
-			partSerializer = createPartSerializer(r, builder, bs);
-			bs.addBean(HttpPartSerializer.class, partSerializer);
+			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
 
 			partParser = createPartParser(r, builder, bs);
 			bs.addBean(HttpPartParser.class, partParser);
@@ -324,59 +322,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			.run();
 
 		return x.build();
-	}
-
-	/**
-	 * Instantiates the HTTP part serializer for this REST resource.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-	 * 	<li>Looks for part serializer set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partSerializer()}
-	 * 			<li>{@link Rest#partSerializer()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanStore}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates an {@link OpenApiSerializer}.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @return The HTTP part serializer for this REST resource.
-	 * @throws Exception If serializer could not be instantiated.
-	 */
-	protected HttpPartSerializer createPartSerializer(Object resource, RestOpContextBuilder builder, BeanStore beanStore) throws Exception {
-
-		HttpPartSerializer g = beanStore.getBean(HttpPartSerializer.class).orElse(null);
-
-		if (g != null)
-			return g;
-
-		HttpPartSerializer.Creator x = builder.partSerializer;
-
-		if (x == null)
-			x = builder.restContext.builder.partSerializer();
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HttpPartSerializer.Creator.class, x)
-			.createMethodFinder(HttpPartSerializer.Creator.class, resource)
-			.find("createPartSerializer", Method.class)
-			.thenFind("createPartSerializer")
-			.withDefault(x)
-			.run();
-
-		return x.create();
 	}
 
 	/**
