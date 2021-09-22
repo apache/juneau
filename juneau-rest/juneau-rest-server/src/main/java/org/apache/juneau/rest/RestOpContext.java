@@ -16,15 +16,10 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
-import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
-import static org.apache.juneau.http.HttpParts.*;
 import static java.util.Optional.*;
-import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
@@ -34,14 +29,12 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
-import org.apache.http.ParseException;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
@@ -90,8 +83,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
-	private final PartList defaultRequestQuery, defaultRequestFormData;
-	private final List<NamedAttribute> defaultRequestAttributes;
+	private final PartList defaultRequestQueryData, defaultRequestFormData;
+	private final NamedAttributeList defaultRequestAttributes;
 	private final Charset defaultCharset;
 	private final long maxInput;
 	private final List<MediaType>
@@ -165,11 +158,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			supportedAcceptTypes = unmodifiableList(ofNullable(builder.produces).orElse(serializers.getSupportedMediaTypes()));
 			supportedContentTypes = unmodifiableList(ofNullable(builder.consumes).orElse(parsers.getSupportedMediaTypes()));
 
-			defaultRequestHeaders = createDefaultRequestHeaders(r, builder, bs, method, context).build();
-			defaultResponseHeaders = createDefaultResponseHeaders(r, builder, bs, method, context).build();
-			defaultRequestQuery = createDefaultRequestQuery(r, builder, bs, method).build();
-			defaultRequestFormData = createDefaultRequestFormData(r, builder, bs, method).build();
-			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, builder, bs, method, context));
+			defaultRequestHeaders = builder.defaultRequestHeaders().build();
+			defaultResponseHeaders = builder.defaultResponseHeaders().build();
+			defaultRequestQueryData = builder.defaultRequestQueryData().build();
+			defaultRequestFormData = builder.defaultRequestFormData().build();
+			defaultRequestAttributes = builder.defaultRequestAttributes().build();
 
 			int _hierarchyDepth = 0;
 			Class<?> sc = method.getDeclaringClass().getSuperclass();
@@ -194,8 +187,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			opArgs = context.findRestOperationArgs(mi.inner(), bs);
 
 			this.callLogger = context.getCallLogger();
-		} catch (ServletException e) {
-			throw e;
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
@@ -208,184 +199,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
-	}
-
-	/**
-	 * Instantiates the default request headers for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @param method This Java method.
-	 * @param context The REST class context.
-	 * @return The default request headers for this method.
-	 * @throws Exception If default request headers could not be instantiated.
-	 */
-	protected HeaderList.Builder createDefaultRequestHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
-
-		HeaderList.Builder x = HeaderList.create().setDefault(context.getDefaultRequestHeaders()).setDefault(builder.defaultRequestHeaders.build());
-
-		for (Annotation[] aa : method.getParameterAnnotations()) {
-			for (Annotation a : aa) {
-				if (a instanceof Header) {
-					Header h = (Header)a;
-					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
-					if (def != null) {
-						try {
-							x.set(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @Header annotation");
-						}
-					}
-				}
-			}
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HeaderList.Builder.class, x)
-			.createMethodFinder(HeaderList.Builder.class, resource)
-			.find("createDefaultRequestHeaders", Method.class)
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the default request headers for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @param method This Java method.
-	 * @param context The REST class context.
-	 * @return The default request headers for this method.
-	 * @throws Exception If default request headers could not be instantiated.
-	 */
-	protected HeaderList.Builder createDefaultResponseHeaders(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
-
-		HeaderList.Builder x = HeaderList.create().setDefault(context.getDefaultResponseHeaders()).setDefault(builder.defaultResponseHeaders.build());
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(HeaderList.Builder.class, x)
-			.createMethodFinder(HeaderList.Builder.class, resource)
-			.find("createDefaultResponseHeaders", Method.class)
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the default request attributes for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @param method This Java method.
-	 * @param context The REST class context.
-	 * @return The default request attributes for this method.
-	 * @throws Exception If default request headers could not be instantiated.
-	 */
-	protected NamedAttributeList createDefaultRequestAttributes(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method, RestContext context) throws Exception {
-
-		NamedAttributeList x = context.getDefaultRequestAttributes().copy().appendUnique(builder.defaultRequestAttributes);
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(NamedAttributeList.class, x)
-			.createMethodFinder(NamedAttributeList.class, resource)
-			.find("createDefaultRequestAttributes", Method.class)
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the default query parameters for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @param method This Java method.
-	 * @return The default request query parameters for this method.
-	 * @throws Exception If default request query parameters could not be instantiated.
-	 */
-	protected PartList.Builder createDefaultRequestQuery(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
-
-		PartList.Builder x = builder.defaultQueryData;
-
-		for (Annotation[] aa : method.getParameterAnnotations()) {
-			for (Annotation a : aa) {
-				if (a instanceof Query) {
-					Query h = (Query)a;
-					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
-					if (def != null) {
-						try {
-							x.setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @Query annotation");
-						}
-					}
-				}
-			}
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(PartList.Builder.class, x)
-			.createMethodFinder(PartList.Builder.class, resource)
-			.find("createDefaultRequestQuery", Method.class)
-			.thenFind("createDefaultRequestQuery")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the default form-data parameters for this method.
-	 *
-	 * @param resource The REST resource object.
-	 * @param builder The builder for this object.
-	 * @param beanStore The bean store to use for retrieving and creating beans.
-	 * @param method This Java method.
-	 * @return The default request form-data parameters for this method.
-	 * @throws Exception If default request form-data parameters could not be instantiated.
-	 */
-	protected PartList.Builder createDefaultRequestFormData(Object resource, RestOpContextBuilder builder, BeanStore beanStore, Method method) throws Exception {
-
-		PartList.Builder x = builder.defaultFormData;
-
-		for (Annotation[] aa : method.getParameterAnnotations()) {
-			for (Annotation a : aa) {
-				if (a instanceof FormData) {
-					FormData h = (FormData)a;
-					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
-					if (def != null) {
-						try {
-							x.setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @FormData annotation");
-						}
-					}
-				}
-			}
-		}
-
-		x = BeanStore
-			.of(beanStore, resource)
-			.addBean(PartList.Builder.class, x)
-			.createMethodFinder(PartList.Builder.class, resource)
-			.find("createDefaultRequestFormData", Method.class)
-			.thenFind("createDefaultRequestFormData")
-			.withDefault(x)
-			.run();
-
-		return x;
 	}
 
 	/**
@@ -568,8 +381,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestQuery() {
-		return defaultRequestQuery;
+	public PartList getDefaultRequestQueryData() {
+		return defaultRequestQueryData;
 	}
 
 	/**
@@ -586,7 +399,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The default request attributes.  Never <jk>null</jk>.
 	 */
-	public List<NamedAttribute> getDefaultRequestAttributes() {
+	public NamedAttributeList getDefaultRequestAttributes() {
 		return defaultRequestAttributes;
 	}
 
@@ -861,7 +674,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.filtered()
 				.a("defaultRequestFormData", defaultRequestFormData)
 				.a("defaultRequestHeaders", defaultRequestHeaders)
-				.a("defaultRequestQuery", defaultRequestQuery)
+				.a("defaultRequestQueryData", defaultRequestQueryData)
 				.a("httpMethod", httpMethod)
 			);
 	}
@@ -873,13 +686,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, ContextProperties cp, HttpPartSerializer _default) {
 		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, cp);
 		return hps == null ? _default : hps;
-	}
-
-	private String joinnlFirstNonEmptyArray(String[]...s) {
-		for (String[] ss : s)
-			if (ss.length > 0)
-				return joinnl(ss);
-		return null;
 	}
 
 	private UrlPathMatch matchPattern(RestCall call) {

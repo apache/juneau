@@ -201,7 +201,7 @@ public @interface RestGet {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -215,7 +215,7 @@ public @interface RestGet {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultQueryData() default {};
+	String[] defaultRequestQueryData() default {};
 
 	/**
 	 * Default request attributes.

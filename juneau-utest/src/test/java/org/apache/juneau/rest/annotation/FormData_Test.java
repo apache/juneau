@@ -96,7 +96,7 @@ public class FormData_Test {
 
 	@Rest
 	public static class C {
-		@RestPost(defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestFormParams formData) {
 			return OMap.create()
 				.a("f1", formData.getString("f1"))
@@ -117,7 +117,7 @@ public class FormData_Test {
 				.a("f2", f2)
 				.a("f3", f3);
 		}
-		@RestPost(defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap d(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
 			return OMap.create()
 				.a("f1", f1)

@@ -42,8 +42,8 @@ public class RestPutAnnotation_Test {
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
-		.defaultFormData("defaultFormData")
-		.defaultQueryData("defaultQueryData")
+		.defaultRequestFormData("defaultRequestFormData")
+		.defaultRequestQueryData("defaultRequestQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -73,8 +73,8 @@ public class RestPutAnnotation_Test {
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
-		.defaultFormData("defaultFormData")
-		.defaultQueryData("defaultQueryData")
+		.defaultRequestFormData("defaultRequestFormData")
+		.defaultRequestQueryData("defaultRequestQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -107,8 +107,8 @@ public class RestPutAnnotation_Test {
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
 				+ "defaultContentType:'defaultContentType',"
-				+ "defaultFormData:['defaultFormData'],"
-				+ "defaultQueryData:['defaultQueryData'],"
+				+ "defaultRequestFormData:['defaultRequestFormData'],"
+				+ "defaultRequestQueryData:['defaultRequestQueryData'],"
 				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
 				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
@@ -183,8 +183,8 @@ public class RestPutAnnotation_Test {
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
 			defaultContentType="defaultContentType",
-			defaultFormData="defaultFormData",
-			defaultQueryData="defaultQueryData",
+			defaultRequestFormData="defaultRequestFormData",
+			defaultRequestQueryData="defaultRequestQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",
@@ -215,8 +215,8 @@ public class RestPutAnnotation_Test {
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
 			defaultContentType="defaultContentType",
-			defaultFormData="defaultFormData",
-			defaultQueryData="defaultQueryData",
+			defaultRequestFormData="defaultRequestFormData",
+			defaultRequestQueryData="defaultRequestQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",

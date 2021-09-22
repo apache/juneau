@@ -188,7 +188,7 @@ public final class RestRequest {
 		pathParams.parser(partParserSession);
 
 		queryParams
-			.addDefault(opContext.getDefaultRequestQuery().getAll())
+			.addDefault(opContext.getDefaultRequestQueryData().getAll())
 			.parser(partParserSession);
 
 		headers

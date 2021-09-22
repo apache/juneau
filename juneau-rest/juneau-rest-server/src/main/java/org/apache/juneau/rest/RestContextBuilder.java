@@ -141,7 +141,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	private FileFinder.Builder fileFinder;
 	private StaticFiles.Builder staticFiles;
 	private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
-	private NamedAttributeList defaultRequestAttributes;
+	private NamedAttributeList.Builder defaultRequestAttributes;
 	private RestOpArgList.Builder restOpArgs, hookMethodArgs;
 	private DebugEnablement.Builder debugEnablement;
 	private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
@@ -2676,7 +2676,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 *
 	 * @return The builder for the default request attributer object in the REST context.
 	 */
-	public final NamedAttributeList defaultRequestAttributes() {
+	public final NamedAttributeList.Builder defaultRequestAttributes() {
 		if (defaultRequestAttributes == null)
 			defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), resource());
 		return defaultRequestAttributes;
@@ -2732,7 +2732,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-		defaultRequestAttributes().appendUnique(values);
+		defaultRequestAttributes().add(values);
 		return this;
 	}
 
@@ -2745,25 +2745,36 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * 	The REST servlet/bean instance that this context is defined against.
 	 * @return The default response headers for this REST object.
 	 */
-	protected NamedAttributeList createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
+	protected NamedAttributeList.Builder createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
 
 		// Default value.
-		Value<NamedAttributeList> v = Value.of(
+		Value<NamedAttributeList.Builder> v = Value.of(
 			NamedAttributeList.create()
 		);
 
 		// Replace with bean from bean store.
 		beanStore
-			.getBean("RestContext.defaultRequestAttributes", NamedAttributeList.class)
+			.getBean("RestContext.defaultRequestAttributes", NamedAttributeList.Builder.class)
 			.map(x -> x.copy())
 			.ifPresent(x -> v.set(x));
+
+		beanStore
+			.getBean("RestContext.defaultRequestAttributes", NamedAttributeList.class)
+			.ifPresent(x -> v.get().impl(x));
+
+		// Replace with bean from:  public [static] NamedAttributeList.Builder createDefaultRequestAttributes(<args>)
+		beanStore
+			.beanCreateMethodFinder(NamedAttributeList.Builder.class)
+			.addBean(NamedAttributeList.Builder.class, v.get())
+			.find("createDefaultRequestAttributes")
+			.run(x -> v.set(x));
 
 		// Replace with bean from:  public [static] NamedAttributeList createDefaultRequestAttributes(<args>)
 		beanStore
 			.beanCreateMethodFinder(NamedAttributeList.class)
-			.addBean(NamedAttributeList.class, v.get())
+			.addBean(NamedAttributeList.Builder.class, v.get())
 			.find("createDefaultRequestAttributes")
-			.run(x -> v.set(x));
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}

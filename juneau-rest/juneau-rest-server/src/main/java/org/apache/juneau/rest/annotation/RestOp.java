@@ -230,7 +230,7 @@ public @interface RestOp {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -244,7 +244,7 @@ public @interface RestOp {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultFormData() default {};
+	String[] defaultRequestFormData() default {};
 
 	/**
 	 * Specifies default values for query parameters.
@@ -257,7 +257,7 @@ public @interface RestOp {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -271,7 +271,7 @@ public @interface RestOp {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultQueryData() default {};
+	String[] defaultRequestQueryData() default {};
 
 	/**
 	 * Default request attributes.

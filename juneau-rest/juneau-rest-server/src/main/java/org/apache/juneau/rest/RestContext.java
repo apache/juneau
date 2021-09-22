@@ -296,7 +296,7 @@ public class RestContext extends Context {
 			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().build());
 			defaultRequestHeaders = bs.add("RestContext.defaultRequestHeaders", builder.defaultRequestHeaders().build());
 			defaultResponseHeaders = bs.add("RestContext.defaultResponseHeaders", builder.defaultResponseHeaders().build());
-			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes());
+			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes().build());
 			restOpArgs = builder.restOpArgs().build().asArray();
 			hookMethodArgs = builder.hookMethodArgs().build().asArray();
 			debugEnablement = builder.debugEnablement().build();

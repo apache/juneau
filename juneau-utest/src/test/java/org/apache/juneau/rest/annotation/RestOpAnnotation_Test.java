@@ -42,8 +42,8 @@ public class RestOpAnnotation_Test {
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
-		.defaultFormData("defaultFormData")
-		.defaultQueryData("defaultQueryData")
+		.defaultRequestFormData("defaultRequestFormData")
+		.defaultRequestQueryData("defaultRequestQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -74,8 +74,8 @@ public class RestOpAnnotation_Test {
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
-		.defaultFormData("defaultFormData")
-		.defaultQueryData("defaultQueryData")
+		.defaultRequestFormData("defaultRequestFormData")
+		.defaultRequestQueryData("defaultRequestQueryData")
 		.defaultRequestAttributes("defaultRequestAttributes")
 		.defaultRequestHeaders("defaultRequestHeaders")
 		.defaultResponseHeaders("defaultResponseHeaders")
@@ -109,8 +109,8 @@ public class RestOpAnnotation_Test {
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
 				+ "defaultContentType:'defaultContentType',"
-				+ "defaultFormData:['defaultFormData'],"
-				+ "defaultQueryData:['defaultQueryData'],"
+				+ "defaultRequestFormData:['defaultRequestFormData'],"
+				+ "defaultRequestQueryData:['defaultRequestQueryData'],"
 				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
 				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
@@ -186,8 +186,8 @@ public class RestOpAnnotation_Test {
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
 			defaultContentType="defaultContentType",
-			defaultFormData="defaultFormData",
-			defaultQueryData="defaultQueryData",
+			defaultRequestFormData="defaultRequestFormData",
+			defaultRequestQueryData="defaultRequestQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",
@@ -219,8 +219,8 @@ public class RestOpAnnotation_Test {
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
 			defaultContentType="defaultContentType",
-			defaultFormData="defaultFormData",
-			defaultQueryData="defaultQueryData",
+			defaultRequestFormData="defaultRequestFormData",
+			defaultRequestQueryData="defaultRequestQueryData",
 			defaultRequestAttributes="defaultRequestAttributes",
 			defaultRequestHeaders="defaultRequestHeaders",
 			defaultResponseHeaders="defaultResponseHeaders",

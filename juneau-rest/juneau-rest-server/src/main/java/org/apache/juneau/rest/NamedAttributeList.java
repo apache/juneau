@@ -14,23 +14,25 @@ package org.apache.juneau.rest;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link NamedAttribute} objects.
  */
-public class NamedAttributeList extends AList<NamedAttribute> {
+public class NamedAttributeList {
 
-	private static final long serialVersionUID = 1L;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
 	 *
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("unchecked")
-	public static NamedAttributeList create() {
-		return new NamedAttributeList();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -40,9 +42,106 @@ public class NamedAttributeList extends AList<NamedAttribute> {
 	 * @return An empty list.
 	 */
 	public static NamedAttributeList of(NamedAttribute...values) {
-		NamedAttributeList l = new NamedAttributeList();
-		l.a(values);
-		return l;
+		return create().add(values).build();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends BeanBuilder<NamedAttributeList> {
+
+		LinkedHashMap<String,NamedAttribute> entries;
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(NamedAttributeList.class);
+			entries = new LinkedHashMap<>();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			entries = new LinkedHashMap<>(copyFrom.entries);
+		}
+
+		@Override /* BeanBuilder */
+		protected NamedAttributeList buildDefault() {
+			return new NamedAttributeList(this);
+		}
+
+		@Override /* BeanBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		//-------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Appends the specified rest matcher classes to the list.
+		 *
+		 * @param values The values to add.
+		 * @return This object (for method chaining).
+		 */
+		public Builder add(NamedAttribute...values) {
+			for (NamedAttribute v : values)
+				entries.put(v.getName(), v);
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* BeanBuilder */
+		public Builder type(Class<? extends NamedAttributeList> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder impl(NamedAttributeList value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	final NamedAttribute[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param b The builder of this object.
+	 */
+	public NamedAttributeList(Builder b) {
+		entries = b.entries.values().toArray(new NamedAttribute[b.entries.size()]);
 	}
 
 	/**
@@ -50,57 +149,7 @@ public class NamedAttributeList extends AList<NamedAttribute> {
 	 *
 	 * @return A new copy of this list.
 	 */
-	public NamedAttributeList copy() {
-		return NamedAttributeList.of(asArray());
-	}
-
-	/**
-	 * Appends or replaces the named attribute values in this list.
-	 *
-	 * <p>
-	 * If the named attribute already exists in this list, it will be replaced with the new value.
-	 * Otherwise it will be appended to the end of this list.
-	 *
-	 * @param values The values to append or replace in this list.
-	 * @return This object (for method chaining).
-	 */
-	public NamedAttributeList appendUnique(List<NamedAttribute> values) {
-		for (NamedAttribute h : values) {
-			boolean replaced = false;
-			for (ListIterator<NamedAttribute> li = listIterator(); li.hasNext();) {
-				NamedAttribute h2 = li.next();
-				if (h2.getName().equalsIgnoreCase(h.getName())) {
-					li.set(h);
-					replaced = true;
-					break;
-				}
-			}
-			if (! replaced)
-				add(h);
-		}
-		return this;
-	}
-
-	/**
-	 * Appends or replaces the named attribute values in this list.
-	 *
-	 * <p>
-	 * If the named attribute already exists in this list, it will be replaced with the new value.
-	 * Otherwise it will be appended to the end of this list.
-	 *
-	 * @param values The values to append or replace in this list.
-	 * @return This object (for method chaining).
-	 */
-	public NamedAttributeList appendUnique(NamedAttribute...values) {
-		return appendUnique(Arrays.asList(values));
-	}
-
-	/**
-	 * Returns the contents of this list as a {@link NamedAttribute} array.
-	 *
-	 * @return The contents of this list as a {@link NamedAttribute} array.
-	 */
-	public NamedAttribute[] asArray() {
-		return asArrayOf(NamedAttribute.class);
+	public Builder copy() {
+		return copy().add(entries);
 	}
 }

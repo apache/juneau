@@ -72,7 +72,7 @@ public class RestPutAnnotation {
 		Class<?>[] parsers=new Class<?>[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultFormData={}, defaultQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
+		String[] consumes={}, defaultRequestFormData={}, defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
 
 		/**
 		 * Constructor.
@@ -179,24 +179,24 @@ public class RestPutAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestPut#defaultFormData()} property on this annotation.
+		 * Sets the {@link RestPut#defaultRequestFormData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder defaultFormData(String...value) {
-			this.defaultFormData = value;
+		public Builder defaultRequestFormData(String...value) {
+			this.defaultRequestFormData = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link RestPut#defaultQueryData()} property on this annotation.
+		 * Sets the {@link RestPut#defaultRequestQueryData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder defaultQueryData(String...value) {
-			this.defaultQueryData = value;
+		public Builder defaultRequestQueryData(String...value) {
+			this.defaultRequestQueryData = value;
 			return this;
 		}
 
@@ -419,7 +419,7 @@ public class RestPutAnnotation {
 		private final Class<?>[] parsers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, rolesDeclared, roleGuard, summary, value;
-		private final String[] consumes, defaultFormData, defaultQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
+		private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
 
 		Impl(Builder b) {
 			super(b);
@@ -431,8 +431,8 @@ public class RestPutAnnotation {
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
 			this.defaultContentType = b.defaultContentType;
-			this.defaultFormData = copyOf(b.defaultFormData);
-			this.defaultQueryData = copyOf(b.defaultQueryData);
+			this.defaultRequestFormData = copyOf(b.defaultRequestFormData);
+			this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
@@ -494,13 +494,13 @@ public class RestPutAnnotation {
 		}
 
 		@Override /* RestPut */
-		public String[] defaultFormData() {
-			return defaultFormData;
+		public String[] defaultRequestFormData() {
+			return defaultRequestFormData;
 		}
 
 		@Override /* RestPut */
-		public String[] defaultQueryData() {
-			return defaultQueryData;
+		public String[] defaultRequestQueryData() {
+			return defaultRequestQueryData;
 		}
 
 		@Override /* RestPut */
@@ -619,13 +619,13 @@ public class RestPutAnnotation {
 			type(a.contextClass()).ifPresent(x -> b.type(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
-			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
-			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
-			strings(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
-			strings(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultFormData(x));
-			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
-			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders().setDefault(x));
+			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders().setDefault(x));
+			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes().add(x));
+			strings(a.defaultRequestQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestQueryData().setDefault(x));
+			strings(a.defaultRequestFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestFormData().setDefault(x));
+			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
+			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
 			b.matchers().append(a.matchers());

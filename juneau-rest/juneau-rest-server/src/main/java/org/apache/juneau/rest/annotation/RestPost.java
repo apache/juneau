@@ -232,7 +232,7 @@ public @interface RestPost {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -246,7 +246,7 @@ public @interface RestPost {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultFormData() default {};
+	String[] defaultRequestFormData() default {};
 
 	/**
 	 * Specifies default values for query parameters.
@@ -259,7 +259,7 @@ public @interface RestPost {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doPost(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -273,7 +273,7 @@ public @interface RestPost {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
-	String[] defaultQueryData() default {};
+	String[] defaultRequestQueryData() default {};
 
 	/**
 	 * Default request attributes.

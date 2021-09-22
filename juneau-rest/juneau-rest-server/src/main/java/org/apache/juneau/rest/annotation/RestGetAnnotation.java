@@ -71,7 +71,7 @@ public class RestGetAnnotation {
 		Class<? extends Serializer>[] serializers = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] defaultQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
+		String[] defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
 
 		/**
 		 * Constructor.
@@ -156,13 +156,13 @@ public class RestGetAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestGet#defaultQueryData()} property on this annotation.
+		 * Sets the {@link RestGet#defaultRequestQueryData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder defaultQueryData(String...value) {
-			this.defaultQueryData = value;
+		public Builder defaultRequestQueryData(String...value) {
+			this.defaultRequestQueryData = value;
 			return this;
 		}
 
@@ -362,7 +362,7 @@ public class RestGetAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
-		private final String[] defaultQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
+		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
 
 		Impl(Builder b) {
 			super(b);
@@ -372,7 +372,7 @@ public class RestGetAnnotation {
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
-			this.defaultQueryData = copyOf(b.defaultQueryData);
+			this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
@@ -422,8 +422,8 @@ public class RestGetAnnotation {
 		}
 
 		@Override /* RestGet */
-		public String[] defaultQueryData() {
-			return defaultQueryData;
+		public String[] defaultRequestQueryData() {
+			return defaultRequestQueryData;
 		}
 
 		@Override /* RestGet */
@@ -530,11 +530,11 @@ public class RestGetAnnotation {
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.type(x));
 			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
-			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
-			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
-			strings(a.defaultQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultQueryData(x));
-			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
+			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders().setDefault(x));
+			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders().setDefault(x));
+			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes().add(x));
+			strings(a.defaultRequestQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestQueryData().setDefault(x));
+			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
 			b.matchers().append(a.matchers());

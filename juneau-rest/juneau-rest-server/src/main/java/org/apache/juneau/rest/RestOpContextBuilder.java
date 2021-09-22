@@ -13,19 +13,24 @@
 package org.apache.juneau.rest;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
@@ -34,6 +39,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -69,8 +75,8 @@ public class RestOpContextBuilder extends ContextBuilder {
 	private RestMatcherList.Builder matchers;
 	private JsonSchemaGeneratorBuilder jsonSchemaGenerator;
 
-	PartList.Builder defaultFormData, defaultQueryData;
-	NamedAttributeList defaultRequestAttributes;
+	PartList.Builder defaultRequestFormData, defaultRequestQueryData;
+	NamedAttributeList.Builder defaultRequestAttributes;
 	HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 	RestMatcherList.Builder restMatchers;
 	List<MediaType> produces, consumes;
@@ -114,13 +120,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 			.of(context.getRootBeanStore(), context.builder.resource().get())
 			.addBean(java.lang.reflect.Method.class, method);
 
-		this.defaultFormData = PartList.create();
-		this.defaultQueryData = PartList.create();
-		this.defaultRequestAttributes = NamedAttributeList.create();
-		this.defaultRequestHeaders = HeaderList.create();
-		this.defaultResponseHeaders = HeaderList.create();
-		this.restMatchers = RestMatcherList.create();
-
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
 		try {
@@ -143,6 +142,8 @@ public class RestOpContextBuilder extends ContextBuilder {
 				partParser().apply(al);
 			if (context.builder.jsonSchemaGenerator().canApply(al))
 				jsonSchemaGenerator().apply(al);
+
+			processParameterAnnotations();
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -227,6 +228,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 			parent.beanContext().copy()
 		);
 
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(BeanContextBuilder.class, v.get())
+			.createMethodFinder(BeanContextBuilder.class, resource)
+			.find("createBeanContext", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(BeanContextBuilder.class, v.get())
+			.createMethodFinder(BeanContext.class, resource)
+			.find("createBeanContext", Method.class)
+			.run(x -> v.get().impl(x));
+
 		return v.get();
 	}
 
@@ -266,6 +281,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 		Value<EncoderGroup.Builder> v = Value.of(
 			parent.encoders().copy()
 		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(EncoderGroup.Builder.class, v.get())
+			.createMethodFinder(EncoderGroup.Builder.class, resource)
+			.find("createEncoders", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(EncoderGroup.Builder.class, v.get())
+			.createMethodFinder(EncoderGroup.class, resource)
+			.find("createEncoders", Method.class)
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -307,6 +336,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 			parent.serializers().copy()
 		);
 
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(SerializerGroup.Builder.class, v.get())
+			.createMethodFinder(SerializerGroup.Builder.class, resource)
+			.find("createSerializers", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(SerializerGroup.Builder.class, v.get())
+			.createMethodFinder(SerializerGroup.class, resource)
+			.find("createSerializers", Method.class)
+			.run(x -> v.get().impl(x));
+
 		return v.get();
 	}
 
@@ -346,6 +389,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 		Value<ParserGroup.Builder> v = Value.of(
 			parent.parsers().copy()
 		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(ParserGroup.Builder.class, v.get())
+			.createMethodFinder(ParserGroup.Builder.class, resource)
+			.find("createParsers", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(ParserGroup.Builder.class, v.get())
+			.createMethodFinder(ParserGroup.class, resource)
+			.find("createParsers", Method.class)
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -387,6 +444,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 			parent.partSerializer().copy()
 		);
 
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HttpPartSerializer.Creator.class, v.get())
+			.createMethodFinder(HttpPartSerializer.Creator.class, resource)
+			.find("createPartSerializer", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HttpPartSerializer.Creator.class, v.get())
+			.createMethodFinder(HttpPartSerializer.class, resource)
+			.find("createPartSerializer", Method.class)
+			.run(x -> v.get().impl(x));
+
 		return v.get();
 	}
 
@@ -427,6 +498,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 			parent.partParser().copy()
 		);
 
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HttpPartParser.Creator.class, v.get())
+			.createMethodFinder(HttpPartParser.Creator.class, resource)
+			.find("createPartParser", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HttpPartParser.Creator.class, v.get())
+			.createMethodFinder(HttpPartParser.class, resource)
+			.find("createPartParser", Method.class)
+			.run(x -> v.get().impl(x));
+
 		return v.get();
 	}
 
@@ -466,6 +551,20 @@ public class RestOpContextBuilder extends ContextBuilder {
 		Value<JsonSchemaGeneratorBuilder> v = Value.of(
 			parent.jsonSchemaGenerator().copy()
 		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
+			.createMethodFinder(JsonSchemaGeneratorBuilder.class, resource)
+			.find("createJsonSchemaGenerator", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(JsonSchemaGeneratorBuilder.class, v.get())
+			.createMethodFinder(JsonSchemaGenerator.class, resource)
+			.find("createJsonSchemaGenerator", Method.class)
+			.run(x -> v.get().impl(x));
 
 		return v.get();
 	}
@@ -896,6 +995,306 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultRequestHeaders
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default request headers in the REST context.
+	 *
+	 * @return The builder for the default request headers in the REST context.
+	 */
+	public final HeaderList.Builder defaultRequestHeaders() {
+		if (defaultRequestHeaders == null)
+			defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), parent, resource());
+		return defaultRequestHeaders;
+	}
+
+	/**
+	 * Instantiates the default request headers for this method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The default request headers for this method.
+	 */
+	protected HeaderList.Builder createDefaultRequestHeaders(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		Value<HeaderList.Builder> v = Value.of(
+			parent.defaultRequestHeaders().copy()
+		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HeaderList.Builder.class, v.get())
+			.createMethodFinder(HeaderList.Builder.class, resource)
+			.find("createDefaultRequestHeaders", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HeaderList.Builder.class, v.get())
+			.createMethodFinder(HeaderList.class, resource)
+			.find("createDefaultRequestHeaders", Method.class)
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultResponseHeaders
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default response headers in the REST context.
+	 *
+	 * @return The builder for the default response headers in the REST context.
+	 */
+	public final HeaderList.Builder defaultResponseHeaders() {
+		if (defaultResponseHeaders == null)
+			defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), parent, resource());
+		return defaultResponseHeaders;
+	}
+
+	/**
+	 * Instantiates the default request headers for this method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The default request headers for this method.
+	 */
+	protected HeaderList.Builder createDefaultResponseHeaders(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		Value<HeaderList.Builder> v = Value.of(
+			parent.defaultResponseHeaders().copy()
+		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HeaderList.Builder.class, v.get())
+			.createMethodFinder(HeaderList.Builder.class, resource)
+			.find("createDefaultResponseHeaders", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(HeaderList.Builder.class, v.get())
+			.createMethodFinder(HeaderList.class, resource)
+			.find("createDefaultResponseHeaders", Method.class)
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultRequestAttributes
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default request attributes in the REST context.
+	 *
+	 * @return The builder for the default request attributes in the REST context.
+	 */
+	public final NamedAttributeList.Builder defaultRequestAttributes() {
+		if (defaultRequestAttributes == null)
+			defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), parent, resource());
+		return defaultRequestAttributes;
+	}
+
+	/**
+	 * Instantiates the default request attributes for this method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The default request attributes for this method.
+	 */
+	protected NamedAttributeList.Builder createDefaultRequestAttributes(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		Value<NamedAttributeList.Builder> v = Value.of(
+			parent.defaultRequestAttributes().copy()
+		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(NamedAttributeList.Builder.class, v.get())
+			.createMethodFinder(NamedAttributeList.Builder.class, resource)
+			.find("createDefaultRequestAttributes", Method.class)
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(NamedAttributeList.Builder.class, v.get())
+			.createMethodFinder(NamedAttributeList.class, resource)
+			.find("createDefaultRequestAttributes", Method.class)
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultRequestQuery
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default request query data in the REST context.
+	 *
+	 * @return The builder for the default request query data in the REST context.
+	 */
+	public final PartList.Builder defaultRequestQueryData() {
+		if (defaultRequestQueryData == null)
+			defaultRequestQueryData = createDefaultRequestQueryData(beanStore(), parent, resource());
+		return defaultRequestQueryData;
+	}
+
+	/**
+	 * Instantiates the default query parameters for this method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The default request query parameters for this method.
+	 */
+	protected PartList.Builder createDefaultRequestQueryData(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		Value<PartList.Builder> v = Value.of(
+			PartList.create()
+		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(PartList.Builder.class, v.get())
+			.createMethodFinder(PartList.Builder.class, resource)
+			.find("createDefaultRequestQueryData", Method.class)
+			.thenFind("createDefaultRequestQueryData")
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(PartList.Builder.class, v.get())
+			.createMethodFinder(PartList.class, resource)
+			.find("createDefaultRequestQueryData", Method.class)
+			.thenFind("createDefaultRequestQueryData")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// defaultRequestFormData
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the default request form data in the REST context.
+	 *
+	 * @return The builder for the default request form data in the REST context.
+	 */
+	public final PartList.Builder defaultRequestFormData() {
+		if (defaultRequestFormData == null)
+			defaultRequestFormData = createDefaultRequestFormData(beanStore(), parent, resource());
+		return defaultRequestFormData;
+	}
+
+	/**
+	 * Instantiates the default form-data parameters for this method.
+	 *
+	 * @param beanStore
+	 * 	The factory used for creating beans and retrieving injected beans.
+	 * @param parent
+	 * 	The builder for the REST resource class.
+	 * @param resource
+	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @return The default request form-data parameters for this method.
+	 */
+	protected PartList.Builder createDefaultRequestFormData(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
+
+		Value<PartList.Builder> v = Value.of(
+			PartList.create()
+		);
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(PartList.Builder.class, v.get())
+			.createMethodFinder(PartList.Builder.class, resource)
+			.find("createDefaultRequestFormData", Method.class)
+			.thenFind("createDefaultRequestFormData")
+			.run(x -> v.set(x));
+
+		BeanStore
+			.of(beanStore, resource)
+			.addBean(PartList.Builder.class, v.get())
+			.createMethodFinder(PartList.class, resource)
+			.find("createDefaultRequestFormData", Method.class)
+			.thenFind("createDefaultRequestFormData")
+			.run(x -> v.get().impl(x));
+
+		return v.get();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parameter annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Handles processing of any annotations on parameters.
+	 *
+	 * <p>
+	 * This includes: {@link Header}, {@link Query}, {@link FormData}.
+	 */
+	protected void processParameterAnnotations() {
+		for (Annotation[] aa : restMethod.getParameterAnnotations()) {
+
+			for (Annotation a : aa) {
+				if (a instanceof Header) {
+					Header h = (Header)a;
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
+						try {
+							defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Header annotation");
+						}
+					}
+				}
+				if (a instanceof Query) {
+					Query h = (Query)a;
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
+						try {
+							defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Query annotation");
+						}
+					}
+				}
+				if (a instanceof FormData) {
+					FormData h = (FormData)a;
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
+						try {
+							defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @FormData annotation");
+						}
+					}
+				}
+			}
+		}
+	}
+
 	//----------------------------------------------------------------------------------------------------
 	// Properties
 	//----------------------------------------------------------------------------------------------------
@@ -1048,154 +1447,154 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return this;
 	}
 
-	/**
-	 * Default form data parameters.
-	 *
-	 * <p>
-	 * Sets default values for form data parameters.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultFormData}
-	 * 	<li class='ja'>{@link RestPost#defaultFormData}
-	 * </ul>
-	 *
-	 * @param values The form data parameters to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder defaultFormData(NameValuePair...values) {
-		defaultFormData.setDefault(values);
-		return this;
-	}
-
-	/**
-	 * Default query parameters.
-	 *
-	 * <p>
-	 * Sets default values for query data parameters.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQueryData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
-	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
-	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
-	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
-	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
-	 * </ul>
-	 *
-	 * @param values The query parameters to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder defaultQueryData(NameValuePair...values) {
-		defaultQueryData.setDefault(values);
-		return this;
-	}
-
-	/**
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they are not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
-	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
-	 * </ul>
-	 *
-	 * @param values The request attributes to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-		defaultRequestAttributes.append(values);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestOpContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
-	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param values The headers to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder defaultRequestHeaders(Header...values) {
-		defaultRequestHeaders.setDefault(values);
-		return this;
-	}
-
-	/**
-	 * Default response headers.
-	 *
-	 * <p>
-	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
-	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param values The headers to add.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
-		defaultResponseHeaders.setDefault(values);
-		return this;
-	}
-
+//	/**
+//	 * Default form data parameters.
+//	 *
+//	 * <p>
+//	 * Sets default values for form data parameters.
+//	 *
+//	 * <h5 class='section'>Example:</h5>
+//	 * <p class='bcode w800'>
+//	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
+//	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+//	 * </p>
+//
+//	 * <ul class='seealso'>
+//	 * 	<li class='ja'>{@link RestOp#defaultFormData}
+//	 * 	<li class='ja'>{@link RestPost#defaultFormData}
+//	 * </ul>
+//	 *
+//	 * @param values The form data parameters to add.
+//	 * @return This object (for method chaining).
+//	 */
+//	@FluentSetter
+//	public RestOpContextBuilder defaultRequestFormData(NameValuePair...values) {
+//		defaultRequestFormData.setDefault(values);
+//		return this;
+//	}
+//
+//	/**
+//	 * Default query parameters.
+//	 *
+//	 * <p>
+//	 * Sets default values for query data parameters.
+//	 *
+//	 * <p>
+//	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
+//	 *
+//	 * <h5 class='section'>Example:</h5>
+//	 * <p class='bcode w800'>
+//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
+//	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+//	 * </p>
+//
+//	 * <ul class='seealso'>
+//	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
+//	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
+//	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
+//	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
+//	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
+//	 * </ul>
+//	 *
+//	 * @param values The query parameters to add.
+//	 * @return This object (for method chaining).
+//	 */
+//	@FluentSetter
+//	public RestOpContextBuilder defaultRequestQueryData(NameValuePair...values) {
+//		defaultRequestQueryData.setDefault(values);
+//		return this;
+//	}
+//
+//	/**
+//	 * Default request attributes.
+//	 *
+//	 * <p>
+//	 * Specifies default values for request attributes if they are not already set on the request.
+//	 *
+//	 * <h5 class='section'>Example:</h5>
+//	 * <p class='bcode w800'>
+//	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
+//	 * 	<jk>public</jk> String doGet()  {...}
+//	 * </p>
+//	 *
+//	 * <ul class='seealso'>
+//	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
+//	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
+//	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
+//	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
+//	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
+//	 * </ul>
+//	 *
+//	 * @param values The request attributes to add.
+//	 * @return This object (for method chaining).
+//	 */
+//	@FluentSetter
+//	public RestOpContextBuilder defaultRequestAttributes(NamedAttribute...values) {
+//		defaultRequestAttributes.append(values);
+//		return this;
+//	}
+//
+//	/**
+//	 * <i><l>RestOpContext</l> configuration property:&emsp;</i>  Default request headers.
+//	 *
+//	 * <p>
+//	 * Specifies default values for request headers if they're not passed in through the request.
+//	 *
+//	 * <h5 class='section'>Example:</h5>
+//	 * <p class='bcode w800'>
+//	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+//	 * 	<jk>public</jk> String doGet()  {...}
+//	 * </p>
+//	 *
+//	 * <ul class='seealso'>
+//	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
+//	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
+//	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
+//	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
+//	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
+//	 * </ul>
+//	 *
+//	 * @param values The headers to add.
+//	 * @return This object (for method chaining).
+//	 */
+//	@FluentSetter
+//	public RestOpContextBuilder defaultRequestHeaders(Header...values) {
+//		defaultRequestHeaders.setDefault(values);
+//		return this;
+//	}
+//
+//	/**
+//	 * Default response headers.
+//	 *
+//	 * <p>
+//	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+//	 *
+//	 * <h5 class='section'>Example:</h5>
+//	 * <p class='bcode w800'>
+//	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
+//	 * 	<jk>public</jk> String doGet()  {...}
+//	 * </p>
+//	 *
+//	 * <ul class='seealso'>
+//	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
+//	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
+//	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
+//	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
+//	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
+//	 * </ul>
+//	 *
+//	 * @param values The headers to add.
+//	 * @return This object (for method chaining).
+//	 */
+//	@FluentSetter
+//	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
+//		defaultResponseHeaders.setDefault(values);
+//		return this;
+//	}
+//
 	/**
 	 * HTTP method name.
 	 *
@@ -1613,4 +2012,16 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private String joinnlFirstNonEmptyArray(String[]...s) {
+		for (String[] ss : s)
+			if (ss.length > 0)
+				return joinnl(ss);
+		return null;
+	}
+
 }

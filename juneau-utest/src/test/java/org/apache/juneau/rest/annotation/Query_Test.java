@@ -182,7 +182,7 @@ public class Query_Test {
 
 	@Rest
 	public static class D {
-		@RestGet(defaultQueryData={"f1:1","f2=2"," f3 : 3 "})
+		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestQueryParams query) {
 			return OMap.create()
 				.a("f1", query.getString("f1"))
@@ -203,7 +203,7 @@ public class Query_Test {
 				.a("f2", f2)
 				.a("f3", f3);
 		}
-		@RestGet(defaultQueryData={"f1:1","f2=2"," f3 : 3 "})
+		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap d(@Query(n="f1",df="4") String f1, @Query(n="f2",df="5") String f2, @Query(n="f3",df="6") String f3) {
 			return OMap.create()
 				.a("f1", f1)

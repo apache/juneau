@@ -69,6 +69,23 @@ public class RequestAttributes {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	public RequestAttributes addDefault(NamedAttributeList pairs) {
+		for (NamedAttribute p : pairs.entries)
+			if (sreq.getAttribute(p.getName()) == null) {
+				Object o = p.getValue();
+				sreq.setAttribute(p.getName(), o instanceof String ? vs.resolve(o) : o);
+			}
+		return this;
+	}
+
+	/**
+	 * Adds default entries to the request attributes.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
 	public RequestAttributes addDefault(NamedAttribute...pairs) {
 		return addDefault(Arrays.asList(pairs));
 	}
