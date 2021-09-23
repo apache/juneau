@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.net.URI;
-import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -49,7 +48,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -111,7 +109,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.headerData = HeaderList.create();
 		this.queryData = PartList.create();
 		this.formData = PartList.create();
 		this.pathData = PartList.create();
@@ -141,25 +138,34 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		return (T)super.build();
 	}
 
+	/**
+	 * Allows you to apply a consumer to this builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations on sub-builders without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param consumer The consumer to apply.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public RestClientBuilder apply(Consumer<RestClientBuilder> consumer) {
+		consumer.accept(this);
+		return this;
+	}
+
 	private ContextProperties contextProperties() {
-		set(RESTCLIENT_INTERNAL_headerDataBuilder, headerData);
 		set(RESTCLIENT_INTERNAL_formDataBuilder, formData);
 		set(RESTCLIENT_INTERNAL_queryDataBuilder, queryData);
 		set(RESTCLIENT_INTERNAL_pathDataBuilder, pathData);
 		return getContextProperties();
-	}
-
-	/**
-	 * Returns the builder for the header parameter list.
-	 *
-	 * <p>
-	 * Allows you to perform operations on the header parameters that aren't otherwise exposed on this API, such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The header parameter list builder.
-	 */
-	public HeaderList.Builder getHeaderData() {
-		return headerData;
 	}
 
 	/**
@@ -222,10 +228,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -269,10 +275,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -312,10 +318,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -358,10 +364,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -404,10 +410,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -450,10 +456,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -497,10 +503,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -543,10 +549,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -590,10 +596,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -635,10 +641,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -684,10 +690,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
+	 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -726,10 +732,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 			bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
-	 * 	<c>Accept</c> request header must be set by {@link #header(Header)}, or per-request
+	 * 	<c>Accept</c> request header must be set via {@link #headerData()}, or per-request
 	 * 		via {@link RestRequest#header(Header)} in order for the correct parser to be selected.
 	 * <p>
-	 * 	<c>Content-Type</c> request header must be set by {@link #header(Header)},
+	 * 	<c>Content-Type</c> request header must be set via {@link #headerData()},
 	 * 		or per-request via {@link RestRequest#header(Header)} in order for the correct serializer to be selected.
 	 * <p>
 	 * 	Similar to calling <c>json().simpleJson().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
@@ -770,7 +776,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// HttpClientBuilder
+	// httpClientBuilder
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -836,7 +842,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// HttpClient
+	// httpClient
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -908,6 +914,531 @@ public class RestClientBuilder extends BeanContextableBuilder {
 
 	final CloseableHttpClient getHttpClient() {
 		return httpClient != null ? httpClient : createHttpClient();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// headerData
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the list of headers that get applied to all requests created by this builder.
+	 *
+	 * <p>
+	 * This is the primary method for accessing the request header list.
+	 * On first call, the builder is created via the method {@link #createHeaderData()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
+	 * 	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+	 * 	<jv>builder</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>));
+	 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+	 * </p>
+	 *
+	 * <p>
+	 * The following convenience methods are also provided for updating the headers:
+	 * <ul>
+	 * 	<li class='jm'>{@link #headers(Header...)}
+	 * 	<li class='jm'>{@link #defaultHeaders(Header...)}
+	 * 	<li class='jm'>{@link #header(String,String)}
+	 * 	<li class='jm'>{@link #header(String,Supplier)}
+	 * 	<li class='jm'>{@link #mediaType(String)}
+	 * 	<li class='jm'>{@link #mediaType(MediaType)}
+	 * 	<li class='jm'>{@link #accept(String)}
+	 * 	<li class='jm'>{@link #acceptCharset(String)}
+	 * 	<li class='jm'>{@link #acceptEncoding(String)}
+	 * 	<li class='jm'>{@link #acceptLanguage(String)}
+	 * 	<li class='jm'>{@link #authorization(String)}
+	 * 	<li class='jm'>{@link #cacheControl(String)}
+	 * 	<li class='jm'>{@link #clientVersion(String)}
+	 * 	<li class='jm'>{@link #connection(String)}
+	 * 	<li class='jm'>{@link #contentType(String)}
+	 * 	<li class='jm'>{@link #contentEncoding(String)}
+	 * 	<li class='jm'>{@link #debug()}
+	 * 	<li class='jm'>{@link #from(String)}
+	 * 	<li class='jm'>{@link #host(String)}
+	 * 	<li class='jm'>{@link #maxForwards(Integer)}
+	 * 	<li class='jm'>{@link #noTrace()}
+	 * 	<li class='jm'>{@link #origin(String)}
+	 * 	<li class='jm'>{@link #pragma(String)}
+	 * 	<li class='jm'>{@link #proxyAuthorization(String)}
+	 * 	<li class='jm'>{@link #userAgent(String)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return The header list builder.
+	 */
+	public final HeaderList.Builder headerData() {
+		if (headerData == null)
+			headerData = createHeaderData();
+		return headerData;
+	}
+
+	/**
+	 * Creates the builder for the header list.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own implementation.
+	 *
+	 * <p>
+	 * The default behavior creates an empty builder.
+	 *
+	 * @return The header list builder.
+	 * @see #headerData()
+	 */
+	protected HeaderList.Builder createHeaderData() {
+		return HeaderList.create();
+	}
+
+	/**
+	 * Appends multiple headers to all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.headers(
+	 * 			<jsf>ACCEPT_TEXT_XML</jsf>,
+	 * 			<jsm>stringHeader</jsm>(<js>"Foo"</js>, <js>"bar"</js>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The header to set.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder headers(Header...parts) {
+		headerData().append(parts);
+		return this;
+	}
+
+	/**
+	 * Sets default header values.
+	 *
+	 * <p>
+	 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.defaultHeaders(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().setDefault(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts The header values.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	public RestClientBuilder defaultHeaders(Header...parts) {
+		headerData().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Appends a header to all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder header(String name, String value) {
+		headerData().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a header to all requests using a dynamic value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder header(String name, Supplier<String> value) {
+		headerData().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
+	 *
+	 * <p>
+	 * Headers are appended to the end of the current header list.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header values.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder mediaType(String value) {
+		super.mediaType(MediaType.of(value));
+		return headers(Accept.of(value), ContentType.of(value));
+	}
+
+	/**
+	 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
+	 *
+	 * <p>
+	 * Headers are appended to the end of the current header list.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header values.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@Override
+	@FluentSetter
+	public RestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return headers(Accept.of(value), ContentType.of(value));
+	}
+
+	/**
+	 * Appends an <c>Accept</c> header on this request.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value
+	 * 	The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder accept(String value) {
+		return headers(Accept.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Accept-Charset</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(AcceptCharset.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder acceptCharset(String value) {
+		return headers(AcceptCharset.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Accept-Encoding</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(AcceptEncoding.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder acceptEncoding(String value) {
+		return headers(AcceptEncoding.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Accept-Language</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(AcceptLanguage.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder acceptLanguage(String value) {
+		return headers(AcceptLanguage.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Authorization</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Authorization.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder authorization(String value) {
+		return headers(Authorization.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Cache-Control</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(CacheControl.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder cacheControl(String value) {
+		return headers(CacheControl.of(value));
+	}
+
+	/**
+	 * Sets the client version by setting the value for the <js>"Client-Version"</js> header.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(ClientVersion.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The version string (e.g. <js>"1.2.3"</js>)
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder clientVersion(String value) {
+		return headers(ClientVersion.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Connection</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Connection.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder connection(String value) {
+		return headers(Connection.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Content-Type</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * <p>
+	 * This overrides the media type specified on the serializer.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder contentType(String value) {
+		return headers(ContentType.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Content-Encoding</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(ContentEncoding.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder contentEncoding(String value) {
+		return headers(ContentEncoding.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Debug</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Debug.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@Override
+	@FluentSetter
+	public RestClientBuilder debug() {
+		super.debug();
+		return headers(Debug.TRUE);
+	}
+
+	/**
+	 * Sets the value for the <c>From</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(From.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder from(String value) {
+		return headers(From.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Host</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Host.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder host(String value) {
+		return headers(Host.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Max-Forwards</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(MaxForwards.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder maxForwards(Integer value) {
+		return headers(MaxForwards.of(value));
+	}
+
+	/**
+	 * When called, <c>No-Trace: true</c> is added to requests.
+	 *
+	 * <p>
+	 * This gives the opportunity for the servlet to not log errors on invalid requests.
+	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
+	 * results of testing.
+	 *
+	 * <p>
+	 * It's up to the server to decide whether to allow for this.
+	 * The <c>BasicTestRestLogger</c> class watches for this header and prevents logging of status 400+ responses to
+	 * prevent needless logging of test scenarios.
+	 *
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder noTrace() {
+		return headers(NoTrace.of(true));
+	}
+
+	/**
+	 * Sets the value for the <c>Origin</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Origin.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder origin(String value) {
+		return headers(Origin.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Pragma</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(Pragma.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder pragma(String value) {
+		return headers(Pragma.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>Proxy-Authorization</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(ProxyAuthorization.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder proxyAuthorization(String value) {
+		return headers(ProxyAuthorization.of(value));
+	}
+
+	/**
+	 * Sets the value for the <c>User-Agent</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>headerData().append(UserAgent.<jsm>of</jsm>(<jv>value</jv>))</c>.
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @see #headerData()
+	 */
+	@FluentSetter
+	public RestClientBuilder userAgent(String value) {
+		return headers(UserAgent.of(value));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1126,33 +1657,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Appends a header to all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(<jsf>ACCEPT_TEXT_XML</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getHeaderData().append(<jv>part</jv>)</c>.
-	 *
-	 * @param part
-	 * 	The parameter to append.
-	 * 	<br><jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder header(Header part) {
-		getHeaderData().append(part);
-		return this;
-	}
-
-	/**
 	 * Appends a query parameter to the URI of all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1230,35 +1734,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(NameValuePair part) {
 		getPathData().set(part);
-		return this;
-	}
-
-	/**
-	 * Appends multiple headers to all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(
-	 * 			<jsf>ACCEPT_TEXT_XML</jsf>,
-	 * 			<jsm>stringHeader</jsm>(<js>"Foo"</js>, <js>"bar"</js>)
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getHeaderData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The header to set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder headers(Header...parts) {
-		getHeaderData().append(parts);
 		return this;
 	}
 
@@ -1350,22 +1825,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends multiple headers to all requests.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getHeaderData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The header parts set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder headers(HeaderList parts) {
-		getHeaderData().append(parts);
-		return this;
-	}
-
-	/**
 	 * Appends multiple query parameters to all requests.
 	 *
 	 * <p>
@@ -1410,30 +1869,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(PartList parts) {
 		getPathData().append(parts);
-		return this;
-	}
-
-	/**
-	 * Appends a header to all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getHeaderData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder header(String name, String value) {
-		getHeaderData().append(name, value);
 		return this;
 	}
 
@@ -1510,30 +1945,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends a header to all requests using a dynamic value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getHeaderData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The header name.
-	 * @param value The header value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder header(String name, Supplier<String> value) {
-		getHeaderData().append(name, value);
-		return this;
-	}
-
-	/**
 	 * Appends a query parameter with a dynamic value to the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1602,31 +2013,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(String name, Supplier<String> value) {
 		getPathData().set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets default header values.
-	 *
-	 * <p>
-	 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.defaultHeaders(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getHeaderData().setDefault(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts The header values.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder defaultHeaders(Header...parts) {
-		getHeaderData().setDefault(parts);
 		return this;
 	}
 
@@ -1706,30 +2092,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends headers to all requests using freeform key/value pairs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headerPairs(<js>"Header1"</js>,<js>"val1"</js>,<js>"Header2"</js>,<js>"val2"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pairs The header key/value pairs.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder headerPairs(String...pairs) {
-		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
-		HeaderList.Builder b  = getHeaderData();
-		for (int i = 0; i < pairs.length; i+=2)
-			b.append(pairs[i], pairs[i+1]);
-		return this;
-	}
-
-	/**
 	 * Appends query parameters to the URI query using free-form key/value pairs.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1804,556 +2166,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Standard headers.
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
-	 *
-	 * <p>
-	 * Headers are appended to the end of the current header list.
-	 *
-	 * @param value The new header values.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder mediaType(String value) {
-		super.mediaType(MediaType.of(value));
-		return headers(Accept.of(value), ContentType.of(value));
-	}
-
-	/**
-	 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
-	 *
-	 * <p>
-	 * Headers are appended to the end of the current header list.
-	 *
-	 * @param value The new header values.
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	@FluentSetter
-	public RestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return headers(Accept.of(value), ContentType.of(value));
-	}
-
-	/**
-	 * Appends an <c>Accept</c> header on this request.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Accept"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Accept.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value
-	 * 	The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder accept(String value) {
-		return header(Accept.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Accept-Charset</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Accept-Charset"</js>, <jv>value</jv>);</code>
-	 * or <code>header(AcceptCharset.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder acceptCharset(String value) {
-		return header(AcceptCharset.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Accept-Encoding</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Accept-Encoding"</js>, <jv>value</jv>);</code>
-	 * or <code>header(AcceptEncoding.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder acceptEncoding(String value) {
-		return header(AcceptEncoding.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Accept-Language</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Accept-Language"</js>, <jv>value</jv>);</code>
-	 * or <code>header(AcceptLanguage.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder acceptLanguage(String value) {
-		return header(AcceptLanguage.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Authorization</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Authorization"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Authorization.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder authorization(String value) {
-		return header(Authorization.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Cache-Control</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Cache-Control"</js>, <jv>value</jv>);</code>
-	 * or <code>header(CacheControl.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder cacheControl(String value) {
-		return header(CacheControl.of(value));
-	}
-
-	/**
-	 * Sets the client version by setting the value for the <js>"Client-Version"</js> header.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Client-Version"</js>, <jv>value</jv>);</code>
-	 * or <code>header(ClientVersion.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The version string (e.g. <js>"1.2.3"</js>)
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder clientVersion(String value) {
-		return header(ClientVersion.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Connection</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Connection"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Connection.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder connection(String value) {
-		return header(Connection.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Content-Length</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Content-Length"</js>, <jv>value</jv>);</code>
-	 * or <code>header(ContentLength.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder contentLength(Long value) {
-		return header(ContentLength.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Content-Type</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Content-Type"</js>, <jv>value</jv>);</code>
-	 * or <code>header(ContentType.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * <p>
-	 * This overrides the media type specified on the serializer.
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder contentType(String value) {
-		return header(ContentType.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Content-Encoding</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Content-Encoding"</js>, <jv>value</jv>);</code>
-	 * or <code>header(ContentEncoding.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder contentEncoding(String value) {
-		return header(ContentEncoding.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Date</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Date"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Date.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder date(ZonedDateTime value) {
-		return header(Date.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Debug</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Debug"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Debug.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	@FluentSetter
-	public RestClientBuilder debug() {
-		super.debug();
-		return header(Debug.TRUE);
-	}
-
-	/**
-	 * Sets the value for the <c>Expect</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Expect"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Expect.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder expect(String value) {
-		return header(Expect.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Forwarded</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Forwarded"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Forwarded.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder forwarded(String value) {
-		return header(Forwarded.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>From</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"From"</js>, <jv>value</jv>);</code>
-	 * or <code>header(From.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder from(String value) {
-		return header(From.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Host</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Host"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Host.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder host(String value) {
-		return header(Host.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Match</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"If-Match"</js>, <jv>value</jv>);</code>
-	 * or <code>header(IfMatch.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder ifMatch(String value) {
-		return header(IfMatch.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Modified-Since</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"If-Modified-Since"</js>, <jv>value</jv>);</code>
-	 * or <code>header(IfModifiedSince.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder ifModifiedSince(ZonedDateTime value) {
-		return header(IfModifiedSince.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-None-Match</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"If-None-Match"</js>, <jv>value</jv>);</code>
-	 * or <code>header(IfNoneMatch.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder ifNoneMatch(String value) {
-		return header(IfNoneMatch.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Range</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"If-Range"</js>, <jv>value</jv>);</code>
-	 * or <code>header(IfRange.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder ifRange(String value) {
-		return header(IfRange.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Unmodified-Since</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"If-Unmodified-Since"</js>, <jv>value</jv>);</code>
-	 * or <code>header(IfUnmodifiedSince.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder ifUnmodifiedSince(ZonedDateTime value) {
-		return header(IfUnmodifiedSince.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Max-Forwards</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"MaxForwards"</js>, <jv>value</jv>);</code>
-	 * or <code>header(MaxForwards.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder maxForwards(Integer value) {
-		return header(MaxForwards.of(value));
-	}
-
-	/**
-	 * When called, <c>No-Trace: true</c> is added to requests.
-	 *
-	 * <p>
-	 * This gives the opportunity for the servlet to not log errors on invalid requests.
-	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
-	 * results of testing.
-	 *
-	 * <p>
-	 * It's up to the server to decide whether to allow for this.
-	 * The <c>BasicTestRestLogger</c> class watches for this header and prevents logging of status 400+ responses to
-	 * prevent needless logging of test scenarios.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder noTrace() {
-		return header(NoTrace.of(true));
-	}
-
-	/**
-	 * Sets the value for the <c>Origin</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Origin"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Origin.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder origin(String value) {
-		return header(Origin.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Pragma</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Pragma"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Pragma.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pragma(String value) {
-		return header(Pragma.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Proxy-Authorization</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"ProxyAuthorization"</js>, <jv>value</jv>);</code>
-	 * or <code>header(ProxyAuthorization.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder proxyAuthorization(String value) {
-		return header(ProxyAuthorization.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Range</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Range"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Range.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder range(String value) {
-		return header(Range.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Referer</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder referer(String value) {
-		return header(Referer.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>TE</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"TE"</js>, <jv>value</jv>);</code>
-	 * or <code>header(TE.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder te(String value) {
-		return header(TE.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>User-Agent</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"User-Agent"</js>, <jv>value</jv>);</code>
-	 * or <code>header(UserAgent.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder userAgent(String value) {
-		return header(UserAgent.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Upgrade</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Upgrade"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Upgrade.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder upgrade(String value) {
-		return header(Upgrade.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Via</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Via"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Via.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder via(String value) {
-		return header(Via.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Warning</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Warning"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Warning.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder warning(String value) {
-		return header(Warning.of(value));
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties

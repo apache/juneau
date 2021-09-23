@@ -174,7 +174,7 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertBody().is("{f:1}");
+			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -217,7 +217,7 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertBody().is("{f:1}");
+			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 

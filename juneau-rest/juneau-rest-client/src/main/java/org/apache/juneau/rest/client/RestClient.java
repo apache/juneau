@@ -330,12 +330,10 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#getHeaderData() getHeaderData()}
+ * 		<li class='jm'>{@link RestClientBuilder#headerData() headerData()}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,String) header(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestClientBuilder#headers(Header...) headers(Header...)}
- * 		<li class='jm'>{@link RestClientBuilder#headerPairs(String...) headerPairs(String...)}
  * 		<li class='jm'>{@link RestClientBuilder#defaultHeaders(Header...) defaultHeaders(Header...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
@@ -1741,7 +1739,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static final String RESTCLIENT_skipEmptyQueryData = PREFIX + "skipEmptyQueryData.b";
 
-	static final String RESTCLIENT_INTERNAL_headerDataBuilder = PREFIX + "headerDataBuilder.o";
 	static final String RESTCLIENT_INTERNAL_formDataBuilder = PREFIX + "formDataBuilder.o";
 	static final String RESTCLIENT_INTERNAL_queryDataBuilder = PREFIX + "queryBuilder.o";
 	static final String RESTCLIENT_INTERNAL_pathDataBuilder = PREFIX + "pathDataBuilder.o";
@@ -1811,10 +1808,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public RestClient(RestClientBuilder builder) {
 		super(builder);
-		this.httpClient = builder.getHttpClient();
+
+		httpClient = builder.getHttpClient();
+		headerData = builder.headerData().build().copy();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
-		this.headerData = cp.getInstance(RESTCLIENT_INTERNAL_headerDataBuilder, HeaderList.Builder.class).orElseGet(HeaderList.Builder::new).copy();
 		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();

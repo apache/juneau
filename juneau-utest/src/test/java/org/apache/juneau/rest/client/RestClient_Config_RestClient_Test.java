@@ -475,13 +475,13 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a12_partSerializer_partParser() throws Exception {
-		RestClient x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
+		RestClient x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
 		ABean b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 
-		x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(new A12a(MockWriterSerializer.create())).partParser(new A12b(MockReaderParser.create())).build();
+		x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(new A12a(MockWriterSerializer.create())).partParser(new A12b(MockReaderParser.create())).build();
 		b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 	}
