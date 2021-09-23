@@ -924,18 +924,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder formData(NameValuePair part) {
-		super.formData(part);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder formData(PartList parts) {
-		super.formData(parts);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder formData(String name, String value) {
 		super.formData(name, value);
 		return this;
@@ -944,12 +932,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder formData(String name, Supplier<String> value) {
 		super.formData(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder formDataPairs(String...pairs) {
-		super.formDataPairs(pairs);
 		return this;
 	}
 

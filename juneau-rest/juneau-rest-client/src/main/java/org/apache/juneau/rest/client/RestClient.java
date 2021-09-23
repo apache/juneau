@@ -425,12 +425,11 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#getFormData() getFormData()}
+ * 		<li class='jm'>{@link RestClientBuilder#formData() formData()}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,String) formData(String,String)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(NameValuePair...) formDatas(NameValuePair...)}
- * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(String...) formDataPairs(String...)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultFormData(NameValuePair...) defaultFormData(NameValuePair...)}
+ * 		<li class='jm'>{@link RestClientBuilder#formDataDefault(NameValuePair...) defaultFormData(NameValuePair...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -1738,7 +1737,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static final String RESTCLIENT_skipEmptyQueryData = PREFIX + "skipEmptyQueryData.b";
 
-	static final String RESTCLIENT_INTERNAL_formDataBuilder = PREFIX + "formDataBuilder.o";
 	static final String RESTCLIENT_INTERNAL_pathDataBuilder = PREFIX + "pathDataBuilder.o";
 
 	final HeaderList.Builder headerData;
@@ -1810,9 +1808,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		httpClient = builder.getHttpClient();
 		headerData = builder.headerData().build().copy();
 		queryData = builder.queryData().build().copy();
+		formData = builder.formData().build().copy();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
-		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.skipEmptyHeaders = cp.getBoolean(RESTCLIENT_skipEmptyHeaders).orElse(false);
 		this.skipEmptyQueryData = cp.getBoolean(RESTCLIENT_skipEmptyQueryData).orElse(false);

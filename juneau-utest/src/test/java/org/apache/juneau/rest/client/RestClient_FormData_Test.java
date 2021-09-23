@@ -75,7 +75,7 @@ public class RestClient_FormData_Test {
 	@Test
 	public void a04_formDatas_Objects() throws Exception {
 		client().formData(part("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
-		client().formData(parts("foo","bar","foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formData(parts("foo","bar","foo","baz").getAll()).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
 		client().formData(part("foo","bar"),part("foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
 
 		client().build().post("/formData").formData(part("foo","bar")).run().assertBody().is("foo=bar");
@@ -94,16 +94,6 @@ public class RestClient_FormData_Test {
 		client().formData(part("foo","bar",null)).build().post("/formData").run().assertBody().is("foo=bar");
 		client().formData(part("foo",null,null)).build().post("/formData").run().assertBody().is("");
 		client().formData(part("foo",null,null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");
-	}
-
-	@Test
-	public void a05_formDataPairs_Objects() throws Exception {
-		client().formDataPairs("foo","bar","baz","qux").build().post("/formData").run().assertBody().is("foo=bar&baz=qux");
-
-		client().build().post("/formData").formDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
-
-		assertThrown(()->client().formDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into formDataPairs(String...)");
-		assertThrown(()->client().build().post("").formDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into formDataPairs(String...)");
 	}
 
 	@Test

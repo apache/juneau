@@ -109,7 +109,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.formData = PartList.create();
 		this.pathData = PartList.create();
 		this.serializerGroupBuilder = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
 		this.parserGroupBuilder = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
@@ -161,22 +160,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	private ContextProperties contextProperties() {
-		set(RESTCLIENT_INTERNAL_formDataBuilder, formData);
 		set(RESTCLIENT_INTERNAL_pathDataBuilder, pathData);
 		return getContextProperties();
-	}
-
-	/**
-	 * Returns the builder for the form data parameter list.
-	 *
-	 * <p>
-	 * Allows you to perform operations on the form data parameters that aren't otherwise exposed on this API, such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The form data parameter list builder.
-	 */
-	public PartList.Builder getFormData() {
-		return formData;
 	}
 
 	/**
@@ -1448,8 +1433,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * The following convenience methods are also provided for updating the parameters:
 	 * <ul>
-	 * 	<li class='jm'>{@link #queryData(Header...)}
-	 * 	<li class='jm'>{@link #queryDataDefault(Header...)}
+	 * 	<li class='jm'>{@link #queryData(NameValuePair...)}
+	 * 	<li class='jm'>{@link #queryDataDefault(NameValuePair...)}
 	 * 	<li class='jm'>{@link #queryData(String,String)}
 	 * 	<li class='jm'>{@link #queryData(String,Supplier)}
 	 * </ul>
@@ -1465,7 +1450,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @return The header list builder.
+	 * @return The query data list builder.
 	 */
 	public final PartList.Builder queryData() {
 		if (queryData == null)
@@ -1591,6 +1576,171 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder queryData(String name, Supplier<String> value) {
 		queryData().append(name, value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// formData
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the list of form data parameters that get applied to all requests created by this builder.
+	 *
+	 * <p>
+	 * This is the primary method for accessing the form data parameter list.
+	 * On first call, the builder is created via the method {@link #createFormData()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
+	 * 	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+	 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+	 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+	 * </p>
+	 *
+	 * <p>
+	 * The following convenience methods are also provided for updating the parameters:
+	 * <ul>
+	 * 	<li class='jm'>{@link #formData(NameValuePair...)}
+	 * 	<li class='jm'>{@link #formDataDefault(NameValuePair...)}
+	 * 	<li class='jm'>{@link #formData(String,String)}
+	 * 	<li class='jm'>{@link #formData(String,Supplier)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return The form data list builder.
+	 */
+	public final PartList.Builder formData() {
+		if (formData == null)
+			formData = createFormData();
+		return formData;
+	}
+
+	/**
+	 * Creates the builder for the form data list.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own implementation.
+	 *
+	 * <p>
+	 * The default behavior creates an empty builder.
+	 *
+	 * @return The query data list builder.
+	 * @see #queryData()
+	 */
+	protected PartList.Builder createFormData() {
+		return PartList.create();
+	}
+
+	/**
+	 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(
+	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>formData().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The form-data parameters.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(NameValuePair...parts) {
+		formData().append(parts);
+		return this;
+	}
+
+	/**
+	 * Sets default form-data parameter values.
+	 *
+	 * <p>
+	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.defaultFormData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>formData().setDefault(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts The parts.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder formDataDefault(NameValuePair...parts) {
+		formData().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Appends a form-data parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, String value) {
+		formData().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a form-data parameter with a dynamic value to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, Supplier<String> value) {
+		formData().append(name, value);
 		return this;
 	}
 
@@ -1809,34 +1959,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	// HTTP parts
 	//-----------------------------------------------------------------------------------------------------------------
 
-
-	/**
-	 * Appends a form-data parameter to the request bodies of all form posts.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getFormData().append(<jv>part</jv>)</c>.
-	 *
-	 * @param part
-	 * 	The parameter to append.
-	 * 	<br><jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(NameValuePair part) {
-		getFormData().append(part);
-		return this;
-	}
-
 	/**
 	 * Sets a path parameter on all requests.
 	 *
@@ -1861,35 +1983,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(NameValuePair part) {
 		getPathData().set(part);
-		return this;
-	}
-
-	/**
-	 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(
-	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getFormData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The form-data parameters.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(NameValuePair...parts) {
-		getFormData().append(parts);
 		return this;
 	}
 
@@ -1923,22 +2016,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends multiple form-data parameters to all requests.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getFormData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The parts to set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(PartList parts) {
-		getFormData().append(parts);
-		return this;
-	}
-
-	/**
 	 * Appends multiple path parameters to all requests.
 	 *
 	 * <p>
@@ -1951,30 +2028,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(PartList parts) {
 		getPathData().append(parts);
-		return this;
-	}
-
-	/**
-	 * Appends a form-data parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getFormData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, String value) {
-		getFormData().append(name, value);
 		return this;
 	}
 
@@ -2003,30 +2056,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends a form-data parameter with a dynamic value to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getFormData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Supplier<String> value) {
-		getFormData().append(name, value);
-		return this;
-	}
-
-	/**
 	 * Sets a path parameter with a dynamic value to all request bodies.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2047,31 +2076,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(String name, Supplier<String> value) {
 		getPathData().set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets default form-data parameter values.
-	 *
-	 * <p>
-	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.defaultFormData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getFormData().setDefault(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts The parts.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder defaultFormData(NameValuePair...parts) {
-		getFormData().setDefault(parts);
 		return this;
 	}
 
@@ -2097,30 +2101,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	public RestClientBuilder defaultPathData(NameValuePair...parts) {
 		getPathData().setDefault(parts);
-		return this;
-	}
-
-	/**
-	 * Appends form-data parameters to all request bodies using free-form key/value pairs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pairs The form-data key/value pairs.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formDataPairs(String...pairs) {
-		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
-		PartList.Builder b  = getFormData();
-		for (int i = 0; i < pairs.length; i+=2)
-			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
