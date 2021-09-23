@@ -32,7 +32,6 @@ import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
@@ -1243,18 +1242,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder pathData(NameValuePair part) {
-		super.pathData(part);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder pathData(PartList parts) {
-		super.pathData(parts);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder pathData(String name, String value) {
 		super.pathData(name, value);
 		return this;
@@ -1263,12 +1250,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder pathData(String name, Supplier<String> value) {
 		super.pathData(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder pathDataPairs(String...pairs) {
-		super.pathDataPairs(pairs);
 		return this;
 	}
 

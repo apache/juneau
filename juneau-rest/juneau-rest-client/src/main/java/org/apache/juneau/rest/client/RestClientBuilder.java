@@ -109,7 +109,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.pathData = PartList.create();
 		this.serializerGroupBuilder = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
 		this.parserGroupBuilder = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
 		this.partSerializerBuilder = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
@@ -160,21 +159,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	private ContextProperties contextProperties() {
-		set(RESTCLIENT_INTERNAL_pathDataBuilder, pathData);
+		set("RestClient.random", new Random().nextInt());  // TODO - Should be able to get rid of this once context properties go away.
 		return getContextProperties();
-	}
-
-	/**
-	 * Returns the builder for the form data parameter list.
-	 *
-	 * <p>
-	 * Allows you to perform operations on the form data parameters that aren't otherwise exposed on this API, such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The form data parameter list builder.
-	 */
-	public PartList.Builder getPathData() {
-		return pathData;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1572,6 +1558,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
 	 * @return This object (for method chaining).
+	 * @see #queryData()
 	 */
 	@FluentSetter
 	public RestClientBuilder queryData(String name, Supplier<String> value) {
@@ -1636,7 +1623,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * The default behavior creates an empty builder.
 	 *
 	 * @return The query data list builder.
-	 * @see #queryData()
+	 * @see #formData()
 	 */
 	protected PartList.Builder createFormData() {
 		return PartList.create();
@@ -1664,6 +1651,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @param parts
 	 * 	The form-data parameters.
 	 * @return This object (for method chaining).
+	 * @see #formData()
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(NameValuePair...parts) {
@@ -1690,6 +1678,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * @param parts The parts.
 	 * @return This object (for method chaining).
+	 * @see #formData()
 	 */
 	public RestClientBuilder formDataDefault(NameValuePair...parts) {
 		formData().setDefault(parts);
@@ -1713,6 +1702,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * @return This object (for method chaining).
+	 * @see #formData()
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, String value) {
@@ -1737,10 +1727,180 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
 	 * @return This object (for method chaining).
+	 * @see #formData()
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<String> value) {
 		formData().append(name, value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// pathData
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the list of path data parameters that get applied to all requests created by this builder.
+	 *
+	 * <p>
+	 * This is the primary method for accessing the path data parameter list.
+	 * On first call, the builder is created via the method {@link #createFormData()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
+	 * 	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+	 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+	 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+	 * </p>
+	 *
+	 * <p>
+	 * The following convenience methods are also provided for updating the parameters:
+	 * <ul>
+	 * 	<li class='jm'>{@link #pathData(NameValuePair...)}
+	 * 	<li class='jm'>{@link #pathDataDefault(NameValuePair...)}
+	 * 	<li class='jm'>{@link #pathData(String,String)}
+	 * 	<li class='jm'>{@link #pathData(String,Supplier)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return The form data list builder.
+	 */
+	public final PartList.Builder pathData() {
+		if (pathData == null)
+			pathData = createPathData();
+		return pathData;
+	}
+
+	/**
+	 * Creates the builder for the path data list.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own implementation.
+	 *
+	 * <p>
+	 * The default behavior creates an empty builder.
+	 *
+	 * @return The query data list builder.
+	 * @see #pathData()
+	 */
+	protected PartList.Builder createPathData() {
+		return PartList.create();
+	}
+
+	/**
+	 * Sets multiple path parameters on all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.pathData(
+	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>pathData().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The path parameters.
+	 * @return This object (for method chaining).
+	 * @see #pathData()
+	 */
+	@FluentSetter
+	public RestClientBuilder pathData(NameValuePair...parts) {
+		pathData().append(parts);
+		return this;
+	}
+
+	/**
+	 * Sets default path parameter values.
+	 *
+	 * <p>
+	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>pathData().setDefault(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts The parts.
+	 * @return This object (for method chaining).
+	 * @see #pathData()
+	 */
+	public RestClientBuilder pathDataDefault(NameValuePair...parts) {
+		pathData().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Appends a path parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.pathData(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 * @see #pathData()
+	 */
+	@FluentSetter
+	public RestClientBuilder pathData(String name, String value) {
+		pathData().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets a path parameter with a dynamic value to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return This object (for method chaining).
+	 * @see #pathData()
+	 */
+	@FluentSetter
+	public RestClientBuilder pathData(String name, Supplier<String> value) {
+		pathData().set(name, value);
 		return this;
 	}
 
@@ -1954,183 +2114,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		defaultCredentialsProvider(p);
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// HTTP parts
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Sets a path parameter on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.pathData(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getPathData().set(<jv>part</jv>)</c>.
-	 *
-	 * @param part
-	 * 	The parameter to set.
-	 * 	<br><jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pathData(NameValuePair part) {
-		getPathData().set(part);
-		return this;
-	}
-
-	/**
-	 * Sets multiple path parameters on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.pathData(
-	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getPathData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The path parameters.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pathData(NameValuePair...parts) {
-		getPathData().append(parts);
-		return this;
-	}
-
-	/**
-	 * Appends multiple path parameters to all requests.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getPathData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The parts to set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pathData(PartList parts) {
-		getPathData().append(parts);
-		return this;
-	}
-
-	/**
-	 * Appends a path parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.pathData(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getPathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pathData(String name, String value) {
-		getPathData().append(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets a path parameter with a dynamic value to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pathData(String name, Supplier<String> value) {
-		getPathData().set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets default path parameter values.
-	 *
-	 * <p>
-	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.defaultPathData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getPathData().setDefault(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts The parts.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder defaultPathData(NameValuePair...parts) {
-		getPathData().setDefault(parts);
-		return this;
-	}
-
-	/**
-	 * Sets path parameters to all request URLs using free-form key/value pairs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.pathDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pairs The form-data key/value pairs.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder pathDataPairs(String...pairs) {
-		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		PartList.Builder b  = getPathData();
-		for (int i = 0; i < pairs.length; i+=2)
-			b.append(pairs[i], pairs[i+1]);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Standard headers.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties

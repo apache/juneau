@@ -1737,8 +1737,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static final String RESTCLIENT_skipEmptyQueryData = PREFIX + "skipEmptyQueryData.b";
 
-	static final String RESTCLIENT_INTERNAL_pathDataBuilder = PREFIX + "pathDataBuilder.o";
-
 	final HeaderList.Builder headerData;
 	final PartList.Builder queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
@@ -1809,9 +1807,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		headerData = builder.headerData().build().copy();
 		queryData = builder.queryData().build().copy();
 		formData = builder.formData().build().copy();
+		pathData = builder.pathData().build().copy();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
-		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.skipEmptyHeaders = cp.getBoolean(RESTCLIENT_skipEmptyHeaders).orElse(false);
 		this.skipEmptyQueryData = cp.getBoolean(RESTCLIENT_skipEmptyQueryData).orElse(false);
 		this.skipEmptyFormData = cp.getBoolean(RESTCLIENT_skipEmptyFormData).orElse(false);
