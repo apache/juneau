@@ -163,7 +163,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void d01_universal() throws Exception {
-		RestClient x = client().universal().defaultHeaders(Accept.APPLICATION_JSON, ContentType.APPLICATION_JSON).build();
+		RestClient x = client().universal().headersDefault(Accept.APPLICATION_JSON, ContentType.APPLICATION_JSON).build();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().asType(Bean.class).check();
 		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().asType(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getBody().asType(Bean.class).check();

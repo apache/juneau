@@ -334,7 +334,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jm'>{@link RestClientBuilder#header(String,String) header(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#headers(Header...) headers(Header...)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultHeaders(Header...) defaultHeaders(Header...)}
+ * 		<li class='jm'>{@link RestClientBuilder#headersDefault(Header...) defaultHeaders(Header...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -385,12 +385,11 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#getQueryData() getQueryData()}
+ * 		<li class='jm'>{@link RestClientBuilder#queryData() queryData()}
  * 		<li class='jm'>{@link RestClientBuilder#queryData(String,String) queryData(String,String)}
  * 		<li class='jm'>{@link RestClientBuilder#queryData(String,Supplier) queryData(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#queryData(NameValuePair...) queryData(NameValuePair...)}
- * 		<li class='jm'>{@link RestClientBuilder#queryDataPairs(String...) queryDataPairs(String...)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultQueryData(NameValuePair...) defaultQueryData(NameValuePair...)}
+ * 		<li class='jm'>{@link RestClientBuilder#queryDataDefault(NameValuePair...) defaultQueryData(NameValuePair...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -1740,7 +1739,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static final String RESTCLIENT_skipEmptyQueryData = PREFIX + "skipEmptyQueryData.b";
 
 	static final String RESTCLIENT_INTERNAL_formDataBuilder = PREFIX + "formDataBuilder.o";
-	static final String RESTCLIENT_INTERNAL_queryDataBuilder = PREFIX + "queryBuilder.o";
 	static final String RESTCLIENT_INTERNAL_pathDataBuilder = PREFIX + "pathDataBuilder.o";
 
 	final HeaderList.Builder headerData;
@@ -1811,9 +1809,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		httpClient = builder.getHttpClient();
 		headerData = builder.headerData().build().copy();
+		queryData = builder.queryData().build().copy();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
-		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.skipEmptyHeaders = cp.getBoolean(RESTCLIENT_skipEmptyHeaders).orElse(false);

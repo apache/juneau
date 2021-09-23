@@ -127,14 +127,6 @@ public class RestClient_Query_Test {
 		client().build().get("/query").queryData(part("foo","bar")).run().assertBody().is("foo=bar");
 	}
 
-	@Test
-	public void a11_queryPairs_Objects() throws Exception {
-		client().queryDataPairs("foo","bar","baz","qux").build().get("/query").run().assertBody().is("foo=bar&baz=qux");
-		client().build().get("/query").queryDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
-		assertThrown(()->client().queryDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into queryDataPairs(String...)");
-		assertThrown(()->client().build().get().queryDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into queryDataPairs(String...)");
-	}
-
 	public static class A12 extends Reader {
 		@Override
 		public int read(char[] cbuf,int off,int len) throws IOException {

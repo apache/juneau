@@ -1339,18 +1339,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder queryData(NameValuePair part) {
-		super.queryData(part);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder queryData(PartList parts) {
-		super.queryData(parts);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder queryData(String name, String value) {
 		super.queryData(name, value);
 		return this;
@@ -1359,12 +1347,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder queryData(String name, Supplier<String> value) {
 		super.queryData(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder queryDataPairs(String...pairs) {
-		super.queryDataPairs(pairs);
 		return this;
 	}
 

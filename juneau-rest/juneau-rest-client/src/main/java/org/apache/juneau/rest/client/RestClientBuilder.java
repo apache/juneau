@@ -109,7 +109,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.queryData = PartList.create();
 		this.formData = PartList.create();
 		this.pathData = PartList.create();
 		this.serializerGroupBuilder = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
@@ -163,22 +162,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 
 	private ContextProperties contextProperties() {
 		set(RESTCLIENT_INTERNAL_formDataBuilder, formData);
-		set(RESTCLIENT_INTERNAL_queryDataBuilder, queryData);
 		set(RESTCLIENT_INTERNAL_pathDataBuilder, pathData);
 		return getContextProperties();
-	}
-
-	/**
-	 * Returns the builder for the query parameter list.
-	 *
-	 * <p>
-	 * Allows you to perform operations on the query parameters that aren't otherwise exposed on this API, such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The query parameter list builder.
-	 */
-	public PartList.Builder getQueryData() {
-		return queryData;
 	}
 
 	/**
@@ -939,7 +924,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * The following convenience methods are also provided for updating the headers:
 	 * <ul>
 	 * 	<li class='jm'>{@link #headers(Header...)}
-	 * 	<li class='jm'>{@link #defaultHeaders(Header...)}
+	 * 	<li class='jm'>{@link #headersDefault(Header...)}
 	 * 	<li class='jm'>{@link #header(String,String)}
 	 * 	<li class='jm'>{@link #header(String,Supplier)}
 	 * 	<li class='jm'>{@link #mediaType(String)}
@@ -1040,7 +1025,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.defaultHeaders(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
 	 * 		.build();
 	 * </p>
 	 *
@@ -1051,7 +1036,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @return This object (for method chaining).
 	 * @see #headerData()
 	 */
-	public RestClientBuilder defaultHeaders(Header...parts) {
+	public RestClientBuilder headersDefault(Header...parts) {
 		headerData().setDefault(parts);
 		return this;
 	}
@@ -1442,6 +1427,174 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// queryData
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the builder for the list of query parameters that get applied to all requests created by this builder.
+	 *
+	 * <p>
+	 * This is the primary method for accessing the query parameter list.
+	 * On first call, the builder is created via the method {@link #createQueryData()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
+	 * 	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+	 * 	<jv>builder</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+	 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+	 * </p>
+	 *
+	 * <p>
+	 * The following convenience methods are also provided for updating the parameters:
+	 * <ul>
+	 * 	<li class='jm'>{@link #queryData(Header...)}
+	 * 	<li class='jm'>{@link #queryDataDefault(Header...)}
+	 * 	<li class='jm'>{@link #queryData(String,String)}
+	 * 	<li class='jm'>{@link #queryData(String,Supplier)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return The header list builder.
+	 */
+	public final PartList.Builder queryData() {
+		if (queryData == null)
+			queryData = createQueryData();
+		return queryData;
+	}
+
+	/**
+	 * Creates the builder for the query data list.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own implementation.
+	 *
+	 * <p>
+	 * The default behavior creates an empty builder.
+	 *
+	 * @return The query data list builder.
+	 * @see #queryData()
+	 */
+	protected PartList.Builder createQueryData() {
+		return PartList.create();
+	}
+
+	/**
+	 * Appends multiple query parameters to the URI of all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryData(
+	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>queryData().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The query parameters.
+	 * @return This object (for method chaining).
+	 * @see #queryData()
+	 */
+	@FluentSetter
+	public RestClientBuilder queryData(NameValuePair...parts) {
+		queryData().append(parts);
+		return this;
+	}
+
+	/**
+	 * Sets default query parameter values.
+	 *
+	 * <p>
+	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>queryData().setDefault(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts The parts.
+	 * @return This object (for method chaining).
+	 * @see #queryData()
+	 */
+	public RestClientBuilder queryDataDefault(NameValuePair...parts) {
+		queryData().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Appends a query parameter to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryData(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 * @see #queryData()
+	 */
+	@FluentSetter
+	public RestClientBuilder queryData(String name, String value) {
+		queryData().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a query parameter with a dynamic value to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder queryData(String name, Supplier<String> value) {
+		queryData().append(name, value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Logging.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -1656,32 +1809,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	// HTTP parts
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Appends a query parameter to the URI of all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queryData(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getQueryData().append(<jv>part</jv>)</c>.
-	 *
-	 * @param part
-	 * 	The parameter to append.
-	 * 	<br><jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryData(NameValuePair part) {
-		getQueryData().append(part);
-		return this;
-	}
 
 	/**
 	 * Appends a form-data parameter to the request bodies of all form posts.
@@ -1734,35 +1861,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(NameValuePair part) {
 		getPathData().set(part);
-		return this;
-	}
-
-	/**
-	 * Appends multiple query parameters to the URI of all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queryData(
-	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getQueryData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The query parameters.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryData(NameValuePair...parts) {
-		getQueryData().append(parts);
 		return this;
 	}
 
@@ -1825,22 +1923,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends multiple query parameters to all requests.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getQueryData().append(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts
-	 * 	The parts to set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryData(PartList parts) {
-		getQueryData().append(parts);
-		return this;
-	}
-
-	/**
 	 * Appends multiple form-data parameters to all requests.
 	 *
 	 * <p>
@@ -1869,30 +1951,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(PartList parts) {
 		getPathData().append(parts);
-		return this;
-	}
-
-	/**
-	 * Appends a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queryData(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getQueryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryData(String name, String value) {
-		getQueryData().append(name, value);
 		return this;
 	}
 
@@ -1945,30 +2003,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * Appends a query parameter with a dynamic value to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getQueryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryData(String name, Supplier<String> value) {
-		getQueryData().append(name, value);
-		return this;
-	}
-
-	/**
 	 * Appends a form-data parameter with a dynamic value to all request bodies.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2013,31 +2047,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pathData(String name, Supplier<String> value) {
 		getPathData().set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets default query parameter values.
-	 *
-	 * <p>
-	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.defaultQueryData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>getQueryData().setDefault(<jv>parts</jv>)</c>.
-	 *
-	 * @param parts The parts.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder defaultQueryData(NameValuePair...parts) {
-		getQueryData().setDefault(parts);
 		return this;
 	}
 
@@ -2088,30 +2097,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	public RestClientBuilder defaultPathData(NameValuePair...parts) {
 		getPathData().setDefault(parts);
-		return this;
-	}
-
-	/**
-	 * Appends query parameters to the URI query using free-form key/value pairs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queryDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pairs The query key/value pairs.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryDataPairs(String...pairs) {
-		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		PartList.Builder b  = getQueryData();
-		for (int i = 0; i < pairs.length; i+=2)
-			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 

@@ -223,7 +223,7 @@ public class RestClient_Test {
 
 	@Test
 	public void c04_httpClient_defaultHeaders() throws RestCallException {
-		client().defaultHeaders(stringHeader("Foo","bar")).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1","Foo: bar");
+		client().headersDefault(stringHeader("Foo","bar")).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1","Foo: bar");
 	}
 
 	@Test
