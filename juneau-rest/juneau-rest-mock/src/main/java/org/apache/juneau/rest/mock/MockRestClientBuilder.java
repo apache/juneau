@@ -1405,14 +1405,14 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder skipEmptyHeaders() {
-		super.skipEmptyHeaders();
+	public MockRestClientBuilder skipEmptyHeaderData() {
+		super.skipEmptyHeaderData();
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder skipEmptyHeaders(boolean value) {
-		super.skipEmptyHeaders(value);
+	public MockRestClientBuilder skipEmptyHeaderData(boolean value) {
+		super.skipEmptyHeaderData(value);
 		return this;
 	}
 

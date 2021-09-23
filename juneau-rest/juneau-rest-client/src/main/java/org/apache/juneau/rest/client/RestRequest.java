@@ -3089,7 +3089,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (isEmpty(name))
 			return null;
 		if (skipIfEmpty == null)
-			skipIfEmpty = client.isSkipEmptyHeaders();
+			skipIfEmpty = client.isSkipEmptyHeaderData();
 		if (serializer == null)
 			serializer = client.getPartSerializer();
 		return new SerializedHeader(name, value, getPartSerializerSession(serializer), schema, skipIfEmpty);
@@ -3223,7 +3223,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private class SimpleHeader extends SimplePart implements Header {
 
 		SimpleHeader(NameValuePair x) {
-			super(x, client.isSkipEmptyHeaders());
+			super(x, client.isSkipEmptyHeaderData());
 		}
 
 		@Override

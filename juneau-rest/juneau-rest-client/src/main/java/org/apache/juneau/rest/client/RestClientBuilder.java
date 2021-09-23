@@ -95,6 +95,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private PartList.Builder queryData, formData, pathData;
 	private boolean pooled;
 
+	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData;
+
 	SerializerGroup.Builder serializerGroupBuilder;
 	ParserGroup.Builder parserGroupBuilder;
 
@@ -3143,7 +3145,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty form data.
+	 * Skip empty form data.
 	 *
 	 * <p>
 	 * When enabled, form data consisting of empty strings will be skipped on requests.
@@ -3159,11 +3161,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder skipEmptyFormData(boolean value) {
-		return set(RESTCLIENT_skipEmptyFormData, value);
+		skipEmptyFormData = true;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty form data.
+	 * Skip empty form data.
 	 *
 	 * <p>
 	 * When enabled, form data consisting of empty strings will be skipped on requests.
@@ -3180,7 +3183,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty headers.
+	 * Skip empty header data.
 	 *
 	 * <p>
 	 * When enabled, headers consisting of empty strings will be skipped on requests.
@@ -3195,12 +3198,13 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder skipEmptyHeaders(boolean value) {
-		return set(RESTCLIENT_skipEmptyHeaders, value);
+	public RestClientBuilder skipEmptyHeaderData(boolean value) {
+		skipEmptyHeaderData = true;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty headers.
+	 * Skip empty header data.
 	 *
 	 * <p>
 	 * When enabled, headers consisting of empty strings will be skipped on requests.
@@ -3212,12 +3216,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder skipEmptyHeaders() {
-		return skipEmptyHeaders(true);
+	public RestClientBuilder skipEmptyHeaderData() {
+		return skipEmptyHeaderData(true);
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty query data.
+	 * Skip empty query data.
 	 *
 	 * <p>
 	 * When enabled, query parameters consisting of empty strings will be skipped on requests.
@@ -3233,11 +3237,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder skipEmptyQueryData(boolean value) {
-		return set(RESTCLIENT_skipEmptyQueryData, value);
+		skipEmptyQueryData = true;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty query data.
+	 * Skip empty query data.
 	 *
 	 * <p>
 	 * When enabled, query parameters consisting of empty strings will be skipped on requests.
