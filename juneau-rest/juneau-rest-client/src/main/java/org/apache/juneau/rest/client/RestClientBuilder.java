@@ -91,9 +91,10 @@ import org.apache.juneau.xml.*;
 public class RestClientBuilder extends BeanContextableBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
+	private CloseableHttpClient httpClient;
+
 	private HeaderList.Builder headerData;
 	private PartList.Builder queryData, formData, pathData;
-	private CloseableHttpClient httpClient;
 	private boolean pooled;
 
 	SerializerGroup.Builder serializerGroupBuilder;
@@ -110,8 +111,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_INTERNAL_httpClientBuilder);
-		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
 		this.headerData = HeaderList.create();
 		this.queryData = PartList.create();
 		this.formData = PartList.create();
@@ -121,34 +120,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		this.partSerializerBuilder = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
 		this.partParserBuilder = (ParserBuilder) OpenApiParser.create().beanContextBuilder(getBeanContextBuilder());
 		type(RestClient.class);
-	}
-
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The client to copy from.
-	 */
-	protected RestClientBuilder(RestClient copyFrom) {
-		super(copyFrom);
-		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_INTERNAL_httpClientBuilder);
-		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
-		this.headerData = copyFrom.headerData.copy();
-		this.queryData = copyFrom.queryData.copy();
-		this.formData = copyFrom.formData.copy();
-		this.pathData = copyFrom.pathData.copy();
-		this.serializerGroupBuilder = copyFrom.serializers.copy().beanContextBuilder(getBeanContextBuilder());
-		this.parserGroupBuilder = copyFrom.parsers.copy().beanContextBuilder(getBeanContextBuilder());
-		if (copyFrom.partSerializer instanceof Serializer) {
-			this.partSerializerBuilder = (SerializerBuilder) ((Serializer)copyFrom.partSerializer).copy().beanContextBuilder(getBeanContextBuilder());
-		} else {
-			this.simplePartSerializer = copyFrom.partSerializer;
-		}
-		if (copyFrom.partParser instanceof Parser) {
-			this.partParserBuilder = (ParserBuilder) ((Parser)copyFrom.partParser).copy().beanContextBuilder(getBeanContextBuilder());
-		} else {
-			this.simplePartParser = copyFrom.partParser;
-		}
-		type(copyFrom.getClass());
 	}
 
 	@Override /* ContextBuilder */
@@ -171,8 +142,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	private ContextProperties contextProperties() {
-		set(RESTCLIENT_INTERNAL_httpClient, getHttpClient());
-		set(RESTCLIENT_INTERNAL_httpClientBuilder, getHttpClientBuilder());
 		set(RESTCLIENT_INTERNAL_headerDataBuilder, headerData);
 		set(RESTCLIENT_INTERNAL_formDataBuilder, formData);
 		set(RESTCLIENT_INTERNAL_queryDataBuilder, queryData);
@@ -805,6 +774,17 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns the HTTP client builder.
+	 *
+	 * @return The HTTP client builder.
+	 */
+	public final HttpClientBuilder httpClientBuilder() {
+		if (httpClientBuilder == null)
+			httpClientBuilder = createHttpClientBuilder();
+		return httpClientBuilder;
+	}
+
+	/**
 	 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
 	 *
 	 * <p>
@@ -855,12 +835,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		return this;
 	}
 
-	final HttpClientBuilder getHttpClientBuilder() {
-		if (httpClientBuilder == null)
-			httpClientBuilder = createHttpClientBuilder();
-		return httpClientBuilder;
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// HttpClient
 	//------------------------------------------------------------------------------------------------------------------
@@ -900,12 +874,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		Object cm = peek(RESTCLIENT_connectionManager);
 		// Don't call createConnectionManager() if RestClient.setConnectionManager() was called.
 		if (cm == null)
-			httpClientBuilder.setConnectionManager(createConnectionManager());
+			httpClientBuilder().setConnectionManager(createConnectionManager());
 		else if (cm instanceof HttpClientConnectionManager)
-			httpClientBuilder.setConnectionManager((HttpClientConnectionManager)cm);
+			httpClientBuilder().setConnectionManager((HttpClientConnectionManager)cm);
 		else
 			throw runtimeException("Invalid type for RESTCLIENT_connectionManager: {0}", className(cm));
-		return httpClientBuilder.build();
+		return httpClientBuilder().build();
 	}
 
 	/**
@@ -5225,7 +5199,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder disableRedirectHandling() {
-		httpClientBuilder.disableRedirectHandling();
+		httpClientBuilder().disableRedirectHandling();
 		return this;
 	}
 
@@ -5242,7 +5216,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder redirectStrategy(RedirectStrategy redirectStrategy) {
-		httpClientBuilder.setRedirectStrategy(redirectStrategy);
+		httpClientBuilder().setRedirectStrategy(redirectStrategy);
 		return this;
 	}
 
@@ -5255,7 +5229,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
-		httpClientBuilder.setDefaultCookieSpecRegistry(cookieSpecRegistry);
+		httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
 		return this;
 	}
 
@@ -5268,7 +5242,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder requestExecutor(HttpRequestExecutor requestExec) {
-		httpClientBuilder.setRequestExecutor(requestExec);
+		httpClientBuilder().setRequestExecutor(requestExec);
 		return this;
 	}
 
@@ -5286,7 +5260,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
-		httpClientBuilder.setSSLHostnameVerifier(hostnameVerifier);
+		httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
 		return this;
 	}
 
@@ -5303,7 +5277,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
-		httpClientBuilder.setPublicSuffixMatcher(publicSuffixMatcher);
+		httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
 		return this;
 	}
 
@@ -5321,7 +5295,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sslContext(SSLContext sslContext) {
-		httpClientBuilder.setSSLContext(sslContext);
+		httpClientBuilder().setSSLContext(sslContext);
 		return this;
 	}
 
@@ -5338,7 +5312,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
-		httpClientBuilder.setSSLSocketFactory(sslSocketFactory);
+		httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
 		return this;
 	}
 
@@ -5355,7 +5329,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxConnTotal(int maxConnTotal) {
-		httpClientBuilder.setMaxConnTotal(maxConnTotal);
+		httpClientBuilder().setMaxConnTotal(maxConnTotal);
 		return this;
 	}
 
@@ -5372,7 +5346,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxConnPerRoute(int maxConnPerRoute) {
-		httpClientBuilder.setMaxConnPerRoute(maxConnPerRoute);
+		httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
 		return this;
 	}
 
@@ -5389,7 +5363,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultSocketConfig(SocketConfig config) {
-		httpClientBuilder.setDefaultSocketConfig(config);
+		httpClientBuilder().setDefaultSocketConfig(config);
 		return this;
 	}
 
@@ -5406,7 +5380,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultConnectionConfig(ConnectionConfig config) {
-		httpClientBuilder.setDefaultConnectionConfig(config);
+		httpClientBuilder().setDefaultConnectionConfig(config);
 		return this;
 	}
 
@@ -5424,7 +5398,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
-		httpClientBuilder.setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
+		httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 		return this;
 	}
 
@@ -5438,7 +5412,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
 		set(RESTCLIENT_connectionManager, connManager);
-		httpClientBuilder.setConnectionManager(connManager);
+		httpClientBuilder().setConnectionManager(connManager);
 		return this;
 	}
 
@@ -5455,7 +5429,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder connectionManagerShared(boolean shared) {
-		httpClientBuilder.setConnectionManagerShared(shared);
+		httpClientBuilder().setConnectionManagerShared(shared);
 		return this;
 	}
 
@@ -5468,7 +5442,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
-		httpClientBuilder.setConnectionReuseStrategy(reuseStrategy);
+		httpClientBuilder().setConnectionReuseStrategy(reuseStrategy);
 		return this;
 	}
 
@@ -5481,7 +5455,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
-		httpClientBuilder.setKeepAliveStrategy(keepAliveStrategy);
+		httpClientBuilder().setKeepAliveStrategy(keepAliveStrategy);
 		return this;
 	}
 
@@ -5494,7 +5468,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
-		httpClientBuilder.setTargetAuthenticationStrategy(targetAuthStrategy);
+		httpClientBuilder().setTargetAuthenticationStrategy(targetAuthStrategy);
 		return this;
 	}
 
@@ -5507,7 +5481,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
-		httpClientBuilder.setProxyAuthenticationStrategy(proxyAuthStrategy);
+		httpClientBuilder().setProxyAuthenticationStrategy(proxyAuthStrategy);
 		return this;
 	}
 
@@ -5524,7 +5498,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder userTokenHandler(UserTokenHandler userTokenHandler) {
-		httpClientBuilder.setUserTokenHandler(userTokenHandler);
+		httpClientBuilder().setUserTokenHandler(userTokenHandler);
 		return this;
 	}
 
@@ -5536,7 +5510,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder disableConnectionState() {
-		httpClientBuilder.disableConnectionState();
+		httpClientBuilder().disableConnectionState();
 		return this;
 	}
 
@@ -5549,7 +5523,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder schemePortResolver(SchemePortResolver schemePortResolver) {
-		httpClientBuilder.setSchemePortResolver(schemePortResolver);
+		httpClientBuilder().setSchemePortResolver(schemePortResolver);
 		return this;
 	}
 
@@ -5566,7 +5540,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addInterceptorFirst(HttpResponseInterceptor itcp) {
-		httpClientBuilder.addInterceptorFirst(itcp);
+		httpClientBuilder().addInterceptorFirst(itcp);
 		return this;
 	}
 
@@ -5583,7 +5557,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addInterceptorLast(HttpResponseInterceptor itcp) {
-		httpClientBuilder.addInterceptorLast(itcp);
+		httpClientBuilder().addInterceptorLast(itcp);
 		return this;
 	}
 
@@ -5600,7 +5574,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addInterceptorFirst(HttpRequestInterceptor itcp) {
-		httpClientBuilder.addInterceptorFirst(itcp);
+		httpClientBuilder().addInterceptorFirst(itcp);
 		return this;
 	}
 
@@ -5617,7 +5591,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addInterceptorLast(HttpRequestInterceptor itcp) {
-		httpClientBuilder.addInterceptorLast(itcp);
+		httpClientBuilder().addInterceptorLast(itcp);
 		return this;
 	}
 
@@ -5633,7 +5607,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder disableCookieManagement() {
-		httpClientBuilder.disableCookieManagement();
+		httpClientBuilder().disableCookieManagement();
 		return this;
 	}
 
@@ -5649,7 +5623,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder disableContentCompression() {
-		httpClientBuilder.disableContentCompression();
+		httpClientBuilder().disableContentCompression();
 		return this;
 	}
 
@@ -5665,7 +5639,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder disableAuthCaching() {
-		httpClientBuilder.disableAuthCaching();
+		httpClientBuilder().disableAuthCaching();
 		return this;
 	}
 
@@ -5678,7 +5652,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder httpProcessor(HttpProcessor httpprocessor) {
-		httpClientBuilder.setHttpProcessor(httpprocessor);
+		httpClientBuilder().setHttpProcessor(httpprocessor);
 		return this;
 	}
 
@@ -5695,7 +5669,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder retryHandler(HttpRequestRetryHandler retryHandler) {
-		httpClientBuilder.setRetryHandler(retryHandler);
+		httpClientBuilder().setRetryHandler(retryHandler);
 		return this;
 	}
 
@@ -5707,7 +5681,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder disableAutomaticRetries() {
-		httpClientBuilder.disableAutomaticRetries();
+		httpClientBuilder().disableAutomaticRetries();
 		return this;
 	}
 
@@ -5724,7 +5698,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder proxy(HttpHost proxy) {
-		httpClientBuilder.setProxy(proxy);
+		httpClientBuilder().setProxy(proxy);
 		return this;
 	}
 
@@ -5737,7 +5711,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder routePlanner(HttpRoutePlanner routePlanner) {
-		httpClientBuilder.setRoutePlanner(routePlanner);
+		httpClientBuilder().setRoutePlanner(routePlanner);
 		return this;
 	}
 
@@ -5750,7 +5724,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
-		httpClientBuilder.setConnectionBackoffStrategy(connectionBackoffStrategy);
+		httpClientBuilder().setConnectionBackoffStrategy(connectionBackoffStrategy);
 		return this;
 	}
 
@@ -5763,7 +5737,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder backoffManager(BackoffManager backoffManager) {
-		httpClientBuilder.setBackoffManager(backoffManager);
+		httpClientBuilder().setBackoffManager(backoffManager);
 		return this;
 	}
 
@@ -5776,7 +5750,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
-		httpClientBuilder.setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
+		httpClientBuilder().setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 		return this;
 	}
 
@@ -5789,7 +5763,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultCookieStore(CookieStore cookieStore) {
-		httpClientBuilder.setDefaultCookieStore(cookieStore);
+		httpClientBuilder().setDefaultCookieStore(cookieStore);
 		return this;
 	}
 
@@ -5802,7 +5776,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
-		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+		httpClientBuilder().setDefaultCredentialsProvider(credentialsProvider);
 		return this;
 	}
 
@@ -5815,7 +5789,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
-		httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
+		httpClientBuilder().setDefaultAuthSchemeRegistry(authSchemeRegistry);
 		return this;
 	}
 
@@ -5828,7 +5802,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
-		httpClientBuilder.setContentDecoderRegistry(contentDecoderMap);
+		httpClientBuilder().setContentDecoderRegistry(contentDecoderMap);
 		return this;
 	}
 
@@ -5841,7 +5815,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder defaultRequestConfig(RequestConfig config) {
-		httpClientBuilder.setDefaultRequestConfig(config);
+		httpClientBuilder().setDefaultRequestConfig(config);
 		return this;
 	}
 
@@ -5853,7 +5827,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder useSystemProperties() {
-		httpClientBuilder.useSystemProperties();
+		httpClientBuilder().useSystemProperties();
 		return this;
 	}
 
@@ -5871,7 +5845,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder evictExpiredConnections() {
-		httpClientBuilder.evictExpiredConnections();
+		httpClientBuilder().evictExpiredConnections();
 		return this;
 	}
 
@@ -5891,7 +5865,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
-		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
+		httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;
 	}
 }

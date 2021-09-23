@@ -78,17 +78,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		type(MockRestClient.class);
 	}
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	protected MockRestClientBuilder(MockRestClient copyFrom) {
-		super(copyFrom);
-		connectionManager(new MockHttpClientConnectionManager());
-		type(MockRestClient.class);
-	}
-
 	@Override /* ContextBuilder */
 	public MockRestClientBuilder copy() {
 		throw new NoSuchMethodError("Not implemented.");

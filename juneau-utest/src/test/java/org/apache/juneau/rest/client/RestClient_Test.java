@@ -17,7 +17,6 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
-import static org.apache.juneau.rest.client.RestClient.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -72,18 +71,6 @@ public class RestClient_Test {
 	// Override client and builder.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic_overrideHttpClient() {
-		HttpClientBuilder cb = HttpClientBuilder.create();
-		CloseableHttpClient hc = HttpClientBuilder.create().build();
-		RestClient.create()
-			.httpClientBuilder(cb)
-			.build()
-			.copy()
-			.build();
-		RestClient.create().httpClient(hc).build().copy().build();
-	}
-
 	public static class A2 extends RestClientBuilder {}
 
 	@Test
@@ -97,7 +84,7 @@ public class RestClient_Test {
 		RestClient.create().build().closeQuietly();
 		RestClient.create().keepHttpClientOpen().build().close();
 		RestClient.create().keepHttpClientOpen().build().closeQuietly();
-		RestClient.create().set(RESTCLIENT_INTERNAL_httpClient,null).keepHttpClientOpen().build().close();
+		RestClient.create().httpClient(null).keepHttpClientOpen().build().close();
 
 		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(10));
 		RestClient.create().executorService(es,true).build().close();

@@ -1741,8 +1741,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static final String RESTCLIENT_skipEmptyQueryData = PREFIX + "skipEmptyQueryData.b";
 
-	static final String RESTCLIENT_INTERNAL_httpClient = PREFIX + "httpClient.o";
-	static final String RESTCLIENT_INTERNAL_httpClientBuilder = PREFIX + "httpClientBuilder.o";
 	static final String RESTCLIENT_INTERNAL_headerDataBuilder = PREFIX + "headerDataBuilder.o";
 	static final String RESTCLIENT_INTERNAL_formDataBuilder = PREFIX + "formDataBuilder.o";
 	static final String RESTCLIENT_INTERNAL_queryDataBuilder = PREFIX + "queryBuilder.o";
@@ -1797,7 +1795,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	@Override /* Context */
 	public RestClientBuilder copy() {
-		return new RestClientBuilder(this);
+		throw new NoSuchMethodError("Not implemented.");
 	}
 
 	private static final
@@ -1813,8 +1811,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public RestClient(RestClientBuilder builder) {
 		super(builder);
+		this.httpClient = builder.getHttpClient();
+
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
-		this.httpClient = cp.getInstance(RESTCLIENT_INTERNAL_httpClient, CloseableHttpClient.class).orElse(null);
 		this.headerData = cp.getInstance(RESTCLIENT_INTERNAL_headerDataBuilder, HeaderList.Builder.class).orElseGet(HeaderList.Builder::new).copy();
 		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
 		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartList.Builder.class).orElseGet(PartList.Builder::new).copy();
