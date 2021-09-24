@@ -1022,94 +1022,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private static final String PREFIX = "RestClient.";
 
 	/**
-	 * Configuration property:  Executor service.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorService RESTCLIENT_executorService}
-	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link java.util.concurrent.ExecutorService}&gt;</c>
-	 * 			<li>{@link java.util.concurrent.ExecutorService}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  <jk>null</jk>.
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService, boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines the executor service to use when calling future methods on the {@link RestRequest} class.
-	 *
-	 * <p>
-	 * This executor service is used to create {@link Future} objects on the following methods:
-	 * <ul>
-	 * 	<li class='jm'>{@link RestRequest#runFuture()}
-	 * 	<li class='jm'>{@link RestRequest#completeFuture()}
-	 * 	<li class='jm'>{@link ResponseBody#asFuture(Class)} (and similar methods)
-	 * </ul>
-	 *
-	 * <p>
-	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
-	 * and a queue size of 10.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client with a customized executor service.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.executorService(<jk>new</jk> ThreadPoolExecutor(1, 1, 30, TimeUnit.<jsf>SECONDS</jsf>, <jk>new</jk> ArrayBlockingQueue&lt;Runnable&gt;(10)), <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it to asynchronously run a request.</jc>
-	 * 	Future&lt;RestResponse&gt; <jv>responseFuture</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
-	 *
-	 * 	<jc>// Do some other stuff.</jc>
-	 *
-	 * 	<jc>// Now read the response.</jc>
-	 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getBody().asString();
-	 *
-	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-	 * 	Future&lt;MyBean&gt; <jv>myBeanFuture</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Do some other stuff.</jc>
-	 *
-	 * 	<jc>// Now read the response.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>myBeanFuture</jv>.get();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
-
-	/**
-	 * Configuration property:  Shut down executor service on close.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorServiceShutdownOnClose RESTCLIENT_executorServiceShutdownOnClose}
-	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestClient.executorServiceShutdownOnClose</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_EXECUTORSERVICESHUTDOWNONCLOSE</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService, boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
-	 */
-	public static final String RESTCLIENT_executorServiceShutdownOnClose = PREFIX + "executorServiceShutdownOnClose.b";
-
-	/**
 	 * Configuration property:  Ignore errors.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1560,13 +1472,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
 		console = ofNullable(builder.console).orElse(System.err);
+		executorService = builder.executorService;
+		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
 		beanStore.addBean(ContextProperties.class, cp);
 
 		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
-		this.executorServiceShutdownOnClose = cp.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
 		this.leakDetection = cp.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
 		this.ignoreErrors = cp.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);
 		this.logger = cp.getInstance(RESTCLIENT_logger, Logger.class).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
@@ -1583,8 +1496,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		this.partSerializer = builder.simplePartSerializer != null ? builder.simplePartSerializer : (HttpPartSerializer) builder.partSerializerBuilder.build();
 
 		this.partParser = builder.simplePartParser != null ? builder.simplePartParser : (HttpPartParser) builder.partParserBuilder.build();
-
-		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
 		this.interceptors = cp.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 

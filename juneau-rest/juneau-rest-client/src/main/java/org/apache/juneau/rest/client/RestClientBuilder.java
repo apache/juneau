@@ -102,10 +102,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private boolean pooled;
 
 	String rootUri;
-	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData;
+	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose;
 	Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
 	HttpClientConnectionManager connectionManager;
 	PrintStream console;
+	ExecutorService executorService;
 
 	SerializerGroup.Builder serializerGroupBuilder;
 	ParserGroup.Builder parserGroupBuilder;
@@ -2334,19 +2335,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	MyBean <jv>bean</jv> = <jv>myBeanFuture</jv>.get();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorService}
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorServiceShutdownOnClose}
-	 * </ul>
-	 *
 	 * @param executorService The executor service.
 	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
-		set(RESTCLIENT_executorService, executorService);
-		set(RESTCLIENT_executorServiceShutdownOnClose, shutdownOnClose);
+		this.executorService = executorService;
+		this.executorServiceShutdownOnClose = shutdownOnClose;
 		return this;
 	}
 
