@@ -218,93 +218,10 @@ import org.apache.juneau.rest.logging.*;
 public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "RestClient.";
-
-	@SuppressWarnings("javadoc")
-	public static final String
-		MOCKRESTCLIENT_restBean = PREFIX + "restBean.o",
-		MOCKRESTCLIENT_restBeanCtx = PREFIX + "restBeanCtx.o",
-		MOCKRESTCLIENT_servletPath = PREFIX + "servletPath.s",
-		MOCKRESTCLIENT_contextPath = PREFIX + "contextPath.s",
-		MOCKRESTCLIENT_pathVars = PREFIX + "pathVars.oms";
-
 
 	private static Map<Class<?>,RestContext> REST_CONTEXTS = new ConcurrentHashMap<>();
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private final RestContext restBeanCtx;
-	private final Object restObject;
-	private final String contextPath, servletPath;
-	private final Map<String,String> pathVars;
-
-	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
-	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
-	private final ThreadLocal<MockServletRequest> sreq = new ThreadLocal<>();
-	private final ThreadLocal<MockServletResponse> sres = new ThreadLocal<>();
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder
-	 * 	The builder for this object.
-	 */
-	public MockRestClient(MockRestClientBuilder builder) {
-		super(preInit(builder));
-		ContextProperties cp = getContextProperties();
-		this.restBeanCtx = cp.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class).get();
-		this.restObject = restBeanCtx.getResource();
-		this.contextPath = cp.getString(MOCKRESTCLIENT_contextPath).orElse("");
-		this.servletPath = cp.getString(MOCKRESTCLIENT_servletPath).orElse("");
-		this.pathVars = cp.getMap(MOCKRESTCLIENT_pathVars, String.class).orElse(emptyMap());
-
-		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
-		if (ccm instanceof MockHttpClientConnectionManager)
-			((MockHttpClientConnectionManager)ccm).init(this);
-	}
-
-	private static MockRestClientBuilder preInit(MockRestClientBuilder builder) {
-		try {
-			ContextProperties cp = builder.getContextProperties();
-			Object restBean = cp.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
-			String contextPath = cp.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
-			String servletPath = cp.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
-			String rootUrl = ofNullable(builder.getRootUri()).orElse("http://localhost");
-
-			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
-			if (! REST_CONTEXTS.containsKey(c)) {
-				boolean isClass = restBean instanceof Class;
-				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
-				RestContext rc = RestContext
-					.create(o.getClass(), null, null)
-					.defaultClasses(BasicTestRestLogger.class)
-					.debugDefault(CONDITIONAL)
-					.init(()->o)
-					.build()
-					.postInit()
-					.postInitChildFirst();
-				REST_CONTEXTS.put(c, rc);
-			}
-			RestContext restBeanCtx = REST_CONTEXTS.get(c);
-			builder.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
-
-			if (servletPath == null)
-				servletPath = toValidContextPath(restBeanCtx.getFullPath());
-
-			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
-
-			builder.set(MOCKRESTCLIENT_servletPath, servletPath);
-			builder.rootUri(rootUrl);
-			return builder;
-		} catch (Exception e) {
-			throw new ConfigException(e, "Could not initialize MockRestClient");
-		}
-	}
 
 	/**
 	 * Creates a new {@link RestClientBuilder} configured with the specified REST implementation bean or bean class.
@@ -448,6 +365,76 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 */
 	public static MockRestClient buildSimpleJsonLax(Object impl) {
 		return create(impl).simpleJson().ignoreErrors().noTrace().build();
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private final RestContext restContext;
+	private final Object restObject;
+	private final String contextPath, servletPath;
+	private final Map<String,String> pathVars;
+
+	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
+	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
+	private final ThreadLocal<MockServletRequest> sreq = new ThreadLocal<>();
+	private final ThreadLocal<MockServletResponse> sres = new ThreadLocal<>();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder
+	 * 	The builder for this object.
+	 */
+	public MockRestClient(MockRestClientBuilder builder) {
+		super(preInit(builder));
+		restContext = builder.restContext;
+		contextPath = ofNullable(builder.contextPath).orElse("");
+		servletPath = ofNullable(builder.servletPath).orElse("");
+		pathVars = ofNullable(builder.pathVars).orElse(emptyMap());
+		restObject = restContext.getResource();
+
+		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
+		if (ccm instanceof MockHttpClientConnectionManager)
+			((MockHttpClientConnectionManager)ccm).init(this);
+	}
+
+	private static MockRestClientBuilder preInit(MockRestClientBuilder builder) {
+		try {
+			Object restBean = builder.restBean;
+			String contextPath = builder.contextPath;
+			String servletPath = builder.servletPath;
+			String rootUrl = ofNullable(builder.getRootUri()).orElse("http://localhost");
+
+			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
+			if (! REST_CONTEXTS.containsKey(c)) {
+				boolean isClass = restBean instanceof Class;
+				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
+				RestContext rc = RestContext
+					.create(o.getClass(), null, null)
+					.defaultClasses(BasicTestRestLogger.class)
+					.debugDefault(CONDITIONAL)
+					.init(()->o)
+					.build()
+					.postInit()
+					.postInitChildFirst();
+				REST_CONTEXTS.put(c, rc);
+			}
+			RestContext restBeanCtx = REST_CONTEXTS.get(c);
+			builder.restContext(restBeanCtx);
+
+			if (servletPath == null)
+				servletPath = toValidContextPath(restBeanCtx.getFullPath());
+
+			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
+
+			builder.servletPath = servletPath;
+			builder.rootUri(rootUrl);
+			return builder;
+		} catch (Exception e) {
+			throw new ConfigException(e, "Could not initialize MockRestClient");
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -760,7 +747,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
 			MockServletResponse res = MockServletResponse.create();
-			restBeanCtx.execute(restObject, sreq.get(), res);
+			restContext.execute(restObject, sreq.get(), res);
 
 			// If the status isn't set, something's broken.
 			if (res.getStatus() == 0)

@@ -17,7 +17,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import static org.apache.juneau.rest.mock.MockRestClient.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
@@ -36,8 +35,11 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.RestRequest;
+import org.apache.juneau.rest.client.RestResponse;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -64,6 +66,11 @@ import org.apache.http.protocol.*;
 @FluentSetters(ignore="debug")
 public class MockRestClientBuilder extends RestClientBuilder {
 
+	Object restBean;
+	String contextPath, servletPath;
+	RestContext restContext;
+	Map<String,String> pathVars;
+
 	/**
 	 * No-arg constructor.
 	 *
@@ -84,11 +91,23 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	/**
 	 * Specifies the {@link Rest}-annotated bean class or instance to test against.
 	 *
-	 * @param bean The {@link Rest}-annotated bean class or instance.
+	 * @param value The {@link Rest}-annotated bean class or instance.
 	 * @return This object (for method chaining).
 	 */
-	public MockRestClientBuilder restBean(Object bean) {
-		return set(MOCKRESTCLIENT_restBean, bean);
+	public MockRestClientBuilder restBean(Object value) {
+		restBean = value;
+		return this;
+	}
+
+	/**
+	 * Specifies the {@link RestContext} created for the REST bean.
+	 *
+	 * @param value The {@link RestContext} created for the REST bean.
+	 * @return This object (for method chaining).
+	 */
+	public MockRestClientBuilder restContext(RestContext value) {
+		restContext = value;
+		return this;
 	}
 
 	/**
@@ -113,7 +132,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder contextPath(String value) {
-		return set(MOCKRESTCLIENT_contextPath, toValidContextPath(value));
+		contextPath = toValidContextPath(value);
+		return this;
 	}
 
 	/**
@@ -138,7 +158,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder servletPath(String value) {
-		return set(MOCKRESTCLIENT_servletPath, toValidContextPath(value));
+		servletPath = toValidContextPath(value);
+		return this;
 	}
 
 	/**
@@ -188,7 +209,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @see MockServletRequest#pathVars(Map)
 	 */
 	public MockRestClientBuilder pathVars(Map<String,String> value) {
-		return putAllTo(MOCKRESTCLIENT_pathVars, value);
+		pathVars = value;
+		return this;
 	}
 
 	/**
