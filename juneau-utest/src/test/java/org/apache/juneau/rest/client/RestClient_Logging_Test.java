@@ -134,8 +134,6 @@ public class RestClient_Logging_Test {
 		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
 		c.assertContents().isEmpty();
 		c.reset();
-
-		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).console(MockConsole.class).build().post("/bean",bean).complete();
 	}
 
 	@Test

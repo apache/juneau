@@ -773,12 +773,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder console(Class<? extends java.io.PrintStream> value) {
-		super.console(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 		super.contentDecoderRegistry(contentDecoderMap);
 		return this;

@@ -23,6 +23,7 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -1021,32 +1022,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private static final String PREFIX = "RestClient.";
 
 	/**
-	 * Configuration property:  Console print stream.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_console RESTCLIENT_console}
-	 * 	<li><b>Name:</b>  <js>"RestClient.console.o"</js>
-	 * 	<li><b>System property:</b>  <c>RestClient.console</c>
-	 * 	<li><b>Data type:</b>
-	 * 	<ul>
-	 * 		<li><b>Data type:</b>  <c>Class&lt;? <jk>extends</jk> {@link java.io.PrintStream}&gt; | {@link java.io.PrintStream}</c>
-	 * 	</ul>
-	 * 	<li><b>Default:</b>  <c>System.<jsf>out</jsf></c>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#console(PrintStream)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#console(Class)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allows you to redirect the console output to a different print stream.
-	 */
-	public static final String RESTCLIENT_console = PREFIX + "console.o";
-
-	/**
 	 * Configuration property:  Executor service.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1584,6 +1559,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		rootUri = builder.rootUri;
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
+		console = ofNullable(builder.console).orElse(System.err);
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
@@ -1597,7 +1573,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		this.logRequests = cp.getInstance(RESTCLIENT_logRequests, DetailLevel.class).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
 		this.logRequestsLevel = cp.getInstance(RESTCLIENT_logRequestsLevel, Level.class).orElse(isDebug() ? Level.WARNING : Level.OFF);
 		this.logToConsole = cp.getBoolean(RESTCLIENT_logToConsole).orElse(isDebug());
-		this.console = cp.getInstance(RESTCLIENT_console, PrintStream.class).orElse(System.err);
 		this.logRequestsPredicate = cp.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		this.serializers = builder.serializerGroupBuilder.build();

@@ -105,6 +105,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData;
 	Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
 	HttpClientConnectionManager connectionManager;
+	PrintStream console;
 
 	SerializerGroup.Builder serializerGroupBuilder;
 	ParserGroup.Builder parserGroupBuilder;
@@ -2272,33 +2273,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Console print stream
+	 * Console print stream
 	 *
 	 * <p>
 	 * Allows you to redirect the console output to a different print stream.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_console}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder console(Class<? extends PrintStream> value) {
-		return set(RESTCLIENT_console, value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Console print stream
-	 *
-	 * <p>
-	 * Allows you to redirect the console output to a different print stream.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_console}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
@@ -2306,7 +2284,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder console(PrintStream value) {
-		return set(RESTCLIENT_console, value);
+		console = value;
+		return this;
 	}
 
 	/**
