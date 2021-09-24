@@ -1076,170 +1076,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.so/add";
 
 	/**
-	 * Configuration property:  Logger.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logger RESTCLIENT_logger}
-	 * 	<li><b>Name:</b>  <js>"RestClient.logger.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link java.util.logging.Logger}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  <c>Logger.<jsm>getLogger</jsm>(RestClient.<jk>class</jk>.getName())</c>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#logger(Logger)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 */
-	public static final String RESTCLIENT_logger = PREFIX + "logger.o";
-
-	/**
-	 * Configuration property:  Log to console.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logToConsole RESTCLIENT_logToConsole}
-	 * 	<li><b>Name:</b>  <js>"RestClient.logToConsole.b"</js>
-	 * 	<li><b>System property:</b>  <c>RestClient.logToConsole</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_LOGTOCONSOLE</c>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><jk>boolean</jk>
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#logToConsole()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, log messages are sent to the console in addition to the existing logger.
-	 */
-	public static final String RESTCLIENT_logToConsole = PREFIX + "logToConsole.b";
-
-	/**
-	 * Configuration property:  Log requests.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logRequests RESTCLIENT_logRequests}
-	 * 	<li><b>Name:</b>  <js>"RestClient.logRequests.s"</js>
-	 * 	<li><b>System property:</b>  <c>RestClient.logRequests</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_LOGREQUESTS</c>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link org.apache.juneau.DetailLevel}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.DetailLevel#NONE}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Causes requests/responses to be logged at the specified log level at the end of the request.
-	 *
-	 * <p>
-	 * <jsf>SIMPLE</jsf> detail produces a log message like the following:
-	 * <p class='bcode w800 console'>
-	 * 	POST http://localhost:10000/testUrl, HTTP/1.1 200 OK
-	 * </p>
-	 *
-	 * <p>
-	 * <jsf>FULL</jsf> detail produces a log message like the following:
-	 * <p class='bcode w800 console'>
-	 * 	=== HTTP Call (outgoing) =======================================================
-	 * 	=== REQUEST ===
-	 * 	POST http://localhost:10000/testUrl
-	 * 	---request headers---
-	 * 		Debug: true
-	 * 		No-Trace: true
-	 * 		Accept: application/json
-	 * 	---request entity---
-	 * 		Content-Type: application/json
-	 * 	---request content---
-	 * 	{"foo":"bar","baz":123}
-	 * 	=== RESPONSE ===
-	 * 	HTTP/1.1 200 OK
-	 * 	---response headers---
-	 * 		Content-Type: application/json;charset=utf-8
-	 * 		Content-Length: 21
-	 * 		Server: Jetty(8.1.0.v20120127)
-	 * 	---response content---
-	 * 	{"message":"OK then"}
-	 * 	=== END ========================================================================
-	 * </p>
-	 *
-	 * <p>
-	 * By default, the message is logged to the default logger.  It can be logged to a different logger via the
-	 * {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logger} setting or logged to the console using the
-	 * {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logToConsole} setting.
-	 */
-	public static final String RESTCLIENT_logRequests = PREFIX + "logRequests.s";
-
-	/**
-	 * Configuration property:  Log requests log level.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logRequestsLevel RESTCLIENT_logRequestsLevel}
-	 * 	<li><b>Name:</b>  <js>"RestClient.logRequestsLevel.s"</js>
-	 * 	<li><b>System property:</b>  <c>RestClient.logRequestsLevel</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_LOGREQUESTLEVEL</c>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link java.util.logging.Level}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link java.util.logging.Level#INFO}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in combination with {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logRequests} to specify the
-	 * level to log request messages to.
-	 */
-	public static final String RESTCLIENT_logRequestsLevel = PREFIX + "logRequestsLevel.s";
-
-	/**
-	 * Configuration property:  Log requests predicate.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logRequestsPredicate RESTCLIENT_logRequestsPredicate}
-	 * 	<li><b>Name:</b>  <js>"RestClient.logRequestsPredicate.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link java.util.function.BiPredicate}&lt;{@link org.apache.juneau.rest.client.RestRequest},{@link org.apache.juneau.rest.client.RestResponse}&gt;
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  <c>(req,res) -&gt; <jk>true</jk></c>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in combination with {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_logRequests} to specify the
-	 * level to log request messages to.
-	 */
-	public static final String RESTCLIENT_logRequestsPredicate = PREFIX + "logRequestsPredicate.o";
-
-	/**
 	 * Configuration property:  Part parser.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1361,16 +1197,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		ignoreErrors = builder.ignoreErrors;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
 		detectLeaks = builder.detectLeaks;
+		logger = ofNullable(builder.logger).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
+		logToConsole = builder.logToConsole || isDebug();
+		logRequests = ofNullable(builder.logRequests).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
+		logRequestsLevel = ofNullable(builder.logRequestsLevel).orElse(isDebug() ? Level.WARNING : Level.OFF);
+		logRequestsPredicate = ofNullable(builder.logRequestsPredicate).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
 		beanStore.addBean(ContextProperties.class, cp);
-
-		this.logger = cp.getInstance(RESTCLIENT_logger, Logger.class).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
-		this.logRequests = cp.getInstance(RESTCLIENT_logRequests, DetailLevel.class).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
-		this.logRequestsLevel = cp.getInstance(RESTCLIENT_logRequestsLevel, Level.class).orElse(isDebug() ? Level.WARNING : Level.OFF);
-		this.logToConsole = cp.getBoolean(RESTCLIENT_logToConsole).orElse(isDebug());
-		this.logRequestsPredicate = cp.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		this.serializers = builder.serializerGroupBuilder.build();
 		this.parsers = builder.parserGroupBuilder.build();

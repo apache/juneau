@@ -102,7 +102,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private boolean pooled;
 
 	String rootUri;
-	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks;
+	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks,
+		logToConsole;
+	Logger logger;
+	DetailLevel logRequests;
+	Level logRequestsLevel;
+	BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 	Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
 	HttpClientConnectionManager connectionManager;
 	PrintStream console;
@@ -2034,7 +2039,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Logger.
+	 * Logger.
 	 *
 	 * <p>
 	 * Specifies the logger to use for logging.
@@ -2056,20 +2061,17 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logger}
-	 * </ul>
-	 *
 	 * @param value The logger to use for logging.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder logger(Logger value) {
-		return set(RESTCLIENT_logger, value);
+		logger = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Log to console.
+	 * Log to console.
 	 *
 	 * <p>
 	 * Specifies to log messages to the console.
@@ -2084,19 +2086,16 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logToConsole}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder logToConsole() {
-		return set(RESTCLIENT_logToConsole);
+		logToConsole = true;
+		return this;
 	}
 
 	/**
-	 * <i><i><l>RestClient</l> configuration property:&emsp;</i></i>  Log requests.
+	 * Log requests.
 	 *
 	 * <p>
 	 * Causes requests/responses to be logged at the specified log level at the end of the request.
@@ -2137,12 +2136,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * {@link #logger(Logger)} method or logged to the console using the
 	 * {@link #logToConsole()} method.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequests}
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequestsLevel}
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequestsPredicate}
-	 * </ul>
-	 *
 	 * @param detail The detail level of logging.
 	 * @param level The log level.
 	 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
@@ -2150,9 +2143,9 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
-		set(RESTCLIENT_logRequests, detail);
-		set(RESTCLIENT_logRequestsLevel, level);
-		set(RESTCLIENT_logRequestsPredicate, test);
+		logRequests = detail;
+		logRequestsLevel = level;
+		logRequestsPredicate = test;
 		return this;
 	}
 
