@@ -1607,45 +1607,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static final String RESTCLIENT_partParser = PREFIX + "partParser.o";
 
-	/**
-	 * Configuration property:  Root URI.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_rootUri RESTCLIENT_rootUri}
-	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestClient.rootUri</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_ROOTURI</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#rootUri(Object)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When set, relative URI strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
-	 * will be prefixed with the specified root.
-	 * <br>This root URI is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URI string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
-	 * 		.build();
-	 *
-	 * 	Bar <jv>bar</jv> = <jv>client</jv>
-	 * 		.get(<js>"/bar"</js>)  <jc>// Relative to http://localhost:10000/foo</jc>
-	 * 		.run()
-	 * 		.getBody().as(Bar.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
-
 	final HeaderList.Builder headerData;
 	final PartList.Builder queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
@@ -1720,6 +1681,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
 		skipEmptyQueryData = builder.skipEmptyQueryData;
 		skipEmptyFormData = builder.skipEmptyFormData;
+		rootUri = builder.getRootUri();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
@@ -1731,7 +1693,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
 		this.errorCodes = cp.getInstance(RESTCLIENT_errorCodes, Predicate.class).orElse(ERROR_CODES_DEFAULT);
 		this.executorServiceShutdownOnClose = cp.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
-		this.rootUri = StringUtils.nullIfEmpty(cp.getString(RESTCLIENT_rootUri).orElse("").replaceAll("\\/$", ""));
 		this.leakDetection = cp.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
 		this.ignoreErrors = cp.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);
 		this.logger = cp.getInstance(RESTCLIENT_logger, Logger.class).orElseGet(()->Logger.getLogger(RestClient.class.getName()));

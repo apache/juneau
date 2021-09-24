@@ -278,13 +278,6 @@ public class Remote_Test {
 		assertEquals("quux",x.x5x());
 	}
 
-	@Test
-	public void c02_rootUriNotSpecified() throws Exception {
-		C1 x = client(C.class).rootUri("").build().getRemote(C1.class);
-		assertThrown(()->x.x1()).message().is("Invalid remote definition found on class org.apache.juneau.http.remote.Remote_Test$C1. Root URI has not been specified.  Cannot construct absolute path to remote resource.");
-	}
-
-
 	@Rest(path="/C3")
 	public static class C3a implements BasicSimpleJsonRest {
 		@RestOp
@@ -484,12 +477,6 @@ public class Remote_Test {
 		E1 x = client(E.class).rootUri("http://localhost/proxy").build().getRrpcInterface(E1.class);
 
 		assertEquals("foo",x.echo("foo"));
-	}
-
-	@Test
-	public void e02_rrpc_noRootPath() throws Exception {
-		RestClient x = client(E.class).rootUri("").build();
-		assertThrown(()->x.getRrpcInterface(E1.class)).message().is("Invalid remote definition found on class org.apache.juneau.http.remote.Remote_Test$E1. Root URI has not been specified.  Cannot construct absolute path to remote interface.");
 	}
 
 	@Remote(path="/proxy")

@@ -15,6 +15,8 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -94,6 +96,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private HeaderList.Builder headerData;
 	private PartList.Builder queryData, formData, pathData;
 	private boolean pooled;
+	private String rootUri;
 
 	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData;
 
@@ -2981,10 +2984,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.getBody().as(Bar.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The root URI to prefix to relative URI strings.
 	 * 	<br>Trailing slashes are trimmed.
@@ -2993,7 +2992,29 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder rootUri(Object value) {
-		return set(RESTCLIENT_rootUri, value);
+		String s = stringify(value);
+		if (! isEmpty(s))
+			s = s.replaceAll("\\/$", "");
+		if (isEmpty(s))
+			rootUri = null;
+		else if (s.indexOf("://") == -1)
+			throw runtimeException("Invalid rootUri value: ''{0}''.  Must be a valid absolute URL.", value);
+		else
+			rootUri = s;
+		return this;
+	}
+
+	/**
+	 * Returns the root URI defined for this client.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> in leu of an empty string.
+	 * Trailing slashes are trimmed.
+	 *
+	 * @return The root URI defined for this client.
+	 */
+	public String getRootUri() {
+		return rootUri;
 	}
 
 	/**

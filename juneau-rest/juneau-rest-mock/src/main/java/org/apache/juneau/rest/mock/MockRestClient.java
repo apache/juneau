@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
 import static java.util.Collections.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.net.*;
@@ -273,7 +274,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			Object restBean = cp.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
 			String contextPath = cp.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
 			String servletPath = cp.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
-			String rootUrl = cp.get(RESTCLIENT_rootUri, String.class).orElse("http://localhost");
+			String rootUrl = ofNullable(builder.getRootUri()).orElse("http://localhost");
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			if (! REST_CONTEXTS.containsKey(c)) {
@@ -298,7 +299,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
 
 			builder.set(MOCKRESTCLIENT_servletPath, servletPath);
-			builder.set(RESTCLIENT_rootUri, rootUrl);
+			builder.rootUri(rootUrl);
 			return builder;
 		} catch (Exception e) {
 			throw new ConfigException(e, "Could not initialize MockRestClient");
