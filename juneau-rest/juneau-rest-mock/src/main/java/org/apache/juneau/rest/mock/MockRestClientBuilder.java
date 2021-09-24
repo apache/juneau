@@ -995,12 +995,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ignoreErrors(boolean value) {
-		super.ignoreErrors(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
@@ -1049,8 +1043,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder leakDetection() {
-		super.leakDetection();
+	public MockRestClientBuilder detectLeaks() {
+		super.detectLeaks();
 		return this;
 	}
 

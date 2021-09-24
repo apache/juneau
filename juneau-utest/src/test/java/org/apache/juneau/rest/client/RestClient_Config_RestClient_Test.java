@@ -117,8 +117,8 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a02_errorCodes() throws Exception {
-		RestClient x1 = client().errorCodes(x -> x == 200).ignoreErrors(false).build();
-		RestClient x2 = client().ignoreErrors(false).build();
+		RestClient x1 = client().errorCodes(x -> x == 200).build();
+		RestClient x2 = client().build();
 		assertThrown(()->x1.get("/echo").run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
 		assertThrown(()->x2.get("/echo").errorCodes(x -> x == 200).run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
 	}
@@ -348,13 +348,13 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a07_leakDetection() throws Throwable {
-		client().leakDetection().build(A7.class).finalize();
+		client().detectLeaks().build(A7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);
 
 		client().debug().build(A7.class).finalize();
 		assertTrue(A7.lastMessage.startsWith("WARNING:  RestClient garbage collected before it was finalized.\nCreation Stack:\n\t"));
 
-		client().leakDetection().build(A7.class).finalize();
+		client().detectLeaks().build(A7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);
 	}
 

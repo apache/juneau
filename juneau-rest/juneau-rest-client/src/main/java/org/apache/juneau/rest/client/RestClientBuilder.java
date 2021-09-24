@@ -102,7 +102,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private boolean pooled;
 
 	String rootUri;
-	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose;
+	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks;
 	Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
 	HttpClientConnectionManager connectionManager;
 	PrintStream console;
@@ -1276,6 +1276,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder debug() {
 		super.debug();
+		detectLeaks();
 		return headers(Debug.TRUE);
 	}
 
@@ -2364,19 +2365,16 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder keepHttpClientOpen() {
-		return set(RESTCLIENT_keepHttpClientOpen);
+		keepHttpClientOpen = true;
+		return this;
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Ignore errors.
+	 * Ignore errors.
 	 *
 	 * <p>
 	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
@@ -2396,48 +2394,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.assertStatus().is(500);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_ignoreErrors}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder ignoreErrors() {
-		return ignoreErrors(true);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Ignore errors.
-	 *
-	 * <p>
-	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
-	 * be thrown.
-	 * <p>
-	 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
-	 * 	RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreErrors(<jk>true</jk>)
-	 * 		.build()
-	 * 		.get(<js>"/error"</js>)  <jc>// Throws a 500 error</jc>
-	 * 		.run()
-	 * 		.assertStatus().is(500);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_ignoreErrors}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder ignoreErrors(boolean value) {
-		return set(RESTCLIENT_ignoreErrors, value);
+		ignoreErrors = true;
+		return this;
 	}
 
 	/**
@@ -2599,22 +2561,19 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 	<jc>// Create a client that logs a message if </jc>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.leakDetection()
+	 * 		.detectLeaks()
 	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
 	 * 		.build();
 	 *
 	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_leakDetection}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder leakDetection() {
-		return set(RESTCLIENT_leakDetection);
+	public RestClientBuilder detectLeaks() {
+		detectLeaks = true;
+		return this;
 	}
 
 	/**

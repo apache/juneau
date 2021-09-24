@@ -881,7 +881,7 @@ import org.apache.juneau.utils.*;
  * Enabling debug mode has the following effects:
  * <ul>
  * 	<li>{@link Context#CONTEXT_debug} is enabled.
- * 	<li>{@link #RESTCLIENT_leakDetection} is enabled.
+ * 	<li>{@link RestClientBuilder#detectLeaks()} is enabled.
  * 	<li>{@link RestClientBuilder#logToConsole()} is called.
  * </ul>
  *
@@ -1022,45 +1022,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private static final String PREFIX = "RestClient.";
 
 	/**
-	 * Configuration property:  Ignore errors.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_ignoreErrors RESTCLIENT_ignoreErrors}
-	 * 	<li><b>Name:</b>  <js>"RestClient.ignoreErrors.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ignoreErrors()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ignoreErrors(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#ignoreErrors()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
-	 * be thrown.
-	 * <p>
-	 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
-	 * 	RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreErrors()
-	 * 		.build()
-	 * 		.get(<js>"/error"</js>)  <jc>// Throws a 500 error</jc>
-	 * 		.run()
-	 * 		.assertStatus().is(500);
-	 * </p>
-	 */
-	public static final String RESTCLIENT_ignoreErrors = PREFIX + "ignoreErrors.b";
-
-	/**
 	 * Configuration property:  Call interceptors.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1113,83 +1074,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Add to the Call interceptors property.
 	 */
 	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.so/add";
-
-	/**
-	 * Configuration property:  Keep HttpClient open.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_keepHttpClientOpen RESTCLIENT_keepHttpClientOpen}
-	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestClient.keepHttpClientOpen</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_KEEPHTTPCLIENTOPEN</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#keepHttpClientOpen()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Don't close this client when the {@link RestClient#close()} method is called.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.httpClient(<jv>myHttpClient</jv>)
-	 * 		.keepHttpClientOpen()
-	 * 		.build();
-	 *
-	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
-	 * </p>
-	 */
-	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
-
-	/**
-	 * Configuration property:  Enable leak detection.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_leakDetection RESTCLIENT_leakDetection}
-	 * 	<li><b>Name:</b>  <js>"RestClient.leakDetection.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestClient.leakDetection</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_LEAKDETECTION</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#leakDetection()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Enable client and request/response leak detection.
-	 *
-	 * <p>
-	 * Causes messages to be logged to the console if clients or request/response objects are not properly closed
-	 * when the <c>finalize</c> methods are invoked.
-	 *
-	 * <p>
-	 * Automatically enabled with {@link Context#CONTEXT_debug}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that logs a message if </jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.leakDetection()
-	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
-	 * 		.build();
-	 *
-	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
-	 * </p>
-	 */
-	public static final String RESTCLIENT_leakDetection = PREFIX + "leakDetection.b";
 
 	/**
 	 * Configuration property:  Logger.
@@ -1398,7 +1282,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	final CloseableHttpClient httpClient;
 
 	private final HttpClientConnectionManager connectionManager;
-	private final boolean keepHttpClientOpen, leakDetection, skipEmptyHeaderData, skipEmptyQueryData, skipEmptyFormData;
+	private final boolean keepHttpClientOpen, detectLeaks, skipEmptyHeaderData, skipEmptyQueryData, skipEmptyFormData;
 	private final BeanStore beanStore;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	final HttpPartSerializer partSerializer;
@@ -1474,14 +1358,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		console = ofNullable(builder.console).orElse(System.err);
 		executorService = builder.executorService;
 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
+		ignoreErrors = builder.ignoreErrors;
+		keepHttpClientOpen = builder.keepHttpClientOpen;
+		detectLeaks = builder.detectLeaks;
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
 		beanStore.addBean(ContextProperties.class, cp);
 
-		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
-		this.leakDetection = cp.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
-		this.ignoreErrors = cp.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);
 		this.logger = cp.getInstance(RESTCLIENT_logger, Logger.class).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
 		this.logRequests = cp.getInstance(RESTCLIENT_logRequests, DetailLevel.class).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
 		this.logRequestsLevel = cp.getInstance(RESTCLIENT_logRequestsLevel, Level.class).orElse(isDebug() ? Level.WARNING : Level.OFF);
@@ -2707,7 +2591,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (leakDetection && ! isClosed && ! keepHttpClientOpen) {
+		if (detectLeaks && ! isClosed && ! keepHttpClientOpen) {
 			StringBuilder sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (creationStack != null) {
 				sb.append("\nCreation Stack:");  // NOT DEBUG
