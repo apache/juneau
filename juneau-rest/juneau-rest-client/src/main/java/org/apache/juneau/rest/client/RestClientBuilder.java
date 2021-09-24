@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -100,12 +99,12 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private HeaderList.Builder headerData;
 	private PartList.Builder queryData, formData, pathData;
 	private BeanCreator<RestCallHandler> callHandler;
-//	private RestCallHandler.Builder restCallHandler;
 	private boolean pooled;
 
 	String rootUri;
 	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData;
 	Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
+	HttpClientConnectionManager connectionManager;
 
 	SerializerGroup.Builder serializerGroupBuilder;
 	ParserGroup.Builder parserGroupBuilder;
@@ -845,14 +844,9 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @return The HTTP client to use.
 	 */
 	protected CloseableHttpClient createHttpClient() {
-		Object cm = peek(RESTCLIENT_connectionManager);
-		// Don't call createConnectionManager() if RestClient.setConnectionManager() was called.
-		if (cm == null)
-			httpClientBuilder().setConnectionManager(createConnectionManager());
-		else if (cm instanceof HttpClientConnectionManager)
-			httpClientBuilder().setConnectionManager((HttpClientConnectionManager)cm);
-		else
-			throw runtimeException("Invalid type for RESTCLIENT_connectionManager: {0}", className(cm));
+		if (connectionManager == null)
+			connectionManager = createConnectionManager();
+		httpClientBuilder().setConnectionManager(connectionManager);
 		return httpClientBuilder().build();
 	}
 
@@ -2189,7 +2183,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 */
-	@SuppressWarnings("resource")
 	protected HttpClientConnectionManager createConnectionManager() {
 		return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
 	}
@@ -2212,6 +2205,37 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder pooled() {
 		this.pooled = true;
+		return this;
+	}
+
+	/**
+	 * Assigns {@link HttpClientConnectionManager} instance.
+	 *
+	 * @param value New property value.
+	 * @return This object (for method chaining).
+	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
+	 */
+	@FluentSetter
+	public RestClientBuilder connectionManager(HttpClientConnectionManager value) {
+		connectionManager = value;
+		httpClientBuilder().setConnectionManager(value);
+		return this;
+	}
+
+	/**
+	 * Defines the connection manager is to be shared by multiple client instances.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
+	 * </ul>
+	 *
+	 * @param shared New property value.
+	 * @return This object (for method chaining).
+	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
+	 */
+	@FluentSetter
+	public RestClientBuilder connectionManagerShared(boolean shared) {
+		httpClientBuilder().setConnectionManagerShared(shared);
 		return this;
 	}
 
@@ -5196,37 +5220,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 		httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
-		return this;
-	}
-
-	/**
-	 * Assigns {@link HttpClientConnectionManager} instance.
-	 *
-	 * @param connManager New property value.
-	 * @return This object (for method chaining).
-	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
-	 */
-	@FluentSetter
-	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
-		set(RESTCLIENT_connectionManager, connManager);
-		httpClientBuilder().setConnectionManager(connManager);
-		return this;
-	}
-
-	/**
-	 * Defines the connection manager is to be shared by multiple client instances.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
-	 * </ul>
-	 *
-	 * @param shared New property value.
-	 * @return This object (for method chaining).
-	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
-	 */
-	@FluentSetter
-	public RestClientBuilder connectionManagerShared(boolean shared) {
-		httpClientBuilder().setConnectionManagerShared(shared);
 		return this;
 	}
 

@@ -1021,31 +1021,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private static final String PREFIX = "RestClient.";
 
 	/**
-	 * Configuration property:  Connection manager
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_connectionManager RESTCLIENT_connectionManager}
-	 * 	<li><b>Name:</b>  <js>"RestClient.connectionManager.o"</js>
-	 * 	<li><b>System property:</b>  <c>RestClient.connectionManager</c>
-	 * 	<li><b>Data type:</b>
-	 * 	<ul>
-	 * 		<li><b>Data type:</b>  {@link org.apache.http.conn.HttpClientConnectionManager}</c>
-	 * 	</ul>
-	 * 	<li><b>Default:</b>  Value returned by {@link org.apache.juneau.rest.client.RestClientBuilder#createConnectionManager()}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#connectionManager(HttpClientConnectionManager)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allows you to override the connection manager used by the HTTP client.
-	 */
-	public static final String RESTCLIENT_connectionManager = PREFIX + "connectionManager.o";
-
-	/**
 	 * Configuration property:  Console print stream.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1608,12 +1583,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		skipEmptyFormData = builder.skipEmptyFormData;
 		rootUri = builder.rootUri;
 		errorCodes = builder.errorCodes;
+		connectionManager = builder.connectionManager;
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
 		beanStore.addBean(ContextProperties.class, cp);
 
-		this.connectionManager = cp.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class).orElse(null);
 		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
 		this.executorServiceShutdownOnClose = cp.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
 		this.leakDetection = cp.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
