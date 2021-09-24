@@ -1116,38 +1116,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static final String RESTCLIENT_console = PREFIX + "console.o";
 
 	/**
-	 * Configuration property:  Error codes predicate.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_errorCodes RESTCLIENT_errorCodes}
-	 * 	<li><b>Name:</b>  <js>"RestClient.errorCodes.o"</js>
-	 * 	<li><b>Data type:</b>  {@link java.util.function.Predicate}&lt;{@link java.lang.Integer}&gt;
-	 * 	<li><b>Default:</b>  <code>x -&gt; x&gt;=400</code>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#errorCodes(Predicate)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#errorCodes(Predicate)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Defines a predicate to test for error codes.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv> &gt;= 300)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_errorCodes = PREFIX + "errorCodes.o";
-
-	/**
 	 * Configuration property:  Executor service.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1660,9 +1628,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	private static final
-		Predicate<Integer> ERROR_CODES_DEFAULT = x ->  x<=0 || x>=400;
-
-	private static final
 		BiPredicate<RestRequest,RestResponse> LOG_REQUESTS_PREDICATE_DEFAULT = (req,res) -> true;
 
 	/**
@@ -1681,7 +1646,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
 		skipEmptyQueryData = builder.skipEmptyQueryData;
 		skipEmptyFormData = builder.skipEmptyFormData;
-		rootUri = builder.getRootUri();
+		rootUri = builder.rootUri;
+		errorCodes = builder.errorCodes;
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
@@ -1691,7 +1657,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		this.connectionManager = cp.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class).orElse(null);
 		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
-		this.errorCodes = cp.getInstance(RESTCLIENT_errorCodes, Predicate.class).orElse(ERROR_CODES_DEFAULT);
 		this.executorServiceShutdownOnClose = cp.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
 		this.leakDetection = cp.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
 		this.ignoreErrors = cp.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);

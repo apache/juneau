@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.rest.client.RestClient.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -96,9 +97,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private HeaderList.Builder headerData;
 	private PartList.Builder queryData, formData, pathData;
 	private boolean pooled;
-	private String rootUri;
 
+	String rootUri;
 	boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData;
+	Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
 
 	SerializerGroup.Builder serializerGroupBuilder;
 	ParserGroup.Builder parserGroupBuilder;
@@ -1910,6 +1912,36 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// errorCodes
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Errors codes predicate.
+	 *
+	 * <p>
+	 * Defines a predicate to test for error codes.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder errorCodes(Predicate<Integer> value) {
+		errorCodes = assertArgNotNull("value", value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Logging.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -2243,35 +2275,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder console(PrintStream value) {
 		return set(RESTCLIENT_console, value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Errors codes predicate.
-	 *
-	 * <p>
-	 * Defines a predicate to test for error codes.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_errorCodes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder errorCodes(Predicate<Integer> value) {
-		return set(RESTCLIENT_errorCodes, value);
 	}
 
 	/**
