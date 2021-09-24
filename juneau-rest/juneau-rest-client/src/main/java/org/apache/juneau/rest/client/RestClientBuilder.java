@@ -2800,10 +2800,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default value is {@link OpenApiParser}.
@@ -2841,10 +2837,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
 	 * 		.build();
 	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.

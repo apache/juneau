@@ -1075,44 +1075,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.so/add";
 
-	/**
-	 * Configuration property:  Part parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partParser RESTCLIENT_partParser}
-	 * 	<li><b>Name:</b>  <js>"RestClient.partParser.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.httppart.HttpPartParser}&gt;</c>
-	 * 			<li>{@link org.apache.juneau.httppart.HttpPartParser}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiParser};
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partParser(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partParser(HttpPartParser)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
-	 *
-	 * <p>
-	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.partParser(UonParser.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_partParser = PREFIX + "partParser.o";
-
 	final HeaderList.Builder headerData;
 	final PartList.Builder queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
@@ -2234,16 +2196,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					return executeRemote(interfaceClass, rc, method, rom);
 				}
 		});
-	}
-
-	static Consumer<Header> wrapper(Consumer<Header> consumer) {
-		return i -> {
-			try {
-				consumer.accept(i);
-			} catch (Exception e) {
-				throw runtimeException(e);
-			}
-		};
 	}
 
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {
