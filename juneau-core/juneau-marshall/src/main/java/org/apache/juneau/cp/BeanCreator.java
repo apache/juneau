@@ -26,7 +26,7 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Utility class for creating beans.
- * 
+ *
  * @param <T> The bean type being created.
  */
 public class BeanCreator<T> {
@@ -36,6 +36,7 @@ public class BeanCreator<T> {
 	private Object outer;
 	private Object builder;
 	private boolean findSingleton;
+	private T impl;
 
 	/**
 	 * Static creator.
@@ -69,6 +70,16 @@ public class BeanCreator<T> {
 		return this;
 	}
 
+	/**
+	 * Allows you to specify a specific instance for the build method to return.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> impl(T value) {
+		impl = value;
+		return this;
+	}
 	/**
 	 * Specifies a bean store for looking up matching parameters on constructors and static creator methods.
 	 *
@@ -119,6 +130,10 @@ public class BeanCreator<T> {
 	 * @return A new bean.
 	 */
 	public T run() {
+
+		if (impl != null)
+			return impl;
+
 		if (type == null)
 			return null;
 

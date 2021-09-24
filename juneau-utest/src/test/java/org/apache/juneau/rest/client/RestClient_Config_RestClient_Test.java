@@ -112,7 +112,7 @@ public class RestClient_Config_RestClient_Test {
 			}
 		};
 		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertBody().is("['f1','f2','baz']");
-		client().callHandler(x).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertCode().is(201);
+		client().apply(y -> y.callHandler().impl(x)).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertCode().is(201);
 	}
 
 	@Test

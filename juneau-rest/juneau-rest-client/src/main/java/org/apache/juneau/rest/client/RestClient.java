@@ -771,8 +771,7 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#callHandler(Class) callHandler(Class&lt;? extends RestCallHandler&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#callHandler(RestCallHandler) callHandler(RestCallHandler)}
+ * 		<li class='jm'>{@link RestClientBuilder#callHandler() callHandler()}
  * 	</ul>
  * 	<li class='jic'>{@link RestCallHandler}
  * 	<ul>
@@ -1020,49 +1019,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private static final String PREFIX = "RestClient.";
-
-	/**
-	 * Configuration property:  REST call handler.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_callHandler RESTCLIENT_callHandler}
-	 * 	<li><b>Name:</b>  <js>"RestClient.callHandler.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.rest.client.RestCallHandler}&gt;</c>
-	 * 			<li>{@link org.apache.juneau.rest.client.RestCallHandler}
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  <c><jk>null</jk></c>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#callHandler(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#callHandler(RestCallHandler)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Allows you to provide a custom handler for making HTTP calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.callHandler(
-	 * 			<jk>new</jk> RestCallHandler() {
-	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
-	 * 					<jc>// Custom handle requests.</jc>
-	 * 				}
-	 * 			}
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_callHandler = PREFIX + "callHandler.o";
 
 	/**
 	 * Configuration property:  Connection manager
@@ -1638,11 +1594,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public RestClient(RestClientBuilder builder) {
 		super(builder);
 
+		beanStore = builder.beanStore
+			.addBean(RestClient.class, this);
+
 		httpClient = builder.getHttpClient();
 		headerData = builder.headerData().build().copy();
 		queryData = builder.queryData().build().copy();
 		formData = builder.formData().build().copy();
 		pathData = builder.pathData().build().copy();
+		callHandler = builder.callHandler().run();
 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
 		skipEmptyQueryData = builder.skipEmptyQueryData;
 		skipEmptyFormData = builder.skipEmptyFormData;
@@ -1651,9 +1611,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
-		BeanStore bs = this.beanStore = BeanStore.create().build()
-			.addBean(ContextProperties.class, cp)
-			.addBean(RestClient.class, this);
+		beanStore.addBean(ContextProperties.class, cp);
 
 		this.connectionManager = cp.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class).orElse(null);
 		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
@@ -1677,8 +1635,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		this.partParser = builder.simplePartParser != null ? builder.simplePartParser : (HttpPartParser) builder.partParserBuilder.build();
 
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
-
-		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.creator(BasicRestCallHandler.class).supplier());
 
 		this.interceptors = cp.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 
@@ -1729,9 +1685,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
-	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(Class)}
-	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(RestCallHandler)}
+	 * 	<li class='jm'>{@link RestClientBuilder#callHandler()}
 	 * </ul>
 	 *
 	 * @param target The target host for the request.

@@ -12,12 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
-
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -32,8 +28,7 @@ public class ThrownStatsBuilder {
 	List<String> stackTrace;
 	ThrownStats causedBy;
 
-	Class<? extends ThrownStats> implClass;
-	BeanStore beanStore;
+	BeanCreator<ThrownStats> creator = BeanCreator.create(ThrownStats.class).builder(this);
 
 	/**
 	 * Create a new {@link ThrownStats} using this builder.
@@ -41,21 +36,7 @@ public class ThrownStatsBuilder {
 	 * @return A new {@link ThrownStats}
 	 */
 	public ThrownStats build() {
-		try {
-			Class<? extends ThrownStats> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanCreator.create(ic).store(beanStore).builder(this).run();
-		} catch (ExecutableException e) {
-			throw runtimeException(e);
-		}
-	}
-
-	/**
-	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
-	 *
-	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
-	 */
-	protected Class<? extends ThrownStats> getDefaultImplClass() {
-		return ThrownStats.class;
+		return creator.run();
 	}
 
 	/**
@@ -69,7 +50,7 @@ public class ThrownStatsBuilder {
 	 */
 	@FluentSetter
 	public ThrownStatsBuilder beanStore(BeanStore value) {
-		this.beanStore = value;
+		creator.store(value);
 		return this;
 	}
 
@@ -80,8 +61,8 @@ public class ThrownStatsBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public ThrownStatsBuilder implClass(Class<? extends ThrownStats> value) {
-		this.implClass = value;
+	public ThrownStatsBuilder type(Class<? extends ThrownStats> value) {
+		creator.type(value == null ? ThrownStats.class : value);
 		return this;
 	}
 

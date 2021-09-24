@@ -725,12 +725,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder callHandler(RestCallHandler value) {
-		super.callHandler(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder clientVersion(String value) {
 		super.clientVersion(value);
 		return this;

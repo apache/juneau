@@ -335,7 +335,7 @@ public class ThrownStore {
 			stc = ThrownStats
 				.create()
 				.beanStore(beanStore)
-				.implClass(statsImplClass)
+				.type(statsImplClass)
 				.throwable(t)
 				.hash(hash)
 				.stackTrace(createStackTrace(t))

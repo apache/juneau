@@ -58,12 +58,14 @@ import org.apache.juneau.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
- * 	<li class='jm'>{@link RestClientBuilder#callHandler(Class)}
- * 	<li class='jm'>{@link RestClientBuilder#callHandler(RestCallHandler)}
+ * 	<li class='jm'>{@link RestClientBuilder#callHandler()}
  * </ul>
  */
 public interface RestCallHandler {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Execute the specified request.

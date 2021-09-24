@@ -48,6 +48,7 @@ import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -91,11 +92,15 @@ import org.apache.juneau.xml.*;
 @FluentSetters(ignore={"beanMapPutReturnsOldValue","example","exampleJson"})
 public class RestClientBuilder extends BeanContextableBuilder {
 
+	BeanStore beanStore = BeanStore.create().build();
+
 	private HttpClientBuilder httpClientBuilder;
 	private CloseableHttpClient httpClient;
 
 	private HeaderList.Builder headerData;
 	private PartList.Builder queryData, formData, pathData;
+	private BeanCreator<RestCallHandler> callHandler;
+//	private RestCallHandler.Builder restCallHandler;
 	private boolean pooled;
 
 	String rootUri;
@@ -1912,6 +1917,92 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// callHandler
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the creator for the rest call handler.
+	 *
+	 * <p>
+	 * Allows you to provide a custom handler for making HTTP calls.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
+	 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+	 * 			<jc>// Custom handle requests.</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.callHandler(MyRestCallHandler.<jk>class</jk>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
+	 * 	<li>
+	 * 		Use {@link BeanCreator#impl(Object)} to specify an already instantiated instance.
+	 * 	<li>
+	 * 		Use {@link BeanCreator#type(Class)} to specify a subtype to instantiate.
+	 * 		<br>Subclass must have a public constructor that takes in any args available
+	 * 		in the bean store of this builder (including {@link RestClient} itself).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jic'>{@link RestCallHandler}
+	 * </ul>
+	 *
+	 * @return The creator for the rest call handler.
+	 */
+	public final BeanCreator<RestCallHandler> callHandler() {
+		if (callHandler == null)
+			callHandler = createCallHandler();
+		return callHandler;
+	}
+
+	/**
+	 * Creates the creator for the rest call handler.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own implementation.
+	 *
+	 * <p>
+	 * The default behavior creates a bean creator initialized to return a {@link BasicRestCallHandler}.
+	 *
+	 * @return The creator for the rest call handler.
+	 * @see #callHandler()
+	 */
+	protected BeanCreator<RestCallHandler> createCallHandler() {
+		return BeanCreator.create(RestCallHandler.class).type(BasicRestCallHandler.class).store(beanStore);
+	}
+
+	/**
+	 * REST call handler class.
+	 *
+	 * <p>
+	 * Specifies a custom handler for making HTTP calls.
+	 *
+	 * <p>
+	 * This is a shortcut for <c>callHandler().type(<jv>value</jv>)</c>.
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * @return This object (for method chaining).
+	 * @see #callHandler()
+	 */
+	@FluentSetter
+	public RestClientBuilder callHandler(Class<? extends RestCallHandler> value) {
+		callHandler().type(value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// errorCodes
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -2155,89 +2246,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  REST call handler.
-	 *
-	 * <p>
-	 * Allows you to provide a custom handler for making HTTP calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
-	 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
-	 * 			<jc>// Custom handle requests.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.callHandler(MyRestCallHandler.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jic'>{@link RestCallHandler}
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder callHandler(Class<? extends RestCallHandler> value) {
-		return set(RESTCLIENT_callHandler, value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  REST call handler.
-	 *
-	 * <p>
-	 * Allows you to provide a custom handler for making HTTP calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.callHandler(
-	 * 			<jk>new</jk> RestCallHandler() {
-	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
-	 * 					<jc>// Custom handle requests.</jc>
-	 * 				}
-	 * 			}
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jic'>{@link RestCallHandler}
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder callHandler(RestCallHandler value) {
-		return set(RESTCLIENT_callHandler, value);
-	}
 
 	/**
 	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Console print stream
