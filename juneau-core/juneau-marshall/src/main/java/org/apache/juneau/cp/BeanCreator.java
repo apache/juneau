@@ -44,7 +44,7 @@ public class BeanCreator<T> {
 	 * @param type The bean type being created.
 	 * @return A new creator object.
 	 */
-	public static <T> BeanCreator<T> create(Class<T> type) {
+	public static <T> BeanCreator<T> of(Class<T> type) {
 		return new BeanCreator<>(type);
 	}
 
@@ -55,6 +55,29 @@ public class BeanCreator<T> {
 	 */
 	protected BeanCreator(Class<T> type) {
 		this.type = ClassInfo.ofc(type);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The creator being copied.
+	 */
+	protected BeanCreator(BeanCreator<T> copyFrom) {
+		type = copyFrom.type;
+		store = copyFrom.store;
+		outer = copyFrom.outer;
+		builder = copyFrom.builder;
+		findSingleton = copyFrom.findSingleton;
+		impl = copyFrom.impl;
+	}
+
+	/**
+	 * Creates a copy of this bean creator.
+	 *
+	 * @return A copy of this bean creator.
+	 */
+	public BeanCreator<T> copy() {
+		return new BeanCreator<>(this);
 	}
 
 	/**
@@ -337,5 +360,4 @@ public class BeanCreator<T> {
 			return AnnotationInfo.of((ClassInfo)null, namedAnnotation.get()).getValue(String.class, "value").orElse(null);
 		return null;
 	}
-
 }

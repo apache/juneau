@@ -96,7 +96,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestOpContext build() {
 		try {
-			return BeanCreator.create(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).store(beanStore).builder(this).run();
+			return BeanCreator.of(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).store(beanStore).builder(this).run();
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}

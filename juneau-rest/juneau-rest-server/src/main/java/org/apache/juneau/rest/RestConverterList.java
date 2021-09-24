@@ -43,7 +43,7 @@ public class RestConverterList {
 	 */
 	public static class Builder extends BeanBuilder<RestConverterList> {
 
-		AList<Object> entries;
+		AList<BeanCreator<RestConverter>> entries;
 
 		/**
 		 * Create an empty builder.
@@ -85,7 +85,8 @@ public class RestConverterList {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestConverter>...values) {
-			entries.append((Object[])values);
+			for (Class<? extends RestConverter> v : values)
+				entries.append(BeanCreator.of(RestConverter.class).type(v));
 			return this;
 		}
 
@@ -96,7 +97,8 @@ public class RestConverterList {
 		 * @return This object (for method chaining).
 		 */
 		public Builder append(RestConverter...values) {
-			entries.append((Object[])values);
+			for (RestConverter v : values)
+				entries.append(BeanCreator.of(RestConverter.class).impl(v));
 			return this;
 		}
 
@@ -142,22 +144,13 @@ public class RestConverterList {
 	 */
 	protected RestConverterList(Builder builder) {
 		BeanStore bs = builder.beanStore().orElse(BeanStore.INSTANCE);
+		builder.entries.stream().forEach(x -> x.store(bs));
 		entries =
 			builder
 				.entries
 				.stream()
-				.map(x -> instantiate(x, bs))
+				.map(x -> x.store(bs).run())
 				.toArray(RestConverter[]::new);
-	}
-
-	private static RestConverter instantiate(Object o, BeanStore bs) {
-		if (o instanceof RestConverter)
-			return (RestConverter)o;
-		try {
-			return BeanCreator.create(RestConverter.class).type((Class<?>)o).store(bs).run();
-		} catch (ExecutableException e) {
-			throw new ConfigException(e, "Could not instantiate class {0}", o);
-		}
 	}
 
 	/**

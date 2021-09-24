@@ -47,7 +47,7 @@ public class RestMatcherList {
 	 */
 	public static class Builder extends BeanBuilder<RestMatcherList> {
 
-		AList<Object> entries;
+		AList<BeanCreator<RestMatcher>> entries;
 
 		/**
 		 * Constructor.
@@ -89,7 +89,8 @@ public class RestMatcherList {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestMatcher>...values) {
-			entries.append((Object[])values);
+			for (Class<? extends RestMatcher> v : values)
+				entries.append(BeanCreator.of(RestMatcher.class).type(v));
 			return this;
 		}
 
@@ -100,7 +101,8 @@ public class RestMatcherList {
 		 * @return This object (for method chaining).
 		 */
 		public Builder append(RestMatcher...values) {
-			entries.append((Object[])values);
+			for (RestMatcher v : values)
+				entries.append(BeanCreator.of(RestMatcher.class).impl(v));
 			return this;
 		}
 
@@ -151,20 +153,10 @@ public class RestMatcherList {
 			builder
 				.entries
 				.stream()
-				.map(x -> instantiate(x, bs))
+				.map(x -> x.store(bs).run())
 				.collect(toList());
 		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 		requiredEntries = l.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
-	}
-
-	private static RestMatcher instantiate(Object o, BeanStore bs) {
-		if (o instanceof RestMatcher)
-			return (RestMatcher)o;
-		try {
-			return BeanCreator.create(RestMatcher.class).type((Class<?>)o).store(bs).run();
-		} catch (ExecutableException e) {
-			throw new ConfigException(e, "Could not instantiate class {0}", o);
-		}
 	}
 
 	/**

@@ -43,7 +43,7 @@ public class RestGuardList {
 	 */
 	public static class Builder extends BeanBuilder<RestGuardList> {
 
-		AList<Object> entries;
+		AList<BeanCreator<RestGuard>> entries;
 
 		/**
 		 * Constructor.
@@ -85,7 +85,8 @@ public class RestGuardList {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestGuard>...values) {
-			entries.append((Object[])values);
+			for (Class<? extends RestGuard> v : values)
+				entries.append(BeanCreator.of(RestGuard.class).type(v));
 			return this;
 		}
 
@@ -96,7 +97,8 @@ public class RestGuardList {
 		 * @return This object (for method chaining).
 		 */
 		public Builder append(RestGuard...values) {
-			entries.append((Object[])values);
+			for (RestGuard v : values)
+				entries.append(BeanCreator.of(RestGuard.class).impl(v));
 			return this;
 		}
 
@@ -146,18 +148,8 @@ public class RestGuardList {
 			builder
 				.entries
 				.stream()
-				.map(x -> instantiate(x, bs))
+				.map(x -> x.store(bs).run())
 				.toArray(RestGuard[]::new);
-	}
-
-	private static RestGuard instantiate(Object o, BeanStore bs) {
-		if (o instanceof RestGuard)
-			return (RestGuard)o;
-		try {
-			return BeanCreator.create(RestGuard.class).type((Class<?>)o).store(bs).run();
-		} catch (ExecutableException e) {
-			throw new ConfigException(e, "Could not instantiate class {0}", o);
-		}
 	}
 
 	/**

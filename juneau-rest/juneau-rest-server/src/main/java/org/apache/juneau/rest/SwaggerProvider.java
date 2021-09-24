@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.*;
@@ -61,14 +60,13 @@ public interface SwaggerProvider {
 	 */
 	public class Builder {
 
-		Class<? extends SwaggerProvider> type;
 		BeanStore beanStore;
 		Class<?> resourceClass;
 		Supplier<VarResolver> varResolver;
 		Supplier<JsonSchemaGenerator> jsonSchemaGenerator;
 		Supplier<Messages> messages;
 		Supplier<FileFinder> fileFinder;
-		SwaggerProvider impl;
+		BeanCreator<SwaggerProvider> creator = BeanCreator.of(SwaggerProvider.class).type(BasicSwaggerProvider.class).builder(this);
 
 		/**
 		 * Constructor.
@@ -81,14 +79,12 @@ public interface SwaggerProvider {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder copyFrom) {
-			type = copyFrom.type;
-			beanStore = copyFrom.beanStore;
 			resourceClass = copyFrom.resourceClass;
 			varResolver = copyFrom.varResolver;
 			jsonSchemaGenerator = copyFrom.jsonSchemaGenerator;
 			messages = copyFrom.messages;
 			fileFinder = copyFrom.fileFinder;
-			impl = copyFrom.impl;
+			creator = copyFrom.creator.copy();
 		}
 		/**
 		 * Creates a new {@link SwaggerProvider} object from this builder.
@@ -101,9 +97,7 @@ public interface SwaggerProvider {
 		 */
 		public SwaggerProvider build() {
 			try {
-				if (impl != null)
-					return impl;
-				return BeanCreator.create(SwaggerProvider.class).type(isConcrete(type) ? type : getDefaultType()).store(beanStore).builder(this).run();
+				return creator.run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}
@@ -161,6 +155,7 @@ public interface SwaggerProvider {
 		 * @return  This object.
 		 */
 		public Builder beanStore(BeanStore value) {
+			creator.store(value);
 			beanStore = value;
 			return this;
 		}
@@ -172,7 +167,7 @@ public interface SwaggerProvider {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends SwaggerProvider> value) {
-			type = value;
+			creator.type(value == null ? BasicSwaggerProvider.class : value);
 			return this;
 		}
 
@@ -227,7 +222,7 @@ public interface SwaggerProvider {
 		 * @return  This object.
 		 */
 		public Builder impl(SwaggerProvider value) {
-			impl = value;
+			creator.impl(value);
 			return this;
 		}
 

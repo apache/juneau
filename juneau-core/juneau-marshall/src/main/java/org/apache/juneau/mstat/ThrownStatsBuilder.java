@@ -28,7 +28,7 @@ public class ThrownStatsBuilder {
 	List<String> stackTrace;
 	ThrownStats causedBy;
 
-	BeanCreator<ThrownStats> creator = BeanCreator.create(ThrownStats.class).builder(this);
+	BeanCreator<ThrownStats> creator = BeanCreator.of(ThrownStats.class).builder(this);
 
 	/**
 	 * Create a new {@link ThrownStats} using this builder.

@@ -35,8 +35,8 @@ public class BeanCreator_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(create(A1.class).run()).isNotNull();
-		assertObject(create(null).run()).isNull();
+		assertObject(of(A1.class).run()).isNotNull();
+		assertObject(of(null).run()).isNull();
 	}
 
 	public class A2 {}
@@ -44,7 +44,7 @@ public class BeanCreator_Test {
 	@Test
 	public void a02_outer() {
 		BeanCreator_Test outer = new BeanCreator_Test();
-		assertObject(create(A2.class).outer(outer).run()).isNotNull();
+		assertObject(of(A2.class).outer(outer).run()).isNotNull();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class BeanCreator_Test {
 
 	@Test
 	public void b01_staticCreator_create() {
-		assertString(create(B1.class).run().a).is("foo");
+		assertString(of(B1.class).run().a).is("foo");
 
 	}
 
@@ -77,7 +77,7 @@ public class BeanCreator_Test {
 
 	@Test
 	public void b02_staticCreator_getInstance() {
-		assertString(create(B2.class).run().a).is("foo");
+		assertString(of(B2.class).run().a).is("foo");
 	}
 
 	public static class B3a {
@@ -188,7 +188,7 @@ public class BeanCreator_Test {
 
 	@Test
 	public void b05_staticCreator_ignoredWithBuilder() {
-		assertString(create(B5.class).builder("bar").run().a).is("bar");
+		assertString(of(B5.class).builder("bar").run().a).is("bar");
 	}
 
 	public static class B6 {
@@ -239,8 +239,8 @@ public class BeanCreator_Test {
 
 	@Test
 	public void c01_staticCreator_withBeans() {
-		assertThrown(()->create(C1.class).run()).message().is("Could not instantiate class "+C1.class.getName()+": Class is abstract.");
-		assertThrown(()->create(C2.class).run()).message().is("Could not instantiate class "+C2.class.getName()+": Class is an interface.");
+		assertThrown(()->of(C1.class).run()).message().is("Could not instantiate class "+C1.class.getName()+": Class is abstract.");
+		assertThrown(()->of(C2.class).run()).message().is("Could not instantiate class "+C2.class.getName()+": Class is an interface.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ public class BeanCreator_Test {
 
 	@Test
 	public void d04_constructors_private() {
-		assertThrown(()->create(D4.class).run()).message().is("Could not instantiate class "+D4.class.getName()+": No public/protected constructors found.");
+		assertThrown(()->of(D4.class).run()).message().is("Could not instantiate class "+D4.class.getName()+": No public/protected constructors found.");
 	}
 
 	public static class D5 {

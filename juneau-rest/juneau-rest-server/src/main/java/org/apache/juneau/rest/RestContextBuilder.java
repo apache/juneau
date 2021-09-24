@@ -210,7 +210,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			return BeanCreator.create(RestContext.class).outer(resource.get()).store(beanStore()).builder(this).type(getType().orElse(RestContext.class)).run();
+			return BeanCreator.of(RestContext.class).outer(resource.get()).store(beanStore()).builder(this).type(getType().orElse(RestContext.class)).run();
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}

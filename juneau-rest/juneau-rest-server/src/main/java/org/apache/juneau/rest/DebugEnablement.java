@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.function.*;
@@ -59,11 +58,9 @@ public interface DebugEnablement {
 	public class Builder {
 
 		ReflectionMap.Builder<Enablement> mapBuilder;
-		private Class<? extends DebugEnablement> type;
 		Enablement defaultEnablement = NEVER;
-		BeanStore beanStore;
 		Predicate<HttpServletRequest> conditionalPredicate;
-		DebugEnablement impl;
+		BeanCreator<DebugEnablement> creator = BeanCreator.of(DebugEnablement.class).type(BasicDebugEnablement.class).builder(this);
 
 		/**
 		 * Constructor.
@@ -81,11 +78,9 @@ public interface DebugEnablement {
 		 */
 		protected Builder(Builder copyFrom) {
 			mapBuilder = copyFrom.mapBuilder.copy();
-			type = copyFrom.type;
+			creator = copyFrom.creator.copy();
 			defaultEnablement = copyFrom.defaultEnablement;
-			beanStore = copyFrom.beanStore;
 			conditionalPredicate = copyFrom.conditionalPredicate;
-			impl = copyFrom.impl;
 		}
 
 		/**
@@ -99,21 +94,10 @@ public interface DebugEnablement {
 		 */
 		public DebugEnablement build() {
 			try {
-				if (impl != null)
-					return impl;
-				return BeanCreator.create(DebugEnablement.class).type(isConcrete(type) ? type : getDefaultImplClass()).store(beanStore).builder(this).run();
+				return creator.run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}
-		}
-
-		/**
-		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
-		 *
-		 * @return The default implementation class if not specified via {@link #type(Class)}.
-		 */
-		protected Class<? extends DebugEnablement> getDefaultImplClass() {
-			return BasicDebugEnablement.class;
 		}
 
 		/**
@@ -123,7 +107,7 @@ public interface DebugEnablement {
 		 * @return  This object.
 		 */
 		public Builder beanStore(BeanStore value) {
-			beanStore = value;
+			creator.store(value);
 			return this;
 		}
 
@@ -134,7 +118,7 @@ public interface DebugEnablement {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends DebugEnablement> value) {
-			type = value;
+			creator.type(value == null ? BasicDebugEnablement.class : value);
 			return this;
 		}
 
@@ -145,7 +129,7 @@ public interface DebugEnablement {
 		 * @return This object.
 		 */
 		public Builder impl(DebugEnablement value) {
-			impl = value;
+			creator.impl(value);
 			return this;
 		}
 

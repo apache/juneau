@@ -1979,7 +1979,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * @see #callHandler()
 	 */
 	protected BeanCreator<RestCallHandler> createCallHandler() {
-		return BeanCreator.create(RestCallHandler.class).type(BasicRestCallHandler.class).store(beanStore);
+		return BeanCreator.of(RestCallHandler.class).type(BasicRestCallHandler.class).store(beanStore);
 	}
 
 	/**

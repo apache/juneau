@@ -919,7 +919,7 @@ public final class ContextProperties {
 			return (T)value;
 		try {
 			if (ClassInfo.of(value.getClass()).isChildOf(Class.class))
-				return BeanCreator.create((Class<T>)value).store(beanStore).run();
+				return BeanCreator.of((Class<T>)value).store(beanStore).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not create bean of type ''{0}''.", value);
 		}
