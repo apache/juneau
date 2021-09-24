@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.rest.client.RestClient.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -112,12 +111,13 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	HttpClientConnectionManager connectionManager;
 	PrintStream console;
 	ExecutorService executorService;
+	List<RestCallInterceptor> interceptors;
 
-	SerializerGroup.Builder serializerGroupBuilder;
-	ParserGroup.Builder parserGroupBuilder;
+	SerializerGroup.Builder serializers;
+	ParserGroup.Builder parsers;
 
-	SerializerBuilder partSerializerBuilder;
-	ParserBuilder partParserBuilder;
+	SerializerBuilder partSerializer;
+	ParserBuilder partParser;
 
 	HttpPartSerializer simplePartSerializer;
 	HttpPartParser simplePartParser;
@@ -127,10 +127,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.serializerGroupBuilder = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
-		this.parserGroupBuilder = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
-		this.partSerializerBuilder = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
-		this.partParserBuilder = (ParserBuilder) OpenApiParser.create().beanContextBuilder(getBeanContextBuilder());
+		this.serializers = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
+		this.parsers = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
+		this.partSerializer = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
+		this.partParser = (ParserBuilder) OpenApiParser.create().beanContextBuilder(getBeanContextBuilder());
 		type(RestClient.class);
 	}
 
@@ -2435,10 +2435,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * </ul>
-	 *
 	 * @param values
 	 * 	The values to add to this setting.
 	 * 	<br>Can be implementations of any of the following:
@@ -2465,7 +2461,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Call interceptors.
+	 * Call interceptors.
 	 *
 	 * <p>
 	 * Adds an interceptor that gets called immediately after a connection is made.
@@ -2503,10 +2499,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The values to add to this setting.
 	 * 	<br>Can be implementations of any of the following:
@@ -2533,7 +2525,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 					l.add((RestCallInterceptor)o);
 			}
 		}
-		return prependTo(RESTCLIENT_interceptors, l);
+		if (interceptors == null)
+			interceptors = l;
+		else
+			interceptors.addAll(0, l);
+		return this;
 	}
 
 	/**
@@ -2739,7 +2735,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-		parserGroupBuilder.add(value);
+		parsers.add(value);
 		return this;
 	}
 
@@ -2778,7 +2774,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder parsers(Parser...value) {
-		parserGroupBuilder.add(value);
+		parsers.add(value);
 		return this;
 	}
 
@@ -2809,7 +2805,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
 		if (Parser.class.isAssignableFrom(value))
-			this.partParserBuilder = Parser.createParserBuilder((Class<? extends Parser>)value);
+			this.partParser = Parser.createParserBuilder((Class<? extends Parser>)value);
 		else {
 			try {
 				this.simplePartParser = ClassInfo.of(value).getPublicConstructor().invoke();
@@ -2876,7 +2872,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
 		if (Serializer.class.isAssignableFrom(value))
-			this.partSerializerBuilder = Serializer.createSerializerBuilder((Class<? extends Serializer>)value);
+			this.partSerializer = Serializer.createSerializerBuilder((Class<? extends Serializer>)value);
 		else {
 			try {
 				this.simplePartSerializer = ClassInfo.of(value).getPublicConstructor().invoke();
@@ -3076,7 +3072,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@SuppressWarnings("unchecked")
 	@FluentSetter
 	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-		serializerGroupBuilder.add(value);
+		serializers.add(value);
 		return this;
 	}
 
@@ -3115,7 +3111,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder serializers(Serializer...value) {
-		serializerGroupBuilder.add(value);
+		serializers.add(value);
 		return this;
 	}
 
@@ -3287,7 +3283,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder detectRecursions() {
-		serializerGroupBuilder.forEach(x -> x.detectRecursions());
+		serializers.forEach(x -> x.detectRecursions());
 		return this;
 	}
 
@@ -3340,7 +3336,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ignoreRecursions() {
-		serializerGroupBuilder.forEach(x -> x.ignoreRecursions());
+		serializers.forEach(x -> x.ignoreRecursions());
 		return this;
 	}
 
@@ -3385,7 +3381,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder initialDepth(int value) {
-		serializerGroupBuilder.forEach(x -> x.initialDepth(value));
+		serializers.forEach(x -> x.initialDepth(value));
 		return this;
 	}
 
@@ -3422,7 +3418,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxDepth(int value) {
-		serializerGroupBuilder.forEach(x -> x.maxDepth(value));
+		serializers.forEach(x -> x.maxDepth(value));
 		return this;
 	}
 
@@ -3480,7 +3476,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addBeanTypes() {
-		serializerGroupBuilder.forEach(x -> x.addBeanTypes());
+		serializers.forEach(x -> x.addBeanTypes());
 		return this;
 	}
 
@@ -3534,7 +3530,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addRootType() {
-		serializerGroupBuilder.forEach(x -> x.addRootType());
+		serializers.forEach(x -> x.addRootType());
 		return this;
 	}
 
@@ -3576,7 +3572,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder keepNullProperties() {
-		serializerGroupBuilder.forEach(x -> x.keepNullProperties());
+		serializers.forEach(x -> x.keepNullProperties());
 		return this;
 	}
 
@@ -3615,7 +3611,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortCollections() {
-		serializerGroupBuilder.forEach(x -> x.sortCollections());
+		serializers.forEach(x -> x.sortCollections());
 		return this;
 	}
 
@@ -3654,7 +3650,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortMaps() {
-		serializerGroupBuilder.forEach(x -> x.sortMaps());
+		serializers.forEach(x -> x.sortMaps());
 		return this;
 	}
 
@@ -3700,7 +3696,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyCollections() {
-		serializerGroupBuilder.forEach(x -> x.trimEmptyCollections());
+		serializers.forEach(x -> x.trimEmptyCollections());
 		return this;
 	}
 
@@ -3745,7 +3741,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyMaps() {
-		serializerGroupBuilder.forEach(x -> x.trimEmptyMaps());
+		serializers.forEach(x -> x.trimEmptyMaps());
 		return this;
 	}
 
@@ -3781,7 +3777,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnWrite() {
-		serializerGroupBuilder.forEach(x -> x.trimStrings());
+		serializers.forEach(x -> x.trimStrings());
 		return this;
 	}
 
@@ -3830,7 +3826,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriContext(UriContext value) {
-		serializerGroupBuilder.forEach(x -> x.uriContext(value));
+		serializers.forEach(x -> x.uriContext(value));
 		return this;
 	}
 
@@ -3869,7 +3865,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriRelativity(UriRelativity value) {
-		serializerGroupBuilder.forEach(x -> x.uriRelativity(value));
+		serializers.forEach(x -> x.uriRelativity(value));
 		return this;
 	}
 
@@ -3910,7 +3906,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriResolution(UriResolution value) {
-		serializerGroupBuilder.forEach(x -> x.uriResolution(value));
+		serializers.forEach(x -> x.uriResolution(value));
 		return this;
 	}
 
@@ -3950,7 +3946,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxIndent(int value) {
-		serializerGroupBuilder.forEachWS(x -> x.maxIndent(value));
+		serializers.forEachWS(x -> x.maxIndent(value));
 		return this;
 	}
 
@@ -3995,7 +3991,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder quoteChar(char value) {
-		serializerGroupBuilder.forEachWS(x -> x.quoteChar(value));
+		serializers.forEachWS(x -> x.quoteChar(value));
 		return this;
 	}
 
@@ -4013,7 +4009,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder quoteCharOverride(char value) {
-		serializerGroupBuilder.forEachWS(x -> x.quoteCharOverride(value));
+		serializers.forEachWS(x -> x.quoteCharOverride(value));
 		return this;
 	}
 
@@ -4055,7 +4051,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sq() {
-		serializerGroupBuilder.forEachWS(x -> x.sq());
+		serializers.forEachWS(x -> x.sq());
 		return this;
 	}
 
@@ -4092,7 +4088,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder useWhitespace() {
-		serializerGroupBuilder.forEachWS(x -> x.useWhitespace());
+		serializers.forEachWS(x -> x.useWhitespace());
 		return this;
 	}
 
@@ -4130,7 +4126,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ws() {
-		serializerGroupBuilder.forEachWS(x -> x.ws());
+		serializers.forEachWS(x -> x.ws());
 		return this;
 	}
 
@@ -4181,7 +4177,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder debugOutputLines(int value) {
-		parserGroupBuilder.forEach(x -> x.debugOutputLines(value));
+		parsers.forEach(x -> x.debugOutputLines(value));
 		return this;
 	}
 
@@ -4247,7 +4243,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder strict() {
-		parserGroupBuilder.forEach(x -> x.strict());
+		parsers.forEach(x -> x.strict());
 		return this;
 	}
 
@@ -4285,7 +4281,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnRead() {
-		parserGroupBuilder.forEach(x -> x.trimStrings());
+		parsers.forEach(x -> x.trimStrings());
 		return this;
 	}
 
@@ -4354,11 +4350,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder oapiFormat(HttpPartFormat value) {
-		serializerGroupBuilder.forEach(OpenApiSerializerBuilder.class, x -> x.format(value));
-		if (partSerializerBuilder instanceof OpenApiSerializerBuilder)
-			((OpenApiSerializerBuilder)partSerializerBuilder).format(value);
-		if (partParserBuilder instanceof OpenApiParserBuilder)
-			((OpenApiParserBuilder)partParserBuilder).format(value);
+		serializers.forEach(OpenApiSerializerBuilder.class, x -> x.format(value));
+		if (partSerializer instanceof OpenApiSerializerBuilder)
+			((OpenApiSerializerBuilder)partSerializer).format(value);
+		if (partParser instanceof OpenApiParserBuilder)
+			((OpenApiParserBuilder)partParser).format(value);
 		return this;
 	}
 
@@ -4418,11 +4414,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder oapiCollectionFormat(HttpPartCollectionFormat value) {
-		serializerGroupBuilder.forEach(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
-		if (partSerializerBuilder instanceof OpenApiSerializerBuilder)
-			((OpenApiSerializerBuilder)partSerializerBuilder).collectionFormat(value);
-		if (partParserBuilder instanceof OpenApiParserBuilder)
-			((OpenApiParserBuilder)partParserBuilder).collectionFormat(value);
+		serializers.forEach(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
+		if (partSerializer instanceof OpenApiSerializerBuilder)
+			((OpenApiSerializerBuilder)partSerializer).collectionFormat(value);
+		if (partParser instanceof OpenApiParserBuilder)
+			((OpenApiParserBuilder)partParser).collectionFormat(value);
 		return this;
 	}
 
@@ -4476,7 +4472,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder paramFormat(ParamFormat value) {
-		serializerGroupBuilder.forEach(UonSerializerBuilder.class, x -> x.paramFormat(value));
+		serializers.forEach(UonSerializerBuilder.class, x -> x.paramFormat(value));
 		return this;
 	}
 
@@ -4517,7 +4513,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder paramFormatPlain() {
-		serializerGroupBuilder.forEach(UonSerializerBuilder.class, x -> x.paramFormatPlain());
+		serializers.forEach(UonSerializerBuilder.class, x -> x.paramFormatPlain());
 		return this;
 	}
 

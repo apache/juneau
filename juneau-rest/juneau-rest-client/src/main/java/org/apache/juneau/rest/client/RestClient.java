@@ -1015,66 +1015,6 @@ import org.apache.juneau.utils.*;
 @ConfigurableContext(nocache=true)
 public class RestClient extends BeanContextable implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "RestClient.";
-
-	/**
-	 * Configuration property:  Call interceptors.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_interceptors RESTCLIENT_interceptors}
-	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Class&lt;{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt; | {@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list.
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#interceptors(Object...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Adds an interceptor that can be called to hook into specified events in the lifecycle of a single request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 *   <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
-	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
-	 *			<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
-	 *			// set on the request from the client.</jc>
-	 *		}
-	 *		<ja>@Override</ja>
-	 *		<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
-	 *			<jc>// Intercept immediately after an HTTP response has been received.</jc>
-	 *		}
-	 *
-	 *		<ja>@Override</ja>
-	 *		<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
-	 * 			<jc>// Intercept when the response body is consumed.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a client with a customized interceptor.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.interceptors(MyRestCallInterceptor.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
-
-	/**
-	 * Add to the Call interceptors property.
-	 */
-	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.so/add";
-
 	final HeaderList.Builder headerData;
 	final PartList.Builder queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
@@ -1164,21 +1104,17 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		logRequests = ofNullable(builder.logRequests).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
 		logRequestsLevel = ofNullable(builder.logRequestsLevel).orElse(isDebug() ? Level.WARNING : Level.OFF);
 		logRequestsPredicate = ofNullable(builder.logRequestsPredicate).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
+		interceptors = ofNullable(builder.interceptors).map(x -> x.toArray(new RestCallInterceptor[x.size()])).orElse(new RestCallInterceptor[0]);
+		serializers = builder.serializers.build();
+		parsers = builder.parsers.build();
+		partSerializer = builder.simplePartSerializer != null ? builder.simplePartSerializer : (HttpPartSerializer) builder.partSerializer.build();
+		partParser = builder.simplePartParser != null ? builder.simplePartParser : (HttpPartParser) builder.partParser.build();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
 		beanStore.addBean(ContextProperties.class, cp);
 
-		this.serializers = builder.serializerGroupBuilder.build();
-		this.parsers = builder.parserGroupBuilder.build();
-
 		this.urlEncodingSerializer = UrlEncodingSerializer.create().apply(cp).build();
-
-		this.partSerializer = builder.simplePartSerializer != null ? builder.simplePartSerializer : (HttpPartSerializer) builder.partSerializerBuilder.build();
-
-		this.partParser = builder.simplePartParser != null ? builder.simplePartParser : (HttpPartParser) builder.partParserBuilder.build();
-
-		this.interceptors = cp.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 	}
@@ -2581,7 +2517,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Subclasses can override this method to intercept the request and perform special modifications.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Object...)}
 	 * </ul>
 	 *
@@ -2607,7 +2542,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Subclasses can override this method to intercept the response and perform special modifications.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Object...)}
 	 * </ul>
 	 *
@@ -2634,7 +2568,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Subclasses can override this method to handle any cleanup operations.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Object...)}
 	 * </ul>
 	 *
