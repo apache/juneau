@@ -107,7 +107,7 @@ public @interface Beanp {
 	 * However, this property can be used to assign a different property name from the automatically inferred value.
 	 *
 	 * <p>
-	 * If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the
+	 * If the {@link BeanContextBuilder#beanFieldVisibility(Visibility)} setting on the bean context excludes this field (e.g. the
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
 	 *

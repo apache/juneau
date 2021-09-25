@@ -45,13 +45,13 @@ public class BeanConfigAnnotation {
 		public void apply(AnnotationInfo<BeanConfig> ai, BeanContextBuilder b) {
 			BeanConfig a = ai.getAnnotation();
 
-			visibility(a.beanClassVisibility(), "beanClassVisibility").ifPresent(x -> b.set(BEAN_beanClassVisibility, x));
-			visibility(a.beanConstructorVisibility(), "beanConstructorVisibility").ifPresent(x -> b.set(BEAN_beanConstructorVisibility, x));
+			visibility(a.beanClassVisibility(), "beanClassVisibility").ifPresent(x -> b.beanClassVisibility(x));
+			visibility(a.beanConstructorVisibility(), "beanConstructorVisibility").ifPresent(x -> b.beanConstructorVisibility(x));
+			visibility(a.beanFieldVisibility(), "beanFieldVisibility").ifPresent(x -> b.beanFieldVisibility(x));
+			visibility(a.beanMethodVisibility(), "beanMethodVisibility").ifPresent(x -> b.beanMethodVisibility(x));
 			b.prependTo(BEAN_beanDictionary, a.dictionary());
 			b.setIfNotEmpty(BEAN_beanDictionary, a.dictionary_replace());
-			visibility(a.beanFieldVisibility(), "beanFieldVisibility").ifPresent(x -> b.set(BEAN_beanFieldVisibility, x));
 			bool(a.beanMapPutReturnsOldValue()).ifPresent(x -> b.set(BEAN_beanMapPutReturnsOldValue, x));
-			visibility(a.beanMethodVisibility(), "beanMethodVisibility").ifPresent(x -> b.set(BEAN_beanMethodVisibility, x));
 			bool(a.beansRequireDefaultConstructor()).ifPresent(x -> b.set(BEAN_beansRequireDefaultConstructor, x));
 			bool(a.beansRequireSerializable()).ifPresent(x -> b.set(BEAN_beansRequireSerializable, x));
 			bool(a.beansRequireSettersForGetters()).ifPresent(x -> b.set(BEAN_beansRequireSettersForGetters, x));

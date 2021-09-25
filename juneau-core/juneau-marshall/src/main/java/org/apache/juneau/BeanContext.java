@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.io.*;
@@ -84,7 +82,7 @@ import org.apache.juneau.transform.*;
  * plain strings using the {@link Object#toString()} method.
  *
  * <p class='w800'>
- * Some settings (e.g. {@link #BEAN_beanFieldVisibility}) are used to determine what kinds of properties are
+ * Some settings (e.g. {@link BeanContextBuilder#beanFieldVisibility(Visibility)}) are used to determine what kinds of properties are
  * detected on beans.
  *
  * <p class='w800'>
@@ -157,60 +155,6 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext";
 
 	/**
-	 * Configuration property:  Minimum bean class visibility.
-	 *
-	 * <p>
-	 * Classes are not considered beans unless they meet the minimum visibility requirements.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
-	 * 	<li><b>System property:</b>  <c>BeanContext.beanClassVisibility</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANCLASSVISIBILITY</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanClassVisibility(Visibility)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_beanClassVisibility = PREFIX + ".beanClassVisibility.s";
-
-	/**
-	 * Configuration property:  Minimum bean constructor visibility.
-	 *
-	 * <p>
-	 * Only look for constructors with the specified minimum visibility.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
-	 * 	<li><b>System property:</b>  <c>BeanContext.beanConstructorVisibility</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANCONSTRUCTORVISIBILITY</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanConstructorVisibility(Visibility)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_beanConstructorVisibility = PREFIX + ".beanConstructorVisibility.s";
-
-	/**
 	 * Configuration property:  Bean dictionary.
 	 *
 	 * <p>
@@ -268,33 +212,6 @@ public class BeanContext extends Context {
 	public static final String BEAN_disableBeansRequireSomeProperties = PREFIX + ".disableBeansRequireSomeProperties.b";
 
 	/**
-	 * Configuration property:  Minimum bean field visibility.
-	 *
-	 * <p>
-	 * Only look for bean fields with the specified minimum visibility.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
-	 * 	<li><b>System property:</b>  <c>BeanContext.beanFieldVisibility</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANFIELDVISIBILITY</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFieldVisibility(Visibility)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_beanFieldVisibility = PREFIX + ".beanFieldVisibility.s";
-
-	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
 	 * <p>
@@ -321,33 +238,6 @@ public class BeanContext extends Context {
 	 * </ul>
 	 */
 	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + ".beanMapPutReturnsOldValue.b";
-
-	/**
-	 * Configuration property:  Minimum bean method visibility.
-	 *
-	 * <p>
-	 * Only look for bean methods with the specified minimum visibility.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
-	 * 	<li><b>System property:</b>  <c>BeanContext.beanMethodVisibility</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANMETHODVISIBILITY</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMethodVisibility(Visibility)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_beanMethodVisibility = PREFIX + ".beanMethodVisibility.s";
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
@@ -1013,14 +903,6 @@ public class BeanContext extends Context {
 	};
 
 
-	// This map is important!
-	// We may have many Context objects that have identical BeanContext properties.
-	// This map ensures that if the BeanContext properties in the Context are the same,
-	// then we reuse the same Class->ClassMeta cache map.
-	// This significantly reduces the number of times we need to construct ClassMeta objects which can be expensive.
-	private static final ConcurrentHashMap<ContextProperties,Map<Class,ClassMeta>> cmCacheCache
-		= new ConcurrentHashMap<>();
-
 	/** Default config.  All default settings. */
 	public static final BeanContext DEFAULT = BeanContext.create().build();
 
@@ -1048,7 +930,7 @@ public class BeanContext extends Context {
 		sortProperties,
 		findFluentSetters;
 
-	private final Visibility
+	final Visibility
 		beanConstructorVisibility,
 		beanClassVisibility,
 		beanMethodVisibility,
@@ -1075,24 +957,13 @@ public class BeanContext extends Context {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param builder The builder for this object.
 	 */
 	public BeanContext(BeanContextBuilder builder) {
-		this(builder.getContextProperties());
-	}
+		super(builder.getContextProperties(), true);
 
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Typically only called from {@link ContextBuilder#build(Class)} method.
-	 *
-	 * @param cp The property store containing the unmodifiable configuration for this bean context.
-	 */
-	public BeanContext(ContextProperties cp) {
-		super(cp, true);
-
+		ContextProperties cp = builder.getContextProperties();
 		if (cp == null)
 			cp = ContextProperties.DEFAULT;
 
@@ -1116,10 +987,10 @@ public class BeanContext extends Context {
 		findFluentSetters = cp.getBoolean(BEAN_findFluentSetters).orElse(false);
 		typePropertyName = cp.getString(BEAN_typePropertyName).orElse("_type");
 
-		beanConstructorVisibility = cp.get(BEAN_beanConstructorVisibility, Visibility.class).orElse(PUBLIC);
-		beanClassVisibility = cp.get(BEAN_beanClassVisibility, Visibility.class).orElse(PUBLIC);
-		beanMethodVisibility = cp.get(BEAN_beanMethodVisibility, Visibility.class).orElse(PUBLIC);
-		beanFieldVisibility = cp.get(BEAN_beanFieldVisibility, Visibility.class).orElse(PUBLIC);
+		beanConstructorVisibility = builder.beanConstructorVisibility;
+		beanClassVisibility = builder.beanClassVisibility;
+		beanMethodVisibility = builder.beanMethodVisibility;
+		beanFieldVisibility = builder.beanFieldVisibility;
 
 		notBeanClasses = cp.getClassArray(BEAN_notBeanClasses).orElse(DEFAULT_NOTBEAN_CLASSES);
 
@@ -1156,13 +1027,9 @@ public class BeanContext extends Context {
 		}
 		swaps = lpf.toArray(new PojoSwap[lpf.size()]);
 
-		if (! cmCacheCache.containsKey(cp)) {
-			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
-			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
-			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
-			cmCacheCache.putIfAbsent(cp, cm);
-		}
-		cmCache = cmCacheCache.get(cp);
+		cmCache = new ConcurrentHashMap<>();
+		cmCache.put(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
+		cmCache.put(Object.class, new ClassMeta(Object.class, this, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
@@ -1308,20 +1175,6 @@ public class BeanContext extends Context {
 		if (o == null)
 			return false;
 		return getClassMetaForObject(o).isBean();
-	}
-
-	/**
-	 * Prints meta cache statistics to <c>System.out</c>.
-	 */
-	protected static void dumpCacheStats() {
-		try {
-			int ctCount = 0;
-			for (Map<Class,ClassMeta> cm : cmCacheCache.values())
-				ctCount += cm.size();
-			System.out.println(format("ClassMeta cache: {0} instances in {1} caches", ctCount, cmCacheCache.size())); // NOT DEBUG
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -1784,7 +1637,7 @@ public class BeanContext extends Context {
 	/**
 	 * Minimum bean class visibility.
 	 *
-	 * @see #BEAN_beanClassVisibility
+	 * @see BeanContextBuilder#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -1795,7 +1648,7 @@ public class BeanContext extends Context {
 	/**
 	 * Minimum bean constructor visibility.
 	 *
-	 * @see #BEAN_beanConstructorVisibility
+	 * @see BeanContextBuilder#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -1818,7 +1671,7 @@ public class BeanContext extends Context {
 	 * Minimum bean field visibility.
 	 *
 	 *
-	 * @see #BEAN_beanFieldVisibility
+	 * @see BeanContextBuilder#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -1841,7 +1694,7 @@ public class BeanContext extends Context {
 	/**
 	 * Minimum bean method visibility.
 	 *
-	 * @see #BEAN_beanMethodVisibility
+	 * @see BeanContextBuilder#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */

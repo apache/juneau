@@ -168,7 +168,6 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -218,7 +217,6 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -277,7 +275,6 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -418,7 +415,6 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
 	 * </ul>
 	 *
 	 * @param value

@@ -1249,7 +1249,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Minimum bean class visibility.
 	 *
-	 * @see BeanContext#BEAN_beanClassVisibility
+	 * @see BeanContextBuilder#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -1260,7 +1260,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
 	 *
-	 * @see BeanContext#BEAN_beanConstructorVisibility
+	 * @see BeanContextBuilder#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -1284,7 +1284,7 @@ public class BeanSession extends Session {
 	 * Configuration property:  Minimum bean field visibility.
 	 *
 	 *
-	 * @see BeanContext#BEAN_beanFieldVisibility
+	 * @see BeanContextBuilder#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -1307,7 +1307,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Minimum bean method visibility.
 	 *
-	 * @see BeanContext#BEAN_beanMethodVisibility
+	 * @see BeanContextBuilder#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */

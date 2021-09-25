@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.Visibility.*;
 
 import java.beans.*;
 import java.io.*;
@@ -54,7 +55,17 @@ import org.apache.juneau.utils.*;
 @FluentSetters
 public class BeanContextBuilder extends ContextBuilder {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final ConcurrentHashMap<HashKey,BeanContext> CACHE = new ConcurrentHashMap<>();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
 
 	/**
 	 * Constructor.
@@ -63,6 +74,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	protected BeanContextBuilder() {
 		super();
+		beanClassVisibility = env("RestContext.beanClassVisibility", PUBLIC);
+		beanConstructorVisibility = env("RestContext.beanConstructorVisibility", PUBLIC);
+		beanMethodVisibility = env("RestContext.beanMethodVisibility", PUBLIC);
+		beanFieldVisibility = env("RestContext.beanFieldVisibility", PUBLIC);
 	}
 
 	/**
@@ -72,6 +87,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	protected BeanContextBuilder(BeanContext copyFrom) {
 		super(copyFrom);
+		beanClassVisibility = copyFrom.beanClassVisibility;
+		beanConstructorVisibility = copyFrom.beanConstructorVisibility;
+		beanMethodVisibility = copyFrom.beanMethodVisibility;
+		beanFieldVisibility = copyFrom.beanFieldVisibility;
 	}
 
 	/**
@@ -81,6 +100,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	protected BeanContextBuilder(BeanContextBuilder copyFrom) {
 		super(copyFrom);
+		beanClassVisibility = copyFrom.beanClassVisibility;
+		beanConstructorVisibility = copyFrom.beanConstructorVisibility;
+		beanMethodVisibility = copyFrom.beanMethodVisibility;
+		beanFieldVisibility = copyFrom.beanFieldVisibility;
 	}
 
 	@Override /* ContextBuilder */
@@ -92,7 +115,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	public BeanContext build() {
 		ContextProperties cp = getContextProperties();
 		cp = cp.subset(new String[]{"Context","BeanContext"});
-		HashKey key = HashKey.create().add(cp).build();
+		HashKey key = HashKey
+			.create()
+			.add(cp, beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility)
+			.build();
 		BeanContext bc = CACHE.get(key);
 		if (bc == null) {
 			bc = new BeanContext(this);
@@ -138,7 +164,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -148,7 +173,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanClassVisibility(Visibility value) {
-		return set(BEAN_beanClassVisibility, value);
+		beanClassVisibility = value;
+		return this;
 	}
 
 	/**
@@ -187,7 +213,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -197,7 +222,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanConstructorVisibility(Visibility value) {
-		return set(BEAN_beanConstructorVisibility, value);
+		beanConstructorVisibility = value;
+		return this;
 	}
 
 	/**
@@ -245,7 +271,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -255,7 +280,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanFieldVisibility(Visibility value) {
-		return set(BEAN_beanFieldVisibility, value);
+		beanFieldVisibility = value;
+		return this;
 	}
 
 	/**
@@ -383,7 +409,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
 	 * </ul>
 	 *
 	 * @param value
@@ -393,7 +418,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanMethodVisibility(Visibility value) {
-		return set(BEAN_beanMethodVisibility, value);
+		beanMethodVisibility = value;
+		return this;
 	}
 
 	/**

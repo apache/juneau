@@ -77,7 +77,6 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanClassVisibility(Visibility)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
 	 * </ul>
 	 */
 	String beanClassVisibility() default "";
@@ -108,7 +107,6 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanConstructorVisibility(Visibility)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
 	 * </ul>
 	 */
 	String beanConstructorVisibility() default "";
@@ -139,7 +137,6 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFieldVisibility(Visibility)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
 	 * </ul>
 	 */
 	String beanFieldVisibility() default "";
@@ -196,7 +193,6 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMethodVisibility(Visibility)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
 	 * </ul>
 	 */
 	String beanMethodVisibility() default "";
