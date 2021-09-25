@@ -195,6 +195,18 @@ public final class SerializerGroup {
 		}
 
 		/**
+		 * Applies an operation to the bean context builder.
+		 *
+		 * @param operation The operation to apply.
+		 * @return This object.
+		 */
+		public final Builder beanContextBuilder(Consumer<BeanContextBuilder> operation) {
+			if (bcBuilder != null)
+				operation.accept(bcBuilder);
+			return this;
+		}
+
+		/**
 		 * Adds the specified serializers to this group.
 		 *
 		 * <p>

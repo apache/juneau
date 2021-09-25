@@ -200,9 +200,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link BeanContext} object in the REST context.
+	 * Returns the bean context sub-builder.
 	 *
-	 * @return The builder for the {@link BeanContext} object in the REST context.
+	 * @return The bean context sub-builder.
 	 */
 	public final BeanContextBuilder beanContext() {
 		if (beanContext == null)
@@ -211,7 +211,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the bean context builder for this REST method.
+	 * Applies an operation to the bean context sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.ignoreUnknownBeanProperties())
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder beanContext(Consumer<BeanContextBuilder> operation) {
+		operation.accept(beanContext());
+		return this;
+	}
+
+	/**
+	 * Instantiates the bean context sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -219,7 +241,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The bean context builder for this REST resource.
+	 * @return A new bean context sub-builder.
 	 */
 	protected BeanContextBuilder createBeanContext(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -254,9 +276,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link EncoderGroup} object in the REST context.
+	 * Returns the encoder group sub-builder.
 	 *
-	 * @return The builder for the {@link EncoderGroup} object in the REST context.
+	 * @return The encoder group sub-builder.
 	 */
 	public final EncoderGroup.Builder encoders() {
 		if (encoders == null)
@@ -265,7 +287,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the encoder group builder for this REST method.
+	 * Applies an operation to the encoder group sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder encoders(Consumer<EncoderGroup.Builder> operation) {
+		operation.accept(encoders());
+		return this;
+	}
+
+	/**
+	 * Instantiates the encoder group sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -273,7 +317,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The encoder group builder for this REST resource.
+	 * @return A new encoder group sub-builder.
 	 */
 	protected EncoderGroup.Builder createEncoders(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -308,9 +352,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link SerializerGroup} object in the REST context.
+	 * Returns the serializer group sub-builder.
 	 *
-	 * @return The builder for the {@link SerializerGroup} object in the REST context.
+	 * @return The serializer group sub-builder.
 	 */
 	public final SerializerGroup.Builder serializers() {
 		if (serializers == null)
@@ -319,7 +363,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the serializer group builder for this REST method.
+	 * Applies an operation to the serializer group sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder serializers(Consumer<SerializerGroup.Builder> operation) {
+		operation.accept(serializers());
+		return this;
+	}
+
+	/**
+	 * Instantiates the serializer group sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -327,7 +393,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The serializer group builder for this REST resource.
+	 * @return A new serializer group sub-builder.
 	 */
 	protected SerializerGroup.Builder createSerializers(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -362,9 +428,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link ParserGroup} object in the REST context.
+	 * Returns the parser group sub-builder.
 	 *
-	 * @return The builder for the {@link ParserGroup} object in the REST context.
+	 * @return The parser group sub-builder.
 	 */
 	public final ParserGroup.Builder parsers() {
 		if (parsers == null)
@@ -373,7 +439,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the parser group builder for this REST method.
+	 * Applies an operation to the parser group sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder parsers(Consumer<ParserGroup.Builder> operation) {
+		operation.accept(parsers());
+		return this;
+	}
+
+	/**
+	 * Instantiates the parser group sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -381,7 +469,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The serializer group builder for this REST resource.
+	 * @return A new parser group sub-builder.
 	 */
 	protected ParserGroup.Builder createParsers(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -416,9 +504,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link HttpPartSerializer} object in the REST context.
+	 * Returns the part serializer sub-builder.
 	 *
-	 * @return The builder for the {@link HttpPartSerializer} object in the REST context.
+	 * @return The part serializer sub-builder.
 	 */
 	public final HttpPartSerializer.Creator partSerializer() {
 		if (partSerializer == null)
@@ -427,7 +515,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the part serializer builder for this REST method.
+	 * Applies an operation to the part serializer sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializerBuilder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
+		operation.accept(partSerializer());
+		return this;
+	}
+
+	/**
+	 * Instantiates the part serializer sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -435,7 +545,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The part serializer builder for this REST resource.
+	 * @return A new part serializer sub-builder.
 	 */
 	protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -470,9 +580,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link HttpPartParser} object in the REST context.
+	 * Returns the part parser sub-builder.
 	 *
-	 * @return The builder for the {@link HttpPartParser} object in the REST context.
+	 * @return The part parser sub-builder.
 	 */
 	public final HttpPartParser.Creator partParser() {
 		if (partParser == null)
@@ -481,7 +591,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the part parser builder for this REST method.
+	 * Applies an operation to the part parser sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParserBuilder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder partParser(Consumer<HttpPartParser.Creator> operation) {
+		operation.accept(partParser());
+		return this;
+	}
+
+	/**
+	 * Instantiates the part parser sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -489,7 +621,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The part serializer builder for this REST resource.
+	 * @return A new part parser sub-builder.
 	 */
 	protected HttpPartParser.Creator createPartParser(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -524,9 +656,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link JsonSchemaGenerator} object in the REST context.
+	 * Returns the JSON schema generator sub-builder.
 	 *
-	 * @return The builder for the {@link JsonSchemaGenerator} object in the REST context.
+	 * @return The JSON schema generator sub-builder.
 	 */
 	public final JsonSchemaGeneratorBuilder jsonSchemaGenerator() {
 		if (jsonSchemaGenerator == null)
@@ -535,7 +667,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructs the JSON schema generator builder for this REST method.
+	 * Applies an operation to the JSON schema generator sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder jsonSchemaGenerator(Consumer<JsonSchemaGeneratorBuilder> operation) {
+		operation.accept(jsonSchemaGenerator());
+		return this;
+	}
+
+	/**
+	 * Instantiates the JSON schema generator sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -543,7 +697,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The part serializer builder for this REST resource.
+	 * @return A new JSON schema generator sub-builder.
 	 */
 	protected JsonSchemaGeneratorBuilder createJsonSchemaGenerator(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -578,9 +732,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link RestConverterList} object in the REST context.
+	 * Returns the response converter list sub-builder.
 	 *
-	 * @return The builder for the {@link RestConverterList} object in the REST context.
+	 * @return The response converter list sub-builder.
 	 */
 	public final RestConverterList.Builder converters() {
 		if (converters == null)
@@ -589,7 +743,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Response converters.
+	 * Applies an operation to the response converter list sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.converters(<jv>x</jv> -&gt; <jv>x</jv>.add(MyConverter.<jk>class</jk>)))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder converters(Consumer<RestConverterList.Builder> operation) {
+		operation.accept(converters());
+		return this;
+	}
+
+	/**
+	 * Instantiates the response converter list sub-builder.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
@@ -663,7 +839,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The rest converter list builder for this REST method.
+	 * @return A new response converter list sub-builder.
 	 */
 	protected RestConverterList.Builder createConverters(BeanStore beanStore, Supplier<?> resource) {
 
@@ -712,9 +888,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link RestGuardList} object in the REST context.
+	 * Returns the guard list sub-builder.
 	 *
-	 * @return The builder for the {@link RestGuardList} object in the REST context.
+	 * @return The guard list sub-builder.
 	 */
 	public final RestGuardList.Builder guards() {
 		if (guards == null)
@@ -723,7 +899,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the guards for this REST resource method.
+	 * Applies an operation to the guard list sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.guards(<jv>x</jv> -&gt; <jv>x</jv>.add(MyGuard.<jk>class</jk>)))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder guards(Consumer<RestGuardList.Builder> operation) {
+		operation.accept(guards());
+		return this;
+	}
+
+	/**
+	 * Instantiates the guard list sub-builder.
 	 *
 	 * <p>
 	 * Instantiates based on the following logic:
@@ -750,7 +948,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The rest converter list builder for this REST method.
+	 * @return A new guard list sub-builder.
 	 */
 	protected RestGuardList.Builder createGuards(BeanStore beanStore, Supplier<?> resource) {
 
@@ -814,9 +1012,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the {@link RestMatcherList} object in the REST context.
+	 * Returns the matcher list sub-builder.
 	 *
-	 * @return The builder for the {@link RestMatcherList} object in the REST context.
+	 * @return The matcher list sub-builder.
 	 */
 	public final RestMatcherList.Builder matchers() {
 		if (matchers == null)
@@ -825,7 +1023,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the method matchers for this REST resource method.
+	 * Applies an operation to the matcher list sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.matchers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyMatcher.<jk>class</jk>)))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder matchers(Consumer<RestMatcherList.Builder> operation) {
+		operation.accept(matchers());
+		return this;
+	}
+
+	/**
+	 * Instantiates the matcher list sub-builder.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
@@ -878,7 +1098,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The factory used for creating beans and retrieving injected beans.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The rest converter list builder for this REST method.
+	 * @return A new matcher list sub-builder.
 	 */
 	protected RestMatcherList.Builder createMatchers(BeanStore beanStore, Supplier<?> resource) {
 
@@ -1000,9 +1220,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the default request headers in the REST context.
+	 * Returns the default request headers sub-builder.
 	 *
-	 * @return The builder for the default request headers in the REST context.
+	 * @return The default request headers sub-builder.
 	 */
 	public final HeaderList.Builder defaultRequestHeaders() {
 		if (defaultRequestHeaders == null)
@@ -1011,7 +1231,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the default request headers for this method.
+	 * Applies an operation to the default request headers sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
+		operation.accept(defaultRequestHeaders());
+		return this;
+	}
+
+	/**
+	 * Instantiates the default request headers sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -1019,7 +1261,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The default request headers for this method.
+	 * @return A new default request headers sub-builder.
 	 */
 	protected HeaderList.Builder createDefaultRequestHeaders(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -1049,9 +1291,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the default response headers in the REST context.
+	 * Returns the default response headers sub-builder.
 	 *
-	 * @return The builder for the default response headers in the REST context.
+	 * @return The default response headers sub-builder.
 	 */
 	public final HeaderList.Builder defaultResponseHeaders() {
 		if (defaultResponseHeaders == null)
@@ -1060,7 +1302,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the default request headers for this method.
+	 * Applies an operation to the default response headers sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
+		operation.accept(defaultResponseHeaders());
+		return this;
+	}
+
+	/**
+	 * Instantiates the default response headers sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -1068,7 +1332,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The default request headers for this method.
+	 * @return A new default response headers sub-builder.
 	 */
 	protected HeaderList.Builder createDefaultResponseHeaders(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -1098,9 +1362,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the default request attributes in the REST context.
+	 * Returns the default request attributes sub-builder.
 	 *
-	 * @return The builder for the default request attributes in the REST context.
+	 * @return The default request attributes sub-builder.
 	 */
 	public final NamedAttributeList.Builder defaultRequestAttributes() {
 		if (defaultRequestAttributes == null)
@@ -1109,7 +1373,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the default request attributes for this method.
+	 * Applies an operation to the default request attributes sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
+		operation.accept(defaultRequestAttributes());
+		return this;
+	}
+
+	/**
+	 * Instantiates the default request attributes sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -1117,7 +1403,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The default request attributes for this method.
+	 * @return A new default request attributes sub-builder.
 	 */
 	protected NamedAttributeList.Builder createDefaultRequestAttributes(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -1147,9 +1433,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the default request query data in the REST context.
+	 * Returns the default request query data sub-builder.
 	 *
-	 * @return The builder for the default request query data in the REST context.
+	 * @return The default request query data sub-builder.
 	 */
 	public final PartList.Builder defaultRequestQueryData() {
 		if (defaultRequestQueryData == null)
@@ -1158,7 +1444,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the default query parameters for this method.
+	 * Applies an operation to the default request query data sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.defaultRequestQueryData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder defaultRequestQueryData(Consumer<PartList.Builder> operation) {
+		operation.accept(defaultRequestQueryData());
+		return this;
+	}
+
+	/**
+	 * Instantiates the default request query data sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -1166,7 +1474,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The default request query parameters for this method.
+	 * @return A new default request query data sub-builder.
 	 */
 	protected PartList.Builder createDefaultRequestQueryData(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -1198,9 +1506,9 @@ public class RestOpContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the default request form data in the REST context.
+	 * Returns the default request form data sub-builder.
 	 *
-	 * @return The builder for the default request form data in the REST context.
+	 * @return The default request form data sub-builder.
 	 */
 	public final PartList.Builder defaultRequestFormData() {
 		if (defaultRequestFormData == null)
@@ -1209,7 +1517,29 @@ public class RestOpContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Instantiates the default form-data parameters for this method.
+	 * Applies an operation to the default request form data sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestOpContext <jv>context</jv> = RestOpContext
+	 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
+	 * 		.defaultRequestFormData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestOpContextBuilder defaultRequestFormData(Consumer<PartList.Builder> operation) {
+		operation.accept(defaultRequestFormData());
+		return this;
+	}
+
+	/**
+	 * Instantiates the default request form data sub-builder.
 	 *
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
@@ -1217,7 +1547,7 @@ public class RestOpContextBuilder extends ContextBuilder {
 	 * 	The builder for the REST resource class.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return The default request form-data parameters for this method.
+	 * @return A new default request form data sub-builder.
 	 */
 	protected PartList.Builder createDefaultRequestFormData(BeanStore beanStore, RestContextBuilder parent, Supplier<?> resource) {
 
@@ -1447,154 +1777,6 @@ public class RestOpContextBuilder extends ContextBuilder {
 		return this;
 	}
 
-//	/**
-//	 * Default form data parameters.
-//	 *
-//	 * <p>
-//	 * Sets default values for form data parameters.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
-//	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-//	 * </p>
-//
-//	 * <ul class='seealso'>
-//	 * 	<li class='ja'>{@link RestOp#defaultFormData}
-//	 * 	<li class='ja'>{@link RestPost#defaultFormData}
-//	 * </ul>
-//	 *
-//	 * @param values The form data parameters to add.
-//	 * @return This object (for method chaining).
-//	 */
-//	@FluentSetter
-//	public RestOpContextBuilder defaultRequestFormData(NameValuePair...values) {
-//		defaultRequestFormData.setDefault(values);
-//		return this;
-//	}
-//
-//	/**
-//	 * Default query parameters.
-//	 *
-//	 * <p>
-//	 * Sets default values for query data parameters.
-//	 *
-//	 * <p>
-//	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
-//	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-//	 * </p>
-//
-//	 * <ul class='seealso'>
-//	 * 	<li class='ja'>{@link RestOp#defaultQueryData}
-//	 * 	<li class='ja'>{@link RestGet#defaultQueryData}
-//	 * 	<li class='ja'>{@link RestPut#defaultQueryData}
-//	 * 	<li class='ja'>{@link RestPost#defaultQueryData}
-//	 * 	<li class='ja'>{@link RestDelete#defaultQueryData}
-//	 * </ul>
-//	 *
-//	 * @param values The query parameters to add.
-//	 * @return This object (for method chaining).
-//	 */
-//	@FluentSetter
-//	public RestOpContextBuilder defaultRequestQueryData(NameValuePair...values) {
-//		defaultRequestQueryData.setDefault(values);
-//		return this;
-//	}
-//
-//	/**
-//	 * Default request attributes.
-//	 *
-//	 * <p>
-//	 * Specifies default values for request attributes if they are not already set on the request.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
-//	 * 	<jk>public</jk> String doGet()  {...}
-//	 * </p>
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
-//	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
-//	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
-//	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
-//	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
-//	 * </ul>
-//	 *
-//	 * @param values The request attributes to add.
-//	 * @return This object (for method chaining).
-//	 */
-//	@FluentSetter
-//	public RestOpContextBuilder defaultRequestAttributes(NamedAttribute...values) {
-//		defaultRequestAttributes.append(values);
-//		return this;
-//	}
-//
-//	/**
-//	 * <i><l>RestOpContext</l> configuration property:&emsp;</i>  Default request headers.
-//	 *
-//	 * <p>
-//	 * Specifies default values for request headers if they're not passed in through the request.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
-//	 * 	<jk>public</jk> String doGet()  {...}
-//	 * </p>
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
-//	 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
-//	 * 	<li class='ja'>{@link RestPut#defaultRequestHeaders}
-//	 * 	<li class='ja'>{@link RestPost#defaultRequestHeaders}
-//	 * 	<li class='ja'>{@link RestDelete#defaultRequestHeaders}
-//	 * </ul>
-//	 *
-//	 * @param values The headers to add.
-//	 * @return This object (for method chaining).
-//	 */
-//	@FluentSetter
-//	public RestOpContextBuilder defaultRequestHeaders(Header...values) {
-//		defaultRequestHeaders.setDefault(values);
-//		return this;
-//	}
-//
-//	/**
-//	 * Default response headers.
-//	 *
-//	 * <p>
-//	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-//	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
-//	 * 	<jk>public</jk> String doGet()  {...}
-//	 * </p>
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
-//	 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
-//	 * 	<li class='ja'>{@link RestPut#defaultResponseHeaders}
-//	 * 	<li class='ja'>{@link RestPost#defaultResponseHeaders}
-//	 * 	<li class='ja'>{@link RestDelete#defaultResponseHeaders}
-//	 * </ul>
-//	 *
-//	 * @param values The headers to add.
-//	 * @return This object (for method chaining).
-//	 */
-//	@FluentSetter
-//	public RestOpContextBuilder defaultResponseHeaders(Header...values) {
-//		defaultResponseHeaders.setDefault(values);
-//		return this;
-//	}
-//
 	/**
 	 * HTTP method name.
 	 *

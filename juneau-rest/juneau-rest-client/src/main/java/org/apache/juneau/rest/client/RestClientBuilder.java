@@ -153,29 +153,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		return (T)super.build();
 	}
 
-	/**
-	 * Allows you to apply a consumer to this builder.
-	 *
-	 * <p>
-	 * Typically used to allow you to execute operations on sub-builders without breaking the fluent flow of the client builder.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param consumer The consumer to apply.
-	 * @return This object.
-	 */
-	@FluentSetter
-	public RestClientBuilder apply(Consumer<RestClientBuilder> consumer) {
-		consumer.accept(this);
-		return this;
-	}
-
 	private ContextProperties contextProperties() {
 		set("RestClient.random", new Random().nextInt());  // TODO - Should be able to get rid of this once context properties go away.
 		return getContextProperties();
@@ -765,6 +742,28 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
+	 * Applies an operation to the HTTP client builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.httpClientBuilder(<jv>x</jv> -&gt; <jv>x</jv>.disableAuthCaching())
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder httpClientBuilder(Consumer<HttpClientBuilder> operation) {
+		operation.accept(httpClientBuilder());
+		return this;
+	}
+
+	/**
 	 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
 	 *
 	 * <p>
@@ -935,15 +934,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
+	 * Note that the {@link #headerData(Consumer)} method can be used to call this method without breaking fluent call chains.
 	 *
 	 * @return The header list builder.
 	 */
@@ -951,6 +942,28 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		if (headerData == null)
 			headerData = createHeaderData();
 		return headerData;
+	}
+
+	/**
+	 * Applies an operation to the header data builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.headerData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder headerData(Consumer<HeaderList.Builder> operation) {
+		operation.accept(headerData());
+		return this;
 	}
 
 	/**
@@ -1440,15 +1453,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
+	 * Note that the {@link #queryData(Consumer)} method can be used to call this method without breaking fluent call chains.
 	 *
 	 * @return The query data list builder.
 	 */
@@ -1456,6 +1461,28 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		if (queryData == null)
 			queryData = createQueryData();
 		return queryData;
+	}
+
+	/**
+	 * Applies an operation to the query data builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder queryData(Consumer<PartList.Builder> operation) {
+		operation.accept(queryData());
+		return this;
 	}
 
 	/**
@@ -1609,15 +1636,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
+	 * Note that the {@link #formData(Consumer)} method can be used to call this method without breaking fluent call chains.
 	 *
 	 * @return The form data list builder.
 	 */
@@ -1625,6 +1644,28 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		if (formData == null)
 			formData = createFormData();
 		return formData;
+	}
+
+	/**
+	 * Applies an operation to the form data builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder formData(Consumer<PartList.Builder> operation) {
+		operation.accept(formData());
+		return this;
 	}
 
 	/**
@@ -1778,15 +1819,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the {@link #apply(Consumer)} method can be used to call this method without breaking fluent call chains.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
+	 * Note that the {@link #pathData(Consumer)} method can be used to call this method without breaking fluent call chains.
 	 *
 	 * @return The form data list builder.
 	 */
@@ -1794,6 +1827,28 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		if (pathData == null)
 			pathData = createPathData();
 		return pathData;
+	}
+
+	/**
+	 * Applies an operation to the path data builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder pathData(Consumer<PartList.Builder> operation) {
+		operation.accept(pathData());
+		return this;
 	}
 
 	/**
@@ -1966,6 +2021,28 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		if (callHandler == null)
 			callHandler = createCallHandler();
 		return callHandler;
+	}
+
+	/**
+	 * Applies an operation to the REST call handler bean creator.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.callHandler(<jv>x</jv> -&gt; <jv>x</jv>.impl(<jv>myCallHandler</jv>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder callHandler(Consumer<BeanCreator<RestCallHandler>> operation) {
+		operation.accept(callHandler());
+		return this;
 	}
 
 	/**

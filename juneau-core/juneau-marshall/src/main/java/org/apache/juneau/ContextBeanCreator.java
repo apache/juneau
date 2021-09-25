@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * Utility class for instantiating a Context bean.
@@ -99,6 +100,24 @@ public class ContextBeanCreator<T> {
 	@SuppressWarnings("unchecked")
 	public <T2 extends ContextBuilder> Optional<T2> builder(Class<T2> c) {
 		return ofNullable(c.isInstance(builder) ? (T2)builder : null);
+	}
+
+	/**
+	 * Applies an operation to the builder in this creator object.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 * The operation is ignored if the builder isn't the specified type.
+	 *
+	 * @param c The builder class type.
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T2 extends ContextBuilder> ContextBeanCreator<T> builder(Class<T2> c, Consumer<T2> operation) {
+		if (c.isInstance(builder))
+			operation.accept((T2)builder);
+		return this;
 	}
 
 	/**
