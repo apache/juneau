@@ -156,98 +156,6 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext";
 
 	/**
-	 * Configuration property:  Bean type property name.
-	 *
-	 * <p>
-	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
-	 * parser knows the data type to reconstruct.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_typePropertyName BEAN_typePropertyName}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.typePropertyName.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.typePropertyName</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_TYPEPROPERTYNAME</c>
-	 * 	<li><b>Default:</b>  <js>"_type"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
-
-	/**
-	 * Configuration property:  Locale.
-	 *
-	 * <p>
-	 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSessionArgs#locale(Locale)}.
-	 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_locale CONTEXT_locale}
-	 * 	<li><b>Name:</b>  <js>"Context.locale.s"</js>
-	 * 	<li><b>Data type:</b>  {@link java.util.Locale}
-	 * 	<li><b>System property:</b>  <c>Context.locale</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_LOCALE</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link java.util.Locale#getDefault()})
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#locale(Locale)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_locale = PREFIX + ".locale.s";
-
-	/**
-	 * Configuration property:  Media type.
-	 *
-	 * <p>
-	 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSessionArgs#mediaType(MediaType)}.
-	 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
-	 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
-	 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
-	 * serializer or parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_mediaType CONTEXT_mediaType}
-	 * 	<li><b>Name:</b>  <js>"Context.mediaType.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.header.MediaType}
-	 * 	<li><b>System property:</b>  <c>Context.mediaType</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_MEDIATYPE</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#mediaType(MediaType)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_mediaType = PREFIX + ".mediaType.s";
-
-	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * <p>
@@ -367,37 +275,6 @@ public class BeanContext extends Context {
 	 */
 	public static final String BEAN_swaps = PREFIX + ".swaps.lo";
 
-	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * <p>
-	 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSessionArgs#timeZone(TimeZone)}.
-	 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_timeZone CONTEXT_timeZone}
-	 * 	<li><b>Name:</b>  <js>"Context.timeZone.s"</js>
-	 * 	<li><b>Data type:</b>  {@link java.util.TimeZone}
-	 * 	<li><b>System property:</b>  <c>Context.timeZone</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_TIMEZONE</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#timeZone(TimeZone)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_timeZone = PREFIX + ".timeZone.s";
-
 	/*
 	 * The default package pattern exclusion list.
 	 * Any beans in packages in this list will not be considered beans.
@@ -467,11 +344,11 @@ public class BeanContext extends Context {
 	private final PojoSwap<?,?>[] swaps;
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamer;
-	private final String typePropertyName;
+	final String typePropertyName;
 
-	private final Locale locale;
-	private final TimeZone timeZone;
-	private final MediaType mediaType;
+	final Locale locale;
+	final TimeZone timeZone;
+	final MediaType mediaType;
 
 	final Map<Class,ClassMeta> cmCache;
 	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
@@ -510,7 +387,10 @@ public class BeanContext extends Context {
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		sortProperties = builder.sortProperties;
 		findFluentSetters = builder.findFluentSetters;
-		typePropertyName = cp.getString(BEAN_typePropertyName).orElse("_type");
+		typePropertyName = ofNullable(builder.typePropertyName).orElse("_type");
+		locale = ofNullable(builder.locale).orElseGet(()->Locale.getDefault());
+		timeZone = builder.timeZone;
+		mediaType = builder.mediaType;
 
 		beanConstructorVisibility = builder.beanConstructorVisibility;
 		beanClassVisibility = builder.beanClassVisibility;
@@ -521,9 +401,6 @@ public class BeanContext extends Context {
 
 		propertyNamer = cp.getInstance(BEAN_propertyNamer, PropertyNamer.class).orElseGet(BasicPropertyNamer::new);
 
-		locale = cp.getInstance(BEAN_locale, Locale.class).orElseGet(()->Locale.getDefault());
-		timeZone = cp.getInstance(BEAN_timeZone, TimeZone.class).orElse(null);
-		mediaType = cp.getInstance(BEAN_mediaType, MediaType.class).orElse(null);
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();
@@ -1279,7 +1156,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean type property name.
 	 *
-	 * @see #BEAN_typePropertyName
+	 * @see BeanContextBuilder#typePropertyName(String)
 	 * @return
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
@@ -1471,7 +1348,7 @@ public class BeanContext extends Context {
 	/**
 	 * Locale.
 	 *
-	 * @see #BEAN_locale
+	 * @see BeanContextBuilder#locale(Locale)
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
@@ -1482,7 +1359,7 @@ public class BeanContext extends Context {
 	/**
 	 * Media type.
 	 *
-	 * @see #BEAN_mediaType
+	 * @see BeanContextBuilder#mediaType(MediaType)
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
@@ -1493,7 +1370,7 @@ public class BeanContext extends Context {
 	/**
 	 * Time zone.
 	 *
-	 * @see #BEAN_timeZone
+	 * @see BeanContextBuilder#timeZone(TimeZone)
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */

@@ -56,7 +56,7 @@ public class BeanConfigAnnotation {
 			bool(a.beansRequireSerializable()).ifPresent(x -> b.beansRequireSerializable(x));
 			bool(a.beansRequireSettersForGetters()).ifPresent(x -> b.beansRequireSettersForGetters(x));
 			bool(a.disableBeansRequireSomeProperties()).ifPresent(x -> b.disableBeansRequireSomeProperties(x));
-			string(a.typePropertyName()).ifPresent(x -> b.set(BEAN_typePropertyName, x));
+			string(a.typePropertyName()).ifPresent(x -> b.typePropertyName(x));
 			bool(a.debug()).ifPresent(x -> b.set(CONTEXT_debug, x));
 			bool(a.findFluentSetters()).ifPresent(x -> b.findFluentSetters(x));
 			bool(a.ignoreInvocationExceptionsOnGetters()).ifPresent(x -> b.ignoreInvocationExceptionsOnGetters(x));
@@ -66,8 +66,8 @@ public class BeanConfigAnnotation {
 			bool(a.ignoreUnknownBeanProperties()).ifPresent(x -> b.ignoreUnknownBeanProperties(x));
 			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(x -> b.disableIgnoreUnknownNullBeanProperties(x));
 			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.annotations(x));
-			string(a.locale()).map(Locale::forLanguageTag).ifPresent(x -> b.set(BEAN_locale, x));
-			string(a.mediaType()).map(MediaType::of).ifPresent(x -> b.set(BEAN_mediaType, x));
+			string(a.locale()).map(Locale::forLanguageTag).ifPresent(x -> b.locale(x));
+			string(a.mediaType()).map(MediaType::of).ifPresent(x -> b.mediaType(x));
 			b.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses());
 			b.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses_replace());
 			b.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
@@ -76,7 +76,7 @@ public class BeanConfigAnnotation {
 			bool(a.sortProperties()).ifPresent(x -> b.sortProperties(x));
 			b.prependTo(BEAN_swaps, a.swaps());
 			b.setIfNotEmpty(BEAN_swaps, a.swaps_replace());
-			string(a.timeZone()).map(TimeZone::getTimeZone).ifPresent(x -> b.set(BEAN_timeZone, x));
+			string(a.timeZone()).map(TimeZone::getTimeZone).ifPresent(x -> b.timeZone(x));
 			bool(a.useEnumNames()).ifPresent(x -> b.useEnumNames(x));
 			bool(a.disableInterfaceProxies()).ifPresent(x -> b.disableInterfaceProxies(x));
 			bool(a.useJavaBeanIntrospector()).ifPresent(x -> b.useJavaBeanIntrospector(x));

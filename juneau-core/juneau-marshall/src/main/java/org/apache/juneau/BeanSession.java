@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -71,10 +71,9 @@ public class BeanSession extends Session {
 		this.ctx = ctx;
 		schema = args.schema;
 		sbStack = args.unmodifiable ? null : new Stack<>();
-		SessionProperties sp = args.properties;
-		locale = sp.get(BEAN_locale, Locale.class).orElse(ctx.getDefaultLocale());
-		timeZone = sp.get(BEAN_timeZone, TimeZone.class).orElse(ctx.getDefaultTimeZone());
-		mediaType = sp.get(BEAN_mediaType, MediaType.class).orElse(ctx.getDefaultMediaType());
+		locale = ofNullable(args.locale).orElse(ctx.getDefaultLocale());
+		timeZone = ofNullable(args.timeZone).orElse(ctx.getDefaultTimeZone());
+		mediaType = ofNullable(args.mediaType).orElse(ctx.getDefaultMediaType());
 	}
 
 	/**
@@ -1083,12 +1082,11 @@ public class BeanSession extends Session {
 	 * The locale is determined in the following order:
 	 * <ol>
 	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
+	 * 	<li>{@link BeanContextBuilder#locale(Locale)} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
 	 * </ol>
 	 *
-	 * @see BeanContext#BEAN_locale
+	 * @see BeanContextBuilder#locale(Locale)
 	 * @return The session locale.
 	 */
 	public Locale getLocale() {
@@ -1101,7 +1099,7 @@ public class BeanSession extends Session {
 	 * <p>
 	 * For example, <js>"application/json"</js>.
 	 *
-	 * @see BeanContext#BEAN_mediaType
+	 * @see BeanContextBuilder#mediaType(MediaType)
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() {
@@ -1109,7 +1107,7 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the type property name as defined by {@link BeanContext#BEAN_typePropertyName}.
+	 * Returns the type property name as defined by {@link BeanContextBuilder#typePropertyName(String)}.
 	 *
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
@@ -1365,7 +1363,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean type property name.
 	 *
-	 * @see BeanContext#BEAN_typePropertyName
+	 * @see BeanContextBuilder#typePropertyName(String)
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
@@ -1516,11 +1514,10 @@ public class BeanSession extends Session {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
+	 * 	<li>{@link BeanContextBuilder#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see BeanContext#BEAN_timeZone
+	 * @see BeanContextBuilder#timeZone(TimeZone)
 	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
 	 */
 	public final TimeZone getTimeZone() {
@@ -1534,11 +1531,10 @@ public class BeanSession extends Session {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
+	 * 	<li>{@link BeanContextBuilder#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see BeanContext#BEAN_timeZone
+	 * @see BeanContextBuilder#timeZone(TimeZone)
 	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
 	 */
 	public final ZoneId getTimeZoneId() {

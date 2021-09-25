@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
-
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
@@ -33,6 +32,9 @@ public class BeanSessionArgs extends SessionArgs {
 	public static final BeanSessionArgs DEFAULT = new BeanSessionArgs();
 
 	HttpPartSchema schema;
+	TimeZone timeZone;
+	Locale locale;
+	MediaType mediaType;
 
 	/**
 	 * Constructor
@@ -59,12 +61,11 @@ public class BeanSessionArgs extends SessionArgs {
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_locale}.
+	 * If not specified, defaults to {@link BeanContextBuilder#locale(Locale)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#locale(Locale)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
+	 * 	<li class='ja'>{@link BeanConfig#locale()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
 	 * </ul>
 	 *
 	 * @param value
@@ -74,7 +75,7 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	@FluentSetter
 	public BeanSessionArgs locale(Locale value) {
-		property(BEAN_locale, value);
+		locale = value;
 		return this;
 	}
 
@@ -85,12 +86,11 @@ public class BeanSessionArgs extends SessionArgs {
 	 * Specifies the default media type value for serializer and parser sessions.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_mediaType}.
+	 * If not specified, defaults to {@link BeanContextBuilder#mediaType(MediaType)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#mediaType(MediaType)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
+	 * 	<li class='ja'>{@link BeanConfig#mediaType()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
 	 * </ul>
 	 *
 	 * @param value
@@ -100,7 +100,7 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	@FluentSetter
 	public BeanSessionArgs mediaType(MediaType value) {
-		property(BEAN_mediaType, value);
+		mediaType = value;
 		return this;
 	}
 
@@ -128,12 +128,11 @@ public class BeanSessionArgs extends SessionArgs {
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_timeZone}.
+	 * If not specified, defaults to {@link BeanContextBuilder#timeZone(TimeZone)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#timeZone(TimeZone)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
+	 * 	<li class='ja'>{@link BeanConfig#timeZone()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
 	 * </ul>
 	 *
 	 * @param value
@@ -143,7 +142,7 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	@FluentSetter
 	public BeanSessionArgs timeZone(TimeZone value) {
-		property(BEAN_timeZone, value);
+		timeZone = value;
 		return this;
 	}
 

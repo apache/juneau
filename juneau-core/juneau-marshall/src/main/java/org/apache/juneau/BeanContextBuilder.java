@@ -71,6 +71,10 @@ public class BeanContextBuilder extends ContextBuilder {
 		beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
 		disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
 		ignoreUnknownBeanProperties, sortProperties, useEnumNames, useJavaBeanIntrospector;
+	String typePropertyName;
+	MediaType mediaType;
+	Locale locale;
+	TimeZone timeZone;
 
 	/**
 	 * Constructor.
@@ -100,6 +104,10 @@ public class BeanContextBuilder extends ContextBuilder {
 		sortProperties = env("BeanContext.sortProperties", false);
 		useEnumNames = env("BeanContext.useEnumNames", false);
 		useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
+		typePropertyName = env("BeanContext.typePropertyName", "_type");
+		mediaType = env("BeanContext.mediaType", (MediaType)null);
+		timeZone = env("BeanContext.timeZone", (TimeZone)null);
+		locale = env("BeanContext.locale", Locale.getDefault());
 	}
 
 	/**
@@ -130,6 +138,10 @@ public class BeanContextBuilder extends ContextBuilder {
 		sortProperties = copyFrom.sortProperties;
 		useEnumNames = copyFrom.useEnumNames;
 		useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
+		typePropertyName = copyFrom.typePropertyName;
+		mediaType = copyFrom.mediaType;
+		timeZone = copyFrom.timeZone;
+		locale = copyFrom.locale;
 	}
 
 	/**
@@ -160,6 +172,10 @@ public class BeanContextBuilder extends ContextBuilder {
 		sortProperties = copyFrom.sortProperties;
 		useEnumNames = copyFrom.useEnumNames;
 		useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
+		typePropertyName = copyFrom.typePropertyName;
+		mediaType = copyFrom.mediaType;
+		timeZone = copyFrom.timeZone;
+		locale = copyFrom.locale;
 	}
 
 	@Override /* ContextBuilder */
@@ -195,7 +211,11 @@ public class BeanContextBuilder extends ContextBuilder {
 				sortProperties,
 				useEnumNames,
 				useJavaBeanIntrospector
-			)
+			),
+			typePropertyName,
+			mediaType,
+			timeZone,
+			locale
 		);
 		BeanContext bc = CACHE.get(key);
 		if (bc == null) {
@@ -2308,7 +2328,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -2316,7 +2335,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder locale(Locale value) {
-		return set(BEAN_locale, value);
+		locale = value;
+		return this;
 	}
 
 	/**
@@ -2359,7 +2379,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -2367,7 +2386,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder mediaType(MediaType value) {
-		return set(BEAN_mediaType, value);
+		mediaType = value;
+		return this;
 	}
 
 	/**
@@ -2864,7 +2884,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -2872,7 +2891,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder timeZone(TimeZone value) {
-		return set(BEAN_timeZone, value);
+		timeZone = value;
+		return this;
 	}
 
 	/**
@@ -2965,7 +2985,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
 	 * </ul>
 	 *
 	 * @param value
@@ -2975,7 +2994,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder typePropertyName(String value) {
-		return set(BEAN_typePropertyName, value);
+		typePropertyName = value;
+		return this;
 	}
 
 	/**
@@ -3010,7 +3030,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
 	 * </ul>
 	 *
 	 * @param on The class the type property name applies to.

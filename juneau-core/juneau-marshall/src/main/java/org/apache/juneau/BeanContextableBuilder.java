@@ -167,7 +167,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
+	 * 	<li class='ja'>{@link BeanConfig#beanClassVisibility()}
 	 * </ul>
 	 *
 	 * @param value
@@ -216,7 +216,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
+	 * 	<li class='ja'>{@link BeanConfig#beanConstructorVisibility()}
 	 * </ul>
 	 *
 	 * @param value
@@ -274,7 +274,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
+	 * 	<li class='ja'>{@link BeanConfig#beanFieldVisibility()}
 	 * </ul>
 	 *
 	 * @param value
@@ -368,7 +368,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
+	 * 	<li class='ja'>{@link BeanConfig#beanMapPutReturnsOldValue()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * </ul>
 	 *
@@ -414,7 +414,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
+	 * 	<li class='ja'>{@link BeanConfig#beanMethodVisibility()}
 	 * </ul>
 	 *
 	 * @param value
@@ -470,7 +470,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
+	 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * </ul>
 	 *
@@ -519,7 +519,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
+	 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable()}
 	 * </ul>
 	 *
@@ -566,7 +566,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSettersForGetters()}
+	 * 	<li class='ja'>{@link BeanConfig#beansRequireSettersForGetters()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters()}
 	 * </ul>
 	 *
@@ -610,7 +610,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
+	 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#disableBeansRequireSomeProperties()}
 	 * </ul>
 	 *
@@ -1392,11 +1392,11 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextableBuilder#beanDictionary(Class...)}
+	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link BeanContextableBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @param values
@@ -1595,8 +1595,8 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
+	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
 	 * </ul>
 	 *
@@ -1676,7 +1676,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
+	 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnGetters()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * </ul>
 	 *
@@ -1715,7 +1715,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
+	 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnSetters()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * </ul>
 	 *
@@ -1758,7 +1758,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
+	 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreMissingSetters()}
 	 * </ul>
 	 *
@@ -1798,7 +1798,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
+	 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreTransientFields()}
 	 * </ul>
 	 *
@@ -1835,7 +1835,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
+	 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownBeanProperties()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * </ul>
 	 *
@@ -1872,7 +1872,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
+	 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()}
 	 * </ul>
 	 *
@@ -2095,9 +2095,9 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
+	 * 	<li class='ja'>{@link BeanConfig#locale()}
+	 * 	<li class='jm'>{@link BeanSessionArgs#locale(Locale)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -2147,9 +2147,9 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
+	 * 	<li class='ja'>{@link BeanConfig#mediaType()}
+	 * 	<li class='jm'>{@link BeanSessionArgs#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -2201,8 +2201,8 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
+	 * 	<li class='ja'>{@link BeanIgnore}
+	 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
 	 *
@@ -2638,9 +2638,9 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
+	 * 	<li class='ja'>{@link BeanConfig#timeZone()}
+	 * 	<li class='jm'>{@link BeanSessionArgs#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -2741,9 +2741,9 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
+	 * 	<li class='ja'>{@link Bean#typePropertyName()}
+	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#typePropertyName(String)}
 	 * </ul>
 	 *
 	 * @param value
@@ -2789,7 +2789,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
+	 * 	<li class='jm'>{@link BeanContextBuilder#typePropertyName(String)}
 	 * </ul>
 	 *
 	 * @param on The class the type property name applies to.
@@ -2859,7 +2859,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
+	 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
 	 * 	<li class='jm'>{@link BeanContextBuilder#disableInterfaceProxies()}
 	 * </ul>
 	 *
