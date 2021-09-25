@@ -482,7 +482,7 @@ public final class BeanPropertyMeta {
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
 	 * 	<li>Dictionary defined via {@link Beanp#dictionary() @Beanp(dictionary)}.
-	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
+	 * 	<li>Dictionary defined via {@link BeanContextBuilder#beanDictionary(Class...)}.
 	 * </ol>
 	 *
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.

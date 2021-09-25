@@ -499,8 +499,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public HtmlSchemaSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -153,35 +154,6 @@ import org.apache.juneau.transform.*;
 public class BeanContext extends Context {
 
 	static final String PREFIX = "BeanContext";
-
-	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * <p>
-	 * The list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_beanDictionary = PREFIX + ".beanDictionary.lc";
 
 	/**
 	 * Configuration property:  Beans don't require at least one property.
@@ -937,7 +909,7 @@ public class BeanContext extends Context {
 		beanFieldVisibility;
 
 	private final Class<?>[] notBeanClasses;
-	private final List<Class<?>> beanDictionaryClasses;
+	final List<Class<?>> beanDictionary;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final PojoSwap<?,?>[] swaps;
 	private final BeanRegistry beanRegistry;
@@ -1034,7 +1006,8 @@ public class BeanContext extends Context {
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
 
-		beanDictionaryClasses = AList.unmodifiable(cp.getClassArray(BEAN_beanDictionary).orElse(new Class[0]));
+		beanDictionary = ofNullable(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
+
 		beanRegistry = new BeanRegistry(this, null);
 	}
 
@@ -1659,12 +1632,12 @@ public class BeanContext extends Context {
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see #BEAN_beanDictionary
+	 * @see BeanContextBuilder#beanDictionary()
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
-	public final List<Class<?>> getBeanDictionaryClasses() {
-		return beanDictionaryClasses;
+	public final List<Class<?>> getBeanDictionary() {
+		return beanDictionary;
 	}
 
 	/**
@@ -2005,7 +1978,7 @@ public class BeanContext extends Context {
 					.a("id", System.identityHashCode(this))
 					.a("beanClassVisibility", beanClassVisibility)
 					.a("beanConstructorVisibility", beanConstructorVisibility)
-					.a("beanDictionaryClasses", beanDictionaryClasses)
+					.a("beanDictionary", beanDictionary)
 					.a("beanFieldVisibility", beanFieldVisibility)
 					.a("beanMethodVisibility", beanMethodVisibility)
 					.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
@@ -2013,7 +1986,6 @@ public class BeanContext extends Context {
 					.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
 					.a("beansRequireSomeProperties", beansRequireSomeProperties)
 					.a("ignoreTransientFields", ignoreTransientFields)
-					.a("ignoreMissingSetters", ignoreMissingSetters)
 					.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 					.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 					.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)

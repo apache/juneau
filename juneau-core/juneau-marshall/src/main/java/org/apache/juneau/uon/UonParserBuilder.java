@@ -382,8 +382,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public UonParserBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

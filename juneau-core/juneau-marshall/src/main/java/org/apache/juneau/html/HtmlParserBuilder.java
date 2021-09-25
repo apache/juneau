@@ -321,8 +321,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public HtmlParserBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

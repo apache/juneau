@@ -350,8 +350,8 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SoapXmlSerializerBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public SoapXmlSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

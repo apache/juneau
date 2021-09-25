@@ -370,8 +370,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public UrlEncodingSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

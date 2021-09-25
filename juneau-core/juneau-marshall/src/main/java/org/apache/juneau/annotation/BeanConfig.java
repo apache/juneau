@@ -383,9 +383,7 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
 	 * 	<li class='link'>{@doc BeanDictionaries}
 	 * </ul>
 	 */
@@ -401,9 +399,7 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] dictionary_replace() default {};

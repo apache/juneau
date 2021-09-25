@@ -66,6 +66,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
+	List<Class<?>> beanDictionary;
 
 	/**
 	 * Constructor.
@@ -78,6 +79,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanConstructorVisibility = env("RestContext.beanConstructorVisibility", PUBLIC);
 		beanMethodVisibility = env("RestContext.beanMethodVisibility", PUBLIC);
 		beanFieldVisibility = env("RestContext.beanFieldVisibility", PUBLIC);
+		beanDictionary = null;
 	}
 
 	/**
@@ -91,6 +93,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 		beanMethodVisibility = copyFrom.beanMethodVisibility;
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
+		beanDictionary = copyFrom.beanDictionary.isEmpty() ? null : new ArrayList<>(copyFrom.beanDictionary);
 	}
 
 	/**
@@ -104,6 +107,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 		beanMethodVisibility = copyFrom.beanMethodVisibility;
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
+		beanDictionary = copyFrom.beanDictionary == null ? null : new ArrayList<>(copyFrom.beanDictionary);
 	}
 
 	@Override /* ContextBuilder */
@@ -117,7 +121,14 @@ public class BeanContextBuilder extends ContextBuilder {
 		cp = cp.subset(new String[]{"Context","BeanContext"});
 		HashKey key = HashKey
 			.create()
-			.add(cp, beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility)
+			.add(
+				cp, 
+				beanClassVisibility, 
+				beanConstructorVisibility, 
+				beanMethodVisibility, 
+				beanFieldVisibility, 
+				beanDictionary
+			)
 			.build();
 		BeanContext bc = CACHE.get(key);
 		if (bc == null) {
@@ -1382,8 +1393,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @param values
@@ -1391,39 +1401,39 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dictionary(Object...values) {
-		return prependTo(BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionary(Class<?>...values) {
+		return beanDictionary(Arrays.asList(values));
 	}
 
 	/**
-	 * Bean dictionary.
-	 *
-	 * <p>
-	 * Same as {@link #dictionary(Object...)}, but replaces instead of prepends the values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
+	 * Same as {@link #beanDictionary(Class...)} but allows you to pass in a collection of classes.
 	 *
 	 * @param values
-	 * 	The values to replace on this setting.
+	 * 	The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dictionary_replace(Object...values) {
-		return set(BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionary(Collection<Class<?>> values) {
+		beanDictionary().addAll(0, values);
+		return this;
+	}
+
+	/**
+	 * Returns the bean dictionary list.
+	 *
+	 * @return The bean dictionary list.
+	 */
+	public List<Class<?>> beanDictionary() {
+		if (beanDictionary == null)
+			beanDictionary = new ArrayList<>();
+		return beanDictionary;
 	}
 
 	/**
 	 * Bean dictionary.
 	 *
 	 * <p>
-	 * This is identical to {@link #dictionary(Object...)}, but specifies a dictionary within the context of
+	 * This is identical to {@link #beanDictionary(Class...)}, but specifies a dictionary within the context of
 	 * a single class as opposed to globally.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1454,7 +1464,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @param on The class that the dictionary values apply to.
@@ -2686,7 +2696,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @param on

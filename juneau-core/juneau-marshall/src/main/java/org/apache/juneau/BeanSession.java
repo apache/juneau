@@ -1134,7 +1134,7 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the bean registry defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
+	 * Returns the bean registry defined in this bean context defined by {@link BeanContextBuilder#beanDictionary(Class...)}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
@@ -1271,13 +1271,12 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
-	 * @see BeanContext#BEAN_beanDictionary
+	 * @see BeanContextBuilder#beanDictionary(Class...)
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
-	// TODO - Rename to getBeanDictionary()
-	public final List<Class<?>> getBeanDictionaryClasses() {
-		return ctx.getBeanDictionaryClasses();
+	public final List<Class<?>> getBeanDictionary() {
+		return ctx.getBeanDictionary();
 	}
 
 	/**

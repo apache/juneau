@@ -32,7 +32,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = JsonParser.create().dictionary(A1.class).build();
+		ReaderParser p = JsonParser.create().beanDictionary(A1.class).build();
 
 		Map m = null;
 		m = (Map)p.parse("{a:1}", Object.class);
@@ -82,7 +82,7 @@ public class CommonParserTest {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = JsonSerializer.create().addBeanTypes().addRootType().dictionary(A1.class).build().serialize(b);
+		String json = JsonSerializer.create().addBeanTypes().addRootType().beanDictionary(A1.class).build().serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 

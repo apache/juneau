@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.xml.XmlSerializer.*;
@@ -60,7 +59,8 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:_type>BwT</jp:_type>\n<jp:f>1</jp:f>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:_type>BwT</jp:_type>\n      <jp:f>1</jp:f>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_addBeanTypes, true, BEAN_beanDictionary, T0.class))
+				.beanContext(x -> x.beanDictionary(T0.class))
+				.properties(OMap.of(SERIALIZER_addBeanTypes, true))
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
@@ -89,7 +89,8 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>BwT</jp:_type>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>BwT</jp:_type>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_addRootType, true, BEAN_beanDictionary, T0.class))
+				.beanContext(x -> x.beanDictionary(T0.class))
+				.properties(OMap.of(SERIALIZER_addRootType, true))
 			},
 			{ 	/* 2 */
 				new ComboInput<>(

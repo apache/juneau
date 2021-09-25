@@ -349,8 +349,8 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public InputStreamParserBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

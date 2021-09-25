@@ -29,7 +29,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class CommonParser_UrlEncodingTest {
 
-	ReaderParser p = UrlEncodingParser.create().dictionary(A1.class).build();
+	ReaderParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();
 
 	//====================================================================================================
 	// testFromSerializer

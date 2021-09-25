@@ -617,7 +617,7 @@ public class BeanFilterBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @param values

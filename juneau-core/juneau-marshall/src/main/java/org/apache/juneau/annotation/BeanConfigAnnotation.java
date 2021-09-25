@@ -49,8 +49,8 @@ public class BeanConfigAnnotation {
 			visibility(a.beanConstructorVisibility(), "beanConstructorVisibility").ifPresent(x -> b.beanConstructorVisibility(x));
 			visibility(a.beanFieldVisibility(), "beanFieldVisibility").ifPresent(x -> b.beanFieldVisibility(x));
 			visibility(a.beanMethodVisibility(), "beanMethodVisibility").ifPresent(x -> b.beanMethodVisibility(x));
-			b.prependTo(BEAN_beanDictionary, a.dictionary());
-			b.setIfNotEmpty(BEAN_beanDictionary, a.dictionary_replace());
+			classes(a.dictionary()).ifPresent(x -> b.beanDictionary(x));
+			classes(a.dictionary_replace()).ifPresent(x -> { b.beanDictionary().clear(); b.beanDictionary(x);});
 			bool(a.beanMapPutReturnsOldValue()).ifPresent(x -> b.set(BEAN_beanMapPutReturnsOldValue, x));
 			bool(a.beansRequireDefaultConstructor()).ifPresent(x -> b.set(BEAN_beansRequireDefaultConstructor, x));
 			bool(a.beansRequireSerializable()).ifPresent(x -> b.set(BEAN_beansRequireSerializable, x));

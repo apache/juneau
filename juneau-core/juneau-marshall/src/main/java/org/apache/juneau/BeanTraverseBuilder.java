@@ -480,8 +480,8 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public BeanTraverseBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

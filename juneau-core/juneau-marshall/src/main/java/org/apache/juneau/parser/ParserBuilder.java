@@ -622,8 +622,8 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public ParserBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

@@ -18,6 +18,7 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
@@ -60,8 +61,13 @@ public abstract class ComboRoundTripTest {
 		Serializer s2 = serializerMap.get(s);
 		if (s2 == null) {
 			s2 = applySettings(s);
-			if (! comboInput.swaps.isEmpty())
-				s2 = s2.copy().swaps(comboInput.swaps.toArray()).build();
+			if (! (comboInput.swaps.isEmpty() && comboInput.beanContextApplies.isEmpty())) {
+				SerializerBuilder b = s2.copy();
+				b.swaps(comboInput.swaps.toArray());
+				for (Consumer<BeanContextBuilder> c : (List<Consumer<BeanContextBuilder>>)comboInput.beanContextApplies)
+					b.beanContext(c);
+				s2 = b.build();
+			}
 			serializerMap.put(s, s2);
 		}
 		return s2;
@@ -71,8 +77,13 @@ public abstract class ComboRoundTripTest {
 		Parser p2 = parserMap.get(p);
 		if (p2 == null) {
 			p2 = applySettings(p);
-			if (! comboInput.swaps.isEmpty())
-				p2 = p2.copy().swaps(comboInput.swaps.toArray()).build();
+			if (! (comboInput.swaps.isEmpty() && comboInput.beanContextApplies.isEmpty())) {
+				ParserBuilder b = p2.copy();
+				b.swaps(comboInput.swaps.toArray());
+				for (Consumer<BeanContextBuilder> c : (List<Consumer<BeanContextBuilder>>)comboInput.beanContextApplies)
+					b.beanContext(c);
+				p2 = b.build();
+			}
 			parserMap.put(p, p2);
 		}
 		return p2;

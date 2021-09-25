@@ -37,7 +37,7 @@ public class BeanMapTest {
 	JsonSerializer serializer = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
 	BeanContext bc = BeanContext.create()
-			.dictionary(MyBeanDictionaryMap.class)
+			.beanDictionary(MyBeanDictionaryMap.class)
 			.build();
 	BeanSession session = bc.createSession();
 
@@ -481,7 +481,7 @@ public class BeanMapTest {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = JsonParser.create().dictionary(D2.class).build();
+		JsonParser p = JsonParser.create().beanDictionary(D2.class).build();
 		m.put("lb1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(OList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
@@ -533,7 +533,7 @@ public class BeanMapTest {
 		m.put("b", new D2c());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = JsonParser.create().dictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
+		JsonParser p = JsonParser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
 		m.put("lb1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(OList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2c.class.getName(), t.lb1.get(0).getClass().getName());
@@ -727,7 +727,7 @@ public class BeanMapTest {
 		assertEquals(HEnum.THREE, t7.getEnum2());
 
 		// Create instance directly from JSON.
-		JsonParser p = JsonParser.create().dictionary(H.class).build();
+		JsonParser p = JsonParser.create().beanDictionary(H.class).build();
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);

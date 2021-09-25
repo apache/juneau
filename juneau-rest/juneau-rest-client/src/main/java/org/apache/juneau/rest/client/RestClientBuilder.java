@@ -4981,8 +4981,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public RestClientBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

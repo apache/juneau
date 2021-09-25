@@ -596,8 +596,8 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public WriterSerializerBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public WriterSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

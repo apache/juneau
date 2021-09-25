@@ -22,10 +22,10 @@ public class HashKey {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Static creator.
-	 * 
+	 *
 	 * @return A new builder.
 	 */
 	public static Builder create() {
@@ -44,7 +44,7 @@ public class HashKey {
 
 		/**
 		 * Adds a list of objects to this builder.
-		 * 
+		 *
 		 * @param values The values to add to this list.
 		 * @return This object.
 		 */
@@ -55,7 +55,7 @@ public class HashKey {
 
 		/**
 		 * Creates the key.
-		 * 
+		 *
 		 * @return The key.
 		 */
 		public HashKey build() {
@@ -86,7 +86,7 @@ public class HashKey {
 		if (array.length != x.array.length)
 			return false;
 		for (int i = 0; i < array.length; i++)
-			if (! array[i].equals(x.array[i]))
+			if (! Objects.equals(array[i], x.array[i]))
 				return false;
 		return true;
 	}

@@ -32,10 +32,16 @@ public class ComboInput<T> {
 	private Predicate<String> skipTest;
 	private Function<T,T> convert;
 	private List<Function<T,String>> verify = AList.create();
+	List<Consumer<BeanContextBuilder>> beanContextApplies = AList.create();
 	List<Class<?>> swaps = AList.create();
 	final Type type;
 	String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
+
+	public ComboInput<T> beanContext(Consumer<BeanContextBuilder> c) {
+		this.beanContextApplies.add(c);
+		return this;
+	}
 
 	public ComboInput<T> properties(OMap properties) {
 		this.properties = properties;

@@ -150,7 +150,7 @@ public class BeanConfigAnnotation_Test {
 
 		check("PRIVATE", bc.getBeanClassVisibility());
 		check("PRIVATE", bc.getBeanConstructorVisibility());
-		check("A1,A2,A3", bc.getBeanDictionaryClasses());
+		check("A1,A2,A3", bc.getBeanDictionary());
 		check("PRIVATE", bc.getBeanFieldVisibility());
 		check("true", bc.isBeanMapPutReturnsOldValue());
 		check("PRIVATE", bc.getBeanMethodVisibility());
@@ -194,7 +194,7 @@ public class BeanConfigAnnotation_Test {
 		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
-		check("", bc.getBeanDictionaryClasses());
+		check("", bc.getBeanDictionary());
 		check("PUBLIC", bc.getBeanFieldVisibility());
 		check("false", bc.isBeanMapPutReturnsOldValue());
 		check("PUBLIC", bc.getBeanMethodVisibility());
@@ -240,7 +240,7 @@ public class BeanConfigAnnotation_Test {
 		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
-		check("", bc.getBeanDictionaryClasses());
+		check("", bc.getBeanDictionary());
 		check("PUBLIC", bc.getBeanFieldVisibility());
 		check("false", bc.isBeanMapPutReturnsOldValue());
 		check("PUBLIC", bc.getBeanMethodVisibility());

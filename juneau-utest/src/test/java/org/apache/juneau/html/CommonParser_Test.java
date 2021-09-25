@@ -32,7 +32,7 @@ public class CommonParser_Test {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = HtmlParser.create().dictionary(A1.class).build();
+		ReaderParser p = HtmlParser.create().beanDictionary(A1.class).build();
 		Map m = null;
 		String in;
 

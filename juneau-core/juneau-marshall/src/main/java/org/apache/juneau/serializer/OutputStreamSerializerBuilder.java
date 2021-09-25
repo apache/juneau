@@ -363,8 +363,8 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionary(Object...values) {
-		super.dictionary(values);
+	public OutputStreamSerializerBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
 		return this;
 	}
 

@@ -570,11 +570,11 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a15_dictionary() throws Exception {
-		Object o = client().dictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",A15a.get()).run().cacheBody().assertBody().contains("{_type:'foo',foo:'1'}").getBody().asType(Object.class);;
+		Object o = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",A15a.get()).run().cacheBody().assertBody().contains("{_type:'foo',foo:'1'}").getBody().asType(Object.class);;
 		assertTrue(o instanceof A15a);
 
 		OMap m = OMap.of("x",A15a.get(),"y",A15b.get());
-		m = client().dictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",m).run().cacheBody().assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getBody().asType(OMap.class);;
+		m = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",m).run().cacheBody().assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getBody().asType(OMap.class);;
 		assertTrue(m.get("x") instanceof A15a);
 		assertTrue(m.get("y") instanceof A15b);
 
