@@ -1109,13 +1109,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		parsers = builder.parsers().build();
 		partSerializer = builder.partSerializer().create();
 		partParser = builder.partParser().create();
-
-		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
-
-		beanStore.addBean(ContextProperties.class, cp);
-
-		this.urlEncodingSerializer = UrlEncodingSerializer.create().apply(cp).build();
-
+		urlEncodingSerializer = builder.urlEncodingSerializer().build();
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 	}
 

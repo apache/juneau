@@ -102,6 +102,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private ParserGroup.Builder parsers;
 	private HttpPartSerializer.Creator partSerializer;
 	private HttpPartParser.Creator partParser;
+	private UrlEncodingSerializerBuilder urlEncodingSerializer;
 
 	private boolean pooled;
 
@@ -133,21 +134,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 
 	@Override /* ContextBuilder */
 	public RestClient build() {
-		contextProperties();
 		return (RestClient)super.build();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
-		contextProperties();
 		type(c);
 		return (T)super.build();
-	}
-
-	private ContextProperties contextProperties() {
-		set("RestClient.random", new Random().nextInt());  // TODO - Should be able to get rid of this once context properties go away.
-		return getContextProperties();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1438,6 +1432,44 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	public RestClientBuilder partParser(HttpPartParser value) {
 		partParser().impl(value);
 		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// urlEncodingSerializer
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the URL-encoding serializer sub-builder.
+	 *
+	 * @return The URL-encoding serializer sub-builder.
+	 */
+	public final UrlEncodingSerializerBuilder urlEncodingSerializer() {
+		if (urlEncodingSerializer == null)
+			urlEncodingSerializer = createUrlEncodingSerializer();
+		return urlEncodingSerializer;
+	}
+
+	/**
+	 * Applies an operation to the URL-encoding serializer sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder urlEncodingSerializer(Consumer<UrlEncodingSerializerBuilder> operation) {
+		operation.accept(urlEncodingSerializer());
+		return this;
+	}
+
+	/**
+	 * Instantiates the URL-encoding serializer sub-builder.
+	 *
+	 * @return A new URL-encoding serializer sub-builder.
+	 */
+	protected UrlEncodingSerializerBuilder createUrlEncodingSerializer() {
+		return (UrlEncodingSerializerBuilder)UrlEncodingSerializer.create().beanContext(beanContext());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
