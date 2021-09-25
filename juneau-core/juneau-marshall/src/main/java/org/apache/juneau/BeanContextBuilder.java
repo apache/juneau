@@ -20,11 +20,13 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of serializers, parsers, and bean contexts.
@@ -51,6 +53,8 @@ import org.apache.juneau.transform.*;
  */
 @FluentSetters
 public class BeanContextBuilder extends ContextBuilder {
+
+	private static final ConcurrentHashMap<HashKey,BeanContext> CACHE = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -86,7 +90,15 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	@Override /* ContextBuilder */
 	public BeanContext build() {
-		return build(BeanContext.class);
+		ContextProperties cp = getContextProperties();
+		cp = cp.subset(new String[]{"Context","BeanContext"});
+		HashKey key = HashKey.create().add(cp).build();
+		BeanContext bc = CACHE.get(key);
+		if (bc == null) {
+			bc = new BeanContext(this);
+			CACHE.putIfAbsent(key, bc);
+		}
+		return bc;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

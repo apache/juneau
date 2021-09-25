@@ -1075,6 +1075,15 @@ public class BeanContext extends Context {
 
 	/**
 	 * Constructor.
+	 * 
+	 * @param builder The builder for this object.
+	 */
+	public BeanContext(BeanContextBuilder builder) {
+		this(builder.getContextProperties());
+	}
+
+	/**
+	 * Constructor.
 	 *
 	 * <p>
 	 * Typically only called from {@link ContextBuilder#build(Class)} method.
