@@ -208,8 +208,8 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	// <FluentSetters>
 
 	@Override
-	public JsonSerializerBuilder beanContextBuilder(BeanContextBuilder value) {
-		super.beanContextBuilder(value);
+	public JsonSerializerBuilder beanContext(BeanContextBuilder value) {
+		super.beanContext(value);
 		return this;
 	}
 

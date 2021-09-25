@@ -17,6 +17,7 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -98,8 +99,19 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * @return The inner bean context builder.
 	 */
-	public BeanContextBuilder getBeanContextBuilder() {
+	public BeanContextBuilder beanContext() {
 		return bcBuilder;
+	}
+
+	/**
+	 * Applies an operation to the inner bean context builder.
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final BeanContextableBuilder beanContext(Consumer<BeanContextBuilder> operation) {
+		operation.accept(beanContext());
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -118,7 +130,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextableBuilder beanContextBuilder(BeanContextBuilder value) {
+	public BeanContextableBuilder beanContext(BeanContextBuilder value) {
 		this.bcBuilder = value;
 		return this;
 	}

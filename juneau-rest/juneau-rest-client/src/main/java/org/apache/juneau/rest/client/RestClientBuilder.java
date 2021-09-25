@@ -127,10 +127,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.serializers = SerializerGroup.create().beanContextBuilder(getBeanContextBuilder());
-		this.parsers = ParserGroup.create().beanContextBuilder(getBeanContextBuilder());
-		this.partSerializer = (SerializerBuilder) OpenApiSerializer.create().beanContextBuilder(getBeanContextBuilder());
-		this.partParser = (ParserBuilder) OpenApiParser.create().beanContextBuilder(getBeanContextBuilder());
+		this.serializers = SerializerGroup.create().beanContext(beanContext());
+		this.parsers = ParserGroup.create().beanContext(beanContext());
+		this.partSerializer = (SerializerBuilder) OpenApiSerializer.create().beanContext(beanContext());
+		this.partParser = (ParserBuilder) OpenApiParser.create().beanContext(beanContext());
 		type(RestClient.class);
 	}
 

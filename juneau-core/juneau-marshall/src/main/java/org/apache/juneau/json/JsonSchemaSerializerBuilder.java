@@ -43,7 +43,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		produces("application/json");
 		accept("application/json+schema,text/json+schema");
 		type(JsonSchemaSerializer.class);
-		generatorBuilder = (JsonSchemaGeneratorBuilder) JsonSchemaGenerator.create().beanContextBuilder(getBeanContextBuilder());
+		generatorBuilder = (JsonSchemaGeneratorBuilder) JsonSchemaGenerator.create().beanContext(beanContext());
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	protected JsonSchemaSerializerBuilder(JsonSchemaSerializer copyFrom) {
 		super(copyFrom);
-		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generator.copy().beanContextBuilder(getBeanContextBuilder());
+		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generator.copy().beanContext(beanContext());
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	protected JsonSchemaSerializerBuilder(JsonSchemaSerializerBuilder copyFrom) {
 		super(copyFrom);
-		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generatorBuilder.copy().beanContextBuilder(getBeanContextBuilder());
+		generatorBuilder = (JsonSchemaGeneratorBuilder) copyFrom.generatorBuilder.copy().beanContext(beanContext());
 	}
 
 	@Override /* ContextBuilder */

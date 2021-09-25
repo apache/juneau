@@ -41,9 +41,9 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	protected JsonSchemaGeneratorBuilder() {
 		super();
-		BeanContextBuilder bc = getBeanContextBuilder();
-		jsonSerializerBuilder = JsonSerializer.create().beanContextBuilder(bc);
-		jsonParserBuilder = (JsonParserBuilder) JsonParser.create().beanContextBuilder(bc);
+		BeanContextBuilder bc = beanContext();
+		jsonSerializerBuilder = JsonSerializer.create().beanContext(bc);
+		jsonParserBuilder = (JsonParserBuilder) JsonParser.create().beanContext(bc);
 		type(JsonSchemaGenerator.class);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
@@ -55,9 +55,9 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	protected JsonSchemaGeneratorBuilder(JsonSchemaGenerator copyFrom) {
 		super(copyFrom);
-		BeanContextBuilder bc = getBeanContextBuilder();
-		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContextBuilder(bc);
-		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParser.copy().beanContextBuilder(bc);
+		BeanContextBuilder bc = beanContext();
+		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
+		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParser.copy().beanContext(bc);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
 
@@ -68,9 +68,9 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	protected JsonSchemaGeneratorBuilder(JsonSchemaGeneratorBuilder copyFrom) {
 		super(copyFrom);
-		BeanContextBuilder bc = getBeanContextBuilder();
-		jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContextBuilder(bc);
-		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParserBuilder.copy().beanContextBuilder(bc);
+		BeanContextBuilder bc = beanContext();
+		jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContext(bc);
+		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParserBuilder.copy().beanContext(bc);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 	}
 

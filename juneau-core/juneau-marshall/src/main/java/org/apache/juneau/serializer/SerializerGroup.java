@@ -162,7 +162,7 @@ public final class SerializerGroup {
 				SerializerBuilder x = (SerializerBuilder)o;
 				x = x.copy();
 				if (bcBuilder != null)
-					x.beanContextBuilder(bcBuilder);
+					x.beanContext(bcBuilder);
 				return x;
 			}
 			return o;
@@ -188,9 +188,9 @@ public final class SerializerGroup {
 		 * @param value The bean contest builder to associate.
 		 * @return This object (for method chaining).
 		 */
-		public Builder beanContextBuilder(BeanContextBuilder value) {
+		public Builder beanContext(BeanContextBuilder value) {
 			bcBuilder = value;
-			forEach(x -> x.beanContextBuilder(value));
+			forEach(x -> x.beanContext(value));
 			return this;
 		}
 
@@ -200,7 +200,7 @@ public final class SerializerGroup {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder beanContextBuilder(Consumer<BeanContextBuilder> operation) {
+		public final Builder beanContext(Consumer<BeanContextBuilder> operation) {
 			if (bcBuilder != null)
 				operation.accept(bcBuilder);
 			return this;
@@ -287,7 +287,7 @@ public final class SerializerGroup {
 				@SuppressWarnings("unchecked")
 				SerializerBuilder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
 				if (bcBuilder != null)
-					b.beanContextBuilder(bcBuilder);
+					b.beanContext(bcBuilder);
 				o = b;
 			}
 			return o;
