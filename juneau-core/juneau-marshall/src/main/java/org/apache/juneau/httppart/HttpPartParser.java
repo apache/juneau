@@ -86,6 +86,17 @@ public interface HttpPartParser {
 		public Creator copy() {
 			return new Creator(this);
 		}
+
+		/**
+		 * Associates an existing bean context builder with this part parser.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Creator beanContext(BeanContextBuilder value) {
+			builder(BeanContextableBuilder.class).ifPresent(x -> x.beanContext(value));
+			return this;
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

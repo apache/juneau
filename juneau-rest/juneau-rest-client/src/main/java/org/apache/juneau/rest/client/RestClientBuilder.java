@@ -98,6 +98,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	private HeaderList.Builder headerData;
 	private PartList.Builder queryData, formData, pathData;
 	private BeanCreator<RestCallHandler> callHandler;
+	private SerializerGroup.Builder serializers;
+	private ParserGroup.Builder parsers;
+	private HttpPartSerializer.Creator partSerializer;
+	private HttpPartParser.Creator partParser;
+
 	private boolean pooled;
 
 	String rootUri;
@@ -113,24 +118,11 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	ExecutorService executorService;
 	List<RestCallInterceptor> interceptors;
 
-	SerializerGroup.Builder serializers;
-	ParserGroup.Builder parsers;
-
-	SerializerBuilder partSerializer;
-	ParserBuilder partParser;
-
-	HttpPartSerializer simplePartSerializer;
-	HttpPartParser simplePartParser;
-
 	/**
 	 * Constructor.
 	 */
 	protected RestClientBuilder() {
 		super();
-		this.serializers = SerializerGroup.create().beanContext(beanContext());
-		this.parsers = ParserGroup.create().beanContext(beanContext());
-		this.partSerializer = (SerializerBuilder) OpenApiSerializer.create().beanContext(beanContext());
-		this.partParser = (ParserBuilder) OpenApiParser.create().beanContext(beanContext());
 		type(RestClient.class);
 	}
 
@@ -882,6 +874,570 @@ public class RestClientBuilder extends BeanContextableBuilder {
 
 	final CloseableHttpClient getHttpClient() {
 		return httpClient != null ? httpClient : createHttpClient();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// serializers
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the serializer group sub-builder.
+	 *
+	 * @return The serializer group sub-builder.
+	 */
+	public final SerializerGroup.Builder serializers() {
+		if (serializers == null)
+			serializers = createSerializers();
+		return serializers;
+	}
+
+	/**
+	 * Applies an operation to the serializer group sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder serializers(Consumer<SerializerGroup.Builder> operation) {
+		operation.accept(serializers());
+		return this;
+	}
+
+	/**
+	 * Instantiates the serializer group sub-builder.
+	 *
+	 * @return A new serializer group sub-builder.
+	 */
+	protected SerializerGroup.Builder createSerializers() {
+		return SerializerGroup.create().beanContext(beanContext());
+	}
+
+	/**
+	 * Serializer.
+	 *
+	 * <p>
+	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializer(JsonSerializer.<jk>class</jk>)
+	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	@FluentSetter
+	public RestClientBuilder serializer(Class<? extends Serializer> value) {
+		return serializers(value);
+	}
+
+	/**
+	 * Serializer.
+	 *
+	 * <p>
+	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder serializer(Serializer value) {
+		return serializers(value);
+	}
+
+	/**
+	 * Serializers.
+	 *
+	 * <p>
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>)
+	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	@FluentSetter
+	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
+		serializers().add(value);
+		return this;
+	}
+
+	/**
+	 * Serializers.
+	 *
+	 * <p>
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>, XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder serializers(Serializer...value) {
+		serializers().add(value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// parsers
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the parser group sub-builder.
+	 *
+	 * @return The parser group sub-builder.
+	 */
+	public final ParserGroup.Builder parsers() {
+		if (parsers == null)
+			parsers = createParsers();
+		return parsers;
+	}
+
+	/**
+	 * Applies an operation to the parser group sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder parsers(Consumer<ParserGroup.Builder> operation) {
+		operation.accept(parsers());
+		return this;
+	}
+
+	/**
+	 * Instantiates the parser group sub-builder.
+	 *
+	 * @return A new parser group sub-builder.
+	 */
+	protected ParserGroup.Builder createParsers() {
+		return ParserGroup.create().beanContext(beanContext());
+	}
+
+	/**
+	 * Parser.
+	 *
+	 * <p>
+	 * Associates the specified {@link Parser Parser} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser is used to parse the HTTP response body into a POJO.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jk>class</jk>)
+	 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	@FluentSetter
+	public RestClientBuilder parser(Class<? extends Parser> value) {
+		return parsers(value);
+	}
+
+	/**
+	 * Parser.
+	 *
+	 * <p>
+	 * Associates the specified {@link Parser Parser} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser is used to parse the HTTP response body into a POJO.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder parser(Parser value) {
+		return parsers(value);
+	}
+
+	/**
+	 * Parsers.
+	 *
+	 * <p>
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parsers are used to parse the HTTP response body into a POJO.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
+	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	@FluentSetter
+	public RestClientBuilder parsers(Class<? extends Parser>...value) {
+		parsers().add(value);
+		return this;
+	}
+
+	/**
+	 * Parsers.
+	 *
+	 * <p>
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parsers are used to parse the HTTP response body into a POJO.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder parsers(Parser...value) {
+		parsers().add(value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// partSerializer
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the part serializer sub-builder.
+	 *
+	 * @return The part serializer sub-builder.
+	 */
+	public final HttpPartSerializer.Creator partSerializer() {
+		if (partSerializer == null)
+			partSerializer = createPartSerializer();
+		return partSerializer;
+	}
+
+	/**
+	 * Applies an operation to the part serializer sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
+		operation.accept(partSerializer());
+		return this;
+	}
+
+	/**
+	 * Instantiates the part serializer sub-builder.
+	 *
+	 * @return A new part serializer sub-builder.
+	 */
+	protected HttpPartSerializer.Creator createPartSerializer() {
+		return HttpPartSerializer.creator().type(OpenApiSerializer.class).beanContext(beanContext());
+	}
+
+	/**
+	 * Part serializer.
+	 *
+	 * <p>
+	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partSerializer(UonSerializer.<jk>class</jk>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link OpenApiSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
+		partSerializer().type(value);
+		return this;
+	}
+
+	/**
+	 * Part serializer.
+	 *
+	 * <p>
+	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partSerializer(UonSerializer.<jsf>DEFAULT</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link OpenApiSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder partSerializer(HttpPartSerializer value) {
+		partSerializer().impl(value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// partParser
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the part parser sub-builder.
+	 *
+	 * @return The part parser sub-builder.
+	 */
+	public final HttpPartParser.Creator partParser() {
+		if (partParser == null)
+			partParser = createPartParser();
+		return partParser;
+	}
+
+	/**
+	 * Applies an operation to the part parser sub-builder.
+	 *
+	 * <p>
+	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
+	 *
+	 * @param operation The operation to apply.
+	 * @return This object.
+	 */
+	public final RestClientBuilder partParser(Consumer<HttpPartParser.Creator> operation) {
+		operation.accept(partParser());
+		return this;
+	}
+
+	/**
+	 * Instantiates the part parser sub-builder.
+	 *
+	 * @return A new part parser sub-builder.
+	 */
+	protected HttpPartParser.Creator createPartParser() {
+		return HttpPartParser.creator().type(OpenApiParser.class).beanContext(beanContext());
+	}
+
+	/**
+	 * Part parser.
+	 *
+	 * <p>
+	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partParser(UonParser.<jk>class</jk>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link OpenApiParser}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
+		partParser().type(value);
+		return this;
+	}
+
+	/**
+	 * Part parser.
+	 *
+	 * <p>
+	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link OpenApiParser}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder partParser(HttpPartParser value) {
+		partParser().impl(value);
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -2708,288 +3264,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parser.
-	 *
-	 * <p>
-	 * Associates the specified {@link Parser Parser} with the HTTP client.
-	 *
-	 * <p>
-	 * The parser is used to parse the HTTP response body into a POJO.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.parser(JsonParser.<jk>class</jk>)
-	 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@FluentSetter
-	public RestClientBuilder parser(Class<? extends Parser> value) {
-		return parsers(value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parser.
-	 *
-	 * <p>
-	 * Associates the specified {@link Parser Parser} with the HTTP client.
-	 *
-	 * <p>
-	 * The parser is used to parse the HTTP response body into a POJO.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
-	 * 	on this builder class have no effect.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder parser(Parser value) {
-		return parsers(value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parsers.
-	 *
-	 * <p>
-	 * Associates the specified {@link Parser Parsers} with the HTTP client.
-	 *
-	 * <p>
-	 * The parsers are used to parse the HTTP response body into a POJO.
-	 *
-	 * <p>
-	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
-	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@FluentSetter
-	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-		parsers.add(value);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parsers.
-	 *
-	 * <p>
-	 * Associates the specified {@link Parser Parsers} with the HTTP client.
-	 *
-	 * <p>
-	 * The parsers are used to parse the HTTP response body into a POJO.
-	 *
-	 * <p>
-	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
-	 * 	on this builder class have no effect.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder parsers(Parser...value) {
-		parsers.add(value);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part parser.
-	 *
-	 * <p>
-	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
-	 *
-	 * <p>
-	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.partParser(UonParser.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiParser}.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@FluentSetter
-	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
-		if (Parser.class.isAssignableFrom(value))
-			this.partParser = Parser.createParserBuilder((Class<? extends Parser>)value);
-		else {
-			try {
-				this.simplePartParser = ClassInfo.of(value).getPublicConstructor().invoke();
-			} catch (ExecutableException e) {
-				throw new ConfigException(e, "Could not instantiate HttpPartParser class {0}", value);
-			}
-		}
-		return this;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part parser.
-	 *
-	 * <p>
-	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
-	 *
-	 * <p>
-	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiParser}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder partParser(HttpPartParser value) {
-		simplePartParser = value;
-		return this;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part serializer.
-	 *
-	 * <p>
-	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-	 *
-	 * <p>
-	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.partSerializer(UonSerializer.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@FluentSetter
-	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
-		if (Serializer.class.isAssignableFrom(value))
-			this.partSerializer = Serializer.createSerializerBuilder((Class<? extends Serializer>)value);
-		else {
-			try {
-				this.simplePartSerializer = ClassInfo.of(value).getPublicConstructor().invoke();
-			} catch (ExecutableException e) {
-				throw new ConfigException(e, "Could not instantiate HttpPartSerializer class {0}", value);
-			}
-		}
-		return this;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part serializer.
-	 *
-	 * <p>
-	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-	 *
-	 * <p>
-	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.partSerializer(UonSerializer.<jsf>DEFAULT</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder partSerializer(HttpPartSerializer value) {
-		this.simplePartSerializer = value;
-		return this;
-	}
-
-	/**
 	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Root URI.
 	 *
 	 * <p>
@@ -3042,154 +3316,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	public String getRootUri() {
 		return rootUri;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializer.
-	 *
-	 * <p>
-	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer is used to serialize POJOs into the HTTP request body.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.serializer(JsonSerializer.<jk>class</jk>)
-	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link JsonSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@FluentSetter
-	public RestClientBuilder serializer(Class<? extends Serializer> value) {
-		return serializers(value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializer.
-	 *
-	 * <p>
-	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer is used to serialize POJOs into the HTTP request body.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
-	 * 	on this builder class have no effect.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link JsonSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder serializer(Serializer value) {
-		return serializers(value);
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializers.
-	 *
-	 * <p>
-	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer is used to serialize POJOs into the HTTP request body.
-	 *
-	 * <p>
-	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>)
-	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link JsonSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@FluentSetter
-	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-		serializers.add(value);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializers.
-	 *
-	 * <p>
-	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer is used to serialize POJOs into the HTTP request body.
-	 *
-	 * <p>
-	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
-	 * 	on this builder class have no effect.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>, XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link JsonSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder serializers(Serializer...value) {
-		serializers.add(value);
-		return this;
 	}
 
 	/**
@@ -3360,7 +3486,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder detectRecursions() {
-		serializers.forEach(x -> x.detectRecursions());
+		serializers().forEach(x -> x.detectRecursions());
 		return this;
 	}
 
@@ -3413,7 +3539,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ignoreRecursions() {
-		serializers.forEach(x -> x.ignoreRecursions());
+		serializers().forEach(x -> x.ignoreRecursions());
 		return this;
 	}
 
@@ -3458,7 +3584,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder initialDepth(int value) {
-		serializers.forEach(x -> x.initialDepth(value));
+		serializers().forEach(x -> x.initialDepth(value));
 		return this;
 	}
 
@@ -3495,7 +3621,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxDepth(int value) {
-		serializers.forEach(x -> x.maxDepth(value));
+		serializers().forEach(x -> x.maxDepth(value));
 		return this;
 	}
 
@@ -3553,7 +3679,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addBeanTypes() {
-		serializers.forEach(x -> x.addBeanTypes());
+		serializers().forEach(x -> x.addBeanTypes());
 		return this;
 	}
 
@@ -3607,7 +3733,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addRootType() {
-		serializers.forEach(x -> x.addRootType());
+		serializers().forEach(x -> x.addRootType());
 		return this;
 	}
 
@@ -3649,7 +3775,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder keepNullProperties() {
-		serializers.forEach(x -> x.keepNullProperties());
+		serializers().forEach(x -> x.keepNullProperties());
 		return this;
 	}
 
@@ -3688,7 +3814,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortCollections() {
-		serializers.forEach(x -> x.sortCollections());
+		serializers().forEach(x -> x.sortCollections());
 		return this;
 	}
 
@@ -3727,7 +3853,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortMaps() {
-		serializers.forEach(x -> x.sortMaps());
+		serializers().forEach(x -> x.sortMaps());
 		return this;
 	}
 
@@ -3773,7 +3899,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyCollections() {
-		serializers.forEach(x -> x.trimEmptyCollections());
+		serializers().forEach(x -> x.trimEmptyCollections());
 		return this;
 	}
 
@@ -3818,7 +3944,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyMaps() {
-		serializers.forEach(x -> x.trimEmptyMaps());
+		serializers().forEach(x -> x.trimEmptyMaps());
 		return this;
 	}
 
@@ -3854,7 +3980,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnWrite() {
-		serializers.forEach(x -> x.trimStrings());
+		serializers().forEach(x -> x.trimStrings());
 		return this;
 	}
 
@@ -3903,7 +4029,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriContext(UriContext value) {
-		serializers.forEach(x -> x.uriContext(value));
+		serializers().forEach(x -> x.uriContext(value));
 		return this;
 	}
 
@@ -3942,7 +4068,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriRelativity(UriRelativity value) {
-		serializers.forEach(x -> x.uriRelativity(value));
+		serializers().forEach(x -> x.uriRelativity(value));
 		return this;
 	}
 
@@ -3983,7 +4109,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder uriResolution(UriResolution value) {
-		serializers.forEach(x -> x.uriResolution(value));
+		serializers().forEach(x -> x.uriResolution(value));
 		return this;
 	}
 
@@ -4023,7 +4149,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder maxIndent(int value) {
-		serializers.forEachWS(x -> x.maxIndent(value));
+		serializers().forEachWS(x -> x.maxIndent(value));
 		return this;
 	}
 
@@ -4068,7 +4194,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder quoteChar(char value) {
-		serializers.forEachWS(x -> x.quoteChar(value));
+		serializers().forEachWS(x -> x.quoteChar(value));
 		return this;
 	}
 
@@ -4086,7 +4212,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder quoteCharOverride(char value) {
-		serializers.forEachWS(x -> x.quoteCharOverride(value));
+		serializers().forEachWS(x -> x.quoteCharOverride(value));
 		return this;
 	}
 
@@ -4128,7 +4254,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sq() {
-		serializers.forEachWS(x -> x.sq());
+		serializers().forEachWS(x -> x.sq());
 		return this;
 	}
 
@@ -4165,7 +4291,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder useWhitespace() {
-		serializers.forEachWS(x -> x.useWhitespace());
+		serializers().forEachWS(x -> x.useWhitespace());
 		return this;
 	}
 
@@ -4203,7 +4329,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ws() {
-		serializers.forEachWS(x -> x.ws());
+		serializers().forEachWS(x -> x.ws());
 		return this;
 	}
 
@@ -4254,7 +4380,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder debugOutputLines(int value) {
-		parsers.forEach(x -> x.debugOutputLines(value));
+		parsers().forEach(x -> x.debugOutputLines(value));
 		return this;
 	}
 
@@ -4320,7 +4446,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder strict() {
-		parsers.forEach(x -> x.strict());
+		parsers().forEach(x -> x.strict());
 		return this;
 	}
 
@@ -4358,7 +4484,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnRead() {
-		parsers.forEach(x -> x.trimStrings());
+		parsers().forEach(x -> x.trimStrings());
 		return this;
 	}
 
@@ -4427,11 +4553,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder oapiFormat(HttpPartFormat value) {
-		serializers.forEach(OpenApiSerializerBuilder.class, x -> x.format(value));
-		if (partSerializer instanceof OpenApiSerializerBuilder)
-			((OpenApiSerializerBuilder)partSerializer).format(value);
-		if (partParser instanceof OpenApiParserBuilder)
-			((OpenApiParserBuilder)partParser).format(value);
+		serializers().forEach(OpenApiSerializerBuilder.class, x -> x.format(value));
+		parsers().forEach(OpenApiParserBuilder.class, x -> x.format(value));
+		partSerializer().builder(OpenApiSerializerBuilder.class).ifPresent(x -> x.format(value));
+		partParser().builder(OpenApiParserBuilder.class).ifPresent(x -> x.format(value));
 		return this;
 	}
 
@@ -4491,11 +4616,10 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder oapiCollectionFormat(HttpPartCollectionFormat value) {
-		serializers.forEach(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
-		if (partSerializer instanceof OpenApiSerializerBuilder)
-			((OpenApiSerializerBuilder)partSerializer).collectionFormat(value);
-		if (partParser instanceof OpenApiParserBuilder)
-			((OpenApiParserBuilder)partParser).collectionFormat(value);
+		serializers().forEach(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
+		parsers().forEach(OpenApiParserBuilder.class, x -> x.collectionFormat(value));
+		partSerializer().builder(OpenApiSerializerBuilder.class, x -> x.collectionFormat(value));
+		partParser().builder(OpenApiParserBuilder.class, x -> x.collectionFormat(value));
 		return this;
 	}
 
@@ -4549,7 +4673,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder paramFormat(ParamFormat value) {
-		serializers.forEach(UonSerializerBuilder.class, x -> x.paramFormat(value));
+		serializers().forEach(UonSerializerBuilder.class, x -> x.paramFormat(value));
 		return this;
 	}
 
@@ -4590,7 +4714,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder paramFormatPlain() {
-		serializers.forEach(UonSerializerBuilder.class, x -> x.paramFormatPlain());
+		serializers().forEach(UonSerializerBuilder.class, x -> x.paramFormatPlain());
 		return this;
 	}
 

@@ -1105,10 +1105,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		logRequestsLevel = ofNullable(builder.logRequestsLevel).orElse(isDebug() ? Level.WARNING : Level.OFF);
 		logRequestsPredicate = ofNullable(builder.logRequestsPredicate).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 		interceptors = ofNullable(builder.interceptors).map(x -> x.toArray(new RestCallInterceptor[x.size()])).orElse(new RestCallInterceptor[0]);
-		serializers = builder.serializers.build();
-		parsers = builder.parsers.build();
-		partSerializer = builder.simplePartSerializer != null ? builder.simplePartSerializer : (HttpPartSerializer) builder.partSerializer.build();
-		partParser = builder.simplePartParser != null ? builder.simplePartParser : (HttpPartParser) builder.partParser.build();
+		serializers = builder.serializers().build();
+		parsers = builder.parsers().build();
+		partSerializer = builder.partSerializer().create();
+		partParser = builder.partParser().create();
 
 		ContextProperties cp = getContextProperties().copy().apply(getBeanContext().getContextProperties()).build();
 
