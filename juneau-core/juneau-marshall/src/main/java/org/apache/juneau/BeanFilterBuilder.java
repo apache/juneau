@@ -294,7 +294,7 @@ public class BeanFilterBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#sort()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jf'>{@link BeanContextBuilder#sortProperties()}
 	 * </ul>
 	 *
 	 * @param value
@@ -315,7 +315,7 @@ public class BeanFilterBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#sort()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jf'>{@link BeanContextBuilder#sortProperties()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -352,7 +352,7 @@ public class BeanFilterBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).

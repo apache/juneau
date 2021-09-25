@@ -52,10 +52,10 @@ public @interface Bean {
 	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
+	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] dictionary() default {};
@@ -149,9 +149,8 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
+	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
 	 * </ul>
 	 */
 	boolean findFluentSetters() default false;
@@ -373,7 +372,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#sortProperties()}
 	 * </ul>
 	 */
 	boolean sort() default false;
@@ -446,9 +445,8 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
+	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#typePropertyName(String)}
 	 * </ul>
 	 */
 	String typePropertyName() default "";

@@ -26,41 +26,11 @@ public class HashKey {
 	/**
 	 * Static creator.
 	 *
-	 * @return A new builder.
+	 * @param array The contents of the key.
+	 * @return A new bean.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * The builder class for this object.
-	 */
-	public static class Builder {
-		List<Object> list = new ArrayList<>();
-
-		/**
-		 * Adds a list of objects to this builder.
-		 *
-		 * @param values The values to add to this list.
-		 * @return This object.
-		 */
-		public Builder add(Object...values) {
-			Collections.addAll(list, values);
-			return this;
-		}
-
-		/**
-		 * Creates the key.
-		 *
-		 * @return The key.
-		 */
-		public HashKey build() {
-			return new HashKey(this);
-		}
+	public static HashKey of(Object...array) {
+		return new HashKey(array);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -70,9 +40,9 @@ public class HashKey {
 	private final int hashCode;
 	private final Object[] array;
 
-	HashKey(Builder builder) {
-		hashCode = builder.list.hashCode();
-		array = builder.list.toArray(new Object[builder.list.size()]);
+	HashKey(Object[] array) {
+		this.array = array;
+		this.hashCode = Arrays.hashCode(array);
 	}
 
 	@Override

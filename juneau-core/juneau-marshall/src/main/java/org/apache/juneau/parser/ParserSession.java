@@ -312,7 +312,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting on this parser is
+	 * 	Automatically thrown if {@link BeanContextBuilder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */

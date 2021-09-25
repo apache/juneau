@@ -1294,7 +1294,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
-	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
+	 * @see BeanContextBuilder#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -1317,7 +1317,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
-	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
+	 * @see BeanContextBuilder#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -1329,7 +1329,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Beans require Serializable interface.
 	 *
-	 * @see BeanContext#BEAN_beansRequireSerializable
+	 * @see BeanContextBuilder#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -1341,7 +1341,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Beans require setters for getters.
 	 *
-	 * @see BeanContext#BEAN_beansRequireSettersForGetters
+	 * @see BeanContextBuilder#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -1353,7 +1353,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Beans require at least one property.
 	 *
-	 * @see BeanContext#BEAN_disableBeansRequireSomeProperties
+	 * @see BeanContextBuilder#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -1379,7 +1379,7 @@ public class BeanSession extends Session {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see BeanContext#BEAN_findFluentSetters
+	 * @see BeanContextBuilder#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -1390,7 +1390,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
 	 *
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
+	 * @see BeanContextBuilder#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -1401,7 +1401,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
 	 *
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
+	 * @see BeanContextBuilder#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -1412,7 +1412,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Silently ignore missing setters.
 	 *
-	 * @see BeanContext#BEAN_disableIgnoreMissingSetters
+	 * @see BeanContextBuilder#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -1423,7 +1423,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
-	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
+	 * @see BeanContextBuilder#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -1435,7 +1435,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
 	 *
-	 * @see BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties
+	 * @see BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
 	 */
@@ -1490,7 +1490,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Sort bean properties.
 	 *
-	 * @see BeanContext#BEAN_sortProperties
+	 * @see BeanContextBuilder#sortProperties()
 	 * @return
 	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
@@ -1548,7 +1548,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Use enum names.
 	 *
-	 * @see BeanContext#BEAN_useEnumNames
+	 * @see BeanContextBuilder#useEnumNames()
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
@@ -1559,7 +1559,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Use interface proxies.
 	 *
-	 * @see BeanContext#BEAN_disableInterfaceProxies
+	 * @see BeanContextBuilder#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -1571,7 +1571,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Use Java Introspector.
 	 *
-	 * @see BeanContext#BEAN_useJavaBeanIntrospector
+	 * @see BeanContextBuilder#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */

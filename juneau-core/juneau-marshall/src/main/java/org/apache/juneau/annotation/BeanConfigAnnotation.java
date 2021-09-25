@@ -51,20 +51,20 @@ public class BeanConfigAnnotation {
 			visibility(a.beanMethodVisibility(), "beanMethodVisibility").ifPresent(x -> b.beanMethodVisibility(x));
 			classes(a.dictionary()).ifPresent(x -> b.beanDictionary(x));
 			classes(a.dictionary_replace()).ifPresent(x -> { b.beanDictionary().clear(); b.beanDictionary(x);});
-			bool(a.beanMapPutReturnsOldValue()).ifPresent(x -> b.set(BEAN_beanMapPutReturnsOldValue, x));
-			bool(a.beansRequireDefaultConstructor()).ifPresent(x -> b.set(BEAN_beansRequireDefaultConstructor, x));
-			bool(a.beansRequireSerializable()).ifPresent(x -> b.set(BEAN_beansRequireSerializable, x));
-			bool(a.beansRequireSettersForGetters()).ifPresent(x -> b.set(BEAN_beansRequireSettersForGetters, x));
-			bool(a.disableBeansRequireSomeProperties()).ifPresent(x -> b.set(BEAN_disableBeansRequireSomeProperties, x));
+			bool(a.beanMapPutReturnsOldValue()).ifPresent(x -> b.beanMapPutReturnsOldValue(x));
+			bool(a.beansRequireDefaultConstructor()).ifPresent(x -> b.beansRequireDefaultConstructor(x));
+			bool(a.beansRequireSerializable()).ifPresent(x -> b.beansRequireSerializable(x));
+			bool(a.beansRequireSettersForGetters()).ifPresent(x -> b.beansRequireSettersForGetters(x));
+			bool(a.disableBeansRequireSomeProperties()).ifPresent(x -> b.disableBeansRequireSomeProperties(x));
 			string(a.typePropertyName()).ifPresent(x -> b.set(BEAN_typePropertyName, x));
 			bool(a.debug()).ifPresent(x -> b.set(CONTEXT_debug, x));
-			bool(a.findFluentSetters()).ifPresent(x -> b.set(BEAN_findFluentSetters, x));
-			bool(a.ignoreInvocationExceptionsOnGetters()).ifPresent(x -> b.set(BEAN_ignoreInvocationExceptionsOnGetters, x));
-			bool(a.ignoreInvocationExceptionsOnSetters()).ifPresent(x -> b.set(BEAN_ignoreInvocationExceptionsOnSetters, x));
-			bool(a.disableIgnoreMissingSetters()).ifPresent(x -> b.set(BEAN_disableIgnoreMissingSetters, x));
-			bool(a.disableIgnoreTransientFields()).ifPresent(x -> b.set(BEAN_disableIgnoreTransientFields, x));
-			bool(a.ignoreUnknownBeanProperties()).ifPresent(x -> b.set(BEAN_ignoreUnknownBeanProperties, x));
-			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(x -> b.set(BEAN_disableIgnoreUnknownNullBeanProperties, x));
+			bool(a.findFluentSetters()).ifPresent(x -> b.findFluentSetters(x));
+			bool(a.ignoreInvocationExceptionsOnGetters()).ifPresent(x -> b.ignoreInvocationExceptionsOnGetters(x));
+			bool(a.ignoreInvocationExceptionsOnSetters()).ifPresent(x -> b.ignoreInvocationExceptionsOnSetters(x));
+			bool(a.disableIgnoreMissingSetters()).ifPresent(x -> b.disableIgnoreMissingSetters(x));
+			bool(a.disableIgnoreTransientFields()).ifPresent(x -> b.disableIgnoreTransientFields(x));
+			bool(a.ignoreUnknownBeanProperties()).ifPresent(x -> b.ignoreUnknownBeanProperties(x));
+			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(x -> b.disableIgnoreUnknownNullBeanProperties(x));
 			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.annotations(x));
 			string(a.locale()).map(Locale::forLanguageTag).ifPresent(x -> b.set(BEAN_locale, x));
 			string(a.mediaType()).map(MediaType::of).ifPresent(x -> b.set(BEAN_mediaType, x));
@@ -73,13 +73,13 @@ public class BeanConfigAnnotation {
 			b.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
 			b.setIfNotEmpty(BEAN_notBeanPackages, stringList(a.notBeanPackages_replace()));
 			type(a.propertyNamer()).ifPresent(x -> b.set(BEAN_propertyNamer, x));
-			bool(a.sortProperties()).ifPresent(x -> b.set(BEAN_sortProperties, x));
+			bool(a.sortProperties()).ifPresent(x -> b.sortProperties(x));
 			b.prependTo(BEAN_swaps, a.swaps());
 			b.setIfNotEmpty(BEAN_swaps, a.swaps_replace());
 			string(a.timeZone()).map(TimeZone::getTimeZone).ifPresent(x -> b.set(BEAN_timeZone, x));
-			bool(a.useEnumNames()).ifPresent(x -> b.set(BEAN_useEnumNames, x));
-			bool(a.disableInterfaceProxies()).ifPresent(x -> b.set(BEAN_disableInterfaceProxies, x));
-			bool(a.useJavaBeanIntrospector()).ifPresent(x -> b.set(BEAN_useJavaBeanIntrospector, x));
+			bool(a.useEnumNames()).ifPresent(x -> b.useEnumNames(x));
+			bool(a.disableInterfaceProxies()).ifPresent(x -> b.disableInterfaceProxies(x));
+			bool(a.useJavaBeanIntrospector()).ifPresent(x -> b.useJavaBeanIntrospector(x));
 		}
 	}
 }

@@ -201,7 +201,7 @@ public @interface Beanp {
 	 *
 	 * <div class='info'>
 	 * 	Note that if you're not interested in these additional properties, you can also use the
-	 * 	{@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting to ignore values that don't fit into existing
+	 * 	{@link BeanContextBuilder#ignoreUnknownBeanProperties()} setting to ignore values that don't fit into existing
 	 * 	properties.
 	 * </div>
 	 * <div class='info'>

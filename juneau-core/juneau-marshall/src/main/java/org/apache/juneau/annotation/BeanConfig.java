@@ -76,7 +76,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanClassVisibility(Visibility)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
 	 * </ul>
 	 */
 	String beanClassVisibility() default "";
@@ -106,7 +106,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanConstructorVisibility(Visibility)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
 	 * </ul>
 	 */
 	String beanConstructorVisibility() default "";
@@ -136,7 +136,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFieldVisibility(Visibility)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanFieldVisibility(Visibility)}
 	 * </ul>
 	 */
 	String beanFieldVisibility() default "";
@@ -161,8 +161,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMapPutReturnsOldValue()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * </ul>
 	 */
 	String beanMapPutReturnsOldValue() default "";
@@ -192,7 +191,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMethodVisibility(Visibility)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanMethodVisibility(Visibility)}
 	 * </ul>
 	 */
 	String beanMethodVisibility() default "";
@@ -218,8 +217,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireDefaultConstructor()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * </ul>
 	 */
 	String beansRequireDefaultConstructor() default "";
@@ -245,8 +243,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSerializable()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable()}
 	 * </ul>
 	 */
 	String beansRequireSerializable() default "";
@@ -270,8 +267,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSettersForGetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters()}
 	 * </ul>
 	 */
 	String beansRequireSettersForGetters() default "";
@@ -295,8 +291,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableBeansRequireSomeProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableBeansRequireSomeProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableBeansRequireSomeProperties()}
 	 * </ul>
 	 */
 	String disableBeansRequireSomeProperties() default "";
@@ -316,9 +311,8 @@ public @interface BeanConfig {
 	 * </ul>
 
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
+	 * 	<li class='ja'>{@link Bean#typePropertyName()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#typePropertyName(String)}
 	 * </ul>
 	 */
 	String typePropertyName() default "";
@@ -356,8 +350,8 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#debug()}
-	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#debug(Boolean)}
+	 * 	<li class='jm'>{@link ContextBuilder#debug()}
+	 * 	<li class='jm'>{@link SessionArgs#debug(Boolean)}
 	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
 	 * </ul>
 	 */
@@ -380,10 +374,10 @@ public @interface BeanConfig {
 	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
+	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * 	<li class='link'>{@doc BeanDictionaries}
 	 * </ul>
 	 */
@@ -396,10 +390,10 @@ public @interface BeanConfig {
 	 * Same as {@link #dictionary()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
+	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] dictionary_replace() default {};
@@ -431,9 +425,8 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
+	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
 	 * </ul>
 	 */
 	String findFluentSetters() default "";
@@ -457,8 +450,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * </ul>
 	 */
 	String ignoreInvocationExceptionsOnGetters() default "";
@@ -482,8 +474,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * </ul>
 	 */
 	String ignoreInvocationExceptionsOnSetters() default "";
@@ -507,8 +498,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreMissingSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreMissingSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreMissingSetters()}
 	 * </ul>
 	 */
 	String disableIgnoreMissingSetters() default "";
@@ -531,8 +521,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreTransientFields()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreTransientFields}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreTransientFields()}
 	 * </ul>
 	 */
 	String disableIgnoreTransientFields() default "";
@@ -556,8 +545,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownBeanProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * </ul>
 	 */
 	String ignoreUnknownBeanProperties() default "";
@@ -581,8 +569,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()}
 	 * </ul>
 	 */
 	String disableIgnoreUnknownNullBeanProperties() default "";
@@ -635,9 +622,8 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#locale(Locale)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
+	 * 	<li class='jm'>{@link BeanSessionArgs#locale(Locale)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
 	 * </ul>
 	 */
 	String locale() default "";
@@ -654,9 +640,8 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#mediaType(MediaType)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
+	 * 	<li class='jm'>{@link BeanSessionArgs#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
 	 * </ul>
 	 */
 	String mediaType() default "";
@@ -674,10 +659,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses_replace(Object...)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * 	<li class='ja'>{@link BeanIgnore}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses_replace(Object...)}
 	 * </ul>
 	 */
 	Class<?>[] notBeanClasses() default {};
@@ -689,7 +673,7 @@ public @interface BeanConfig {
 	 * Same as {@link #notBeanClasses()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
 	 * </ul>
 	 */
 	Class<?>[] notBeanClasses_replace() default {};
@@ -724,7 +708,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
 	 * </ul>
 	 */
 	String[] notBeanPackages() default {};
@@ -736,7 +720,7 @@ public @interface BeanConfig {
 	 * Same as {@link #notBeanPackages()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
 	 * </ul>
 	 */
 	String[] notBeanPackages_replace() default {};
@@ -756,7 +740,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * </ul>
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Null.class;
@@ -787,7 +771,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#sortProperties()}
 	 * </ul>
 	 */
 	String sortProperties() default "";
@@ -808,7 +792,7 @@ public @interface BeanConfig {
 	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * 	<li class='jm'>{@link BeanContextBuilder#swaps}
 	 * 	<li class='link'>{@doc PojoSwaps}
 	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
 	 * 	<li class='link'>{@doc OneWayPojoSwaps}
@@ -826,7 +810,7 @@ public @interface BeanConfig {
 	 * Same as {@link #swaps()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
 	 * </ul>
 	 */
 	Class<?>[] swaps_replace() default {};
@@ -843,9 +827,8 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#timeZone(TimeZone)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
+	 * 	<li class='jm'>{@link BeanSessionArgs#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
 	 * </ul>
 	 */
 	String timeZone() default "";
@@ -868,7 +851,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
+	 * 	<li class='jm'>{@link BeanContextBuilder#useEnumNames()}
 	 * </ul>
 	 */
 	String useEnumNames() default "";
@@ -893,8 +876,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableInterfaceProxies()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableInterfaceProxies}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableInterfaceProxies()}
 	 * </ul>
 	 */
 	String disableInterfaceProxies() default "";
@@ -918,7 +900,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
+	 * 	<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector()}
 	 * </ul>
 	 */
 	String useJavaBeanIntrospector() default "";

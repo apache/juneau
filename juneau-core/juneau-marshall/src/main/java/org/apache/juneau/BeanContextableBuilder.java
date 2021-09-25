@@ -369,7 +369,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -471,7 +471,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -520,7 +520,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -567,7 +567,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSettersForGetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -611,7 +611,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableBeansRequireSomeProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableBeansRequireSomeProperties()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1597,7 +1597,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1637,7 +1637,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
 	 * </ul>
 	 *
 	 * @param on The class that this applies to.
@@ -1677,7 +1677,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1716,7 +1716,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1759,7 +1759,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreMissingSetters}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreMissingSetters()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1799,7 +1799,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreTransientFields}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreTransientFields()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1836,7 +1836,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -1873,7 +1873,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -2414,7 +2414,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#sortProperties()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -2452,7 +2452,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jm'>{@link BeanContextBuilder#sortProperties()}
 	 * </ul>
 	 *
 	 * @param on The bean classes to sort properties on.
@@ -2839,7 +2839,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
+	 * 	<li class='jm'>{@link BeanContextBuilder#useEnumNames()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -2860,7 +2860,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableInterfaceProxies}
+	 * 	<li class='jm'>{@link BeanContextBuilder#disableInterfaceProxies()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -2888,7 +2888,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
+	 * 	<li class='jmf'>{@link BeanContextBuilder#useJavaBeanIntrospector()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).

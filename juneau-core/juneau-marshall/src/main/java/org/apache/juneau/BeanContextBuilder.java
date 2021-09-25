@@ -67,6 +67,10 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
 	List<Class<?>> beanDictionary;
+	boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
+		beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
+		disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
+		ignoreUnknownBeanProperties, sortProperties, useEnumNames, useJavaBeanIntrospector;
 
 	/**
 	 * Constructor.
@@ -75,11 +79,27 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	protected BeanContextBuilder() {
 		super();
-		beanClassVisibility = env("RestContext.beanClassVisibility", PUBLIC);
-		beanConstructorVisibility = env("RestContext.beanConstructorVisibility", PUBLIC);
-		beanMethodVisibility = env("RestContext.beanMethodVisibility", PUBLIC);
-		beanFieldVisibility = env("RestContext.beanFieldVisibility", PUBLIC);
+		beanClassVisibility = env("BeanContext.beanClassVisibility", PUBLIC);
+		beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
+		beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
+		beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
 		beanDictionary = null;
+		disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
+		beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
+		beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
+		beansRequireSerializable = env("BeanContext.beansRequireSerializable", false);
+		beansRequireSettersForGetters = env("BeanContext.beansRequireSettersForGetters", false);
+		disableIgnoreTransientFields = env("BeanContext.disableIgnoreTransientFields", false);
+		disableIgnoreUnknownNullBeanProperties = env("BeanContext.disableIgnoreUnknownNullBeanProperties", false);
+		disableIgnoreMissingSetters = env("BeanContext.disableIgnoreMissingSetters", false);
+		disableInterfaceProxies = env("BeanContext.disableInterfaceProxies", false);
+		findFluentSetters = env("BeanContext.findFluentSetters", false);
+		ignoreInvocationExceptionsOnGetters = env("BeanContext.ignoreInvocationExceptionsOnGetters", false);
+		ignoreInvocationExceptionsOnSetters = env("BeanContext.ignoreInvocationExceptionsOnSetters", false);
+		ignoreUnknownBeanProperties = env("BeanContext.ignoreUnknownBeanProperties", false);
+		sortProperties = env("BeanContext.sortProperties", false);
+		useEnumNames = env("BeanContext.useEnumNames", false);
+		useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
 	}
 
 	/**
@@ -94,6 +114,22 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanMethodVisibility = copyFrom.beanMethodVisibility;
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
 		beanDictionary = copyFrom.beanDictionary.isEmpty() ? null : new ArrayList<>(copyFrom.beanDictionary);
+		disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
+		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
+		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
+		beansRequireSerializable = copyFrom.beansRequireSerializable;
+		beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
+		disableIgnoreTransientFields = ! copyFrom.ignoreTransientFields;
+		disableIgnoreUnknownNullBeanProperties = ! copyFrom.ignoreUnknownNullBeanProperties;
+		disableIgnoreMissingSetters = ! copyFrom.ignoreMissingSetters;
+		disableInterfaceProxies = ! copyFrom.useInterfaceProxies;
+		findFluentSetters = copyFrom.findFluentSetters;
+		ignoreInvocationExceptionsOnGetters = copyFrom.ignoreInvocationExceptionsOnGetters;
+		ignoreInvocationExceptionsOnSetters = copyFrom.ignoreInvocationExceptionsOnSetters;
+		ignoreUnknownBeanProperties = copyFrom.ignoreUnknownBeanProperties;
+		sortProperties = copyFrom.sortProperties;
+		useEnumNames = copyFrom.useEnumNames;
+		useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 	}
 
 	/**
@@ -108,6 +144,22 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanMethodVisibility = copyFrom.beanMethodVisibility;
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
 		beanDictionary = copyFrom.beanDictionary == null ? null : new ArrayList<>(copyFrom.beanDictionary);
+		disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
+		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
+		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
+		beansRequireSerializable = copyFrom.beansRequireSerializable;
+		beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
+		disableIgnoreTransientFields = copyFrom.disableIgnoreTransientFields;
+		disableIgnoreUnknownNullBeanProperties = copyFrom.disableIgnoreUnknownNullBeanProperties;
+		disableIgnoreMissingSetters = copyFrom.disableIgnoreMissingSetters;
+		disableInterfaceProxies = copyFrom.disableInterfaceProxies;
+		findFluentSetters = copyFrom.findFluentSetters;
+		ignoreInvocationExceptionsOnGetters = copyFrom.ignoreInvocationExceptionsOnGetters;
+		ignoreInvocationExceptionsOnSetters = copyFrom.ignoreInvocationExceptionsOnSetters;
+		ignoreUnknownBeanProperties = copyFrom.ignoreUnknownBeanProperties;
+		sortProperties = copyFrom.sortProperties;
+		useEnumNames = copyFrom.useEnumNames;
+		useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 	}
 
 	@Override /* ContextBuilder */
@@ -119,23 +171,45 @@ public class BeanContextBuilder extends ContextBuilder {
 	public BeanContext build() {
 		ContextProperties cp = getContextProperties();
 		cp = cp.subset(new String[]{"Context","BeanContext"});
-		HashKey key = HashKey
-			.create()
-			.add(
-				cp, 
-				beanClassVisibility, 
-				beanConstructorVisibility, 
-				beanMethodVisibility, 
-				beanFieldVisibility, 
-				beanDictionary
+		HashKey key = HashKey.of(
+			cp,
+			beanClassVisibility,
+			beanConstructorVisibility,
+			beanMethodVisibility,
+			beanFieldVisibility,
+			beanDictionary,
+			integer(
+				disableBeansRequireSomeProperties,
+				beanMapPutReturnsOldValue,
+				beansRequireDefaultConstructor,
+				beansRequireSerializable,
+				beansRequireSettersForGetters,
+				disableIgnoreTransientFields,
+				disableIgnoreUnknownNullBeanProperties,
+				disableIgnoreMissingSetters,
+				disableInterfaceProxies,
+				findFluentSetters,
+				ignoreInvocationExceptionsOnGetters,
+				ignoreInvocationExceptionsOnSetters,
+				ignoreUnknownBeanProperties,
+				sortProperties,
+				useEnumNames,
+				useJavaBeanIntrospector
 			)
-			.build();
+		);
 		BeanContext bc = CACHE.get(key);
 		if (bc == null) {
 			bc = new BeanContext(this);
 			CACHE.putIfAbsent(key, bc);
 		}
 		return bc;
+	}
+
+	private int integer(boolean...values) {
+		int n = 0;
+		for (boolean b : values)
+			n = (n << 1) | (b ? 1 : 0);
+		return n;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -375,14 +449,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanMapPutReturnsOldValue() {
-		return set(BEAN_beanMapPutReturnsOldValue);
+		return beanMapPutReturnsOldValue(true);
+	}
+
+	/**
+	 * Same as {@link #beanMapPutReturnsOldValue()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
+		beanMapPutReturnsOldValue = value;
+		return this;
 	}
 
 	/**
@@ -476,14 +561,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansRequireDefaultConstructor() {
-		return set(BEAN_beansRequireDefaultConstructor);
+		return beansRequireDefaultConstructor(true);
+	}
+
+	/**
+	 * Same as {@link #beansRequireDefaultConstructor()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder beansRequireDefaultConstructor(boolean value) {
+		beansRequireDefaultConstructor = value;
+		return this;
 	}
 
 	/**
@@ -524,14 +620,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansRequireSerializable() {
-		return set(BEAN_beansRequireSerializable);
+		return beansRequireSerializable(true);
+	}
+
+	/**
+	 * Same as {@link #beansRequireSerializable()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder beansRequireSerializable(boolean value) {
+		beansRequireSerializable = value;
+		return this;
 	}
 
 	/**
@@ -568,16 +675,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSettersForGetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansRequireSettersForGetters() {
-		return set(BEAN_beansRequireSettersForGetters);
+		return beansRequireSettersForGetters(true);
+	}
+
+	/**
+	 * Same as {@link #beansRequireSettersForGetters()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder beansRequireSettersForGetters(boolean value) {
+		beansRequireSettersForGetters = value;
+		return this;
 	}
 
 	/**
@@ -613,14 +727,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableBeansRequireSomeProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableBeansRequireSomeProperties() {
-		return set(BEAN_disableBeansRequireSomeProperties);
+		return disableBeansRequireSomeProperties(true);
+	}
+
+	/**
+	 * Same as {@link #disableBeansRequireSomeProperties()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder disableBeansRequireSomeProperties(boolean value) {
+		disableBeansRequireSomeProperties = value;
+		return this;
 	}
 
 	/**
@@ -1614,14 +1739,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder findFluentSetters() {
-		return set(BEAN_findFluentSetters);
+		return findFluentSetters(true);
+	}
+
+	/**
+	 * Same as {@link #findFluentSetters()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder findFluentSetters(boolean value) {
+		findFluentSetters = value;
+		return this;
 	}
 
 	/**
@@ -1653,7 +1789,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
+	 * 	<li class='jm'>{@link #findFluentSetters()}
 	 * </ul>
 	 *
 	 * @param on The class that this applies to.
@@ -1692,14 +1828,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters() {
-		return set(BEAN_ignoreInvocationExceptionsOnGetters);
+		return ignoreInvocationExceptionsOnGetters(true);
+	}
+
+	/**
+	 * Same as {@link #ignoreInvocationExceptionsOnGetters()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		ignoreInvocationExceptionsOnGetters = value;
+		return this;
 	}
 
 	/**
@@ -1730,14 +1877,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters() {
-		return set(BEAN_ignoreInvocationExceptionsOnSetters);
+		return ignoreInvocationExceptionsOnSetters(true);
+	}
+
+	/**
+	 * Same as {@link #ignoreInvocationExceptionsOnSetters()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		ignoreInvocationExceptionsOnSetters = value;
+		return this;
 	}
 
 	/**
@@ -1772,14 +1930,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreMissingSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableIgnoreMissingSetters() {
-		return set(BEAN_disableIgnoreMissingSetters);
+		return disableIgnoreMissingSetters(true);
+	}
+
+	/**
+	 * Same as {@link #disableIgnoreMissingSetters()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder disableIgnoreMissingSetters(boolean value) {
+		disableIgnoreMissingSetters = value;
+		return this;
 	}
 
 	/**
@@ -1811,14 +1980,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreTransientFields}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableIgnoreTransientFields() {
-		return set(BEAN_disableIgnoreTransientFields);
+		return disableIgnoreTransientFields(true);
+	}
+
+	/**
+	 * Same as {@link #disableIgnoreTransientFields()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder disableIgnoreTransientFields(boolean value) {
+		disableIgnoreTransientFields = value;
+		return this;
 	}
 
 	/**
@@ -1847,14 +2027,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder ignoreUnknownBeanProperties() {
-		return set(BEAN_ignoreUnknownBeanProperties);
+		return ignoreUnknownBeanProperties(true);
+	}
+
+	/**
+	 * Same as {@link #ignoreUnknownBeanProperties()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder ignoreUnknownBeanProperties(boolean value) {
+		ignoreUnknownBeanProperties = value;
+		return this;
 	}
 
 	/**
@@ -1883,14 +2074,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableIgnoreUnknownNullBeanProperties() {
-		return set(BEAN_disableIgnoreUnknownNullBeanProperties);
+		return disableIgnoreUnknownNullBeanProperties(true);
+	}
+
+	/**
+	 * Same as {@link #disableIgnoreUnknownNullBeanProperties()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder disableIgnoreUnknownNullBeanProperties(boolean value) {
+		disableIgnoreUnknownNullBeanProperties = value;
+		return this;
 	}
 
 	/**
@@ -2428,15 +2630,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder sortProperties() {
-		return set(BEAN_sortProperties);
+		sortProperties = true;
+		return sortProperties(true);
+	}
+
+	/**
+	 * Same as {@link #sortProperties()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder sortProperties(boolean value) {
+		sortProperties = value;
+		return this;
 	}
 
 	/**
@@ -2466,7 +2677,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * 	<li class='jm'>{@link #sortProperties()}
 	 * </ul>
 	 *
 	 * @param on The bean classes to sort properties on.
@@ -2847,15 +3058,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder useEnumNames() {
-		return set(BEAN_useEnumNames);
+		return useEnumNames(true);
+	}
+
+	/**
+	 * Same as {@link #useEnumNames()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder useEnumNames(boolean value) {
+		useEnumNames = value;
+		return this;
 	}
 
 	/**
@@ -2868,14 +3087,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableInterfaceProxies}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableInterfaceProxies() {
-		return set(BEAN_disableInterfaceProxies);
+		return disableInterfaceProxies(true);
+	}
+
+	/**
+	 * Same as {@link #disableInterfaceProxies()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder disableInterfaceProxies(boolean value) {
+		disableInterfaceProxies = value;
+		return this;
 	}
 
 	/**
@@ -2894,15 +3124,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder useJavaBeanIntrospector() {
-		return set(BEAN_useJavaBeanIntrospector);
+		return useJavaBeanIntrospector(true);
+	}
+
+	/**
+	 * Same as {@link #useJavaBeanIntrospector()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextBuilder useJavaBeanIntrospector(boolean value) {
+		useJavaBeanIntrospector = value;
+		return this;
 	}
 
 	// <FluentSetters>
