@@ -278,7 +278,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see JsonSerializer#JSON_addBeanTypes
+	 * @see JsonSerializerBuilder#addBeanTypesJson()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -291,7 +291,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
-	 * @see JsonSerializer#JSON_escapeSolidus
+	 * @see JsonSerializerBuilder#escapeSolidus()
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
@@ -302,7 +302,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Simple JSON mode.
 	 *
-	 * @see JsonSerializer#JSON_simpleMode
+	 * @see JsonSerializerBuilder#simpleMode()
 	 * @return
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.

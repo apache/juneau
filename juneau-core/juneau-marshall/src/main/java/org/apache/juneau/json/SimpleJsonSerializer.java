@@ -39,7 +39,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
+	/** Default serializer, single quotes, {@link JsonSerializerBuilder#simpleMode() simple mode}. */
 	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(create());
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */

@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json.annotation;
 
-import static org.apache.juneau.json.JsonParser.*;
-import static org.apache.juneau.json.JsonSerializer.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -27,25 +25,46 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<JsonConfig,ContextPropertiesBuilder> {
+	public static class ApplySerializer extends AnnotationApplier<JsonConfig,JsonSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(JsonConfig.class, ContextPropertiesBuilder.class, vr);
+		public ApplySerializer(VarResolverSession vr) {
+			super(JsonConfig.class, JsonSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<JsonConfig> ai, JsonSerializerBuilder b) {
 			JsonConfig a = ai.getAnnotation();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(JSON_addBeanTypes, x));
-			bool(a.escapeSolidus()).ifPresent(x -> b.set(JSON_escapeSolidus, x));
-			bool(a.simpleMode()).ifPresent(x -> b.set(JSON_simpleMode, x));
-			bool(a.validateEnd()).ifPresent(x -> b.set(JSON_validateEnd, x));
+			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesJson(x));
+			bool(a.escapeSolidus()).ifPresent(x -> b.escapeSolidus(x));
+			bool(a.simpleMode()).ifPresent(x -> b.simpleMode(x));
+		}
+	}
+
+	/**
+	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 */
+	public static class ApplyParser extends AnnotationApplier<JsonConfig,JsonParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ApplyParser(VarResolverSession vr) {
+			super(JsonConfig.class, JsonParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<JsonConfig> ai, JsonParserBuilder b) {
+			JsonConfig a = ai.getAnnotation();
+
+			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
 		}
 	}
 }

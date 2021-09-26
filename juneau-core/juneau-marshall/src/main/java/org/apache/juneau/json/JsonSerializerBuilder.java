@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,8 @@ import org.apache.juneau.serializer.*;
 @FluentSetters
 public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
+	boolean addBeanTypesJson, escapeSolidus, simpleMode;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -39,6 +39,9 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		produces("application/json");
 		accept("application/json,text/json");
 		type(JsonSerializer.class);
+		addBeanTypesJson = env("JsonSerializer.addBeanTypes", false);
+		escapeSolidus = env("JsonSerializer.escapeSolidus", false);
+		simpleMode = env("JsonSerializer.simpleMode", false);
 	}
 
 	/**
@@ -48,6 +51,9 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected JsonSerializerBuilder(JsonSerializer copyFrom) {
 		super(copyFrom);
+		addBeanTypesJson = copyFrom.addBeanTypesJson;
+		escapeSolidus = copyFrom.escapeSolidus;
+		simpleMode = copyFrom.simpleMode;
 	}
 
 	/**
@@ -57,6 +63,9 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected JsonSerializerBuilder(JsonSerializerBuilder copyFrom) {
 		super(copyFrom);
+		addBeanTypesJson = copyFrom.addBeanTypesJson;
+		escapeSolidus = copyFrom.escapeSolidus;
+		simpleMode = copyFrom.simpleMode;
 	}
 
 	@Override /* ContextBuilder */
@@ -73,6 +82,35 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSerializerBuilder addBeanTypesJson() {
+		return addBeanTypesJson(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypesJson()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSerializerBuilder addBeanTypesJson(boolean value) {
+		addBeanTypesJson = value;
+		return this;
+	}
 
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
@@ -98,15 +136,23 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public JsonSerializerBuilder escapeSolidus() {
-		return set(JSON_escapeSolidus);
+		return escapeSolidus(true);
+	}
+
+	/**
+	 * Same as {@link #escapeSolidus()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSerializerBuilder escapeSolidus(boolean value) {
+		escapeSolidus = value;
+		return this;
 	}
 
 	/**
@@ -176,15 +222,23 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	String <jv>json2<jv> = <jv>serializer2<jv>.serialize(<jv>myMap<jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public JsonSerializerBuilder simpleMode() {
-		return set(JSON_simpleMode);
+		return simpleMode(true);
+	}
+
+	/**
+	 * Same as {@link #simpleMode()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSerializerBuilder simpleMode(boolean value) {
+		simpleMode = value;
+		return this;
 	}
 
 	/**
@@ -194,11 +248,10 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * Shortcut for calling <c>simple().sq()</c>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * 	<li class='jf'>{@link JsonSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public JsonSerializerBuilder ssq() {

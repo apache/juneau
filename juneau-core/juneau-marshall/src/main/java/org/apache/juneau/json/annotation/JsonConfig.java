@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(JsonConfigAnnotation.Apply.class)
+@ContextApply({JsonConfigAnnotation.ApplySerializer.class,JsonConfigAnnotation.ApplyParser.class})
 public @interface JsonConfig {
 
 	/**
@@ -69,7 +69,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
+	 * 	<li class='jm'>{@link JsonParserBuilder#validateEnd()}
 	 * </ul>
 	 */
 	String validateEnd() default "";
@@ -101,7 +101,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_addBeanTypes}
+	 * 	<li class='jm'>{@link JsonSerializerBuilder#addBeanTypesJson()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -127,7 +127,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
+	 * 	<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus()}
 	 * </ul>
 	 */
 	String escapeSolidus() default "";
@@ -166,7 +166,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
+	 * 	<li class='jm'>{@link JsonSerializerBuilder#simpleMode()}
 	 * </ul>
 	 */
 	String simpleMode() default "";

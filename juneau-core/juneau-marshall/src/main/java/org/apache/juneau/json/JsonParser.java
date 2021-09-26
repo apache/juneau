@@ -108,41 +108,7 @@ import org.apache.juneau.parser.*;
 public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "JsonParser";
-
-	/**
-	 * Configuration property:  Validate end.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
-	 * the stream consists of only comments or whitespace.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}
-	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonParser.validateEnd</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONPARSER_VALIDATEEND</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#validateEnd()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonParserBuilder#validateEnd()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSON_validateEnd = PREFIX + ".validateEnd.b";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
@@ -153,7 +119,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, strict mode. */
@@ -173,7 +139,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean validateEnd;
+	final boolean validateEnd;
+
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -184,9 +151,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 */
 	protected JsonParser(JsonParserBuilder builder) {
 		super(builder);
-
-		ContextProperties cp = getContextProperties();
-		validateEnd = cp.getBoolean(JSON_validateEnd).orElse(false);
+		validateEnd = builder.validateEnd;
 	}
 
 	@Override /* Context */
@@ -253,7 +218,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	/**
 	 * Validate end.
 	 *
-	 * @see #JSON_validateEnd
+	 * @see JsonParserBuilder#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

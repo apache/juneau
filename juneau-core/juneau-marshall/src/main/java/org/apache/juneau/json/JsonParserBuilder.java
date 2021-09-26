@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,8 @@ import org.apache.juneau.parser.*;
 @FluentSetters
 public class JsonParserBuilder extends ReaderParserBuilder {
 
+	boolean validateEnd;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +38,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		super();
 		consumes("application/json,text/json");
 		type(JsonParser.class);
+		validateEnd = env("JsonParser.validateEnd", false);
 	}
 
 	/**
@@ -47,6 +48,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 */
 	protected JsonParserBuilder(JsonParser copyFrom) {
 		super(copyFrom);
+		validateEnd = copyFrom.validateEnd;
 	}
 
 	/**
@@ -56,6 +58,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 */
 	protected JsonParserBuilder(JsonParserBuilder copyFrom) {
 		super(copyFrom);
+		validateEnd = copyFrom.validateEnd;
 	}
 
 	@Override /* ContextBuilder */
@@ -92,15 +95,23 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public JsonParserBuilder validateEnd() {
-		return set(JSON_validateEnd);
+		return validateEnd(true);
+	}
+
+	/**
+	 * Same as {@link #validateEnd()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonParserBuilder validateEnd(boolean value) {
+		validateEnd = value;
+		return this;
 	}
 
 	// <FluentSetters>

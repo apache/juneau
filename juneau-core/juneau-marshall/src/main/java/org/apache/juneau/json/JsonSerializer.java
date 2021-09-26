@@ -94,101 +94,7 @@ import org.apache.juneau.serializer.*;
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider, JsonCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "JsonSerializer";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonSerializer.addBeanTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSERIALIZER_ADDBEANTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#addBeanTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#addBeanTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSON_addBeanTypes = PREFIX + ".addBeanTypes.b";
-
-	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonSerializer.escapeSolidus</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSERIALIZER_ESCAPESOLIDUS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#escapeSolidus()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#escapeSolidus()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSON_escapeSolidus = PREFIX + ".escapeSolidus.b";
-
-	/**
-	 * Configuration property:  Simple JSON mode.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * <br>Otherwise, they are always quoted.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonSerializer.simpleMode</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSERIALIZER_SIMPLEMODE</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#simpleMode()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simpleMode()}
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#ssq()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSON_simpleMode = PREFIX + ".simpleMode.b";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
@@ -197,9 +103,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, with whitespace. */
@@ -231,15 +136,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 	}
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
-		simpleMode,
-		escapeSolidus,
-		addBeanTypes;
+	final boolean addBeanTypesJson, escapeSolidus, simpleMode;
+
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -252,11 +154,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 */
 	protected JsonSerializer(JsonSerializerBuilder builder) {
 		super(builder);
-
-		ContextProperties cp = getContextProperties();
-		simpleMode = cp.getBoolean(JSON_simpleMode).orElse(false);
-		escapeSolidus = cp.getBoolean(JSON_escapeSolidus).orElse(false);
-		addBeanTypes = cp.getFirstBoolean(JSON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+		addBeanTypesJson = builder.addBeanTypesJson;
+		simpleMode = builder.simpleMode;
+		escapeSolidus = builder.escapeSolidus;
 	}
 
 	@Override /* Context */
@@ -338,20 +238,20 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #JSON_addBeanTypes
+	 * @see JsonSerializerBuilder#addBeanTypesJson()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
 	 */
 	@Override
 	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
+		return addBeanTypesJson || super.isAddBeanTypes();
 	}
 
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
-	 * @see #JSON_escapeSolidus
+	 * @see JsonSerializerBuilder#escapeSolidus()
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
@@ -362,7 +262,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Simple JSON mode.
 	 *
-	 * @see #JSON_simpleMode
+	 * @see JsonSerializerBuilder#simpleMode()
 	 * @return
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.
@@ -385,7 +285,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 					.filtered()
 					.a("simpleMode", simpleMode)
 					.a("escapeSolidus", escapeSolidus)
-					.a("addBeanTypes", addBeanTypes)
+					.a("addBeanTypesJson", addBeanTypesJson)
 			);
 	}
 }
