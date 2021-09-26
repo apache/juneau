@@ -1477,7 +1477,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean property namer.
 	 *
-	 * @see BeanContext#BEAN_propertyNamer
+	 * @see BeanContextBuilder#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */

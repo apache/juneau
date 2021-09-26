@@ -155,33 +155,9 @@ import org.apache.juneau.transform.*;
 @ConfigurableContext
 public class BeanContext extends Context {
 
-	static final String PREFIX = "BeanContext";
-
-	/**
-	 * Configuration property:  Bean property namer.
-	 *
-	 * <p>
-	 * The class to use for calculating bean property names..
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BasicPropertyNamer}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#propertyNamer()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#propertyNamer()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#propertyNamer(Class)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_propertyNamer = PREFIX + ".propertyNamer.c";
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/*
 	 * The default package pattern exclusion list.
@@ -222,6 +198,10 @@ public class BeanContext extends Context {
 	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
 	public  static final BeanSession DEFAULT_SESSION = new BeanSession(DEFAULT, DEFAULT.createDefaultBeanSessionArgs().unmodifiable());
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	final boolean
 		beansRequireDefaultConstructor,
 		beansRequireSerializable,
@@ -239,28 +219,26 @@ public class BeanContext extends Context {
 		useEnumNames,
 		sortProperties,
 		findFluentSetters;
-
 	final Visibility
 		beanConstructorVisibility,
 		beanClassVisibility,
 		beanMethodVisibility,
 		beanFieldVisibility;
-
-	final List<Class<?>> beanDictionary, swaps, notBeanClasses;
-	final List<String> notBeanPackages;
-	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
-	private final BeanRegistry beanRegistry;
-	private final PropertyNamer propertyNamer;
 	final String typePropertyName;
-
-	private final PojoSwap[] swapArray;
-	private final Class<?>[] notBeanClassesArray;
-
 	final Locale locale;
 	final TimeZone timeZone;
 	final MediaType mediaType;
+	final Class<? extends PropertyNamer> propertyNamer;
+	final List<Class<?>> beanDictionary, swaps, notBeanClasses;
+	final List<String> notBeanPackages;
 
 	final Map<Class,ClassMeta> cmCache;
+
+	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
+	private final BeanRegistry beanRegistry;
+	private final PropertyNamer propertyNamerBean;
+	private final PojoSwap[] swapArray;
+	private final Class<?>[] notBeanClassesArray;
 	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
 	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
 	private final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
@@ -309,14 +287,19 @@ public class BeanContext extends Context {
 		swaps = ofNullable(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
 		notBeanClasses = ofNullable(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
 		notBeanPackages = ofNullable(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
-
-		propertyNamer = cp.getInstance(BEAN_propertyNamer, PropertyNamer.class).orElseGet(BasicPropertyNamer::new);
+		propertyNamer = builder.propertyNamer != null ? builder.propertyNamer : BasicPropertyNamer.class;
 
 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, asList(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
 
 		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.of(notBeanPackages, asList(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
 		notBeanPackageNames = Stream.of(_notBeanPackages).filter(x -> ! x.endsWith(".*")).toArray(String[]::new);
 		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length()-2)).toArray(String[]::new);
+
+		try {
+			propertyNamerBean = propertyNamer.newInstance();
+		} catch (Exception e) {
+			throw runtimeException(e);
+		}
 
 		LinkedList<PojoSwap<?,?>> _swaps = new LinkedList<>();
 		for (Object o : ofNullable(swaps).orElse(emptyList())) {
@@ -1191,12 +1174,12 @@ public class BeanContext extends Context {
 	/**
 	 * Bean property namer.
 	 *
-	 * @see #BEAN_propertyNamer
+	 * @see BeanContextBuilder#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
 	public final PropertyNamer getPropertyNamer() {
-		return propertyNamer;
+		return propertyNamerBean;
 	}
 
 	/**

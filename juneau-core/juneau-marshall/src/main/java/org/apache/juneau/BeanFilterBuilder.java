@@ -391,7 +391,7 @@ public class BeanFilterBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#propertyNamer()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * 	<li class='jc'>{@link PropertyNamer}
 	 * </ul>
 	 *

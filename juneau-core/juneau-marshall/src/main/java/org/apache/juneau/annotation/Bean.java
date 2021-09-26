@@ -320,7 +320,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * </ul>
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default BasicPropertyNamer.class;

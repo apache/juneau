@@ -2300,7 +2300,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * </ul>
 	 *
 	 * @param value
@@ -2340,7 +2340,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * </ul>
 	 *
 	 * @param on The class that the namer applies to.

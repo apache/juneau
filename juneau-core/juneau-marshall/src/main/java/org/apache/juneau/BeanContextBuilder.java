@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.Visibility.*;
 import static java.util.Arrays.*;
@@ -67,9 +66,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
-	List<Class<?>> beanDictionary, swaps;
-	Set<Class<?>> notBeanClasses;
-	Set<String> notBeanPackages;
 	boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
 		beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
 		disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
@@ -78,6 +74,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	MediaType mediaType;
 	Locale locale;
 	TimeZone timeZone;
+	Class<? extends PropertyNamer> propertyNamer;
+	List<Class<?>> beanDictionary, swaps;
+	Set<Class<?>> notBeanClasses;
+	Set<String> notBeanPackages;
 
 	/**
 	 * Constructor.
@@ -114,6 +114,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		mediaType = env("BeanContext.mediaType", (MediaType)null);
 		timeZone = env("BeanContext.timeZone", (TimeZone)null);
 		locale = env("BeanContext.locale", Locale.getDefault());
+		propertyNamer = null;
 	}
 
 	/**
@@ -151,6 +152,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		mediaType = copyFrom.mediaType;
 		timeZone = copyFrom.timeZone;
 		locale = copyFrom.locale;
+		propertyNamer = copyFrom.propertyNamer;
 	}
 
 	/**
@@ -188,6 +190,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		mediaType = copyFrom.mediaType;
 		timeZone = copyFrom.timeZone;
 		locale = copyFrom.locale;
+		propertyNamer = copyFrom.propertyNamer;
 	}
 
 	@Override /* ContextBuilder */
@@ -230,7 +233,8 @@ public class BeanContextBuilder extends ContextBuilder {
 			typePropertyName,
 			mediaType,
 			timeZone,
-			locale
+			locale,
+			propertyNamer
 		);
 		BeanContext bc = CACHE.get(key);
 		if (bc == null) {
@@ -2584,10 +2588,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is {@link BasicPropertyNamer}.
@@ -2595,7 +2595,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder propertyNamer(Class<? extends PropertyNamer> value) {
-		return set(BEAN_propertyNamer, value);
+		propertyNamer = value;
+		return this;
 	}
 
 	/**
@@ -2624,7 +2625,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
 	 * </ul>
 	 *
 	 * @param on The class that the namer applies to.
