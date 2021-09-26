@@ -35,17 +35,15 @@ import org.apache.juneau.serializer.*;
 public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
 	public static final HtmlStrippedDocSerializer DEFAULT = new HtmlStrippedDocSerializer(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
+	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "HtmlStrippedDocSerializer";
 
 	/**
 	 * Constructor.

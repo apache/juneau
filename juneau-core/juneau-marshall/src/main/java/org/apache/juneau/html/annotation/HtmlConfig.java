@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(HtmlConfigAnnotation.Apply.class)
+@ContextApply(HtmlConfigAnnotation.ApplySerializer.class)
 public @interface HtmlConfig {
 
 	/**
@@ -73,7 +73,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addBeanTypes}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#addBeanTypesHtml()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -121,7 +121,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders()}
 	 * </ul>
 	 */
 	String addKeyValueTableHeaders() default "";
@@ -131,7 +131,7 @@ public @interface HtmlConfig {
 	 *
 	 * <p>
 	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
+	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs:
@@ -169,7 +169,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLinksInStrings}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#disableDetectLinksInStrings()}
 	 * </ul>
 	 */
 	String disableDetectLinksInStrings() default "";
@@ -188,7 +188,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#labelParameter(String)}
 	 * </ul>
 	 */
 	String labelParameter() default "";
@@ -200,7 +200,7 @@ public @interface HtmlConfig {
 	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
-	 * The parameter name can be changed via the {@link HtmlSerializer#HTML_labelParameter} property.
+	 * The parameter name can be changed via the {@link HtmlSerializerBuilder#labelParameter(String)} property.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs.
@@ -239,7 +239,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLabelParameters}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#disableDetectLabelParameters()}
 	 * </ul>
 	 */
 	String disableDetectLabelParameters() default "";
@@ -269,7 +269,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}
 	 * </ul>
 	 */
 	String uriAnchorText() default "";

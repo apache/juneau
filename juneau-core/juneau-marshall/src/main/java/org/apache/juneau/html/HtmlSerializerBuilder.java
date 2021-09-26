@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -22,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -31,6 +30,10 @@ import org.apache.juneau.xml.*;
 @FluentSetters
 public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
+	boolean addBeanTypesHtml, addKeyValueTableHeaders, disableDetectLabelParameters, disableDetectLinksInStrings;
+	String labelParameter;
+	AnchorText uriAnchorText;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +41,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		super();
 		produces("text/html");
 		type(HtmlSerializer.class);
+		addBeanTypesHtml = env("HtmlSerializer.addBeanTypesHtml", false);
+		addKeyValueTableHeaders = env("HtmlSerializer.addKeyValueTableHeaders", false);
+		disableDetectLabelParameters = env("HtmlSerializer.disableDetectLabelParameters", false);
+		disableDetectLinksInStrings = env("HtmlSerializer.disableDetectLinksInStrings", false);
+		uriAnchorText = env("HtmlSerializer.uriAnchorText", AnchorText.TO_STRING);
+		labelParameter =  env("HtmlSerializer.labelParameter", "label");
 	}
 
 	/**
@@ -47,6 +56,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	protected HtmlSerializerBuilder(HtmlSerializer copyFrom) {
 		super(copyFrom);
+		addBeanTypesHtml = copyFrom.addBeanTypesHtml;
+		addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
+		disableDetectLabelParameters = ! copyFrom.detectLabelParameters;
+		disableDetectLinksInStrings = ! copyFrom.detectLinksInStrings;
+		labelParameter = copyFrom.labelParameter;
+		uriAnchorText = copyFrom.uriAnchorText;
 	}
 
 	/**
@@ -56,6 +71,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	protected HtmlSerializerBuilder(HtmlSerializerBuilder copyFrom) {
 		super(copyFrom);
+		addBeanTypesHtml = copyFrom.addBeanTypesHtml;
+		addKeyValueTableHeaders = copyFrom.addKeyValueTableHeaders;
+		disableDetectLabelParameters = copyFrom.disableDetectLabelParameters;
+		disableDetectLinksInStrings = copyFrom.disableDetectLinksInStrings;
+		labelParameter = copyFrom.labelParameter;
+		uriAnchorText = copyFrom.uriAnchorText;
 	}
 
 	@Override /* ContextBuilder */
@@ -71,6 +92,36 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public HtmlSerializerBuilder addBeanTypesHtml() {
+		return addBeanTypesHtml(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypesHtml()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public HtmlSerializerBuilder addBeanTypesHtml(boolean value) {
+		addBeanTypesHtml = value;
+		return this;
+	}
 
 	/**
 	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Add key/value headers on bean/map tables.
@@ -124,15 +175,23 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder addKeyValueTableHeaders() {
-		return set(HTML_addKeyValueTableHeaders);
+		return addKeyValueTableHeaders(true);
+	}
+
+	/**
+	 * Same as {@link #addKeyValueTableHeaders()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
+		addKeyValueTableHeaders = value;
+		return this;
 	}
 
 	/**
@@ -140,7 +199,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <p>
 	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
+	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -190,15 +249,23 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLinksInStrings}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder disableDetectLinksInStrings() {
-		return set(HTML_disableDetectLinksInStrings);
+		return disableDetectLinksInStrings(true);
+	}
+
+	/**
+	 * Same as {@link #disableDetectLinksInStrings()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public HtmlSerializerBuilder disableDetectLinksInStrings(boolean value) {
+		disableDetectLinksInStrings = value;
+		return this;
 	}
 
 	/**
@@ -207,10 +274,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * <p>
 	 * The parameter name to look for when resolving link labels}.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <js>"label"</js>.
@@ -218,7 +281,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder labelParameter(String value) {
-		return set(HTML_labelParameter, value);
+		labelParameter = value;
+		return this;
 	}
 
 	/**
@@ -228,7 +292,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
-	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
+	 * The parameter name can be changed via the {@link #labelParameter(String)} property.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -279,15 +343,23 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLabelParameters}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder disableDetectLabelParameters() {
-		return set(HTML_disableDetectLabelParameters);
+		return disableDetectLabelParameters(true);
+	}
+
+	/**
+	 * Same as {@link #disableDetectLabelParameters()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public HtmlSerializerBuilder disableDetectLabelParameters(boolean value) {
+		disableDetectLabelParameters = value;
+		return this;
 	}
 
 	/**
@@ -443,10 +515,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link AnchorText#TO_STRING}.
@@ -454,7 +522,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
-		return set(HTML_uriAnchorText, value);
+		uriAnchorText = value;
+		return this;
 	}
 
 	// <FluentSetters>

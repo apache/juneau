@@ -41,13 +41,7 @@ import org.apache.juneau.serializer.*;
 public class HtmlSchemaSerializer extends HtmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "HtmlSchemaSerializer";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
@@ -63,7 +57,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, with whitespace. */

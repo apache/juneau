@@ -58,7 +58,7 @@ public @interface Html {
 	 * </p>
 	 *
 	 * <p>
-	 * This overrides the behavior specified by {@link HtmlSerializer#HTML_uriAnchorText}.
+	 * This overrides the behavior specified by {@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}.
 	 */
 	String anchorText() default "";
 
@@ -100,7 +100,7 @@ public @interface Html {
 	 * When <jk>true</jk>, don't add headers to tables.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
+	 * 	<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders()}
 	 * </ul>
 	 */
 	boolean noTableHeaders() default false;

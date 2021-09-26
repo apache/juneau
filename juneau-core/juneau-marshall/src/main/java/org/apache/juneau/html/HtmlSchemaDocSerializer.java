@@ -38,6 +38,10 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final JsonSchemaGenerator generator;
 
 	/**

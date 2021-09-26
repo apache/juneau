@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.html.HtmlSerializer.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -24,29 +23,29 @@ import org.apache.juneau.svl.*;
 public class HtmlConfigAnnotation {
 
 	/**
-	 * Applies {@link HtmlConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link HtmlConfig} annotations to a {@link HtmlSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<HtmlConfig,ContextPropertiesBuilder> {
+	public static class ApplySerializer extends AnnotationApplier<HtmlConfig,HtmlSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(HtmlConfig.class, ContextPropertiesBuilder.class, vr);
+		public ApplySerializer(VarResolverSession vr) {
+			super(HtmlConfig.class, HtmlSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlSerializerBuilder b) {
 			HtmlConfig a = ai.getAnnotation();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(HTML_addBeanTypes, x));
-			bool(a.addKeyValueTableHeaders()).ifPresent(x -> b.set(HTML_addKeyValueTableHeaders, x));
-			bool(a.disableDetectLabelParameters()).ifPresent(x -> b.set(HTML_disableDetectLabelParameters, x));
-			bool(a.disableDetectLinksInStrings()).ifPresent(x -> b.set(HTML_disableDetectLinksInStrings, x));
-			string(a.labelParameter()).ifPresent(x -> b.set(HTML_labelParameter, x));
-			string(a.uriAnchorText()).ifPresent(x -> b.set(HTML_uriAnchorText, x));
+			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesHtml(x));
+			bool(a.addKeyValueTableHeaders()).ifPresent(x -> b.addKeyValueTableHeaders(x));
+			bool(a.disableDetectLabelParameters()).ifPresent(x -> b.disableDetectLabelParameters(x));
+			bool(a.disableDetectLinksInStrings()).ifPresent(x -> b.disableDetectLinksInStrings(x));
+			string(a.labelParameter()).ifPresent(x -> b.labelParameter(x));
+			string(a.uriAnchorText()).map(AnchorText::valueOf).ifPresent(x -> b.uriAnchorText(x));
 		}
 	}
 }
