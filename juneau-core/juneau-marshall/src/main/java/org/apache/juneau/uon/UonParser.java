@@ -35,7 +35,7 @@ import org.apache.juneau.parser.*;
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 @ConfigurableContext
-public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider, UonCommon {
+public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -116,7 +116,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @ConfigurableContext
-public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, XmlCommon {
+public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

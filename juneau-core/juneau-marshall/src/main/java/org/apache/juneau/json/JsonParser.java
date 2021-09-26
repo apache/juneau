@@ -105,7 +105,7 @@ import org.apache.juneau.parser.*;
  * The end result should be the same.
  */
 @ConfigurableContext
-public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCommon {
+public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

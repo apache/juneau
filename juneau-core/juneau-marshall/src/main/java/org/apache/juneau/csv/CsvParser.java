@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
  * TODO - Work in progress.  CSV parser.
  */
 @ConfigurableContext
-public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommon {
+public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

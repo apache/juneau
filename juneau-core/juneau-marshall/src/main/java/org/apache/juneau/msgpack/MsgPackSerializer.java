@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  */
 @ConfigurableContext
-public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider, MsgPackCommon {
+public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

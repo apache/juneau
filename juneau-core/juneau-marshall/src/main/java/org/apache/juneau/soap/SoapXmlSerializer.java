@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  */
 @ConfigurableContext
-public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider,SoapXmlCommon {
+public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

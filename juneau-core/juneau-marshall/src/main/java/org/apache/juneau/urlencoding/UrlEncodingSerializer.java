@@ -117,7 +117,7 @@ import org.apache.juneau.uon.*;
  * </p>
  */
 @ConfigurableContext
-public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider, UrlEncodingCommon {
+public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * TODO - Work in progress.  CSV serializer.
  */
 @ConfigurableContext
-public final class CsvSerializer extends WriterSerializer implements CsvMetaProvider,CsvCommon {
+public final class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

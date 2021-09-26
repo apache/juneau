@@ -29,16 +29,10 @@ import org.apache.juneau.parser.*;
  * Consumes <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
-public final class JsoParser extends InputStreamParser implements JsoMetaProvider, JsoCommon {
+public final class JsoParser extends InputStreamParser implements JsoMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "JsoParser";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/

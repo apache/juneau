@@ -31,16 +31,10 @@ import org.apache.juneau.serializer.*;
  * Produces <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
-public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProvider, JsoCommon {
+public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "JsoSerializer";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/

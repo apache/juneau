@@ -39,7 +39,7 @@ import org.apache.juneau.transform.*;
  * transform defined on it.
  */
 @ConfigurableContext
-public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider, PlainTextCommon {
+public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

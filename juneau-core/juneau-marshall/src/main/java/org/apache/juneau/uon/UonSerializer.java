@@ -120,7 +120,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  */
 @ConfigurableContext
-public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider, UonCommon {
+public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

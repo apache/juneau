@@ -43,7 +43,7 @@ import org.apache.juneau.transform.*;
  * defined on it.
  */
 @ConfigurableContext
-public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider, PlainTextCommon {
+public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

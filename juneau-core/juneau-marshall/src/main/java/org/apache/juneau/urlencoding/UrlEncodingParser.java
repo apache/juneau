@@ -40,7 +40,7 @@ import org.apache.juneau.uon.*;
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 @ConfigurableContext
-public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider, UrlEncodingCommon {
+public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -28,7 +28,7 @@ import org.apache.juneau.parser.*;
  * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
  */
 @ConfigurableContext
-public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider, MsgPackCommon {
+public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
