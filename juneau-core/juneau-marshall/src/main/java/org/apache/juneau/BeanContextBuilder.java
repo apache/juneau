@@ -69,6 +69,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
 	List<Class<?>> beanDictionary, swaps;
 	Set<Class<?>> notBeanClasses;
+	Set<String> notBeanPackages;
 	boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
 		beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
 		disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
@@ -92,6 +93,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanDictionary = null;
 		swaps = null;
 		notBeanClasses = null;
+		notBeanPackages = null;
 		disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
 		beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
 		beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
@@ -128,6 +130,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanDictionary = copyFrom.beanDictionary.isEmpty() ? null : new ArrayList<>(copyFrom.beanDictionary);
 		swaps = copyFrom.swaps.isEmpty() ? null : new ArrayList<>(copyFrom.swaps);
 		notBeanClasses = copyFrom.notBeanClasses.isEmpty() ? null : classSet(copyFrom.notBeanClasses);
+		notBeanPackages = copyFrom.notBeanPackages.isEmpty() ? null : new TreeSet<>(copyFrom.notBeanPackages);
 		disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -164,6 +167,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanDictionary = copyFrom.beanDictionary == null ? null : new ArrayList<>(copyFrom.beanDictionary);
 		swaps = copyFrom.swaps == null ? null : new ArrayList<>(copyFrom.swaps);
 		notBeanClasses = copyFrom.notBeanClasses == null ? null : classSet(copyFrom.notBeanClasses);
+		notBeanPackages = copyFrom.notBeanPackages == null ? null : new TreeSet<>(copyFrom.notBeanPackages);
 		disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -204,6 +208,7 @@ public class BeanContextBuilder extends ContextBuilder {
 			beanDictionary,
 			swaps,
 			notBeanClasses,
+			notBeanPackages,
 			integer(
 				disableBeansRequireSomeProperties,
 				beanMapPutReturnsOldValue,
@@ -2508,10 +2513,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 *
 	 * @param values
 	 * 	The values to add to this setting.
 	 * 	<br>Values can consist of any of the following types:
@@ -2523,21 +2524,32 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder notBeanPackages(Object...values) {
-		for (Object o : values) {
-			if (o instanceof Package)
-				addTo(BEAN_notBeanPackages, ((Package) o).getName());
-			else if (o instanceof String)
-				addTo(BEAN_notBeanPackages, o.toString());
-			else if (o instanceof Collection) {
-				for (Object o2 : (Collection<?>)o)
-					notBeanPackages(o2);
-			} else if (o.getClass().isArray()) {
-				for (int i = 0; i < Array.getLength(o); i++)
-					notBeanPackages(Array.get(o, i));
-			}
-		}
+	public BeanContextBuilder notBeanPackages(String...values) {
+		return notBeanPackages(asList(values));
+	}
+
+	/**
+	 * Same as {@link #notBeanPackages(String...)} but allows you to pass in a collection of classes.
+	 *
+	 * @param values
+	 * 	The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BeanContextBuilder notBeanPackages(Collection<String> values) {
+		notBeanPackages().addAll(values);
 		return this;
+	}
+
+	/**
+	 * Returns the list of not-bean Java package names.
+	 *
+	 * @return The list of not-bean Java package names.
+	 */
+	public Set<String> notBeanPackages() {
+		if (notBeanPackages == null)
+			notBeanPackages = new TreeSet<>();
+		return notBeanPackages;
 	}
 
 	/**

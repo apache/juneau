@@ -696,7 +696,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackages(Object...values) {
+	public JsonSchemaGeneratorBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}

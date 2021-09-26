@@ -594,7 +594,7 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder notBeanPackages(Object...values) {
+	public BeanTraverseBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}

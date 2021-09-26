@@ -1066,11 +1066,11 @@ public class RestAnnotation {
 			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
 			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
 			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
-			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
-			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
-			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes(x));
+			stream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders(x));
+			stream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders(x));
 			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders(x));
 			b.responseProcessors().add(a.responseProcessors());
@@ -1121,8 +1121,8 @@ public class RestAnnotation {
 		public void apply(AnnotationInfo<Rest> ai, RestOpContextBuilder b) {
 			Rest a = ai.getAnnotation();
 
-			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));

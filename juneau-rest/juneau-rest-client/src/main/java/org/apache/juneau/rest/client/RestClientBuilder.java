@@ -5082,7 +5082,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(Object...values) {
+	public RestClientBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}

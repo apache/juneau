@@ -22,6 +22,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -157,44 +158,6 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext";
 
 	/**
-	 * Configuration property:  Bean package exclusions.
-	 *
-	 * <p>
-	 * Used as a convenient way of defining the not-bean-classes property for entire packages.
-	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
-	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.notBeanPackages</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_NOTBEANPACKAGES</c>
-	 * 	<li><b>Default:</b>
-	 * 	<ul>
-	 * 		<li><c>java.lang</c>
-	 * 		<li><c>java.lang.annotation</c>
-	 * 		<li><c>java.lang.ref</c>
-	 * 		<li><c>java.lang.reflect</c>
-	 * 		<li><c>java.io</c>
-	 * 		<li><c>java.net</c>
-	 * 		<li><c>java.nio.*</c>
-	 * 		<li><c>java.util.*</c>
-	 * 	</ul>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanPackages()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(Object...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_notBeanPackages = PREFIX + ".notBeanPackages.ss";
-
-	/**
 	 * Configuration property:  Bean property namer.
 	 *
 	 * <p>
@@ -284,6 +247,7 @@ public class BeanContext extends Context {
 		beanFieldVisibility;
 
 	final List<Class<?>> beanDictionary, swaps, notBeanClasses;
+	final List<String> notBeanPackages;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamer;
@@ -344,39 +308,27 @@ public class BeanContext extends Context {
 		beanDictionary = ofNullable(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
 		swaps = ofNullable(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
 		notBeanClasses = ofNullable(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
+		notBeanPackages = ofNullable(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
 
 		propertyNamer = cp.getInstance(BEAN_propertyNamer, PropertyNamer.class).orElseGet(BasicPropertyNamer::new);
 
-		List<String> l1 = new LinkedList<>();
-		List<String> l2 = new LinkedList<>();
-		for (String s : cp.getArray(BEAN_notBeanPackages, String.class).orElse(DEFAULT_NOTBEAN_PACKAGES)) {
-			if (s.endsWith(".*"))
-				l2.add(s.substring(0, s.length()-2));
-			else
-				l1.add(s);
-		}
-		notBeanPackageNames = l1.toArray(new String[l1.size()]);
-		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
+		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, asList(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
 
-		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
+		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.of(notBeanPackages, asList(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
+		notBeanPackageNames = Stream.of(_notBeanPackages).filter(x -> ! x.endsWith(".*")).toArray(String[]::new);
+		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length()-2)).toArray(String[]::new);
+
+		LinkedList<PojoSwap<?,?>> _swaps = new LinkedList<>();
 		for (Object o : ofNullable(swaps).orElse(emptyList())) {
 			ClassInfo ci = ClassInfo.of((Class<?>)o);
 			if (ci.isChildOf(PojoSwap.class))
-				lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
+				_swaps.add(castOrCreate(PojoSwap.class, ci.inner()));
 			else if (ci.isChildOf(Surrogate.class))
-				lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
+				_swaps.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
 			else
 				throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 		}
-		swapArray = lpf.toArray(new PojoSwap[lpf.size()]);
-
-		if (notBeanClasses.isEmpty())
-			notBeanClassesArray = DEFAULT_NOTBEAN_CLASSES;
-		else {
-			List<Class<?>> l = new ArrayList<>(notBeanClasses);
-			l.addAll(asList(DEFAULT_NOTBEAN_CLASSES));
-			notBeanClassesArray = l.toArray(new Class[0]);
-		}
+		swapArray = _swaps.toArray(new PojoSwap[_swaps.size()]);
 
 		cmCache = new ConcurrentHashMap<>();
 		cmCache.put(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
@@ -1206,7 +1158,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see #BEAN_notBeanPackages
+	 * @see BeanContextBuilder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of fully-qualified package names to exclude from being classified as beans.
 	 */
@@ -1217,7 +1169,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see #BEAN_notBeanPackages
+	 * @see BeanContextBuilder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
 	 */

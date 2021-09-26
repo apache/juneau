@@ -707,7 +707,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
 	 * </ul>
 	 */
 	String[] notBeanPackages() default {};
@@ -719,7 +719,7 @@ public @interface BeanConfig {
 	 * Same as {@link #notBeanPackages()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
 	 * </ul>
 	 */
 	String[] notBeanPackages_replace() default {};

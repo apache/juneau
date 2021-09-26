@@ -2248,7 +2248,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
 	 * </ul>
 	 *
 	 * @param values
@@ -2262,7 +2262,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextableBuilder notBeanPackages(Object...values) {
+	public BeanContextableBuilder notBeanPackages(String...values) {
 		bcBuilder.notBeanPackages(values);
 		return this;
 	}

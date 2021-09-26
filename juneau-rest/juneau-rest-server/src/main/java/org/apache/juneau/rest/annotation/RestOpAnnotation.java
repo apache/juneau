@@ -633,13 +633,13 @@ public class RestOpAnnotation {
 			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
 			type(a.contextClass()).ifPresent(x -> b.type(x));
-			strings(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			strings(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			strings(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders().setDefault(x));
-			strings(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders().setDefault(x));
-			strings(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes().add(x));
-			strings(a.defaultRequestQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestQueryData().setDefault(x));
-			strings(a.defaultRequestFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestFormData().setDefault(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders().setDefault(x));
+			stream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders().setDefault(x));
+			stream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes().add(x));
+			stream(a.defaultRequestQueryData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestQueryData().setDefault(x));
+			stream(a.defaultRequestFormData()).map(x -> basicPart(x)).forEach(x -> b.defaultRequestFormData().setDefault(x));
 			string(a.defaultAccept()).map(x -> accept(x)).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
 			string(a.defaultContentType()).map(x -> contentType(x)).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
 			b.converters().append(a.converters());
@@ -648,7 +648,7 @@ public class RestOpAnnotation {
 			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			strings(a.path()).forEach(x -> b.path(x));
+			stream(a.path()).forEach(x -> b.path(x));
 			strings_cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
 			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
 

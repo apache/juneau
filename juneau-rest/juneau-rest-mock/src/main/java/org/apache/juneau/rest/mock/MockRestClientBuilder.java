@@ -585,7 +585,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder notBeanPackages(Object...values) {
+	public MockRestClientBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}

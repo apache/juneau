@@ -1455,7 +1455,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
-	 * @see BeanContext#BEAN_notBeanPackages
+	 * @see BeanContextBuilder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of fully-qualified package names to exclude from being classified as beans.
 	 */
@@ -1466,7 +1466,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
-	 * @see BeanContext#BEAN_notBeanPackages
+	 * @see BeanContextBuilder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
 	 */

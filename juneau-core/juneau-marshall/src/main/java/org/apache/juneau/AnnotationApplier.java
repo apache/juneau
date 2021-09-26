@@ -105,13 +105,26 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	}
 
 	/**
+	 * Returns the specified string array as an {@link Optional}.
+	 *
+	 * <p>
+	 * If the array is empty, then returns {@link Optional#empty()}.
+	 *
+	 * @param in The string array.
+	 * @return The array wrapped in an {@link Optional}.
+	 */
+	protected Optional<String[]> strings(String[] in) {
+		return Optional.ofNullable(in.length == 0 ? null : Arrays.asList(in).stream().map(x -> vr.resolve(x)).filter(x -> !StringUtils.isEmpty(x)).toArray(String[]::new));
+	}
+
+	/**
 	 * Resolves the specified strings in the string array.
 	 *
 	 * @param in The string array containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
 	protected List<String> stringList(String[] in) {
-		return strings(in).collect(Collectors.toList());
+		return stream(in).collect(Collectors.toList());
 	}
 
 	/**
@@ -120,7 +133,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The CDL string containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
-	protected Stream<String> strings(String[] in) {
+	protected Stream<String> stream(String[] in) {
 		return Arrays.asList(in).stream().map(x -> vr.resolve(x)).filter(x -> !StringUtils.isEmpty(x));
 	}
 

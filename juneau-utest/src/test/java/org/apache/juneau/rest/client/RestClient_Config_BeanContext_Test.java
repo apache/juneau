@@ -834,7 +834,7 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a29_notBeanPackages() throws Exception {
-		A28 x = client().notBeanPackages(A28.class.getPackage()).build().post("/echoBody",A28.get()).run().cacheBody().assertBody().is("'1'").getBody().asType(A28.class);
+		A28 x = client().notBeanPackages(A28.class.getPackage().getName()).build().post("/echoBody",A28.get()).run().cacheBody().assertBody().is("'1'").getBody().asType(A28.class);
 		assertEquals(1,x.foo);
 	}
 
