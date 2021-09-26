@@ -350,12 +350,6 @@ public class RestClient_Config_RestClient_Test {
 	public void a07_leakDetection() throws Throwable {
 		client().detectLeaks().build(A7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);
-
-		client().debug().build(A7.class).finalize();
-		assertTrue(A7.lastMessage.startsWith("WARNING:  RestClient garbage collected before it was finalized.\nCreation Stack:\n\t"));
-
-		client().detectLeaks().build(A7.class).finalize();
-		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);
 	}
 
 	@Test

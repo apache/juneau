@@ -2203,7 +2203,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanIgnore}
 	 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * 	<li class='jf'>{@link BeanContextBuilder#notBeanClasses()}
 	 * </ul>
 	 *
 	 * @param values
@@ -2216,29 +2216,8 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextableBuilder notBeanClasses(Object...values) {
+	public BeanContextableBuilder notBeanClasses(Class<?>...values) {
 		bcBuilder.notBeanClasses(values);
-		return this;
-	}
-
-	/**
-	 * Bean class exclusions.
-	 *
-	 * <p>
-	 * Same as {@link #notBeanClasses(Object...)} but replaces any existing values.
-	 *
-	 * @param values
-	 * 	The values to add to this setting.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Classes.
-	 * 		<li>Arrays and collections of classes.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanContextableBuilder notBeanClasses_replace(Object...values) {
-		bcBuilder.notBeanClasses_replace(values);
 		return this;
 	}
 
@@ -2246,7 +2225,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * Bean package exclusions.
 	 *
 	 * <p>
-	 * Used as a convenient way of defining the {@link #notBeanClasses(Object...)} property for entire packages.
+	 * Used as a convenient way of defining the {@link BeanContextBuilder#notBeanClasses(Class...)} property for entire packages.
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 *
 	 * <p>

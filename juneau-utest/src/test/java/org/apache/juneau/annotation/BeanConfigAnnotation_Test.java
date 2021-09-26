@@ -168,7 +168,7 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isIgnoreUnknownNullBeanProperties());
 		check("en_US", bc.getLocale());
 		check("application/json", bc.getMediaType());
-		check("A1,A2,A3", bc.getNotBeanClasses());
+		check("A1,A2,A3,Map,Collection,Reader,Writer,InputStream,OutputStream,Throwable", bc.getNotBeanClasses());
 		check("foo1,foo2,foo3", bc.getNotBeanPackagesNames());
 		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bc.getSwaps());
 		check("PropertyNamerULC", bc.getPropertyNamer());

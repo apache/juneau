@@ -1882,7 +1882,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder debug() {
 		super.debug();
-		detectLeaks();
 		return headers(Debug.TRUE);
 	}
 
@@ -5077,7 +5076,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Object...values) {
+	public RestClientBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}

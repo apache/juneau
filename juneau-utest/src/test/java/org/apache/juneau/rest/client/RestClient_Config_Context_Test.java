@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.BeanContext.*;
 import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -51,7 +50,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a02_addToStringObject() throws Exception {
-		client().addTo(BEAN_notBeanClasses,A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheBody().assertBody().is("'bar'").getBody().asType(A2.class);
+		client().notBeanClasses(A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheBody().assertBody().is("'bar'").getBody().asType(A2.class);
 	}
 
 	public static class A3a {

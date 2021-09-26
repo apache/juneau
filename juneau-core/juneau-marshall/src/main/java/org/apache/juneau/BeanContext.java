@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Optional.*;
+import static java.util.Arrays.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -156,39 +157,10 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext";
 
 	/**
-	 * Configuration property:  Bean class exclusions.
-	 *
-	 * <p>
-	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * Not-bean classes are converted to <c>Strings</c> during serialization.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
-	 * 	<li><b>Data type:</b>  <c>Set&lt;Class&gt;</c>
-	 * 	<li><b>Default:</b>  empty set
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses_replace()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses_replace(Object...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_notBeanClasses = PREFIX + ".notBeanClasses.sc";
-
-	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
 	 * <p>
-	 * Used as a convenient way of defining the {@link #BEAN_notBeanClasses} property for entire packages.
+	 * Used as a convenient way of defining the not-bean-classes property for entire packages.
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -311,14 +283,14 @@ public class BeanContext extends Context {
 		beanMethodVisibility,
 		beanFieldVisibility;
 
-	private final Class<?>[] notBeanClasses;
-	final List<Class<?>> beanDictionary, swaps;
+	final List<Class<?>> beanDictionary, swaps, notBeanClasses;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamer;
 	final String typePropertyName;
 
-	final PojoSwap[] swapArray;
+	private final PojoSwap[] swapArray;
+	private final Class<?>[] notBeanClassesArray;
 
 	final Locale locale;
 	final TimeZone timeZone;
@@ -371,8 +343,7 @@ public class BeanContext extends Context {
 		mediaType = builder.mediaType;
 		beanDictionary = ofNullable(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
 		swaps = ofNullable(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
-
-		notBeanClasses = cp.getClassArray(BEAN_notBeanClasses).orElse(DEFAULT_NOTBEAN_CLASSES);
+		notBeanClasses = ofNullable(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
 
 		propertyNamer = cp.getInstance(BEAN_propertyNamer, PropertyNamer.class).orElseGet(BasicPropertyNamer::new);
 
@@ -398,6 +369,14 @@ public class BeanContext extends Context {
 				throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 		}
 		swapArray = lpf.toArray(new PojoSwap[lpf.size()]);
+
+		if (notBeanClasses.isEmpty())
+			notBeanClassesArray = DEFAULT_NOTBEAN_CLASSES;
+		else {
+			List<Class<?>> l = new ArrayList<>(notBeanClasses);
+			l.addAll(asList(DEFAULT_NOTBEAN_CLASSES));
+			notBeanClassesArray = l.toArray(new Class[0]);
+		}
 
 		cmCache = new ConcurrentHashMap<>();
 		cmCache.put(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
@@ -530,7 +509,7 @@ public class BeanContext extends Context {
 					return true;
 		}
 		ClassInfo ci = ClassInfo.of(c);
-		for (Class exclude : notBeanClasses)
+		for (Class exclude : notBeanClassesArray)
 			if (ci.isChildOf(exclude))
 				return true;
 		return false;
@@ -1216,12 +1195,12 @@ public class BeanContext extends Context {
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see #BEAN_notBeanClasses
+	 * @see BeanContextBuilder#notBeanClasses(Class...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 */
 	protected final Class<?>[] getNotBeanClasses() {
-		return notBeanClasses;
+		return notBeanClassesArray;
 	}
 
 	/**

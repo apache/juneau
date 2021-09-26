@@ -1444,7 +1444,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
-	 * @see BeanContext#BEAN_notBeanClasses
+	 * @see BeanContextBuilder#notBeanClasses(Class...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 */

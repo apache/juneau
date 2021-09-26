@@ -660,8 +660,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanIgnore}
-	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses_replace(Object...)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] notBeanClasses() default {};
@@ -673,7 +672,7 @@ public @interface BeanConfig {
 	 * Same as {@link #notBeanClasses()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] notBeanClasses_replace() default {};

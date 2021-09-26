@@ -947,7 +947,7 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * For example, the {@link BeanContext#BEAN_notBeanClasses} property which has the value <js>"BeanContext.notBeanClasses.sc"</js>.
+	 * For example, the {@link BeanContextBuilder#notBeanClasses(Class...)} property which has the value <js>"BeanContext.notBeanClasses.sc"</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

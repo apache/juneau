@@ -68,6 +68,7 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
 	List<Class<?>> beanDictionary, swaps;
+	Set<Class<?>> notBeanClasses;
 	boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
 		beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
 		disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
@@ -90,6 +91,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
 		beanDictionary = null;
 		swaps = null;
+		notBeanClasses = null;
 		disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
 		beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
 		beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
@@ -125,6 +127,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
 		beanDictionary = copyFrom.beanDictionary.isEmpty() ? null : new ArrayList<>(copyFrom.beanDictionary);
 		swaps = copyFrom.swaps.isEmpty() ? null : new ArrayList<>(copyFrom.swaps);
+		notBeanClasses = copyFrom.notBeanClasses.isEmpty() ? null : classSet(copyFrom.notBeanClasses);
 		disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -160,6 +163,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
 		beanDictionary = copyFrom.beanDictionary == null ? null : new ArrayList<>(copyFrom.beanDictionary);
 		swaps = copyFrom.swaps == null ? null : new ArrayList<>(copyFrom.swaps);
+		notBeanClasses = copyFrom.notBeanClasses == null ? null : classSet(copyFrom.notBeanClasses);
 		disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -199,6 +203,7 @@ public class BeanContextBuilder extends ContextBuilder {
 			beanFieldVisibility,
 			beanDictionary,
 			swaps,
+			notBeanClasses,
 			integer(
 				disableBeansRequireSomeProperties,
 				beanMapPutReturnsOldValue,
@@ -2437,7 +2442,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
 	 *
 	 * @param values
@@ -2450,35 +2454,39 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder notBeanClasses(Object...values) {
-		return addTo(BEAN_notBeanClasses, values);
+	public BeanContextBuilder notBeanClasses(Class<?>...values) {
+		return notBeanClasses(asList(values));
 	}
 
 	/**
-	 * Bean class exclusions.
-	 *
-	 * <p>
-	 * Same as {@link #notBeanClasses(Object...)} but replaces any existing values.
+	 * Same as {@link #notBeanClasses(Class...)} but allows you to pass in a collection of classes.
 	 *
 	 * @param values
 	 * 	The values to add to this setting.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Classes.
-	 * 		<li>Arrays and collections of classes.
-	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder notBeanClasses_replace(Object...values) {
-		return set(BEAN_notBeanClasses, values);
+	public BeanContextBuilder notBeanClasses(Collection<Class<?>> values) {
+		notBeanClasses().addAll(values);
+		return this;
+	}
+
+	/**
+	 * Returns the list of not-bean classes.
+	 *
+	 * @return The list of not-bean classes.
+	 */
+	public Set<Class<?>> notBeanClasses() {
+		if (notBeanClasses == null)
+			notBeanClasses = classSet();
+		return notBeanClasses;
 	}
 
 	/**
 	 * Bean package exclusions.
 	 *
 	 * <p>
-	 * Used as a convenient way of defining the {@link #notBeanClasses(Object...)} property for entire packages.
+	 * Used as a convenient way of defining the {@link #notBeanClasses(Class...)} property for entire packages.
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 *
 	 * <p>
@@ -3292,4 +3300,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helpers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static Set<Class<?>> classSet() {
+		return new TreeSet<>(Comparator.comparing(Class::getName));
+	}
+
+	private static Set<Class<?>> classSet(Collection<Class<?>> copy) {
+		Set<Class<?>> x = classSet();
+		x.addAll(copy);
+		return x;
+	}
 }
