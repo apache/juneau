@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 /**
- * Identifies possible float values for {@link HtmlDocSerializer#HTMLDOC_asideFloat}.
+ * Identifies possible float values for {@link HtmlDocSerializerBuilder#asideFloat(AsideFloat)}.
  */
 public enum AsideFloat {
 

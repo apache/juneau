@@ -12,12 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
-
 import java.io.IOException;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -36,10 +33,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	private static final VarResolver DEFAULT_VR = VarResolver.create().defaultVars().vars(HtmlWidgetVar.class).build();
 
 	private final HtmlDocSerializer ctx;
-	private final String[] navlinks, head, header, nav, aside, footer;
-	private final AsideFloat asideFloat;
-	private final Set<String> style, stylesheet, script;
-	private final boolean nowrap;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -53,24 +46,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected HtmlDocSerializerSession(HtmlDocSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-
-		SessionProperties sp = getSessionProperties();
-
-		header = sp.get(HTMLDOC_header, String[].class).orElse(ctx.getHeader());
-		nav = sp.get(HTMLDOC_nav, String[].class).orElse(ctx.getNav());
-		aside = sp.get(HTMLDOC_aside, String[].class).orElse(ctx.getAside());
-		asideFloat = sp.get(HTMLDOC_asideFloat, AsideFloat.class).orElse(ctx.getAsideFloat());
-		footer = sp.get(HTMLDOC_footer, String[].class).orElse(ctx.getFooter());
-		navlinks = sp.get(HTMLDOC_navlinks, String[].class).orElse(ctx.getNavlinks());
-
-		// These can contain dups after variable resolution, so de-dup them with hashsets.
-		style = ASet.of(sp.get(HTMLDOC_style, String[].class).orElse(ctx.getStyle()));
-		stylesheet = ASet.of(sp.get(HTMLDOC_stylesheet, String[].class).orElse(ctx.getStylesheet()));
-		script = ASet.of(sp.get(HTMLDOC_script, String[].class).orElse(ctx.getScript()));
-
-		head = sp.get(HTMLDOC_head, String[].class).orElse(ctx.getHead());
-		nowrap = sp.get(HTMLDOC_nowrap, boolean.class).orElse(ctx.isNowrap());
-
 		addVarBean(HtmlWidgetMap.class, ctx.getWidgets());
 	}
 
@@ -80,15 +55,15 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerBuilder#navlinks(String...)} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
+	 * 	The {@link HtmlDocSerializerBuilder#navlinks(String...)} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty map.
 	 */
 	public final String[] getNavLinks() {
-		return navlinks;
+		return ctx.navlinks;
 	}
 
 	@Override /* Serializer */
@@ -123,84 +98,84 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Aside section contents.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_aside
+	 * @see HtmlDocSerializerBuilder#aside(String...)
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
 	protected final String[] getAside() {
-		return aside;
+		return ctx.aside;
 	}
 
 	/**
 	 * Configuration property:  Aside section contents float.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_asideFloat
+	 * @see HtmlDocSerializerBuilder#asideFloat(AsideFloat)
 	 * @return
 	 * 	The location of where to place the aside section.
 	 */
 	protected final AsideFloat getAsideFloat() {
-		return asideFloat;
+		return ctx.asideFloat;
 	}
 
 	/**
 	 * Configuration property:  Footer section contents.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_footer
+	 * @see HtmlDocSerializerBuilder#footer(String...)
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
 	protected final String[] getFooter() {
-		return footer;
+		return ctx.footer;
 	}
 
 	/**
 	 * Configuration property:  Additional head section content.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_head
+	 * @see HtmlDocSerializerBuilder#head(String...)
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
 	protected final String[] getHead() {
-		return head;
+		return ctx.head;
 	}
 
 	/**
 	 * Configuration property:  Header section contents.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_header
+	 * @see HtmlDocSerializerBuilder#header(String...)
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
 	protected final String[] getHeader() {
-		return header;
+		return ctx.header;
 	}
 
 	/**
 	 * Configuration property:  Nav section contents.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_nav
+	 * @see HtmlDocSerializerBuilder#nav(String...)
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
 	protected final String[] getNav() {
-		return nav;
+		return ctx.nav;
 	}
 
 	/**
 	 * Configuration property:  Page navigation links.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_navlinks
+	 * @see HtmlDocSerializerBuilder#navlinks(String...)
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
 	protected final String[] getNavlinks() {
-		return navlinks;
+		return ctx.navlinks;
 	}
 
 	/**
 	 * Configuration property:  No-results message.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_noResultsMessage
+	 * @see HtmlDocSerializerBuilder#noResultsMessage(String)
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
@@ -211,51 +186,51 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Prevent word wrap on page.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_nowrap
+	 * @see HtmlDocSerializerBuilder#nowrap()
 	 * @return
-	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
+	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> should be added to the CSS instructions on the page to prevent word wrapping.
 	 */
 	protected final boolean isNowrap() {
-		return nowrap;
+		return ctx.nowrap;
 	}
 
 	/**
 	 * Configuration property:  Javascript code.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_script
+	 * @see HtmlDocSerializerBuilder#script(String...)
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
-	protected final Set<String> getScript() {
-		return script;
+	protected final String[] getScript() {
+		return ctx.script;
 	}
 
 	/**
 	 * Configuration property:  CSS style code.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_style
+	 * @see HtmlDocSerializerBuilder#style(String...)
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
-	protected final Set<String> getStyle() {
-		return style;
+	protected final String[] getStyle() {
+		return ctx.style;
 	}
 
 	/**
 	 * Configuration property:  Stylesheet import URLs.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_stylesheet
+	 * @see HtmlDocSerializerBuilder#stylesheet(String...)
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
-	protected final Set<String> getStylesheet() {
-		return stylesheet;
+	protected final String[] getStylesheet() {
+		return ctx.stylesheet;
 	}
 
 	/**
 	 * Configuration property:  HTML document template.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_template
+	 * @see HtmlDocSerializerBuilder#template(Class)
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
@@ -264,9 +239,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Page navigation links.
+	 * Configuration property:  Page widgets.
 	 *
-	 * @see HtmlDocSerializer#HTMLDOC_navlinks
+	 * @see HtmlDocSerializerBuilder#widgets(Class...)
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
@@ -286,15 +261,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 				OMap
 					.create()
 					.filtered()
-					.a("aside", aside)
-					.a("head", head)
-					.a("header", header)
-					.a("footer", footer)
-					.a("nav", nav)
-					.a("navlinks", navlinks)
-					.a("script", script)
-					.a("style", style)
-					.a("stylesheet", stylesheet)
+					.a("ctx", ctx)
 					.a("varResolver", getVarResolver())
 			);
 	}

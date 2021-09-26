@@ -12,10 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import org.apache.juneau.*;
+import static java.util.Optional.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
+import static java.util.Collections.*;
+
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -62,430 +66,25 @@ import org.apache.juneau.serializer.*;
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "HtmlDocSerializer";
-
-	/**
-	 * Configuration property:  Aside section contents.
-	 *
-	 * <p>
-	 * Allows you to specify the contents of the aside section on the HTML page.
-	 * The aside section floats on the right of the page for providing content supporting the serialized content of
-	 * the page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.aside</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDE</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#aside()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#aside(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_aside = PREFIX + ".aside.ls";
-
-	/**
-	 * Configuration property:  Float aside section contents.
-	 *
-	 * <p>
-	 * Allows you to position the aside contents of the page around the main contents.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.asideFloat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.AsideFloat}
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.asideFloat</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDEFLOAT</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.AsideFloat#DEFAULT}
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#asideFloat()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#asideFloat(AsideFloat)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_asideFloat = PREFIX + ".asideFloat.s";
-
-	/**
-	 * Configuration property:  Footer section contents.
-	 *
-	 * <p>
-	 * Allows you to specify the contents of the footer section on the HTML page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.footer</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_FOOTER</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#footer()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#footer(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_footer = PREFIX + ".footer.ls";
-
-	/**
-	 * Configuration property:  Additional head section content.
-	 *
-	 * <p>
-	 * Adds the specified HTML content to the head section of the page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.head</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_HEAD</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#head()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#head(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_head = PREFIX + ".head.ls";
-
-	/**
-	 * Configuration property:  Header section contents.
-	 *
-	 * <p>
-	 * Allows you to override the contents of the header section on the HTML page.
-	 * The header section normally contains the title and description at the top of the page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.header.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.header</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_HEADER</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#header()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#header(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_header = PREFIX + ".header.ls";
-
-	/**
-	 * Configuration property:  Nav section contents.
-	 *
-	 * <p>
-	 * Allows you to override the contents of the nav section on the HTML page.
-	 * The nav section normally contains the page links at the top of the page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.nav</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NAV</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nav()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#nav(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_nav = PREFIX + ".nav.ls";
-
-	/**
-	 * Configuration property:  Page navigation links.
-	 *
-	 * <p>
-	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.navlinks.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.navlinks</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NAVLINKS</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#navlinks()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#navlinks(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_navlinks = PREFIX + ".navlinks.ls";
-
-	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_navlinks} property.
-	 */
-	public static final String HTMLDOC_navlinks_add = PREFIX + ".navlinks.ls/add";
-
-	/**
-	 * Configuration property:  No-results message.
-	 *
-	 * <p>
-	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.noResultsMessage.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.noResultsMessage</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NORESULTSMESSAGE</c>
-	 * 	<li><b>Default:</b>  <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#noResultsMessage()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#noResultsMessage(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_noResultsMessage = PREFIX + ".noResultsMessage.s";
-
-	/**
-	 * Configuration property:  Prevent word wrap on page.
-	 *
-	 * <p>
-	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nowrap.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.nowrap</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NOWRAP</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nowrap()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#nowrap()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_nowrap = PREFIX + ".nowrap.b";
-
-	/**
-	 * Configuration property:  Javascript code.
-	 *
-	 * <p>
-	 * Adds the specified Javascript code to the HTML page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.script</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_SCRIPT</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#script()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#script(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_script = PREFIX + ".script.ls";
-
-	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
-	 */
-	public static final String HTMLDOC_script_add = PREFIX + ".script.ls/add";
-
-	/**
-	 * Configuration property:  CSS style code.
-	 *
-	 * <p>
-	 * Adds the specified CSS instructions to the HTML page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.style.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.style</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_STYLE</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#style()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#style(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_style = PREFIX + ".style.ls";
-
-	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_style} property.
-	 */
-	public static final String HTMLDOC_style_add = PREFIX + ".style.ls/add";
-
-	/**
-	 * Configuration property:  Stylesheet import URLs.
-	 *
-	 * <p>
-	 * Adds a link to the specified stylesheet URL.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.stylesheet</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_STYLESHEET</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#stylesheet(String[])}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_stylesheet = PREFIX + ".stylesheet.ls";
-
-	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
-	 */
-	public static final String HTMLDOC_stylesheet_add = PREFIX + ".stylesheet.ls/add";
-
-	/**
-	 * Configuration property:  HTML document template.
-	 *
-	 * <p>
-	 * Specifies the template to use for serializing the page.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.template.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.html.HtmlDocTemplate}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.BasicHtmlDocTemplate}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#template()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#template(Class)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_template = PREFIX + ".template.c";
-
-	/**
-	 * Configuration property:  HTML Widgets.
-	 *
-	 * <p>
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_widgets HTMLDOC_widgets}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.widgets.lo"</js>
-	 * 	<li><b>Data type:</b><c>List&lt;{@link org.apache.juneau.html.HtmlWidget}|Class&lt;{@link org.apache.juneau.html.HtmlWidget}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link HtmlDocConfig#widgets()}
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#widgets()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlDocSerializerBuilder#widgets(Class...)}
-	 * 			<li class='jm'>{@link HtmlDocSerializerBuilder#widgets(HtmlWidget...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String HTMLDOC_widgets = PREFIX + ".widgets.lo";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
-	private final AsideFloat asideFloat;
-	private final String noResultsMessage;
-	private final boolean nowrap;
-	private final HtmlDocTemplate template;
-	private final HtmlWidgetMap widgets;
+	final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
+	final AsideFloat asideFloat;
+	final String noResultsMessage;
+	final boolean nowrap;
+	final Class<? extends HtmlDocTemplate> template;
+	final List<Class<? extends HtmlWidget>> widgets;
+
+	private final HtmlWidgetMap widgetMap;
+	private final HtmlDocTemplate templateBean;
 
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
 
@@ -496,23 +95,24 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	protected HtmlDocSerializer(HtmlDocSerializerBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		style = cp.getArray(HTMLDOC_style, String.class).orElse(new String[0]);
-		stylesheet = cp.getArray(HTMLDOC_stylesheet, String.class).orElse(new String[0]);
-		script = cp.getArray(HTMLDOC_script, String.class).orElse(new String[0]);
-		head = cp.getArray(HTMLDOC_head, String.class).orElse(new String[0]);
-		header = cp.getArray(HTMLDOC_header, String.class).orElse(new String[0]);
-		nav = cp.getArray(HTMLDOC_nav, String.class).orElse(new String[0]);
-		aside = cp.getArray(HTMLDOC_aside, String.class).orElse(new String[0]);
-		asideFloat = cp.get(HTMLDOC_asideFloat, AsideFloat.class).orElse(AsideFloat.RIGHT);
-		footer = cp.getArray(HTMLDOC_footer, String.class).orElse(new String[0]);
-		nowrap = cp.getBoolean(HTMLDOC_nowrap).orElse(false);
-		navlinks = cp.getArray(HTMLDOC_navlinks, String.class).orElse(new String[0]);
-		noResultsMessage = cp.getString(HTMLDOC_noResultsMessage).orElse("<p>no results</p>");
-		template = cp.getInstance(HTMLDOC_template, HtmlDocTemplate.class).orElseGet(BasicHtmlDocTemplate::new);
+		style = ofNullable(builder.style).map(x -> toArray(x)).orElse(new String[0]);
+		stylesheet = ofNullable(builder.stylesheet).map(x -> toArray(x)).orElse(new String[0]);
+		script = ofNullable(builder.script).map(x -> toArray(x)).orElse(new String[0]);
+		head = ofNullable(builder.head).map(x -> toArray(x)).orElse(new String[0]);
+		header = ofNullable(builder.header).map(x -> toArray(x)).orElse(new String[0]);
+		nav = ofNullable(builder.nav).map(x -> toArray(x)).orElse(new String[0]);
+		aside = ofNullable(builder.aside).map(x -> toArray(x)).orElse(new String[0]);
+		footer = ofNullable(builder.footer).map(x -> toArray(x)).orElse(new String[0]);
+		navlinks = ofNullable(builder.navlinks).map(x -> toArray(x)).orElse(new String[0]);
+		asideFloat = builder.asideFloat;
+		noResultsMessage = builder.noResultsMessage;
+		nowrap = builder.nowrap;
+		template = builder.template;
+		widgets = builder.widgets == null ? emptyList() : new ArrayList<>(builder.widgets);
 
-		widgets = new HtmlWidgetMap();
-		widgets.append(cp.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class).orElse(new HtmlWidget[0]));
+		templateBean = newInstance(template);
+		widgetMap = new HtmlWidgetMap();
+		widgets.stream().map(x -> newInstance(x)).forEach(x -> widgetMap.append(x));
 	}
 
 	@Override /* Context */
@@ -560,7 +160,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Aside section contents.
 	 *
-	 * @see #HTMLDOC_aside
+	 * @see HtmlDocSerializerBuilder#aside(String...)
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
@@ -571,7 +171,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Float side section contents.
 	 *
-	 * @see #HTMLDOC_asideFloat
+	 * @see HtmlDocSerializerBuilder#asideFloat(AsideFloat)
 	 * @return
 	 * 	How to float the aside contents on the page.
 	 */
@@ -582,7 +182,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Footer section contents.
 	 *
-	 * @see #HTMLDOC_footer
+	 * @see HtmlDocSerializerBuilder#footer(String...)
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
@@ -593,7 +193,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Additional head section content.
 	 *
-	 * @see #HTMLDOC_head
+	 * @see HtmlDocSerializerBuilder#head(String...)
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
@@ -604,7 +204,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Header section contents.
 	 *
-	 * @see #HTMLDOC_header
+	 * @see HtmlDocSerializerBuilder#header(String...)
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
@@ -615,7 +215,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Nav section contents.
 	 *
-	 * @see #HTMLDOC_nav
+	 * @see HtmlDocSerializerBuilder#nav(String...)
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
@@ -626,7 +226,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Page navigation links.
 	 *
-	 * @see #HTMLDOC_navlinks
+	 * @see HtmlDocSerializerBuilder#navlinks(String...)
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
@@ -637,7 +237,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * No-results message.
 	 *
-	 * @see #HTMLDOC_noResultsMessage
+	 * @see HtmlDocSerializerBuilder#noResultsMessage(String)
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
@@ -648,7 +248,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Prevent word wrap on page.
 	 *
-	 * @see #HTMLDOC_nowrap
+	 * @see HtmlDocSerializerBuilder#nowrap()
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
 	 */
@@ -659,7 +259,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Javascript code.
 	 *
-	 * @see #HTMLDOC_script
+	 * @see HtmlDocSerializerBuilder#script(String...)
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
@@ -670,7 +270,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * CSS style code.
 	 *
-	 * @see #HTMLDOC_style
+	 * @see HtmlDocSerializerBuilder#style(String...)
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
@@ -681,7 +281,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Stylesheet import URLs.
 	 *
-	 * @see #HTMLDOC_stylesheet
+	 * @see HtmlDocSerializerBuilder#stylesheet(String...)
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
@@ -692,28 +292,40 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * HTML document template.
 	 *
-	 * @see #HTMLDOC_template
+	 * @see HtmlDocSerializerBuilder#template(Class)
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
 	protected final HtmlDocTemplate getTemplate() {
-		return template;
+		return templateBean;
 	}
 
 	/**
 	 * HTML widgets.
 	 *
-	 * @see #HTMLDOC_widgets
+	 * @see HtmlDocSerializerBuilder#widgets(Class...)
 	 * @return
 	 * 	Widgets defined on this serializers.
 	 */
 	protected final HtmlWidgetMap getWidgets() {
-		return widgets;
+		return widgetMap;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	private String[] toArray(List<String> x) {
+		return x.toArray(new String[x.size()]);
+	}
+
+	private <T> T newInstance(Class<T> c) {
+		try {
+			return c.newInstance();
+		} catch (Exception e) {
+			throw runtimeException(e);
+		}
+	}
 
 	@Override /* Context */
 	public OMap toMap() {
@@ -735,7 +347,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 					.a("nowrap", nowrap)
 					.a("template", template)
 					.a("noResultsMessage", noResultsMessage)
-					.a("widgets", widgets.keySet())
+					.a("widgets", widgets)
 			);
 	}
 }

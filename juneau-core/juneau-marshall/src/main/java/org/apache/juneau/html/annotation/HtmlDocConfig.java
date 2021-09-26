@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(HtmlDocConfigAnnotation.Apply.class)
+@ContextApply(HtmlDocConfigAnnotation.ApplySerializer.class)
 public @interface HtmlDocConfig {
 
 	/**
@@ -88,7 +88,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_aside}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#aside(String...)}
 	 * </ul>
 	 */
 	String[] aside() default {};
@@ -137,7 +137,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_asideFloat}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#asideFloat(AsideFloat)}
 	 * </ul>
 	 */
 	String asideFloat() default "DEFAULT";
@@ -177,7 +177,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_footer}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#footer(String...)}
 	 * </ul>
 	 */
 	String[] footer() default {};
@@ -215,7 +215,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_head}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#head(String...)}
 	 * </ul>
 	 */
 	String[] head() default {};
@@ -256,7 +256,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_header}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#header(String...)}
 	 * </ul>
 	 */
 	String[] header() default {};
@@ -299,7 +299,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nav}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#nav(String...)}
 	 * </ul>
 	 */
 	String[] nav() default {};
@@ -361,7 +361,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#navlinks(String...)}
 	 * </ul>
 	 */
 	String[] navlinks() default {};
@@ -390,7 +390,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_noResultsMessage}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#noResultsMessage(String)}
 	 * </ul>
 	 */
 	String noResultsMessage() default "";
@@ -414,7 +414,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nowrap}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#nowrap()}
 	 * </ul>
 	 */
 	String nowrap() default "";
@@ -454,7 +454,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#script(String...)}
 	 * </ul>
 	 */
 	String[] script() default {};
@@ -495,7 +495,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#style(String...)}
 	 * </ul>
 	 */
 	String[] style() default {};
@@ -523,7 +523,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_stylesheet}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#stylesheet(String...)}
 	 * </ul>
 	 */
 	String[] stylesheet() default {};
@@ -554,7 +554,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_template}
+	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#template(Class)}
 	 * </ul>
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.Null.class;

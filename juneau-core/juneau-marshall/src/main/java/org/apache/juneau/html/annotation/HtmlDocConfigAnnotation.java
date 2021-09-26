@@ -12,14 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
-import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Arrays.*;
-
-import java.util.regex.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -30,78 +23,38 @@ import org.apache.juneau.svl.*;
 public class HtmlDocConfigAnnotation {
 
 	/**
-	 * Applies {@link HtmlDocConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link HtmlDocConfig} annotations to a {@link HtmlDocSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<HtmlDocConfig,ContextPropertiesBuilder> {
+	public static class ApplySerializer extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(HtmlDocConfig.class, ContextPropertiesBuilder.class, vr);
+		public ApplySerializer(VarResolverSession vr) {
+			super(HtmlDocConfig.class, HtmlDocSerializerBuilder.class, vr);
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
-		public void apply(AnnotationInfo<HtmlDocConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializerBuilder b) {
 			HtmlDocConfig a = ai.getAnnotation();
 
-			b.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), b.peek(String[].class, HTMLDOC_aside)));
-			b.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
-			b.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), b.peek(String[].class, HTMLDOC_footer)));
-			b.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), b.peek(String[].class, HTMLDOC_head)));
-			b.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), b.peek(String[].class, HTMLDOC_header)));
-			b.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), b.peek(String[].class, HTMLDOC_nav)));
-			b.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), b.peek(String[].class, HTMLDOC_navlinks)));
-			string(a.noResultsMessage()).ifPresent(x -> b.set(HTMLDOC_noResultsMessage, x));
-			bool(a.nowrap()).ifPresent(x -> b.set(HTMLDOC_nowrap, x));
-			b.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), b.peek(String[].class, HTMLDOC_script)));
-			b.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), b.peek(String[].class, HTMLDOC_style)));
-			b.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), b.peek(String[].class, HTMLDOC_stylesheet)));
-			b.setIf(a.template() != HtmlDocTemplate.Null.class, HTMLDOC_template, a.template());
-			asList(a.widgets()).stream().forEach(x -> b.prependTo(HTMLDOC_widgets, x));
-		}
-
-		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
-
-		private String[] resolveLinks(Object[] value, String[] prev) {
-			AList<String> list = AList.create();
-			for (Object v : value) {
-				String s = string(stringify(v)).orElse(null);
-				if (s == null)
-					return new String[0];
-				if ("INHERIT".equals(s)) {
-					if (prev != null)
-						list.a(prev);
-				} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
-					Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
-					lm.matches();
-					String key = lm.group(1);
-					int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
-					String remainder = lm.group(3);
-					list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
-				} else {
-					list.add(s);
-				}
-			}
-			return list.asArrayOf(String.class);
-		}
-
-		private String[] resolveList(Object[] value, String[] prev) {
-			ASet<String> set = ASet.of();
-			for (Object v : value) {
-				String s = string(stringify(v)).orElse(null);
-				if ("INHERIT".equals(s)) {
-					if (prev != null)
-						set.a(prev);
-				} else if ("NONE".equals(s)) {
-					return new String[0];
-				} else {
-					set.add(s);
-				}
-			}
-			return set.asArrayOf(String.class);
+			strings(a.aside()).ifPresent(x -> b.aside(x));
+			strings(a.footer()).ifPresent(x -> b.footer(x));
+			strings(a.head()).ifPresent(x -> b.head(x));
+			strings(a.header()).ifPresent(x -> b.header(x));
+			strings(a.nav()).ifPresent(x -> b.nav(x));
+			strings(a.navlinks()).ifPresent(x -> b.navlinks(x));
+			strings(a.script()).ifPresent(x -> b.script(x));
+			strings(a.style()).ifPresent(x -> b.style(x));
+			strings(a.stylesheet()).ifPresent(x -> b.stylesheet(x));
+			string(a.asideFloat()).filter(x -> ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(x -> b.asideFloat(x));
+			string(a.noResultsMessage()).ifPresent(x -> b.noResultsMessage(x));
+			bool(a.nowrap()).ifPresent(x -> b.nowrap(x));
+			type(a.template()).ifPresent(x -> b.template(x));
+			classes(a.widgets()).ifPresent(x -> b.widgets((Class<? extends HtmlWidget>[]) x));
 		}
 	}
 }

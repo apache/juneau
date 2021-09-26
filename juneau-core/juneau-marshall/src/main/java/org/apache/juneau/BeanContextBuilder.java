@@ -1575,6 +1575,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @see #beanDictionary(Class...)
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanDictionary(Collection<Class<?>> values) {
@@ -1585,7 +1586,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Returns the bean dictionary list.
 	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #beanDictionary(Class...)}.
+	 *
 	 * @return The bean dictionary list.
+	 * @see #beanDictionary(Class...)
 	 */
 	public List<Class<?>> beanDictionary() {
 		if (beanDictionary == null)
@@ -2473,6 +2478,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @see #notBeanClasses(Class...)
 	 */
 	@FluentSetter
 	public BeanContextBuilder notBeanClasses(Collection<Class<?>> values) {
@@ -2483,7 +2489,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Returns the list of not-bean classes.
 	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanClasses(Class...)}.
+	 *
 	 * @return The list of not-bean classes.
+	 * @see #notBeanClasses(Class...)
 	 */
 	public Set<Class<?>> notBeanClasses() {
 		if (notBeanClasses == null)
@@ -2538,6 +2548,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @see #notBeanPackages(String...)
 	 */
 	@FluentSetter
 	public BeanContextBuilder notBeanPackages(Collection<String> values) {
@@ -2548,7 +2559,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Returns the list of not-bean Java package names.
 	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanPackages(String...)}.
+	 *
 	 * @return The list of not-bean Java package names.
+	 * @see #notBeanPackages(String...)
 	 */
 	public Set<String> notBeanPackages() {
 		if (notBeanPackages == null)
@@ -2873,6 +2888,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @see #swaps(Class...)
 	 */
 	@FluentSetter
 	public BeanContextBuilder swaps(Collection<Class<?>> values) {
@@ -2883,7 +2899,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Returns the bean swaps list.
 	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #swaps(Class...)}.
+	 *
 	 * @return The bean swaps list.
+	 * @see #swaps(Class...)
 	 */
 	public List<Class<?>> swaps() {
 		if (swaps == null)

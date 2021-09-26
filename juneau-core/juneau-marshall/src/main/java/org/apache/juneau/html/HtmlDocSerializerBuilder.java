@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
@@ -32,6 +31,13 @@ import org.apache.juneau.xml.*;
 @FluentSetters
 public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 
+	List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;
+	AsideFloat asideFloat;
+	String noResultsMessage;
+	boolean nowrap;
+	Class<? extends HtmlDocTemplate> template;
+	List<Class<? extends HtmlWidget>> widgets;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -40,6 +46,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 		produces("text/html");
 		accept("text/html");
 		type(HtmlDocSerializer.class);
+		asideFloat = AsideFloat.RIGHT;
+		noResultsMessage = "<p>no results</p>";
+		template = BasicHtmlDocTemplate.class;
 	}
 
 	/**
@@ -49,6 +58,20 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	protected HtmlDocSerializerBuilder(HtmlDocSerializer copyFrom) {
 		super(copyFrom);
+		aside = copy(copyFrom.aside);
+		footer = copy(copyFrom.footer);
+		head = copy(copyFrom.head);
+		header = copy(copyFrom.header);
+		nav = copy(copyFrom.nav);
+		navlinks = copy(copyFrom.navlinks);
+		script = copy(copyFrom.script);
+		style = copy(copyFrom.style);
+		stylesheet = copy(copyFrom.stylesheet);
+		asideFloat = copyFrom.asideFloat;
+		noResultsMessage = copyFrom.noResultsMessage;
+		nowrap = copyFrom.nowrap;
+		template = copyFrom.template;
+		widgets = copy(copyFrom.widgets);
 	}
 
 	/**
@@ -58,6 +81,20 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	protected HtmlDocSerializerBuilder(HtmlDocSerializerBuilder copyFrom) {
 		super(copyFrom);
+		aside = copy(copyFrom.aside);
+		footer = copy(copyFrom.footer);
+		head = copy(copyFrom.head);
+		header = copy(copyFrom.header);
+		nav = copy(copyFrom.nav);
+		navlinks = copy(copyFrom.navlinks);
+		script = copy(copyFrom.script);
+		style = copy(copyFrom.style);
+		stylesheet = copy(copyFrom.stylesheet);
+		asideFloat = copyFrom.asideFloat;
+		noResultsMessage = copyFrom.noResultsMessage;
+		nowrap = copyFrom.nowrap;
+		template = copyFrom.template;
+		widgets = copy(copyFrom.widgets);
 	}
 
 	@Override /* ContextBuilder */
@@ -124,8 +161,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder aside(String...value) {
-		set(HTMLDOC_aside, value);
+		aside = merge(aside, value);
 		return this;
+	}
+
+	/**
+	 * Returns the list of aside section contents.
+	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #aside(String...)}.
+	 *
+	 * @return The list of aside section contents.
+	 * @see #aside(String...)
+	 */
+	public List<String> aside() {
+		if (aside == null)
+			aside = new ArrayList<>();
+		return aside;
 	}
 
 	/**
@@ -158,7 +210,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder asideFloat(AsideFloat value) {
-		set(HTMLDOC_asideFloat, value);
+		asideFloat = value;
 		return this;
 	}
 
@@ -187,8 +239,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder footer(String...value) {
-		set(HTMLDOC_footer, value);
+		footer = merge(footer, value);
 		return this;
+	}
+
+	/**
+	 * Returns the list of footer section contents.
+	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #footer(String...)}.
+	 *
+	 * @return The list of footer section contents.
+	 * @see #footer(String...)
+	 */
+	public List<String> footer() {
+		if (footer == null)
+			footer = new ArrayList<>();
+		return footer;
 	}
 
 	/**
@@ -213,8 +280,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder head(String...value) {
-		set(HTMLDOC_head, value);
+		head = merge(head, value);
 		return this;
+	}
+
+	/**
+	 * Returns the list of head section contents.
+	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #head(String...)}.
+	 *
+	 * @return The list of head section contents.
+	 * @see #head(String...)
+	 */
+	public List<String> head() {
+		if (head == null)
+			head = new ArrayList<>();
+		return head;
 	}
 
 	/**
@@ -240,8 +322,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder header(String...value) {
-		set(HTMLDOC_header, value);
+		header = merge(header, value);
 		return this;
+	}
+
+	/**
+	 * Returns the list of header section contents.
+	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #header(String...)}.
+	 *
+	 * @return The list of header section contents.
+	 * @see #header(String...)
+	 */
+	public List<String> header() {
+		if (header == null)
+			header = new ArrayList<>();
+		return header;
 	}
 
 	/**
@@ -262,7 +359,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * When this property is specified, the {@link HtmlDocSerializer#HTMLDOC_navlinks} property is ignored.
+	 * When this property is specified, the {@link HtmlDocSerializerBuilder#navlinks(String...)} property is ignored.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -270,8 +367,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder nav(String...value) {
-		set(HTMLDOC_nav, value);
+		nav = merge(nav, value);
 		return this;
+	}
+
+	/**
+	 * Returns the list of nav section contents.
+	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #nav(String...)}.
+	 *
+	 * @return The list of nav section contents.
+	 * @see #nav(String...)
+	 */
+	public List<String> nav() {
+		if (nav == null)
+			nav = new ArrayList<>();
+		return nav;
 	}
 
 	/**
@@ -316,55 +428,24 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder navlinks_replace(String...value) {
-		set(HTMLDOC_navlinks, value);
+	public HtmlDocSerializerBuilder navlinks(String...value) {
+		navlinks = mergeNavLinks(navlinks, value);
 		return this;
 	}
 
 	/**
-	 * Add to the {@link HtmlDocSerializer#HTMLDOC_navlinks} property.
+	 * Returns the list of navlinks section contents.
 	 *
 	 * <p>
-	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #navlinks(String...)}.
 	 *
-	 * <p>
-	 * This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
-	 *
-	 * <p>
-	 * The value is an array of strings with two possible values:
-	 * <ul>
-	 * 	<li>A key-value pair representing a hyperlink label and href:
-	 * 		<br><js>"google: http://google.com"</js>
-	 * 	<li>Arbitrary HTML.
-	 * </ul>
-	 *
-	 * <p>
-	 * Relative URLs are considered relative to the servlet path.
-	 * For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
-	 * URL is <js>"foo"</js>, the link becomes <js>"http://localhost/myContext/myServlet/foo"</js>.
-	 * Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
-	 * can also be used in addition to various other protocols specified by {@link UriResolver} such as
-	 * <js>"servlet:/..."</js>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.navlinks(
-	 * 			<js>"api: servlet:/api"</js>,
-	 * 			<js>"doc: doc"</js>
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param value
-	 * 	The value to add to this property.
-	 * @return This object (for method chaining).
+	 * @return The list of navlinks section contents.
+	 * @see #navlinks(String...)
 	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder navlinks(String...value) {
-		set(HTMLDOC_navlinks_add, value);
-		return this;
+	public List<String> navlinks() {
+		if (navlinks == null)
+			navlinks = new ArrayList<>();
+		return navlinks;
 	}
 
 	/**
@@ -390,7 +471,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder noResultsMessage(String value) {
-		set(HTMLDOC_noResultsMessage, value);
+		noResultsMessage = value;
 		return this;
 	}
 
@@ -404,14 +485,24 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder nowrap() {
-		set(HTMLDOC_nowrap);
+		return nowrap(true);
+	}
+
+	/**
+	 * Same as {@link #nowrap()} but allows you to explicitly specify the boolean value.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 * @see #nowrap()
+	 */
+	@FluentSetter
+	public HtmlDocSerializerBuilder nowrap(boolean value) {
+		nowrap = value;
 		return this;
 	}
 
 	/**
-	 * Add to the {@link HtmlDocSerializer#HTMLDOC_script} property.
-	 *
-	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
 	 *
 	 * <p>
@@ -429,14 +520,26 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder script(String...value) {
-		set(HTMLDOC_script_add, value);
+		script = merge(script, value);
 		return this;
 	}
 
 	/**
-	 * Add to the {@link HtmlDocSerializer#HTMLDOC_style} property.
+	 * Returns the list of page script contents.
 	 *
 	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #script(String...)}.
+	 *
+	 * @return The list of page script contents.
+	 * @see #script(String...)
+	 */
+	public List<String> script() {
+		if (script == null)
+			script = new ArrayList<>();
+		return script;
+	}
+
+	/**
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
 	 * <p class='bcode w800'>
@@ -455,15 +558,27 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder style(String...value) {
-		set(HTMLDOC_style_add, value);
+		style = merge(style, value);
 		return this;
 	}
 
 	/**
-	 * Add to the {@link HtmlDocSerializer#HTMLDOC_stylesheet} property.
+	 * Returns the list of page style contents.
 	 *
 	 * <p>
-	 * Adds a link to the specified stylesheet URL.
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #style(String...)}.
+	 *
+	 * @return The list of page style contents.
+	 * @see #style(String...)
+	 */
+	public List<String> style() {
+		if (style == null)
+			style = new ArrayList<>();
+		return style;
+	}
+
+	/**
+	 * Adds to the list of stylesheet URLs.
 	 *
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
@@ -474,8 +589,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlDocSerializerBuilder stylesheet(String...value) {
-		set(HTMLDOC_stylesheet_add, value);
+		stylesheet = merge(stylesheet, value);
 		return this;
+	}
+
+	/**
+	 * Returns the list of stylesheet URLs.
+	 *
+	 * <p>
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #stylesheet(String...)}.
+	 *
+	 * @return The list of stylesheet URLs.
+	 * @see #stylesheet(String...)
+	 */
+	public List<String> stylesheet() {
+		if (stylesheet == null)
+			stylesheet = new ArrayList<>();
+		return stylesheet;
 	}
 
 	/**
@@ -501,8 +631,8 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder template(Class<?> value) {
-		set(HTMLDOC_template, value);
+	public HtmlDocSerializerBuilder template(Class<? extends HtmlDocTemplate> value) {
+		template = value;
 		return this;
 	}
 
@@ -550,7 +680,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestHtmlWidgets}
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
@@ -559,25 +688,23 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@FluentSetter
 	@SuppressWarnings("unchecked")
 	public HtmlDocSerializerBuilder widgets(Class<? extends HtmlWidget>...values) {
-		return prependTo(HTMLDOC_widgets, values);
+		Collections.addAll(widgets(), values);
+		return this;
 	}
 
 	/**
-	 * HTML Widgets.
+	 * Returns the list of page widgets.
 	 *
 	 * <p>
-	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
+	 * Gives access to the inner list if you need to make more than simple additions via {@link #widgets(Class...)}.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
+	 * @return The list of page widgets.
+	 * @see #widgets(Class...)
 	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder widgets(HtmlWidget...values) {
-		return prependTo(HTMLDOC_widgets, values);
+	public List<Class<? extends HtmlWidget>> widgets() {
+		if (widgets == null)
+			widgets = new ArrayList<>();
+		return widgets;
 	}
 
 	// <FluentSetters>
@@ -1225,4 +1352,57 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helpers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static <T> List<T> copy(List<T> s) {
+		return s == null || s.isEmpty() ? null : new ArrayList<>(s);
+	}
+
+	private static <T> List<T> copy(T[] s) {
+		return s.length == 0 ? null : new ArrayList<>(Arrays.asList(s));
+	}
+
+	private List<String> merge(List<String> old, String[] newValues) {
+		List<String> x = new ArrayList<>(newValues.length);
+		for (String s : newValues) {
+			if ("NONE".equals(s)) {
+				if (old != null)
+					old.clear();
+			} else if ("INHERIT".equals(s)) {
+				if (old != null)
+					x.addAll(old);
+			} else {
+				x.add(s);
+			}
+		}
+		return x;
+	}
+
+	private List<String> mergeNavLinks(List<String> old, String[] newValues) {
+		List<String> x = new ArrayList<>(newValues.length);
+		for (String s : newValues) {
+			if ("NONE".equals(s)) {
+				if (old != null)
+					old.clear();
+			} else if ("INHERIT".equals(s)) {
+				if (old != null)
+					x.addAll(old);
+			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
+				Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
+				lm.matches();
+				String key = lm.group(1);
+				int index = Math.min(x.size(), Integer.parseInt(lm.group(2)));
+				String remainder = lm.group(3);
+				x.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+			} else {
+				x.add(s);
+			}
+		}
+		return x;
+	}
+
+	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 }
