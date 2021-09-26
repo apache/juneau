@@ -648,7 +648,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder swaps(Object...values) {
+	public XmlParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

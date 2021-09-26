@@ -467,7 +467,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder swaps(Object...values) {
+	public JsoParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

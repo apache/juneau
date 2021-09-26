@@ -248,33 +248,6 @@ public class BeanContext extends Context {
 	 */
 	public static final String BEAN_propertyNamer = PREFIX + ".propertyNamer.c";
 
-	/**
-	 * Configuration property:  Java object swaps.
-	 *
-	 * <p>
-	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
-	 * and "swap in" the non-serializable class during parsing..
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_swaps BEAN_swaps}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.swaps.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swap}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#swaps()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_swaps = PREFIX + ".swaps.lo";
-
 	/*
 	 * The default package pattern exclusion list.
 	 * Any beans in packages in this list will not be considered beans.
@@ -339,12 +312,13 @@ public class BeanContext extends Context {
 		beanFieldVisibility;
 
 	private final Class<?>[] notBeanClasses;
-	final List<Class<?>> beanDictionary;
+	final List<Class<?>> beanDictionary, swaps;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
-	private final PojoSwap<?,?>[] swaps;
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamer;
 	final String typePropertyName;
+
+	final PojoSwap[] swapArray;
 
 	final Locale locale;
 	final TimeZone timeZone;
@@ -371,6 +345,10 @@ public class BeanContext extends Context {
 
 		cp = cp.subset(new String[]{"Context","BeanContext"});
 
+		beanConstructorVisibility = builder.beanConstructorVisibility;
+		beanClassVisibility = builder.beanClassVisibility;
+		beanMethodVisibility = builder.beanMethodVisibility;
+		beanFieldVisibility = builder.beanFieldVisibility;
 		beansRequireDefaultConstructor = builder.beansRequireDefaultConstructor;
 		beansRequireSerializable = builder.beansRequireSerializable;
 		beansRequireSettersForGetters = builder.beansRequireSettersForGetters;
@@ -391,16 +369,12 @@ public class BeanContext extends Context {
 		locale = ofNullable(builder.locale).orElseGet(()->Locale.getDefault());
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
-
-		beanConstructorVisibility = builder.beanConstructorVisibility;
-		beanClassVisibility = builder.beanClassVisibility;
-		beanMethodVisibility = builder.beanMethodVisibility;
-		beanFieldVisibility = builder.beanFieldVisibility;
+		beanDictionary = ofNullable(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
+		swaps = ofNullable(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
 
 		notBeanClasses = cp.getClassArray(BEAN_notBeanClasses).orElse(DEFAULT_NOTBEAN_CLASSES);
 
 		propertyNamer = cp.getInstance(BEAN_propertyNamer, PropertyNamer.class).orElseGet(BasicPropertyNamer::new);
-
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();
@@ -414,20 +388,16 @@ public class BeanContext extends Context {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
-		for (Object o : cp.getList(BEAN_swaps, Object.class).orElse(emptyList())) {
-			if (o instanceof Class) {
-				ClassInfo ci = ClassInfo.of((Class<?>)o);
-				if (ci.isChildOf(PojoSwap.class))
-					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
-				else if (ci.isChildOf(Surrogate.class))
-					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
-				else
-					throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
-			} else if (o instanceof PojoSwap) {
-				lpf.add((PojoSwap)o);
-			}
+		for (Object o : ofNullable(swaps).orElse(emptyList())) {
+			ClassInfo ci = ClassInfo.of((Class<?>)o);
+			if (ci.isChildOf(PojoSwap.class))
+				lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
+			else if (ci.isChildOf(Surrogate.class))
+				lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
+			else
+				throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 		}
-		swaps = lpf.toArray(new PojoSwap[lpf.size()]);
+		swapArray = lpf.toArray(new PojoSwap[lpf.size()]);
 
 		cmCache = new ConcurrentHashMap<>();
 		cmCache.put(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
@@ -435,8 +405,6 @@ public class BeanContext extends Context {
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
-
-		beanDictionary = ofNullable(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
 
 		beanRegistry = new BeanRegistry(this, null);
 	}
@@ -948,7 +916,7 @@ public class BeanContext extends Context {
 		// Note:  On first
 		if (c != null) {
 			List<PojoSwap> l = new ArrayList<>();
-			for (PojoSwap f : swaps)
+			for (PojoSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
 			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
@@ -963,10 +931,10 @@ public class BeanContext extends Context {
 	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
 	 */
 	private final PojoSwap[] findChildPojoSwaps(Class<?> c) {
-		if (c == null || swaps.length == 0)
+		if (c == null || swapArray.length == 0)
 			return null;
 		List<PojoSwap> l = null;
-		for (PojoSwap f : swaps) {
+		for (PojoSwap f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
 					l = new ArrayList<>();
@@ -1281,12 +1249,12 @@ public class BeanContext extends Context {
 	/**
 	 * Java object swaps.
 	 *
-	 * @see #BEAN_swaps
+	 * @see BeanContextBuilder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
 	public final PojoSwap<?,?>[] getSwaps() {
-		return swaps;
+		return swapArray;
 	}
 
 	/**

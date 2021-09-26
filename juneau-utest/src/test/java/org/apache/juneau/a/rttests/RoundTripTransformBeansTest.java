@@ -51,7 +51,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSwapBeans1() throws Exception {
-		Object[] f = {
+		Class<?>[] f = {
 			ByteArraySwap.Base64.class
 		};
 		swaps(f);
@@ -153,7 +153,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSwapBeans2() throws Exception {
-		Object[] f = {
+		Class<?>[] f = {
 			ByteArraySwap.Base64.class
 		};
 		swaps(f);

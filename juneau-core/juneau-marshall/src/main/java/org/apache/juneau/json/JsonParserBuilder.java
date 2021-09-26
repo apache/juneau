@@ -508,7 +508,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonParserBuilder swaps(Object...values) {
+	public JsonParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

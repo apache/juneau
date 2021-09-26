@@ -868,7 +868,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder swaps(Object...values) {
+	public HtmlSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

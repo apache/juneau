@@ -499,7 +499,7 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder swaps(Object...values) {
+	public InputStreamParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

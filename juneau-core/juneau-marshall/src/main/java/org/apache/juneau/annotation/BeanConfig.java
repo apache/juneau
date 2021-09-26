@@ -810,7 +810,7 @@ public @interface BeanConfig {
 	 * Same as {@link #swaps()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#swaps(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] swaps_replace() default {};

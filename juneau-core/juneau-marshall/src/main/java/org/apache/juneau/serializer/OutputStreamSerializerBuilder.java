@@ -513,7 +513,7 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder swaps(Object...values) {
+	public OutputStreamSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

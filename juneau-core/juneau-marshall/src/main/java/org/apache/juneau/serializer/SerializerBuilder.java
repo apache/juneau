@@ -1032,7 +1032,7 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder swaps(Object...values) {
+	public SerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

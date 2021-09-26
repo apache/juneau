@@ -623,7 +623,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder swaps(Object...values) {
+	public UonSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

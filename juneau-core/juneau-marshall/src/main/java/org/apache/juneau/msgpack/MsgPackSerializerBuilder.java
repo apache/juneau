@@ -479,7 +479,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder swaps(Object...values) {
+	public MsgPackSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

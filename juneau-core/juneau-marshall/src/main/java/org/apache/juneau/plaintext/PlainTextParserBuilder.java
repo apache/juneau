@@ -473,7 +473,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextParserBuilder swaps(Object...values) {
+	public PlainTextParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

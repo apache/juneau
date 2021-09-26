@@ -468,7 +468,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder swaps(Object...values) {
+	public CsvParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

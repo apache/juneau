@@ -994,7 +994,7 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * For example, the {@link BeanContext#BEAN_swaps} property which has the value <js>"BeanContext.swaps.lo"</js>.
+	 * For example, the {@link BeanContextBuilder#swaps(Class...)} setting which has the value <js>"BeanContext.swaps.lo"</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1042,7 +1042,7 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * For example, the {@link BeanContext#BEAN_swaps} property which has the value <js>"BeanContext.swaps.lo"</js>.
+	 * For example, the {@link BeanContextBuilder#swaps(Class...)} property which has the value <js>"BeanContext.swaps.lo"</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

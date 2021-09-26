@@ -1308,7 +1308,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder swaps(Object...values) {
+	public RdfSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

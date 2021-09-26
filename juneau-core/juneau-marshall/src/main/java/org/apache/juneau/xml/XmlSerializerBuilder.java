@@ -632,7 +632,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder swaps(Object...values) {
+	public XmlSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

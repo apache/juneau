@@ -467,7 +467,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder swaps(Object...values) {
+	public MsgPackParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

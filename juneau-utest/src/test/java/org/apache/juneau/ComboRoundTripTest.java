@@ -63,7 +63,7 @@ public abstract class ComboRoundTripTest {
 			s2 = applySettings(s);
 			if (! (comboInput.swaps.isEmpty() && comboInput.beanContextApplies.isEmpty())) {
 				SerializerBuilder b = s2.copy();
-				b.swaps(comboInput.swaps.toArray());
+				b.swaps((Class<?>[])comboInput.swaps.toArray(new Class[0]));
 				for (Consumer<BeanContextBuilder> c : (List<Consumer<BeanContextBuilder>>)comboInput.beanContextApplies)
 					b.beanContext(c);
 				s2 = b.build();
@@ -79,7 +79,7 @@ public abstract class ComboRoundTripTest {
 			p2 = applySettings(p);
 			if (! (comboInput.swaps.isEmpty() && comboInput.beanContextApplies.isEmpty())) {
 				ParserBuilder b = p2.copy();
-				b.swaps(comboInput.swaps.toArray());
+				b.swaps((Class<?>[])comboInput.swaps.toArray(new Class[0]));
 				for (Consumer<BeanContextBuilder> c : (List<Consumer<BeanContextBuilder>>)comboInput.beanContextApplies)
 					b.beanContext(c);
 				p2 = b.build();

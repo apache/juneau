@@ -621,7 +621,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder swaps(Object...values) {
+	public MockRestClientBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

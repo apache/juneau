@@ -582,7 +582,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder swaps(Object...values) {
+	public OpenApiParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

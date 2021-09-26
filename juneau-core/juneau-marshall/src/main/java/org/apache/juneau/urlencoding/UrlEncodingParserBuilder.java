@@ -518,7 +518,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder swaps(Object...values) {
+	public UrlEncodingParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

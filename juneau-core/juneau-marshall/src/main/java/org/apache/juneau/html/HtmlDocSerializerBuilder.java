@@ -979,7 +979,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder swaps(Object...values) {
+	public HtmlDocSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

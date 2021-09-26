@@ -1209,7 +1209,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder swaps(Object...values) {
+	public RdfParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

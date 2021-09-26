@@ -520,7 +520,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder swaps(Object...values) {
+	public UrlEncodingSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

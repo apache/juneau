@@ -622,7 +622,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSerializerBuilder swaps(Object...values) {
+	public JsonSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

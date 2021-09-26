@@ -471,7 +471,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder swaps(Object...values) {
+	public HtmlParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

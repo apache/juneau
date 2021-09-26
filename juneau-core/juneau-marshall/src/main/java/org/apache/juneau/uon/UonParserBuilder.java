@@ -532,7 +532,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder swaps(Object...values) {
+	public UonParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

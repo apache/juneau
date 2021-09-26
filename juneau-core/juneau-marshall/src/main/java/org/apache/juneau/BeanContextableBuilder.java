@@ -2582,7 +2582,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * 	<li class='jf'>{@link BeanContextBuilder#swaps(Class...)}
 	 * </ul>
 	 *
 	 * @param values
@@ -2596,7 +2596,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextableBuilder swaps(Object...values) {
+	public BeanContextableBuilder swaps(Class<?>...values) {
 		bcBuilder.swaps(values);
 		return this;
 	}

@@ -211,7 +211,7 @@ public abstract class RoundTripTest {
 		return new Object[0];
 	}
 
-	public Object[] getPojoSwaps() {
+	public Class<?>[] getPojoSwaps() {
 		return new Class<?>[0];
 	}
 
@@ -255,7 +255,7 @@ public abstract class RoundTripTest {
 		return p;
 	}
 
-	protected void swaps(Object...c) {
+	protected void swaps(Class<?>...c) {
 		s = s.copy().swaps(c).build();
 		if (p != null)
 			p = p.copy().swaps(c).build();

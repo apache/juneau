@@ -57,7 +57,7 @@ import org.apache.juneau.serializer.*;
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
  * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the
- * {@link BeanContextBuilder#swaps(Object...)} method.
+ * {@link BeanContextBuilder#swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
  * <p>

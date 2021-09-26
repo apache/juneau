@@ -536,7 +536,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder swaps(Object...values) {
+	public ReaderParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.Visibility.*;
+import static java.util.Arrays.*;
 
 import java.beans.*;
 import java.io.*;
@@ -66,7 +67,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
-	List<Class<?>> beanDictionary;
+	List<Class<?>> beanDictionary, swaps;
 	boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
 		beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
 		disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
@@ -88,6 +89,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
 		beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
 		beanDictionary = null;
+		swaps = null;
 		disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
 		beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
 		beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
@@ -122,6 +124,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanMethodVisibility = copyFrom.beanMethodVisibility;
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
 		beanDictionary = copyFrom.beanDictionary.isEmpty() ? null : new ArrayList<>(copyFrom.beanDictionary);
+		swaps = copyFrom.swaps.isEmpty() ? null : new ArrayList<>(copyFrom.swaps);
 		disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -156,6 +159,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		beanMethodVisibility = copyFrom.beanMethodVisibility;
 		beanFieldVisibility = copyFrom.beanFieldVisibility;
 		beanDictionary = copyFrom.beanDictionary == null ? null : new ArrayList<>(copyFrom.beanDictionary);
+		swaps = copyFrom.swaps == null ? null : new ArrayList<>(copyFrom.swaps);
 		disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 		beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -194,6 +198,7 @@ public class BeanContextBuilder extends ContextBuilder {
 			beanMethodVisibility,
 			beanFieldVisibility,
 			beanDictionary,
+			swaps,
 			integer(
 				disableBeansRequireSomeProperties,
 				beanMapPutReturnsOldValue,
@@ -1547,7 +1552,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanDictionary(Class<?>...values) {
-		return beanDictionary(Arrays.asList(values));
+		return beanDictionary(asList(values));
 	}
 
 	/**
@@ -2826,10 +2831,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
-	 * </ul>
-	 *
 	 * @param values
 	 * 	The values to add to this setting.
 	 * 	<br>Values can consist of any of the following types:
@@ -2841,8 +2842,32 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder swaps(Object...values) {
-		return appendTo(BEAN_swaps, values);
+	public BeanContextBuilder swaps(Class<?>...values) {
+		return swaps(asList(values));
+	}
+
+	/**
+	 * Same as {@link #swaps(Class...)} but allows you to pass in a collection of classes.
+	 *
+	 * @param values
+	 * 	The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BeanContextBuilder swaps(Collection<Class<?>> values) {
+		swaps().addAll(0, values);
+		return this;
+	}
+
+	/**
+	 * Returns the bean swaps list.
+	 *
+	 * @return The bean swaps list.
+	 */
+	public List<Class<?>> swaps() {
+		if (swaps == null)
+			swaps = new ArrayList<>();
+		return swaps;
 	}
 
 	/**

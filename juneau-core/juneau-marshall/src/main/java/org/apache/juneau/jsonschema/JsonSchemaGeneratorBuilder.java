@@ -732,7 +732,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder swaps(Object...values) {
+	public JsonSchemaGeneratorBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

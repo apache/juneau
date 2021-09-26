@@ -479,7 +479,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder swaps(Object...values) {
+	public JsoSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

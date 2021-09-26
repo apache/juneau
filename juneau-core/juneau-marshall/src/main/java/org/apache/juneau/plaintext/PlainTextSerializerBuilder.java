@@ -480,7 +480,7 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder swaps(Object...values) {
+	public PlainTextSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

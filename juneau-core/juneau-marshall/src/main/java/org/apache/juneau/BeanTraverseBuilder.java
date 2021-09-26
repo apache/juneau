@@ -630,7 +630,7 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder swaps(Object...values) {
+	public BeanTraverseBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

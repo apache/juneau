@@ -53,13 +53,13 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 			serializers = SerializerGroup.create()
 				.add(jp.serializers())
-				.forEach(x -> x.swaps((Object[])jp.swaps()))
+				.forEach(x -> x.swaps(jp.swaps()))
 				.forEach(x -> x.set(properties))
 				.build();
 
 			parsers = ParserGroup.create()
 				.add(jp.parsers())
-				.forEach(x -> x.swaps((Object[])jp.swaps()))
+				.forEach(x -> x.swaps(jp.swaps()))
 				.forEach(x -> x.set(properties))
 				.build();
 

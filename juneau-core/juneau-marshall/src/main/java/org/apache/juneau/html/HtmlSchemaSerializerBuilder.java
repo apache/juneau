@@ -649,7 +649,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder swaps(Object...values) {
+	public HtmlSchemaSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

@@ -1499,7 +1499,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Java object swaps.
 	 *
-	 * @see BeanContext#BEAN_swaps
+	 * @see BeanContextBuilder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */

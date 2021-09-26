@@ -605,7 +605,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder swaps(Object...values) {
+	public OpenApiSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

@@ -72,13 +72,13 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a03_appendToStringObject() throws Exception {
-		A3a x = client().appendTo(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().asType(A3a.class);
+		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().asType(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
 	@Test
 	public void a04_prependToStringObject() throws Exception {
-		A3a x = client().prependTo(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().asType(A3a.class);
+		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().asType(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
@@ -114,12 +114,6 @@ public class RestClient_Config_Context_Test {
 		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		AnnotationWorkList al = ClassInfo.of(A6c.class).getAnnotationList(ContextApplyFilter.INSTANCE).getWork(null);
 		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
-	}
-
-	@Test
-	public void a07_removeFrom() throws Exception {
-		A3a x = client().appendTo(BEAN_swaps,A3b.class).removeFrom(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().asType(A3a.class);
-		assertEquals(1,x.foo);
 	}
 
 	@Test

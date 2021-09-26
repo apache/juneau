@@ -480,7 +480,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder swaps(Object...values) {
+	public CsvSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

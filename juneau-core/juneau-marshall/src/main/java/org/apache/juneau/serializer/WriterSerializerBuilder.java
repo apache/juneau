@@ -746,7 +746,7 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public WriterSerializerBuilder swaps(Object...values) {
+	public WriterSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

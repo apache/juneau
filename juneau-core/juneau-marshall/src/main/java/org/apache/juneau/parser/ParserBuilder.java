@@ -772,7 +772,7 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder swaps(Object...values) {
+	public ParserBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

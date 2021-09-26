@@ -500,7 +500,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SoapXmlSerializerBuilder swaps(Object...values) {
+	public SoapXmlSerializerBuilder swaps(Class<?>...values) {
 		super.swaps(values);
 		return this;
 	}

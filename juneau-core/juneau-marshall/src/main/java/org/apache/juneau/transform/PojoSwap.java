@@ -44,9 +44,7 @@ import org.apache.juneau.serializer.*;
  * <c>PojoSwaps</c> are associated with serializers and parsers through the following:
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Swap @Swap}
- * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
- * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
- * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#swaps(Class...)}
  * </ul>
  *
  * <p>
