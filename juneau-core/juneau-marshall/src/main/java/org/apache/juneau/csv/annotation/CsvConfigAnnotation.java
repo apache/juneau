@@ -13,6 +13,7 @@
 package org.apache.juneau.csv.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -22,21 +23,40 @@ import org.apache.juneau.svl.*;
 public class CsvConfigAnnotation {
 
 	/**
-	 * Applies {@link CsvConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link CsvConfig} annotations to a {@link CsvSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<CsvConfig,ContextPropertiesBuilder> {
+	public static class ApplySerializer extends AnnotationApplier<CsvConfig,CsvSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(CsvConfig.class, ContextPropertiesBuilder.class, vr);
+		public ApplySerializer(VarResolverSession vr) {
+			super(CsvConfig.class, CsvSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<CsvConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<CsvConfig> ai, CsvSerializerBuilder b) {
+		}
+	}
+
+	/**
+	 * Applies {@link CsvConfig} annotations to a {@link CsvParserBuilder}.
+	 */
+	public static class ApplyParser extends AnnotationApplier<CsvConfig,CsvParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ApplyParser(VarResolverSession vr) {
+			super(CsvConfig.class, CsvParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<CsvConfig> ai, CsvParserBuilder b) {
 		}
 	}
 }

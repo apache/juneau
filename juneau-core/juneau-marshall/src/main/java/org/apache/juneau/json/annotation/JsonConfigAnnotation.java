@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
 public class JsonConfigAnnotation {
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link JsonConfig} annotations to a {@link JsonSerializerBuilder}.
 	 */
 	public static class ApplySerializer extends AnnotationApplier<JsonConfig,JsonSerializerBuilder> {
 
@@ -47,7 +47,7 @@ public class JsonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link JsonConfig} annotations to a {@link JsonParserBuilder}.
 	 */
 	public static class ApplyParser extends AnnotationApplier<JsonConfig,JsonParserBuilder> {
 
