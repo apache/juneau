@@ -23,25 +23,46 @@ import org.apache.juneau.urlencoding.*;
 public class UrlEncodingConfigAnnotation {
 
 	/**
-	 * Applies {@link UrlEncodingConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link UrlEncodingConfig} annotations to a {@link UrlEncodingSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<UrlEncodingConfig,ContextPropertiesBuilder> {
+	public static class SerializerApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(UrlEncodingConfig.class, ContextPropertiesBuilder.class, vr);
+		public SerializerApply(VarResolverSession vr) {
+			super(UrlEncodingConfig.class, UrlEncodingSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncodingConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingSerializerBuilder b) {
 			UrlEncodingConfig a = ai.getAnnotation();
 
-			bool(a.expandedParams()).ifPresent(x -> b.set(UrlEncodingSerializer.URLENC_expandedParams, x));
-			bool(a.expandedParams()).ifPresent(x -> b.set(UrlEncodingParser.URLENC_expandedParams, x));
+			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));
+		}
+	}
+
+	/**
+	 * Applies {@link UrlEncodingConfig} annotations to a {@link UrlEncodingParserBuilder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(UrlEncodingConfig.class, UrlEncodingParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingParserBuilder b) {
+			UrlEncodingConfig a = ai.getAnnotation();
+
+			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));
 		}
 	}
 }

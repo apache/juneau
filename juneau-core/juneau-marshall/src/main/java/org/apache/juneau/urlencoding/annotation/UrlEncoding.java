@@ -44,8 +44,8 @@ public @interface UrlEncoding {
 	 * When true, bean properties of type array or Collection will be expanded into multiple key/value pairings.
 	 *
 	 * <p>
-	 * This annotation is identical in behavior to using the {@link UrlEncodingSerializer#URLENC_expandedParams}
-	 * and {@link UrlEncodingParser#URLENC_expandedParams} properties, but applies to only instances of this bean.
+	 * This annotation is identical in behavior to using the {@link UrlEncodingSerializerBuilder#expandedParams()}
+	 * and {@link UrlEncodingParserBuilder#expandedParams()} properties, but applies to only instances of this bean.
 	 */
 	boolean expandedParams() default false;
 

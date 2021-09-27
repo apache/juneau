@@ -270,7 +270,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
-	 * @see UrlEncodingSerializer#URLENC_expandedParams
+	 * @see UrlEncodingSerializerBuilder#expandedParams()
 	 * @return
 	 * 	<jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * 	<br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.

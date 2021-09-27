@@ -43,52 +43,18 @@ import org.apache.juneau.uon.*;
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "UrlEncodingParser";
-
-	/**
-	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
-	 *
-	 * <p>
-	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams URLENC_expandedParams}
-	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>UrlEncodingParser.expandedParams</c>
-	 * 	<li><b>Environment variable:</b>  <c>URLENCODINGPARSER_EXPANDEDPARAMS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingConfig#expandedParams()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingParserBuilder#expandedParams()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String URLENC_expandedParams = PREFIX + ".expandedParams.b";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
 	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean expandedParams;
+	final boolean expandedParams;
+
 	private final Map<ClassMeta<?>,UrlEncodingClassMeta> urlEncodingClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,UrlEncodingBeanPropertyMeta> urlEncodingBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -99,8 +65,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 */
 	protected UrlEncodingParser(UrlEncodingParserBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		expandedParams = cp.getBoolean(URLENC_expandedParams).orElse(false);
+		expandedParams = builder.expandedParams;
 	}
 
 	@Override /* Context */
@@ -172,7 +137,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	/**
 	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
-	 * @see #URLENC_expandedParams
+	 * @see UrlEncodingParserBuilder#expandedParams()
 	 * @return
 	 * <jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * <br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.

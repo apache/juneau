@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,8 @@ import org.apache.juneau.uon.*;
 @FluentSetters
 public class UrlEncodingParserBuilder extends UonParserBuilder {
 
+	boolean expandedParams;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -39,6 +39,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		decoding();
 		consumes("application/x-www-form-urlencoded");
 		type(UrlEncodingParser.class);
+		expandedParams = env("UrlEncoding.expandedParams", false);
 	}
 
 	/**
@@ -48,6 +49,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 */
 	protected UrlEncodingParserBuilder(UrlEncodingParser copyFrom) {
 		super(copyFrom);
+		expandedParams = copyFrom.expandedParams;
 	}
 
 	/**
@@ -57,6 +59,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 */
 	protected UrlEncodingParserBuilder(UrlEncodingParserBuilder copyFrom) {
 		super(copyFrom);
+		expandedParams = copyFrom.expandedParams;
 	}
 
 	@Override /* ContextBuilder */
@@ -77,7 +80,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
+	 * This is the parser-side equivalent of the {@link UrlEncodingSerializerBuilder#expandedParams()} setting.
 	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
@@ -108,15 +111,23 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * 		is added to it.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public UrlEncodingParserBuilder expandedParams() {
-		return set(URLENC_expandedParams);
+		return expandedParams(true);
+	}
+
+	/**
+	 * Same as {@link #expandedParams()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UrlEncodingParserBuilder expandedParams(boolean value) {
+		expandedParams = value;
+		return this;
 	}
 
 	// <FluentSetters>

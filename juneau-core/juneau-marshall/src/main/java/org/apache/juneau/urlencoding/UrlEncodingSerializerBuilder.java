@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,8 @@ import org.apache.juneau.uon.*;
 @FluentSetters
 public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
+	boolean expandedParams;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +38,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		super();
 		produces("application/x-www-form-urlencoded");
 		type(UrlEncodingSerializer.class);
+		expandedParams = env("UrlEncoding.expandedParams", false);
 	}
 
 	/**
@@ -47,6 +48,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 */
 	protected UrlEncodingSerializerBuilder(UrlEncodingSerializer copyFrom) {
 		super(copyFrom);
+		expandedParams = copyFrom.expandedParams;
 	}
 
 	/**
@@ -56,6 +58,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 */
 	protected UrlEncodingSerializerBuilder(UrlEncodingSerializerBuilder copyFrom) {
 		super(copyFrom);
+		expandedParams = copyFrom.expandedParams;
 	}
 
 	@Override /* ContextBuilder */
@@ -110,15 +113,23 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A()); <jc>
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public UrlEncodingSerializerBuilder expandedParams() {
-		return set(URLENC_expandedParams);
+		return expandedParams(true);
+	}
+
+	/**
+	 * Same as {@link #expandedParams()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
+		expandedParams = value;
+		return this;
 	}
 
 	// <FluentSetters>

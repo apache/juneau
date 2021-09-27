@@ -30,7 +30,7 @@ import org.apache.juneau.urlencoding.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(UrlEncodingConfigAnnotation.Apply.class)
+@ContextApply({UrlEncodingConfigAnnotation.SerializerApply.class,UrlEncodingConfigAnnotation.ParserApply.class})
 public @interface UrlEncodingConfig {
 
 	/**
@@ -53,7 +53,7 @@ public @interface UrlEncodingConfig {
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * This is the parser-side equivalent of the {@link UrlEncodingSerializer#URLENC_expandedParams} setting.
+	 * This is the parser-side equivalent of the {@link UrlEncodingSerializerBuilder#expandedParams()} setting.
 	 *
 	 * <p>
 	 * If <js>"false"</js>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
@@ -77,7 +77,7 @@ public @interface UrlEncodingConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
+	 * 	<li class='jf'>{@link UrlEncodingSerializerBuilder#expandedParams()}
 	 * </ul>
 	 */
 	String expandedParams() default "";
