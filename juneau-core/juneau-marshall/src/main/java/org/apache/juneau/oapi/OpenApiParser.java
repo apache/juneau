@@ -31,30 +31,24 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @ConfigurableContext
-public class OpenApiParser extends UonParser implements OpenApiMetaProvider, OpenApiCommon {
+public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "OpenApiParser";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OpenApiParser}. */
 	public static final OpenApiParser DEFAULT = new OpenApiParser(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	final HttpPartFormat format;
+	final HttpPartCollectionFormat collectionFormat;
+
 	private final Map<ClassMeta<?>,OpenApiClassMeta> openApiClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,OpenApiBeanPropertyMeta> openApiBeanPropertyMetas = new ConcurrentHashMap<>();
-	private final HttpPartFormat format;
-	private final HttpPartCollectionFormat collectionFormat;
 
 	/**
 	 * Constructor.
@@ -63,9 +57,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	 */
 	protected OpenApiParser(OpenApiParserBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		format = cp.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
-		collectionFormat = cp.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+		format = builder.format;
+		collectionFormat = builder.collectionFormat;
 	}
 
 	@Override /* Context */

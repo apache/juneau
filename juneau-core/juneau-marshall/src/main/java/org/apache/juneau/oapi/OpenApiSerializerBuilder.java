@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import static org.apache.juneau.oapi.OpenApiSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,9 @@ import org.apache.juneau.uon.*;
 @FluentSetters
 public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 
+	HttpPartFormat format;
+	HttpPartCollectionFormat collectionFormat;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +39,8 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		super();
 		produces("text/openapi");
 		type(OpenApiSerializer.class);
+		format = HttpPartFormat.NO_FORMAT;
+		collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 	}
 
 	/**
@@ -47,6 +50,8 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 */
 	protected OpenApiSerializerBuilder(OpenApiSerializer copyFrom) {
 		super(copyFrom);
+		format = copyFrom.format;
+		collectionFormat = copyFrom.collectionFormat;
 	}
 
 	/**
@@ -56,6 +61,8 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 */
 	protected OpenApiSerializerBuilder(OpenApiSerializerBuilder copyFrom) {
 		super(copyFrom);
+		format = copyFrom.format;
+		collectionFormat = copyFrom.collectionFormat;
 	}
 
 	@Override /* ContextBuilder */
@@ -120,16 +127,13 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 * 	String v2 = s2.serialize(string);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public OpenApiSerializerBuilder format(HttpPartFormat value) {
-		return set(OAPI_format, value);
+		format = value;
+		return this;
 	}
 
 	/**
@@ -182,16 +186,13 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 * 	String v2 = s2.serialize(l)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public OpenApiSerializerBuilder collectionFormat(HttpPartCollectionFormat value) {
-		return set(OAPI_collectionFormat, value);
+		collectionFormat = value;
+		return this;
 	}
 
 	// <FluentSetters>

@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi.annotation;
 
-import static org.apache.juneau.oapi.OpenApiCommon.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -24,25 +24,48 @@ import org.apache.juneau.svl.*;
 public class OpenApiConfigAnnotation {
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<OpenApiConfig,ContextPropertiesBuilder> {
+	public static class ApplySerializer extends AnnotationApplier<OpenApiConfig,OpenApiSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(OpenApiConfig.class, ContextPropertiesBuilder.class, vr);
+		public ApplySerializer(VarResolverSession vr) {
+			super(OpenApiConfig.class, OpenApiSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApiConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiSerializerBuilder b) {
 			OpenApiConfig a = ai.getAnnotation();
 
-			string(a.format()).ifPresent(x -> b.set(OAPI_format, x));
-			string(a.collectionFormat()).ifPresent(x -> b.set(OAPI_collectionFormat, x));
+			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
+			string(a.collectionFormat()).map(HttpPartCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
+		}
+	}
+
+	/**
+	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiParserBuilder}.
+	 */
+	public static class ApplyParser extends AnnotationApplier<OpenApiConfig,OpenApiParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ApplyParser(VarResolverSession vr) {
+			super(OpenApiConfig.class, OpenApiParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiParserBuilder b) {
+			OpenApiConfig a = ai.getAnnotation();
+
+			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
+			string(a.collectionFormat()).map(HttpPartCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
 		}
 	}
 }

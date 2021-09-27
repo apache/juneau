@@ -31,30 +31,24 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @ConfigurableContext
-public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider, OpenApiCommon {
+public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "OpenApiSerializer";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OpenApiSerializer}, all default settings. */
 	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	final HttpPartFormat format;
+	final HttpPartCollectionFormat collectionFormat;
+
 	private final Map<ClassMeta<?>,OpenApiClassMeta> openApiClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,OpenApiBeanPropertyMeta> openApiBeanPropertyMetas = new ConcurrentHashMap<>();
-	private final HttpPartFormat format;
-	private final HttpPartCollectionFormat collectionFormat;
 
 	/**
 	 * Constructor.
@@ -64,9 +58,8 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	 */
 	protected OpenApiSerializer(OpenApiSerializerBuilder builder) {
 		super(builder.encoding(false));
-		ContextProperties cp = getContextProperties();
-		format = cp.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
-		collectionFormat = cp.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+		format = builder.format;
+		collectionFormat = builder.collectionFormat;
 	}
 
 	@Override /* Context */

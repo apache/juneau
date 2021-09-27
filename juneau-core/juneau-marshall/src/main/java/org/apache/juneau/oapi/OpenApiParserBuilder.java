@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import static org.apache.juneau.oapi.OpenApiCommon.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,9 @@ import org.apache.juneau.uon.*;
 @FluentSetters
 public class OpenApiParserBuilder extends UonParserBuilder {
 
+	HttpPartFormat format;
+	HttpPartCollectionFormat collectionFormat;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +39,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		super();
 		consumes("text/openapi");
 		type(OpenApiParser.class);
+		format = HttpPartFormat.NO_FORMAT;
+		collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 	}
 
 	/**
@@ -47,6 +50,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 */
 	protected OpenApiParserBuilder(OpenApiParser copyFrom) {
 		super(copyFrom);
+		format = copyFrom.format;
+		collectionFormat = copyFrom.collectionFormat;
 	}
 
 	/**
@@ -56,6 +61,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 */
 	protected OpenApiParserBuilder(OpenApiParserBuilder copyFrom) {
 		super(copyFrom);
+		format = copyFrom.format;
+		collectionFormat = copyFrom.collectionFormat;
 	}
 
 	@Override /* ContextBuilder */
@@ -118,16 +125,13 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * 	String v2 = p2.parse(<js>"'foo bar'"</js>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public OpenApiParserBuilder format(HttpPartFormat value) {
-		return set(OAPI_format, value);
+		format = value;
+		return this;
 	}
 
 	/**
@@ -171,16 +175,13 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * 	OList l2 = p2.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, OList.<jk>class</jk>)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public OpenApiParserBuilder collectionFormat(HttpPartCollectionFormat value) {
-		return set(OAPI_collectionFormat, value);
+		collectionFormat = value;
+		return this;
 	}
 
 	// <FluentSetters>

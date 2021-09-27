@@ -4574,7 +4574,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
+	 * 	<li class='jm'>{@link OpenApiSerializerBuilder#format(HttpPartFormat)}
+	 * 	<li class='jm'>{@link OpenApiParserBuilder#format(HttpPartFormat)}
 	 * </ul>
 	 *
 	 * @param value
@@ -4601,14 +4602,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * Possible values:
 	 * <ul class='javatree'>
-	 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+	 * 	<li class='jc'>{@link HttpPartCollectionFormat}
 	 * 	<ul>
-	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
-	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
 	 * 	</ul>
 	 * </ul>
 	 *
@@ -4637,7 +4638,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}
+	 * 	<li class='jm'>{@link OpenApiSerializerBuilder#collectionFormat(HttpPartCollectionFormat)}
+	 * 	<li class='jm'>{@link OpenApiParserBuilder#collectionFormat(HttpPartCollectionFormat)}
 	 * </ul>
 	 *
 	 * @param value
