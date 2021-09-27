@@ -36,7 +36,7 @@ package org.apache.juneau.json;
 public class SimpleJsonSerializer extends JsonSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes, {@link JsonSerializerBuilder#simpleMode() simple mode}. */
@@ -46,7 +46,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
@@ -61,6 +61,10 @@ public class SimpleJsonSerializer extends JsonSerializer {
 			super(builder.simpleMode().quoteChar('\'').useWhitespace());
 		}
 	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -27,6 +27,8 @@ import org.apache.juneau.serializer.*;
 @FluentSetters
 public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 
+	boolean addBeanTypesMsgPack;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -34,6 +36,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 		super();
 		produces("octal/msgpack");
 		type(MsgPackSerializer.class);
+		addBeanTypesMsgPack = env("MsgPackSerializer.addBeanTypesMsgPack", false);
 	}
 
 	/**
@@ -67,6 +70,36 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public MsgPackSerializerBuilder addBeanTypesMsgPack() {
+		return addBeanTypesMsgPack(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypesMsgPack()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public MsgPackSerializerBuilder addBeanTypesMsgPack(boolean value) {
+		addBeanTypesMsgPack = value;
+		return this;
+	}
 
 	// <FluentSetters>
 

@@ -31,13 +31,7 @@ import org.apache.juneau.parser.*;
 public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "MsgPackParser";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
@@ -50,7 +44,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	public static final MsgPackParser DEFAULT_BASE64 = new Base64(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, string input encoded as spaced-hex. */

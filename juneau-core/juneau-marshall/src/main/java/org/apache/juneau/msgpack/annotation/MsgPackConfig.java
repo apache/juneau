@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(MsgPackConfigAnnotation.Apply.class)
+@ContextApply(MsgPackConfigAnnotation.ApplySerializer.class)
 public @interface MsgPackConfig {
 
 	/**
@@ -73,7 +73,7 @@ public @interface MsgPackConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link MsgPackSerializer#MSGPACK_addBeanTypes}
+	 * 	<li class='jf'>{@link MsgPackSerializerBuilder#addBeanTypesMsgPack()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";

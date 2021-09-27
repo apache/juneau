@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack.annotation;
 
-import static org.apache.juneau.msgpack.MsgPackSerializer.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -24,24 +23,24 @@ import org.apache.juneau.svl.*;
 public class MsgPackConfigAnnotation {
 
 	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<MsgPackConfig,ContextPropertiesBuilder> {
+	public static class ApplySerializer extends AnnotationApplier<MsgPackConfig,MsgPackSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(MsgPackConfig.class, ContextPropertiesBuilder.class, vr);
+		public ApplySerializer(VarResolverSession vr) {
+			super(MsgPackConfig.class, MsgPackSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackSerializerBuilder b) {
 			MsgPackConfig a = ai.getAnnotation();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(MSGPACK_addBeanTypes, x));
+			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesMsgPack(x));
 		}
 	}
 }

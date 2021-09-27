@@ -34,45 +34,7 @@ import org.apache.juneau.serializer.*;
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "MsgPackSerializer";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}
-	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>MsgPackSerializer.addBeanTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>MSGPACKSERIALIZER_ADDBEANTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackConfig#addBeanTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializerBuilder#addBeanTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String MSGPACK_addBeanTypes = PREFIX + ".addBeanTypes.b";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
@@ -85,7 +47,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, spaced-hex string output. */
@@ -118,8 +80,9 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
-		addBeanTypes;
+	final boolean
+		addBeanTypesMsgPack;
+
 	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -130,8 +93,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 */
 	protected MsgPackSerializer(MsgPackSerializerBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		this.addBeanTypes = cp.getFirstBoolean(MSGPACK_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+		this.addBeanTypesMsgPack = builder.addBeanTypesMsgPack;
 	}
 
 	@Override /* Context */
@@ -197,7 +159,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	@Override
 	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
+		return addBeanTypesMsgPack || super.isAddBeanTypes();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -212,7 +174,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 				OMap
 					.create()
 					.filtered()
-					.a("addBeanTypes", addBeanTypes)
+					.a("addBeanTypesMsgPack", addBeanTypesMsgPack)
 			);
 	}
 }
