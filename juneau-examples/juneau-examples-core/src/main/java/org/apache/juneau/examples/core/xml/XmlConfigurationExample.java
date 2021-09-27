@@ -14,7 +14,7 @@ package org.apache.juneau.examples.core.xml;
 
 import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.examples.core.pojo.PojoComplex;
-import org.apache.juneau.xml.XmlSerializer;
+import org.apache.juneau.xml.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,8 +76,8 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"><name>&lt;pojo&gt;</name><id>a</id></object>
-		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace("http://www.pierobon.org" +
-			"/iis/review1.htm.html#one").addNamespaceUrisToRoot().build()
+		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create("http://www.pierobon.org" +
+			"/iis/review1.htm.html#one")).addNamespaceUrisToRoot().build()
 			.serialize(aPojo);
 		// the output will have new default namespace added.
 		System.out.println(dNamsSpace);

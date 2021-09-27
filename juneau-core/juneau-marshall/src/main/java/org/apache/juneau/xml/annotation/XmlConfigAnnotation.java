@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml.annotation;
 
-import static org.apache.juneau.xml.XmlSerializer.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -42,12 +40,12 @@ public class XmlConfigAnnotation {
 		public void apply(AnnotationInfo<XmlConfig> ai, XmlSerializerBuilder b) {
 			XmlConfig a = ai.getAnnotation();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(XML_addBeanTypes, x));
-			bool(a.addNamespaceUrisToRoot()).ifPresent(x -> b.set(XML_addNamespaceUrisToRoot, x));
-			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.set(XML_disableAutoDetectNamespaces, x));
-			string(a.defaultNamespace()).ifPresent(x -> b.set(XML_defaultNamespace, x));
-			bool(a.enableNamespaces()).ifPresent(x -> b.set(XML_enableNamespaces, x));
-			b.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
+			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesXml(x));
+			bool(a.addNamespaceUrisToRoot()).ifPresent(x -> b.addNamespaceUrisToRoot(x));
+			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.disableAutoDetectNamespaces(x));
+			string(a.defaultNamespace()).map(Namespace::create).ifPresent(x -> b.defaultNamespace(x));
+			bool(a.enableNamespaces()).ifPresent(x -> b.enableNamespaces(x));
+			strings(a.namespaces()).map(Namespace::createArray).ifPresent(x -> b.namespaces(x));
 		}
 	}
 

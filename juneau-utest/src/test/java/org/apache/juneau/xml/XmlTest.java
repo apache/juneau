@@ -138,7 +138,7 @@ public class XmlTest {
 		OMap m = (OMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String r = XmlSerializer.create().ns().sq().ws()
 			.addNamespaceUrisToRoot()
-			.defaultNamespace("http://www.apache.org")
+			.defaultNamespace(Namespace.of("http://www.apache.org"))
 			.keepNullProperties()
 			.build()
 			.serialize(m);
@@ -541,9 +541,9 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
@@ -593,9 +593,9 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<foo:T2 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
@@ -646,9 +646,9 @@ public class XmlTest {
 		// Manually set namespaces
 		s.disableAutoDetectNamespaces();
 		s.namespaces(
-			Namespace.create("p1","http://p1"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("p1","http://p1"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
@@ -696,10 +696,10 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz"),
-			Namespace.create("p1","http://p1")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz"),
+			Namespace.of("p1","http://p1")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
@@ -748,9 +748,9 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
@@ -800,9 +800,9 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
@@ -852,10 +852,10 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz"),
-			Namespace.create("p1","http://p1")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz"),
+			Namespace.of("p1","http://p1")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
@@ -901,9 +901,9 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
@@ -952,9 +952,9 @@ public class XmlTest {
 
 		// Manually set namespaces
 		s.namespaces(
-			Namespace.create("foo","http://foo"),
-			Namespace.create("bar","http://bar"),
-			Namespace.create("baz","http://baz")
+			Namespace.of("foo","http://foo"),
+			Namespace.of("bar","http://bar"),
+			Namespace.of("baz","http://baz")
 		);
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><p1:f1>1</p1:f1></object>", r);

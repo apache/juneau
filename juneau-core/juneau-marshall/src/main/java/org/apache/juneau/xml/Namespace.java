@@ -44,7 +44,7 @@ public final class Namespace {
 	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.
 	 * @return The namespace object.
 	 */
-	public static Namespace create(String name, String uri) {
+	public static Namespace of(String name, String uri) {
 		String key = name + ":" + uri;
 		Namespace n = CACHE.get(key);
 		if (n == null) {
@@ -61,16 +61,16 @@ public final class Namespace {
 	 * @param key The key/pair string.
 	 * @return The namespace object.
 	 */
-	public static Namespace create(String key) {
+	public static Namespace of(String key) {
 		Namespace n = CACHE.get(key);
 		if (n != null)
 			return n;
 		int i = key.indexOf(':');
 		if (i == -1)
-			return create(key, null);
+			return of(key, null);
 		if (key.startsWith("http://") || key.startsWith("https://"))
-			return create(null, key);
-		return create(key.substring(0, i).trim(), key.substring(i+1).trim());
+			return of(null, key);
+		return of(key.substring(0, i).trim(), key.substring(i+1).trim());
 	}
 
 	/**
@@ -92,7 +92,7 @@ public final class Namespace {
 		if (o instanceof Namespace)
 			return (Namespace)o;
 		if (o instanceof CharSequence)
-			return create(o.toString());
+			return of(o.toString());
 		throw runtimeException("Invalid object type passed to Namespace.create(Object):  ''{0}''", className(o));
 	}
 

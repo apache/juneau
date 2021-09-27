@@ -47,8 +47,8 @@ import org.apache.juneau.xml.*;
 public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvider {
 
 	private static final Namespace
-		DEFAULT_JUNEAU_NS = Namespace.create("j", "http://www.apache.org/juneau/"),
-		DEFAULT_JUNEAUBP_NS = Namespace.create("jp", "http://www.apache.org/juneaubp/");
+		DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
+		DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -114,8 +114,8 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 		trimWhitespace = cp.getBoolean(RDF_trimWhitespace).orElse(false);
 		looseCollections = cp.getBoolean(RDF_looseCollections).orElse(false);
 		rdfLanguage = cp.getString(RDF_language).orElse("RDF/XML-ABBREV");
-		juneauNs = cp.getInstance(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
-		juneauBpNs = cp.getInstance(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
+		juneauNs = cp.getInstance(RDF_juneauNs, String.class).map(Namespace::of).orElse(DEFAULT_JUNEAU_NS);
+		juneauBpNs = cp.getInstance(RDF_juneauBpNs, String.class).map(Namespace::of).orElse(DEFAULT_JUNEAUBP_NS);
 		collectionFormat = cp.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
 
 		ASortedMap<String,Object> m = ASortedMap.create();

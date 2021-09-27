@@ -29,6 +29,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -61,11 +62,16 @@ public abstract class ComboRoundTripTest {
 		Serializer s2 = serializerMap.get(s);
 		if (s2 == null) {
 			s2 = applySettings(s);
-			if (! (comboInput.swaps.isEmpty() && comboInput.beanContextApplies.isEmpty())) {
+			if (! (comboInput.swaps.isEmpty() && comboInput.applies.isEmpty())) {
 				SerializerBuilder b = s2.copy();
 				b.swaps((Class<?>[])comboInput.swaps.toArray(new Class[0]));
-				for (Consumer<BeanContextBuilder> c : (List<Consumer<BeanContextBuilder>>)comboInput.beanContextApplies)
-					b.beanContext(c);
+				List<Tuple2<Class<?>,Consumer<?>>> pairs = comboInput.applies;
+				for (Tuple2<Class<?>,Consumer<?>> pair : pairs) {
+					if (pair.getA().equals(BeanContextBuilder.class))
+						b.beanContext((Consumer<BeanContextBuilder>) pair.getB());
+					else if (pair.getA().isInstance(b))
+						b.apply(SerializerBuilder.class, (Consumer<SerializerBuilder>) pair.getB());
+				}
 				s2 = b.build();
 			}
 			serializerMap.put(s, s2);
@@ -77,11 +83,16 @@ public abstract class ComboRoundTripTest {
 		Parser p2 = parserMap.get(p);
 		if (p2 == null) {
 			p2 = applySettings(p);
-			if (! (comboInput.swaps.isEmpty() && comboInput.beanContextApplies.isEmpty())) {
+			if (! (comboInput.swaps.isEmpty() && comboInput.applies.isEmpty())) {
 				ParserBuilder b = p2.copy();
 				b.swaps((Class<?>[])comboInput.swaps.toArray(new Class[0]));
-				for (Consumer<BeanContextBuilder> c : (List<Consumer<BeanContextBuilder>>)comboInput.beanContextApplies)
-					b.beanContext(c);
+				List<Tuple2<Class<?>,Consumer<?>>> pairs = comboInput.applies;
+				for (Tuple2<Class<?>,Consumer<?>> pair : pairs) {
+					if (pair.getA().equals(BeanContextBuilder.class))
+						b.beanContext((Consumer<BeanContextBuilder>) pair.getB());
+					else if (pair.getA().isInstance(b))
+						b.apply(ParserBuilder.class, (Consumer<ParserBuilder>) pair.getB());
+				}
 				p2 = b.build();
 			}
 			parserMap.put(p, p2);

@@ -680,12 +680,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - XmlSerializerBuilder */
-	public SoapXmlSerializerBuilder defaultNamespace(String value) {
-		super.defaultNamespace(value);
-		return this;
-	}
-
-	@Override /* GENERATED - XmlSerializerBuilder */
 	public SoapXmlSerializerBuilder disableAutoDetectNamespaces() {
 		super.disableAutoDetectNamespaces();
 		return this;
@@ -694,12 +688,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - XmlSerializerBuilder */
 	public SoapXmlSerializerBuilder enableNamespaces() {
 		super.enableNamespaces();
-		return this;
-	}
-
-	@Override /* GENERATED - XmlSerializerBuilder */
-	public SoapXmlSerializerBuilder namespaces(String...values) {
-		super.namespaces(values);
 		return this;
 	}
 

@@ -14,7 +14,6 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
@@ -60,9 +59,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected XmlSerializerSession(XmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		SessionProperties sp = getSessionProperties();
-		namespaces = sp.getInstanceArray(XML_namespaces, Namespace.class).orElse(ctx.getNamespaces());
-		defaultNamespace = findDefaultNamespace(sp.getInstance(XML_defaultNamespace, Namespace.class).orElse(ctx.getDefaultNamespace()));
+		namespaces = ctx.getNamespaces();
+		defaultNamespace = findDefaultNamespace(ctx.getDefaultNamespace());
 	}
 
 	private Namespace findDefaultNamespace(Namespace n) {
@@ -750,7 +748,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see XmlSerializer#XML_addBeanTypes
+	 * @see XmlSerializerBuilder#addBeanTypesXml()
 	 * @return
 	 * 	<jk>true</jk> if<js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -763,7 +761,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
 	 *
-	 * @see XmlSerializer#XML_addNamespaceUrisToRoot
+	 * @see XmlSerializerBuilder#addNamespaceUrisToRoot()
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
@@ -774,7 +772,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * @see XmlSerializer#XML_disableAutoDetectNamespaces
+	 * @see XmlSerializerBuilder#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
@@ -785,7 +783,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default namespace.
 	 *
-	 * @see XmlSerializer#XML_defaultNamespace
+	 * @see XmlSerializerBuilder#defaultNamespace(Namespace)
 	 * @return
 	 * 	The default namespace URI for this document.
 	 */
@@ -796,7 +794,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
 	 *
-	 * @see XmlSerializer#XML_enableNamespaces
+	 * @see XmlSerializerBuilder#enableNamespaces()
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */
@@ -807,7 +805,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default namespaces.
 	 *
-	 * @see XmlSerializer#XML_namespaces
+	 * @see XmlSerializerBuilder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */

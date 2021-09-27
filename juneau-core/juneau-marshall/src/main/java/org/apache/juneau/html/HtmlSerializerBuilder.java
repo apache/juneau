@@ -1117,12 +1117,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlSerializerBuilder defaultNamespace(String value) {
-		super.defaultNamespace(value);
-		return this;
-	}
-
-	@Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSerializerBuilder disableAutoDetectNamespaces() {
 		super.disableAutoDetectNamespaces();
 		return this;
@@ -1131,12 +1125,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSerializerBuilder enableNamespaces() {
 		super.enableNamespaces();
-		return this;
-	}
-
-	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlSerializerBuilder namespaces(String...values) {
-		super.namespaces(values);
 		return this;
 	}
 

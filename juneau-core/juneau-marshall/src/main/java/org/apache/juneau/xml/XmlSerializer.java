@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static java.util.Optional.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -119,181 +121,7 @@ import org.apache.juneau.serializer.*;
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "XmlSerializer";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.addBeanTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_ADDBEANTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#addBeanTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addBeanTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_addBeanTypes = PREFIX + ".addBeanTypes.b";
-
-	/**
-	 * Configuration property:  Add namespace URLs to the root element.
-	 *
-	 * <p>
-	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.addNamespaceUrisToRoot</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_ADDNAMESPACEURISTOROOT</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#addNamespaceUrisToRoot()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addNamespaceUrisToRoot()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_addNamespaceUrisToRoot = PREFIX + ".addNamespaceUrisToRoot.b";
-
-	/**
-	 * Configuration property:  Default namespace.
-	 *
-	 * <p>
-	 * Specifies the default namespace URI for this document.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.defaultNamespace.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.defaultNamespace</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_DEFAULTNAMESPACE</c>
-	 * 	<li><b>Default:</b>  <js>"juneau: http://www.apache.org/2013/Juneau"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#defaultNamespace()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#defaultNamespace(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_defaultNamespace = PREFIX + ".defaultNamespace.s";
-
-	/**
-	 * Configuration property:  Don't auto-detect namespace usage.
-	 *
-	 * <p>
-	 * Don't detect namespace usage before serialization.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_disableAutoDetectNamespaces XML_disableAutoDetectNamespaces}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.disableAutoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.disableAutoDetectNamespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_DONTAUTODETECTNAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#disableAutoDetectNamespaces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#disableAutoDetectNamespaces()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_disableAutoDetectNamespaces = PREFIX + ".disableAutoDetectNamespaces.b";
-
-	/**
-	 * Configuration property:  Enable support for XML namespaces.
-	 *
-	 * <p>
-	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces XML_enableNamespaces}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.enableNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.enableNamespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_ENABLENAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#enableNamespaces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#enableNamespaces()}
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#ns()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_enableNamespaces = PREFIX + ".enableNamespaces.b";
-
-	/**
-	 * Configuration property:  Default namespaces.
-	 *
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_namespaces XML_namespaces}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>Set&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c>
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.namespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_NAMESPACES</c>
-	 * 	<li><b>Default:</b>  empty set
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#defaultNamespace()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#defaultNamespace(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_namespaces = PREFIX + ".namespaces.ls";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// c
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer without namespaces. */
@@ -314,9 +142,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes. */
@@ -386,20 +213,23 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	@SuppressWarnings("javadoc")
 	protected static final Namespace
-		DEFAULT_JUNEAU_NAMESPACE = Namespace.create("juneau", "http://www.apache.org/2013/Juneau"),
-		DEFAULT_XS_NAMESPACE = Namespace.create("xs", "http://www.w3.org/2001/XMLSchema");
+		DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau"),
+		DEFAULT_XS_NAMESPACE = Namespace.of("xs", "http://www.w3.org/2001/XMLSchema");
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
+	final boolean
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
-		addBeanTypes;
-	private final Namespace defaultNamespace;
-	private final Namespace[] namespaces;
+		addBeanTypesXml;
+
+	final Namespace defaultNamespace;
+	final Namespace[] namespaces;
+
+	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -412,13 +242,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 */
 	protected XmlSerializer(XmlSerializerBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		autoDetectNamespaces = ! cp.getBoolean(XML_disableAutoDetectNamespaces).orElse(false);
-		enableNamespaces = cp.getBoolean(XML_enableNamespaces).orElse(false);
-		addNamespaceUrlsToRoot = cp.getBoolean(XML_addNamespaceUrisToRoot).orElse(false);
-		defaultNamespace = cp.getInstance(XML_defaultNamespace, Namespace.class).orElse(DEFAULT_JUNEAU_NAMESPACE);
-		addBeanTypes = cp.getFirstBoolean(XML_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
-		namespaces = cp.getInstanceArray(XML_namespaces, Namespace.class).orElse(new Namespace[0]);
+		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
+		enableNamespaces = builder.enableNamespaces;
+		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
+		addBeanTypesXml = builder.addBeanTypesXml;
+		defaultNamespace = ofNullable(builder.defaultNamespace).orElse(DEFAULT_JUNEAU_NAMESPACE);
+		namespaces = ofNullable(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
+
+		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
 	}
 
 	@Override /* Context */
@@ -493,7 +324,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #XML_addBeanTypes
+	 * @see XmlSerializerBuilder#addBeanTypesXml()
 	 * @return
 	 * 	<jk>true</jk> if<js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -506,7 +337,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Add namespace URLs to the root element.
 	 *
-	 * @see #XML_addNamespaceUrisToRoot
+	 * @see XmlSerializerBuilder#addNamespaceUrisToRoot()
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
@@ -517,7 +348,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Auto-detect namespace usage.
 	 *
-	 * @see #XML_disableAutoDetectNamespaces
+	 * @see XmlSerializerBuilder#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
@@ -528,7 +359,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Default namespace.
 	 *
-	 * @see #XML_defaultNamespace
+	 * @see XmlSerializerBuilder#defaultNamespace(Namespace)
 	 * @return
 	 * 	The default namespace URI for this document.
 	 */
@@ -539,7 +370,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Enable support for XML namespaces.
 	 *
-	 * @see #XML_enableNamespaces
+	 * @see XmlSerializerBuilder#enableNamespaces()
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */
@@ -550,7 +381,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Default namespaces.
 	 *
-	 * @see #XML_namespaces
+	 * @see XmlSerializerBuilder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */

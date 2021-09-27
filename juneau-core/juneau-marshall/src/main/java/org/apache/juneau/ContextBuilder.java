@@ -132,6 +132,20 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Apply a consumer to this builder.
+	 *
+	 * @param subtype The builder subtype that this consumer can be applied to.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ContextBuilder> ContextBuilder apply(Class<T> subtype, Consumer<T> consumer) {
+		if (subtype.isInstance(this))
+			consumer.accept((T)this);
+		return this;
+	}
+
+	/**
 	 * Associates a context class with this builder.
 	 *
 	 * @param value The context class that this builder should create.

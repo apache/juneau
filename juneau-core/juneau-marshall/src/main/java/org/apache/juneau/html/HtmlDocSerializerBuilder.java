@@ -1286,12 +1286,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlDocSerializerBuilder defaultNamespace(String value) {
-		super.defaultNamespace(value);
-		return this;
-	}
-
-	@Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlDocSerializerBuilder disableAutoDetectNamespaces() {
 		super.disableAutoDetectNamespaces();
 		return this;
@@ -1300,12 +1294,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlDocSerializerBuilder enableNamespaces() {
 		super.enableNamespaces();
-		return this;
-	}
-
-	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlDocSerializerBuilder namespaces(String...values) {
-		super.namespaces(values);
 		return this;
 	}
 

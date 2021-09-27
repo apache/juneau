@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -31,6 +30,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters
 public class XmlSerializerBuilder extends WriterSerializerBuilder {
 
+	boolean addBeanTypesXml, addNamespaceUrisToRoot, disableAutoDetectNamespaces, enableNamespaces;
+	Namespace defaultNamespace;
+	List<Namespace> namespaces;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +41,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		super();
 		produces("text/xml");
 		type(XmlSerializer.class);
+		addBeanTypesXml = env("XmlSerializer.addBeanTypes", false);
+		addNamespaceUrisToRoot = env("XmlSerializer.addNamespaceUrisToRoot", false);
+		disableAutoDetectNamespaces = env("XmlSerializer.disableAutoDetectNamespaces", false);
+		enableNamespaces = env("XmlSerializer.enableNamespaces", false);
+		defaultNamespace = null;
+		namespaces = null;
+
 	}
 
 	/**
@@ -47,6 +57,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected XmlSerializerBuilder(XmlSerializer copyFrom) {
 		super(copyFrom);
+		addBeanTypesXml = copyFrom.addBeanTypesXml;
+		addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
+		disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+		enableNamespaces = copyFrom.enableNamespaces;
+		defaultNamespace = copyFrom.defaultNamespace;
+		namespaces = copyFrom.namespaces.length == 0 ? null : AList.of(copyFrom.namespaces);
 	}
 
 	/**
@@ -56,6 +72,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected XmlSerializerBuilder(XmlSerializerBuilder copyFrom) {
 		super(copyFrom);
+		addBeanTypesXml = copyFrom.addBeanTypesXml;
+		addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
+		disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
+		enableNamespaces = copyFrom.enableNamespaces;
+		defaultNamespace = copyFrom.defaultNamespace;
+		namespaces = copyFrom.namespaces == null ? null : AList.of(copyFrom.namespaces);
 	}
 
 	@Override /* ContextBuilder */
@@ -73,6 +95,36 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public XmlSerializerBuilder addBeanTypesXml() {
+		return addBeanTypesXml(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypesXml()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public XmlSerializerBuilder addBeanTypesXml(boolean value) {
+		addBeanTypesXml = value;
+		return this;
+	}
+
+	/**
 	 * Add namespace URLs to the root element.
 	 *
 	 * <p>
@@ -82,7 +134,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
@@ -90,7 +141,19 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder addNamespaceUrisToRoot() {
-		return set(XML_addNamespaceUrisToRoot);
+		return addNamespaceUrisToRoot(true);
+	}
+
+	/**
+	 * Same as {@link #addNamespaceUrisToRoot()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
+		addNamespaceUrisToRoot = value;
+		return this;
 	}
 
 	/**
@@ -100,7 +163,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
+	 * Used in conjunction with {@link XmlSerializerBuilder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
 	 *
 	 * <p>
@@ -108,17 +171,16 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * the root element is serialized.
 	 *
 	 * <p>
-	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
+	 * This setting is ignored if {@link XmlSerializerBuilder#enableNamespaces()} is not enabled.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
+	 * 		disabled, and that namespaces be manually defined through the {@link XmlSerializerBuilder#namespaces(Namespace...)} property.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_disableAutoDetectNamespaces}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
@@ -126,7 +188,19 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder disableAutoDetectNamespaces() {
-		return set(XML_disableAutoDetectNamespaces);
+		return disableAutoDetectNamespaces(true);
+	}
+
+	/**
+	 * Same as {@link #disableAutoDetectNamespaces()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public XmlSerializerBuilder disableAutoDetectNamespaces(boolean value) {
+		disableAutoDetectNamespaces = value;
+		return this;
 	}
 
 	/**
@@ -136,7 +210,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * Specifies the default namespace URI for this document.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
@@ -146,8 +219,9 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public XmlSerializerBuilder defaultNamespace(String value) {
-		return set(XML_defaultNamespace, value);
+	public XmlSerializerBuilder defaultNamespace(Namespace value) {
+		defaultNamespace = value;
+		return this;
 	}
 
 	/**
@@ -157,7 +231,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
@@ -165,7 +238,19 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder enableNamespaces() {
-		return set(XML_enableNamespaces);
+		return enableNamespaces(true);
+	}
+
+	/**
+	 * Same as {@link #enableNamespaces()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public XmlSerializerBuilder enableNamespaces(boolean value) {
+		enableNamespaces = value;
+		return this;
 	}
 
 	/**
@@ -174,15 +259,11 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder ns() {
-		return set(XML_enableNamespaces);
+		return enableNamespaces();
 	}
 
 	/**
@@ -190,35 +271,16 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
-	 * </ul>
 	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder namespaces(Namespace...values) {
-		return set(XML_namespaces, values);
-	}
-
-	/**
-	 * Default namespaces.
-	 *
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
-	 * </ul>
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public XmlSerializerBuilder namespaces(String...values) {
-		return set(XML_namespaces, Namespace.createArray(values));
+		if (namespaces == null)
+			namespaces = new ArrayList<>();
+		Collections.addAll(namespaces, values);
+		return this;
 	}
 
 	// <FluentSetters>

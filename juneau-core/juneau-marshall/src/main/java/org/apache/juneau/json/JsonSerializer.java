@@ -142,6 +142,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	final boolean addBeanTypesJson, escapeSolidus, simpleMode;
 
+	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -157,6 +158,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		addBeanTypesJson = builder.addBeanTypesJson;
 		simpleMode = builder.simpleMode;
 		escapeSolidus = builder.escapeSolidus;
+
+		addBeanTypes = addBeanTypesJson || super.isAddBeanTypes();
 	}
 
 	@Override /* Context */
@@ -245,7 +248,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 */
 	@Override
 	protected final boolean isAddBeanTypes() {
-		return addBeanTypesJson || super.isAddBeanTypes();
+		return addBeanTypes;
 	}
 
 	/**

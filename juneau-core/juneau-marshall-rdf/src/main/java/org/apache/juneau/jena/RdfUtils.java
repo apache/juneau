@@ -54,20 +54,20 @@ public class RdfUtils {
 
 		// If both prefix and namespace specified, use that Namespace mapping.
 		if (! (prefix.isEmpty() || ns.isEmpty()))
-			return Namespace.create(prefix, ns);
+			return Namespace.of(prefix, ns);
 
 		// If only prefix specified, need to search for namespaceURI.
 		if (! prefix.isEmpty()) {
 			if (rdfs != null)
 				for (Rdf rdf2 : rdfs)
 					if (rdf2.prefix().equals(prefix) && ! rdf2.namespace().isEmpty())
-						return Namespace.create(prefix, rdf2.namespace());
+						return Namespace.of(prefix, rdf2.namespace());
 			for (RdfSchema schema : schemas) {
 				if (schema.prefix().equals(prefix) && ! schema.namespace().isEmpty())
-					return Namespace.create(prefix, schema.namespace());
+					return Namespace.of(prefix, schema.namespace());
 				for (RdfNs rdfNs : schema.rdfNs())
 					if (rdfNs.prefix().equals(prefix))
-						return Namespace.create(prefix, rdfNs.namespaceURI());
+						return Namespace.of(prefix, rdfNs.namespaceURI());
 			}
 			throw new BeanRuntimeException("Found @Rdf.prefix annotation with no matching URI.  prefix='"+prefix+"'");
 		}
@@ -77,13 +77,13 @@ public class RdfUtils {
 			if (rdfs != null)
 				for (Rdf rdf2 : rdfs)
 					if (rdf2.namespace().equals(ns) && ! rdf2.prefix().isEmpty())
-						return Namespace.create(rdf2.prefix(), ns);
+						return Namespace.of(rdf2.prefix(), ns);
 			for (RdfSchema schema : schemas) {
 				if (schema.namespace().equals(ns) && ! schema.prefix().isEmpty())
-					return Namespace.create(schema.prefix(), ns);
+					return Namespace.of(schema.prefix(), ns);
 				for (RdfNs rdfNs : schema.rdfNs())
 					if (rdfNs.namespaceURI().equals(ns))
-						return Namespace.create(rdfNs.prefix(), ns);
+						return Namespace.of(rdfNs.prefix(), ns);
 			}
 		}
 

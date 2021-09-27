@@ -172,7 +172,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_addBeanTypes}
+	 * 	<li class='jm'>{@link XmlSerializerBuilder#addBeanTypesXml()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -191,13 +191,13 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
+	 * 		This setting is ignored if {@link XmlSerializerBuilder#enableNamespaces()} is not enabled.
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
+	 * 	<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -210,7 +210,7 @@ public @interface XmlConfig {
 	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link XmlSerializer#XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
+	 * Used in conjunction with {@link XmlSerializerBuilder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
 	 *
 	 * <p>
@@ -218,13 +218,13 @@ public @interface XmlConfig {
 	 * the root element is serialized.
 	 *
 	 * <p>
-	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
+	 * This setting is ignored if {@link XmlSerializerBuilder#enableNamespaces()} is not enabled.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link XmlSerializer#XML_namespaces} property.
+	 * 		disabled, and that namespaces be manually defined through the {@link XmlSerializerBuilder#namespaces(Namespace...)} property.
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -236,7 +236,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_disableAutoDetectNamespaces}
+	 * 	<li class='jm'>{@link XmlSerializerBuilder#disableAutoDetectNamespaces()}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -254,7 +254,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
+	 * 	<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(Namespace)}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -278,7 +278,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
+	 * 	<li class='jm'>{@link XmlSerializerBuilder#enableNamespaces()}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -296,7 +296,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
+	 * 	<li class='jm'>{@link XmlSerializerBuilder#namespaces(Namespace...)}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */

@@ -18,6 +18,7 @@ import java.util.function.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -32,14 +33,19 @@ public class ComboInput<T> {
 	private Predicate<String> skipTest;
 	private Function<T,T> convert;
 	private List<Function<T,String>> verify = AList.create();
-	List<Consumer<BeanContextBuilder>> beanContextApplies = AList.create();
 	List<Class<?>> swaps = AList.create();
 	final Type type;
 	String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
+	List<Tuple2<Class<?>,Consumer<?>>> applies = AList.create();
 
 	public ComboInput<T> beanContext(Consumer<BeanContextBuilder> c) {
-		this.beanContextApplies.add(c);
+		apply(BeanContextBuilder.class, c);
+		return this;
+	}
+
+	public <T2> ComboInput<T> apply(Class<T2> t, Consumer<T2> c) {
+		applies.add(Tuple2.of(t, c));
 		return this;
 	}
 

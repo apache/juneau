@@ -45,6 +45,11 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		super();
 		consumes("text/xml,application/xml");
 		type(XmlParser.class);
+		preserveRootElement = env("XmlParser.preserveRootElement", false);
+		validating = env("XmlParser.validating", false);
+		eventAllocator = null;
+		reporter = null;
+		resolver = null;
 	}
 
 	/**
@@ -54,6 +59,11 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 */
 	protected XmlParserBuilder(XmlParser copyFrom) {
 		super(copyFrom);
+		preserveRootElement = copyFrom.preserveRootElement;
+		validating = copyFrom.validating;
+		eventAllocator = copyFrom.eventAllocator;
+		reporter = copyFrom.reporter;
+		resolver = copyFrom.resolver;
 	}
 
 	/**
@@ -63,6 +73,11 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 */
 	protected XmlParserBuilder(XmlParserBuilder copyFrom) {
 		super(copyFrom);
+		preserveRootElement = copyFrom.preserveRootElement;
+		validating = copyFrom.validating;
+		eventAllocator = copyFrom.eventAllocator;
+		reporter = copyFrom.reporter;
+		resolver = copyFrom.resolver;
 	}
 
 	@Override /* ContextBuilder */

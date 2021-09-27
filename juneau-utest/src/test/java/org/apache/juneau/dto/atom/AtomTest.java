@@ -187,7 +187,7 @@ public class AtomTest {
 			+"	<updated>2016-12-31T05:02:03Z</updated>\n"
 			+"</feed>\n";
 
-		s = XmlSerializer.create().sq().ws().defaultNamespace("atom").enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
+		s = XmlSerializer.create().sq().ws().defaultNamespace(Namespace.of("atom")).enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
