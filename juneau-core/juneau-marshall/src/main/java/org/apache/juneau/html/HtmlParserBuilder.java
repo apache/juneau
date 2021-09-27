@@ -17,9 +17,6 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import javax.xml.stream.*;
-import javax.xml.stream.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -561,12 +558,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - XmlParserBuilder */
-	public HtmlParserBuilder eventAllocator(XMLEventAllocator value) {
-		super.eventAllocator(value);
-		return this;
-	}
-
-	@Override /* GENERATED - XmlParserBuilder */
 	public HtmlParserBuilder preserveRootElement() {
 		super.preserveRootElement();
 		return this;
@@ -579,19 +570,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - XmlParserBuilder */
-	public HtmlParserBuilder reporter(XMLReporter value) {
-		super.reporter(value);
-		return this;
-	}
-
-	@Override /* GENERATED - XmlParserBuilder */
 	public HtmlParserBuilder resolver(Class<? extends javax.xml.stream.XMLResolver> value) {
-		super.resolver(value);
-		return this;
-	}
-
-	@Override /* GENERATED - XmlParserBuilder */
-	public HtmlParserBuilder resolver(XMLResolver value) {
 		super.resolver(value);
 		return this;
 	}

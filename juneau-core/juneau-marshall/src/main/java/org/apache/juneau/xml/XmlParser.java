@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static java.util.Optional.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -39,160 +42,26 @@ import org.apache.juneau.parser.*;
 public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "XmlParser";
-
-	/**
-	 * Configuration property:  XML event allocator.
-	 *
-	 * <p>
-	 * Associates an {@link XMLEventAllocator} with this parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_eventAllocator XML_eventAllocator}
-	 * 	<li><b>Name:</b>  <js>"XmlParser.eventAllocator.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.util.XMLEventAllocator}&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#eventAllocator()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#eventAllocator(XMLEventAllocator)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_eventAllocator = PREFIX + ".eventAllocator.c";
-
-	/**
-	 * Configuration property:  Preserve root element during generalized parsing.
-	 *
-	 * <p>
-	 * When enabled, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
-	 * is the root element name.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_preserveRootElement XML_preserveRootElement}
-	 * 	<li><b>Name:</b>  <js>"XmlParser.preserveRootElement.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlParser.preserveRootElement</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLPARSER_PRESERVEROOTELEMENT</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#preserveRootElement()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#preserveRootElement()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_preserveRootElement = PREFIX + ".preserveRootElement.b";
-
-	/**
-	 * Configuration property:  XML reporter.
-	 *
-	 * <p>
-	 * Associates an {@link XMLReporter} with this parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_reporter XML_reporter}
-	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.XMLReporter}&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#reporter()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#reporter(XMLReporter)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_reporter = PREFIX + ".reporter.c";
-
-	/**
-	 * Configuration property:  XML resolver.
-	 *
-	 * <p>
-	 * Associates an {@link XMLResolver} with this parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_resolver XML_resolver}
-	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.XMLResolver}&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#resolver()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#resolver(XMLResolver)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_resolver = PREFIX + ".resolver.c";
-
-	/**
-	 * Configuration property:  Enable validation.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, XML document will be validated.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_validating XML_validating}
-	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlParser.validating</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLPARSER_VALIDATING</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#validating()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#validating()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String XML_validating = PREFIX + ".validating.b";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
 	public static final XmlParser DEFAULT = new XmlParser(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
+	final boolean
 		validating,
 		preserveRootElement;
-	private final XMLReporter reporter;
-	private final XMLResolver resolver;
-	private final XMLEventAllocator eventAllocator;
+	final Class<? extends XMLEventAllocator> eventAllocator;
+	final Class<? extends XMLReporter> reporter;
+	final Class<? extends XMLResolver> resolver;
+
+	private final XMLReporter reporterImpl;
+	private final XMLResolver resolverImpl;
+	private final XMLEventAllocator eventAllocatorImpl;
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -205,12 +74,15 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 */
 	protected XmlParser(XmlParserBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		validating = cp.getBoolean(XML_validating).orElse(false);
-		preserveRootElement = cp.getBoolean(XML_preserveRootElement).orElse(false);
-		reporter = cp.getInstance(XML_reporter, XMLReporter.class).orElse(null);
-		resolver = cp.getInstance(XML_resolver, XMLResolver.class).orElse(null);
-		eventAllocator = cp.getInstance(XML_eventAllocator, XMLEventAllocator.class).orElse(null);
+		validating = builder.validating;
+		preserveRootElement = builder.preserveRootElement;
+		reporter = builder.reporter;
+		resolver = builder.resolver;
+		eventAllocator = builder.eventAllocator;
+
+		reporterImpl = ofNullable(reporter).map(x -> newInstance(x)).orElse(null);
+		resolverImpl = ofNullable(resolver).map(x -> newInstance(x)).orElse(null);
+		eventAllocatorImpl = ofNullable(eventAllocator).map(x -> newInstance(x)).orElse(null);
 	}
 
 	@Override /* Context */
@@ -286,18 +158,18 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * XML event allocator.
 	 *
-	 * @see #XML_eventAllocator
+	 * @see XmlParserBuilder#eventAllocator(Class)
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
 	protected final XMLEventAllocator getEventAllocator() {
-		return eventAllocator;
+		return eventAllocatorImpl;
 	}
 
 	/**
 	 * Preserve root element during generalized parsing.
 	 *
-	 * @see #XML_preserveRootElement
+	 * @see XmlParserBuilder#preserveRootElement()
 	 * @return
 	 * 	<jk>true</jk> if when parsing into a generic {@link OMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
@@ -309,29 +181,29 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * XML reporter.
 	 *
-	 * @see #XML_reporter
+	 * @see XmlParserBuilder#reporter(Class)
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
 	protected final XMLReporter getReporter() {
-		return reporter;
+		return reporterImpl;
 	}
 
 	/**
 	 * XML resolver.
 	 *
-	 * @see #XML_resolver
+	 * @see XmlParserBuilder#resolver(Class)
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
 	protected final XMLResolver getResolver() {
-		return resolver;
+		return resolverImpl;
 	}
 
 	/**
 	 * Enable validation.
 	 *
-	 * @see #XML_validating
+	 * @see XmlParserBuilder#validating()
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */
@@ -342,6 +214,14 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	private <T> T newInstance(Class<T> c) {
+		try {
+			return c.newInstance();
+		} catch (Exception e) {
+			throw runtimeException(e);
+		}
+	}
 
 	@Override /* Context */
 	public OMap toMap() {

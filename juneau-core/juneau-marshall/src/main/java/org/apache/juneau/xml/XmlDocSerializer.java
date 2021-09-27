@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
 public class XmlDocSerializer extends XmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer without namespaces. */

@@ -729,7 +729,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML event allocator.
 	 *
-	 * @see XmlParser#XML_eventAllocator
+	 * @see XmlParserBuilder#eventAllocator(Class)
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -740,7 +740,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
-	 * @see XmlParser#XML_preserveRootElement
+	 * @see XmlParserBuilder#preserveRootElement()
 	 * @return
 	 * 	<jk>true</jk> if when parsing into a generic {@link OMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
@@ -752,7 +752,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML reporter.
 	 *
-	 * @see XmlParser#XML_reporter
+	 * @see XmlParserBuilder#reporter(Class)
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -763,7 +763,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML resolver.
 	 *
-	 * @see XmlParser#XML_resolver
+	 * @see XmlParserBuilder#resolver(Class)
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -774,7 +774,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Enable validation.
 	 *
-	 * @see XmlParser#XML_validating
+	 * @see XmlParserBuilder#validating()
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */

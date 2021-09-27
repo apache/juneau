@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -34,6 +32,11 @@ import org.apache.juneau.parser.*;
  */
 @FluentSetters
 public class XmlParserBuilder extends ReaderParserBuilder {
+
+	boolean preserveRootElement, validating;
+	Class<? extends XMLEventAllocator> eventAllocator;
+	Class<? extends XMLReporter> reporter;
+	Class<? extends XMLResolver> resolver;
 
 	/**
 	 * Constructor, default settings.
@@ -82,34 +85,13 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public XmlParserBuilder eventAllocator(XMLEventAllocator value) {
-		return set(XML_eventAllocator, value);
-	}
-
-	/**
-	 * XML event allocator.
-	 *
-	 * <p>
-	 * Associates an {@link XMLEventAllocator} with this parser.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlParserBuilder eventAllocator(Class<? extends XMLEventAllocator> value) {
-		return set(XML_eventAllocator, value);
+		eventAllocator = value;
+		return this;
 	}
 
 	/**
@@ -141,38 +123,23 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * 	OMap <jv>myMap2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class)</jk>;
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlParserBuilder preserveRootElement() {
-		return set(XML_preserveRootElement);
+		return preserveRootElement(true);
 	}
 
 	/**
-	 * XML reporter.
+	 * Same as {@link #preserveRootElement()} but allows you to explicitly specify the value.
 	 *
-	 * <p>
-	 * Associates an {@link XMLReporter} with this parser.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Reporters are not copied to new parsers during a clone.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @param value The value for this setting.
+	 * @return This object.
 	 */
 	@FluentSetter
-	public XmlParserBuilder reporter(XMLReporter value) {
-		return set(XML_reporter, value);
+	public XmlParserBuilder preserveRootElement(boolean value) {
+		preserveRootElement = value;
+		return this;
 	}
 
 	/**
@@ -180,17 +147,14 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
-	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlParserBuilder reporter(Class<? extends XMLReporter> value) {
-		return set(XML_reporter, value);
+		reporter = value;
+		return this;
 	}
 
 	/**
@@ -198,35 +162,14 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public XmlParserBuilder resolver(XMLResolver value) {
-		return set(XML_resolver, value);
-	}
-
-	/**
-	 * XML resolver.
-	 *
-	 * <p>
-	 * Associates an {@link XMLResolver} with this parser.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
-	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlParserBuilder resolver(Class<? extends XMLResolver> value) {
-		return set(XML_resolver, value);
+		resolver = value;
+		return this;
 	}
 
 	/**
@@ -238,15 +181,23 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_validating}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlParserBuilder validating() {
-		return set(XML_validating);
+		return validating(true);
+	}
+
+	/**
+	 * Same as {@link #validating()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public XmlParserBuilder validating(boolean value) {
+		validating = value;
+		return this;
 	}
 
 	// <FluentSetters>

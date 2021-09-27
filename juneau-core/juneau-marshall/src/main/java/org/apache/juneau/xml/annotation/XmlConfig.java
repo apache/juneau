@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(XmlConfigAnnotation.Apply.class)
+@ContextApply({XmlConfigAnnotation.SerializerApply.class,XmlConfigAnnotation.ParserApply.class})
 public @interface XmlConfig {
 
 	/**
@@ -61,7 +61,7 @@ public @interface XmlConfig {
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
+	 * 	<li class='jm'>{@link XmlParserBuilder#eventAllocator(Class)}
 	 * </ul>
 	 */
 	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Null.class;
@@ -85,7 +85,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
+	 * 	<li class='jm'>{@link XmlParserBuilder#preserveRootElement()}
 	 * </ul>
 	 */
 	String preserveRootElement() default "";
@@ -102,7 +102,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
+	 * 	<li class='jm'>{@link XmlParserBuilder#reporter(Class)}
 	 * </ul>
 	 */
 	Class<? extends XMLReporter> reporter() default XmlReporter.Null.class;
@@ -114,7 +114,7 @@ public @interface XmlConfig {
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
+	 * 	<li class='jm'>{@link XmlParserBuilder#resolver(Class)}
 	 * </ul>
 	 */
 	Class<? extends XMLResolver> resolver() default XmlResolver.Null.class;
@@ -140,7 +140,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlParser#XML_validating}
+	 * 	<li class='jm'>{@link XmlParserBuilder#validating()}
 	 * </ul>
 	 */
 	String validating() default "";
