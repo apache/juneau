@@ -46,18 +46,11 @@ import org.apache.juneau.transform.*;
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "PlainTextParser";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
 	public static final PlainTextParser DEFAULT = new PlainTextParser(create());
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

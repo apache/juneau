@@ -25,14 +25,14 @@ public class HtmlConfigAnnotation {
 	/**
 	 * Applies {@link HtmlConfig} annotations to a {@link HtmlSerializerBuilder}.
 	 */
-	public static class ApplySerializer extends AnnotationApplier<HtmlConfig,HtmlSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<HtmlConfig,HtmlSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplySerializer(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(HtmlConfig.class, HtmlSerializerBuilder.class, vr);
 		}
 
@@ -46,6 +46,25 @@ public class HtmlConfigAnnotation {
 			bool(a.disableDetectLinksInStrings()).ifPresent(x -> b.disableDetectLinksInStrings(x));
 			string(a.labelParameter()).ifPresent(x -> b.labelParameter(x));
 			string(a.uriAnchorText()).map(AnchorText::valueOf).ifPresent(x -> b.uriAnchorText(x));
+		}
+	}
+
+	/**
+	 * Applies {@link HtmlConfig} annotations to a {@link HtmlParserBuilder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<HtmlConfig,HtmlParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(HtmlConfig.class, HtmlParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlParserBuilder b) {
 		}
 	}
 }

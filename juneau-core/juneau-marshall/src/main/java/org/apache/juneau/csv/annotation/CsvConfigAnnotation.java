@@ -25,14 +25,14 @@ public class CsvConfigAnnotation {
 	/**
 	 * Applies {@link CsvConfig} annotations to a {@link CsvSerializerBuilder}.
 	 */
-	public static class ApplySerializer extends AnnotationApplier<CsvConfig,CsvSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<CsvConfig,CsvSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplySerializer(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(CsvConfig.class, CsvSerializerBuilder.class, vr);
 		}
 
@@ -44,14 +44,14 @@ public class CsvConfigAnnotation {
 	/**
 	 * Applies {@link CsvConfig} annotations to a {@link CsvParserBuilder}.
 	 */
-	public static class ApplyParser extends AnnotationApplier<CsvConfig,CsvParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<CsvConfig,CsvParserBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplyParser(VarResolverSession vr) {
+		public ParserApply(VarResolverSession vr) {
 			super(CsvConfig.class, CsvParserBuilder.class, vr);
 		}
 

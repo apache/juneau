@@ -42,18 +42,11 @@ import org.apache.juneau.transform.*;
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "PlainTextSerializer";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
 	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(create());
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

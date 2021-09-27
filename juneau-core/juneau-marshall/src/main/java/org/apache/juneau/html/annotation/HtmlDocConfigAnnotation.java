@@ -25,14 +25,14 @@ public class HtmlDocConfigAnnotation {
 	/**
 	 * Applies {@link HtmlDocConfig} annotations to a {@link HtmlDocSerializerBuilder}.
 	 */
-	public static class ApplySerializer extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplySerializer(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(HtmlDocConfig.class, HtmlDocSerializerBuilder.class, vr);
 		}
 

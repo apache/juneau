@@ -30,7 +30,7 @@ import org.apache.juneau.csv.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({CsvConfigAnnotation.ApplySerializer.class,CsvConfigAnnotation.ApplyParser.class})
+@ContextApply({CsvConfigAnnotation.SerializerApply.class,CsvConfigAnnotation.ParserApply.class})
 public @interface CsvConfig {
 
 	/**

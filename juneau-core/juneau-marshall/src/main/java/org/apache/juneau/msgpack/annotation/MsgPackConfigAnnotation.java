@@ -25,14 +25,14 @@ public class MsgPackConfigAnnotation {
 	/**
 	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackSerializerBuilder}.
 	 */
-	public static class ApplySerializer extends AnnotationApplier<MsgPackConfig,MsgPackSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<MsgPackConfig,MsgPackSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplySerializer(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(MsgPackConfig.class, MsgPackSerializerBuilder.class, vr);
 		}
 
@@ -41,6 +41,25 @@ public class MsgPackConfigAnnotation {
 			MsgPackConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesMsgPack(x));
+		}
+	}
+
+	/**
+	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackParserBuilder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(MsgPackConfig.class, MsgPackParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParserBuilder b) {
 		}
 	}
 }

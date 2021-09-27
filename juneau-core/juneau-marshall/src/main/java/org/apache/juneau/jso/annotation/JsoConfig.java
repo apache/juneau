@@ -30,7 +30,7 @@ import org.apache.juneau.jso.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(JsoConfigAnnotation.Apply.class)
+@ContextApply({JsoConfigAnnotation.SerializerApply.class,JsoConfigAnnotation.ParserApply.class})
 public @interface JsoConfig {
 
 	/**

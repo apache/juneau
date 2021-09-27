@@ -26,14 +26,14 @@ public class OpenApiConfigAnnotation {
 	/**
 	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiSerializerBuilder}.
 	 */
-	public static class ApplySerializer extends AnnotationApplier<OpenApiConfig,OpenApiSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<OpenApiConfig,OpenApiSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplySerializer(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(OpenApiConfig.class, OpenApiSerializerBuilder.class, vr);
 		}
 
@@ -49,14 +49,14 @@ public class OpenApiConfigAnnotation {
 	/**
 	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiParserBuilder}.
 	 */
-	public static class ApplyParser extends AnnotationApplier<OpenApiConfig,OpenApiParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<OpenApiConfig,OpenApiParserBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplyParser(VarResolverSession vr) {
+		public ParserApply(VarResolverSession vr) {
 			super(OpenApiConfig.class, OpenApiParserBuilder.class, vr);
 		}
 

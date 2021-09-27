@@ -13,6 +13,7 @@
 package org.apache.juneau.plaintext.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -22,21 +23,40 @@ import org.apache.juneau.svl.*;
 public class PlainTextConfigAnnotation {
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link PlainTextConfig} annotations to a {@link PlainTextSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<PlainTextConfig,ContextPropertiesBuilder> {
+	public static class SerializerApply extends AnnotationApplier<PlainTextConfig,PlainTextSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(PlainTextConfig.class, ContextPropertiesBuilder.class, vr);
+		public SerializerApply(VarResolverSession vr) {
+			super(PlainTextConfig.class, PlainTextSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializerBuilder b) {
+		}
+	}
+
+	/**
+	 * Applies {@link PlainTextConfig} annotations to a {@link PlainTextParserBuilder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<PlainTextConfig,PlainTextParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(PlainTextConfig.class, PlainTextParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParserBuilder b) {
 		}
 	}
 }

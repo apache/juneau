@@ -32,7 +32,7 @@ import org.apache.juneau.oapi.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({OpenApiConfigAnnotation.ApplySerializer.class,OpenApiConfigAnnotation.ApplyParser.class})
+@ContextApply({OpenApiConfigAnnotation.SerializerApply.class,OpenApiConfigAnnotation.ParserApply.class})
 public @interface OpenApiConfig {
 
 	/**

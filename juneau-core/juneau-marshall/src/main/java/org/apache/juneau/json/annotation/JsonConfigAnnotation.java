@@ -25,14 +25,14 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link JsonSerializerBuilder}.
 	 */
-	public static class ApplySerializer extends AnnotationApplier<JsonConfig,JsonSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplySerializer(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(JsonConfig.class, JsonSerializerBuilder.class, vr);
 		}
 
@@ -49,14 +49,14 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link JsonParserBuilder}.
 	 */
-	public static class ApplyParser extends AnnotationApplier<JsonConfig,JsonParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParserBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ApplyParser(VarResolverSession vr) {
+		public ParserApply(VarResolverSession vr) {
 			super(JsonConfig.class, JsonParserBuilder.class, vr);
 		}
 

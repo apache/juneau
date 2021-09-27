@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(HtmlDocConfigAnnotation.ApplySerializer.class)
+@ContextApply(HtmlDocConfigAnnotation.SerializerApply.class)
 public @interface HtmlDocConfig {
 
 	/**
