@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static java.util.Optional.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -123,102 +125,7 @@ import org.apache.juneau.serializer.*;
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "UonSerializer";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}
-	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>UonSerializer.addBeanTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>UONSERIALIZER_ADDBEANTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#addBeanTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#addBeanTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String UON_addBeanTypes = PREFIX + ".addBeanTypes.b";
-
-	/**
-	 * Configuration property:  Encode non-valid URI characters.
-	 *
-	 * <p>
-	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_encoding UON_encoding}
-	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>UonSerializer.encoding</c>
-	 * 	<li><b>Environment variable:</b>  <c>UONSERIALIZER_ENCODING</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link org.apache.juneau.uon.UonSerializer}, <jk>true</jk> for {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#encoding()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#encoding()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String UON_encoding = PREFIX + ".encoding.b";
-
-	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
-	 *
-	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_paramFormat UON_paramFormat}
-	 * 	<li><b>Name:</b>  <js>"UonSerializer.paramFormat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.uon.ParamFormat}
-	 * 	<li><b>System property:</b>  <c>UonSerializer.paramFormat</c>
-	 * 	<li><b>Environment variable:</b>  <c>UONSERIALIZER_PARAMFORMAT</c>
-	 * 	<li><b>Default:</b>  <js>"UON"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#paramFormat()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#paramFormat(ParamFormat)}
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#paramFormatPlain()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String UON_paramFormat = PREFIX + ".paramFormat.s";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
@@ -230,9 +137,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/** Reusable instance of {@link UonSerializer.Encoding}. */
 	public static final UonSerializer DEFAULT_ENCODING = new Encoding(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -290,15 +196,16 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
+	final boolean
 		encoding,
-		addBeanTypes;
-
-	private final char
-		quoteChar;
-
-	private final ParamFormat
+		addBeanTypesUon;
+	final ParamFormat
 		paramFormat;
+	final Character
+		quoteCharUon;
+
+	private final boolean addBeanTypes;
+	private final char quoteChar;
 
 	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -311,11 +218,14 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 */
 	protected UonSerializer(UonSerializerBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		encoding = cp.getBoolean(UON_encoding).orElse(false);
-		addBeanTypes = cp.getFirstBoolean(UON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
-		paramFormat = cp.get(UON_paramFormat, ParamFormat.class).orElse(ParamFormat.UON);
-		quoteChar = cp.getString(WSERIALIZER_quoteCharOverride).orElse(cp.getString(WSERIALIZER_quoteChar).orElse("'")).charAt(0);
+
+		encoding = builder.encoding;
+		addBeanTypesUon = builder.addBeanTypesUon;
+		paramFormat = builder.paramFormat;
+		quoteCharUon = builder.quoteCharUon;
+
+		addBeanTypes = addBeanTypesUon || super.isAddBeanTypes();
+		quoteChar = ofNullable(quoteCharUon).orElse(ofNullable(super.quoteChar()).orElse('\''));
 	}
 
 	@Override /* Context */
@@ -392,7 +302,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #UON_addBeanTypes
+	 * @see UonSerializerBuilder#addBeanTypesUon()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -405,7 +315,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Encode non-valid URI characters.
 	 *
-	 * @see #UON_encoding
+	 * @see UonSerializerBuilder#encoding()
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */
@@ -416,7 +326,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Format to use for query/form-data/header values.
 	 *
-	 * @see #UON_paramFormat
+	 * @see UonSerializerBuilder#paramFormat(ParamFormat)
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
@@ -427,7 +337,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Quote character.
 	 *
-	 * @see WriterSerializer#WSERIALIZER_quoteChar
+	 * @see UonSerializerBuilder#quoteCharUon(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */

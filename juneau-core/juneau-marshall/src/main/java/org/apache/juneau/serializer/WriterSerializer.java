@@ -186,6 +186,8 @@ public abstract class WriterSerializer extends Serializer {
 	private final Charset streamCharset;
 	private final boolean useWhitespace;
 
+	private final Character quoteCharRaw;
+
 	/**
 	 * Constructor.
 	 *
@@ -198,6 +200,8 @@ public abstract class WriterSerializer extends Serializer {
 		ContextProperties cp = getContextProperties();
 		maxIndent = cp.getInteger(WSERIALIZER_maxIndent).orElse(100);
 		quoteChar = cp.getString(WSERIALIZER_quoteCharOverride).orElse(cp.getString(WSERIALIZER_quoteChar).orElse("\"")).charAt(0);
+		String _quoteCharRaw = cp.getString(WSERIALIZER_quoteCharOverride).orElse(cp.getString(WSERIALIZER_quoteChar).orElse(null));
+		quoteCharRaw = _quoteCharRaw == null ? null : _quoteCharRaw.charAt(0);
 		streamCharset = cp.get(WSERIALIZER_streamCharset, Charset.class).orElse(IOUtils.UTF8);
 		fileCharset = cp.get(WSERIALIZER_fileCharset, Charset.class).orElse(Charset.defaultCharset());
 		useWhitespace = cp.getBoolean(WSERIALIZER_useWhitespace).orElse(false);
@@ -302,6 +306,17 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	protected char getQuoteChar() {
 		return quoteChar;
+	}
+
+	/**
+	 * Quote character.
+	 *
+	 * @see #WSERIALIZER_quoteChar
+	 * @return
+	 * 	The character used for quoting attributes and values.
+	 */
+	protected Character quoteChar() {
+		return quoteCharRaw;
 	}
 
 	/**

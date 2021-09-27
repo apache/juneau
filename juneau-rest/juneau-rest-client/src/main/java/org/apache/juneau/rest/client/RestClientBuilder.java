@@ -4698,7 +4698,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * 	<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -4740,7 +4740,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * 	<li class='jm'>{@link UonSerializerBuilder#paramFormatPlain()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).

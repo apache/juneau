@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,8 @@ import org.apache.juneau.parser.*;
 @FluentSetters
 public class UonParserBuilder extends ReaderParserBuilder {
 
+	boolean decoding, validateEnd;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +38,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		super();
 		consumes("text/uon");
 		type(UonParser.class);
+		decoding = env("UonParser.decoding", false);
+		validateEnd = env("UonParser.validateEnd", false);
 	}
 
 	/**
@@ -47,6 +49,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 */
 	protected UonParserBuilder(UonParser copyFrom) {
 		super(copyFrom);
+		decoding = copyFrom.decoding;
+		validateEnd = copyFrom.validateEnd;
 	}
 
 	/**
@@ -56,6 +60,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 */
 	protected UonParserBuilder(UonParserBuilder copyFrom) {
 		super(copyFrom);
+		decoding = copyFrom.decoding;
+		validateEnd = copyFrom.validateEnd;
 	}
 
 	@Override /* ContextBuilder */
@@ -91,15 +97,23 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * 	String[] <jv>foo</jv> = <jv>parser</jv>.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonParser#UON_decoding}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public UonParserBuilder decoding() {
-		return set(UON_decoding);
+		return decoding(true);
+	}
+
+	/**
+	 * Same as {@link #decoding()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UonParserBuilder decoding(boolean value) {
+		decoding = value;
+		return this;
 	}
 
 	/**
@@ -122,15 +136,23 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(in, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public UonParserBuilder validateEnd() {
-		return set(UON_validateEnd);
+		return validateEnd(true);
+	}
+
+	/**
+	 * Same as {@link #validateEnd()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UonParserBuilder validateEnd(boolean value) {
+		validateEnd = value;
+		return this;
 	}
 
 	// <FluentSetters>

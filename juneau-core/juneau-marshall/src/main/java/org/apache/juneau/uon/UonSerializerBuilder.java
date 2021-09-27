@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,6 +29,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters
 public class UonSerializerBuilder extends WriterSerializerBuilder {
 
+	boolean addBeanTypesUon, encoding;
+	ParamFormat paramFormat;
+	Character quoteCharUon;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +40,10 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		super();
 		produces("text/uon");
 		type(UonSerializer.class);
+		addBeanTypesUon = env("UonSerializer.addBeanTypesUon", false);
+		encoding = env("UonSerializer.encoding", false);
+		paramFormat = env("UonSerializer.paramFormat", ParamFormat.UON);
+		quoteCharUon = null;
 	}
 
 	/**
@@ -47,6 +53,10 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected UonSerializerBuilder(UonSerializer copyFrom) {
 		super(copyFrom);
+		addBeanTypesUon = copyFrom.addBeanTypesUon;
+		encoding = copyFrom.encoding;
+		paramFormat = copyFrom.paramFormat;
+		quoteCharUon = copyFrom.quoteCharUon;
 	}
 
 	/**
@@ -56,6 +66,10 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected UonSerializerBuilder(UonSerializerBuilder copyFrom) {
 		super(copyFrom);
+		addBeanTypesUon = copyFrom.addBeanTypesUon;
+		encoding = copyFrom.encoding;
+		paramFormat = copyFrom.paramFormat;
+		quoteCharUon = copyFrom.quoteCharUon;
 	}
 
 	@Override /* ContextBuilder */
@@ -71,6 +85,36 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UonSerializerBuilder addBeanTypesUon() {
+		return addBeanTypesUon(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypesUon()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UonSerializerBuilder addBeanTypesUon(boolean value) {
+		addBeanTypesUon = value;
+		return this;
+	}
 
 	/**
 	 * Encode non-valid URI characters.
@@ -105,15 +149,11 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public UonSerializerBuilder encoding() {
-		return set(UON_encoding);
+		return encoding(true);
 	}
 
 	/**
@@ -123,7 +163,8 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object.
 	 */
 	public UonSerializerBuilder encoding(boolean value) {
-		return set(UON_encoding, value);
+		encoding = value;
+		return this;
 	}
 
 	/**
@@ -164,10 +205,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is {@link ParamFormat#UON}.
@@ -175,7 +212,8 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
-		return set(UON_paramFormat, value);
+		paramFormat = value;
+		return this;
 	}
 
 	/**
@@ -201,15 +239,23 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	String <jv>uon</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public UonSerializerBuilder paramFormatPlain() {
-		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
+		return paramFormat(ParamFormat.PLAINTEXT);
+	}
+
+	/**
+	 * Specifies the quote character.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public UonSerializerBuilder quoteCharUon(char value) {
+		quoteCharUon = value;
+		return this;
 	}
 
 	// <FluentSetters>

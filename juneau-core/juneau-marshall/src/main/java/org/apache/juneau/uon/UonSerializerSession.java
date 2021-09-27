@@ -41,7 +41,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Override the {@link UonSerializer#UON_encoding} setting.
+	 * @param encode Override the {@link UonSerializerBuilder#encoding()} setting.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -304,7 +304,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see UonSerializer#UON_addBeanTypes
+	 * @see UonSerializerBuilder#addBeanTypesUon()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -317,7 +317,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
 	 *
-	 * @see UonSerializer#UON_encoding
+	 * @see UonSerializerBuilder#encoding()
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */
@@ -328,7 +328,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
-	 * @see UonSerializer#UON_paramFormat
+	 * @see UonSerializerBuilder#paramFormat(ParamFormat)
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
@@ -339,7 +339,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Configuration property:  Quote character.
 	 *
-	 * @see WriterSerializer#WSERIALIZER_quoteChar
+	 * @see UonSerializerBuilder#quoteCharUon(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */

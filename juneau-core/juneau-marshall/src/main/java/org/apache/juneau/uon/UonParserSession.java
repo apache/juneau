@@ -13,7 +13,6 @@
 package org.apache.juneau.uon;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.uon.UonParser.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -56,15 +55,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		SessionProperties sp = getSessionProperties();
-		decoding = sp.get(UON_decoding, boolean.class).orElse(ctx.isDecoding());
+		decoding = ctx.decoding;
 	}
 
 	/**
 	 * Create a specialized parser session for parsing URL parameters.
 	 *
 	 * <p>
-	 * The main difference is that characters are never decoded, and the {@link UonParser#UON_decoding}
+	 * The main difference is that characters are never decoded, and the {@link UonParserBuilder#decoding()}
 	 * property is always ignored.
 	 *
 	 * @param ctx
@@ -832,7 +830,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
-	 * @see UonParser#UON_decoding
+	 * @see UonParserBuilder#decoding()
 	 * @return
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
@@ -844,7 +842,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Configuration property:  Validate end.
 	 *
-	 * @see UonParser#UON_validateEnd
+	 * @see UonParserBuilder#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

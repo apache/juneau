@@ -38,89 +38,7 @@ import org.apache.juneau.parser.*;
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "UonParser";
-
-	/**
-	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 *
-	 * <p>
-	 * <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
-	 * before being passed to this parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_decoding UON_decoding}
-	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>UonParser.decoding</c>
-	 * 	<li><b>Environment variable:</b>  <c>UONPARSER_DECODING</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link org.apache.juneau.uon.UonParser}, <jk>true</jk> for {@link org.apache.juneau.urlencoding.UrlEncodingParser}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#decoding()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#decoding()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String UON_decoding = PREFIX + ".decoding.b";
-
-	/**
-	 * Configuration property:  Validate end.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_validateEnd UON_validateEnd}
-	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>UonParser.validateEnd</c>
-	 * 	<li><b>Environment variable:</b>  <c>UONPARSER_VALIDATEEND</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#validateEnd()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#validateEnd()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
-	 * the stream consists of only comments or whitespace.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = UonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.validateEnd()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = UonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>UON_validateEnd</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
-	 * 	String in = <js>"(foo=bar)(baz=qux)"</js>;
-	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String UON_validateEnd = PREFIX + ".validateEnd.b";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
@@ -129,9 +47,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
 	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, decoding. */
@@ -206,8 +123,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
-		decoding, validateEnd;
+	final boolean decoding, validateEnd;
+
 	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -218,9 +135,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 */
 	protected UonParser(UonParserBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		this.decoding = cp.getBoolean(UON_decoding).orElse(false);
-		this.validateEnd = cp.getBoolean(UON_validateEnd).orElse(false);
+		decoding = builder.decoding;
+		validateEnd = builder.validateEnd;
 	}
 
 	@Override /* Context */
@@ -305,7 +221,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Decode <js>"%xx"</js> sequences enabled
 	 *
-	 * @see #UON_decoding
+	 * @see UonParserBuilder#decoding()
 	 * @return
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
@@ -317,7 +233,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Validate end enabled.
 	 *
-	 * @see #UON_validateEnd
+	 * @see UonParserBuilder#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

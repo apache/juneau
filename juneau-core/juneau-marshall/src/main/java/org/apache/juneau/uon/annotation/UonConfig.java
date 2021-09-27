@@ -32,7 +32,7 @@ import org.apache.juneau.urlencoding.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(UonConfigAnnotation.Apply.class)
+@ContextApply({UonConfigAnnotation.SerializerApply.class,UonConfigAnnotation.ParserApply.class})
 public @interface UonConfig {
 
 	/**
@@ -72,7 +72,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonParser#UON_decoding}
+	 * 	<li class='jm'>{@link UonParserBuilder#decoding()}
 	 * </ul>
 	 */
 	String decoding() default "";
@@ -96,7 +96,7 @@ public @interface UonConfig {
 	 * </ul>
 
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
+	 * 	<li class='jm'>{@link UonParserBuilder#validateEnd()}
 	 * </ul>
 	 */
 	String validateEnd() default "";
@@ -128,7 +128,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_addBeanTypes}
+	 * 	<li class='jm'>{@link UonSerializerBuilder#addBeanTypesUon()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -165,7 +165,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
+	 * 	<li class='jm'>{@link UonSerializerBuilder#encoding()}
 	 * </ul>
 	 */
 	String encoding() default "";
@@ -188,7 +188,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * 	<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}
 	 * </ul>
 	 */
 	String paramFormat() default "";
