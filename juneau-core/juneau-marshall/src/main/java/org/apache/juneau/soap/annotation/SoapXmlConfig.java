@@ -30,7 +30,7 @@ import org.apache.juneau.soap.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(SoapXmlConfigAnnotation.Apply.class)
+@ContextApply(SoapXmlConfigAnnotation.SerializerApply.class)
 public @interface SoapXmlConfig {
 
 	/**
@@ -53,7 +53,7 @@ public @interface SoapXmlConfig {
 	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}
+	 * 	<li class='jm'>{@link SoapXmlSerializerBuilder#soapAction(String)}
 	 * </ul>
 	 */
 	String soapAction() default "";

@@ -12,12 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.soap.SoapXmlSerializer.*;
-
 import java.io.IOException;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -31,7 +28,7 @@ import org.apache.juneau.xml.*;
  */
 public class SoapXmlSerializerSession extends XmlSerializerSession {
 
-	private final String soapAction;
+	private final SoapXmlSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -48,8 +45,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	public SoapXmlSerializerSession(SoapXmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 
-		SessionProperties sp = getSessionProperties();
-		soapAction = sp.get(SOAPXML_SOAPAction, String.class).orElse(ctx.soapAction);
+		this.ctx = ctx;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -64,7 +60,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 				.attr("encoding", "UTF-8")
 				.appendln("?>");
 			w.oTag("soap", "Envelope")
-				.attr("xmlns", "soap", soapAction)
+				.attr("xmlns", "soap", getSoapAction())
 				.appendln(">");
 			w.sTag(1, "soap", "Body").nl(1);
 			indent += 2;
@@ -77,7 +73,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* Serializer */
 	public Map<String,String> getResponseHeaders() {
-		return AMap.of("SOAPAction",soapAction);
+		return AMap.of("SOAPAction",getSoapAction());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -87,12 +83,12 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  The SOAPAction HTTP header value to set on responses.
 	 *
-	 * @see SoapXmlSerializer#SOAPXML_SOAPAction
+	 * @see SoapXmlSerializerBuilder#soapAction(String)
 	 * @return
 	 * 	The SOAPAction HTTP header value to set on responses.
 	 */
 	public String getSoapAction() {
-		return soapAction;
+		return ctx.getSoapAction();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,7 +103,6 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 				OMap
 					.create()
 					.filtered()
-					.a("soapAction", soapAction)
 			);
 	}
 }

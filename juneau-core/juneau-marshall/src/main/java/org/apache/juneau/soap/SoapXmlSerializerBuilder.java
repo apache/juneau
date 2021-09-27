@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.soap.SoapXmlSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -30,6 +28,8 @@ import org.apache.juneau.xml.*;
 @FluentSetters
 public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 
+	String soapAction;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -38,6 +38,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		produces("text/xml");
 		accept("text/xml+soap");
 		type(SoapXmlSerializer.class);
+		soapAction = "http://www.w3.org/2003/05/soap-envelope";
 	}
 
 	/**
@@ -47,6 +48,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	protected SoapXmlSerializerBuilder(SoapXmlSerializer copyFrom) {
 		super(copyFrom);
+		soapAction = copyFrom.soapAction;
 	}
 
 	/**
@@ -56,6 +58,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	protected SoapXmlSerializerBuilder(SoapXmlSerializerBuilder copyFrom) {
 		super(copyFrom);
+		soapAction = copyFrom.soapAction;
 	}
 
 	@Override /* ContextBuilder */
@@ -73,11 +76,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>SoapXmlSerializer</l> configuration property:&emsp;</i>  The <c>SOAPAction</c> HTTP header value to set on responses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}
-	 * </ul>
+	 * The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -86,7 +85,8 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public SoapXmlSerializerBuilder soapAction(String value) {
-		return set(SOAPXML_SOAPAction, value);
+		soapAction = value;
+		return this;
 	}
 
 	// <FluentSetters>

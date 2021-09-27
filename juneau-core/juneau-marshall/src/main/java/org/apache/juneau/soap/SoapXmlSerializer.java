@@ -38,40 +38,11 @@ import org.apache.juneau.xml.*;
 public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "SoapXmlSerializer";
-
-	/**
-	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.soap.SoapXmlSerializer#SOAPXML_SOAPAction SOAPXML_SOAPAction}
-	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>SoapXmlSerializer.SOAPAction</c>
-	 * 	<li><b>Environment variable:</b>  <c>SOAPXMLSERIALIZER_SOAPACTION</c>
-	 * 	<li><b>Default:</b>  <js>"http://www.w3.org/2003/05/soap-envelope"</js>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlConfig#soapAction()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.soap.SoapXmlSerializerBuilder#soapAction(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SOAPXML_SOAPAction = PREFIX + ".SOAPAction.s";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final String soapAction;
+
 	private final Map<ClassMeta<?>,SoapXmlClassMeta> soapXmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,SoapXmlBeanPropertyMeta> soapXmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -82,8 +53,7 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	 */
 	protected SoapXmlSerializer(SoapXmlSerializerBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		soapAction = cp.getString(SOAPXML_SOAPAction).orElse("http://www.w3.org/2003/05/soap-envelope");
+		soapAction = builder.soapAction;
 	}
 
 	@Override /* Context */
@@ -150,7 +120,7 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	/**
 	 * The SOAPAction HTTP header value to set on responses.
 	 *
-	 * @see #SOAPXML_SOAPAction
+	 * @see SoapXmlSerializerBuilder#soapAction(String)
 	 * @return
 	 * 	The SOAPAction HTTP header value to set on responses.
 	 */
