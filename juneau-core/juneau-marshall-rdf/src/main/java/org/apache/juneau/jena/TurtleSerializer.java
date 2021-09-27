@@ -18,7 +18,7 @@ package org.apache.juneau.jena;
 public class TurtleSerializer extends RdfSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default Turtle serializer, all default settings.*/

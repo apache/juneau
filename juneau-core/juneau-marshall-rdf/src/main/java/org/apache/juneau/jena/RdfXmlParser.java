@@ -20,7 +20,7 @@ import static org.apache.juneau.jena.Constants.*;
 public class RdfXmlParser extends RdfParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default XML parser, all default settings.*/

@@ -33,7 +33,7 @@ import org.apache.juneau.xml.annotation.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({RdfConfigAnnotation.SerializerApplier.class,RdfConfigAnnotation.ParserApplier.class})
+@ContextApply({RdfConfigAnnotation.SerializerApply.class,RdfConfigAnnotation.ParserApply.class})
 public @interface RdfConfig {
 
 	/**
@@ -151,7 +151,7 @@ public @interface RdfConfig {
 	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_iriRules}
 	 * </ul>
 	 */
-	String arp_iriRules() default "";
+	String rdfxml_iriRules() default "";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
@@ -187,7 +187,7 @@ public @interface RdfConfig {
 	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 	 * </ul>
 	 */
-	String arp_errorMode() default "";
+	String rdfxml_errorMode() default "";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <c>embedding</c>.
@@ -206,7 +206,7 @@ public @interface RdfConfig {
 	 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
 	 */
-	String arp_embedding() default "";
+	String rdfxml_embedding() default "";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>xmlbase</c>.

@@ -20,7 +20,7 @@ import static org.apache.juneau.jena.Constants.*;
 public class TurtleParser extends RdfParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default Turtle parser, all default settings.*/

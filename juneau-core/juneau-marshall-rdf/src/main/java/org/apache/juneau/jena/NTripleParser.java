@@ -20,7 +20,7 @@ import static org.apache.juneau.jena.Constants.*;
 public class NTripleParser extends RdfParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N-Triple parser, all default settings.*/

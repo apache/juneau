@@ -65,7 +65,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
 		if (! ctx.getLanguage().equals(LANG_NTRIPLE)) {
-			for (Map.Entry<String,Object> e : ctx.jenaProperties.entrySet())
+			for (Map.Entry<String,Object> e : ctx.getJenaSettings().entrySet())
 				rdfReader.setProperty(e.getKey(), e.getValue());
 		}
 	}
@@ -511,8 +511,8 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaProperties() {
-		return ctx.getJenaProperties();
+	protected final Map<String,Object> getJenaSettings() {
+		return ctx.getJenaSettings();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -13,7 +13,6 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.jena.RdfCommon.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -47,7 +46,7 @@ public class RdfParserTest {
 
 		// Create a new serializer with readable output.
 		RdfSerializer s = RdfSerializer.create().xmlabbrev()
-			.set(RDF_rdfxml_tab, 3)
+			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty()
 			.build();

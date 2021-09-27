@@ -18,7 +18,7 @@ package org.apache.juneau.jena;
 public class N3Serializer extends RdfSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N3 serializer, all default settings.*/

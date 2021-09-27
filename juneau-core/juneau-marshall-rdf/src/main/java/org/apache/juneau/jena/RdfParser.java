@@ -43,56 +43,18 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */
-@ConfigurableContext(prefixes={RdfCommon.PREFIX,RdfParser.PREFIX})
-public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvider {
-
-	private static final Namespace
-		DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
-		DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "RdfParser";
-
-	/**
-	 * Configuration property:  Trim whitespace from text elements.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}
-	 * 	<li><b>Name:</b>  <js>"RdfParser.trimWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfParser.trimWhitespace</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFPARSER_TRIMWHITESPACE</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#trimWhitespace()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#trimWhitespace()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_trimWhitespace = PREFIX + ".trimWhitespace.b";
+@ConfigurableContext
+public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean trimWhitespace, looseCollections;
-	private final String rdfLanguage;
-	private final Namespace juneauNs, juneauBpNs;
-	private final RdfCollectionFormat collectionFormat;
-
-	final Map<String,Object> jenaProperties;
+	final boolean trimWhitespace, looseCollections;
+	final String language;
+	final Namespace juneauNs, juneauBpNs;
+	final RdfCollectionFormat collectionFormat;
+	final Map<String,Object> jenaSettings;
 
 	private final Map<ClassMeta<?>,RdfClassMeta> rdfClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanMeta<?>,RdfBeanMeta> rdfBeanMetas = new ConcurrentHashMap<>();
@@ -110,27 +72,20 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 */
 	protected RdfParser(RdfParserBuilder builder) {
 		super((RdfParserBuilder) builder.consumes(getConsumes(builder)));
-		ContextProperties cp = getContextProperties();
-		trimWhitespace = cp.getBoolean(RDF_trimWhitespace).orElse(false);
-		looseCollections = cp.getBoolean(RDF_looseCollections).orElse(false);
-		rdfLanguage = cp.getString(RDF_language).orElse("RDF/XML-ABBREV");
-		juneauNs = cp.getInstance(RDF_juneauNs, String.class).map(Namespace::of).orElse(DEFAULT_JUNEAU_NS);
-		juneauBpNs = cp.getInstance(RDF_juneauBpNs, String.class).map(Namespace::of).orElse(DEFAULT_JUNEAUBP_NS);
-		collectionFormat = cp.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
 
-		ASortedMap<String,Object> m = ASortedMap.create();
-		for (String k : getPropertyKeys("RdfCommon"))
-			if (k.startsWith("jena."))
-				m.put(k.substring(5), cp.get("RdfCommon." + k).orElse(null));
-		jenaProperties = m.unmodifiable();
+		trimWhitespace = builder.trimWhitespace;
+		looseCollections = builder.looseCollections;
+		language = builder.language;
+		juneauNs = builder.juneauNs;
+		juneauBpNs = builder.juneauBpNs;
+		collectionFormat = builder.collectionFormat;
+		jenaSettings = new TreeMap<>(builder.jenaSettings);
 	}
 
 	private static String getConsumes(RdfParserBuilder builder) {
 		if (builder.getConsumes() != null)
 			return builder.getConsumes();
-		ContextProperties cp = builder.getContextProperties();
-		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
-		switch(rdfLanguage) {
+		switch(builder.language) {
 			case "RDF/XML":
 			case "RDF/XML-ABBREV": return "text/xml+rdf";
 			case "N-TRIPLE": return "text/n-triple";
@@ -283,7 +238,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * 	The RDF language to use.
 	 */
 	protected final String getLanguage() {
-		return rdfLanguage;
+		return language;
 	}
 
 	/**
@@ -308,8 +263,8 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaProperties() {
-		return jenaProperties;
+	protected final Map<String,Object> getJenaSettings() {
+		return jenaSettings;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -341,7 +296,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 					.filtered()
 					.a("trimWhitespace", trimWhitespace)
 					.a("looseCollections", looseCollections)
-					.a("rdfLanguage", rdfLanguage)
+					.a("language", language)
 					.a("juneauNs", juneauNs)
 					.a("juneauBpNs", juneauBpNs)
 					.a("collectionFormat", collectionFormat)

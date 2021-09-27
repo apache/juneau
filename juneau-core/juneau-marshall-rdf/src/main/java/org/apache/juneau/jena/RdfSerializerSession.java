@@ -13,7 +13,6 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfSerializer.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
@@ -40,6 +39,11 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class RdfSerializerSession extends WriterSerializerSession {
 
+	/**
+	 * Maps RDF writer names to property prefixes that apply to them.
+	 */
+	static final Map<String,String> LANG_PROP_MAP = AMap.of("RDF/XML","rdfXml.","RDF/XML-ABBREV","rdfXml.","N3","n3.","N3-PP","n3.","N3-PLAIN","n3.","N3-TRIPLES","n3.","TURTLE","n3.","N-TRIPLE","ntriple.");
+
 	private final RdfSerializer ctx;
 	private final Property pRoot, pValue;
 	private final Model model;
@@ -63,7 +67,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		this.ctx = ctx;
 
 		SessionProperties sp = getSessionProperties();
-		namespaces = sp.getInstanceArray(RDF_namespaces, Namespace.class).orElse(ctx.namespaces);
+		namespaces = ctx.namespaces;
 		model = ModelFactory.createDefaultModel();
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());
@@ -74,7 +78,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		writer = model.getWriter(ctx.getLanguage());
 
 		// Only apply properties with this prefix!
-		String propPrefix = RdfCommon.LANG_PROP_MAP.get(ctx.getLanguage());
+		String propPrefix = LANG_PROP_MAP.get(ctx.getLanguage());
 		if (propPrefix == null)
 			throw runtimeException("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
 
@@ -84,7 +88,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
 		}
 
-		for (Map.Entry<String,Object> e : ctx.jenaProperties.entrySet())
+		for (Map.Entry<String,Object> e : ctx.getJenaSettings().entrySet())
 			if (e.getKey().startsWith(propPrefix, 5))
 				writer.setProperty(e.getKey().substring(5 + propPrefix.length()), e.getValue());
 
@@ -463,8 +467,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaProperties() {
-		return ctx.getJenaProperties();
+	protected final Map<String,Object> getJenaSettings() {
+		return ctx.getJenaSettings();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -12,15 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena.annotation;
 
-import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.jena.RdfParser.*;
-import static org.apache.juneau.jena.RdfSerializer.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.jena.RdfCollectionFormat;
 import org.apache.juneau.jena.RdfParserBuilder;
 import org.apache.juneau.jena.RdfSerializerBuilder;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.xml.Namespace;
 
 /**
  * Utility classes and methods for the {@link RdfConfig @RdfConfig} annotation.
@@ -30,7 +28,7 @@ public class RdfConfigAnnotation {
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link RdfSerializerBuilder}.
 	 */
-	public static class SerializerApplier extends AnnotationApplier<RdfConfig,RdfSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<RdfConfig,RdfSerializerBuilder> {
 
 		/**
 		 * Constructor.
@@ -38,7 +36,7 @@ public class RdfConfigAnnotation {
 		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public SerializerApplier(VarResolverSession vr) {
+		public SerializerApply(VarResolverSession vr) {
 			super(RdfConfig.class, RdfSerializerBuilder.class, vr);
 		}
 
@@ -46,47 +44,46 @@ public class RdfConfigAnnotation {
 		public void apply(AnnotationInfo<RdfConfig> ai, RdfSerializerBuilder b) {
 			RdfConfig a = ai.getAnnotation();
 
-			string(a.language()).ifPresent(x -> b.set(RDF_language, x));
-			string(a.juneauNs()).ifPresent(x -> b.set(RDF_juneauNs, x));
-			string(a.juneauBpNs()).ifPresent(x -> b.set(RDF_juneauBpNs, x));
-			bool(a.disableUseXmlNamespaces()).ifPresent(x -> b.set(RDF_disableUseXmlNamespaces, x));
-			string(a.arp_iriRules()).ifPresent(x -> b.set(RDF_arp_iriRules, x));
-			string(a.arp_errorMode()).ifPresent(x -> b.set(RDF_arp_errorMode, x));
-			bool(a.arp_embedding()).ifPresent(x -> b.set(RDF_arp_embedding, x));
-			string(a.rdfxml_xmlBase()).ifPresent(x -> b.set(RDF_rdfxml_xmlBase, x));
-			bool(a.rdfxml_longId()).ifPresent(x -> b.set(RDF_rdfxml_longId, x));
-			bool(a.rdfxml_allowBadUris()).ifPresent(x -> b.set(RDF_rdfxml_allowBadUris, x));
-			string(a.rdfxml_relativeUris()).ifPresent(x -> b.set(RDF_rdfxml_relativeUris, x));
-			string(a.rdfxml_showXmlDeclaration()).ifPresent(x -> b.set(RDF_rdfxml_showXmlDeclaration, x));
-			bool(a.rdfxml_disableShowDoctypeDeclaration()).ifPresent(x -> b.set(RDF_rdfxml_disableShowDoctypeDeclaration, x));
-			integer(a.rdfxml_tab(), "rdfxml_tab").ifPresent(x -> b.set(RDF_rdfxml_tab, x));
-			string(a.rdfxml_attributeQuoteChar()).ifPresent(x -> b.set(RDF_rdfxml_attributeQuoteChar, x));
-			string(a.rdfxml_blockRules()).ifPresent(x -> b.set(RDF_rdfxml_blockRules, x));
-			integer(a.n3_minGap(), "n3_minGap").ifPresent(x -> b.set(RDF_n3_minGap, x));
-			bool(a.n3_disableObjectLists()).ifPresent(x -> b.set(RDF_n3_disableObjectLists, x));
-			integer(a.n3_subjectColumn(), "n3_subjectColumn").ifPresent(x -> b.set(RDF_n3_subjectColumn, x));
-			integer(a.n3_propertyColumn(), "n3_propertyColumn").ifPresent(x -> b.set(RDF_n3_propertyColumn, x));
-			integer(a.n3_indentProperty(), "n3_indentProperty").ifPresent(x -> b.set(RDF_n3_indentProperty, x));
-			integer(a.n3_widePropertyLen(), "n3_widePropertyLen").ifPresent(x -> b.set(RDF_n3_widePropertyLen, x));
-			bool(a.n3_disableAbbrevBaseUri()).ifPresent(x -> b.set(RDF_n3_disableAbbrevBaseUri, x));
-			bool(a.n3_disableUsePropertySymbols()).ifPresent(x -> b.set(RDF_n3_disableUsePropertySymbols, x));
-			bool(a.n3_disableUseTripleQuotedStrings()).ifPresent(x -> b.set(RDF_n3_disableUseTripleQuotedStrings, x));
-			bool(a.n3_disableUseDoubles()).ifPresent(x -> b.set(RDF_n3_disableUseDoubles, x));
-			string(a.collectionFormat()).ifPresent(x -> b.set(RDF_collectionFormat, x));
-			bool(a.looseCollections()).ifPresent(x -> b.set(RDF_looseCollections, x));
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(RDF_addBeanTypes, x));
-			bool(a.addLiteralTypes()).ifPresent(x -> b.set(RDF_addLiteralTypes, x));
-			bool(a.addRootProperty()).ifPresent(x -> b.set(RDF_addRootProperty, x));
-			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.set(RDF_disableAutoDetectNamespaces, x));
-			b.setIfNotEmpty(RDF_namespaces, stringList(a.namespaces()));
-			bool(a.trimWhitespace()).ifPresent(x -> b.set(RDF_trimWhitespace, x));
+			string(a.language()).ifPresent(x -> b.language(x));
+			string(a.juneauNs()).map(Namespace::of).ifPresent(x -> b.juneauNs(x));
+			string(a.juneauBpNs()).map(Namespace::of).ifPresent(x -> b.juneauBpNs(x));
+			bool(a.disableUseXmlNamespaces()).ifPresent(x -> b.disableUseXmlNamespaces(x));
+			string(a.collectionFormat()).map(RdfCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
+			bool(a.looseCollections()).ifPresent(x -> b.looseCollections(x));
+			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesRdf(x));
+			bool(a.addLiteralTypes()).ifPresent(x -> b.addLiteralTypes(x));
+			bool(a.addRootProperty()).ifPresent(x -> b.addRootProperty(x));
+			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.disableAutoDetectNamespaces(x));
+			strings(a.namespaces()).map(Namespace::createArray).ifPresent(x -> b.namespaces(x));
+			string(a.rdfxml_iriRules()).ifPresent(x -> b.rdfxml_iriRules(x));
+			string(a.rdfxml_errorMode()).ifPresent(x -> b.rdfxml_errorMode(x));
+			bool(a.rdfxml_embedding()).ifPresent(x -> b.rdfxml_embedding(x));
+			string(a.rdfxml_xmlBase()).ifPresent(x -> b.rdfxml_xmlbase(x));
+			bool(a.rdfxml_longId()).ifPresent(x -> b.rdfxml_longId(x));
+			bool(a.rdfxml_allowBadUris()).ifPresent(x -> b.rdfxml_allowBadUris(x));
+			string(a.rdfxml_relativeUris()).ifPresent(x -> b.rdfxml_relativeUris(x));
+			string(a.rdfxml_showXmlDeclaration()).ifPresent(x -> b.rdfxml_showXmlDeclaration(x));
+			bool(a.rdfxml_disableShowDoctypeDeclaration()).ifPresent(x -> b.rdfxml_disableShowDoctypeDeclaration(x));
+			integer(a.rdfxml_tab(), "rdfxml_tab").ifPresent(x -> b.rdfxml_tab(x));
+			string(a.rdfxml_attributeQuoteChar()).map(x -> x.charAt(0)).ifPresent(x -> b.rdfxml_attributeQuoteChar(x));
+			string(a.rdfxml_blockRules()).ifPresent(x -> b.rdfxml_blockRules(x));
+			integer(a.n3_minGap(), "n3_minGap").ifPresent(x -> b.n3_minGap(x));
+			bool(a.n3_disableObjectLists()).ifPresent(x -> b.n3_disableObjectLists(x));
+			integer(a.n3_subjectColumn(), "n3_subjectColumn").ifPresent(x -> b.n3_subjectColumn(x));
+			integer(a.n3_propertyColumn(), "n3_propertyColumn").ifPresent(x -> b.n3_propertyColumn(x));
+			integer(a.n3_indentProperty(), "n3_indentProperty").ifPresent(x -> b.n3_indentProperty(x));
+			integer(a.n3_widePropertyLen(), "n3_widePropertyLen").ifPresent(x -> b.n3_widePropertyLen(x));
+			bool(a.n3_disableAbbrevBaseUri()).ifPresent(x -> b.n3_disableAbbrevBaseUri(x));
+			bool(a.n3_disableUsePropertySymbols()).ifPresent(x -> b.n3_disableUsePropertySymbols(x));
+			bool(a.n3_disableUseTripleQuotedStrings()).ifPresent(x -> b.n3_disableUseTripleQuotedStrings(x));
+			bool(a.n3_disableUseDoubles()).ifPresent(x -> b.n3_disableUseDoubles(x));
 		}
 	}
 
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link RdfParserBuilder}.
 	 */
-	public static class ParserApplier extends AnnotationApplier<RdfConfig,RdfParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<RdfConfig,RdfParserBuilder> {
 
 		/**
 		 * Constructor.
@@ -94,7 +91,7 @@ public class RdfConfigAnnotation {
 		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public ParserApplier(VarResolverSession vr) {
+		public ParserApply(VarResolverSession vr) {
 			super(RdfConfig.class, RdfParserBuilder.class, vr);
 		}
 
@@ -102,40 +99,34 @@ public class RdfConfigAnnotation {
 		public void apply(AnnotationInfo<RdfConfig> ai, RdfParserBuilder b) {
 			RdfConfig a = ai.getAnnotation();
 
-			string(a.language()).ifPresent(x -> b.set(RDF_language, x));
-			string(a.juneauNs()).ifPresent(x -> b.set(RDF_juneauNs, x));
-			string(a.juneauBpNs()).ifPresent(x -> b.set(RDF_juneauBpNs, x));
-			bool(a.disableUseXmlNamespaces()).ifPresent(x -> b.set(RDF_disableUseXmlNamespaces, x));
-			string(a.arp_iriRules()).ifPresent(x -> b.set(RDF_arp_iriRules, x));
-			string(a.arp_errorMode()).ifPresent(x -> b.set(RDF_arp_errorMode, x));
-			bool(a.arp_embedding()).ifPresent(x -> b.set(RDF_arp_embedding, x));
-			string(a.rdfxml_xmlBase()).ifPresent(x -> b.set(RDF_rdfxml_xmlBase, x));
-			bool(a.rdfxml_longId()).ifPresent(x -> b.set(RDF_rdfxml_longId, x));
-			bool(a.rdfxml_allowBadUris()).ifPresent(x -> b.set(RDF_rdfxml_allowBadUris, x));
-			string(a.rdfxml_relativeUris()).ifPresent(x -> b.set(RDF_rdfxml_relativeUris, x));
-			string(a.rdfxml_showXmlDeclaration()).ifPresent(x -> b.set(RDF_rdfxml_showXmlDeclaration, x));
-			bool(a.rdfxml_disableShowDoctypeDeclaration()).ifPresent(x -> b.set(RDF_rdfxml_disableShowDoctypeDeclaration, x));
-			integer(a.rdfxml_tab(), "rdfxml_tab").ifPresent(x -> b.set(RDF_rdfxml_tab, x));
-			string(a.rdfxml_attributeQuoteChar()).ifPresent(x -> b.set(RDF_rdfxml_attributeQuoteChar, x));
-			string(a.rdfxml_blockRules()).ifPresent(x -> b.set(RDF_rdfxml_blockRules, x));
-			integer(a.n3_minGap(), "n3_minGap").ifPresent(x -> b.set(RDF_n3_minGap, x));
-			bool(a.n3_disableObjectLists()).ifPresent(x -> b.set(RDF_n3_disableObjectLists, x));
-			integer(a.n3_subjectColumn(), "n3_subjectColumn").ifPresent(x -> b.set(RDF_n3_subjectColumn, x));
-			integer(a.n3_propertyColumn(), "n3_propertyColumn").ifPresent(x -> b.set(RDF_n3_propertyColumn, x));
-			integer(a.n3_indentProperty(), "n3_indentProperty").ifPresent(x -> b.set(RDF_n3_indentProperty, x));
-			integer(a.n3_widePropertyLen(), "n3_widePropertyLen").ifPresent(x -> b.set(RDF_n3_widePropertyLen, x));
-			bool(a.n3_disableAbbrevBaseUri()).ifPresent(x -> b.set(RDF_n3_disableAbbrevBaseUri, x));
-			bool(a.n3_disableUsePropertySymbols()).ifPresent(x -> b.set(RDF_n3_disableUsePropertySymbols, x));
-			bool(a.n3_disableUseTripleQuotedStrings()).ifPresent(x -> b.set(RDF_n3_disableUseTripleQuotedStrings, x));
-			bool(a.n3_disableUseDoubles()).ifPresent(x -> b.set(RDF_n3_disableUseDoubles, x));
-			string(a.collectionFormat()).ifPresent(x -> b.set(RDF_collectionFormat, x));
-			bool(a.looseCollections()).ifPresent(x -> b.set(RDF_looseCollections, x));
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(RDF_addBeanTypes, x));
-			bool(a.addLiteralTypes()).ifPresent(x -> b.set(RDF_addLiteralTypes, x));
-			bool(a.addRootProperty()).ifPresent(x -> b.set(RDF_addRootProperty, x));
-			bool(a.disableAutoDetectNamespaces()).ifPresent(x -> b.set(RDF_disableAutoDetectNamespaces, x));
-			b.setIfNotEmpty(RDF_namespaces, stringList(a.namespaces()));
-			bool(a.trimWhitespace()).ifPresent(x -> b.set(RDF_trimWhitespace, x));
+			string(a.language()).ifPresent(x -> b.language(x));
+			string(a.juneauNs()).map(Namespace::of).ifPresent(x -> b.juneauNs(x));
+			string(a.juneauBpNs()).map(Namespace::of).ifPresent(x -> b.juneauBpNs(x));
+			string(a.collectionFormat()).map(RdfCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
+			bool(a.looseCollections()).ifPresent(x -> b.looseCollections(x));
+			bool(a.trimWhitespace()).ifPresent(x -> b.trimWhitespace(x));
+			string(a.rdfxml_iriRules()).ifPresent(x -> b.rdfxml_iriRules(x));
+			string(a.rdfxml_errorMode()).ifPresent(x -> b.rdfxml_errorMode(x));
+			bool(a.rdfxml_embedding()).ifPresent(x -> b.rdfxml_embedding(x));
+			string(a.rdfxml_xmlBase()).ifPresent(x -> b.rdfxml_xmlbase(x));
+			bool(a.rdfxml_longId()).ifPresent(x -> b.rdfxml_longId(x));
+			bool(a.rdfxml_allowBadUris()).ifPresent(x -> b.rdfxml_allowBadUris(x));
+			string(a.rdfxml_relativeUris()).ifPresent(x -> b.rdfxml_relativeUris(x));
+			string(a.rdfxml_showXmlDeclaration()).ifPresent(x -> b.rdfxml_showXmlDeclaration(x));
+			bool(a.rdfxml_disableShowDoctypeDeclaration()).ifPresent(x -> b.rdfxml_disableShowDoctypeDeclaration(x));
+			integer(a.rdfxml_tab(), "rdfxml_tab").ifPresent(x -> b.rdfxml_tab(x));
+			string(a.rdfxml_attributeQuoteChar()).map(x -> x.charAt(0)).ifPresent(x -> b.rdfxml_attributeQuoteChar(x));
+			string(a.rdfxml_blockRules()).ifPresent(x -> b.rdfxml_blockRules(x));
+			integer(a.n3_minGap(), "n3_minGap").ifPresent(x -> b.n3_minGap(x));
+			bool(a.n3_disableObjectLists()).ifPresent(x -> b.n3_disableObjectLists(x));
+			integer(a.n3_subjectColumn(), "n3_subjectColumn").ifPresent(x -> b.n3_subjectColumn(x));
+			integer(a.n3_propertyColumn(), "n3_propertyColumn").ifPresent(x -> b.n3_propertyColumn(x));
+			integer(a.n3_indentProperty(), "n3_indentProperty").ifPresent(x -> b.n3_indentProperty(x));
+			integer(a.n3_widePropertyLen(), "n3_widePropertyLen").ifPresent(x -> b.n3_widePropertyLen(x));
+			bool(a.n3_disableAbbrevBaseUri()).ifPresent(x -> b.n3_disableAbbrevBaseUri(x));
+			bool(a.n3_disableUsePropertySymbols()).ifPresent(x -> b.n3_disableUsePropertySymbols(x));
+			bool(a.n3_disableUseTripleQuotedStrings()).ifPresent(x -> b.n3_disableUseTripleQuotedStrings(x));
+			bool(a.n3_disableUseDoubles()).ifPresent(x -> b.n3_disableUseDoubles(x));
 		}
 	}
 }

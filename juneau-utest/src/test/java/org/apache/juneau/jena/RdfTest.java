@@ -13,7 +13,6 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.jena.RdfCommon.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
@@ -36,7 +35,7 @@ public class RdfTest {
 		String expected;
 
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
-			.set(RDF_rdfxml_tab, 3)
+			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty();
 		RdfParser p = RdfParser.create().xml().build();
@@ -196,7 +195,7 @@ public class RdfTest {
 		B b = new B().init(), b2;
 		String rdfXml, expected;
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
-			.set(RDF_rdfxml_tab, 3)
+			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty();
 		RdfParser p = RdfXmlParser.DEFAULT;
@@ -429,7 +428,7 @@ public class RdfTest {
 		C c = new C().init(), c2;
 		String rdfXml, expected;
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
-			.set(RDF_rdfxml_tab, 3)
+			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty();
 		RdfParser p = RdfXmlParser.DEFAULT;

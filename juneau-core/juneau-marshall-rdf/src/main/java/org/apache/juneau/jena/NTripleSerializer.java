@@ -18,7 +18,7 @@ package org.apache.juneau.jena;
 public class NTripleSerializer extends RdfSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N-Triple serializer, all default settings.*/

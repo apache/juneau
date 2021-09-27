@@ -18,7 +18,7 @@ package org.apache.juneau.jena;
 public class RdfXmlAbbrevSerializer extends RdfSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default RDF/XML serializer, all default settings.*/

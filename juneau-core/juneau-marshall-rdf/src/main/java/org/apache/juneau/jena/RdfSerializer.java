@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static java.util.Optional.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -42,203 +44,28 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */
-@ConfigurableContext(prefixes={RdfCommon.PREFIX,RdfSerializer.PREFIX})
-public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMetaProvider {
-
-	private static final Namespace
-		DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
-		DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "RdfSerializer";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypes RDF_addBeanTypes}
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfSerializer.addBeanTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_ADDBEANTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#addBeanTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addBeanTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_addBeanTypes = PREFIX + ".addBeanTypes.b";
-
-	/**
-	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes RDF_addLiteralTypes}
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addLiteralTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfSerializer.addLiteralTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_ADDLITERALTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#addLiteralTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addLiteralTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_addLiteralTypes = PREFIX + ".addLiteralTypes.b";
-
-	/**
-	 * Configuration property:  Add RDF root identifier property to root node.
-	 *
-	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
-	 * to identify the root node in the graph.
-	 * <br>This helps locate the root node during parsing.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty RDF_addRootProperty}
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addRootProperty.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfSerializer.addRootProperty</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_ADDROOTPROPERTY</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#addRootProperty()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addRootProperty()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_addRootProperty = PREFIX + ".addRootProperty.b";
-
-	/**
-	 * Configuration property:  Auto-detect namespace usage.
-	 *
-	 * <p>
-	 * Don't detect namespace usage before serialization.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_disableAutoDetectNamespaces RDF_disableAutoDetectNamespaces}
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.disableAutoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfSerializer.disableAutoDetectNamespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_DISABLEAUTODETECTNAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#disableAutoDetectNamespaces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#disableAutoDetectNamespaces()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_disableAutoDetectNamespaces = PREFIX + ".disableAutoDetectNamespaces.b";
-
-	/**
-	 * Configuration property:  Default namespaces.
-	 *
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_namespaces RDF_namespaces}
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RdfSerializer.namespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_NAMESPACES</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.Rdf#namespace()}
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#namespaces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#namespaces(Namespace...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_namespaces = PREFIX + ".namespaces.ls";
-
-	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * <p>
-	 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
-	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_disableUseXmlNamespaces RDF_disableUseXmlNamespaces}
-	 * 	<li><b>Name:</b>  <js>"Rdf.disableUseXmlNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Rdf.disableUseXmlNamespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_USEXMLNAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#disableUseXmlNamespaces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#disableUseXmlNamespaces()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String RDF_disableUseXmlNamespaces = PREFIX + ".disableUseXmlNamespaces.b";
+@ConfigurableContext
+public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
+	final boolean
 		addLiteralTypes,
 		addRootProperty,
 		useXmlNamespaces,
 		looseCollections,
 		autoDetectNamespaces,
-		addBeanTypes;
-	private final String rdfLanguage;
-	private final Namespace juneauNs;
-	private final Namespace juneauBpNs;
-	private final RdfCollectionFormat collectionFormat;
-	final Map<String,Object> jenaProperties;
+		addBeanTypesRdf;
+
+	final String language;
+	final Namespace juneauNs, juneauBpNs;
+	final RdfCollectionFormat collectionFormat;
+	final Map<String,Object> jenaSettings;
 	final Namespace[] namespaces;
 
+	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,RdfClassMeta> rdfClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanMeta<?>,RdfBeanMeta> rdfBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,RdfBeanPropertyMeta> rdfBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -255,32 +82,26 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 */
 	protected RdfSerializer(RdfSerializerBuilder builder) {
 		super(builder.produces(getProduces(builder)).accept(getAccept(builder)));
-		ContextProperties cp = getContextProperties();
-		addLiteralTypes = cp.getBoolean(RDF_addLiteralTypes).orElse(false);
-		addRootProperty = cp.getBoolean(RDF_addRootProperty).orElse(false);
-		useXmlNamespaces = ! cp.getBoolean(RDF_disableUseXmlNamespaces).orElse(false);
-		looseCollections = cp.getBoolean(RDF_looseCollections).orElse(false);
-		autoDetectNamespaces = ! cp.getBoolean(RDF_disableAutoDetectNamespaces).orElse(false);
-		rdfLanguage = cp.getString(RDF_language).orElse("RDF/XML-ABBREV");
-		juneauNs = cp.get(RDF_juneauNs, String.class).map(Namespace::of).orElse(DEFAULT_JUNEAU_NS);
-		juneauBpNs = cp.get(RDF_juneauBpNs, String.class).map(Namespace::of).orElse(DEFAULT_JUNEAUBP_NS);
-		collectionFormat = cp.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
-		namespaces = cp.get(RDF_namespaces, String[].class).map(Namespace::createArray).orElse(new Namespace[0]);
-		addBeanTypes = cp.getFirstBoolean(RDF_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+		addLiteralTypes = builder.addLiteralTypes;
+		addRootProperty = builder.addRootProperty;
+		useXmlNamespaces = ! builder.disableUseXmlNamespaces;
+		looseCollections = builder.looseCollections;
+		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
+		language = builder.language;
+		juneauNs = builder.juneauNs;
+		juneauBpNs = builder.juneauBpNs;
+		collectionFormat = builder.collectionFormat;
+		namespaces = ofNullable(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
+		addBeanTypesRdf = builder.addBeanTypesRdf;
+		jenaSettings = new TreeMap<>(builder.jenaSettings);
 
-		ASortedMap<String,Object> m = ASortedMap.create();
-		for (String k : getPropertyKeys("RdfCommon"))
-			if (k.startsWith("jena."))
-				m.put(k.substring(5), cp.get("RdfCommon." + k).orElse(null));
-		jenaProperties = m.unmodifiable();
+		addBeanTypes = addBeanTypesRdf || super.isAddBeanTypes();
 	}
 
 	private static String getProduces(RdfSerializerBuilder builder) {
 		if (builder.getProduces() != null)
 			return builder.getProduces();
-		ContextProperties cp = builder.getContextProperties();
-		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
-		switch(rdfLanguage) {
+		switch(builder.language) {
 			case "RDF/XML": return "text/xml+rdf+abbrev";
 			case "RDF/XML-ABBREV": return "text/xml+rdf";
 			case "N-TRIPLE": return "text/n-triple";
@@ -296,9 +117,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	private static String getAccept(RdfSerializerBuilder builder) {
 		if (builder.getAccept() != null)
 			return builder.getAccept();
-		ContextProperties cp = builder.getContextProperties();
-		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
-		switch(rdfLanguage) {
+		switch(builder.language) {
 			case "RDF/XML": return "text/xml+rdf+abbrev";
 			case "RDF/XML-ABBREV": return "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
 			case "N-TRIPLE": return "text/n-triple";
@@ -451,7 +270,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 	The RDF language to use.
 	 */
 	protected final String getLanguage() {
-		return rdfLanguage;
+		return language;
 	}
 
 	/**
@@ -476,8 +295,8 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaProperties() {
-		return jenaProperties;
+	protected final Map<String,Object> getJenaSettings() {
+		return jenaSettings;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -571,7 +390,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 					.a("useXmlNamespaces", useXmlNamespaces)
 					.a("looseCollections", looseCollections)
 					.a("autoDetectNamespaces", autoDetectNamespaces)
-					.a("rdfLanguage", rdfLanguage)
+					.a("language", language)
 					.a("juneauNs", juneauNs)
 					.a("juneauBpNs", juneauBpNs)
 					.a("collectionFormat", collectionFormat)

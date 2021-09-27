@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.jena.RdfParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -34,12 +31,29 @@ import org.apache.juneau.xml.*;
 @FluentSetters
 public class RdfParserBuilder extends ReaderParserBuilder {
 
+	private static final Namespace
+		DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
+		DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
+
+	boolean trimWhitespace, looseCollections;
+	String language;
+	Namespace juneauNs, juneauBpNs;
+	RdfCollectionFormat collectionFormat;
+	Map<String,Object> jenaSettings = new TreeMap<String,Object>();
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected RdfParserBuilder() {
 		super();
 		type(RdfParser.class);
+		trimWhitespace = env("Rdf.trimWhitespace", false);
+		looseCollections = env("Rdf.looseCollections", false);
+		language = env("Rdf.language", "RDF/XML-ABBREV");
+		collectionFormat = env("Rdf.collectionFormat", RdfCollectionFormat.DEFAULT);
+		juneauNs = DEFAULT_JUNEAU_NS;
+		juneauBpNs = DEFAULT_JUNEAUBP_NS;
+		jenaSettings = new TreeMap<>();
 	}
 
 	/**
@@ -49,6 +63,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	protected RdfParserBuilder(RdfParser copyFrom) {
 		super(copyFrom);
+		trimWhitespace = copyFrom.trimWhitespace;
+		looseCollections = copyFrom.looseCollections;
+		language = copyFrom.language;
+		collectionFormat = copyFrom.collectionFormat;
+		juneauNs = copyFrom.juneauNs;
+		juneauBpNs = copyFrom.juneauBpNs;
+		jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 	}
 
 	/**
@@ -58,6 +79,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	protected RdfParserBuilder(RdfParserBuilder copyFrom) {
 		super(copyFrom);
+		trimWhitespace = copyFrom.trimWhitespace;
+		looseCollections = copyFrom.looseCollections;
+		language = copyFrom.language;
+		collectionFormat = copyFrom.collectionFormat;
+		juneauNs = copyFrom.juneauNs;
+		juneauBpNs = copyFrom.juneauBpNs;
+		jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 	}
 
 	@Override /* ContextBuilder */
@@ -80,28 +108,9 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	/**
-	 * XML namespace for Juneau properties.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfParserBuilder juneauNs(String value) {
-		return set(RDF_juneauNs, value);
-	}
-
-	/**
-	 * Default XML namespace for bean properties.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfParserBuilder juneauBpNs(String value) {
-		return set(RDF_juneauBpNs, value);
+	RdfParserBuilder jena(String key, Object value) {
+		jenaSettings.put(key, value);
+		return this;
 	}
 
 	/**
@@ -131,8 +140,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder arp_iriRules(String value) {
-		return set(RDF_arp_iriRules, value);
+	public RdfParserBuilder rdfxml_iriRules(String value) {
+		return jena("rdfXml.iri-rules", value);
 	}
 
 	/**
@@ -169,12 +178,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder arp_errorMode(String value) {
-		return set(RDF_arp_errorMode, value);
+	public RdfParserBuilder rdfxml_errorMode(String value) {
+		return jena("rdfXml.error-mode", value);
 	}
 
 	/**
-	 * RDF/XML ARP property: <c>error-mode</c>.
+	 * RDF/XML ARP property: <c>embedding</c>.
 	 *
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
@@ -189,8 +198,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder arp_embedding(boolean value) {
-		return set(RDF_arp_embedding, value);
+	public RdfParserBuilder rdfxml_embedding() {
+		return rdfxml_embedding(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder rdfxml_embedding(boolean value) {
+		return jena("rdfXml.embedding", value);
 	}
 
 	/**
@@ -204,8 +218,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder rdfxml_xmlBase(String value) {
-		return set(RDF_rdfxml_xmlBase, value);
+	public RdfParserBuilder rdfxml_xmlbase(String value) {
+		return jena("rdfXml.xmlbase", value);
 	}
 
 	/**
@@ -219,7 +233,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder rdfxml_longId() {
-		return set(RDF_rdfxml_longId);
+		return rdfxml_longId(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder rdfxml_longId(boolean value) {
+		return jena("rdfXml.longId", value);
 	}
 
 	/**
@@ -233,8 +252,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
+	public RdfParserBuilder rdfxml_allowBadUris() {
+		return rdfxml_allowBadUris(true);
+	}
+
+	@FluentSetter
 	public RdfParserBuilder rdfxml_allowBadUris(boolean value) {
-		return set(RDF_rdfxml_allowBadUris, value);
+		return jena("rdfXml.allowBadURIs", value);
 	}
 
 	/**
@@ -271,7 +295,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder rdfxml_relativeUris(String value) {
-		return set(RDF_rdfxml_relativeUris, value);
+		return jena("rdfXml.relativeURIs", value);
 	}
 
 	/**
@@ -296,7 +320,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder rdfxml_showXmlDeclaration(String value) {
-		return set(RDF_rdfxml_showXmlDeclaration, value);
+		return jena("rdfXml.showXmlDeclaration", value);
 	}
 
 	/**
@@ -312,7 +336,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder rdfxml_disableShowDoctypeDeclaration() {
-		return set(RDF_rdfxml_disableShowDoctypeDeclaration);
+		return rdfxml_disableShowDoctypeDeclaration(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder rdfxml_disableShowDoctypeDeclaration(boolean value) {
+		return jena("rdfXml.disableShowDoctypeDeclaration", value);
 	}
 
 	/**
@@ -327,7 +356,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder rdfxml_tab(int value) {
-		return set(RDF_rdfxml_tab, value);
+		return jena("rdfXml.tab", value);
 	}
 
 	/**
@@ -341,8 +370,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder rdfxml_attributeQuoteChar(String value) {
-		return set(RDF_rdfxml_attributeQuoteChar, value);
+	public RdfParserBuilder rdfxml_attributeQuoteChar(char value) {
+		return jena("rdfXml.attributeQuoteChar", value);
 	}
 
 	/**
@@ -359,7 +388,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder rdfxml_blockRules(String value) {
-		return set(RDF_rdfxml_blockRules, value);
+		return jena("rdfXml.blockRules", value);
 	}
 
 	/**
@@ -374,7 +403,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_minGap(int value) {
-		return set(RDF_n3_minGap, value);
+		return jena("n3.minGap", value);
 	}
 
 	/**
@@ -387,7 +416,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_disableObjectLists() {
-		return set(RDF_n3_disableObjectLists);
+		return n3_disableObjectLists(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder n3_disableObjectLists(boolean value) {
+		return jena("n3.disableObjectLists", value);
 	}
 
 	/**
@@ -402,7 +436,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_subjectColumn(int value) {
-		return set(RDF_n3_subjectColumn, value);
+		return jena("n3.subjectColumn", value);
 	}
 
 	/**
@@ -417,7 +451,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_propertyColumn(int value) {
-		return set(RDF_n3_propertyColumn, value);
+		return jena("n3.propertyColumn", value);
 	}
 
 	/**
@@ -432,7 +466,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_indentProperty(int value) {
-		return set(RDF_n3_indentProperty, value);
+		return jena("n3.indentProperty", value);
 	}
 
 	/**
@@ -448,7 +482,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_widePropertyLen(int value) {
-		return set(RDF_n3_widePropertyLen, value);
+		return jena("n3.widePropertyLen", value);
 	}
 
 	/**
@@ -461,7 +495,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_disableAbbrevBaseUri() {
-		return set(RDF_n3_disableAbbrevBaseUri);
+		return n3_disableAbbrevBaseUri(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder n3_disableAbbrevBaseUri(boolean value) {
+		return jena("n3.disableAbbrevBaseUri", value);
 	}
 
 	/**
@@ -474,7 +513,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_disableUsePropertySymbols() {
-		return set(RDF_n3_disableUsePropertySymbols);
+		return n3_disableUsePropertySymbols(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder n3_disableUsePropertySymbols(boolean value) {
+		return jena("n3.disableUsePropertySymbols", value);
 	}
 
 	/**
@@ -487,7 +531,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_disableUseTripleQuotedStrings() {
-		return set(RDF_n3_disableUseTripleQuotedStrings);
+		return n3_disableUseTripleQuotedStrings(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder n3_disableUseTripleQuotedStrings(boolean value) {
+		return jena("n3.disableUseTripleQuotedStrings", value);
 	}
 
 	/**
@@ -500,40 +549,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder n3_disableUseDoubles() {
-		return set(RDF_n3_disableUseDoubles);
+		return n3_disableUseDoubles(true);
 	}
 
-	/**
-	 * RDF format for representing collections and arrays.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"BAG"</js> - RDF Bag container.
-	 * 	<li>
-	 * 		<js>"LIST"</js> - RDF List container.
-	 * 	<li>
-	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
-	 * 		lost.
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
 	@FluentSetter
-	public RdfParserBuilder collectionFormat(String value) {
-		return set(RDF_collectionFormat, value);
+	public RdfParserBuilder n3_disableUseDoubles(boolean value) {
+		return jena("n3.disableUseDoubles", value);
 	}
 
 	/**
@@ -563,7 +584,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
-		return set(RDF_collectionFormat, value);
+		collectionFormat = value;
+		return this;
 	}
 
 	/**
@@ -580,7 +602,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder juneauBpNs(Namespace value) {
-		return set(RDF_juneauBpNs, value);
+		juneauBpNs = value;
+		return this;
 	}
 
 	/**
@@ -597,7 +620,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder juneauNs(Namespace value) {
-		return set(RDF_juneauNs, value);
+		juneauNs = value;
+		return this;
 	}
 
 	/**
@@ -646,7 +670,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder language(String value) {
-		return set(RDF_language, value);
+		language = value;
+		return this;
 	}
 
 	/**
@@ -704,7 +729,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder looseCollections() {
-		return set(RDF_looseCollections);
+		return looseCollections(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder looseCollections(boolean value) {
+		looseCollections = value;
+		return this;
 	}
 
 	/**
@@ -765,7 +796,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder trimWhitespace() {
-		return set(RDF_trimWhitespace);
+		return trimWhitespace(true);
+	}
+
+	@FluentSetter
+	public RdfParserBuilder trimWhitespace(boolean value) {
+		trimWhitespace = value;
+		return this;
 	}
 
 	/**

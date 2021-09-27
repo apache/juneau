@@ -12,15 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.jena.RdfSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.AList;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
@@ -35,12 +33,35 @@ import org.apache.juneau.xml.annotation.*;
 @FluentSetters
 public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
+	private static final Namespace
+		DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
+		DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
+
+	boolean addBeanTypesRdf, addLiteralTypes, addRootProperty, disableAutoDetectNamespaces, disableUseXmlNamespaces, looseCollections;
+	String language;
+	Namespace juneauNs, juneauBpNs;
+	RdfCollectionFormat collectionFormat;
+	List<Namespace> namespaces;
+	Map<String,Object> jenaSettings;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected RdfSerializerBuilder() {
 		super();
 		type(RdfSerializer.class);
+		addBeanTypesRdf = env("Rdf.addBeanTypesRdf", false);
+		addLiteralTypes = env("Rdf.addLiteralTypes", false);
+		addRootProperty = env("Rdf.addRootProperty", false);
+		disableAutoDetectNamespaces = env("Rdf.disableAutoDetectNamespaces", false);
+		disableUseXmlNamespaces = env("Rdf.disableUseXmlNamespaces", false);
+		looseCollections = env("Rdf.looseCollections", false);
+		language = env("Rdf.language", "RDF/XML-ABBREV");
+		collectionFormat = env("Rdf.collectionFormat", RdfCollectionFormat.DEFAULT);
+		juneauNs = DEFAULT_JUNEAU_NS;
+		juneauBpNs = DEFAULT_JUNEAUBP_NS;
+		namespaces = null;
+		jenaSettings = new TreeMap<>();
 	}
 
 	/**
@@ -50,6 +71,18 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected RdfSerializerBuilder(RdfSerializer copyFrom) {
 		super(copyFrom);
+		addBeanTypesRdf = copyFrom.addBeanTypesRdf;
+		addLiteralTypes = copyFrom.addLiteralTypes;
+		addRootProperty = copyFrom.addRootProperty;
+		disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+		disableUseXmlNamespaces = ! copyFrom.useXmlNamespaces;
+		looseCollections = copyFrom.looseCollections;
+		language = copyFrom.language;
+		collectionFormat = copyFrom.collectionFormat;
+		juneauNs = copyFrom.juneauNs;
+		juneauBpNs = copyFrom.juneauBpNs;
+		namespaces = copyFrom.namespaces.length == 0 ? null : AList.of(copyFrom.namespaces);
+		jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 	}
 
 	/**
@@ -59,6 +92,18 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	protected RdfSerializerBuilder(RdfSerializerBuilder copyFrom) {
 		super(copyFrom);
+		addBeanTypesRdf = copyFrom.addBeanTypesRdf;
+		addLiteralTypes = copyFrom.addLiteralTypes;
+		addRootProperty = copyFrom.addRootProperty;
+		disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
+		disableUseXmlNamespaces = copyFrom.disableUseXmlNamespaces;
+		looseCollections = copyFrom.looseCollections;
+		language = copyFrom.language;
+		collectionFormat = copyFrom.collectionFormat;
+		juneauNs = copyFrom.juneauNs;
+		juneauBpNs = copyFrom.juneauBpNs;
+		namespaces = copyFrom.namespaces;
+		jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 	}
 
 	@Override /* ContextBuilder */
@@ -75,28 +120,39 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * XML namespace for Juneau properties.
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder juneauNs(String value) {
-		return set(RDF_juneauNs, value);
+	RdfSerializerBuilder jena(String key, Object value) {
+		jenaSettings.put(key, value);
+		return this;
 	}
 
 	/**
-	 * Default XML namespace for bean properties.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * @return This object (for method chaining).
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
+	 * @return This object.
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder juneauBpNs(String value) {
-		return set(RDF_juneauBpNs, value);
+	public RdfSerializerBuilder addBeanTypesRdf() {
+		return addBeanTypesRdf(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypesRdf()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public RdfSerializerBuilder addBeanTypesRdf(boolean value) {
+		addBeanTypesRdf = value;
+		return this;
 	}
 
 	/**
@@ -125,8 +181,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder arp_iriRules(String value) {
-		return set(RDF_arp_iriRules, value);
+	public RdfSerializerBuilder rdfxml_iriRules(String value) {
+		return jena("rdfXml.iri-rules", value);
 	}
 
 	/**
@@ -163,8 +219,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder arp_errorMode(String value) {
-		return set(RDF_arp_errorMode, value);
+	public RdfSerializerBuilder rdfxml_errorMode(String value) {
+		return jena("rdfXml.error-mode", value);
 	}
 
 	/**
@@ -183,8 +239,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder arp_embedding() {
-		return set(RDF_arp_embedding);
+	public RdfSerializerBuilder rdfxml_embedding() {
+		return rdfxml_embedding(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder rdfxml_embedding(boolean value) {
+		return jena("rdfXml.embedding", value);
 	}
 
 	/**
@@ -198,8 +259,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder rdfxml_xmlBase(String value) {
-		return set(RDF_rdfxml_xmlBase, value);
+	public RdfSerializerBuilder rdfxml_xmlbase(String value) {
+		return jena("rdfXml.xmlbase", value);
 	}
 
 	/**
@@ -213,7 +274,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_longId() {
-		return set(RDF_rdfxml_longId);
+		return rdfxml_longId(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder rdfxml_longId(boolean value) {
+		return jena("rdfXml.longId", value);
 	}
 
 	/**
@@ -226,7 +292,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_allowBadUris() {
-		return set(RDF_rdfxml_allowBadUris);
+		return rdfxml_allowBadUris(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder rdfxml_allowBadUris(boolean value) {
+		return jena("rdfXml.allowBadURIs", value);
 	}
 
 	/**
@@ -263,7 +334,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_relativeUris(String value) {
-		return set(RDF_rdfxml_relativeUris, value);
+		return jena("rdfXml.relativeURIs", value);
 	}
 
 	/**
@@ -288,7 +359,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_showXmlDeclaration(String value) {
-		return set(RDF_rdfxml_showXmlDeclaration, value);
+		return jena("rdfXml.showXmlDeclaration", value);
 	}
 
 	/**
@@ -304,7 +375,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_disableShowDoctypeDeclaration() {
-		return set(RDF_rdfxml_disableShowDoctypeDeclaration);
+		return rdfxml_disableShowDoctypeDeclaration(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder rdfxml_disableShowDoctypeDeclaration(boolean value) {
+		return jena("rdfXml.disableShowDoctypeDeclaration", value);
 	}
 
 	/**
@@ -319,7 +395,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_tab(int value) {
-		return set(RDF_rdfxml_tab, value);
+		return jena("rdfXml.tab", value);
 	}
 
 	/**
@@ -333,8 +409,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder rdfxml_attributeQuoteChar(String value) {
-		return set(RDF_rdfxml_attributeQuoteChar, value);
+	public RdfSerializerBuilder rdfxml_attributeQuoteChar(char value) {
+		return jena("rdfXml.attributeQuoteChar", value);
 	}
 
 	/**
@@ -351,7 +427,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder rdfxml_blockRules(String value) {
-		return set(RDF_rdfxml_blockRules, value);
+		return jena("rdfXml.blockRules", value);
 	}
 
 	/**
@@ -366,7 +442,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_minGap(int value) {
-		return set(RDF_n3_minGap, value);
+		return jena("n3.minGap", value);
 	}
 
 	/**
@@ -379,7 +455,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_disableObjectLists() {
-		return set(RDF_n3_disableObjectLists);
+		return n3_disableObjectLists(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder n3_disableObjectLists(boolean value) {
+		return jena("n3.disableObjectLists", value);
 	}
 
 	/**
@@ -394,7 +475,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_subjectColumn(int value) {
-		return set(RDF_n3_subjectColumn, value);
+		return jena("n3.subjectColumn", value);
 	}
 
 	/**
@@ -409,7 +490,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_propertyColumn(int value) {
-		return set(RDF_n3_propertyColumn, value);
+		return jena("n3.propertyColumn", value);
 	}
 
 	/**
@@ -424,7 +505,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_indentProperty(int value) {
-		return set(RDF_n3_indentProperty, value);
+		return jena("n3.indentProperty", value);
 	}
 
 	/**
@@ -440,7 +521,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_widePropertyLen(int value) {
-		return set(RDF_n3_widePropertyLen, value);
+		return jena("n3.widePropertyLen", value);
 	}
 
 	/**
@@ -453,7 +534,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_disableAbbrevBaseUri() {
-		return set(RDF_n3_disableAbbrevBaseUri);
+		return n3_disableAbbrevBaseUri(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder n3_disableAbbrevBaseUri(boolean value) {
+		return jena("n3.disableAbbrevBaseUri", value);
 	}
 
 	/**
@@ -466,7 +552,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_disableUsePropertySymbols() {
-		return set(RDF_n3_disableUsePropertySymbols);
+		return n3_disableUsePropertySymbols(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder n3_disableUsePropertySymbols(boolean value) {
+		return jena("n3.disableUsePropertySymbols", value);
 	}
 
 	/**
@@ -479,7 +570,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_disableUseTripleQuotedStrings() {
-		return set(RDF_n3_disableUseTripleQuotedStrings);
+		return n3_disableUseTripleQuotedStrings(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder n3_disableUseTripleQuotedStrings(boolean value) {
+		return jena("n3.disableUseTripleQuotedStrings", value);
 	}
 
 	/**
@@ -492,55 +588,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder n3_disableUseDoubles() {
-		return set(RDF_n3_disableUseDoubles);
+		return n3_disableUseDoubles(true);
 	}
 
-	/**
-	 * RDF format for representing collections and arrays.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"BAG"</js> - RDF Bag container.
-	 * 	<li>
-	 * 		<js>"LIST"</js> - RDF List container.
-	 * 	<li>
-	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
-	 * 		lost.
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
 	@FluentSetter
-	public RdfSerializerBuilder collectionFormat(String value) {
-		return set(RDF_collectionFormat, value);
-	}
-
-	/**
-	 * Default namespaces.
-	 *
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder namespaces(String[] value) {
-		return set(RDF_namespaces, value);
+	public RdfSerializerBuilder n3_disableUseDoubles(boolean value) {
+		return jena("n3.disableUseDoubles", value);
 	}
 
 	/**
@@ -553,7 +606,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder addLiteralTypes() {
-		return set(RDF_addLiteralTypes);
+		return addLiteralTypes(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder addLiteralTypes(boolean value) {
+		addLiteralTypes = value;
+		return this;
 	}
 
 	/**
@@ -576,7 +635,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder addRootProperty() {
-		return set(RDF_addRootProperty);
+		return addRootProperty(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder addRootProperty(boolean value) {
+		addRootProperty = value;
+		return this;
 	}
 
 	/**
@@ -597,7 +662,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder disableAutoDetectNamespaces() {
-		return set(RDF_disableAutoDetectNamespaces);
+		return disableAutoDetectNamespaces(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder disableAutoDetectNamespaces(boolean value) {
+		disableAutoDetectNamespaces = value;
+		return this;
 	}
 
 	/**
@@ -629,7 +700,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder collectionFormat(RdfCollectionFormat value) {
-		return set(RDF_collectionFormat, value);
+		collectionFormat = value;
+		return this;
 	}
 
 	/**
@@ -646,7 +718,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder juneauBpNs(Namespace value) {
-		return set(RDF_juneauBpNs, value);
+		juneauBpNs = value;
+		return this;
 	}
 
 	/**
@@ -663,7 +736,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder juneauNs(Namespace value) {
-		return set(RDF_juneauNs, value);
+		juneauNs = value;
+		return this;
 	}
 
 	/**
@@ -714,7 +788,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder language(String value) {
-		return set(RDF_language, value);
+		language = value;
+		return this;
 	}
 
 	/**
@@ -772,7 +847,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder looseCollections() {
-		return set(RDF_looseCollections);
+		return looseCollections(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder looseCollections(boolean value) {
+		looseCollections = value;
+		return this;
 	}
 
 	/**
@@ -807,7 +888,10 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder namespaces(Namespace...values) {
-		return set(RDF_namespaces, values);
+		if (namespaces == null)
+			namespaces = new ArrayList<>();
+		Collections.addAll(namespaces, values);
+		return this;
 	}
 
 	/**
@@ -860,7 +944,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder disableUseXmlNamespaces() {
-		return set(RDF_disableUseXmlNamespaces);
+		return disableUseXmlNamespaces(true);
+	}
+
+	@FluentSetter
+	public RdfSerializerBuilder disableUseXmlNamespaces(boolean value) {
+		disableUseXmlNamespaces = value;
+		return this;
 	}
 
 	/**
