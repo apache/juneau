@@ -103,7 +103,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final JsonSchemaGenerator generator;
+	final JsonSchemaGenerator generator;
 
 	/**
 	 * Constructor.
@@ -113,7 +113,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	protected HtmlSchemaSerializer(HtmlSchemaSerializerBuilder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
-		generator = JsonSchemaGenerator.create().apply(getContextProperties()).build();
+		generator = builder.generatorBuilder.build();
 	}
 
 	/**

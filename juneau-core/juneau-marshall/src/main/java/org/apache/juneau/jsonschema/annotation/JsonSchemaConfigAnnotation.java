@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema.annotation;
 
-import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
@@ -42,13 +40,13 @@ public class JsonSchemaConfigAnnotation {
 		public void apply(AnnotationInfo<JsonSchemaConfig> ai, JsonSchemaGeneratorBuilder b) {
 			JsonSchemaConfig a = ai.getAnnotation();
 
-			string(a.addDescriptionsTo()).ifPresent(x -> b.set(JSONSCHEMA_addDescriptionsTo, x));
-			string(a.addExamplesTo()).ifPresent(x -> b.set(JSONSCHEMA_addExamplesTo, x));
-			bool(a.allowNestedDescriptions()).ifPresent(x -> b.set(JSONSCHEMA_allowNestedDescriptions, x));
-			bool(a.allowNestedExamples()).ifPresent(x -> b.set(JSONSCHEMA_allowNestedExamples, x));
-			type(a.beanDefMapper()).ifPresent(x -> b.set(JSONSCHEMA_beanDefMapper, x));
-			string(a.ignoreTypes()).ifPresent(x -> b.set(JSONSCHEMA_ignoreTypes, x));
-			bool(a.useBeanDefs()).ifPresent(x -> b.set(JSONSCHEMA_useBeanDefs, x));
+			string(a.addDescriptionsTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addDescriptionsTo(x));
+			string(a.addExamplesTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addExamplesTo(x));
+			bool(a.allowNestedDescriptions()).ifPresent(x -> b.allowNestedDescriptions(x));
+			bool(a.allowNestedExamples()).ifPresent(x -> b.allowNestedExamples(x));
+			type(a.beanDefMapper()).ifPresent(x -> b.beanDefMapper(x));
+			string(a.ignoreTypes()).ifPresent(x -> b.ignoreTypes(x));
+			bool(a.useBeanDefs()).ifPresent(x -> b.useBeanDefs(x));
 			bool(a.detectRecursions()).ifPresent(x -> b.detectRecursions(x));
 			bool(a.ignoreRecursions()).ifPresent(x -> b.ignoreRecursions(x));
 			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.initialDepth(x));

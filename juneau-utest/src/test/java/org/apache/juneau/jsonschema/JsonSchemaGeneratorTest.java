@@ -14,6 +14,7 @@ package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.util.*;
 
@@ -259,13 +260,6 @@ public class JsonSchemaGeneratorTest {
 		assertObject(s.getBeanDefs()).asJson().is("{'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}");
 	}
 
-	@Test
-	public void customBeanDefMapperInstance() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useBeanDefs().beanDefMapper(new CustomBeanDefMapper()).build().createSession();
-		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{'$ref':'#/definitions/org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean'}");
-		assertObject(s.getBeanDefs()).asJson().is("{'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}");
-	}
-
 	public static class CustomBeanDefMapper extends BasicBeanDefMapper {
 		@Override
 		public String getId(ClassMeta<?> cm) {
@@ -297,13 +291,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_noBeanExample() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethod() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B1.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
@@ -311,13 +305,13 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleMethod_wDefault() throws Exception {
 		B1 b = new B1();
 		b.f1 = "baz";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").example(B1.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(B1.class, b).build().createSession();
 		assertObject(s.getSchema(B1.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethod_array2d() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B1[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -333,7 +327,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleMethod_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B1cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B1cConfig.class).build().createSession();
 		assertObject(s.getSchema(B1c.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
@@ -341,13 +335,13 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleMethod_wDefault_usingConfig() throws Exception {
 		B1c b = new B1c();
 		b.f1 = "baz";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B1cConfig.class).example(B1c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B1cConfig.class).example(B1c.class, b).build().createSession();
 		assertObject(s.getSchema(B1c.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethod_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B1cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B1cConfig.class).build().createSession();
 		assertObject(s.getSchema(B1c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -369,13 +363,13 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleMethodOverridden_wDefault() throws Exception {
 		B2 b = new B2();
 		b.f1 = "baz";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").example(B2.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(B2.class, b).build().createSession();
 		assertObject(s.getSchema(B2.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethodOverridden_array2d() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B2[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -393,13 +387,13 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleMethodOverridden_wDefault_usingConfig() throws Exception {
 		B2c b = new B2c();
 		b.f1 = "baz";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B2cConfig.class).example(B2c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B2cConfig.class).example(B2c.class, b).build().createSession();
 		assertObject(s.getSchema(B2c.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethodOverridden_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B2cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B2cConfig.class).build().createSession();
 		assertObject(s.getSchema(B2c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -419,13 +413,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleField() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B3.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleField_array2d() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B3[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -443,13 +437,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleField_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B3cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B3cConfig.class).build().createSession();
 		assertObject(s.getSchema(B3c.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleField_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B3cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B3cConfig.class).build().createSession();
 		assertObject(s.getSchema(B3c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -469,13 +463,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B4.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().createSession();
 		assertObject(s.getSchema(B4[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -484,13 +478,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B4cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B4cConfig.class).build().createSession();
 		assertObject(s.getSchema(B4c.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").applyAnnotations(B4cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B4cConfig.class).build().createSession();
 		assertObject(s.getSchema(B4c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -503,7 +497,7 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleBeanProperty() throws Exception {
 		SimpleBean b = new SimpleBean();
 		b.f1 = "foobar";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").example(SimpleBean.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(SimpleBean.class, b).build().createSession();
 		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
@@ -511,7 +505,7 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleBeanProperty_2darray() throws Exception {
 		SimpleBean b = new SimpleBean();
 		b.f1 = "foobar";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("bean").example(SimpleBean.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(SimpleBean.class, b).build().createSession();
 		assertObject(s.getSchema(SimpleBean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
 	}
 
@@ -521,13 +515,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_noExample() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().createSession();
 		assertObject(s.getSchema(BeanMap.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleMethod() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().createSession();
 		assertObject(s.getSchema(C1.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}");
 	}
 
@@ -535,7 +529,7 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_MAP_exampleMethod_wDefault() throws Exception {
 		C1 b = new C1();
 		b.put(456, B1.example());
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").example(C1.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).example(C1.class, b).build().createSession();
 		assertObject(s.getSchema(C1.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'456':{f1:'foobar'}}}");
 	}
 
@@ -552,7 +546,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleMethod_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").applyAnnotations(C1cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C1cConfig.class).build().createSession();
 		assertObject(s.getSchema(C1c.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}");
 	}
 
@@ -560,7 +554,7 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_MAP_exampleMethod_wDefault_usingConfig() throws Exception {
 		C1c b = new C1c();
 		b.put(456, B1.example());
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").applyAnnotations(C1cConfig.class).example(C1c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C1cConfig.class).example(C1c.class, b).build().createSession();
 		assertObject(s.getSchema(C1c.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'456':{f1:'foobar'}}}");
 	}
 
@@ -579,13 +573,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleField() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().createSession();
 		assertObject(s.getSchema(C2.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleField_array2d() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().createSession();
 		assertObject(s.getSchema(C2[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}}}");
 	}
 
@@ -604,13 +598,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleField_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").applyAnnotations(C2cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C2cConfig.class).build().createSession();
 		assertObject(s.getSchema(C2c.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleField_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").applyAnnotations(C2cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C2cConfig.class).build().createSession();
 		assertObject(s.getSchema(C2c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}}}");
 	}
 
@@ -631,13 +625,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().createSession();
 		assertObject(s.getSchema(C3.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().createSession();
 		assertObject(s.getSchema(C3[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}}}");
 	}
 
@@ -647,13 +641,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").applyAnnotations(C3cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C3cConfig.class).build().createSession();
 		assertObject(s.getSchema(C3c.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").applyAnnotations(C3cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C3cConfig.class).build().createSession();
 		assertObject(s.getSchema(C3c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}}}");
 	}
 
@@ -665,13 +659,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleBeanProperty() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").example(BeanMap.class, C1.example()).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).example(BeanMap.class, C1.example()).build().createSession();
 		assertObject(s.getSchema(BeanMap.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleBeanProperty_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("map").example(BeanMap.class, C1.example()).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).example(BeanMap.class, C1.example()).build().createSession();
 		assertObject(s.getSchema(BeanMap[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}}}");
 	}
 
@@ -681,13 +675,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_noExample() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).build().createSession();
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}");
 	}
 
 	@Test
 	public void addExample_COLLECTION_exampleMethod() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).build().createSession();
 		assertObject(s.getSchema(D1.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'foobar'}]}");
 	}
 
@@ -697,7 +691,7 @@ public class JsonSchemaGeneratorTest {
 		SimpleBean sb = new SimpleBean();
 		sb.f1 = "baz";
 		b.add(sb);
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").example(D1.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).example(D1.class, b).build().createSession();
 		assertObject(s.getSchema(D1.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}");
 	}
 
@@ -714,7 +708,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleMethod_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").applyAnnotations(D1c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).applyAnnotations(D1c.class).build().createSession();
 		assertObject(s.getSchema(D1c.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'foobar'}]}");
 	}
 
@@ -724,7 +718,7 @@ public class JsonSchemaGeneratorTest {
 		SimpleBean sb = new SimpleBean();
 		sb.f1 = "baz";
 		b.add(sb);
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").applyAnnotations(D1cConfig.class).example(D1c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).applyAnnotations(D1cConfig.class).example(D1c.class, b).build().createSession();
 		assertObject(s.getSchema(D1c.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}");
 	}
 
@@ -743,13 +737,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleField() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).build().createSession();
 		assertObject(s.getSchema(D2.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'foobar'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleField_array2d() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("array").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).build().createSession();
 		assertObject(s.getSchema(D2[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'foobar'}]]]}");
 	}
 
@@ -768,13 +762,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleField_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").applyAnnotations(D2cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).applyAnnotations(D2cConfig.class).build().createSession();
 		assertObject(s.getSchema(D2c.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'foobar'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleField_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("array").applyAnnotations(D2cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).applyAnnotations(D2cConfig.class).build().createSession();
 		assertObject(s.getSchema(D2c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'foobar'}]]]}");
 	}
 
@@ -795,13 +789,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleBeanAnnotation() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).build().createSession();
 		assertObject(s.getSchema(D3.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleBeanAnnotation_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("array").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).build().createSession();
 		assertObject(s.getSchema(D3[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'baz'}]]]}");
 	}
 
@@ -811,13 +805,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleBeanAnnotation_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").applyAnnotations(D3cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).applyAnnotations(D3cConfig.class).build().createSession();
 		assertObject(s.getSchema(D3c.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("array").applyAnnotations(D3cConfig.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).applyAnnotations(D3cConfig.class).build().createSession();
 		assertObject(s.getSchema(D3c[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'baz'}]]]}");
 	}
 
@@ -829,13 +823,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleBeanProperty() throws Exception {
-		JsonSchemaGeneratorSession s =JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("collection").example(BeanList.class, D1.example()).build().createSession();
+		JsonSchemaGeneratorSession s =JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).example(BeanList.class, D1.example()).build().createSession();
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'foobar'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleBeanProperty_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("array").example(BeanList.class, D1.example()).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).example(BeanList.class, D1.example()).build().createSession();
 		assertObject(s.getSchema(BeanList[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'foobar'}]]]}");
 	}
 
@@ -844,14 +838,14 @@ public class JsonSchemaGeneratorTest {
 	//====================================================================================================
 	@Test
 	public void addExample_BOOLEAN() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("boolean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BOOLEAN).build().createSession();
 		assertObject(s.getSchema(boolean.class)).asJson().is("{type:'boolean',example:true}");
 		assertObject(s.getSchema(Boolean.class)).asJson().is("{type:'boolean',example:true}");
 	}
 
 	@Test
 	public void addExample_BOOLEAN_wDefault() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("boolean")
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BOOLEAN)
 			.example(boolean.class, false)
 			.example(Boolean.class, false)
 			.build().createSession();
@@ -861,7 +855,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BOOLEAN_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("boolean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BOOLEAN).build().createSession();
 		assertObject(s.getSchema(boolean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'boolean',example:true}}}");
 		assertObject(s.getSchema(Boolean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'boolean',example:true}}}");
 	}
@@ -871,7 +865,7 @@ public class JsonSchemaGeneratorTest {
 	//====================================================================================================
 	@Test
 	public void addExample_NUMBER() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("number").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(NUMBER).build().createSession();
 		assertObject(s.getSchema(short.class)).asJson().is("{type:'integer',format:'int16',example:1}");
 		assertObject(s.getSchema(Short.class)).asJson().is("{type:'integer',format:'int16',example:1}");
 		assertObject(s.getSchema(int.class)).asJson().is("{type:'integer',format:'int32',example:1}");
@@ -886,7 +880,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_NUMBER_wDefault() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("number")
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(NUMBER)
 			.example(short.class, (short)2)
 			.example(Short.class, (short)3)
 			.example(int.class, 4)
@@ -912,7 +906,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_NUMBER_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("number").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(NUMBER).build().createSession();
 		assertObject(s.getSchema(short[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int16',example:1}}}");
 		assertObject(s.getSchema(Short[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int16',example:1}}}");
 		assertObject(s.getSchema(int[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int32',example:1}}}");
@@ -931,7 +925,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_STRING() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("string").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(STRING).build().createSession();
 		assertObject(s.getSchema(String.class)).asJson().is("{type:'string',example:'foo'}");
 		assertObject(s.getSchema(StringBuilder.class)).asJson().is("{type:'string',example:'foo'}");
 		assertObject(s.getSchema(Character.class)).asJson().is("{type:'string',example:'a'}");
@@ -940,7 +934,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_STRING_wDefault() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("string")
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(STRING)
 			.example(StringBuilder.class, new StringBuilder("foo"))
 			.example(Character.class, 'b')
 			.example(char.class, 'c')
@@ -952,7 +946,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_STRING_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("string").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(STRING).build().createSession();
 		assertObject(s.getSchema(String[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string',example:'foo'}}}");
 		assertObject(s.getSchema(StringBuilder[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string',example:'foo'}}}");
 		assertObject(s.getSchema(Character[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string',example:'a'}}}");
@@ -961,7 +955,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_STRING_2darray_wDefault() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("string")
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(STRING)
 			.example(StringBuilder.class, new StringBuilder("foo"))
 			.example(Character.class, 'b')
 			.example(char.class, 'c')
@@ -977,37 +971,37 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_ENUM() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("enum").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ENUM).build().createSession();
 		assertObject(s.getSchema(TestEnumToString.class)).asJson().is("{type:'string','enum':['one','two','three'],example:'one'}");
 	}
 
 	@Test
 	public void addExample_ENUM_wDefault() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ENUM).example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
 		assertObject(s.getSchema(TestEnumToString.class)).asJson().is("{type:'string','enum':['one','two','three'],example:'two'}");
 	}
 
 	@Test
 	public void addExample_ENUM_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("enum").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ENUM).build().createSession();
 		assertObject(s.getSchema(TestEnumToString[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],example:'one'}}}");
 	}
 
 	@Test
 	public void addExample_ENUM_useEnumNames() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo("enum").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo(ENUM).build().createSession();
 		assertObject(s.getSchema(TestEnumToString.class)).asJson().is("{type:'string','enum':['ONE','TWO','THREE'],example:'ONE'}");
 	}
 
 	@Test
 	public void addExample_ENUM_wDefault_useEnumNames() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo("enum").example(TestEnumToString.class, "'TWO'").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo(ENUM).example(TestEnumToString.class, "'TWO'").build().createSession();
 		assertObject(s.getSchema(TestEnumToString.class)).asJson().is("{type:'string','enum':['ONE','TWO','THREE'],example:'TWO'}");
 	}
 
 	@Test
 	public void addExample_ENUM_2darray_useEnumNames() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo("enum").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo(ENUM).build().createSession();
 		assertObject(s.getSchema(TestEnumToString[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string','enum':['ONE','TWO','THREE'],example:'ONE'}}}");
 	}
 
@@ -1016,7 +1010,7 @@ public class JsonSchemaGeneratorTest {
 	//====================================================================================================
 	@Test
 	public void addExample_ANY() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo("any").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ANY).build().createSession();
 		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{type:'object',properties:{f1:{type:'string',example:'foo'}}}");
 		assertObject(s.getSchema(C1.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}");
 		assertObject(s.getSchema(D1.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'foobar'}]}");
@@ -1045,13 +1039,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_BEAN() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(BEAN).build().createSession();
 		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean'}");
 	}
 
 	@Test
 	public void addDescription_BEAN_array2d() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("bean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(BEAN).build().createSession();
 		assertObject(s.getSchema(SimpleBean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean'}}}");
 	}
 
@@ -1061,13 +1055,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_MAP() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(MAP).build().createSession();
 		assertObject(s.getSchema(BeanMap.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanMap<java.lang.Integer,org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}");
 	}
 
 	@Test
 	public void addDescription_MAP_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("map").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(MAP).build().createSession();
 		assertObject(s.getSchema(BeanMap[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanMap<java.lang.Integer,org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}}}");
 	}
 
@@ -1077,19 +1071,19 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_COLLECTION() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("collection").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(COLLECTION).build().createSession();
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}");
 	}
 
 	@Test
 	public void addDescription_COLLECTION_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("collection").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(COLLECTION).build().createSession();
 		assertObject(s.getSchema(BeanList[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}}}");
 	}
 
 	@Test
 	public void addDescription_ARRAY() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("array").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(ARRAY).build().createSession();
 		assertObject(s.getSchema(BeanList[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>[][]'}");
 	}
 
@@ -1098,14 +1092,14 @@ public class JsonSchemaGeneratorTest {
 	//====================================================================================================
 	@Test
 	public void addDescription_BOOLEAN() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("boolean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(BOOLEAN).build().createSession();
 		assertObject(s.getSchema(boolean.class)).asJson().is("{type:'boolean',description:'boolean'}");
 		assertObject(s.getSchema(Boolean.class)).asJson().is("{type:'boolean',description:'java.lang.Boolean'}");
 	}
 
 	@Test
 	public void addDescription_BOOLEAN_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("boolean").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(BOOLEAN).build().createSession();
 		assertObject(s.getSchema(boolean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'boolean',description:'boolean'}}}");
 		assertObject(s.getSchema(Boolean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'boolean',description:'java.lang.Boolean'}}}");
 	}
@@ -1115,7 +1109,7 @@ public class JsonSchemaGeneratorTest {
 	//====================================================================================================
 	@Test
 	public void addDescription_NUMBER() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("number").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(NUMBER).build().createSession();
 		assertObject(s.getSchema(short.class)).asJson().is("{type:'integer',format:'int16',description:'short'}");
 		assertObject(s.getSchema(Short.class)).asJson().is("{type:'integer',format:'int16',description:'java.lang.Short'}");
 		assertObject(s.getSchema(int.class)).asJson().is("{type:'integer',format:'int32',description:'int'}");
@@ -1130,7 +1124,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_NUMBER_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("number").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(NUMBER).build().createSession();
 		assertObject(s.getSchema(short[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int16',description:'short'}}}");
 		assertObject(s.getSchema(Short[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int16',description:'java.lang.Short'}}}");
 		assertObject(s.getSchema(int[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int32',description:'int'}}}");
@@ -1149,7 +1143,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_STRING() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("string").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(STRING).build().createSession();
 		assertObject(s.getSchema(String.class)).asJson().is("{type:'string',description:'java.lang.String'}");
 		assertObject(s.getSchema(StringBuilder.class)).asJson().is("{type:'string',description:'java.lang.StringBuilder'}");
 		assertObject(s.getSchema(Character.class)).asJson().is("{type:'string',description:'java.lang.Character'}");
@@ -1158,7 +1152,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_STRING_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("string").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(STRING).build().createSession();
 		assertObject(s.getSchema(String[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string',description:'java.lang.String'}}}");
 		assertObject(s.getSchema(StringBuilder[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string',description:'java.lang.StringBuilder'}}}");
 		assertObject(s.getSchema(Character[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string',description:'java.lang.Character'}}}");
@@ -1171,13 +1165,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addDescription_ENUM() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("enum").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(ENUM).build().createSession();
 		assertObject(s.getSchema(TestEnumToString.class)).asJson().is("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}");
 	}
 
 	@Test
 	public void addDescription_ENUM_2darray() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("enum").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(ENUM).build().createSession();
 		assertObject(s.getSchema(TestEnumToString[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}}}");
 	}
 
@@ -1186,7 +1180,7 @@ public class JsonSchemaGeneratorTest {
 	//====================================================================================================
 	@Test
 	public void addDescription_ANY() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo("any").build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addDescriptionsTo(ANY).build().createSession();
 		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean'}");
 		assertObject(s.getSchema(BeanMap.class)).asJson().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanMap<java.lang.Integer,org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}");
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}");
@@ -1322,7 +1316,7 @@ public class JsonSchemaGeneratorTest {
 			.allowNestedExamples()
 			.example(BeanList.class, new BeanList())
 			.example(SimpleBean.class, new SimpleBean())
-			.addExamplesTo("collection,bean")
+			.addExamplesTo(COLLECTION,BEAN)
 			.build().createSession();
 
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}");
@@ -1333,7 +1327,7 @@ public class JsonSchemaGeneratorTest {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy()
 			.example(BeanList.class, new BeanList())
 			.example(SimpleBean.class, new SimpleBean())
-			.addExamplesTo("collection,bean")
+			.addExamplesTo(COLLECTION,BEAN)
 			.build().createSession();
 
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}");
@@ -1347,7 +1341,7 @@ public class JsonSchemaGeneratorTest {
 	public void allowNestedDescriptions_enabled() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy()
 			.allowNestedDescriptions()
-			.addDescriptionsTo("collection,bean")
+			.addDescriptionsTo(COLLECTION,BEAN)
 			.build().createSession();
 
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean'},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}");
@@ -1356,7 +1350,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void allowNestedDescriptions_disabled() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy()
-			.addDescriptionsTo("collection,bean")
+			.addDescriptionsTo(COLLECTION,BEAN)
 			.build().createSession();
 
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaGeneratorTest$SimpleBean>'}");

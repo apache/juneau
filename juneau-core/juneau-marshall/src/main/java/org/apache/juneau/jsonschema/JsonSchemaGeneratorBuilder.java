@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -36,6 +34,11 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	final JsonSerializerBuilder jsonSerializerBuilder;
 	final JsonParserBuilder jsonParserBuilder;
 
+	Set<TypeCategory> addDescriptionsTo, addExamplesTo;
+	boolean allowNestedDescriptions, allowNestedExamples, useBeanDefs;
+	Class<? extends BeanDefMapper> beanDefMapper;
+	Set<String> ignoreTypes;
+
 	/**
 	 * Constructor, default settings.
 	 */
@@ -46,6 +49,13 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		jsonParserBuilder = (JsonParserBuilder) JsonParser.create().beanContext(bc);
 		type(JsonSchemaGenerator.class);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
+		addDescriptionsTo = null;
+		addExamplesTo = null;
+		allowNestedDescriptions = env("JsonSchemaGenerator.allowNestedDescriptions", false);
+		allowNestedExamples = env("JsonSchemaGenerator.allowNestedExamples", false);
+		useBeanDefs = env("JsonSchemaGenerator.useBeanDefs", false);
+		beanDefMapper = BasicBeanDefMapper.class;
+		ignoreTypes = null;
 	}
 
 	/**
@@ -59,6 +69,13 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
 		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParser.copy().beanContext(bc);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
+		addDescriptionsTo = copyFrom.addDescriptionsTo.isEmpty() ? null : new TreeSet<>(copyFrom.addDescriptionsTo);
+		addExamplesTo = copyFrom.addExamplesTo.isEmpty() ? null : new TreeSet<>(copyFrom.addExamplesTo);
+		allowNestedDescriptions = copyFrom.allowNestedDescriptions;
+		allowNestedExamples = copyFrom.allowNestedExamples;
+		useBeanDefs = copyFrom.useBeanDefs;
+		beanDefMapper = copyFrom.beanDefMapper;
+		ignoreTypes = copyFrom.ignoreTypes.isEmpty() ? null : new TreeSet<>(copyFrom.ignoreTypes);
 	}
 
 	/**
@@ -72,6 +89,13 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContext(bc);
 		jsonParserBuilder = (JsonParserBuilder) copyFrom.jsonParserBuilder.copy().beanContext(bc);
 		registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
+		addDescriptionsTo = copyFrom.addDescriptionsTo == null ? null : new TreeSet<>(copyFrom.addDescriptionsTo);
+		addExamplesTo = copyFrom.addExamplesTo == null ? null : new TreeSet<>(copyFrom.addExamplesTo);
+		allowNestedDescriptions = copyFrom.allowNestedDescriptions;
+		allowNestedExamples = copyFrom.allowNestedExamples;
+		useBeanDefs = copyFrom.useBeanDefs;
+		beanDefMapper = copyFrom.beanDefMapper;
+		ignoreTypes = copyFrom.ignoreTypes == null ? null : new TreeSet<>(copyFrom.ignoreTypes);
 	}
 
 	@Override /* ContextBuilder */
@@ -108,18 +132,17 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
+	 * @param values
+	 * 	The values to add to this setting.
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public JsonSchemaGeneratorBuilder addDescriptionsTo(String value) {
-		return set(JSONSCHEMA_addDescriptionsTo, value);
+	public JsonSchemaGeneratorBuilder addDescriptionsTo(TypeCategory...values) {
+		if (addDescriptionsTo == null)
+			addDescriptionsTo = new TreeSet<>();
+		Collections.addAll(addDescriptionsTo, values);
+		return this;
 	}
 
 	/**
@@ -150,18 +173,17 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
+	 * @param values
+	 * 	The values to add to this setting.
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public JsonSchemaGeneratorBuilder addExamplesTo(String value) {
-		return set(JSONSCHEMA_addExamplesTo, value);
+	public JsonSchemaGeneratorBuilder addExamplesTo(TypeCategory...values) {
+		if (addExamplesTo == null)
+			addExamplesTo = new TreeSet<>();
+		Collections.addAll(addExamplesTo, values);
+		return this;
 	}
 
 	/**
@@ -170,15 +192,23 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions() {
-		return set(JSONSCHEMA_allowNestedDescriptions);
+		return allowNestedDescriptions(true);
+	}
+
+	/**
+	 * Same as {@link #allowNestedDescriptions()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSchemaGeneratorBuilder allowNestedDescriptions(boolean value) {
+		allowNestedDescriptions = value;
+		return this;
 	}
 
 	/**
@@ -187,15 +217,23 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder allowNestedExamples() {
-		return set(JSONSCHEMA_allowNestedExamples);
+		return allowNestedExamples(true);
+	}
+
+	/**
+	 * Same as {@link #allowNestedExamples()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSchemaGeneratorBuilder allowNestedExamples(boolean value) {
+		allowNestedExamples = value;
+		return this;
 	}
 
 	/**
@@ -206,11 +244,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 * <p>
-	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
-	 * </ul>
+	 * This setting is ignored if {@link JsonSchemaGeneratorBuilder#useBeanDefs()} is not enabled.
 	 *
 	 * @param value
 	 * 	The new value for this setting.
@@ -219,29 +253,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
-		return set(JSONSCHEMA_beanDefMapper, value);
-	}
-
-	/**
-	 * Bean schema definition mapper.
-	 *
-	 * <p>
-	 * Interface to use for converting Bean classes to definition IDs and URIs.
-	 * Used primarily for defining common definition sections for beans in Swagger JSON.
-	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public JsonSchemaGeneratorBuilder beanDefMapper(BeanDefMapper value) {
-		return set(JSONSCHEMA_beanDefMapper, value);
+		beanDefMapper = value;
+		return this;
 	}
 
 	/**
@@ -284,13 +297,16 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<jk>public class</jk> MyResource {...}
 	 * </p>
 	 *
-	 * @param value
-	 * 	A comma-delimited list of types to ignore.
+	 * @param values
+	 * 	The values to add.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public JsonSchemaGeneratorBuilder ignoreTypes(String value) {
-		return set(JSONSCHEMA_ignoreTypes, value);
+	public JsonSchemaGeneratorBuilder ignoreTypes(String...values) {
+		if (ignoreTypes == null)
+			ignoreTypes = new TreeSet<>();
+		Collections.addAll(ignoreTypes, values);
+		return this;
 	}
 
 	/**
@@ -314,7 +330,19 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder useBeanDefs() {
-		return set(JSONSCHEMA_useBeanDefs);
+		return useBeanDefs(true);
+	}
+
+	/**
+	 * Same as {@link #useBeanDefs()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public JsonSchemaGeneratorBuilder useBeanDefs(boolean value) {
+		useBeanDefs = value;
+		return this;
 	}
 
 	/**

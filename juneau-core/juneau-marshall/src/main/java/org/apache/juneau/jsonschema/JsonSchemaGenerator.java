@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Collections.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -31,227 +33,25 @@ import org.apache.juneau.json.*;
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "JsonSchemaGenerator";
-
-	/**
-	 * Configuration property:  Add descriptions to types.
-	 *
-	 * <p>
-	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
-	 * The description is the result of calling {@link ClassMeta#getFullName()}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo JSONSCHEMA_addDescriptionsTo}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.addDescriptionsTo</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ADDDESCRIPTIONSTO</c>
-	 * 	<li><b>Default:</b>  Empty string.
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#addDescriptionsTo()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#addDescriptionsTo(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_addDescriptionsTo = PREFIX + ".addDescriptionsTo.s";
-
-	/**
-	 * Configuration property:  Add examples.
-	 *
-	 * <p>
-	 * Identifies which categories of types that examples should be automatically added to generated schemas.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addExamplesTo.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.addExamplesTo</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ADDEXAMPLESTO</c>
-	 * 	<li><b>Default:</b>  Empty string.
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#addExamplesTo()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#addExamplesTo(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_addExamplesTo = PREFIX + ".addExamplesTo.s";
-
-	/**
-	 * Configuration property:  Allow nested descriptions.
-	 *
-	 * <p>
-	 * Identifies whether nested descriptions are allowed in schema definitions.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions JSONSCHEMA_allowNestedDescriptions}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.allowNestedDescriptions</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ALLOWNESTEDDESCRIPTIONS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#allowNestedDescriptions()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_allowNestedDescriptions = PREFIX + ".allowNestedDescriptions.b";
-
-	/**
-	 * Configuration property:  Allow nested examples.
-	 *
-	 * <p>
-	 * Identifies whether nested examples are allowed in schema definitions.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.allowNestedExamples</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ALLOWNESTEDEXAMPLES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#allowNestedExamples()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedExamples()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_allowNestedExamples = PREFIX + ".allowNestedExamples.b";
-
-	/**
-	 * Configuration property:  Bean schema definition mapper.
-	 *
-	 * <p>
-	 * Interface to use for converting Bean classes to definition IDs and URIs.
-	 * Used primarily for defining common definition sections for beans in Swagger JSON.
-	 * This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_beanDefMapper JSONSCHEMA_beanDefMapper}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.beanDefMapper.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.jsonschema.BeanDefMapper}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#beanDefMapper()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#beanDefMapper(BeanDefMapper)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_beanDefMapper = PREFIX + ".beanDefMapper.o";
-
-	/**
-	 * Configuration property:  Ignore types from schema definitions.
-	 *
-	 * <p>
-	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
-	 * Swagger documentation.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_ignoreTypes JSONSCHEMA_ignoreTypes}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.ignoreTypes.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.ignoreTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_IGNORETYPES</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>.
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#ignoreTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#ignoreTypes(String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_ignoreTypes = PREFIX + ".ignoreTypes.s";
-
-	/**
-	 * Configuration property:  Use bean definitions.
-	 *
-	 * <p>
-	 * When enabled, schemas on beans will be serialized as the following:
-	 * <p class='bcode w800'>
-	 * 	{
-	 * 		type: <js>'object'</js>,
-	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs JSONSCHEMA_useBeanDefs}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.useBeanDefs</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_USEBEANDEFS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#useBeanDefs()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#useBeanDefs()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String JSONSCHEMA_useBeanDefs = PREFIX + ".useBeanDefs.b";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
 	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
-	private final BeanDefMapper beanDefMapper;
-	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
+	final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
+	final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
+	final Class<? extends BeanDefMapper> beanDefMapper;
+	final Set<String> ignoreTypes;
+
+	private final BeanDefMapper beanDefMapperBean;
 	final JsonSerializer jsonSerializer;
 	final JsonParser jsonParser;
-	private final Set<Pattern> ignoreTypes;
+	private final Set<Pattern> ignoreTypePatterns;
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -263,18 +63,25 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	protected JsonSchemaGenerator(JsonSchemaGeneratorBuilder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
-		ContextProperties cp = getContextProperties();
-		useBeanDefs = cp.getBoolean(JSONSCHEMA_useBeanDefs).orElse(false);
-		allowNestedExamples = cp.getBoolean(JSONSCHEMA_allowNestedExamples).orElse(false);
-		allowNestedDescriptions = cp.getBoolean(JSONSCHEMA_allowNestedDescriptions).orElse(false);
-		beanDefMapper = cp.getInstance(JSONSCHEMA_beanDefMapper, BeanDefMapper.class).orElseGet(BasicBeanDefMapper::new);
-		addExamplesTo = TypeCategory.parse(cp.getString(JSONSCHEMA_addExamplesTo).orElse(null));
-		addDescriptionsTo = TypeCategory.parse(cp.getString(JSONSCHEMA_addDescriptionsTo).orElse(null));
+		useBeanDefs = builder.useBeanDefs;
+		allowNestedExamples = builder.allowNestedExamples;
+		allowNestedDescriptions = builder.allowNestedDescriptions;
+		beanDefMapper = builder.beanDefMapper;
+		addExamplesTo = builder.addExamplesTo == null ? emptySet() : new TreeSet<>(builder.addExamplesTo);
+		addDescriptionsTo = builder.addDescriptionsTo == null ? emptySet() : new TreeSet<>(builder.addDescriptionsTo);
+		ignoreTypes = builder.ignoreTypes == null ? emptySet() : new TreeSet<>(builder.ignoreTypes);
 
-		Set<Pattern> ignoreTypes = new LinkedHashSet<>();
-		for (String s : split(cp.get(JSONSCHEMA_ignoreTypes, String.class).orElse("")))
-			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
-		this.ignoreTypes = ignoreTypes;
+		Set<Pattern> ignoreTypePatterns = new LinkedHashSet<>();
+		for (String s : ignoreTypes)
+			for (String s2 : split(s))
+				ignoreTypePatterns.add(Pattern.compile(s2.replace(".", "\\.").replace("*", ".*")));
+		this.ignoreTypePatterns = ignoreTypePatterns;
+
+		try {
+			beanDefMapperBean = beanDefMapper.newInstance();
+		} catch (Exception e) {
+			throw runtimeException(e);
+		}
 
 		jsonSerializer = builder.jsonSerializerBuilder.build();
 		jsonParser = builder.jsonParserBuilder.apply(getBeanContext().getContextProperties()).build();
@@ -322,7 +129,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Add descriptions to types.
 	 *
-	 * @see #JSONSCHEMA_addDescriptionsTo
+	 * @see JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)
 	 * @return
 	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
@@ -333,7 +140,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Add examples.
 	 *
-	 * @see #JSONSCHEMA_addExamplesTo
+	 * @see JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...)
 	 * @return
 	 * 	Set of categories of types that examples should be automatically added to generated schemas.
 	 */
@@ -344,7 +151,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Allow nested descriptions.
 	 *
-	 * @see #JSONSCHEMA_allowNestedDescriptions
+	 * @see JsonSchemaGeneratorBuilder#allowNestedDescriptions()
 	 * @return
 	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
@@ -355,7 +162,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Allow nested examples.
 	 *
-	 * @see #JSONSCHEMA_allowNestedExamples
+	 * @see JsonSchemaGeneratorBuilder#allowNestedExamples()
 	 * @return
 	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
 	 */
@@ -366,29 +173,29 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Bean schema definition mapper.
 	 *
-	 * @see #JSONSCHEMA_beanDefMapper
+	 * @see JsonSchemaGeneratorBuilder#beanDefMapper(Class)
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
 	protected final BeanDefMapper getBeanDefMapper() {
-		return beanDefMapper;
+		return beanDefMapperBean;
 	}
 
 	/**
 	 * Ignore types from schema definitions.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_ignoreTypes
+	 * @see JsonSchemaGeneratorBuilder#ignoreTypes(String...)
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
 	public Set<Pattern> getIgnoreTypes() {
-		return ignoreTypes;
+		return ignoreTypePatterns;
 	}
 
 	/**
 	 * Use bean definitions.
 	 *
-	 * @see #JSONSCHEMA_useBeanDefs
+	 * @see JsonSchemaGeneratorBuilder#useBeanDefs()
 	 * @return
 	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */
@@ -428,14 +235,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Returns <jk>true</jk> if the specified type is ignored.
 	 *
 	 * <p>
-	 * The type is ignored if it's specified in the {@link #JSONSCHEMA_ignoreTypes} setting.
+	 * The type is ignored if it's specified in the {@link JsonSchemaGeneratorBuilder#ignoreTypes(String...)} setting.
 	 * <br>Ignored types return <jk>null</jk> on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.
 	 *
 	 * @param cm The type to check.
 	 * @return <jk>true</jk> if the specified type is ignored.
 	 */
 	public boolean isIgnoredType(ClassMeta<?> cm) {
-		for (Pattern p : ignoreTypes)
+		for (Pattern p : ignoreTypePatterns)
 			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
 				return true;
 		return false;

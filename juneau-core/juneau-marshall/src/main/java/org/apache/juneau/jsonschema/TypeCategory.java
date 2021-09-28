@@ -20,8 +20,8 @@ import org.apache.juneau.internal.*;
  * Represents possible values for JSONSCHEMA_addExamplesTo and JSONSCHEMA_addDescriptionsTo.
  *
  * <ul class='javatree'>
- * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
- * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
+ * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...)}
+ * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
  * </ul>
  */
 public enum TypeCategory {
@@ -69,5 +69,20 @@ public enum TypeCategory {
 		for (String ss : StringUtils.split(s))
 			set.add(valueOf(ss.toUpperCase()));
 		return set;
+	}
+
+	/**
+	 * Parses a comma-delimited list of values into an array of {@link TypeCategory} values.
+	 *
+	 * @param s The comma-delimited string.
+	 * @return A comma-delimited list of values into an array of {@link TypeCategory} values.
+	 */
+	public static TypeCategory[] parseArray(String s) {
+		if (s == null || s.isEmpty())
+			return new TypeCategory[0];
+		List<TypeCategory> x = new ArrayList<>();
+		for (String ss : StringUtils.split(s))
+			x.add(valueOf(ss.toUpperCase()));
+		return x.toArray(new TypeCategory[x.size()]);
 	}
 }

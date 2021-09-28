@@ -77,7 +77,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 */
 	String addDescriptionsTo() default "";
@@ -114,7 +114,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 */
 	String addExamplesTo() default "";
@@ -137,7 +137,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
 	 * </ul>
 	 */
 	String allowNestedDescriptions() default "";
@@ -160,7 +160,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples()}
 	 * </ul>
 	 */
 	String allowNestedExamples() default "";
@@ -176,11 +176,11 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
+	 * 		This setting is ignored if {@link JsonSchemaGeneratorBuilder#useBeanDefs()} is not enabled.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
 	 * </ul>
 	 */
 	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Null.class;
@@ -200,7 +200,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_ignoreTypes}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#ignoreTypes(String...)}
 	 * </ul>
 	 */
 	String ignoreTypes() default "";
@@ -235,7 +235,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#useBeanDefs()}
 	 * </ul>
 	 */
 	String useBeanDefs() default "";

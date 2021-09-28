@@ -340,7 +340,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * This map is modifiable and affects the map in the session.
 	 *
 	 * @return
-	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} was not enabled.
+	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGeneratorBuilder#useBeanDefs()} was not enabled.
 	 */
 	public Map<String,OMap> getBeanDefs() {
 		return defs;
@@ -366,7 +366,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Add descriptions to types.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo
+	 * @see JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)
 	 * @return
 	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
@@ -377,7 +377,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Add examples.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_addExamplesTo
+	 * @see JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...)
 	 * @return
 	 * 	Set of categories of types that examples should be automatically added to generated schemas.
 	 */
@@ -388,7 +388,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions
+	 * @see JsonSchemaGeneratorBuilder#allowNestedDescriptions()
 	 * @return
 	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
@@ -399,7 +399,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Allow nested examples.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples
+	 * @see JsonSchemaGeneratorBuilder#allowNestedExamples()
 	 * @return
 	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
 	 */
@@ -410,7 +410,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Bean schema definition mapper.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_beanDefMapper
+	 * @see JsonSchemaGeneratorBuilder#beanDefMapper(Class)
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
@@ -421,7 +421,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Ignore types from schema definitions.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_ignoreTypes
+	 * @see JsonSchemaGeneratorBuilder#ignoreTypes(String...)
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
@@ -432,7 +432,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Use bean definitions.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_useBeanDefs
+	 * @see JsonSchemaGeneratorBuilder#useBeanDefs()
 	 * @return
 	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */

@@ -315,10 +315,10 @@ public @interface Body {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
-	 * 	<li class='jc'>{@link JsonSchemaSerializer}
+	 * 	<li class='jc'>{@link JsonSchemaGeneratorBuilder}
 	 * 	<ul>
-	 * 		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
-	 * 		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
+	 * 		<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...) addExamplesTo(TypeCategory...)}
+	 * 		<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples() allowNestedExamples()}
 	 * 	</ul>
 	 * </ul>
 	 *

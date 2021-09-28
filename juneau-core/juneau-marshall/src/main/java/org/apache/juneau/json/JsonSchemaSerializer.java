@@ -38,13 +38,7 @@ import org.apache.juneau.serializer.*;
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "JsonSchemaSerializer";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
@@ -59,9 +53,8 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final JsonSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
 
-
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
+	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, with whitespace. */
@@ -103,12 +96,12 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 	}
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final JsonSchemaGenerator generator;
+
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 

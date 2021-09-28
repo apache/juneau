@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -89,17 +87,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 *
-	 * @param value
-	 * 	The new value for this property.
+	 * @param values
+	 * 	The values to add to this setting.
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public JsonSchemaSerializerBuilder addDescriptionsTo(String value) {
-		return set(JSONSCHEMA_addDescriptionsTo, value);
+	public JsonSchemaSerializerBuilder addDescriptionsTo(TypeCategory...values) {
+		generatorBuilder.addDescriptionsTo(values);
+		return this;
 	}
 
 	/**
@@ -116,17 +115,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...)}
 	 * </ul>
 	 *
-	 * @param value
-	 * 	The new value for this property.
+	 * @param values
+	 * 	The values to add to this setting.
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public JsonSchemaSerializerBuilder addExamplesTo(String value) {
-		return set(JSONSCHEMA_addExamplesTo, value);
+	public JsonSchemaSerializerBuilder addExamplesTo(TypeCategory...values) {
+		generatorBuilder.addExamplesTo(values);
+		return this;
 	}
 
 	/**
@@ -136,14 +136,15 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
-		return set(JSONSCHEMA_allowNestedDescriptions);
+		generatorBuilder.allowNestedDescriptions();
+		return this;
 	}
 
 	/**
@@ -153,14 +154,15 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedExamples() {
-		return set(JSONSCHEMA_allowNestedExamples);
+		generatorBuilder.allowNestedExamples();
+		return this;
 	}
 
 	/**
@@ -171,10 +173,10 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 * <p>
-	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
+	 * This setting is ignored if {@link JsonSchemaGeneratorBuilder#useBeanDefs()} is not enabled.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
+	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
 	 * </ul>
 	 *
 	 * @param value
@@ -184,31 +186,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
-		return set(JSONSCHEMA_beanDefMapper, value);
-	}
-
-	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Bean schema definition mapper.
-	 *
-	 * <p>
-	 * Interface to use for converting Bean classes to definition IDs and URIs.
-	 * <p>
-	 * Used primarily for defining common definition sections for beans in Swagger JSON.
-	 * <p>
-	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public JsonSchemaSerializerBuilder beanDefMapper(BeanDefMapper value) {
-		return set(JSONSCHEMA_beanDefMapper, value);
+		generatorBuilder.beanDefMapper(value);
+		return this;
 	}
 
 	/**
@@ -250,7 +229,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder useBeanDefs() {
-		return set(JSONSCHEMA_useBeanDefs);
+		generatorBuilder.useBeanDefs();
+		return this;
 	}
 
 	// <FluentSetters>
