@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.OutputStreamSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -29,11 +27,14 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 
+	BinaryFormat binaryFormat;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected OutputStreamSerializerBuilder() {
 		super();
+		binaryFormat = env("OutputStreamSerializer.binaryFormat", BinaryFormat.HEX);
 	}
 
 	/**
@@ -43,6 +44,7 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 */
 	protected OutputStreamSerializerBuilder(OutputStreamSerializer copyFrom) {
 		super(copyFrom);
+		binaryFormat = copyFrom.binaryFormat;
 	}
 
 	/**
@@ -52,6 +54,7 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 */
 	protected OutputStreamSerializerBuilder(OutputStreamSerializerBuilder copyFrom) {
 		super(copyFrom);
+		binaryFormat = copyFrom.binaryFormat;
 	}
 
 	@Override /* ContextBuilder */
@@ -88,10 +91,6 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * 	String <jv>msgPack</jv> = <jv>serializer</jv>.serializeToString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
@@ -99,7 +98,8 @@ public abstract class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 */
 	@FluentSetter
 	public OutputStreamSerializerBuilder binaryFormat(BinaryFormat value) {
-		return set(OSSERIALIZER_binaryFormat, value);
+		binaryFormat = value;
+		return this;
 	}
 
 	// <FluentSetters>

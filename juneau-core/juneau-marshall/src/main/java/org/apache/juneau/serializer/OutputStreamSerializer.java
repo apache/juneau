@@ -24,44 +24,10 @@ import org.apache.juneau.collections.*;
 public abstract class OutputStreamSerializer extends Serializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "OutputStreamSerializer";
-
-	/**
-	 * Configuration property:  Binary output format.
-	 *
-	 * <p>
-	 * When using the {@link #serializeToString(Object)} method on stream-based serializers, this defines the format to use
-	 * when converting the resulting byte array to a string.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
-	 * 	<li><b>Name:</b>  <js>"OutputStreamSerializer.binaryFormat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}
-	 * 	<li><b>System property:</b>  <c>OutputStreamSerializer.binaryFormat</c>
-	 * 	<li><b>Environment variable:</b>  <c>OUTPUTSTREAMSERIALIZER_BINARYFORMAT</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BinaryFormat#HEX}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#binaryFormat()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String OSSERIALIZER_binaryFormat = PREFIX + ".binaryFormat.s";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final BinaryFormat binaryFormat;
+	final BinaryFormat binaryFormat;
 
 	/**
 	 * Constructor.
@@ -72,8 +38,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	protected OutputStreamSerializer(OutputStreamSerializerBuilder builder) {
 		super(builder);
 
-		ContextProperties cp = getContextProperties();
-		binaryFormat = cp.get(OSSERIALIZER_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.HEX);
+		binaryFormat = builder.binaryFormat;
 	}
 
 	@Override
@@ -120,7 +85,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	/**
 	 * Binary output format.
 	 *
-	 * @see #OSSERIALIZER_binaryFormat
+	 * @see OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */

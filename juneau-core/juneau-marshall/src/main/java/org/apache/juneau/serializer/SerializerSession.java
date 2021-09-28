@@ -167,7 +167,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	The serialized object.
 	 * 	<br>Character-based serializers will return a <c>String</c>
-	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer#OSSERIALIZER_binaryFormat} setting.
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)} setting.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public abstract String serializeToString(Object o) throws SerializeException;

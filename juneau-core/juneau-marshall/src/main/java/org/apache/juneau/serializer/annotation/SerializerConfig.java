@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({SerializerConfigAnnotation.Apply.class,SerializerConfigAnnotation.WriterSerializerApply.class})
+@ContextApply({SerializerConfigAnnotation.Apply.class,SerializerConfigAnnotation.OutputStreamSerializerApply.class,SerializerConfigAnnotation.WriterSerializerApply.class})
 public @interface SerializerConfig {
 
 	/**
@@ -68,7 +68,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+	 * 	<li class='jm'>{@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)}
 	 * </ul>
 	 */
 	String binaryFormat() default "";

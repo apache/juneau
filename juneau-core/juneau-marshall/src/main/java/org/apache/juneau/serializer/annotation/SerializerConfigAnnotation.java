@@ -55,11 +55,32 @@ public class SerializerConfigAnnotation {
 			string(a.uriContext()).ifPresent(x -> b.set(SERIALIZER_uriContext, x));
 			string(a.uriRelativity()).ifPresent(x -> b.set(SERIALIZER_uriRelativity, x));
 			string(a.uriResolution()).ifPresent(x -> b.set(SERIALIZER_uriResolution, x));
-			string(a.binaryFormat()).ifPresent(x -> b.set(OSSERIALIZER_binaryFormat, x));
 			bool(a.detectRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_detectRecursions, x));
 			bool(a.ignoreRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_ignoreRecursions, x));
 			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.set(BEANTRAVERSE_initialDepth, x));
 			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.set(BEANTRAVERSE_maxDepth, x));
+		}
+	}
+
+	/**
+	 * Applies {@link SerializerConfig} annotations to a {@link OutputStreamSerializerBuilder}.
+	 */
+	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializerBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public OutputStreamSerializerApply(VarResolverSession vr) {
+			super(SerializerConfig.class, OutputStreamSerializerBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializerBuilder b) {
+			SerializerConfig a = ai.getAnnotation();
+
+			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
 		}
 	}
 

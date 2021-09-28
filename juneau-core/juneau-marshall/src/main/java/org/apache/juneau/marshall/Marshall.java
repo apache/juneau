@@ -133,7 +133,7 @@ public abstract class Marshall {
 	 * <p>
 	 * For writer-based serializers, this is identical to calling {@link Serializer#serialize(Object)}.
 	 * <br>For stream-based serializers, this converts the returned byte array to a string based on
-	 * the {@link OutputStreamSerializer#OSSERIALIZER_binaryFormat} setting.
+	 * the {@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)} setting.
 	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
