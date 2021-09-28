@@ -14,10 +14,10 @@ package org.apache.juneau.serializer.annotation;
 
 import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
-import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -56,15 +56,36 @@ public class SerializerConfigAnnotation {
 			string(a.uriRelativity()).ifPresent(x -> b.set(SERIALIZER_uriRelativity, x));
 			string(a.uriResolution()).ifPresent(x -> b.set(SERIALIZER_uriResolution, x));
 			string(a.binaryFormat()).ifPresent(x -> b.set(OSSERIALIZER_binaryFormat, x));
-			charset(a.fileCharset()).ifPresent(x -> b.set(WSERIALIZER_fileCharset, x));
-			integer(a.maxIndent(), "maxIndent").ifPresent(x -> b.set(WSERIALIZER_maxIndent, x));
-			character(a.quoteChar(), "quoteChar").ifPresent(x -> b.set(WSERIALIZER_quoteChar, x));
-			charset(a.streamCharset()).ifPresent(x -> b.set(WSERIALIZER_streamCharset, x));
-			bool(a.useWhitespace()).ifPresent(x -> b.set(WSERIALIZER_useWhitespace, x));
 			bool(a.detectRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_detectRecursions, x));
 			bool(a.ignoreRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_ignoreRecursions, x));
 			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.set(BEANTRAVERSE_initialDepth, x));
 			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.set(BEANTRAVERSE_maxDepth, x));
+		}
+	}
+
+	/**
+	 * Applies {@link SerializerConfig} annotations to a {@link WriterSerializerBuilder}.
+	 */
+	public static class WriterSerializerApply extends AnnotationApplier<SerializerConfig,WriterSerializerBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public WriterSerializerApply(VarResolverSession vr) {
+			super(SerializerConfig.class, WriterSerializerBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<SerializerConfig> ai, WriterSerializerBuilder b) {
+			SerializerConfig a = ai.getAnnotation();
+
+			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));
+			integer(a.maxIndent(), "maxIndent").ifPresent(x -> b.maxIndent(x));
+			character(a.quoteChar(), "quoteChar").ifPresent(x -> b.quoteChar(x));
+			charset(a.streamCharset()).ifPresent(x -> b.streamCharset(x));
+			bool(a.useWhitespace()).ifPresent(x -> b.useWhitespace(x));
 		}
 	}
 }

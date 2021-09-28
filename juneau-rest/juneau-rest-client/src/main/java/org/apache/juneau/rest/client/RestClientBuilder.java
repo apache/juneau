@@ -4170,7 +4170,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
 	 * </ul>
 	 *
 	 * @param value
@@ -4215,7 +4215,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
 	 * </ul>
 	 *
 	 * @param value
@@ -4226,24 +4226,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder quoteChar(char value) {
 		serializers().forEachWS(x -> x.quoteChar(value));
-		return this;
-	}
-
-	/**
-	 * Same as {@link #quoteChar(char)} but overrides it if it has a default setting on the serializer.
-	 *
-	 * <p>
-	 * For example, you can use this to override the quote character on {@link SimpleJsonSerializer} even though
-	 * the quote char is normally a single quote on that class.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>'"'</js>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder quoteCharOverride(char value) {
-		serializers().forEachWS(x -> x.quoteCharOverride(value));
 		return this;
 	}
 
@@ -4278,7 +4260,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -4316,7 +4298,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
@@ -4353,7 +4335,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).

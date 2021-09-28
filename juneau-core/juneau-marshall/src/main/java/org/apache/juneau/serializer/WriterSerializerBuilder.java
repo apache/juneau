@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.WriterSerializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -31,11 +29,22 @@ import org.apache.juneau.json.*;
 @FluentSetters
 public abstract class WriterSerializerBuilder extends SerializerBuilder {
 
+	boolean useWhitespace;
+	Charset fileCharset, streamCharset;
+	int maxIndent;
+	Character quoteChar, quoteCharOverride;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected WriterSerializerBuilder() {
 		super();
+		fileCharset = Charset.defaultCharset();
+		streamCharset = IOUtils.UTF8;
+		maxIndent = env("WriterSerializer.maxIndent", 100);
+		quoteChar = env("WriterSerializer.quoteChar", (Character)null);
+		quoteCharOverride = env("WriterSerializer.quoteCharOverride", (Character)null);
+		useWhitespace = env("WriterSerializer.useWhitespace", false);
 	}
 
 	/**
@@ -45,6 +54,12 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	protected WriterSerializerBuilder(WriterSerializer copyFrom) {
 		super(copyFrom);
+		fileCharset = copyFrom.fileCharset;
+		streamCharset = copyFrom.streamCharset;
+		maxIndent = copyFrom.maxIndent;
+		quoteChar = copyFrom.quoteChar;
+		quoteCharOverride = copyFrom.quoteCharOverride;
+		useWhitespace = copyFrom.useWhitespace;
 	}
 
 	/**
@@ -54,6 +69,12 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	protected WriterSerializerBuilder(WriterSerializerBuilder copyFrom) {
 		super(copyFrom);
+		fileCharset = copyFrom.fileCharset;
+		streamCharset = copyFrom.streamCharset;
+		maxIndent = copyFrom.maxIndent;
+		quoteChar = copyFrom.quoteChar;
+		quoteCharOverride = copyFrom.quoteCharOverride;
+		useWhitespace = copyFrom.useWhitespace;
 	}
 
 	@Override /* ContextBuilder */
@@ -89,10 +110,6 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<jv>serializer</jv>.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is the system JVM setting.
@@ -100,11 +117,12 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	@FluentSetter
 	public WriterSerializerBuilder fileCharset(Charset value) {
-		return set(WSERIALIZER_fileCharset, value);
+		fileCharset = value;
+		return this;
 	}
 
 	/**
-	 *  Maximum indentation.
+	 * Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -123,10 +141,6 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <c>100</c>.
@@ -134,7 +148,8 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	@FluentSetter
 	public WriterSerializerBuilder maxIndent(int value) {
-		return set(WSERIALIZER_maxIndent, value);
+		maxIndent = value;
+		return this;
 	}
 
 	/**
@@ -164,10 +179,6 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is <js>'"'</js>.
@@ -175,24 +186,29 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	@FluentSetter
 	public WriterSerializerBuilder quoteChar(char value) {
-		return set(WSERIALIZER_quoteChar, value);
+		quoteChar = value;
+		return this;
 	}
 
 	/**
-	 * Same as {@link #quoteChar(char)} but overrides it if it has a default setting on the serializer.
+	 * Quote character override.
 	 *
 	 * <p>
-	 * For example, you can use this to override the quote character on {@link SimpleJsonSerializer} even though
-	 * the quote char is normally a single quote on that class.
+	 * Similar to {@link #quoteChar(char)} but takes precedence over that setting.
+	 *
+	 * <p>
+	 * Allows you to override the quote character even if it's set by a subclass such as {@link SimpleJsonSerializer}.
+	 *
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>'"'</js>.
+	 * 	<br>The default is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public WriterSerializerBuilder quoteCharOverride(char value) {
-		return set(WSERIALIZER_quoteCharOverride, value);
+		quoteCharOverride = value;
+		return this;
 	}
 
 	/**
@@ -222,10 +238,6 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -254,10 +266,6 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<jv>serializer</jv>.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default is the system JVM setting.
@@ -265,7 +273,8 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	@FluentSetter
 	public WriterSerializerBuilder streamCharset(Charset value) {
-		return set(WSERIALIZER_streamCharset, value);
+		streamCharset = value;
+		return this;
 	}
 
 	/**
@@ -291,14 +300,23 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public WriterSerializerBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace);
+		return useWhitespace(true);
+	}
+
+	/**
+	 * Same as {@link #useWhitespace()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public WriterSerializerBuilder useWhitespace(boolean value) {
+		useWhitespace = value;
+		return this;
 	}
 
 	/**
@@ -323,10 +341,6 @@ public abstract class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */

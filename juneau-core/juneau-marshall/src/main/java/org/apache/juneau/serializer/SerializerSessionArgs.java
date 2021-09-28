@@ -41,6 +41,8 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 
 	Method javaMethod;
 	VarResolverSession resolver;
+	Boolean useWhitespace;
+	Charset fileCharset, streamCharset;
 
 	/**
 	 * Static creator.
@@ -74,7 +76,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 */
 	@FluentSetter
 	public SerializerSessionArgs fileCharset(Charset value) {
-		property(WriterSerializer.WSERIALIZER_fileCharset, value);
+		fileCharset = value;
 		return this;
 	}
 
@@ -128,7 +130,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 */
 	@FluentSetter
 	public SerializerSessionArgs streamCharset(Charset value) {
-		property(WriterSerializer.WSERIALIZER_streamCharset, value);
+		streamCharset = value;
 		return this;
 	}
 
@@ -165,7 +167,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 */
 	@FluentSetter
 	public SerializerSessionArgs useWhitespace(Boolean value) {
-		property(WriterSerializer.WSERIALIZER_useWhitespace, value);
+		useWhitespace = value;
 		return this;
 	}
 

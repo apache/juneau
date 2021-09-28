@@ -13,11 +13,11 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.serializer.Serializer.*;
-import static org.apache.juneau.serializer.WriterSerializer.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -353,7 +353,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2 rdf:parseType='Resource'>\n      <jp:f1>2</jp:f1>\n      <jp:f2 rdf:parseType='Resource'>\n        <jp:f1>3</jp:f1>\n      </jp:f2>\n    </jp:f2>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2 rdf:parseType='Resource'>\n      <jp:f1>2</jp:f1>\n      <jp:f2 rdf:parseType='Resource'>\n        <jp:f1>3</jp:f1>\n      </jp:f2>\n    </jp:f2>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2 rdf:parseType='Resource'>\n      <jp:f1>2</jp:f1>\n      <jp:f2 rdf:parseType='Resource'>\n        <jp:f1>3</jp:f1>\n      </jp:f2>\n    </jp:f2>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(WSERIALIZER_maxIndent, 2, WSERIALIZER_useWhitespace, true))
+				.apply(WriterSerializerBuilder.class, x -> x.maxIndent(2).useWhitespace())
 			},
 			{ 	/* 11 */
 				new ComboInput<>(
@@ -383,7 +383,8 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>T11</jp:t>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f>\n<rdf:Seq>\n<rdf:li>_x0020_foo_x0020_</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>T11</jp:_type>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f>\n            <rdf:Seq>\n              <rdf:li>_x0020_foo_x0020_</rdf:li>\n            </rdf:Seq>\n          </jp:f>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.apply(XmlSerializerBuilder.class, x -> x.addNamespaceUrisToRoot())
-				.properties(OMap.of(WSERIALIZER_quoteCharOverride, '|', SERIALIZER_addBeanTypes, true, SERIALIZER_addRootType, true))
+				.apply(WriterSerializerBuilder.class, x -> x.quoteCharOverride('|'))
+				.properties(OMap.of(SERIALIZER_addBeanTypes, true, SERIALIZER_addRootType, true))
 				.skipTest(x -> x.startsWith("parse") || x.startsWith("verify"))
 			},
 		});

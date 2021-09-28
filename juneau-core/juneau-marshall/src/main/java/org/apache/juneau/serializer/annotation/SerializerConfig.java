@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -32,7 +33,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(SerializerConfigAnnotation.Apply.class)
+@ContextApply({SerializerConfigAnnotation.Apply.class,SerializerConfigAnnotation.WriterSerializerApply.class})
 public @interface SerializerConfig {
 
 	/**
@@ -432,7 +433,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#fileCharset(java.nio.charset.Charset)}
 	 * </ul>
 	 */
 	String fileCharset() default "";
@@ -455,7 +456,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
 	 * </ul>
 	 */
 	String maxIndent() default "";
@@ -476,7 +477,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
 	 * </ul>
 	 */
 	String quoteChar() default "";
@@ -502,7 +503,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#streamCharset(Charset)}
 	 * </ul>
 	 */
 	String streamCharset() default "";
@@ -525,7 +526,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
 	 * </ul>
 	 */
 	String useWhitespace() default "";

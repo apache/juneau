@@ -248,7 +248,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * Shortcut for calling <c>simple().sq()</c>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#WSERIALIZER_quoteChar}
+	 * 	<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
 	 * </ul>
 	 *
 	 * @return This object.

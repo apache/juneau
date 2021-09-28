@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.WriterSerializer.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -57,10 +56,9 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		SessionProperties sp = getSessionProperties();
-		this.streamCharset = sp.get(WSERIALIZER_streamCharset, Charset.class).orElse(ctx.getStreamCharset());
-		this.fileCharset = sp.get(WSERIALIZER_fileCharset, Charset.class).orElse(ctx.getFileCharset());
-		this.useWhitespace = sp.getBoolean(WSERIALIZER_useWhitespace).orElse(ctx.isUseWhitespace());
+		streamCharset = ofNullable(args == null ? null : args.streamCharset).orElse(ctx.streamCharset);
+		fileCharset = ofNullable(args == null ? null : args.fileCharset).orElse(ctx.fileCharset);
+		useWhitespace = ofNullable(args == null ? null : args.useWhitespace).orElse(ctx.useWhitespace);
 	}
 
 	@Override /* SerializerSession */
@@ -103,7 +101,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Maximum indentation.
 	 *
-	 * @see WriterSerializer#WSERIALIZER_maxIndent
+	 * @see WriterSerializerBuilder#maxIndent(int)
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
@@ -114,7 +112,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Quote character.
 	 *
-	 * @see WriterSerializer#WSERIALIZER_quoteChar
+	 * @see WriterSerializerBuilder#quoteChar(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
@@ -125,7 +123,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Use whitespace.
 	 *
-	 * @see WriterSerializer#WSERIALIZER_useWhitespace
+	 * @see WriterSerializerBuilder#useWhitespace()
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */

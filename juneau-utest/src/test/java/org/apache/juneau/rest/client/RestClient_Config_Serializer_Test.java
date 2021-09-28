@@ -214,7 +214,6 @@ public class RestClient_Config_Serializer_Test {
 		A15 x = new A15();
 		MockRestClient.create(A.class).json().quoteChar('\'').build().post("/echoBody",x).run().assertBody().is("{'f1':'foo'}");
 		MockRestClient.create(A.class).json().quoteChar('|').build().post("/echoBody",x).run().assertBody().is("{|f1|:|foo|}");
-		client().quoteCharOverride('|').build().post("/echoBody",x).run().assertBody().is("{f1:|foo|}");
 	}
 
 	@Test
