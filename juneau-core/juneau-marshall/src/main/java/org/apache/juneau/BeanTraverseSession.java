@@ -144,7 +144,7 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if {@link BeanTraverseContext#BEANTRAVERSE_detectRecursions} is enabled, and the specified
+	 * Returns <jk>true</jk> if {@link BeanTraverseBuilder#detectRecursions()} is enabled, and the specified
 	 * object is already higher up in the traversal chain.
 	 *
 	 * @param attrName The bean property attribute name, or some other identifier.
@@ -302,7 +302,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
-	 * @see BeanTraverseContext#BEANTRAVERSE_detectRecursions
+	 * @see BeanTraverseBuilder#detectRecursions()
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
@@ -313,7 +313,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Configuration property:  Ignore recursion errors.
 	 *
-	 * @see BeanTraverseContext#BEANTRAVERSE_ignoreRecursions
+	 * @see BeanTraverseBuilder#ignoreRecursions()
 	 * @return
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
@@ -325,7 +325,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Configuration property:  Initial depth.
 	 *
-	 * @see BeanTraverseContext#BEANTRAVERSE_initialDepth
+	 * @see BeanTraverseBuilder#initialDepth(int)
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
@@ -336,7 +336,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Configuration property:  Max traversal depth.
 	 *
-	 * @see BeanTraverseContext#BEANTRAVERSE_maxDepth
+	 * @see BeanTraverseBuilder#maxDepth(int)
 	 * @return
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.

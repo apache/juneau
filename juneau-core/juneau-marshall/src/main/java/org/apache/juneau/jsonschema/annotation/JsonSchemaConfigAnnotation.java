@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema.annotation;
 
-import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -25,9 +25,9 @@ import org.apache.juneau.svl.*;
 public class JsonSchemaConfigAnnotation {
 
 	/**
-	 * Applies {@link JsonSchemaConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link JsonSchemaConfig} annotations to a {@link JsonSchemaGeneratorBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<JsonSchemaConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<JsonSchemaConfig,JsonSchemaGeneratorBuilder> {
 
 		/**
 		 * Constructor.
@@ -35,11 +35,11 @@ public class JsonSchemaConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(JsonSchemaConfig.class, ContextPropertiesBuilder.class, vr);
+			super(JsonSchemaConfig.class, JsonSchemaGeneratorBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonSchemaConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<JsonSchemaConfig> ai, JsonSchemaGeneratorBuilder b) {
 			JsonSchemaConfig a = ai.getAnnotation();
 
 			string(a.addDescriptionsTo()).ifPresent(x -> b.set(JSONSCHEMA_addDescriptionsTo, x));
@@ -49,10 +49,10 @@ public class JsonSchemaConfigAnnotation {
 			type(a.beanDefMapper()).ifPresent(x -> b.set(JSONSCHEMA_beanDefMapper, x));
 			string(a.ignoreTypes()).ifPresent(x -> b.set(JSONSCHEMA_ignoreTypes, x));
 			bool(a.useBeanDefs()).ifPresent(x -> b.set(JSONSCHEMA_useBeanDefs, x));
-			bool(a.detectRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_detectRecursions, x));
-			bool(a.ignoreRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_ignoreRecursions, x));
-			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.set(BEANTRAVERSE_initialDepth, x));
-			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.set(BEANTRAVERSE_maxDepth, x));
+			bool(a.detectRecursions()).ifPresent(x -> b.detectRecursions(x));
+			bool(a.ignoreRecursions()).ifPresent(x -> b.ignoreRecursions(x));
+			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.initialDepth(x));
+			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.maxDepth(x));
 		}
 	}
 }

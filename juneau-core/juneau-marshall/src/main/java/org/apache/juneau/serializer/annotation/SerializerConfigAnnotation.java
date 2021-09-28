@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer.annotation;
 
-import static org.apache.juneau.BeanTraverseContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -54,10 +52,10 @@ public class SerializerConfigAnnotation {
 			string(a.uriContext()).map(UriContext::of).ifPresent(x -> b.uriContext(x));
 			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
 			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
-			bool(a.detectRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_detectRecursions, x));
-			bool(a.ignoreRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_ignoreRecursions, x));
-			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.set(BEANTRAVERSE_initialDepth, x));
-			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.set(BEANTRAVERSE_maxDepth, x));
+			bool(a.detectRecursions()).ifPresent(x -> b.detectRecursions(x));
+			bool(a.ignoreRecursions()).ifPresent(x -> b.ignoreRecursions(x));
+			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.initialDepth(x));
+			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.maxDepth(x));
 		}
 	}
 

@@ -28,132 +28,15 @@ import org.apache.juneau.collections.*;
 public abstract class BeanTraverseContext extends BeanContextable {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "BeanTraverseContext";
-
-	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 *
-	 * <p>
-	 * When enabled, specifies that recursions should be checked for during traversal.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
-	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.detectRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.detectRecursions</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_DETECTRECURSIONS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#detectRecursions()}
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#detectRecursions()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#detectRecursions()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEANTRAVERSE_detectRecursions = PREFIX + ".detectRecursions.b";
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * <p>
-	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}
-	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.ignoreRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.ignoreRecursions</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_IGNORERECURSIONS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#ignoreRecursions()}
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#ignoreRecursions()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#ignoreRecursions()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEANTRAVERSE_ignoreRecursions = PREFIX + ".ignoreRecursions.b";
-
-	/**
-	 * Configuration property:  Initial depth.
-	 *
-	 * <p>
-	 * The initial indentation level at the root.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}
-	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.initialDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <jk>int</jk>
-	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.initialDepth</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_INITIALDEPTH</c>
-	 * 	<li><b>Default:</b>  <c>0</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#initialDepth()}
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#initialDepth()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#initialDepth(int)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEANTRAVERSE_initialDepth = PREFIX + ".initialDepth.i";
-
-	/**
-	 * Configuration property:  Max traversal depth.
-	 *
-	 * <p>
-	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
-	 * If this depth is exceeded, an exception is thrown.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}
-	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.maxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <jk>int</jk>
-	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.maxDepth</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_MAXDEPTH</c>
-	 * 	<li><b>Default:</b>  <c>100</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#maxDepth()}
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#maxDepth()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#maxDepth(int)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEANTRAVERSE_maxDepth = PREFIX + ".maxDepth.i";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final int initialDepth, maxDepth;
-	private final boolean
+	final int initialDepth, maxDepth;
+	final boolean
 		detectRecursions,
 		ignoreRecursions;
+
+	private final boolean actualDetectRecursions;
 
 	/**
 	 * Constructor
@@ -163,11 +46,12 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	protected BeanTraverseContext(BeanTraverseBuilder builder) {
 		super(builder);
 
-		ContextProperties cp = getContextProperties();
-		maxDepth = cp.getInteger(BEANTRAVERSE_maxDepth).orElse(100);
-		initialDepth = cp.getInteger(BEANTRAVERSE_initialDepth).orElse(0);
-		ignoreRecursions = cp.getBoolean(BEANTRAVERSE_ignoreRecursions).orElse(false);
-		detectRecursions = cp.getBoolean(BEANTRAVERSE_detectRecursions).orElse(ignoreRecursions);
+		maxDepth = builder.maxDepth;
+		initialDepth = builder.initialDepth;
+		ignoreRecursions = builder.ignoreRecursions;
+		detectRecursions = builder.detectRecursions;
+
+		actualDetectRecursions = detectRecursions || ignoreRecursions;
 	}
 
 	@Override
@@ -191,18 +75,18 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Automatically detect POJO recursions.
 	 *
-	 * @see #BEANTRAVERSE_detectRecursions
+	 * @see BeanTraverseBuilder#detectRecursions()
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
 	public final boolean isDetectRecursions() {
-		return detectRecursions;
+		return actualDetectRecursions;
 	}
 
 	/**
 	 * Ignore recursion errors.
 	 *
-	 * @see #BEANTRAVERSE_ignoreRecursions
+	 * @see BeanTraverseBuilder#ignoreRecursions()
 	 * @return
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
@@ -214,7 +98,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Initial depth.
 	 *
-	 * @see #BEANTRAVERSE_initialDepth
+	 * @see BeanTraverseBuilder#initialDepth(int)
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
@@ -225,7 +109,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Max traversal depth.
 	 *
-	 * @see #BEANTRAVERSE_maxDepth
+	 * @see BeanTraverseBuilder#maxDepth(int)
 	 * @return
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.

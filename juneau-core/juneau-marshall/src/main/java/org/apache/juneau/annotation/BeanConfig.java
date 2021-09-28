@@ -22,7 +22,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -327,7 +326,7 @@ public @interface BeanConfig {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
+	 * 		Enables {@link BeanTraverseBuilder#detectRecursions()}.
 	 * </ul>
 	 *
 	 * <p>

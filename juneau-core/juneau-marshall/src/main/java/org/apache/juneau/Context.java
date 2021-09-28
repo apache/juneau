@@ -25,7 +25,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -115,7 +114,7 @@ public abstract class Context implements MetaProvider {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
+	 * 		Enables {@link BeanTraverseBuilder#detectRecursions()}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Property:</h5>

@@ -3510,7 +3510,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#detectRecursions()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3563,7 +3563,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#ignoreRecursions()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3605,7 +3605,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#initialDepth(int)}
 	 * </ul>
 	 *
 	 * @param value
@@ -3642,7 +3642,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#maxDepth}
 	 * </ul>
 	 *
 	 * @param value

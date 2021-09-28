@@ -39,7 +39,6 @@ import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
@@ -634,7 +633,7 @@ public abstract class ContextBuilder {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
+	 * 		Enables {@link BeanTraverseBuilder#detectRecursions()}.
 	 * </ul>
 	 *
 	 * <p>

@@ -256,7 +256,7 @@ public @interface JsonSchemaConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}.
+	 * The behavior when recursions are detected depends on the value for {@link BeanTraverseBuilder#ignoreRecursions()}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -280,7 +280,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#detectRecursions()}
 	 * </ul>
 	 */
 	String detectRecursions() default "";
@@ -289,7 +289,7 @@ public @interface JsonSchemaConfig {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}.
+	 * Used in conjunction with {@link BeanTraverseBuilder#detectRecursions()}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
@@ -308,7 +308,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#ignoreRecursions()}
 	 * </ul>
 	 */
 	String ignoreRecursions() default "";
@@ -330,7 +330,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#initialDepth(int)}
 	 * </ul>
 	 */
 	String initialDepth() default "";
@@ -352,7 +352,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#maxDepth(int)}
 	 * </ul>
 	 */
 	String maxDepth() default "";

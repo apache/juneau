@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanTraverseContext.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -28,11 +26,18 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 
+	boolean detectRecursions, ignoreRecursions;
+	int initialDepth, maxDepth;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected BeanTraverseBuilder() {
 		super();
+		detectRecursions = env("BeanTraverseBuilder.detectRecursions", false);
+		ignoreRecursions = env("BeanTraverseBuilder.ignoreRecursions", false);
+		initialDepth = env("BeanTraverseBuilder.initialDepth", 0);
+		maxDepth = env("BeanTraverseBuilder.maxDepth", 100);
 	}
 
 	/**
@@ -42,6 +47,10 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 */
 	protected BeanTraverseBuilder(BeanTraverseContext copyFrom) {
 		super(copyFrom);
+		detectRecursions = copyFrom.detectRecursions;
+		ignoreRecursions = copyFrom.ignoreRecursions;
+		initialDepth = copyFrom.initialDepth;
+		maxDepth = copyFrom.maxDepth;
 	}
 
 	/**
@@ -51,6 +60,10 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 */
 	protected BeanTraverseBuilder(BeanTraverseBuilder copyFrom) {
 		super(copyFrom);
+		detectRecursions = copyFrom.detectRecursions;
+		ignoreRecursions = copyFrom.ignoreRecursions;
+		initialDepth = copyFrom.initialDepth;
+		maxDepth = copyFrom.maxDepth;
 	}
 
 	@Override /* ContextBuilder */
@@ -100,15 +113,23 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanTraverseBuilder detectRecursions() {
-		return set(BEANTRAVERSE_detectRecursions);
+		return detectRecursions(true);
+	}
+
+	/**
+	 * Same as {@link #detectRecursions()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanTraverseBuilder detectRecursions(boolean value) {
+		detectRecursions = value;
+		return this;
 	}
 
 	/**
@@ -149,15 +170,23 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanTraverseBuilder ignoreRecursions() {
-		return set(BEANTRAVERSE_ignoreRecursions);
+		return ignoreRecursions(true);
+	}
+
+	/**
+	 * Same as {@link #ignoreRecursions()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanTraverseBuilder ignoreRecursions(boolean value) {
+		ignoreRecursions = value;
+		return this;
 	}
 
 	/**
@@ -182,10 +211,6 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this setting.
 	 * 	<br>The default is <c>0</c>.
@@ -193,7 +218,8 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public BeanTraverseBuilder initialDepth(int value) {
-		return set(BEANTRAVERSE_initialDepth, value);
+		initialDepth = value;
+		return this;
 	}
 
 	/**
@@ -218,7 +244,7 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
+	 * 	<li class='jm'>{@link BeanTraverseBuilder#maxDepth(int)}
 	 * </ul>
 	 *
 	 * @param value
@@ -228,7 +254,8 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public BeanTraverseBuilder maxDepth(int value) {
-		return set(BEANTRAVERSE_maxDepth, value);
+		maxDepth = value;
+		return this;
 	}
 
 	// <FluentSetters>
