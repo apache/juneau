@@ -86,7 +86,7 @@ public @interface JsonConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
+	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <ul class='notes'>

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.serializer.Serializer.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -60,7 +59,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:_type>BwT</jp:_type>\n      <jp:f>1</jp:f>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.beanContext(x -> x.beanDictionary(T0.class))
-				.properties(OMap.of(SERIALIZER_addBeanTypes, true))
+				.apply(SerializerBuilder.class, x -> x.addBeanTypes())
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
@@ -90,7 +89,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>BwT</jp:_type>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.beanContext(x -> x.beanDictionary(T0.class))
-				.properties(OMap.of(SERIALIZER_addRootType, true))
+				.apply(SerializerBuilder.class, x -> x.addRootType())
 			},
 			{ 	/* 2 */
 				new ComboInput<>(
@@ -119,7 +118,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_sortCollections, true))
+				.apply(SerializerBuilder.class, x -> x.sortCollections())
 			},
 			{ 	/* 3 */
 				new ComboInput<>(
@@ -148,7 +147,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_sortCollections, true))
+				.apply(SerializerBuilder.class, x -> x.sortCollections())
 			},
 			{ 	/* 4 */
 				new ComboInput<>(
@@ -177,7 +176,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n<jp:b>2</jp:b>\n<jp:c>3</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n<jp:b>2</jp:b>\n<jp:c>3</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n    <jp:b>2</jp:b>\n    <jp:c>3</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_sortMaps, true))
+				.apply(SerializerBuilder.class, x -> x.sortMaps())
 			},
 			{ 	/* 5 */
 				new ComboInput<>(
@@ -206,7 +205,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_trimEmptyCollections, true))
+				.apply(SerializerBuilder.class, x -> x.trimEmptyCollections())
 			},
 			{ 	/* 6 */
 				new ComboInput<>(
@@ -235,7 +234,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_trimEmptyMaps, true))
+				.apply(SerializerBuilder.class, x -> x.trimEmptyMaps())
 			},
 			{ 	/* 7 */
 				new ComboInput<>(
@@ -264,7 +263,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_keepNullProperties, true))
+				.apply(SerializerBuilder.class, x -> x.keepNullProperties())
 			},
 			{ 	/* 8 */
 				new ComboInput<>(
@@ -293,7 +292,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>foo</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_trimStrings, true))
+				.apply(SerializerBuilder.class, x -> x.trimStrings())
 			},
 			{ 	/* 9 */
 				new ComboInput<>(
@@ -322,7 +321,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='https://localhost:80/context/resource/foo'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='https://localhost:80/context/resource/foo'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='https://localhost:80/context/resource/foo'/>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_uriContext, UriContext.of("https://localhost:80", "/context", "/resource", "/path"), SERIALIZER_uriRelativity, UriRelativity.PATH_INFO, SERIALIZER_uriResolution, UriResolution.ABSOLUTE))
+				.apply(SerializerBuilder.class, x -> x.uriContext(UriContext.of("https://localhost:80", "/context", "/resource", "/path")).uriRelativity(UriRelativity.PATH_INFO).uriResolution(UriResolution.ABSOLUTE))
 				.convert(x -> new T9())
 				.skipTest(x -> x.contains("parseRdf") || x.contains("verifyRdf"))
 			},
@@ -384,7 +383,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>T11</jp:_type>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f>\n            <rdf:Seq>\n              <rdf:li>_x0020_foo_x0020_</rdf:li>\n            </rdf:Seq>\n          </jp:f>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.apply(XmlSerializerBuilder.class, x -> x.addNamespaceUrisToRoot())
 				.apply(WriterSerializerBuilder.class, x -> x.quoteCharOverride('|'))
-				.properties(OMap.of(SERIALIZER_addBeanTypes, true, SERIALIZER_addRootType, true))
+				.apply(SerializerBuilder.class, x -> x.addBeanTypes().addRootType())
 				.skipTest(x -> x.startsWith("parse") || x.startsWith("verify"))
 			},
 		});

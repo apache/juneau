@@ -13,7 +13,6 @@
 package org.apache.juneau.serializer.annotation;
 
 import static org.apache.juneau.BeanTraverseContext.*;
-import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -26,35 +25,35 @@ import org.apache.juneau.svl.*;
 public class SerializerConfigAnnotation {
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link SerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<SerializerConfig,ContextPropertiesBuilder> {
+	public static class SerializerApply extends AnnotationApplier<SerializerConfig,SerializerBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(SerializerConfig.class, ContextPropertiesBuilder.class, vr);
+		public SerializerApply(VarResolverSession vr) {
+			super(SerializerConfig.class, SerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<SerializerConfig> ai, SerializerBuilder b) {
 			SerializerConfig a = ai.getAnnotation();
 
-			bool(a.addBeanTypes()).ifPresent(x -> b.set(SERIALIZER_addBeanTypes, x));
-			bool(a.addRootType()).ifPresent(x -> b.set(SERIALIZER_addRootType, x));
-			bool(a.keepNullProperties()).ifPresent(x -> b.set(SERIALIZER_keepNullProperties, x));
-			type(a.listener()).ifPresent(x -> b.set(SERIALIZER_listener, x));
-			bool(a.sortCollections()).ifPresent(x -> b.set(SERIALIZER_sortCollections, x));
-			bool(a.sortMaps()).ifPresent(x -> b.set(SERIALIZER_sortMaps, x));
-			bool(a.trimEmptyCollections()).ifPresent(x -> b.set(SERIALIZER_trimEmptyCollections, x));
-			bool(a.trimEmptyMaps()).ifPresent(x -> b.set(SERIALIZER_trimEmptyMaps, x));
-			bool(a.trimStrings()).ifPresent(x -> b.set(SERIALIZER_trimStrings, x));
-			string(a.uriContext()).ifPresent(x -> b.set(SERIALIZER_uriContext, x));
-			string(a.uriRelativity()).ifPresent(x -> b.set(SERIALIZER_uriRelativity, x));
-			string(a.uriResolution()).ifPresent(x -> b.set(SERIALIZER_uriResolution, x));
+			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypes(x));
+			bool(a.addRootType()).ifPresent(x -> b.addRootType(x));
+			bool(a.keepNullProperties()).ifPresent(x -> b.keepNullProperties(x));
+			type(a.listener()).ifPresent(x -> b.listener(x));
+			bool(a.sortCollections()).ifPresent(x -> b.sortCollections(x));
+			bool(a.sortMaps()).ifPresent(x -> b.sortMaps(x));
+			bool(a.trimEmptyCollections()).ifPresent(x -> b.trimEmptyCollections(x));
+			bool(a.trimEmptyMaps()).ifPresent(x -> b.trimEmptyMaps(x));
+			bool(a.trimStrings()).ifPresent(x -> b.trimStrings(x));
+			string(a.uriContext()).map(UriContext::of).ifPresent(x -> b.uriContext(x));
+			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
+			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
 			bool(a.detectRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_detectRecursions, x));
 			bool(a.ignoreRecursions()).ifPresent(x -> b.set(BEANTRAVERSE_ignoreRecursions, x));
 			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.set(BEANTRAVERSE_initialDepth, x));

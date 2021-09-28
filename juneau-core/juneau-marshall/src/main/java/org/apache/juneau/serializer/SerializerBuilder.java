@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.Serializer.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -30,13 +28,33 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public abstract class SerializerBuilder extends BeanTraverseBuilder {
 
+	boolean addBeanTypes, addRootType, keepNullProperties, sortCollections, sortMaps, trimEmptyCollections,
+		trimEmptyMaps, trimStrings;
 	String produces, accept;
+	UriContext uriContext;
+	UriRelativity uriRelativity;
+	UriResolution uriResolution;
+	Class<? extends SerializerListener> listener;
 
 	/**
 	 * Constructor, default settings.
 	 */
 	protected SerializerBuilder() {
 		super();
+		produces = null;
+		accept = null;
+		addBeanTypes = env("Serializer.addBeanTypes", false);
+		addRootType = env("Serializer.addRootType", false);
+		keepNullProperties = env("Serializer.keepNullProperties", false);
+		sortCollections = env("Serializer.sortCollections", false);
+		sortMaps = env("Serializer.sortMaps", false);
+		trimEmptyCollections = env("Serializer.trimEmptyCollections", false);
+		trimEmptyMaps = env("Serializer.trimEmptyMaps", false);
+		trimStrings = env("Serializer.trimStrings", false);
+		uriContext = UriContext.DEFAULT;
+		uriRelativity = UriRelativity.RESOURCE;
+		uriResolution = UriResolution.NONE;
+		listener = null;
 	}
 
 	/**
@@ -46,8 +64,20 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 */
 	protected SerializerBuilder(Serializer copyFrom) {
 		super(copyFrom);
-		produces = copyFrom._produces;
-		accept = copyFrom._accept;
+		produces = copyFrom.produces;
+		accept = copyFrom.accept;
+		addBeanTypes = copyFrom.addBeanTypes;
+		addRootType = copyFrom.addRootType;
+		keepNullProperties = copyFrom.keepNullProperties;
+		sortCollections = copyFrom.sortCollections;
+		sortMaps = copyFrom.sortMaps;
+		trimEmptyCollections = copyFrom.trimEmptyCollections;
+		trimEmptyMaps = copyFrom.trimEmptyMaps;
+		trimStrings = copyFrom.trimStrings;
+		uriContext = copyFrom.uriContext;
+		uriRelativity = copyFrom.uriRelativity;
+		uriResolution = copyFrom.uriResolution;
+		listener = copyFrom.listener;
 	}
 
 	/**
@@ -59,6 +89,18 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 		super(copyFrom);
 		produces = copyFrom.produces;
 		accept = copyFrom.accept;
+		addBeanTypes = copyFrom.addBeanTypes;
+		addRootType = copyFrom.addRootType;
+		keepNullProperties = copyFrom.keepNullProperties;
+		sortCollections = copyFrom.sortCollections;
+		sortMaps = copyFrom.sortMaps;
+		trimEmptyCollections = copyFrom.trimEmptyCollections;
+		trimEmptyMaps = copyFrom.trimEmptyMaps;
+		trimStrings = copyFrom.trimStrings;
+		uriContext = copyFrom.uriContext;
+		uriRelativity = copyFrom.uriRelativity;
+		uriResolution = copyFrom.uriResolution;
+		listener = copyFrom.listener;
 	}
 
 	@Override /* ContextBuilder */
@@ -170,15 +212,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMapp</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder addBeanTypes() {
-		return set(SERIALIZER_addBeanTypes);
+		return addBeanTypes(true);
+	}
+
+	/**
+	 * Same as {@link #addBeanTypes()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder addBeanTypes(boolean value) {
+		addBeanTypes = value;
+		return this;
 	}
 
 	/**
@@ -220,15 +270,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder addRootType() {
-		return set(SERIALIZER_addRootType);
+		return addRootType(true);
+	}
+
+	/**
+	 * Same as {@link #addRootType()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder addRootType(boolean value) {
+		addRootType = value;
+		return this;
 	}
 
 	/**
@@ -258,15 +316,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder keepNullProperties() {
-		return set(SERIALIZER_keepNullProperties);
+		return keepNullProperties(true);
+	}
+
+	/**
+	 * Same as {@link #keepNullProperties()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder keepNullProperties(boolean value) {
+		keepNullProperties = value;
+		return this;
 	}
 
 	/**
@@ -311,17 +377,14 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
-		return set(SERIALIZER_listener, value);
+		listener = value;
+		return this;
 	}
 
 	/**
@@ -348,15 +411,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myArray</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder sortCollections() {
-		return set(SERIALIZER_sortCollections);
+		return sortCollections(true);
+	}
+
+	/**
+	 * Same as {@link #sortCollections()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder sortCollections(boolean value) {
+		sortCollections = value;
+		return this;
 	}
 
 	/**
@@ -383,15 +454,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder sortMaps() {
-		return set(SERIALIZER_sortMaps);
+		return sortMaps(true);
+	}
+
+	/**
+	 * Same as {@link #sortMaps()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder sortMaps(boolean value) {
+		sortMaps = value;
+		return this;
 	}
 
 	/**
@@ -426,15 +505,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder trimEmptyCollections() {
-		return set(SERIALIZER_trimEmptyCollections);
+		return trimEmptyCollections(true);
+	}
+
+	/**
+	 * Same as {@link #trimEmptyCollections()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder trimEmptyCollections(boolean value) {
+		trimEmptyCollections = value;
+		return this;
 	}
 
 	/**
@@ -467,15 +554,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder trimEmptyMaps() {
-		return set(SERIALIZER_trimEmptyMaps);
+		return trimEmptyMaps(true);
+	}
+
+	/**
+	 * Same as {@link #trimEmptyMaps()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder trimEmptyMaps(boolean value) {
+		trimEmptyMaps = value;
+		return this;
 	}
 
 	/**
@@ -499,15 +594,23 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myMap</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public SerializerBuilder trimStrings() {
-		return set(SERIALIZER_trimStrings);
+		return trimStrings(true);
+	}
+
+	/**
+	 * Same as {@link #trimStrings()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerBuilder trimStrings(boolean value) {
+		trimStrings = value;
+		return this;
 	}
 
 	/**
@@ -543,7 +646,6 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
@@ -552,7 +654,8 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerBuilder uriContext(UriContext value) {
-		return set(SERIALIZER_uriContext, value);
+		uriContext = value;
+		return this;
 	}
 
 	/**
@@ -579,7 +682,6 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
@@ -590,7 +692,8 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerBuilder uriRelativity(UriRelativity value) {
-		return set(SERIALIZER_uriRelativity, value);
+		uriRelativity = value;
+		return this;
 	}
 
 	/**
@@ -619,7 +722,6 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
@@ -630,7 +732,8 @@ public abstract class SerializerBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerBuilder uriResolution(UriResolution value) {
-		return set(SERIALIZER_uriResolution, value);
+		uriResolution = value;
+		return this;
 	}
 
 	// <FluentSetters>

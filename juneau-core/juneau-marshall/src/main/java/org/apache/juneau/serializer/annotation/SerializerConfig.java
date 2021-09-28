@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({SerializerConfigAnnotation.Apply.class,SerializerConfigAnnotation.OutputStreamSerializerApply.class,SerializerConfigAnnotation.WriterSerializerApply.class})
+@ContextApply({SerializerConfigAnnotation.SerializerApply.class,SerializerConfigAnnotation.OutputStreamSerializerApply.class,SerializerConfigAnnotation.WriterSerializerApply.class})
 public @interface SerializerConfig {
 
 	/**
@@ -92,8 +92,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -108,7 +108,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
+	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -127,8 +127,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -143,7 +143,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
+	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()}
 	 * </ul>
 	 */
 	String addRootType() default "";
@@ -173,7 +173,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
+	 * 	<li class='jm'>{@link SerializerBuilder#keepNullProperties()}
 	 * </ul>
 	 */
 	String keepNullProperties() default "";
@@ -185,7 +185,7 @@ public @interface SerializerConfig {
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * 	<li class='jm'>{@link SerializerBuilder#listener(Class)}
 	 * </ul>
 	 */
 	Class<? extends SerializerListener> listener() default SerializerListener.Null.class;
@@ -211,7 +211,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * 	<li class='jm'>{@link SerializerBuilder#sortCollections()}
 	 * </ul>
 	 */
 	String sortCollections() default "";
@@ -237,7 +237,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * 	<li class='jm'>{@link SerializerBuilder#sortMaps()}
 	 * </ul>
 	 */
 	String sortMaps() default "";
@@ -269,7 +269,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * 	<li class='jm'>{@link SerializerBuilder#trimEmptyCollections()}
 	 * </ul>
 	 */
 	String trimEmptyCollections() default "";
@@ -299,7 +299,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * 	<li class='jm'>{@link SerializerBuilder#trimEmptyMaps()}
 	 * </ul>
 	 */
 	String trimEmptyMaps() default "";
@@ -322,7 +322,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * 	<li class='jm'>{@link SerializerBuilder#trimStrings()}
 	 * </ul>
 	 */
 	String trimStrings() default "";
@@ -342,7 +342,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * 	<li class='jm'>{@link SerializerBuilder#uriContext(UriContext)}
 	 * </ul>
 	 */
 	String uriContext() default "";
@@ -370,7 +370,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * 	<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */
@@ -400,7 +400,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * 	<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */

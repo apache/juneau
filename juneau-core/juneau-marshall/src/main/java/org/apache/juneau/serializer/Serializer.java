@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static java.util.Optional.*;
+
 import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -42,6 +44,10 @@ import org.apache.juneau.internal.*;
 @ConfigurableContext
 public abstract class Serializer extends BeanTraverseContext {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Represents no Serializer.
 	 */
@@ -66,349 +72,11 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "Serializer";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * When enabled, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
-	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.addBeanTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_ADDBEANTYPES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#addBeanTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addBeanTypes()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_addBeanTypes = PREFIX + ".addBeanTypes.b";
-
-	/**
-	 * Configuration property:  Add type attribute to root nodes.
-	 *
-	 * <p>
-	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
-	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.addRootType</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_ADDROOTTYPE</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#addRootType()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addRootType()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_addRootType = PREFIX + ".addRootType.b";
-
-	/**
-	 * Configuration property:  Serializer listener.
-	 *
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during serialization.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
-	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <c>Class&lt;{@link org.apache.juneau.serializer.SerializerListener}&gt;</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#listener()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#listener(Class)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_listener = PREFIX + ".listener.c";
-
-	/**
-	 * Configuration property:  Don't trim null bean property values.
-	 *
-	 * <p>
-	 * When enabled, null bean values will be serialized to the output.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}
-	 * 	<li><b>Name:</b>  <js>"Serializer.keepNullProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.keepNullProperties</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_KEEPNULLPROPERTIES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#keepNullProperties()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#keepNullProperties()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_keepNullProperties = PREFIX + ".keepNullProperties.b";
-
-	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
-	 *
-	 * <p>
-	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
-	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.sortCollections</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_SORTCOLLECTIONS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#sortCollections()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortCollections()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_sortCollections = PREFIX + ".sortCollections.b";
-
-	/**
-	 * Configuration property:  Sort maps alphabetically.
-	 *
-	 * <p>
-	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
-	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.sortMaps</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_SORTMAPS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#sortMaps()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortMaps()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_sortMaps = PREFIX + ".sortMaps.b";
-
-	/**
-	 * Configuration property:  Trim empty lists and arrays.
-	 *
-	 * <p>
-	 * When enabled, empty lists and arrays will not be serialized.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
-	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.trimEmptyCollections</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMEMPTYCOLLECTIONS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimEmptyCollections()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyCollections()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_trimEmptyCollections = PREFIX + ".trimEmptyCollections.b";
-
-	/**
-	 * Configuration property:  Trim empty maps.
-	 *
-	 * <p>
-	 * When enabled, empty map values will not be serialized to the output.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
-	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.trimEmptyMaps</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMEMPTYMAPS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimEmptyMaps()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyMaps()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_trimEmptyMaps = PREFIX + ".trimEmptyMaps.b";
-
-	/**
-	 * Configuration property:  Trim strings.
-	 *
-	 * <p>
-	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
-	 * 	<li><b>Name:</b>  <js>"Serializer.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.trimStrings</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMSTRINGS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimStrings()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimStrings()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_trimStrings = PREFIX + ".trimStrings.b";
-
-	/**
-	 * Configuration property:  URI context bean.
-	 *
-	 * <p>
-	 * Bean used for resolution of URIs to absolute or root-relative form.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
-	 * 	<li><b>Name:</b>  <js>"Serializer.uriContext.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriContext}
-	 * 	<li><b>System property:</b>  <c>Serializer.uriContext</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_URICONTEXT</c>
-	 * 	<li><b>Default:</b>  <js>"{}"</js>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#uriContext()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriContext(UriContext)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_uriContext = PREFIX + ".uriContext.s";
-
-	/**
-	 * Configuration property:  URI relativity.
-	 *
-	 * <p>
-	 * Defines what relative URIs are relative to when serializing any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties and classes annotated with {@link Uri @Uri}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
-	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriRelativity}
-	 * 	<li><b>System property:</b>  <c>Serializer.uriRelativity</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_URIRELATIVITY</c>
-	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#uriRelativity()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriRelativity(UriRelativity)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_uriRelativity = PREFIX + ".uriRelativity.s";
-
-	/**
-	 * Configuration property:  URI resolution.
-	 *
-	 * <p>
-	 * Defines the resolution level for URIs when serializing any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties and classes annotated with {@link Uri @Uri}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
-	 * 	<li><b>Name:</b>  <js>"Serializer.uriResolution.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriResolution}
-	 * 	<li><b>System property:</b>  <c>Serializer.uriResolution</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_URIRESOLUTION</c>
-	 * 	<li><b>Default:</b>  <js>"NONE"</js>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#uriResolution()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriResolution(UriResolution)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String SERIALIZER_uriResolution = PREFIX + ".uriResolution.s";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean
+	final String produces, accept;
+	final boolean
 		addBeanTypes,
 		keepNullProperties,
 		trimEmptyCollections,
@@ -417,16 +85,14 @@ public abstract class Serializer extends BeanTraverseContext {
 		sortCollections,
 		sortMaps,
 		addRootType;
-	private final UriContext uriContext;
-	private final UriResolution uriResolution;
-	private final UriRelativity uriRelativity;
-	private final Class<? extends SerializerListener> listener;
+	final UriContext uriContext;
+	final UriResolution uriResolution;
+	final UriRelativity uriRelativity;
+	final Class<? extends SerializerListener> listener;
 
-	private final MediaRanges accept;
-	private final MediaType[] accepts;
-	private final MediaType produces;
-
-	final String _produces, _accept;
+	private final MediaRanges acceptRanges;
+	private final MediaType[] acceptMediaTypes;
+	private final MediaType producesMediaType;
 
 	/**
 	 * Constructor
@@ -436,25 +102,24 @@ public abstract class Serializer extends BeanTraverseContext {
 	protected Serializer(SerializerBuilder builder) {
 		super(builder);
 
-		_produces = builder.produces;
-		_accept = builder.accept;
-		ContextProperties cp = getContextProperties();
-		addBeanTypes = cp.getBoolean(SERIALIZER_addBeanTypes).orElse(false);
-		keepNullProperties = cp.getBoolean(SERIALIZER_keepNullProperties).orElse(false);
-		trimEmptyCollections = cp.getBoolean(SERIALIZER_trimEmptyCollections).orElse(false);
-		trimEmptyMaps = cp.getBoolean(SERIALIZER_trimEmptyMaps).orElse(false);
-		trimStrings = cp.getBoolean(SERIALIZER_trimStrings).orElse(false);
-		sortCollections = cp.getBoolean(SERIALIZER_sortCollections).orElse(false);
-		sortMaps = cp.getBoolean(SERIALIZER_sortMaps).orElse(false);
-		addRootType = cp.getBoolean(SERIALIZER_addRootType).orElse(false);
-		uriContext = cp.get(SERIALIZER_uriContext, UriContext.class).orElse(UriContext.DEFAULT);
-		uriResolution = cp.get(SERIALIZER_uriResolution, UriResolution.class).orElse(UriResolution.NONE);
-		uriRelativity = cp.get(SERIALIZER_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
-		listener = cp.getClass(SERIALIZER_listener, SerializerListener.class).orElse(null);
+		produces = builder.produces;
+		accept = builder.accept;
+		addBeanTypes = builder.addBeanTypes;
+		keepNullProperties = builder.keepNullProperties;
+		trimEmptyCollections = builder.trimEmptyCollections;
+		trimEmptyMaps = builder.trimEmptyMaps;
+		trimStrings = builder.trimStrings;
+		sortCollections = builder.sortCollections;
+		sortMaps = builder.sortMaps;
+		addRootType = builder.addRootType;
+		uriContext = builder.uriContext;
+		uriResolution = builder.uriResolution;
+		uriRelativity = builder.uriRelativity;
+		listener = builder.listener;
 
-		this.produces = MediaType.of(builder.produces);
-		this.accept = builder.accept == null ? MediaRanges.of(builder.produces) : MediaRanges.of(builder.accept);
-		this.accepts = builder.accept == null ? new MediaType[] {this.produces} : MediaType.ofAll(StringUtils.split(builder.accept, ','));
+		this.producesMediaType = MediaType.of(produces);
+		this.acceptRanges = ofNullable(accept).map(MediaRanges::of).orElseGet(()->MediaRanges.of(produces));
+		this.acceptMediaTypes = ofNullable(builder.accept).map(x -> StringUtils.split(x, ',')).map(MediaType::ofAll).orElseGet(()->new MediaType[] {this.producesMediaType});
 	}
 
 	@Override
@@ -573,7 +238,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaRanges getMediaTypeRanges() {
-		return accept;
+		return acceptRanges;
 	}
 
 	/**
@@ -585,7 +250,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @return The media type.  Never <jk>null</jk>.
 	 */
 	public final MediaType getPrimaryMediaType() {
-		return accepts[0];
+		return acceptMediaTypes[0];
 	}
 
 	/**
@@ -597,7 +262,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaType[] getAcceptMediaTypes() {
-		return accepts;
+		return acceptMediaTypes;
 	}
 
 	/**
@@ -617,7 +282,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
 	 */
 	public final MediaType getResponseContentType() {
-		return produces;
+		return producesMediaType;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -627,7 +292,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #SERIALIZER_addBeanTypes
+	 * @see SerializerBuilder#addBeanTypes()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -639,7 +304,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Add type attribute to root nodes.
 	 *
-	 * @see #SERIALIZER_addRootType
+	 * @see SerializerBuilder#addRootType()
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
@@ -650,7 +315,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Serializer listener.
 	 *
-	 * @see #SERIALIZER_listener
+	 * @see SerializerBuilder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during serialization.
 	 */
@@ -661,7 +326,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Sort arrays and collections alphabetically.
 	 *
-	 * @see #SERIALIZER_sortCollections
+	 * @see SerializerBuilder#sortCollections()
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
@@ -672,7 +337,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Sort maps alphabetically.
 	 *
-	 * @see #SERIALIZER_sortMaps
+	 * @see SerializerBuilder#sortMaps()
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
@@ -683,7 +348,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Trim empty lists and arrays.
 	 *
-	 * @see #SERIALIZER_trimEmptyCollections
+	 * @see SerializerBuilder#trimEmptyCollections()
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
@@ -694,7 +359,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Trim empty maps.
 	 *
-	 * @see #SERIALIZER_trimEmptyMaps
+	 * @see SerializerBuilder#trimEmptyMaps()
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
@@ -705,7 +370,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Don't trim null bean property values.
 	 *
-	 * @see #SERIALIZER_keepNullProperties
+	 * @see SerializerBuilder#keepNullProperties()
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
@@ -716,7 +381,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Trim strings.
 	 *
-	 * @see #SERIALIZER_trimStrings
+	 * @see SerializerBuilder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
@@ -727,7 +392,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * URI context bean.
 	 *
-	 * @see #SERIALIZER_uriContext
+	 * @see SerializerBuilder#uriContext(UriContext)
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
@@ -738,7 +403,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * URI relativity.
 	 *
-	 * @see #SERIALIZER_uriRelativity
+	 * @see SerializerBuilder#uriRelativity(UriRelativity)
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
@@ -749,7 +414,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * URI resolution.
 	 *
-	 * @see #SERIALIZER_uriResolution
+	 * @see SerializerBuilder#uriResolution(UriResolution)
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */

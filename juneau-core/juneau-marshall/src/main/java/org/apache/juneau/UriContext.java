@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
@@ -66,6 +67,22 @@ public class UriContext {
 	 */
 	public static UriContext of(String authority, String contextRoot, String servletPath, String pathInfo) {
 		return new UriContext(authority, contextRoot, servletPath, pathInfo);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param s
+	 * 	The input string.
+	 * 	<br>Example: <js>{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}</js>
+	 * @return A new {@link UriContext} object.
+	 */
+	public static UriContext of(String s) {
+		try {
+			return new UriContext(s);
+		} catch (ParseException e) {
+			throw runtimeException(e);
+		}
 	}
 
 	/**

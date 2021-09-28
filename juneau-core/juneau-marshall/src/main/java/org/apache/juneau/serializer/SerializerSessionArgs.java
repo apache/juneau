@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.Serializer.*;
-
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -43,6 +41,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	VarResolverSession resolver;
 	Boolean useWhitespace;
 	Charset fileCharset, streamCharset;
+	UriContext uriContext;
 
 	/**
 	 * Static creator.
@@ -141,7 +140,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link Serializer#SERIALIZER_uriContext}.
+	 * If not specified, defaults to {@link SerializerBuilder#uriContext(UriContext)}.
 	 *
 	 * @param value
 	 * 	The new property value.
@@ -150,7 +149,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 */
 	@FluentSetter
 	public SerializerSessionArgs uriContext(UriContext value) {
-		property(SERIALIZER_uriContext, value);
+		uriContext = value;
 		return this;
 	}
 

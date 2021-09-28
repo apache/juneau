@@ -3703,7 +3703,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
+	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3757,7 +3757,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
+	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3799,7 +3799,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
+	 * 	<li class='jm'>{@link SerializerBuilder#keepNullProperties()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3838,7 +3838,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * 	<li class='jm'>{@link SerializerBuilder#sortCollections()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3877,7 +3877,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * 	<li class='jm'>{@link SerializerBuilder#sortMaps()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3923,7 +3923,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * 	<li class='jm'>{@link SerializerBuilder#trimEmptyCollections()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -3968,7 +3968,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * 	<li class='jm'>{@link SerializerBuilder#trimEmptyMaps()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -4004,7 +4004,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * 	<li class='jm'>{@link SerializerBuilder#trimStrings()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -4051,7 +4051,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * 	<li class='jm'>{@link SerializerBuilder#uriContext(UriContext)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
@@ -4088,7 +4088,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * 	<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
@@ -4129,7 +4129,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * 	<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *

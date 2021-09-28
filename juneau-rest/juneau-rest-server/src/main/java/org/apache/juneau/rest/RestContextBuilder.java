@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
-import static org.apache.juneau.serializer.Serializer.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.*;
 import static java.util.logging.Level.*;
@@ -5687,7 +5686,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * 	<li class='jm'>{@link SerializerBuilder#listener(Class)}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -5696,7 +5695,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder serializerListener(Class<? extends SerializerListener> value) {
 		if (value != SerializerListener.Null.class)
-			set(SERIALIZER_listener, value);
+			serializers.forEach(x -> x.listener(value));
 		return this;
 	}
 
