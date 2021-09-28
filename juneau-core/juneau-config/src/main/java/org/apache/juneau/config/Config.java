@@ -229,7 +229,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	Config(Config copyFrom, VarResolverSession varSession) {
-		super(null, true);
+		super(copyFrom);
 		name = copyFrom.name;
 		store = copyFrom.store;
 		configMap = copyFrom.configMap;

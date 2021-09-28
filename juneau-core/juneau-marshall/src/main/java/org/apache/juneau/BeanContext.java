@@ -251,7 +251,7 @@ public class BeanContext extends Context {
 	 * @param builder The builder for this object.
 	 */
 	public BeanContext(BeanContextBuilder builder) {
-		super(builder.getContextProperties(), true);
+		super(builder);
 
 		ContextProperties cp = builder.getContextProperties();
 		if (cp == null)

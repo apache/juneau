@@ -51,7 +51,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		ignoreRecursions = builder.ignoreRecursions;
 		detectRecursions = builder.detectRecursions;
 
-		actualDetectRecursions = detectRecursions || ignoreRecursions;
+		actualDetectRecursions = detectRecursions || ignoreRecursions || super.isDebug();
 	}
 
 	@Override

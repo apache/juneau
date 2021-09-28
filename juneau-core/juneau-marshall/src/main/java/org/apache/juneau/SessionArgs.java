@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Context.*;
-
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -29,6 +27,7 @@ public class SessionArgs {
 
 	SessionProperties properties = SessionProperties.create();
 	boolean unmodifiable;
+	Boolean debug;
 
 	/**
 	 * Constructor.
@@ -49,13 +48,12 @@ public class SessionArgs {
 	 * </ul>
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link Context#CONTEXT_debug}.
+	 * If not specified, defaults to {@link ContextBuilder#debug()}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
 	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#debug()}
-	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
-	 * </ul>
+	 * 	<li class='jm'>{@link ContextBuilder#debug()}
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -64,7 +62,7 @@ public class SessionArgs {
 	 */
 	@FluentSetter
 	public SessionArgs debug(Boolean value) {
-		property(CONTEXT_debug, value);
+		debug = value;
 		return this;
 	}
 

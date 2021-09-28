@@ -1882,6 +1882,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	@FluentSetter
 	public RestClientBuilder debug() {
 		super.debug();
+		serializers().forEach(x -> x.debug());
 		return headers(Debug.TRUE);
 	}
 
@@ -3207,7 +3208,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link Context#CONTEXT_debug}.
+	 * Automatically enabled with {@link ContextBuilder#debug()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

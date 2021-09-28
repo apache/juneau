@@ -351,7 +351,7 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link ContextBuilder#debug()}
 	 * 	<li class='jm'>{@link SessionArgs#debug(Boolean)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
+	 * 	<li class='jm'>{@link ContextBuilder#debug()}
 	 * </ul>
 	 */
 	String debug() default "";

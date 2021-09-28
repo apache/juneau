@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static java.util.Arrays.*;
 
 import java.util.*;
@@ -54,7 +53,7 @@ public class BeanConfigAnnotation {
 			bool(a.beansRequireSerializable()).ifPresent(x -> b.beansRequireSerializable(x));
 			bool(a.beansRequireSettersForGetters()).ifPresent(x -> b.beansRequireSettersForGetters(x));
 			bool(a.disableBeansRequireSomeProperties()).ifPresent(x -> b.disableBeansRequireSomeProperties(x));
-			bool(a.debug()).ifPresent(x -> b.set(CONTEXT_debug, x));
+			bool(a.debug()).ifPresent(x -> b.debug(x));
 			bool(a.findFluentSetters()).ifPresent(x -> b.findFluentSetters(x));
 			bool(a.ignoreInvocationExceptionsOnGetters()).ifPresent(x -> b.ignoreInvocationExceptionsOnGetters(x));
 			bool(a.ignoreInvocationExceptionsOnSetters()).ifPresent(x -> b.ignoreInvocationExceptionsOnSetters(x));

@@ -666,15 +666,25 @@ public abstract class ContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
 	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#debug(Boolean)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public ContextBuilder debug() {
-		debug = true;
-		return set(CONTEXT_debug);
+		return debug(true);
+	}
+
+	/**
+	 * Same as {@link #debug()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ContextBuilder debug(boolean value) {
+		debug = value;
+		return this;
 	}
 
 	/**

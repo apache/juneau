@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.Context.*;
+import static java.util.Optional.*;
 
 import java.text.*;
 import java.util.*;
@@ -53,7 +53,7 @@ public abstract class Session {
 		if (args.unmodifiable)
 			sp = sp.unmodifiable();
 		properties = sp;
-		debug = sp.get(CONTEXT_debug, Boolean.class).orElse(ctx.isDebug());
+		debug = ofNullable(args.debug).orElse(ctx.isDebug());
 	}
 
 	/**
@@ -170,7 +170,7 @@ public abstract class Session {
 	/**
 	 * Configuration property:  Debug mode.
 	 *
-	 * @see BeanContext#CONTEXT_debug
+	 * @see ContextBuilder#debug()
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */

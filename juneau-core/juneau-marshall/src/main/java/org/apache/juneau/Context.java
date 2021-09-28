@@ -22,7 +22,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
@@ -104,89 +103,21 @@ public abstract class Context implements MetaProvider {
 	 */
 	public static final String CONTEXT_annotations = PREFIX + ".annotations.lo";
 
-	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * <p>
-	 * Enables the following additional information during serialization:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean getters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * 	<li>
-	 * 		Enables {@link BeanTraverseBuilder#detectRecursions()}.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_debug CONTEXT_debug}
-	 * 	<li><b>Name:</b>  <js>"Context.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Context.debug</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#debug()}
-	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#debug(Boolean)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String CONTEXT_debug = PREFIX + ".debug.b";
-
-
 	final ContextProperties properties;
 	private final int identityCode;
 	private final ReflectionMap<Annotation> annotations;
-
 	final boolean debug;
 
 	/**
-	 * Constructor for this class.
+	 * Copy constructor.
 	 *
-	 * <p>
-	 * Subclasses MUST implement the same public constructor.
-	 *
-	 * @param cp The read-only configuration for this context object.
-	 * @param allowReuse If <jk>true</jk>, subclasses that share the same property store values can be reused.
+	 * @param copyFrom The context to copy from.
 	 */
-	public Context(ContextProperties cp, boolean allowReuse) {
-		properties = cp == null ? ContextProperties.DEFAULT : cp;
-		cp = properties;
-		this.identityCode = allowReuse ? new HashCode().add(className(this)).add(cp).get() : System.identityHashCode(this);
-		debug = cp.getBoolean(CONTEXT_debug).orElse(false);
-
-		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
-		for (Annotation a : cp.getList(CONTEXT_annotations, Annotation.class).orElse(emptyList())) {
-			try {
-				ClassInfo ci = ClassInfo.of(a.getClass());
-
-				MethodInfo mi = ci.getMethod("onClass");
-				if (mi != null) {
-					if (! mi.getReturnType().is(Class[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", a.getClass().getSimpleName());
-					for (Class<?> c : (Class<?>[])mi.accessible().invoke(a))
-						rmb.append(c.getName(), a);
-				}
-
-				mi = ci.getMethod("on");
-				if (mi != null) {
-					if (! mi.getReturnType().is(String[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", a.getClass().getSimpleName());
-					for (String s : (String[])mi.accessible().invoke(a))
-						rmb.append(s, a);
-				}
-
-			} catch (Exception e) {
-				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", className(a));
-			}
-		}
-		this.annotations = rmb.build();
+	protected Context(Context copyFrom) {
+		identityCode = copyFrom.identityCode;
+		annotations = copyFrom.annotations;
+		debug = copyFrom.debug;
+		properties = copyFrom.properties;
 	}
 
 	/**
@@ -195,8 +126,7 @@ public abstract class Context implements MetaProvider {
 	 * @param builder The builder for this class.
 	 */
 	protected Context(ContextBuilder builder) {
-		ContextProperties cp = builder.getContextProperties();
-		debug = cp.getBoolean(CONTEXT_debug).orElse(builder.debug);
+		debug = builder.debug;
 		identityCode = System.identityHashCode(this);
 		properties = builder.getContextProperties();
 
@@ -595,7 +525,7 @@ public abstract class Context implements MetaProvider {
 	/**
 	 * Debug mode.
 	 *
-	 * @see #CONTEXT_debug
+	 * @see ContextBuilder#debug()
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
