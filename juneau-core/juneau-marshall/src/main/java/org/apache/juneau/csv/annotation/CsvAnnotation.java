@@ -14,7 +14,6 @@ package org.apache.juneau.csv.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -161,9 +160,9 @@ public class CsvAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Csv} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Csv} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Csv,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Csv,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -171,17 +170,17 @@ public class CsvAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Csv.class, ContextPropertiesBuilder.class, vr);
+			super(Csv.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Csv> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Csv> ai, ContextBuilder b) {
 			Csv a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

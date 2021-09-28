@@ -14,8 +14,6 @@ package org.apache.juneau.msgpack.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -161,9 +159,9 @@ public class MsgPackAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link MsgPack} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link MsgPack} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<MsgPack,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<MsgPack,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -171,17 +169,17 @@ public class MsgPackAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(MsgPack.class, ContextPropertiesBuilder.class, vr);
+			super(MsgPack.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPack> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<MsgPack> ai, ContextBuilder b) {
 			MsgPack a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

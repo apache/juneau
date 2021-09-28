@@ -14,7 +14,6 @@ package org.apache.juneau.jsonschema.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
@@ -1294,9 +1293,9 @@ public class SchemaAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Schema} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Schema} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Schema,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Schema,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -1304,17 +1303,17 @@ public class SchemaAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Schema.class, ContextPropertiesBuilder.class, vr);
+			super(Schema.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Schema> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Schema> ai, ContextBuilder b) {
 			Schema a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

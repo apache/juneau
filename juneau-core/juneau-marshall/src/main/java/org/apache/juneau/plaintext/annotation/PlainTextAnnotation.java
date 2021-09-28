@@ -14,8 +14,6 @@ package org.apache.juneau.plaintext.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -161,9 +159,9 @@ public class PlainTextAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link PlainText} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link PlainText} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<PlainText,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<PlainText,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -171,17 +169,17 @@ public class PlainTextAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(PlainText.class, ContextPropertiesBuilder.class, vr);
+			super(PlainText.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainText> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<PlainText> ai, ContextBuilder b) {
 			PlainText a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

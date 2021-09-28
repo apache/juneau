@@ -14,8 +14,6 @@ package org.apache.juneau.uon.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -161,9 +159,9 @@ public class UonAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Uon} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Uon} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Uon,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Uon,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -171,17 +169,17 @@ public class UonAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Uon.class, ContextPropertiesBuilder.class, vr);
+			super(Uon.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uon> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Uon> ai, ContextBuilder b) {
 			Uon a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

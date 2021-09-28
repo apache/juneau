@@ -14,8 +14,6 @@ package org.apache.juneau.jso.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -161,9 +159,9 @@ public class JsoAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Jso} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Jso} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Jso,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Jso,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -171,17 +169,17 @@ public class JsoAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Jso.class, ContextPropertiesBuilder.class, vr);
+			super(Jso.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Jso> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Jso> ai, ContextBuilder b) {
 			Jso a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

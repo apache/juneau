@@ -14,8 +14,6 @@ package org.apache.juneau.oapi.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -161,9 +159,9 @@ public class OpenApiAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link OpenApi} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link OpenApi} annotations to a {@link ContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<OpenApi,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<OpenApi,ContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -171,17 +169,17 @@ public class OpenApiAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(OpenApi.class, ContextPropertiesBuilder.class, vr);
+			super(OpenApi.class, ContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApi> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<OpenApi> ai, ContextBuilder b) {
 			OpenApi a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 
