@@ -4401,7 +4401,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
+	 * 	<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
 	 * </ul>
 	 *
 	 * @param value
@@ -4470,7 +4470,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * 	<li class='jm'>{@link ParserBuilder#strict()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -4508,7 +4508,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * 	<li class='jm'>{@link ParserBuilder#trimStrings()}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).

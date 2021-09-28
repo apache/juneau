@@ -16,6 +16,7 @@ import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -119,6 +120,10 @@ import org.apache.juneau.utils.*;
 @ConfigurableContext
 public abstract class Parser extends BeanContextable {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Represents no Parser.
 	 */
@@ -143,186 +148,16 @@ public abstract class Parser extends BeanContextable {
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "Parser";
-
-	/**
-	 * Configuration property:  Auto-close streams.
-	 *
-	 * <p>
-	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
-	 * after parsing is complete.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
-	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Parser.autoCloseStreams</c>
-	 * 	<li><b>Environment variable:</b>  <c>PARSER_AUTOCLOSESTREAMS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#autoCloseStreams()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#autoCloseStreams()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String PARSER_autoCloseStreams = PREFIX + ".autoCloseStreams.b";
-
-	/**
-	 * Configuration property:  Debug output lines.
-	 *
-	 * <p>
-	 * When parse errors occur, this specifies the number of lines of input before and after the
-	 * error location to be printed as part of the exception message.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines PARSER_debugOutputLines}
-	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
-	 * 	<li><b>Data type:</b>  <jk>int</jk>
-	 * 	<li><b>System property:</b>  <c>Parser.debugOutputLines</c>
-	 * 	<li><b>Environment variable:</b>  <c>PARSER_DEBUGOUTPUTLINES</c>
-	 * 	<li><b>Default:</b>  <c>5</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#debugOutputLines()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#debugOutputLines(int)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String PARSER_debugOutputLines = PREFIX + ".debugOutputLines.i";
-
-	/**
-	 * Configuration property:  Parser listener.
-	 *
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during parsing.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
-	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <c>Class&lt;{@link org.apache.juneau.parser.ParserListener}&gt;</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#listener()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#listener(Class)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String PARSER_listener = PREFIX + ".listener.c";
-
-	/**
-	 * Configuration property:  Strict mode.
-	 *
-	 * <p>
-	 * When enabled, strict mode for the parser is enabled.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
-	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Parser.strict</c>
-	 * 	<li><b>Environment variable:</b>  <c>PARSER_STRICT</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#strict()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#strict()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String PARSER_strict = PREFIX + ".strict.b";
-
-	/**
-	 * Configuration property:  Trim parsed strings.
-	 *
-	 * <p>
-	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
-	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Parser.trimStrings</c>
-	 * 	<li><b>Environment variable:</b>  <c>PARSER_TRIMSTRINGS</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#trimStrings()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#trimStrings()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String PARSER_trimStrings = PREFIX + ".trimStrings.b";
-
-	/**
-	 * Configuration property:  Unbuffered.
-	 *
-	 * <p>
-	 * When enabled, don't use internal buffering during parsing.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
-	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Parser.unbuffered</c>
-	 * 	<li><b>Environment variable:</b>  <c>PARSER_UNBUFFERED</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#unbuffered()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#unbuffered()}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String PARSER_unbuffered = PREFIX + ".unbuffered.b";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final boolean trimStrings, strict, autoCloseStreams, unbuffered;
-	private final int debugOutputLines;
-	private final Class<? extends ParserListener> listener;
+	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
+	final int debugOutputLines;
+	final String consumes;
+	final Class<? extends ParserListener> listener;
 
 	/** General parser properties currently set on this parser. */
-	private final MediaType[] consumes;
-
-	final String _consumes;
+	private final MediaType[] consumesArray;
 
 	/**
 	 * Constructor.
@@ -332,19 +167,18 @@ public abstract class Parser extends BeanContextable {
 	protected Parser(ParserBuilder builder) {
 		super(builder);
 
-		_consumes = ofNullable(builder.consumes).orElse("");
-		ContextProperties cp = getContextProperties();
-		trimStrings = cp.getBoolean(PARSER_trimStrings).orElse(false);
-		strict = cp.getBoolean(PARSER_strict).orElse(false);
-		autoCloseStreams = cp.getBoolean(PARSER_autoCloseStreams).orElse(false);
-		debugOutputLines = cp.getInteger(PARSER_debugOutputLines).orElse(5);
-		unbuffered = cp.getBoolean(PARSER_unbuffered).orElse(false);
-		listener = cp.getClass(PARSER_listener, ParserListener.class).orElse(null);
+		consumes = builder.consumes;
+		trimStrings = builder.trimStrings;
+		strict = builder.strict;
+		autoCloseStreams = builder.autoCloseStreams;
+		debugOutputLines = builder.debugOutputLines;
+		unbuffered = builder.unbuffered;
+		listener = builder.listener;
 
-		String[] consumes = StringUtils.split(_consumes, ',');
-		this.consumes = new MediaType[consumes.length];
-		for (int i = 0; i < consumes.length; i++) {
-			this.consumes[i] = MediaType.of(consumes[i]);
+		String[] _consumes = StringUtils.split(ofNullable(consumes).orElse(""), ',');
+		this.consumesArray = new MediaType[_consumes.length];
+		for (int i = 0; i < _consumes.length; i++) {
+			this.consumesArray[i] = MediaType.of(_consumes[i]);
 		}
 	}
 
@@ -432,11 +266,11 @@ public abstract class Parser extends BeanContextable {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -444,7 +278,7 @@ public abstract class Parser extends BeanContextable {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.
@@ -674,7 +508,7 @@ public abstract class Parser extends BeanContextable {
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaType[] getMediaTypes() {
-		return consumes;
+		return consumesArray;
 	}
 
 	/**
@@ -683,7 +517,7 @@ public abstract class Parser extends BeanContextable {
 	 * @return The media type.
 	 */
 	public final MediaType getPrimaryMediaType() {
-		return consumes == null || consumes.length == 0 ? null : consumes[0];
+		return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0];
 	}
 
 	/**
@@ -707,7 +541,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Auto-close streams.
 	 *
-	 * @see #PARSER_autoCloseStreams
+	 * @see ParserBuilder#autoCloseStreams()
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -719,7 +553,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Debug output lines.
 	 *
-	 * @see #PARSER_debugOutputLines
+	 * @see ParserBuilder#debugOutputLines(int)
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -730,7 +564,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Parser listener.
 	 *
-	 * @see #PARSER_listener
+	 * @see ParserBuilder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
@@ -741,7 +575,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Strict mode.
 	 *
-	 * @see #PARSER_strict
+	 * @see ParserBuilder#strict()
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
@@ -752,7 +586,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Trim parsed strings.
 	 *
-	 * @see #PARSER_trimStrings
+	 * @see ParserBuilder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -764,7 +598,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Unbuffered.
 	 *
-	 * @see #PARSER_unbuffered
+	 * @see ParserBuilder#unbuffered()
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */

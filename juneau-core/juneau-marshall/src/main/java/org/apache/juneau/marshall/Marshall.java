@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.text.*;
 
 import org.apache.juneau.*;
@@ -276,11 +277,11 @@ public abstract class Marshall {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -288,7 +289,7 @@ public abstract class Marshall {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.
@@ -318,11 +319,11 @@ public abstract class Marshall {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -330,7 +331,7 @@ public abstract class Marshall {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.

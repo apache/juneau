@@ -32,44 +32,10 @@ import org.apache.juneau.collections.*;
 public abstract class InputStreamParser extends Parser {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "InputStreamParser";
-
-	/**
-	 * Configuration property:  Binary input format.
-	 *
-	 * <p>
-	 * When using the {@link #parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
-	 * when converting the string into a byte array.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat ISPARSER_binaryFormat}
-	 * 	<li><b>Name:</b>  <js>"InputStreamParser.binaryFormat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}
-	 * 	<li><b>System property:</b>  <c>InputStreamParser.binaryFormat</c>
-	 * 	<li><b>Environment variable:</b>  <c>INPUTSTREAMFORMAT_BINARYFORMAT</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BinaryFormat#HEX}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#binaryFormat()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.InputStreamParserBuilder#binaryFormat(BinaryFormat)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String ISPARSER_binaryFormat = PREFIX + ".binaryFormat.s";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final BinaryFormat binaryFormat;
+	final BinaryFormat binaryFormat;
 
 	/**
 	 * Constructor.
@@ -78,8 +44,7 @@ public abstract class InputStreamParser extends Parser {
 	 */
 	protected InputStreamParser(InputStreamParserBuilder builder) {
 		super(builder);
-		ContextProperties cp = getContextProperties();
-		binaryFormat = cp.get(ISPARSER_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.HEX);
+		binaryFormat = builder.binaryFormat;
 	}
 
 	@Override /* Parser */
@@ -94,7 +59,7 @@ public abstract class InputStreamParser extends Parser {
 	/**
 	 * Binary input format.
 	 *
-	 * @see #ISPARSER_binaryFormat
+	 * @see InputStreamParserBuilder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */

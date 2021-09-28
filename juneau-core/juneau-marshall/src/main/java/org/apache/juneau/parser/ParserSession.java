@@ -15,10 +15,10 @@ package org.apache.juneau.parser;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.parser.Parser.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -63,10 +63,9 @@ public abstract class ParserSession extends BeanSession {
 		super(ctx.getBeanContext(), args == null ? ParserSessionArgs.DEFAULT : args);
 		args = args == null ? ParserSessionArgs.DEFAULT : args;
 		this.ctx = ctx;
-		SessionProperties sp = getSessionProperties();
 		javaMethod = args.javaMethod;
 		outer = args.outer;
-		listener = sp.getInstance(PARSER_listener, ParserListener.class).orElseGet(()->ClassUtils.castOrCreate(ParserListener.class, ctx.getListener()));
+		listener = ClassUtils.castOrCreate(ParserListener.class, ctx.getListener());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -117,11 +116,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_streamCharset}).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_streamCharset}).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_fileCharset}).
+	 * 			{@link ReaderParserBuilder#fileCharset(Charset)}).
 	 * 	</ul>
 	 * 	<br>For byte-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -129,7 +128,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -377,11 +376,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -421,11 +420,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -928,7 +927,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Auto-close streams.
 	 *
-	 * @see Parser#PARSER_autoCloseStreams
+	 * @see ParserBuilder#autoCloseStreams()
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -940,7 +939,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Debug output lines.
 	 *
-	 * @see Parser#PARSER_debugOutputLines
+	 * @see ParserBuilder#debugOutputLines(int)
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -960,7 +959,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Strict mode.
 	 *
-	 * @see Parser#PARSER_strict
+	 * @see ParserBuilder#strict()
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
@@ -971,7 +970,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim parsed strings.
 	 *
-	 * @see Parser#PARSER_trimStrings
+	 * @see ParserBuilder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -983,7 +982,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Unbuffered.
 	 *
-	 * @see Parser#PARSER_unbuffered
+	 * @see ParserBuilder#unbuffered()
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
@@ -998,7 +997,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Parser listener.
 	 *
-	 * @see Parser#PARSER_listener
+	 * @see ParserBuilder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */

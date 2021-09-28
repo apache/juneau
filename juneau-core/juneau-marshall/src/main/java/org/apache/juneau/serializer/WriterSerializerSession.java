@@ -133,6 +133,24 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		return useWhitespace;
 	}
 
+	/**
+	 * Returns the file charset defined on this session.
+	 *
+	 * @return the file charset defined on this session.
+	 */
+	public Charset getFileCharset() {
+		return fileCharset;
+	}
+
+	/**
+	 * Returns the stream charset defined on this session.
+	 *
+	 * @return the stream charset defined on this session.
+	 */
+	public Charset getStreamCharset() {
+		return streamCharset;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------

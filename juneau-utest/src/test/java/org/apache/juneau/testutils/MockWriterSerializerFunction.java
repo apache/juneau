@@ -15,4 +15,4 @@ package org.apache.juneau.testutils;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
-public interface MockWriterSerializerFunction extends Function2<SerializerSession,Object,String> {}
+public interface MockWriterSerializerFunction extends Function2<WriterSerializerSession,Object,String> {}

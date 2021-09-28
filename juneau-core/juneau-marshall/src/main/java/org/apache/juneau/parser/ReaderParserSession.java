@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-
-import static org.apache.juneau.parser.ReaderParser.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -44,9 +42,8 @@ public abstract class ReaderParserSession extends ParserSession {
 	protected ReaderParserSession(ReaderParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		SessionProperties sp = getSessionProperties();
-		this.fileCharset = sp.get(RPARSER_fileCharset, Charset.class).orElse(ctx.getFileCharset());
-		this.streamCharset = sp.get(RPARSER_streamCharset, Charset.class).orElse(ctx.getStreamCharset());
+		this.fileCharset = ofNullable(args == null ? null : args.fileCharset).orElse(ctx.fileCharset);
+		this.streamCharset = ofNullable(args == null ? null : args.streamCharset).orElse(ctx.streamCharset);
 	}
 
 	@Override /* ParserSession */
@@ -66,11 +63,11 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_streamCharset}).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_streamCharset}).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_fileCharset}).
+	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -90,7 +87,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	 *
 	 * @return the file charset defined on this session.
 	 */
-	protected Charset getFileCharset() {
+	public Charset getFileCharset() {
 		return fileCharset;
 	}
 
@@ -99,7 +96,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	 *
 	 * @return the stream charset defined on this session.
 	 */
-	protected Charset getStreamCharset() {
+	public Charset getStreamCharset() {
 		return streamCharset;
 	}
 

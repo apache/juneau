@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.serializer.Serializer.*;
@@ -5425,7 +5424,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * 	<li class='jm'>{@link ParserBuilder#listener(Class)}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -5434,7 +5433,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@FluentSetter
 	public RestContextBuilder parserListener(Class<? extends ParserListener> value) {
 		if (value != ParserListener.Null.class)
-			set(PARSER_listener, value);
+			parsers.forEach(x -> x.listener(value));
 		return this;
 	}
 

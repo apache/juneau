@@ -15,12 +15,10 @@ package org.apache.juneau.rest;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
@@ -67,15 +65,15 @@ public class Header_AcceptCharset_Test {
 			return in;
 		}
 
-		public static class TestParser extends MockStreamParser {
-			protected TestParser(MockStreamParser.Builder builder) {
-				super(builder.consumes("text/plain").function((session,in,type) -> session.getSessionProperties().get(ReaderParser.RPARSER_streamCharset).get().toString()));
+		public static class TestParser extends MockReaderParser {
+			protected TestParser(MockReaderParser.Builder builder) {
+				super(builder.consumes("text/plain").function((session,in,type) -> session.getStreamCharset().toString()));
 			}
 		}
 
-		public static class TestSerializer extends MockStreamSerializer {
-			protected TestSerializer(MockStreamSerializer.Builder builder) {
-				super(builder.produces("text/plain").function((session,o) -> (o.toString() + "/" + session.getSessionProperties().get(WriterSerializer.WSERIALIZER_streamCharset).orElse(null)).getBytes()));
+		public static class TestSerializer extends MockWriterSerializer {
+			protected TestSerializer(MockWriterSerializer.Builder builder) {
+				super(builder.produces("text/plain").function((session,o) -> (o.toString() + "/" + session.getStreamCharset())));
 			}
 		}
 	}

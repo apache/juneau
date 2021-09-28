@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.Parser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -34,13 +32,23 @@ import org.apache.juneau.xml.*;
 @FluentSetters
 public abstract class ParserBuilder extends BeanContextableBuilder {
 
+	boolean autoCloseStreams, strict, trimStrings, unbuffered;
 	String consumes;
+	int debugOutputLines;
+	Class<? extends ParserListener> listener;
 
 	/**
 	 * Constructor, default settings.
 	 */
 	protected ParserBuilder() {
 		super();
+		autoCloseStreams = env("Parser.autoCloseStreams", false);
+		strict = env("Parser.strict", false);
+		trimStrings = env("Parser.trimStrings", false);
+		unbuffered = env("Parser.unbuffered", false);
+		debugOutputLines = env("Parser.debugOutputLines", 5);
+		listener = null;
+		consumes = null;
 	}
 
 	/**
@@ -50,7 +58,13 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 */
 	protected ParserBuilder(Parser copyFrom) {
 		super(copyFrom);
-		consumes = copyFrom._consumes;
+		autoCloseStreams = copyFrom.autoCloseStreams;
+		strict = copyFrom.strict;
+		trimStrings = copyFrom.trimStrings;
+		unbuffered = copyFrom.unbuffered;
+		debugOutputLines = copyFrom.debugOutputLines;
+		listener = copyFrom.listener;
+		consumes = copyFrom.consumes;
 	}
 
 	/**
@@ -60,6 +74,12 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 */
 	protected ParserBuilder(ParserBuilder copyFrom) {
 		super(copyFrom);
+		autoCloseStreams = copyFrom.autoCloseStreams;
+		strict = copyFrom.strict;
+		trimStrings = copyFrom.trimStrings;
+		unbuffered = copyFrom.unbuffered;
+		debugOutputLines = copyFrom.debugOutputLines;
+		listener = copyFrom.listener;
 		consumes = copyFrom.consumes;
 	}
 
@@ -117,15 +137,23 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 * 	<jsm>assertTrue</jsm>(r.isClosed());
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public ParserBuilder autoCloseStreams() {
-		return set(PARSER_autoCloseStreams);
+		return autoCloseStreams(true);
+	}
+
+	/**
+	 * Same as {@link #autoCloseStreams()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ParserBuilder autoCloseStreams(boolean value) {
+		autoCloseStreams = value;
+		return this;
 	}
 
 	/**
@@ -152,10 +180,6 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <c>5</c>.
@@ -163,7 +187,8 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 */
 	@FluentSetter
 	public ParserBuilder debugOutputLines(int value) {
-		return set(PARSER_debugOutputLines, value);
+		debugOutputLines = value;
+		return this;
 	}
 
 	/**
@@ -209,18 +234,14 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_listener}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public ParserBuilder listener(Class<? extends ParserListener> value) {
-		return set(PARSER_listener, value);
+		listener = value;
+		return this;
 	}
-
 
 	/**
 	 * Strict mode.
@@ -273,15 +294,23 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_strict}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public ParserBuilder strict() {
-		return set(PARSER_strict);
+		return strict(true);
+	}
+
+	/**
+	 * Same as {@link #strict()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ParserBuilder strict(boolean value) {
+		strict = value;
+		return this;
 	}
 
 	/**
@@ -307,15 +336,23 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>myMap</jv>.get(<js>"foo"</js>));
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public ParserBuilder trimStrings() {
-		return set(PARSER_trimStrings);
+		return trimStrings(true);
+	}
+
+	/**
+	 * Same as {@link #trimStrings()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ParserBuilder trimStrings(boolean value) {
+		trimStrings = value;
+		return this;
 	}
 
 	/**
@@ -362,15 +399,23 @@ public abstract class ParserBuilder extends BeanContextableBuilder {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
-	 * </ul>
-	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public ParserBuilder unbuffered() {
-		return set(PARSER_unbuffered);
+		return unbuffered(true);
+	}
+
+	/**
+	 * Same as {@link #unbuffered()} but allows you to explicitly specify the value.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ParserBuilder unbuffered(boolean value) {
+		unbuffered = value;
+		return this;
 	}
 
 	// <FluentSetters>

@@ -16,7 +16,9 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
@@ -35,7 +37,7 @@ import org.apache.juneau.xml.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(ParserConfigAnnotation.Apply.class)
+@ContextApply({ParserConfigAnnotation.ParserApply.class,ParserConfigAnnotation.InputStreamParserApply.class,ParserConfigAnnotation.ReaderParserApply.class})
 public @interface ParserConfig {
 
 	/**
@@ -70,7 +72,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
+	 * 	<li class='jm'>{@link InputStreamParserBuilder#binaryFormat(BinaryFormat)}
 	 * </ul>
 	 */
 	String binaryFormat() default "";
@@ -98,7 +100,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
+	 * 	<li class='jm'>{@link ParserBuilder#autoCloseStreams()}
 	 * </ul>
 	 */
 	String autoCloseStreams() default "";
@@ -120,7 +122,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
+	 * 	<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
 	 * </ul>
 	 */
 	String debugOutputLines() default "";
@@ -132,7 +134,7 @@ public @interface ParserConfig {
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * 	<li class='jm'>{@link ParserBuilder#listener(Class)}
 	 * </ul>
 	 */
 	Class<? extends ParserListener> listener() default ParserListener.Null.class;
@@ -183,7 +185,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * 	<li class='jm'>{@link ParserBuilder#strict()}
 	 * </ul>
 	 */
 	String strict() default "";
@@ -207,7 +209,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * 	<li class='jm'>{@link ParserBuilder#trimStrings()}
 	 * </ul>
 	 */
 	String trimStrings() default "";
@@ -247,7 +249,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
+	 * 	<li class='jm'>{@link ParserBuilder#unbuffered()}
 	 * </ul>
 	 */
 	String unbuffered() default "";
@@ -273,7 +275,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
+	 * 	<li class='jm'>{@link ReaderParserBuilder#fileCharset(Charset)}
 	 * </ul>
 	 */
 	String fileCharset() default "";
@@ -295,7 +297,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
+	 * 	<li class='jm'>{@link ReaderParserBuilder#streamCharset(Charset)}
 	 * </ul>
 	 */
 	String streamCharset() default "";

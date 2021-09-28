@@ -30,6 +30,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 
 	Method javaMethod;
 	Object outer;
+	Charset fileCharset, streamCharset;
 
 	/**
 	 * Default parser session args.
@@ -68,7 +69,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 */
 	@FluentSetter
 	public ParserSessionArgs fileCharset(Charset value) {
-		property(ReaderParser.RPARSER_fileCharset, value);
+		fileCharset = value;
 		return this;
 	}
 
@@ -119,7 +120,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 */
 	@FluentSetter
 	public ParserSessionArgs streamCharset(Charset value) {
-		property(ReaderParser.RPARSER_streamCharset, value);
+		streamCharset = value;
 		return this;
 	}
 

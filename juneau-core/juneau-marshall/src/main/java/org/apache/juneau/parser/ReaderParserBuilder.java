@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.ReaderParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -30,11 +28,15 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public abstract class ReaderParserBuilder extends ParserBuilder {
 
+	Charset fileCharset, streamCharset;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected ReaderParserBuilder() {
 		super();
+		fileCharset = env("ReaderParser.fileCharset", Charset.defaultCharset());
+		streamCharset = env("ReaderParser.streamCharset", IOUtils.UTF8);
 	}
 
 	/**
@@ -44,6 +46,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 */
 	protected ReaderParserBuilder(ReaderParser copyFrom) {
 		super(copyFrom);
+		fileCharset = copyFrom.fileCharset;
+		streamCharset = copyFrom.streamCharset;
 	}
 
 	/**
@@ -53,6 +57,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 */
 	protected ReaderParserBuilder(ReaderParserBuilder copyFrom) {
 		super(copyFrom);
+		fileCharset = copyFrom.fileCharset;
+		streamCharset = copyFrom.streamCharset;
 	}
 
 	@Override /* ContextBuilder */
@@ -88,10 +94,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
@@ -99,7 +101,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 */
 	@FluentSetter
 	public ReaderParserBuilder fileCharset(Charset value) {
-		return set(RPARSER_fileCharset, value);
+		fileCharset = value;
+		return this;
 	}
 
 	/**
@@ -123,10 +126,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is <js>"UTF-8"</js>.
@@ -134,7 +133,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 */
 	@FluentSetter
 	public ReaderParserBuilder streamCharset(Charset value) {
-		return set(RPARSER_streamCharset, value);
+		streamCharset = value;
+		return this;
 	}
 
 	// <FluentSetters>

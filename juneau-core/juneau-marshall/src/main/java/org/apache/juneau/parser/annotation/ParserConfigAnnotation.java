@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser.annotation;
 
-import static org.apache.juneau.parser.InputStreamParser.*;
-import static org.apache.juneau.parser.ReaderParser.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -25,32 +23,74 @@ import org.apache.juneau.svl.*;
 public class ParserConfigAnnotation {
 
 	/**
-	 * Applies {@link ParserConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link ParserConfig} annotations to a {@link ParserBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<ParserConfig,ContextPropertiesBuilder> {
+	public static class ParserApply extends AnnotationApplier<ParserConfig,ParserBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(ParserConfig.class, ContextPropertiesBuilder.class, vr);
+		public ParserApply(VarResolverSession vr) {
+			super(ParserConfig.class, ParserBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<ParserConfig> ai, ParserBuilder b) {
 			ParserConfig a = ai.getAnnotation();
 
-			bool(a.autoCloseStreams()).ifPresent(x -> b.set(PARSER_autoCloseStreams, x));
-			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(x -> b.set(PARSER_debugOutputLines, x));
-			type(a.listener()).ifPresent(x -> b.set(PARSER_listener, x));
-			bool(a.strict()).ifPresent(x -> b.set(PARSER_strict, x));
-			bool(a.trimStrings()).ifPresent(x -> b.set(PARSER_trimStrings, x));
-			bool(a.unbuffered()).ifPresent(x -> b.set(PARSER_unbuffered, x));
-			string(a.binaryFormat()).ifPresent(x -> b.set(ISPARSER_binaryFormat, x));
-			charset(a.fileCharset()).ifPresent(x -> b.set(RPARSER_fileCharset, x));
-			charset(a.streamCharset()).ifPresent(x -> b.set(RPARSER_streamCharset, x));
+			bool(a.autoCloseStreams()).ifPresent(x -> b.autoCloseStreams(x));
+			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(x -> b.debugOutputLines(x));
+			type(a.listener()).ifPresent(x -> b.listener(x));
+			bool(a.strict()).ifPresent(x -> b.strict(x));
+			bool(a.trimStrings()).ifPresent(x -> b.trimStrings(x));
+			bool(a.unbuffered()).ifPresent(x -> b.unbuffered(x));
+		}
+	}
+
+	/**
+	 * Applies {@link ParserConfig} annotations to a {@link InputStreamParserBuilder}.
+	 */
+	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public InputStreamParserApply(VarResolverSession vr) {
+			super(ParserConfig.class, InputStreamParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParserBuilder b) {
+			ParserConfig a = ai.getAnnotation();
+
+			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
+		}
+	}
+
+	/**
+	 * Applies {@link ParserConfig} annotations to a {@link ReaderParserBuilder}.
+	 */
+	public static class ReaderParserApply extends AnnotationApplier<ParserConfig,ReaderParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ReaderParserApply(VarResolverSession vr) {
+			super(ParserConfig.class, ReaderParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<ParserConfig> ai, ReaderParserBuilder b) {
+			ParserConfig a = ai.getAnnotation();
+
+			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));
+			charset(a.streamCharset()).ifPresent(x -> b.streamCharset(x));
 		}
 	}
 }

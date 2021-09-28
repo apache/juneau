@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.InputStreamParser.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -29,11 +27,14 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public abstract class InputStreamParserBuilder extends ParserBuilder {
 
+	BinaryFormat binaryFormat;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	protected InputStreamParserBuilder() {
 		super();
+		binaryFormat = env("InputStreamParser.binaryFormat", BinaryFormat.HEX);
 	}
 
 	/**
@@ -43,6 +44,7 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	 */
 	protected InputStreamParserBuilder(InputStreamParser copyFrom) {
 		super(copyFrom);
+		binaryFormat = copyFrom.binaryFormat;
 	}
 
 	/**
@@ -52,6 +54,7 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	 */
 	protected InputStreamParserBuilder(InputStreamParserBuilder copyFrom) {
 		super(copyFrom);
+		binaryFormat = copyFrom.binaryFormat;
 	}
 
 	@Override /* ContextBuilder */
@@ -86,10 +89,6 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv> .parse(<jv>input</jv> , MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The default value is {@link BinaryFormat#HEX}.
@@ -97,7 +96,8 @@ public abstract class InputStreamParserBuilder extends ParserBuilder {
 	 */
 	@FluentSetter
 	public InputStreamParserBuilder binaryFormat(BinaryFormat value) {
-		return set(ISPARSER_binaryFormat, value);
+		binaryFormat = value;
+		return this;
 	}
 
 	// <FluentSetters>

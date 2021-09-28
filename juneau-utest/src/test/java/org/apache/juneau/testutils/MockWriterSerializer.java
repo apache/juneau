@@ -60,7 +60,7 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 
 	private final MockWriterSerializerFunction function;
 	private final MockWriterSerializerPartFunction partFunction;
-	private final Function<SerializerSession,Map<String,String>> headers;
+	private final Function<WriterSerializerSession,Map<String,String>> headers;
 
 
 	protected MockWriterSerializer(Builder builder) {
@@ -101,7 +101,7 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 	public static class Builder extends WriterSerializerBuilder {
 		MockWriterSerializerFunction function = (s,o) -> StringUtils.stringify(o);
 		MockWriterSerializerPartFunction partFunction = (t,s,o) -> StringUtils.stringify(o);
-		Function<SerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
+		Function<WriterSerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
 
 		public Builder() {
 			super();
@@ -121,7 +121,7 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 			return this;
 		}
 
-		public Builder headers(Function<SerializerSession,Map<String,String>> value) {
+		public Builder headers(Function<WriterSerializerSession,Map<String,String>> value) {
 			headers = value;
 			return this;
 		}
