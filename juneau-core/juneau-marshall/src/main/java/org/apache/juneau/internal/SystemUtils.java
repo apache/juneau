@@ -12,10 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+
 /**
  * System utilities.
  */
 public class SystemUtils {
+
+	static final List<Supplier<String>> SHUTDOWN_MESSAGES = new CopyOnWriteArrayList<>();
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				if (! Boolean.getBoolean("SystemUtils.quiet"))
+				SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));
+			}
+		});
+	}
+
+	/**
+	 * Adds a console message to display when the JVM shuts down.
+	 *
+	 * @param message The message to display.
+	 */
+	public static void shutdownMessage(Supplier<String> message) {
+		SHUTDOWN_MESSAGES.add(message);
+	}
 
 	/**
 	 * Returns the first non-<jk>null</jk> system property.

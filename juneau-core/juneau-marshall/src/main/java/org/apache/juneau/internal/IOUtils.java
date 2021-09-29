@@ -40,12 +40,7 @@ public final class IOUtils {
 	static final AtomicInteger cacheHits = new AtomicInteger();
 
 	static {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				System.out.println("I/O buffer cache hits: " + cacheHits.get());
-			}
-		});
+		SystemUtils.shutdownMessage(()->"I/O buffer cache hits: " + cacheHits.get());
 	}
 
 	/** Reusable empty reader. */

@@ -60,6 +60,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final ConcurrentHashMap<HashKey,BeanContext> CACHE = new ConcurrentHashMap<>();
+	static {
+		SystemUtils.shutdownMessage(()->"Bean contexts created: " + CACHE.size());
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
