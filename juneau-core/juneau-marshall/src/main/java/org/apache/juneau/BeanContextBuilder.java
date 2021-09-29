@@ -22,6 +22,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -60,8 +61,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final ConcurrentHashMap<HashKey,BeanContext> CACHE = new ConcurrentHashMap<>();
+	private static final AtomicInteger CACHE_HITS = new AtomicInteger();
 	static {
-		SystemUtils.shutdownMessage(()->"Bean contexts created: " + CACHE.size());
+		SystemUtils.shutdownMessage(()->"Bean context cache:  hits=" + CACHE_HITS.get() + ", misses: " + CACHE.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -239,6 +241,7 @@ public class BeanContextBuilder extends ContextBuilder {
 			locale,
 			propertyNamer
 		);
+		CACHE_HITS.incrementAndGet();
 		BeanContext bc = CACHE.get(key);
 		if (bc == null) {
 			bc = new BeanContext(this);

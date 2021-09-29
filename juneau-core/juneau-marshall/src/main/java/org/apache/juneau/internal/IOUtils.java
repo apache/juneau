@@ -37,10 +37,14 @@ public final class IOUtils {
 	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
 	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
 
-	static final AtomicInteger cacheHits = new AtomicInteger();
+	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
+	static final AtomicInteger BYTE_BUFFER_CACHE_MISSES = new AtomicInteger();
+	static final AtomicInteger CHAR_BUFFER_CACHE_HITS = new AtomicInteger();
+	static final AtomicInteger CHAR_BUFFER_CACHE_MISSES = new AtomicInteger();
 
 	static {
-		SystemUtils.shutdownMessage(()->"I/O buffer cache hits: " + cacheHits.get());
+		SystemUtils.shutdownMessage(()->"Byte buffer cache:  hits="+BYTE_BUFFER_CACHE_HITS.get()+", misses=" + BYTE_BUFFER_CACHE_MISSES);
+		SystemUtils.shutdownMessage(()->"Char buffer cache:  hits="+CHAR_BUFFER_CACHE_HITS.get()+", misses=" + CHAR_BUFFER_CACHE_MISSES);
 	}
 
 	/** Reusable empty reader. */
@@ -745,10 +749,11 @@ public final class IOUtils {
 		if (BYTE_BUFFER_CACHE != null) {
 			byte[] x = BYTE_BUFFER_CACHE.get();
 			if (x == null) {
-				 x = new byte[BUFF_SIZE];
-				 BYTE_BUFFER_CACHE.set(x);
+				x = new byte[BUFF_SIZE];
+				BYTE_BUFFER_CACHE.set(x);
+				BYTE_BUFFER_CACHE_MISSES.incrementAndGet();
 			} else {
-				cacheHits.incrementAndGet();
+				BYTE_BUFFER_CACHE_HITS.incrementAndGet();
 			}
 			return x;
 		}
@@ -759,10 +764,11 @@ public final class IOUtils {
 		if (CHAR_BUFFER_CACHE != null) {
 			char[] x = CHAR_BUFFER_CACHE.get();
 			if (x == null) {
-				 x = new char[BUFF_SIZE];
-				 CHAR_BUFFER_CACHE.set(x);
+				x = new char[BUFF_SIZE];
+				CHAR_BUFFER_CACHE.set(x);
+				CHAR_BUFFER_CACHE_MISSES.incrementAndGet();
 			} else {
-				cacheHits.incrementAndGet();
+				CHAR_BUFFER_CACHE_HITS.incrementAndGet();
 			}
 			return x;
 		}
