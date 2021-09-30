@@ -205,10 +205,26 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	@Override /* ContextBuilder */
 	public BeanContext build() {
-		ContextProperties cp = getContextProperties();
-		cp = cp.subset(new String[]{"Context","BeanContext"});
-		HashKey key = HashKey.of(
-			cp,
+
+		BeanContext impl = impl(BeanContext.class);
+		if (impl != null)
+			return impl;
+
+		HashKey key = hashKey();
+		BeanContext bc = CACHE.get(key);
+		if (bc == null) {
+			bc = new BeanContext(this);
+			CACHE.putIfAbsent(key, bc);
+		} else {
+			CACHE_HITS.incrementAndGet();
+		}
+		return bc;
+	}
+
+	@Override
+	public HashKey hashKey() {
+		return HashKey.of(
+			super.hashKey(),
 			beanClassVisibility,
 			beanConstructorVisibility,
 			beanMethodVisibility,
@@ -241,13 +257,6 @@ public class BeanContextBuilder extends ContextBuilder {
 			locale,
 			propertyNamer
 		);
-		CACHE_HITS.incrementAndGet();
-		BeanContext bc = CACHE.get(key);
-		if (bc == null) {
-			bc = new BeanContext(this);
-			CACHE.putIfAbsent(key, bc);
-		}
-		return bc;
 	}
 
 	private int integer(boolean...values) {

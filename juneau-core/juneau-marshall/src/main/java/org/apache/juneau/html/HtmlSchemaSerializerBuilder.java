@@ -238,6 +238,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlSchemaSerializerBuilder beanContext(BeanContext value) {
+		super.beanContext(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlSchemaSerializerBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;

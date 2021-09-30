@@ -2903,9 +2903,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		Context o = requestContexts.get(c);
 		if (o == null) {
 			if (Serializer.class.isAssignableFrom(c)) {
-				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).apply(getContextProperties()).build();
+				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).beanContext(getBeanContext()).build();
 			} else if (Parser.class.isAssignableFrom(c)) {
-				o = Parser.createParserBuilder((Class<? extends Parser>)c).apply(getContextProperties()).build();
+				o = Parser.createParserBuilder((Class<? extends Parser>)c).beanContext(getBeanContext()).build();
 			} else {
 				o = ContextCache.INSTANCE.create(c, getContextProperties());
 			}

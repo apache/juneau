@@ -52,6 +52,7 @@ import org.apache.juneau.transform.*;
 public abstract class BeanContextableBuilder extends ContextBuilder {
 
 	BeanContextBuilder bcBuilder;
+	BeanContext bc;
 
 	/**
 	 * Constructor.
@@ -83,6 +84,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	protected BeanContextableBuilder(BeanContextableBuilder copyFrom) {
 		super(copyFrom);
 		this.bcBuilder = copyFrom.bcBuilder.copy();
+		this.bc = copyFrom.bc;
 		registerBuilders(bcBuilder);
 	}
 
@@ -132,6 +134,23 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextableBuilder beanContext(BeanContextBuilder value) {
 		this.bcBuilder = value;
+		return this;
+	}
+
+	/**
+	 * Specifies an already-instantiated bean context to use.
+	 * 
+	 * <p>
+	 * Provides an optimization for cases where serializers and parsers can use an existing
+	 * bean context without having to go through <c><jv>beanContext</jv>.copy().build()</c>.
+	 * An example is {@link BeanContext#getBeanToStringSerializer()}.
+	 *
+	 * @param value The bean context to use.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BeanContextableBuilder beanContext(BeanContext value) {
+		this.bc = value;
 		return this;
 	}
 

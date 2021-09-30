@@ -1270,7 +1270,7 @@ public class BeanContext extends Context {
 		if (beanToStringSerializer == null) {
 			if (JsonSerializer.DEFAULT == null)
 				return null;
-			this.beanToStringSerializer = JsonSerializer.create().apply(getContextProperties()).sq().simpleMode().build();
+			this.beanToStringSerializer = JsonSerializer.create().beanContext(this).sq().simpleMode().build();
 		}
 		return beanToStringSerializer;
 	}

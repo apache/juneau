@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
+import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -190,17 +191,27 @@ public abstract class RoundTripTest {
 
 	public RoundTripTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		this.label = label;
-
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
-		if (m != null) {
+		OMap properties = getProperties();
+		Class<?>[] pojoSwaps = getPojoSwaps();
+		Class<?>[] dictionary = getDictionary();
+		Class<?>[] annotatedClasses = getAnnotatedClasses();
+
+		if (! (m.isEmpty() && properties.isEmpty() && pojoSwaps.length == 0 && dictionary.length == 0 && annotatedClasses.length == 0)) {
+			s = s.copy();
+			p = p == null ? null : p.copy();
 			for (Entry<Class<Object>, Class<? extends Object>> e : m.entrySet()) {
 				s.implClass(e.getKey(), e.getValue());
 				if (p != null)
 					p.implClass(e.getKey(), e.getValue());
 			}
+			s.swaps(pojoSwaps).beanDictionary(dictionary).add(properties).applyAnnotations(annotatedClasses);
+			if (p != null)
+				p.swaps(pojoSwaps).beanDictionary(dictionary).add(properties).applyAnnotations(annotatedClasses);
 		}
-		this.s = s.swaps(getPojoSwaps()).beanDictionary(getDictionary()).add(getProperties()).build();
-		this.p = p == null ? null : p.swaps(getPojoSwaps()).beanDictionary(getDictionary()).add(getProperties()).build();
+
+		this.s = s.build();
+		this.p = p == null ? null : p.build();
 		this.validateXmlWhitespace = (flags & CHECK_XML_WHITESPACE) > 0;
 		this.validateXml = (flags & VALIDATE_XML) > 0;
 		this.returnOriginalObject = (flags & RETURN_ORIGINAL_OBJECT) > 0;
@@ -219,12 +230,16 @@ public abstract class RoundTripTest {
 		return new Class<?>[0];
 	}
 
+	public Class<?>[] getAnnotatedClasses() {
+		return new Class<?>[0];
+	}
+
 	public OMap getProperties() {
 		return OMap.EMPTY_MAP;
 	}
 
 	public <T> Map<Class<T>,Class<? extends T>> getImplClasses() {
-		return null;
+		return emptyMap();
 	}
 
 	public <T> T roundTrip(T object, Type c, Type...args) throws Exception {

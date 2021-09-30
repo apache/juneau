@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -80,33 +81,12 @@ public abstract class Context implements MetaProvider {
 		}
 	}
 
-	static final String PREFIX = "Context";
-
-	/**
-	 * Configuration property:  Annotations.
-	 *
-	 * <p>
-	 * Defines annotations to apply to specific classes and methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_annotations CONTEXT_annotations}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.annotations.lo"</js>
-	 * 	<li><b>Description:</b>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c>
-	 * 	<li><b>Default:</b>  Empty list.
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#annotations(Annotation...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String CONTEXT_annotations = PREFIX + ".annotations.lo";
-
 	final ContextProperties properties;
+	final List<Annotation> annotations;
 	private final int identityCode;
-	private final ReflectionMap<Annotation> annotations;
 	final boolean debug;
+
+	private final ReflectionMap<Annotation> annotationMap;
 
 	/**
 	 * Copy constructor.
@@ -115,6 +95,7 @@ public abstract class Context implements MetaProvider {
 	 */
 	protected Context(Context copyFrom) {
 		identityCode = copyFrom.identityCode;
+		annotationMap = copyFrom.annotationMap;
 		annotations = copyFrom.annotations;
 		debug = copyFrom.debug;
 		properties = copyFrom.properties;
@@ -129,9 +110,11 @@ public abstract class Context implements MetaProvider {
 		debug = builder.debug;
 		identityCode = System.identityHashCode(this);
 		properties = builder.getContextProperties();
+		annotations = ofNullable(builder.annotations).orElse(emptyList());
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
-		for (Annotation a : builder.getContextProperties().getList(CONTEXT_annotations, Annotation.class).orElse(emptyList())) {
+
+		for (Annotation a : annotations) {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());
 
@@ -155,7 +138,7 @@ public abstract class Context implements MetaProvider {
 				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", className(a));
 			}
 		}
-		this.annotations = rmb.build();
+		this.annotationMap = rmb.build();
 	}
 
 	/**
@@ -289,7 +272,7 @@ public abstract class Context implements MetaProvider {
 		if (aa == null) {
 			A[] x = c.getAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(c, a, l);
+			annotationMap.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			classAnnotationCache.put(c, a, aa);
 		}
@@ -313,7 +296,7 @@ public abstract class Context implements MetaProvider {
 		if (aa == null) {
 			A[] x = c.getDeclaredAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(c, a, l);
+			annotationMap.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			declaredClassAnnotationCache.put(c, a, aa);
 		}
@@ -337,7 +320,7 @@ public abstract class Context implements MetaProvider {
 		if (aa == null) {
 			A[] x = m.getAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(m, a, l);
+			annotationMap.appendAll(m, a, l);
 			aa = l.unmodifiable();
 			methodAnnotationCache.put(m, a, aa);
 		}
@@ -397,7 +380,7 @@ public abstract class Context implements MetaProvider {
 		if (aa == null) {
 			A[] x = f.getAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(f, a, l);
+			annotationMap.appendAll(f, a, l);
 			aa = l.unmodifiable();
 			fieldAnnotationCache.put(f, a, aa);
 		}
@@ -433,7 +416,7 @@ public abstract class Context implements MetaProvider {
 		if (aa == null) {
 			A[] x = c.getAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(c, a, l);
+			annotationMap.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			constructorAnnotationCache.put(c, a, l);
 		}

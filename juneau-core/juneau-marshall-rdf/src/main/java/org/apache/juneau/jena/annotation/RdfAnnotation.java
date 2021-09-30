@@ -14,7 +14,6 @@ package org.apache.juneau.jena.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -263,7 +262,7 @@ public class RdfAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 
@@ -289,7 +288,7 @@ public class RdfAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(CONTEXT_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

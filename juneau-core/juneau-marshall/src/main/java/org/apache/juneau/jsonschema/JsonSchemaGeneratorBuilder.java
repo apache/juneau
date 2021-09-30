@@ -364,6 +364,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder beanContext(BeanContext value) {
+		super.beanContext(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;

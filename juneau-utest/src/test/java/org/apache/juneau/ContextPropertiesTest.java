@@ -1792,14 +1792,14 @@ public class ContextPropertiesTest {
 
 	@Test
 	public void testEqualsWithAnnotations() {
-		HtmlSerializer
-			s1 = HtmlSerializer.create().build(),
-			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class).build(),
-			s3 = HtmlSerializer.create().applyAnnotations(B1Config.class).build(),
-			s4 = HtmlSerializer.create().applyAnnotations(B2Config.class).build();
-		assertFalse(s1.getContextProperties().equals(s2.getContextProperties()));
-		assertFalse(s1.getContextProperties().equals(s4.getContextProperties()));
-		assertTrue(s2.getContextProperties().equals(s3.getContextProperties()));
+		HtmlSerializerBuilder
+			s1 = HtmlSerializer.create(),
+			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class),
+			s3 = HtmlSerializer.create().applyAnnotations(B1Config.class),
+			s4 = HtmlSerializer.create().applyAnnotations(B2Config.class);
+		assertFalse(s1.hashKey().equals(s2.hashKey()));
+		assertFalse(s1.hashKey().equals(s4.hashKey()));
+		assertTrue(s2.hashKey().equals(s3.hashKey()));
 	}
 
 	@Html(on="B1", format=HtmlFormat.XML)

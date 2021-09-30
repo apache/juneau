@@ -243,7 +243,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = HtmlSchemaSerializer.create().apply(getContextProperties()).build();
+			schemaSerializer = HtmlSchemaSerializer.create().beanContext(getBeanContext()).build();
 		return schemaSerializer;
 	}
 

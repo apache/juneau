@@ -267,6 +267,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override
+	public JsonSerializerBuilder beanContext(BeanContext value) {
+		super.beanContext(value);
+		return this;
+	}
+
+	@Override
 	public JsonSerializerBuilder produces(String value) {
 		super.produces(value);
 		return this;

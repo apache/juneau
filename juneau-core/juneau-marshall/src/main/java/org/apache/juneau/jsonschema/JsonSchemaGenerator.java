@@ -84,7 +84,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		jsonSerializer = builder.jsonSerializerBuilder.build();
-		jsonParser = builder.jsonParserBuilder.apply(getBeanContext().getContextProperties()).build();
+		jsonParser = (JsonParser) builder.jsonParserBuilder.beanContext(getBeanContext()).build();
 	}
 
 	@Override /* Context */

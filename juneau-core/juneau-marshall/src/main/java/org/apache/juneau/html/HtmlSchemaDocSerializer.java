@@ -53,7 +53,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	protected HtmlSchemaDocSerializer(HtmlDocSerializerBuilder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
-		generator = JsonSchemaGenerator.create().apply(getContextProperties()).build();
+		generator = JsonSchemaGenerator.create().beanContext(getBeanContext()).build();
 	}
 
 	@Override /* Serializer */

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Context.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static org.apache.juneau.Visibility.*;
@@ -44,6 +43,7 @@ import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -59,6 +59,7 @@ public abstract class ContextBuilder {
 	boolean debug;
 	Class<?> type;
 	Context impl;
+	List<Annotation> annotations;
 
 	private final List<Object> builders = new ArrayList<>();
 	private final AnnotationWorkList applied = new AnnotationWorkList();
@@ -70,6 +71,7 @@ public abstract class ContextBuilder {
 	protected ContextBuilder() {
 		cpb = ContextProperties.create();
 		debug = env("Context.debug", false);
+		annotations = null;
 		registerBuilders(this, cpb);
 	}
 
@@ -79,9 +81,10 @@ public abstract class ContextBuilder {
 	 * @param copyFrom The bean to copy from.
 	 */
 	protected ContextBuilder(Context copyFrom) {
-		this.cpb = copyFrom.properties.copy();
-		this.debug = copyFrom.debug;
-		this.type = copyFrom.getClass();
+		cpb = copyFrom.properties.copy();
+		debug = copyFrom.debug;
+		type = copyFrom.getClass();
+		annotations = copyFrom.annotations.isEmpty() ? null : new ArrayList<>(copyFrom.annotations);
 		registerBuilders(this, cpb);
 	}
 
@@ -91,9 +94,10 @@ public abstract class ContextBuilder {
 	 * @param copyFrom The builder to copy from.
 	 */
 	protected ContextBuilder(ContextBuilder copyFrom) {
-		this.cpb =  new ContextPropertiesBuilder(copyFrom.cpb);
-		this.debug = copyFrom.debug;
-		this.type = copyFrom.type;
+		cpb =  new ContextPropertiesBuilder(copyFrom.cpb);
+		debug = copyFrom.debug;
+		type = copyFrom.type;
+		annotations = copyFrom.annotations == null ? null : new ArrayList<>(copyFrom.annotations);
 		registerBuilders(this, cpb);
 	}
 
@@ -103,6 +107,32 @@ public abstract class ContextBuilder {
 	 * @return A new mutable copy of this builder.
 	 */
 	public abstract ContextBuilder copy();
+
+	/**
+	 * Returns the hashkey of this builder.
+	 *
+	 * <p>
+	 * Used to return previously instantiated context beans that have matching hashkeys.
+	 * The {@link HashKey} object is suitable for use as a hashmap key of a map of context beans.
+	 * A context bean is considered equivalent if the {@link HashKey#equals(Object)} method is the same.
+	 *
+	 * @return The hashkey of this builder.
+	 */
+	public HashKey hashKey() {
+		return HashKey.of(debug, type, annotations);
+	}
+
+	/**
+	 * Returns the {@link #impl(Context)} bean if it's the specified type.
+	 *
+	 * @param c The expected bean type.
+	 * @return The impl bean, or <jk>null</jk> if an impl bean wasn't specified.
+	 */
+	protected <T extends Context> T impl(Class<T> c) {
+		if (impl != null && c.isInstance(impl))
+			return c.cast(impl);
+		return null;
+	}
 
 	/**
 	 * Build the object.
@@ -611,7 +641,6 @@ public abstract class ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanConfig}
-	 * 	<li class='jf'>{@link BeanContext#CONTEXT_annotations}
 	 * </ul>
 	 *
 	 * @param values
@@ -620,7 +649,10 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder annotations(Annotation...values) {
-		return prependTo(CONTEXT_annotations, values);
+		if (annotations == null)
+			annotations = new ArrayList<>();
+		Collections.addAll(annotations, values);
+		return this;
 	}
 
 	/**

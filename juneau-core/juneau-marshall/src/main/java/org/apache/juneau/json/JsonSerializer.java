@@ -190,7 +190,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = JsonSchemaSerializer.create().apply(getContextProperties()).build();
+			schemaSerializer = (JsonSchemaSerializer) JsonSchemaSerializer.create().beanContext(getBeanContext()).build();
 		return schemaSerializer;
 	}
 

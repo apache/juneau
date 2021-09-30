@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static java.util.Optional.*;
+
 import org.apache.juneau.collections.*;
 
 /**
@@ -28,7 +30,7 @@ public abstract class BeanContextable extends Context {
 	 */
 	protected BeanContextable(BeanContextableBuilder b) {
 		super(b);
-		beanContext = b.bcBuilder.build();
+		beanContext = ofNullable(b.bc).orElse(b.bcBuilder.build());
 	}
 
 	@Override

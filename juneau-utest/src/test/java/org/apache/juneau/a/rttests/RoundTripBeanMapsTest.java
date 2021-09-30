@@ -42,7 +42,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	static Class<?>[] ANNOTATED_CLASSES={L2Config.class, M2Config.class};
 
 	public RoundTripBeanMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s.applyAnnotations(ANNOTATED_CLASSES), p == null ? null : p.applyAnnotations(ANNOTATED_CLASSES), flags);
+		super(label, s, p, flags);
 	}
 
 	@Override /* RoundTripTest */
@@ -50,6 +50,11 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Map<Class<?>,Class<?>> m = new HashMap<>();
 		m.put(IBean.class, CBean.class);
 		return m;
+	}
+
+	@Override /* RoundTripTest */
+	public Class<?>[] getAnnotatedClasses() {
+		return ANNOTATED_CLASSES;
 	}
 
 	//====================================================================================================

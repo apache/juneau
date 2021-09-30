@@ -528,6 +528,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	// <FluentSetters>
 
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSerializerBuilder beanContext(BeanContext value) {
+		super.beanContext(value);
+		return this;
+	}
+
 	@Override
 	public HtmlSerializerBuilder produces(String value) {
 		super.produces(value);
