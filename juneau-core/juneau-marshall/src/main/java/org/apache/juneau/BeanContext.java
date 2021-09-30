@@ -91,10 +91,6 @@ import org.apache.juneau.transform.*;
  * <p class='w800'>
  * Some settings (e.g. {@link BeanContextBuilder#beanMapPutReturnsOldValue()}) change the runtime behavior of bean maps.
  *
- * <p class='w800'>
- * Settings are specified using the {@link BeanContextBuilder#set(String, Object)} method and related convenience
- * methods.
- *
  * <h5 class='section'>Example:</h5>
  *
  * <p class='bcode w800'>
@@ -152,7 +148,6 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-@ConfigurableContext
 public class BeanContext extends Context {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -252,12 +247,6 @@ public class BeanContext extends Context {
 	 */
 	public BeanContext(BeanContextBuilder builder) {
 		super(builder);
-
-		ContextProperties cp = builder.getContextProperties();
-		if (cp == null)
-			cp = ContextProperties.DEFAULT;
-
-		cp = cp.subset(new String[]{"Context","BeanContext"});
 
 		beanConstructorVisibility = builder.beanConstructorVisibility;
 		beanClassVisibility = builder.beanClassVisibility;

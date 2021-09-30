@@ -1002,30 +1002,6 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public RdfSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
@@ -1062,56 +1038,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public RdfSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

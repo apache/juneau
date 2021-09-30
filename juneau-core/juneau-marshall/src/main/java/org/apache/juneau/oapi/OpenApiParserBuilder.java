@@ -187,30 +187,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
@@ -247,56 +223,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

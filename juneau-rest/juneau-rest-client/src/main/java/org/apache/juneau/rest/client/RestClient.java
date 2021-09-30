@@ -50,7 +50,6 @@ import org.apache.http.impl.client.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.remote.RemoteReturn;
@@ -1012,7 +1011,6 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
-@ConfigurableContext(nocache=true)
 public class RestClient extends BeanContextable implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
 
 	final HeaderList.Builder headerData;
@@ -2906,8 +2904,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).beanContext(getBeanContext()).build();
 			} else if (Parser.class.isAssignableFrom(c)) {
 				o = Parser.createParserBuilder((Class<? extends Parser>)c).beanContext(getBeanContext()).build();
-			} else {
-				o = ContextCache.INSTANCE.create(c, getContextProperties());
 			}
 			requestContexts.put(c, o);
 		}

@@ -13,14 +13,12 @@
 package org.apache.juneau.serializer;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
  * {@review}
  */
-@ConfigurableContext
 public abstract class OutputStreamSerializer extends Serializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

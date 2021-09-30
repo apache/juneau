@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -117,7 +116,6 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  */
-@ConfigurableContext
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

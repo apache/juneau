@@ -137,9 +137,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 		return (RestClient)super.build();
 	}
 
+	/**
+	 * Creates client of the specified class.
+	 *
+	 * @param c The subtype to create.
+	 * @return A new client.
+	 */
 	@SuppressWarnings("unchecked")
-	@Override /* ContextBuilder */
-	public <T extends Context> T build(Class<T> c) {
+	public <T extends RestClient> T build(Class<T> c) {
 		type(c);
 		return (T)super.build();
 	}
@@ -154,14 +159,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * {@link JsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
@@ -201,14 +206,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link SimpleJsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
@@ -244,14 +249,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * {@link XmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
@@ -290,14 +295,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link HtmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
@@ -336,14 +341,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link HtmlDocSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()} or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
@@ -382,14 +387,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link HtmlStrippedDocSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
@@ -429,14 +434,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link PlainTextSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link PlainTextParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
@@ -475,14 +480,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link MsgPackSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link MsgPackParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
@@ -522,14 +527,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link UonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
@@ -565,16 +570,16 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link UrlEncodingSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 		<li>This serializer is NOT used when using the {@link RestRequest#formData(String, Object)} (and related) methods for constructing
 	 * 			the request body.  Instead, the part serializer specified via {@link #partSerializer(Class)} is used.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
@@ -613,16 +618,16 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	{@link OpenApiSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 		<li>Typically the {@link RestRequest#body(Object, HttpPartSchema)} method will be used to specify the body of the request with the
 	 * 			schema describing it's structure.
 	 * 	</ul>
 	 * <p>
 	 * 	{@link OpenApiParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 		<li>Typically the {@link ResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 	 * 	</ul>
 	 * <p>
@@ -659,14 +664,14 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <p>
 	 * 	All basic Juneau serializers will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
-	 * 		<li>The serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	All basic Juneau parsers will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parsers can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 			bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 		<li>The parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header must be set via {@link #headerData()}, or per-request
@@ -918,8 +923,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * The serializer is used to serialize POJOs into the HTTP request body.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 	<li>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -953,8 +958,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * The serializer is used to serialize POJOs into the HTTP request body.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	<li>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 	 * 	on this builder class have no effect.
 	 * </ul>
 	 *
@@ -991,8 +996,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 	<li>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1031,8 +1036,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	<li>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 	 * 	on this builder class have no effect.
 	 * </ul>
 	 *
@@ -1104,8 +1109,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * The parser is used to parse the HTTP response body into a POJO.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 	<li>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1139,8 +1144,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * The parser is used to parse the HTTP response body into a POJO.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	<li>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 	 * 	on this builder class have no effect.
 	 * </ul>
 	 *
@@ -1177,8 +1182,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * 	<li>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1217,8 +1222,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}),
-	 * 	bean context property setters (e.g. {@link #swaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	<li>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}) or
+	 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 	 * 	on this builder class have no effect.
 	 * </ul>
 	 *
@@ -3239,8 +3244,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	parser property setters (e.g. {@link #strict()}), bean context property setters (e.g. {@link #swaps(Class...)}),
-	 * 	or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class have no effect.
+	 * 	parser property setters (e.g. {@link #strict()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -3271,8 +3275,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
-	 * 	parser property setters (e.g. {@link #strict()}), bean context property setters (e.g. {@link #swaps(Class...)}),
-	 * 	or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class have no effect.
+	 * 	parser property setters (e.g. {@link #strict()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -4737,30 +4740,6 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
@@ -4785,56 +4764,8 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

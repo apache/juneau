@@ -261,30 +261,6 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
@@ -321,56 +297,8 @@ public abstract class BeanTraverseBuilder extends BeanContextableBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

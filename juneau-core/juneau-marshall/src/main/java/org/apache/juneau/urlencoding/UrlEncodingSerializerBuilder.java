@@ -135,30 +135,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
@@ -195,56 +171,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

@@ -21,7 +21,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
@@ -46,10 +45,7 @@ import org.apache.juneau.utils.*;
  * Besides that restriction, a context object can do anything you desire.
  * <br>However, it MUST be thread-safe and all fields should be declared final to prevent modification.
  * <br>It should NOT be used for storing temporary or state information.
- *
- * @see ContextProperties
  */
-@ConfigurableContext
 public abstract class Context implements MetaProvider {
 
 	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
@@ -81,7 +77,6 @@ public abstract class Context implements MetaProvider {
 		}
 	}
 
-	final ContextProperties properties;
 	final List<Annotation> annotations;
 	private final int identityCode;
 	final boolean debug;
@@ -98,7 +93,6 @@ public abstract class Context implements MetaProvider {
 		annotationMap = copyFrom.annotationMap;
 		annotations = copyFrom.annotations;
 		debug = copyFrom.debug;
-		properties = copyFrom.properties;
 	}
 
 	/**
@@ -109,7 +103,6 @@ public abstract class Context implements MetaProvider {
 	protected Context(ContextBuilder builder) {
 		debug = builder.debug;
 		identityCode = System.identityHashCode(this);
-		properties = builder.getContextProperties();
 		annotations = ofNullable(builder.annotations).orElse(emptyList());
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
@@ -142,28 +135,6 @@ public abstract class Context implements MetaProvider {
 	}
 
 	/**
-	 * Returns the keys found in the specified property group.
-	 *
-	 * <p>
-	 * The keys are NOT prefixed with group names.
-	 *
-	 * @param group The group name.
-	 * @return The set of property keys, or an empty set if the group was not found.
-	 */
-	public Set<String> getPropertyKeys(String group) {
-		return properties.getKeys(group);
-	}
-
-	/**
-	 * Returns the property store associated with this context.
-	 *
-	 * @return The property store associated with this context.
-	 */
-	public final ContextProperties getContextProperties() {
-		return properties;
-	}
-
-	/**
 	 * Creates a builder from this context object.
 	 *
 	 * <p>
@@ -172,17 +143,6 @@ public abstract class Context implements MetaProvider {
 	 * @return A new ContextBuilder object.
 	 */
 	public abstract ContextBuilder copy();
-
-	/**
-	 * Constructs the specified context class using the property store of this context class.
-	 *
-	 * @param c The context class to instantiate.
-	 * @param <T> The context class to instantiate.
-	 * @return The instantiated context class.
-	 */
-	public <T extends Context> T getContext(Class<T> c) {
-		return ContextCache.INSTANCE.create(c, properties);
-	}
 
 	/**
 	 * Create a new bean session based on the properties defined on this context.
@@ -230,17 +190,6 @@ public abstract class Context implements MetaProvider {
 	 */
 	public int identityCode() {
 		return identityCode;
-	}
-
-	@Override /* Object */
-	public boolean equals(Object o) {
-		// Context objects are considered equal if they're the same class and have the same set of properties.
-		if (o == null)
-			return false;
-		if (o.getClass() != this.getClass())
-			return false;
-		Context c = (Context)o;
-		return (c.properties.equals(properties));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -543,7 +492,6 @@ public abstract class Context implements MetaProvider {
 					.create()
 					.filtered()
 					.a("identityCode", identityCode)
-					.a("properties", System.identityHashCode(properties))
 			);
 	}
 }

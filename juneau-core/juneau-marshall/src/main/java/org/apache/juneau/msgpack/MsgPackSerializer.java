@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -30,7 +29,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  */
-@ConfigurableContext
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

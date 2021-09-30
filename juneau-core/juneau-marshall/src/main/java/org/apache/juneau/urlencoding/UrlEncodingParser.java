@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
@@ -39,7 +38,6 @@ import org.apache.juneau.uon.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  */
-@ConfigurableContext
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

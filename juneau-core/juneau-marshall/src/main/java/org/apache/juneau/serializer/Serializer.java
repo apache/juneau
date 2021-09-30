@@ -16,7 +16,6 @@ import static java.util.Optional.*;
 
 import java.io.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -41,7 +40,6 @@ import org.apache.juneau.internal.*;
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
  */
-@ConfigurableContext
 public abstract class Serializer extends BeanTraverseContext {
 
 	//-------------------------------------------------------------------------------------------------------------------

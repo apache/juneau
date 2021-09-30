@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -31,7 +30,6 @@ import org.apache.juneau.serializer.*;
  * description.
  * Used primarily for JUnit testing the {@link HtmlDocSerializer} class.
  */
-@ConfigurableContext
 public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

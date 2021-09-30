@@ -20,7 +20,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -115,11 +114,6 @@ public abstract class ComboRoundTripTest {
 			s = getSerializer(s);
 			boolean isRdf = s instanceof RdfSerializer;
 
-			OMap properties = comboInput.properties;
-			if (properties != null) {
-				s = s.copy().add(properties).build();
-			}
-
 			String r = s.serializeToString(comboInput.in.get());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
@@ -165,12 +159,6 @@ public abstract class ComboRoundTripTest {
 
 			boolean isRdf = s instanceof RdfSerializer;
 
-			OMap properties = comboInput.properties;
-			if (properties != null) {
-				s = s.copy().add(properties).build();
-				p = p.copy().add(properties).build();
-			}
-
 			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);
 			o = comboInput.convert(o);
@@ -206,12 +194,6 @@ public abstract class ComboRoundTripTest {
 			s = getSerializer(s);
 			p = getParser(p);
 
-			OMap properties = comboInput.properties;
-			if (properties != null) {
-				s = s.copy().add(properties).build();
-				p = p.copy().add(properties).build();
-			}
-
 			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);
 
@@ -235,13 +217,6 @@ public abstract class ComboRoundTripTest {
 			s = (OutputStreamSerializer)getSerializer(s);
 			p = (InputStreamParser)getParser(p);
 			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
-
-			OMap properties = comboInput.properties;
-			if (properties != null) {
-				s = (OutputStreamSerializer)s.copy().add(properties).build();
-				p = (InputStreamParser)p.copy().add(properties).build();
-				sJson = (WriterSerializer)sJson.copy().add(properties).build();
-			}
 
 			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);

@@ -247,16 +247,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		config = beanStore.add(Config.class, createConfig(bs, rc));
 		beanStore.add(VarResolver.class, varResolver.bean(Config.class, config).build());
 
-		// Add the servlet init parameters to our properties.
-		if (inner != null) {
-			VarResolver vr = beanStore.getBean(VarResolver.class).get();
-			for (Enumeration<String> ep = inner.getInitParameterNames(); ep.hasMoreElements();) {
-				String p = ep.nextElement();
-				String initParam = inner.getInitParameter(p);
-				set(vr.resolve(p), vr.resolve(initParam));
-			}
-		}
-
 		ClassInfo rci = ClassInfo.of(resourceClass);
 
 		VarResolverSession vrs = varResolver().build().createSession();
@@ -5873,49 +5863,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RestContextBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestContextBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestContextBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
 	// <FluentSetters>
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
-		return this;
-	}
 
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
@@ -5932,36 +5880,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder debug() {
 		super.debug();
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

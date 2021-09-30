@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -58,7 +57,6 @@ public class RequestBeanPropertyMeta {
 		HttpPartType partType;
 		HttpPartSchema schema;
 		Method getter;
-		ContextProperties cp = ContextProperties.DEFAULT;
 
 		Builder getter(Method value) {
 			getter = value;

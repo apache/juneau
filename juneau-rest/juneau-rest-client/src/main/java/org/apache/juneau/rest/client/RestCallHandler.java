@@ -18,7 +18,6 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.*;
 
 /**
  * Interface that allows you to override the handling of HTTP requests.
@@ -32,7 +31,6 @@ import org.apache.juneau.*;
  * The constructor on the implementation class can optionally take in any of the following parameters:
  * <ul>
  * 	<li>{@link RestClient} - The client using this handler.
- * 	<li>{@link ContextProperties} - The properties used to initialize the client.
  * </ul>
  *
  * <p>

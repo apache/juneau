@@ -3246,32 +3246,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder add(Map<String,Object> properties) {
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder addTo(String name, Object value) {
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder annotations(Annotation...value) {
 		super.annotations(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder apply(ContextProperties copyFrom) {
-		super.apply(copyFrom);
 		return this;
 	}
 
@@ -3296,54 +3272,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder debug() {
 		super.debug();
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder prependTo(String name, Object value) {
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder putAllTo(String name, Object value) {
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(String name) {
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder unset(String name) {
-		super.unset(name);
 		return this;
 	}
 

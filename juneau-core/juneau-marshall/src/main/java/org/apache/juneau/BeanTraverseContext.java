@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -24,7 +23,6 @@ import org.apache.juneau.collections.*;
  *
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  */
-@ConfigurableContext
 public abstract class BeanTraverseContext extends BeanContextable {
 
 	//-------------------------------------------------------------------------------------------------------------------

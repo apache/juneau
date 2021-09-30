@@ -19,7 +19,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
@@ -192,12 +191,11 @@ public abstract class RoundTripTest {
 	public RoundTripTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		this.label = label;
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
-		OMap properties = getProperties();
 		Class<?>[] pojoSwaps = getPojoSwaps();
 		Class<?>[] dictionary = getDictionary();
 		Class<?>[] annotatedClasses = getAnnotatedClasses();
 
-		if (! (m.isEmpty() && properties.isEmpty() && pojoSwaps.length == 0 && dictionary.length == 0 && annotatedClasses.length == 0)) {
+		if (! (m.isEmpty() && pojoSwaps.length == 0 && dictionary.length == 0 && annotatedClasses.length == 0)) {
 			s = s.copy();
 			p = p == null ? null : p.copy();
 			for (Entry<Class<Object>, Class<? extends Object>> e : m.entrySet()) {
@@ -205,9 +203,9 @@ public abstract class RoundTripTest {
 				if (p != null)
 					p.implClass(e.getKey(), e.getValue());
 			}
-			s.swaps(pojoSwaps).beanDictionary(dictionary).add(properties).applyAnnotations(annotatedClasses);
+			s.swaps(pojoSwaps).beanDictionary(dictionary).applyAnnotations(annotatedClasses);
 			if (p != null)
-				p.swaps(pojoSwaps).beanDictionary(dictionary).add(properties).applyAnnotations(annotatedClasses);
+				p.swaps(pojoSwaps).beanDictionary(dictionary).applyAnnotations(annotatedClasses);
 		}
 
 		this.s = s.build();
@@ -232,10 +230,6 @@ public abstract class RoundTripTest {
 
 	public Class<?>[] getAnnotatedClasses() {
 		return new Class<?>[0];
-	}
-
-	public OMap getProperties() {
-		return OMap.EMPTY_MAP;
 	}
 
 	public <T> Map<Class<T>,Class<? extends T>> getImplClasses() {

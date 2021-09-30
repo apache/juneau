@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -90,7 +89,6 @@ import org.apache.juneau.serializer.*;
  * 	String json = serializer.serialize(someObject);
  * </p>
  */
-@ConfigurableContext
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
@@ -42,7 +41,6 @@ import org.apache.juneau.transform.*;
  * Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform
  * defined on it.
  */
-@ConfigurableContext
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

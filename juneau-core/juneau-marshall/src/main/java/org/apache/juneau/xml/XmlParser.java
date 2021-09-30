@@ -22,7 +22,6 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -38,7 +37,6 @@ import org.apache.juneau.parser.*;
  *
  * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
  */
-@ConfigurableContext
 public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

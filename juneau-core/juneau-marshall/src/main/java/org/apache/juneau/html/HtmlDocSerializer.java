@@ -18,7 +18,6 @@ import static java.util.Collections.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -62,7 +61,6 @@ import org.apache.juneau.serializer.*;
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  */
-@ConfigurableContext
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -148,8 +146,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	@Override /* XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
-		if (schemaSerializer == null)
-			schemaSerializer = copy().build(HtmlSchemaDocSerializer.class);
+		int TODO;
+//		if (schemaSerializer == null)
+//			schemaSerializer = (HtmlSchemaDocSerializer) HtmlDocSerializer.create().type(HtmlSchemaDocSerializer.class).beanContext(getBeanContext()).build();
 		return schemaSerializer;
 	}
 

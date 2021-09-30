@@ -24,7 +24,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.encode.ConfigEncoder;
 import org.apache.juneau.config.event.*;
@@ -45,7 +44,6 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@ConfigurableContext
 public final class Config extends Context implements ConfigEventListener, Writable {
 
 	private static boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");

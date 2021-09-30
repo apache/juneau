@@ -39,7 +39,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
@@ -70,7 +69,6 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc RestContext}
  * </ul>
  */
-@ConfigurableContext(nocache=true)
 public class RestContext extends Context {
 
 	/**

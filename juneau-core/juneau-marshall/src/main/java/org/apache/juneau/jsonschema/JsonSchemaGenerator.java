@@ -21,7 +21,6 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 
@@ -29,7 +28,6 @@ import org.apache.juneau.json.*;
  * Generates JSON-schema metadata about POJOs.
  * {@review}
  */
-@ConfigurableContext
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -30,7 +29,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
-@ConfigurableContext
 public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

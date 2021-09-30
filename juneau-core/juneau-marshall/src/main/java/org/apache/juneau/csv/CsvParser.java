@@ -16,14 +16,12 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
  * TODO - Work in progress.  CSV parser.
  */
-@ConfigurableContext
 public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

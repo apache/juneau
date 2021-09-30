@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import static java.util.Optional.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
@@ -50,8 +49,8 @@ public class ResponseBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = serializer.isPresent() ? serializer : ofNullable(castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp));
-		this.parser = parser.isPresent() ? parser : ofNullable(castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp));
+		this.serializer = serializer.isPresent() ? serializer : ofNullable(castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true));
+		this.parser = parser.isPresent() ? parser : ofNullable(castOrCreate(HttpPartParser.class, schema.getParser(), true));
 	}
 
 	static class Builder {
@@ -59,7 +58,6 @@ public class ResponseBeanPropertyMeta {
 		HttpPartSchema schema = HttpPartSchema.DEFAULT;
 		String name;
 		Method getter;
-		ContextProperties cp = ContextProperties.DEFAULT;
 
 		Builder name(String value) {
 			name = value;

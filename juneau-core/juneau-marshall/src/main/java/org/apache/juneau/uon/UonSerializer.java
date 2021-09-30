@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
@@ -121,7 +120,6 @@ import org.apache.juneau.serializer.*;
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-@ConfigurableContext
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

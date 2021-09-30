@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -57,7 +56,7 @@ import org.apache.juneau.parser.*;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link OMap OMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the <c>beanTypeName</c> setting on the {@link ContextProperties} for more information about parsing
+ * 		See the {@link BeanContextBuilder#typePropertyName(String)} setting for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link OList OLists}.
@@ -104,7 +103,6 @@ import org.apache.juneau.parser.*;
  * OList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  */
-@ConfigurableContext
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

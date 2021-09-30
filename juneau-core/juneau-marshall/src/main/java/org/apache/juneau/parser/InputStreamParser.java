@@ -13,7 +13,6 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -28,7 +27,6 @@ import org.apache.juneau.collections.*;
  * 	<li><c>parse(InputStream, ClassMeta, Parser)</c>
  * </ul>
   */
-@ConfigurableContext
 public abstract class InputStreamParser extends Parser {
 
 	//-------------------------------------------------------------------------------------------------------------------

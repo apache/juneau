@@ -24,7 +24,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
@@ -80,7 +79,6 @@ import org.apache.juneau.http.header.*;
  * 	AddressBook addressBook = p.parse(json, AddressBook.<jk>class</jk>);
  * </p>
  */
-@ConfigurableContext(nocache=true)
 public final class ParserGroup {
 
 	//-----------------------------------------------------------------------------------------------------------------

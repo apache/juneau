@@ -17,14 +17,12 @@ import static java.util.Optional.*;
 
 import java.nio.charset.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  * {@review}
  */
-@ConfigurableContext
 public abstract class WriterSerializer extends Serializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

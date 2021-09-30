@@ -42,7 +42,6 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	private SerializerGroup serializers;
 	private ParserGroup parsers;
-	private OMap properties = new OMap();
 
 	/**
 	 * Constructor.
@@ -54,13 +53,11 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			serializers = SerializerGroup.create()
 				.add(jp.serializers())
 				.forEach(x -> x.swaps(jp.swaps()))
-				.forEach(x -> x.set(properties))
 				.build();
 
 			parsers = ParserGroup.create()
 				.add(jp.parsers())
 				.forEach(x -> x.swaps(jp.swaps()))
-				.forEach(x -> x.set(properties))
 				.build();
 
 		} catch (Exception e) {

@@ -139,7 +139,7 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 
 	/**
 	 * Specifies an already-instantiated bean context to use.
-	 * 
+	 *
 	 * <p>
 	 * Provides an optimization for cases where serializers and parsers can use an existing
 	 * bean context without having to go through <c><jv>beanContext</jv>.copy().build()</c>.
@@ -2904,20 +2904,6 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder add(Map<String,Object> properties) {
-		bcBuilder.add(properties);
-		super.add(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder addTo(String name, Object value) {
-		bcBuilder.addTo(name, value);
-		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public BeanContextableBuilder annotations(Annotation...value) {
 		bcBuilder.annotations(value);
 		super.annotations(value);
@@ -2925,79 +2911,9 @@ public abstract class BeanContextableBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder appendTo(String name, Object value) {
-		bcBuilder.appendTo(name, value);
-		super.appendTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder apply(ContextProperties copyFrom) {
-		bcBuilder.apply(copyFrom);
-		super.apply(copyFrom);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public BeanContextableBuilder debug() {
 		bcBuilder.debug();
 		super.debug();
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder prependTo(String name, Object value) {
-		bcBuilder.prependTo(name, value);
-		super.prependTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder putAllTo(String name, Object value) {
-		bcBuilder.putAllTo(name, value);
-		super.putAllTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder putTo(String name, String key, Object value) {
-		bcBuilder.putTo(name, key, value);
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder removeFrom(String name, Object value) {
-		bcBuilder.removeFrom(name, value);
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder set(String name) {
-		bcBuilder.set(name);
-		super.set(name);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder set(Map<String,Object> properties) {
-		bcBuilder.set(properties);
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder set(String name, Object value) {
-		bcBuilder.set(name, value);
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public BeanContextableBuilder unset(String name) {
-		bcBuilder.unset(name);
-		super.unset(name);
 		return this;
 	}
 

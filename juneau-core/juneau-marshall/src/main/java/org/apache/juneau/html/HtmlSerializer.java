@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -127,7 +126,6 @@ import org.apache.juneau.xml.*;
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
  */
-@ConfigurableContext
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

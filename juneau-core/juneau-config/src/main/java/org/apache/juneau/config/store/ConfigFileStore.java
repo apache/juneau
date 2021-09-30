@@ -24,7 +24,6 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
@@ -35,7 +34,6 @@ import org.apache.juneau.internal.*;
  * <p>
  * Points to a file system directory containing configuration files.
  */
-@ConfigurableContext
 public class ConfigFileStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------

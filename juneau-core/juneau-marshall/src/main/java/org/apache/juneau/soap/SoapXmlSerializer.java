@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -34,7 +33,6 @@ import org.apache.juneau.xml.*;
  *
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  */
-@ConfigurableContext
 public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

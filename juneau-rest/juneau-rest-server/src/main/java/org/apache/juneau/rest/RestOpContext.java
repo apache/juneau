@@ -30,7 +30,6 @@ import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
@@ -54,7 +53,6 @@ import org.apache.juneau.utils.*;
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
  * {@review}
  */
-@ConfigurableContext(nocache=true)
 public class RestOpContext extends Context implements Comparable<RestOpContext>  {
 
 	/** Represents a null value for the {@link RestOp#contextClass()} annotation.*/
@@ -238,7 +236,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			ResponseHeader a = c.getAnnotation(ResponseHeader.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), ContextProperties.DEFAULT, partSerializer);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), partSerializer);
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)
@@ -265,7 +263,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			ResponseBody a = c.getAnnotation(ResponseBody.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), ContextProperties.DEFAULT, partSerializer);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), partSerializer);
 				pm = new ResponsePartMeta(BODY, schema, serializer);
 			}
 			if (pm == null)
@@ -683,8 +681,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, ContextProperties cp, HttpPartSerializer _default) {
-		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, cp);
+	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer _default) {
+		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true);
 		return hps == null ? _default : hps;
 	}
 

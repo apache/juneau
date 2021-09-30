@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import java.nio.charset.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -29,7 +28,6 @@ import org.apache.juneau.collections.*;
  * 	<li><c>parse(ParserSession, ClassMeta)</c>
  * </ul>
  */
-@ConfigurableContext
 public abstract class ReaderParser extends Parser {
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
@@ -43,7 +42,6 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */
-@ConfigurableContext
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -28,7 +28,6 @@ public class ComboInput<T> {
 
 	final String label;
 	final Supplier<T> in;
-	OMap properties;
 	String exceptionMsg;
 	private Predicate<String> skipTest;
 	private Function<T,T> convert;
@@ -46,11 +45,6 @@ public class ComboInput<T> {
 
 	public <T2> ComboInput<T> apply(Class<T2> t, Consumer<T2> c) {
 		applies.add(Tuple2.of(t, c));
-		return this;
-	}
-
-	public ComboInput<T> properties(OMap properties) {
-		this.properties = properties;
 		return this;
 	}
 
@@ -210,7 +204,6 @@ public class ComboInput<T> {
 		this.label = label;
 		this.type = type;
 		this.in = () -> in;
-		this.properties = null;
 		this.json = json;
 		this.jsonT = jsonT;
 		this.jsonR = jsonR;

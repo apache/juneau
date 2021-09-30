@@ -18,7 +18,6 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
@@ -68,11 +67,6 @@ public abstract class ComboSerializeTest {
 				return;
 
 			s = getSerializer(s);
-
-			OMap properties = comboInput.properties;
-			if (properties != null) {
-				s = s.copy().add(properties).build();
-			}
 
 			boolean isRdf = s instanceof RdfSerializer;
 

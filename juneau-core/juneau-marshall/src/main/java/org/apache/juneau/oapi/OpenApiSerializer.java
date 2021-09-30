@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -30,7 +29,6 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'>{@doc OpenApiSerializers}
  * </ul>
  */
-@ConfigurableContext
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

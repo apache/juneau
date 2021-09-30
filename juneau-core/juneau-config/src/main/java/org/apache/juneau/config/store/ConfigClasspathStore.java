@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
@@ -31,7 +30,6 @@ import org.apache.juneau.internal.*;
  * <p>
  * Configuration files retrieved from the classpath can be modified but not persisted.
  */
-@ConfigurableContext
 public class ConfigClasspathStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------

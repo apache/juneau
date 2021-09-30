@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
@@ -34,7 +33,6 @@ import org.apache.juneau.parser.*;
  *
  * This parser uses a state machine, which makes it very fast and efficient.
  */
-@ConfigurableContext
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------

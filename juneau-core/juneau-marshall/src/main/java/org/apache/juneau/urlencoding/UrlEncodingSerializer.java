@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -116,7 +115,6 @@ import org.apache.juneau.uon.*;
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-@ConfigurableContext
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
