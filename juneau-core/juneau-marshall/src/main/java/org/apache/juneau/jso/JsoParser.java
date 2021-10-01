@@ -75,7 +75,7 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 
 	@Override /* Parser */
 	public JsoParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

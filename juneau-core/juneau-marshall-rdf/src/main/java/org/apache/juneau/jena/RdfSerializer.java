@@ -151,7 +151,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 	@Override /* Context */
 	public  RdfSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

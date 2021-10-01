@@ -254,7 +254,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 
 	@Override /* Context */
 	public  UonSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

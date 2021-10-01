@@ -57,7 +57,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 
 	@Override /* Context */
 	public BeanTraverseSession createSession() {
-		return new BeanTraverseSession(this, createDefaultSessionArgs());
+		return new BeanTraverseSession(this, defaultArgs());
 	}
 
 	@Override /* Context */

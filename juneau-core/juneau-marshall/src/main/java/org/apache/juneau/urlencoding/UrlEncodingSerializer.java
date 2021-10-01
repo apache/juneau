@@ -230,7 +230,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 
 	@Override /* Context */
 	public UrlEncodingSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

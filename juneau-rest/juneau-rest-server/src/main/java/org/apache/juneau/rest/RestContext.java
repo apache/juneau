@@ -1626,7 +1626,7 @@ public class RestContext extends Context {
 	}
 
 	@Override /* Context */
-	public Context.Args createDefaultSessionArgs() {
+	public Context.Args defaultArgs() {
 		throw unsupportedOperationException("Method not implemented.");
 	}
 

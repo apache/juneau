@@ -77,7 +77,7 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 
 	@Override /* Context */
 	public JsoSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

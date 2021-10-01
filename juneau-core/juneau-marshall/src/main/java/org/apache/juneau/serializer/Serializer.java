@@ -156,11 +156,11 @@ public abstract class Serializer extends BeanTraverseContext {
 
 	@Override /* Context */
 	public SerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Context */
-	public final SerializerSessionArgs createDefaultSessionArgs() {
+	public final SerializerSessionArgs defaultArgs() {
 		return new SerializerSessionArgs().mediaType(getResponseContentType());
 	}
 

@@ -340,7 +340,7 @@ public class BeanContext extends Context {
 	 */
 	@Override /* Context */
 	public BeanSession createSession() {
-		return createBeanSession(createDefaultSessionArgs());
+		return createBeanSession(defaultArgs());
 	}
 
 	/**
@@ -386,12 +386,12 @@ public class BeanContext extends Context {
 	}
 
  	@Override /* Context */
-	public BeanSessionArgs createDefaultSessionArgs() {
+	public BeanSessionArgs defaultArgs() {
  		return createDefaultBeanSessionArgs();
 	}
 
 	/**
-	 * Same as {@link #createDefaultSessionArgs()} except always returns a {@link BeanSessionArgs} unlike
+	 * Same as {@link #defaultArgs()} except always returns a {@link BeanSessionArgs} unlike
 	 * {@link #createDefaultBeanSessionArgs()} which is meant to be overridden by subclasses.
 	 *
 	 * @return A new session arguments object.

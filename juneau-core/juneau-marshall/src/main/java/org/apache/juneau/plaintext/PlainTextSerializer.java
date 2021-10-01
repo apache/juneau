@@ -87,7 +87,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 
 	@Override /* Context */
 	public  PlainTextSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

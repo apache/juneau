@@ -119,7 +119,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 	@Override /* Parser */
 	public RdfParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

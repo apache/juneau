@@ -71,7 +71,7 @@ public abstract class WriterSerializer extends Serializer {
 
 	@Override /* Context */
 	public WriterSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */
@@ -88,7 +88,7 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	@Override /* Serializer */
 	public final String serialize(Object o) throws SerializeException {
-		return createSession(createDefaultSessionArgs()).serialize(o);
+		return createSession(defaultArgs()).serialize(o);
 	}
 
 	/**

@@ -77,7 +77,7 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 
 	@Override /* Serializer */
 	public SoapXmlSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

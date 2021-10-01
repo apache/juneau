@@ -78,7 +78,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	@Override /* Serializer */
 	public HtmlSchemaDocSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

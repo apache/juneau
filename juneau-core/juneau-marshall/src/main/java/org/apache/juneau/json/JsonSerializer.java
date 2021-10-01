@@ -198,7 +198,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	@Override /* Context */
 	public JsonSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

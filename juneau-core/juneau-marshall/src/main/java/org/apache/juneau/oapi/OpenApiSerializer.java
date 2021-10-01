@@ -84,7 +84,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 
 	@Override /* Context */
 	public OpenApiSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

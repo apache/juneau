@@ -81,7 +81,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 	@Override /* Parser */
 	public HtmlParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

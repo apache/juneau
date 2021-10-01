@@ -1600,7 +1600,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Unused.
 	 */
 	@Override /* Context */
-	public Context.Args createDefaultSessionArgs() {
+	public Context.Args defaultArgs() {
 		throw new UnsupportedOperationException();
 	}
 

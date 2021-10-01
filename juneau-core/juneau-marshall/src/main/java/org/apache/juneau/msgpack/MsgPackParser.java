@@ -114,7 +114,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 	@Override /* Parser */
 	public MsgPackParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

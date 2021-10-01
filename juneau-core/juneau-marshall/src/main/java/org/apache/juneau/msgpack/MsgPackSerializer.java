@@ -117,7 +117,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	@Override /* Context */
 	public MsgPackSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

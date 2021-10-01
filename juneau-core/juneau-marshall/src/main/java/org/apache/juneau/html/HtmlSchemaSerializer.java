@@ -137,7 +137,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 
 	@Override /* Context */
 	public HtmlSchemaSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

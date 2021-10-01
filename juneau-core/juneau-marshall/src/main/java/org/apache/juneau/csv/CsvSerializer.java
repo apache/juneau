@@ -70,7 +70,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 
 	@Override /* Context */
 	public CsvSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

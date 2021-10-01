@@ -89,7 +89,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 
 	@Override /* Parser */
 	public PlainTextParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

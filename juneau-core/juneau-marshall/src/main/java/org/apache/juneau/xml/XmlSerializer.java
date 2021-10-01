@@ -273,7 +273,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	@Override /* Serializer */
 	public XmlSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

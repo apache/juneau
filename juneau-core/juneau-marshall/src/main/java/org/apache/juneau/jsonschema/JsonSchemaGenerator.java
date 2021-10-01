@@ -104,7 +104,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 	@Override /* Context */
 	public JsonSchemaGeneratorSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override

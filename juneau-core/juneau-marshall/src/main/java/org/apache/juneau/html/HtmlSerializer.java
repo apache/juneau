@@ -226,7 +226,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 	@Override /* Serializer */
 	public HtmlSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

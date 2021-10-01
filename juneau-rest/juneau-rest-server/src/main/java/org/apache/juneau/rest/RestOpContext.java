@@ -596,7 +596,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	@Override /* Context */
-	public Context.Args createDefaultSessionArgs() {
+	public Context.Args defaultArgs() {
 		throw unsupportedOperationException("Method not implemented.");
 	}
 

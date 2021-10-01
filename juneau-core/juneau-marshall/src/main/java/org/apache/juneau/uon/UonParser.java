@@ -164,7 +164,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @return A new parser session.
 	 */
 	protected final UonParserSession createParameterSession() {
-		return new UonParserSession(this, createDefaultSessionArgs(), false);
+		return new UonParserSession(this, defaultArgs(), false);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

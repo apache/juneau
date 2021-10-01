@@ -136,7 +136,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	@Override /* Serializer */
 	public HtmlDocSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

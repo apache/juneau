@@ -106,7 +106,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	@Override /* Parser */
 	public XmlParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

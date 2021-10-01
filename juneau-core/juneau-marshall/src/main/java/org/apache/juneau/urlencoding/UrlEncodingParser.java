@@ -94,7 +94,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 
 	@Override /* Parser */
 	public UrlEncodingParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

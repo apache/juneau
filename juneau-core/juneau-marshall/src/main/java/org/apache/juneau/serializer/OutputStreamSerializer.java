@@ -56,7 +56,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 
 	@Override /* Context */
 	public OutputStreamSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */
@@ -73,7 +73,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
-		return createSession(createDefaultSessionArgs()).serialize(o);
+		return createSession(defaultArgs()).serialize(o);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

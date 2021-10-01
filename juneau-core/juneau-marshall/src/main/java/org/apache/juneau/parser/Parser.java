@@ -406,11 +406,11 @@ public abstract class Parser extends BeanContextable {
 
 	@Override /* Context */
 	public ParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Context */
-	public final ParserSessionArgs createDefaultSessionArgs() {
+	public final ParserSessionArgs defaultArgs() {
 		return new ParserSessionArgs().mediaType(getPrimaryMediaType());
 	}
 

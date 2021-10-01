@@ -905,7 +905,10 @@ public abstract class Context implements MetaProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Runtime arguments passed to the session object.
+	 * Runtime arguments bean.
+	 *
+	 * <p>
+	 * These are passed to {@link Session} beans to modify select settings defined on the {@link Context} bean.
 	 */
 	@FluentSetters
 	public static class Args {
@@ -1024,7 +1027,6 @@ public abstract class Context implements MetaProvider {
 		// </FluentSetters>
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1094,6 +1096,18 @@ public abstract class Context implements MetaProvider {
 	public abstract Builder copy();
 
 	/**
+	 * Creates an {@link Args} bean to pass to the {@link #createSession(Args)} method.
+	 *
+	 * <p>
+	 * The {@link Args} bean can be used to override select settings defined on this context when creating session beans.
+	 *
+	 * @return A new Args bean.
+	 */
+	public Args createArgs() {
+		return new Args();
+	}
+
+	/**
 	 * Create a new bean session based on the properties defined on this context.
 	 *
 	 * <p>
@@ -1103,7 +1117,7 @@ public abstract class Context implements MetaProvider {
 	 * @return A new session object.
 	 */
 	public Session createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	/**
@@ -1125,7 +1139,7 @@ public abstract class Context implements MetaProvider {
 	 *
 	 * @return A SessionArgs object, possibly a read-only reusable instance.
 	 */
-	public abstract Args createDefaultSessionArgs();
+	public abstract Args defaultArgs();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -1406,6 +1420,8 @@ public abstract class Context implements MetaProvider {
 
 	@Override /* Object */
 	public String toString() {
+		if (SimpleJsonSerializer.DEFAULT_READABLE == null)
+			return super.toString();
 		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
 	}
 

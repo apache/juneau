@@ -47,7 +47,7 @@ public abstract class BeanContextable extends Context {
 
 	@Override
 	public BeanSession createSession() {
-		return beanContext.createBeanSession(beanContext.createDefaultSessionArgs());
+		return beanContext.createBeanSession(beanContext.defaultArgs());
 	}
 
 	/**
@@ -72,8 +72,8 @@ public abstract class BeanContextable extends Context {
 	}
 
 	@Override /* Context */
-	public BeanSessionArgs createDefaultSessionArgs() {
- 		return beanContext.createDefaultSessionArgs();
+	public BeanSessionArgs defaultArgs() {
+ 		return beanContext.defaultArgs();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

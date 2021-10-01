@@ -64,7 +64,7 @@ public class XmlDocSerializer extends XmlSerializer {
 
 	@Override /* Serializer */
 	public XmlDocSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

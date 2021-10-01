@@ -67,7 +67,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	@Override /* Parser */
 	public CsvParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */

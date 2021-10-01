@@ -133,7 +133,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 
 	@Override /* Context */
 	public JsonSchemaSerializerSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Serializer */

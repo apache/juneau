@@ -175,7 +175,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	@Override /* Parser */
 	public JsonParserSession createSession() {
-		return createSession(createDefaultSessionArgs());
+		return createSession(defaultArgs());
 	}
 
 	@Override /* Parser */
