@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Optional.*;
 
 import java.lang.annotation.*;
@@ -48,6 +49,10 @@ import org.apache.juneau.utils.*;
  */
 public abstract class Context implements MetaProvider {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
 
 	/**
@@ -66,7 +71,7 @@ public abstract class Context implements MetaProvider {
 			if (mi == null) {
 				mi = ClassInfo.of(type).getBuilderCreateMethod();
 				if (mi == null)
-					throw new RuntimeException("Could not find builder create method on class " + type);
+					throw runtimeException("Could not find builder create method on class {0}", type);
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			ContextBuilder b = (ContextBuilder)mi.invoke(null);
@@ -77,8 +82,11 @@ public abstract class Context implements MetaProvider {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	final List<Annotation> annotations;
-	private final int identityCode;
 	final boolean debug;
 
 	private final ReflectionMap<Annotation> annotationMap;
@@ -89,7 +97,6 @@ public abstract class Context implements MetaProvider {
 	 * @param copyFrom The context to copy from.
 	 */
 	protected Context(Context copyFrom) {
-		identityCode = copyFrom.identityCode;
 		annotationMap = copyFrom.annotationMap;
 		annotations = copyFrom.annotations;
 		debug = copyFrom.debug;
@@ -102,7 +109,6 @@ public abstract class Context implements MetaProvider {
 	 */
 	protected Context(ContextBuilder builder) {
 		debug = builder.debug;
-		identityCode = System.identityHashCode(this);
 		annotations = ofNullable(builder.annotations).orElse(emptyList());
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
@@ -178,18 +184,19 @@ public abstract class Context implements MetaProvider {
 	 */
 	public abstract SessionArgs createDefaultSessionArgs();
 
-	@Override /* Object */
-	public int hashCode() {
-		return identityCode;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns a uniqueness identity code for this context.
+	 * Debug mode.
 	 *
-	 * @return A uniqueness identity code.
+	 * @see ContextBuilder#debug()
+	 * @return
+	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	public int identityCode() {
-		return identityCode;
+	public boolean isDebug() {
+		return debug;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -450,20 +457,6 @@ public abstract class Context implements MetaProvider {
 		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Debug mode.
-	 *
-	 * @see ContextBuilder#debug()
-	 * @return
-	 * 	<jk>true</jk> if debug mode is enabled.
-	 */
-	public boolean isDebug() {
-		return debug;
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
@@ -491,7 +484,8 @@ public abstract class Context implements MetaProvider {
 				OMap
 					.create()
 					.filtered()
-					.a("identityCode", identityCode)
+					.a("annotations", annotations)
+					.a("debug", debug)
 			);
 	}
 }

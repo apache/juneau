@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.internal.SystemEnv.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;

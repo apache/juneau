@@ -17,12 +17,11 @@ import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static org.apache.juneau.Visibility.*;
 import static java.util.stream.Collectors.*;
 import static java.util.Arrays.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
@@ -670,90 +669,6 @@ public abstract class ContextBuilder {
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Looks up a default value from the environment.
-	 *
-	 * <p>
-	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
-	 * Then returns the default if it can't be found.
-	 *
-	 * @param name The property name.
-	 * @param def The default value if not found.
-	 * @return The default value.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected <T> T env(String name, T def) {
-		String s = System.getProperty(name);
-		if (s == null)
-			s = System.getenv(envName(name));
-		if (s == null)
-			return def;
-		Class<?> c = def.getClass();
-		if (c.isEnum())
-			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
-		Function<String,T> f = (Function<String,T>)ENV_FUNCTIONS.get(c);
-		if (f == null)
-			throw runtimeException("Invalid env type: {0}", c);
-		return f.apply(s);
-	}
-
-	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
-	static {
-		ENV_FUNCTIONS.put(String.class, x -> x);
-		ENV_FUNCTIONS.put(Boolean.class, x -> Boolean.valueOf(x));
-		ENV_FUNCTIONS.put(Charset.class, x -> Charset.forName(x));
-	}
-
-	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
-	private static String envName(String name) {
-		String name2 = PROPERTY_TO_ENV.get(name);
-		if (name2 == null) {
-			name2 = name.toUpperCase().replace(".", "_");
-			PROPERTY_TO_ENV.put(name, name2);
-		}
-		return name2;
-	}
-
-	/**
-	 * Creates a list from an array of objects.
-	 *
-	 * @param objects The objects to create a list from.
-	 * @return A new list not backed by the array.
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> List<T> list(T...objects) {
-		return new ArrayList<>(Arrays.asList(objects));
-	}
-
-	/**
-	 * Appends to an existing list.
-	 *
-	 * @param list The list to append to.
-	 * @param objects The objects to append.
-	 * @return The same list, or a new list if the list was <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> List<T> append(List<T> list, T...objects) {
-		if (list == null)
-			return list(objects);
-		list.addAll(Arrays.asList(objects));
-		return list;
-	}
-
-	/**
-	 * Prepends to an existing list.
-	 *
-	 * @param list The list to prepend to.
-	 * @param objects The objects to prepend.
-	 * @return The same list, or a new list if the list was <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> List<T> prepend(List<T> list, T...objects) {
-		if (list == null)
-			return list(objects);
-		list.addAll(0, Arrays.asList(objects));
-		return list;
-	}
 
 	// <FluentSetters>
 

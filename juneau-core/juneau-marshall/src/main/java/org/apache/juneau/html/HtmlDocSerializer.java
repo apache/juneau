@@ -146,9 +146,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	@Override /* XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
-		int TODO;
-//		if (schemaSerializer == null)
-//			schemaSerializer = (HtmlSchemaDocSerializer) HtmlDocSerializer.create().type(HtmlSchemaDocSerializer.class).beanContext(getBeanContext()).build();
+		if (schemaSerializer == null)
+			schemaSerializer = HtmlSchemaDocSerializer.create().beanContext(getBeanContext()).build();
 		return schemaSerializer;
 	}
 

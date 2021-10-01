@@ -13,9 +13,10 @@
 package org.apache.juneau.microservice.jetty;
 
 import static java.util.logging.Level.*;
+import static org.apache.juneau.internal.SystemEnv.*;
+
 import java.util.logging.*;
 
-import org.apache.juneau.internal.*;
 import org.eclipse.jetty.util.log.AbstractLogger;
 
 /**
@@ -37,7 +38,7 @@ import org.eclipse.jetty.util.log.AbstractLogger;
  *
  */
 public class JettyLogger extends AbstractLogger {
-	private static final boolean SHOW_SOURCE = SystemUtils.getFirstBoolean(true, "org.eclipse.jetty.util.log.SOURCE", "org.eclipse.jetty.util.log.javautil.SOURCE");
+	private static final boolean SHOW_SOURCE = env("org.eclipse.jetty.util.log.SOURCE", env("org.eclipse.jetty.util.log.javautil.SOURCE", true));
 
 	private Level configuredLevel;
 	private Logger logger;

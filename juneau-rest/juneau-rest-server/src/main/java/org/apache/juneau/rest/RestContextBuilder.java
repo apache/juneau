@@ -22,6 +22,7 @@ import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;

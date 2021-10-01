@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.internal.SystemUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -323,7 +323,9 @@ public class JettyMicroservice extends Microservice {
 
 		int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class));
 		int availablePort = findOpenPort(ports);
-		setProperty("availablePort", availablePort, false);
+
+		if (System.getProperty("availablePort") == null)
+			System.setProperty("availablePort", String.valueOf(availablePort));
 
 		String jettyXml = builder.jettyXml;
 		String jettyConfig = cf.getString("Jetty/config", mf.getString("Jetty-Config", "jetty.xml"));
@@ -382,7 +384,8 @@ public class JettyMicroservice extends Microservice {
 		for (Map.Entry<String,Object> e : builder.servletAttributes.entrySet())
 			addServletAttribute(e.getKey(), e.getValue());
 
-		setProperty("juneau.serverPort", availablePort, false);
+		if (System.getProperty("juneau.serverPort") == null)
+			System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 		return server;
 	}

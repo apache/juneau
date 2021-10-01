@@ -15,10 +15,6 @@ package org.apache.juneau.rest.logging;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
-import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.SystemProperties.*;
-import static java.util.logging.Level.*;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -108,15 +104,15 @@ public class BasicRestLogger implements RestLogger {
 	 * @param builder The builder object.
 	 */
 	public BasicRestLogger(RestLogger.Builder builder) {
-		this.logger = firstNonNull(builder.logger, Logger.getLogger(getProperty(String.class, SP_logger, "global")));
+		this.logger = builder.logger;
 		this.thrownStore = builder.thrownStore;
 		this.normalRules = builder.normalRules.toArray(new RestLoggerRule[builder.normalRules.size()]);
 		this.debugRules = builder.debugRules.toArray(new RestLoggerRule[builder.debugRules.size()]);
-		this.enabled = firstNonNull(builder.enabled, getProperty(Enablement.class, SP_enabled, ALWAYS));
-		this.enabledTest = firstNonNull(builder.enabledTest, x -> false);
-		this.requestDetail = firstNonNull(builder.requestDetail, getProperty(RestLoggingDetail.class, SP_requestDetail, STATUS_LINE));
-		this.responseDetail = firstNonNull(builder.responseDetail, getProperty(RestLoggingDetail.class, SP_responseDetail, STATUS_LINE));
-		this.level = firstNonNull(builder.level, getProperty(Level.class, SP_level, OFF));
+		this.enabled = builder.enabled;
+		this.enabledTest = builder.enabledTest;
+		this.requestDetail = builder.requestDetail;
+		this.responseDetail = builder.responseDetail;
+		this.level = builder.level;
 	}
 
 	/**

@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.Visibility.*;
 import static java.util.Arrays.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.beans.*;
 import java.io.*;

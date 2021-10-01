@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logging;
 
+import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.internal.SystemEnv.*;
+import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -161,6 +164,12 @@ public interface RestLogger {
 		 */
 		protected Builder() {
 			super(BasicRestLogger.class);
+			logger = Logger.getLogger(env(SP_logger, "global"));
+			enabled = env(SP_enabled, ALWAYS);
+			enabledTest = x -> false;
+			requestDetail = env(SP_requestDetail, STATUS_LINE);
+			responseDetail = env(SP_responseDetail, STATUS_LINE);
+			level = env(SP_level).map(Level::parse).orElse(OFF);
 		}
 
 		/**

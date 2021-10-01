@@ -39,10 +39,30 @@ import org.apache.juneau.serializer.*;
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Instantiates a new clean-slate {@link HtmlSchemaDocSerializer} object.
+	 *
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> HtmlSchemaDocSerializerBuilder()</code>.
+	 *
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
+	 * the settings of the object called on.
+	 *
+	 * @return A new {@link HtmlSchemaDocSerializerBuilder} object.
+	 */
+	public static HtmlSchemaDocSerializerBuilder create() {
+		return new HtmlSchemaDocSerializerBuilder();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final JsonSchemaGenerator generator;
+	final JsonSchemaGenerator generator;
 
 	/**
 	 * Constructor.
