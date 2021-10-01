@@ -55,7 +55,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @FluentSetters
-public class BeanContextBuilder extends ContextBuilder {
+public class BeanContextBuilder extends Context.Builder {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

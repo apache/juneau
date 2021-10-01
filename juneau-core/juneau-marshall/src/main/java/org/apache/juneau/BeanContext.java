@@ -360,7 +360,7 @@ public class BeanContext extends Context {
 	}
 
 	@Override /* Context */
-	public final Session createSession(SessionArgs args) {
+	public final Session createSession(Context.Args args) {
 		throw new NoSuchMethodError();
 	}
 

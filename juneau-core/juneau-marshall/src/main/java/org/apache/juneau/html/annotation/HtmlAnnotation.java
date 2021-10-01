@@ -279,9 +279,9 @@ public class HtmlAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Html} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link Html} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<Html,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<Html,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -289,11 +289,11 @@ public class HtmlAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Html.class, ContextBuilder.class, vr);
+			super(Html.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Html> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<Html> ai, Context.Builder b) {
 			Html a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

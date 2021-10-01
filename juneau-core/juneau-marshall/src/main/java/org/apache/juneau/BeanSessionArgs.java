@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * Runtime arguments common to all bean, serializer, and parser sessions.
  */
 @FluentSetters
-public class BeanSessionArgs extends SessionArgs {
+public class BeanSessionArgs extends Context.Args {
 
 	/**
 	 * Default empty session arguments.

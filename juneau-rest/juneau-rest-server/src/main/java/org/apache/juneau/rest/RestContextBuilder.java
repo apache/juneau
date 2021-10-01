@@ -95,7 +95,7 @@ import org.apache.juneau.svl.vars.*;
  * </ul>
  */
 @FluentSetters(ignore={"set"})
-public class RestContextBuilder extends ContextBuilder implements ServletConfig {
+public class RestContextBuilder extends Context.Builder implements ServletConfig {
 
 	/**
 	 * Represents a <jk>null</jk> value for the {@link Rest#builder()} annotation.

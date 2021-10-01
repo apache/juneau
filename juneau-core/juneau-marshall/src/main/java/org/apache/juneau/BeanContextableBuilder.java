@@ -49,7 +49,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @FluentSetters
-public abstract class BeanContextableBuilder extends ContextBuilder {
+public abstract class BeanContextableBuilder extends Context.Builder {
 
 	BeanContextBuilder bcBuilder;
 	BeanContext bc;

@@ -159,9 +159,9 @@ public class OpenApiAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link OpenApi} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link OpenApi} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<OpenApi,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<OpenApi,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -169,11 +169,11 @@ public class OpenApiAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(OpenApi.class, ContextBuilder.class, vr);
+			super(OpenApi.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApi> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<OpenApi> ai, Context.Builder b) {
 			OpenApi a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

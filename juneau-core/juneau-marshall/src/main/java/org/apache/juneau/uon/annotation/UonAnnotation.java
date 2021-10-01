@@ -159,9 +159,9 @@ public class UonAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Uon} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link Uon} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<Uon,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<Uon,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -169,11 +169,11 @@ public class UonAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Uon.class, ContextBuilder.class, vr);
+			super(Uon.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uon> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<Uon> ai, Context.Builder b) {
 			Uon a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

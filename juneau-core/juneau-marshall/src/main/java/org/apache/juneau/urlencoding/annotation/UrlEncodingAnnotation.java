@@ -183,9 +183,9 @@ public class UrlEncodingAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link UrlEncoding} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link UrlEncoding} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<UrlEncoding,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<UrlEncoding,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -193,11 +193,11 @@ public class UrlEncodingAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(UrlEncoding.class, ContextBuilder.class, vr);
+			super(UrlEncoding.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncoding> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<UrlEncoding> ai, Context.Builder b) {
 			UrlEncoding a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

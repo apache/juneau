@@ -1293,9 +1293,9 @@ public class SchemaAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Schema} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<Schema,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<Schema,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -1303,11 +1303,11 @@ public class SchemaAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Schema.class, ContextBuilder.class, vr);
+			super(Schema.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Schema> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
 			Schema a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

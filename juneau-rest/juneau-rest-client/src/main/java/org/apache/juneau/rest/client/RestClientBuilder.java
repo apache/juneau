@@ -3213,7 +3213,7 @@ public class RestClientBuilder extends BeanContextableBuilder {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link ContextBuilder#debug()}.
+	 * Automatically enabled with {@link org.apache.juneau.Context.Builder#debug()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

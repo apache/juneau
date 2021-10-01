@@ -41,7 +41,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @FluentSetters
-public class ConfigBuilder extends ContextBuilder {
+public class ConfigBuilder extends Context.Builder {
 
 	String name;
 	ConfigStore store;

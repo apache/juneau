@@ -160,9 +160,9 @@ public class CsvAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Csv} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link Csv} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<Csv,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<Csv,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -170,11 +170,11 @@ public class CsvAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Csv.class, ContextBuilder.class, vr);
+			super(Csv.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Csv> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<Csv> ai, Context.Builder b) {
 			Csv a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

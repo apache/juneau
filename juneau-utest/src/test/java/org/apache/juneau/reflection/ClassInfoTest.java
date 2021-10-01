@@ -63,12 +63,12 @@ public class ClassInfoTest {
 		int value();
 	}
 
-	public static class AConfigApply extends AnnotationApplier<AConfig,ContextBuilder> {
+	public static class AConfigApply extends AnnotationApplier<AConfig,Context.Builder> {
 		protected AConfigApply(VarResolverSession vr) {
-			super(AConfig.class, ContextBuilder.class, vr);
+			super(AConfig.class, Context.Builder.class, vr);
 		}
 		@Override
-		public void apply(AnnotationInfo<AConfig> a, ContextBuilder b) {
+		public void apply(AnnotationInfo<AConfig> a, Context.Builder b) {
 		}
 	}
 

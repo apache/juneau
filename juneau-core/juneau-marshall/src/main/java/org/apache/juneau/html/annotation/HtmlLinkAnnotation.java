@@ -186,9 +186,9 @@ public class HtmlLinkAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link HtmlLink} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link HtmlLink} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<HtmlLink,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<HtmlLink,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -196,11 +196,11 @@ public class HtmlLinkAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(HtmlLink.class, ContextBuilder.class, vr);
+			super(HtmlLink.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlLink> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<HtmlLink> ai, Context.Builder b) {
 			HtmlLink a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

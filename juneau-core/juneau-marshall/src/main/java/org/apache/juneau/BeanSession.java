@@ -46,7 +46,7 @@ import org.apache.juneau.transform.*;
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public class BeanSession extends Session {
+public class BeanSession extends Context.Session {
 
 	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
 

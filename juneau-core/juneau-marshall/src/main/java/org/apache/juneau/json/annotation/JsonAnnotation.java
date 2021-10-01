@@ -181,9 +181,9 @@ public class JsonAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Json} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link Json} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<Json,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<Json,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -191,11 +191,11 @@ public class JsonAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Json.class, ContextBuilder.class, vr);
+			super(Json.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Json> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<Json> ai, Context.Builder b) {
 			Json a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

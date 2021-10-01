@@ -159,9 +159,9 @@ public class SoapXmlAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link SoapXml} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link SoapXml} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<SoapXml,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<SoapXml,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -169,11 +169,11 @@ public class SoapXmlAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(SoapXml.class, ContextBuilder.class, vr);
+			super(SoapXml.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SoapXml> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<SoapXml> ai, Context.Builder b) {
 			SoapXml a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

@@ -349,9 +349,8 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link ContextBuilder#debug()}
-	 * 	<li class='jm'>{@link SessionArgs#debug(Boolean)}
-	 * 	<li class='jm'>{@link ContextBuilder#debug()}
+	 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
+	 * 	<li class='jm'>{@link org.apache.juneau.Context.Args#debug(Boolean)}
 	 * </ul>
 	 */
 	String debug() default "";

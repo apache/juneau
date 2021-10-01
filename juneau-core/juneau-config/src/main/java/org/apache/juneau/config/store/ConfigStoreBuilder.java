@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
  * {@review}
  */
 @FluentSetters
-public abstract class ConfigStoreBuilder extends ContextBuilder {
+public abstract class ConfigStoreBuilder extends Context.Builder {
 
 	/**
 	 * Constructor, default settings.

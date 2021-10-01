@@ -1616,17 +1616,17 @@ public class RestContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ContextBuilder copy() {
+	public Context.Builder copy() {
 		throw unsupportedOperationException("Method not implemented.");
 	}
 
 	@Override /* Context */
-	public Session createSession(SessionArgs args) {
+	public Session createSession(Context.Args args) {
 		throw unsupportedOperationException("Method not implemented.");
 	}
 
 	@Override /* Context */
-	public SessionArgs createDefaultSessionArgs() {
+	public Context.Args createDefaultSessionArgs() {
 		throw unsupportedOperationException("Method not implemented.");
 	}
 

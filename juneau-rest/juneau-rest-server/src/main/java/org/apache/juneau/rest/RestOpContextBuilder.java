@@ -55,7 +55,7 @@ import java.nio.charset.*;
  * Builder class for {@link RestOpContext} objects.
  */
 @FluentSetters
-public class RestOpContextBuilder extends ContextBuilder {
+public class RestOpContextBuilder extends Context.Builder {
 
 	RestContext restContext;
 	RestContextBuilder parent;

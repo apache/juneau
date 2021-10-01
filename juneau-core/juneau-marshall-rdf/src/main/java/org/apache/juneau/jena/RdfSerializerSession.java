@@ -66,7 +66,6 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		super(ctx, args);
 		this.ctx = ctx;
 
-		SessionProperties sp = getSessionProperties();
 		namespaces = ctx.namespaces;
 		model = ModelFactory.createDefaultModel();
 		addModelPrefix(ctx.getJuneauNs());
@@ -91,10 +90,6 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		for (Map.Entry<String,Object> e : ctx.getJenaSettings().entrySet())
 			if (e.getKey().startsWith(propPrefix, 5))
 				writer.setProperty(e.getKey().substring(5 + propPrefix.length()), e.getValue());
-
-		for (String k : sp.keySet())
-			if (k.startsWith("RdfCommon.jena.") && k.startsWith(propPrefix, 15))
-				writer.setProperty(k.substring(15 + propPrefix.length()), sp.get(k).orElse(null));
 	}
 
 	/*

@@ -159,9 +159,9 @@ public class PlainTextAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link PlainText} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link PlainText} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<PlainText,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<PlainText,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -169,11 +169,11 @@ public class PlainTextAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(PlainText.class, ContextBuilder.class, vr);
+			super(PlainText.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainText> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<PlainText> ai, Context.Builder b) {
 			PlainText a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

@@ -879,7 +879,7 @@ import org.apache.juneau.utils.*;
  * <p class='w900'>
  * Enabling debug mode has the following effects:
  * <ul>
- * 	<li>{@link ContextBuilder#debug()} is enabled.
+ * 	<li>{@link org.apache.juneau.Context.Builder#debug()} is enabled.
  * 	<li>{@link RestClientBuilder#detectLeaks()} is enabled.
  * 	<li>{@link RestClientBuilder#logToConsole()} is called.
  * </ul>

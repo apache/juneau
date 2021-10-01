@@ -159,9 +159,9 @@ public class JsoAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Jso} annotations to a {@link ContextBuilder}.
+	 * Applies targeted {@link Jso} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<Jso,ContextBuilder> {
+	public static class Apply extends AnnotationApplier<Jso,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -169,11 +169,11 @@ public class JsoAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Jso.class, ContextBuilder.class, vr);
+			super(Jso.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Jso> ai, ContextBuilder b) {
+		public void apply(AnnotationInfo<Jso> ai, Context.Builder b) {
 			Jso a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
