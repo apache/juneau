@@ -86,7 +86,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

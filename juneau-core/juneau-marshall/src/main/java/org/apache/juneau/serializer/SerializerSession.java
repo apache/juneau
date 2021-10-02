@@ -839,7 +839,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

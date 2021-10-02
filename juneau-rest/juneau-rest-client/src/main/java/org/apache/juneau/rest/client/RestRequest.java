@@ -3236,7 +3236,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

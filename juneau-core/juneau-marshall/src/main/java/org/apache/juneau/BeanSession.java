@@ -40,13 +40,13 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link Serializer} or {@link Parser}.
+ * ContextSession object that lives for the duration of a single use of {@link Serializer} or {@link Parser}.
  *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public class BeanSession extends Context.Session {
+public class BeanSession extends ContextSession {
 
 	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
 
@@ -1588,13 +1588,13 @@ public class BeanSession extends Context.Session {
 		return schema;
 	}
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public void checkForWarnings() {
 		if (isDebug())
 			super.checkForWarnings();
 	}
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a("Context", ctx.toMap())

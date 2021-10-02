@@ -109,7 +109,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

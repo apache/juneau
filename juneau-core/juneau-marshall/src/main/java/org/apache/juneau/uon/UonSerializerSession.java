@@ -352,7 +352,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

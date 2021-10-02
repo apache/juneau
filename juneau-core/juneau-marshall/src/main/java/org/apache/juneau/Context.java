@@ -16,7 +16,6 @@ import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static java.util.Arrays.*;
@@ -25,7 +24,6 @@ import static java.util.stream.Collectors.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -66,7 +64,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<ul>
  * 		<li>This bean is thread-safe and cacheable/reusable.
  * 	</ul>
- * 	<li>A {@link Session} class for doing work.
+ * 	<li>A {@link ContextSession} class for doing work.
  * 	<ul>
  * 		<li>This bean is non-thread-safe and meant for one-time use.
  * 	</ul>
@@ -736,185 +734,6 @@ public abstract class Context implements MetaProvider {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Session
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
-	 */
-	public static abstract class Session {
-
-		private final OMap properties;
-		private Map<String,Object> cache;
-		private List<String> warnings;	// Any warnings encountered.
-
-		private final Context ctx;
-		private final boolean debug;
-		private final boolean unmodifiable;
-
-
-		/**
-		 * Default constructor.
-		 *
-		 * @param ctx The context object.
-		 * @param args
-		 * 	Runtime arguments.
-		 */
-		protected Session(Context ctx, Args args) {
-			this.ctx = ctx;
-			this.unmodifiable = args.unmodifiable;
-			OMap sp = args.properties;
-			if (args.unmodifiable)
-				sp = sp.unmodifiable();
-			properties = sp;
-			debug = ofNullable(args.debug).orElse(ctx.isDebug());
-		}
-
-		/**
-		 * Returns the session properties on this session.
-		 *
-		 * @return The session properties on this session.  Never <jk>null</jk>.
-		 */
-		public final OMap getSessionProperties() {
-			return properties;
-		}
-
-		/**
-		 * Returns the context that created this session.
-		 *
-		 * @return The context that created this session.
-		 */
-		public Context getContext() {
-			return ctx;
-		}
-
-		/**
-		 * Adds an arbitrary object to this session's cache.
-		 *
-		 * <p>
-		 * Can be used to store objects for reuse during a session.
-		 *
-		 * @param key The key.  Can be any string.
-		 * @param val The cached object.
-		 */
-		public final void addToCache(String key, Object val) {
-			if (unmodifiable)
-				return;
-			if (cache == null)
-				cache = new TreeMap<>();
-			cache.put(key, val);
-		}
-
-		/**
-		 * Adds arbitrary objects to this session's cache.
-		 *
-		 * <p>
-		 * Can be used to store objects for reuse during a session.
-		 *
-		 * @param cacheObjects
-		 * 	The objects to add to this session's cache.
-		 * 	No-op if <jk>null</jk>.
-		 */
-		public final void addToCache(Map<String,Object> cacheObjects) {
-			if (unmodifiable)
-				return;
-			if (cacheObjects != null) {
-				if (cache == null)
-					cache = new TreeMap<>();
-				cache.putAll(cacheObjects);
-			}
-		}
-
-		/**
-		 * Returns an object stored in the session cache.
-		 *
-		 * @param c The class type of the object.
-		 * @param key The session object key.
-		 * @return The cached object, or <jk>null</jk> if it doesn't exist.
-		 */
-		@SuppressWarnings("unchecked")
-		public final <T> T getFromCache(Class<T> c, String key) {
-			return cache == null ? null : (T)cache.get(key);
-		}
-
-		/**
-		 * Logs a warning message.
-		 *
-		 * @param msg The warning message.
-		 * @param args Optional {@link MessageFormat}-style arguments.
-		 */
-		public void addWarning(String msg, Object... args) {
-			if (unmodifiable)
-				return;
-			if (warnings == null)
-				warnings = new LinkedList<>();
-			warnings.add((warnings.size() + 1) + ": " + format(msg, args));
-		}
-
-		/**
-		 * Returns <jk>true</jk> if warnings occurred in this session.
-		 *
-		 * @return <jk>true</jk> if warnings occurred in this session.
-		 */
-		public final boolean hasWarnings() {
-			return warnings != null && warnings.size() > 0;
-		}
-
-		/**
-		 * Returns the warnings that occurred in this session.
-		 *
-		 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
-		 */
-		public final List<String> getWarnings() {
-			return warnings;
-		}
-
-		/**
-		 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
-		 */
-		public void checkForWarnings() {
-			if (warnings != null && ! warnings.isEmpty())
-				throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Configuration properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Configuration property:  Debug mode.
-		 *
-		 * @see Context.Builder#debug()
-		 * @return
-		 * 	<jk>true</jk> if debug mode is enabled.
-		 */
-		public boolean isDebug() {
-			return debug;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Other methods
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the properties defined on this bean as a simple map for debugging purposes.
-		 *
-		 * <p>
-		 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-		 *
-		 * @return A new map containing this bean's properties.
-		 */
-		public OMap toMap() {
-			return OMap.create().filtered();
-		}
-
-		@Override /* Object */
-		public String toString() {
-			return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Args
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -922,7 +741,7 @@ public abstract class Context implements MetaProvider {
 	 * Runtime arguments bean.
 	 *
 	 * <p>
-	 * These are passed to {@link Session} beans to modify select settings defined on the {@link Context} bean.
+	 * These are passed to {@link ContextSession} beans to modify select settings defined on the {@link Context} bean.
 	 */
 	@FluentSetters
 	public static class Args {
@@ -966,7 +785,7 @@ public abstract class Context implements MetaProvider {
 		 * Create an unmodifiable session.
 		 *
 		 * <p>
-		 * The created Session object will be unmodifiable which makes it suitable for caching and reuse.
+		 * The created ContextSession object will be unmodifiable which makes it suitable for caching and reuse.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -1130,7 +949,7 @@ public abstract class Context implements MetaProvider {
 	 *
 	 * @return A new session object.
 	 */
-	public Session createSession() {
+	public ContextSession createSession() {
 		return createSession(defaultArgs());
 	}
 
@@ -1146,7 +965,7 @@ public abstract class Context implements MetaProvider {
 	 * 	The session arguments.
 	 * @return A new session object.
 	 */
-	public abstract Session createSession(Args args);
+	public abstract ContextSession createSession(Args args);
 
 	/**
 	 * Defines default session arguments used when calling the {@link #createSession()} method.

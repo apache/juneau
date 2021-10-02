@@ -1592,7 +1592,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Unused.
 	 */
 	@Override /* Context */
-	public Session createSession(Context.Args args) {
+	public ContextSession createSession(Context.Args args) {
 		throw new UnsupportedOperationException();
 	}
 

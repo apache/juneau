@@ -255,7 +255,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

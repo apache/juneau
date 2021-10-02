@@ -56,7 +56,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

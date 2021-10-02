@@ -1005,7 +1005,7 @@ public abstract class ParserSession extends BeanSession {
 		return ctx.getListener();
 	}
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

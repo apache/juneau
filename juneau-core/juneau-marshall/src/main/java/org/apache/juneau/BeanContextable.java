@@ -67,7 +67,7 @@ public abstract class BeanContextable extends Context {
 	}
 
 	@Override /* Context */
-	public final Session createSession(Context.Args args) {
+	public final ContextSession createSession(Context.Args args) {
 		throw new NoSuchMethodError();
 	}
 

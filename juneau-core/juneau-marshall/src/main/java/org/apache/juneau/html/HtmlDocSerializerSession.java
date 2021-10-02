@@ -253,7 +253,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

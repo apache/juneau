@@ -2972,7 +2972,7 @@
 <ul class='javatree'>
 	<li class='jc'><c>Object</c>
 	<ul>
-		<li class='jac'>{@link org.apache.juneau.Session}
+		<li class='jac'>{@link org.apache.juneau.ContextSession}
 		<ul>
 			<li class='jc'>{@link org.apache.juneau.BeanSession}
 			<ul>
@@ -34352,7 +34352,7 @@ Resource bundles are searched using the following base name patterns:
 		<ul>
 			<li>New {@link org.apache.juneau.PropertyStore} class - Used for creating context objects.
 			<li>New {@link org.apache.juneau.Context} class - Read-only configurations for serializers and parsers.
-			<li>New {@link org.apache.juneau.Session} class - One-time use objects used by serializers and parsers.
+			<li>New {@link org.apache.juneau.ContextSession} class - One-time use objects used by serializers and parsers.
 			<li>All context context properties can now also be specified via system properties.
 		</ul>
 	</li>
@@ -34531,7 +34531,7 @@ Resource bundles are searched using the following base name patterns:
 </p>
 <p>
 	In particular, this release cleans up the {@link org.apache.juneau.BeanContext} API to match
-	the {@link org.apache.juneau.PropertyStore}/{@link org.apache.juneau.Context}/{@link org.apache.juneau.Session} paradigm
+	the {@link org.apache.juneau.PropertyStore}/{@link org.apache.juneau.Context}/{@link org.apache.juneau.ContextSession} paradigm
 	previously used in the serializer and parser APIs.
 	It also makes several improvements to the HTML and XML serialization support and introduces HTML5 DTO beans.
 </p>
@@ -36387,7 +36387,7 @@ Resource bundles are searched using the following base name patterns:
 				Session objects also now have a consistent class hierarchy.
 				<br>For example, the class hierarchy of <c>JsonSerializerSession</c> is now:
 				<ul class='doctree'>
-					<li class='jac'>{@link org.apache.juneau.Session}
+					<li class='jac'>{@link org.apache.juneau.ContextSession}
 					<ul>
 						<li class='jc'>{@link org.apache.juneau.BeanSession}
 						<ul>

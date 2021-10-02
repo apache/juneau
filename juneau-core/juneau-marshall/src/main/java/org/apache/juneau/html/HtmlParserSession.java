@@ -30,7 +30,7 @@ import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link HtmlParser}.
+ * ContextSession object that lives for the duration of a single use of {@link HtmlParser}.
  *
  * <p>
  * This class is NOT thread safe.
@@ -785,7 +785,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

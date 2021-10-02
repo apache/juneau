@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 
 /**
- * Session that lives for the duration of a single use of {@link BeanTraverseContext}.
+ * ContextSession that lives for the duration of a single use of {@link BeanTraverseContext}.
  *
  * <p>
  * Used by serializers and other classes that traverse POJOs for the following purposes:
@@ -349,7 +349,7 @@ public class BeanTraverseSession extends BeanSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Session */
+	@Override /* ContextSession */
 	public OMap toMap() {
 		return super.toMap()
 			.a(
