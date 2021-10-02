@@ -702,7 +702,7 @@ public class ResponseBody implements HttpEntity {
 					ParserSessionArgs pArgs =
 						ParserSessionArgs
 							.create()
-							.properties(new OMap().inner(request.getSessionProperties().asMap()))
+							.properties(OMap.create().inner(request.getSessionProperties()))
 							.locale(response.getLocale())
 							.mediaType(mt)
 							.schema(schema);

@@ -15,7 +15,7 @@ package org.apache.juneau.rest.annotation;
 import static java.lang.String.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -65,10 +65,10 @@ public class Rest_RVars_Test {
 				super(b.produces("text/plain").accept("*/*").function((s,o) -> out(s)));
 			}
 			public static String out(SerializerSession s) {
-				SessionProperties sp = s.getSessionProperties();
+				OMap sp = s.getSessionProperties();
 				return format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
-					sp.get("A1").orElse(null), sp.get("A2").orElse(null), sp.get("B1").orElse(null), sp.get("B2").orElse(null), sp.get("C").orElse(null),
-					sp.get("R1a").orElse(null), sp.get("R1b").orElse(null), sp.get("R2").orElse(null), sp.get("R3").orElse(null), sp.get("R4").orElse(null), sp.get("R5").orElse(null), sp.get("R6").orElse(null));
+					sp.get("A1",null), sp.get("A2",null), sp.get("B1",null), sp.get("B2",null), sp.get("C",null),
+					sp.get("R1a",null), sp.get("R1b",null), sp.get("R2",null), sp.get("R3",null), sp.get("R4",null), sp.get("R5",null), sp.get("R6",null));
 			}
 		}
 	}

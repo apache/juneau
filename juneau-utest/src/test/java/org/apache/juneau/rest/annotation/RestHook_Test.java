@@ -21,7 +21,6 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.header.*;
@@ -88,8 +87,8 @@ public class RestHook_Test {
 		}
 
 		private static Object in(ReaderParserSession session) {
-			SessionProperties sp = session.getSessionProperties();
-			return "p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null);
+			OMap sp = session.getSessionProperties();
+			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
 
 		}
 	}
@@ -159,13 +158,13 @@ public class RestHook_Test {
 			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(s->headers(s)));
 		}
 		public static String out(SerializerSession s) {
-			SessionProperties sp = s.getSessionProperties();
-			return "p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null);
+			OMap sp = s.getSessionProperties();
+			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
 		}
 		public static Map<String,String> headers(SerializerSession s) {
-			SessionProperties sp = s.getSessionProperties();
-			if (sp.contains("Override-Content-Type"))
-				return AMap.of("Content-Type",sp.getString("Override-Content-Type").orElse(null));
+			OMap sp = s.getSessionProperties();
+			if (sp.containsKey("Override-Content-Type"))
+				return AMap.of("Content-Type",sp.getString("Override-Content-Type",null));
 			return emptyMap();
 		}
 	}

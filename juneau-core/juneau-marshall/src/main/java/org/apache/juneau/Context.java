@@ -55,7 +55,21 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Base class for all Context beans.
  *
- * {@review}
+ * <p>
+ * Context beans follow the convention of having the following parts:
+ * <ul>
+ * 	<li>A {@link Builder} class for configuring the context bean.
+ * 	<ul>
+ * 		<li>This bean is non-thread-safe and meant for one-time use.
+ * 	</ul>
+ * 	<li>A {@link Context#Context(Builder)} constructor that takes in a builder object.
+ * 	<ul>
+ * 		<li>This bean is thread-safe and cacheable/reusable.
+ * 	</ul>
+ * 	<li>A {@link Session} class for doing work.
+ * 	<ul>
+ * 		<li>This bean is non-thread-safe and meant for one-time use.
+ * 	</ul>
  */
 public abstract class Context implements MetaProvider {
 
@@ -730,9 +744,9 @@ public abstract class Context implements MetaProvider {
 	 */
 	public static abstract class Session {
 
-		private final SessionProperties properties;
+		private final OMap properties;
 		private Map<String,Object> cache;
-		private List<String> warnings;                 // Any warnings encountered.
+		private List<String> warnings;	// Any warnings encountered.
 
 		private final Context ctx;
 		private final boolean debug;
@@ -749,7 +763,7 @@ public abstract class Context implements MetaProvider {
 		protected Session(Context ctx, Args args) {
 			this.ctx = ctx;
 			this.unmodifiable = args.unmodifiable;
-			SessionProperties sp = args.properties;
+			OMap sp = args.properties;
 			if (args.unmodifiable)
 				sp = sp.unmodifiable();
 			properties = sp;
@@ -761,7 +775,7 @@ public abstract class Context implements MetaProvider {
 		 *
 		 * @return The session properties on this session.  Never <jk>null</jk>.
 		 */
-		public final SessionProperties getSessionProperties() {
+		public final OMap getSessionProperties() {
 			return properties;
 		}
 
@@ -913,7 +927,7 @@ public abstract class Context implements MetaProvider {
 	@FluentSetters
 	public static class Args {
 
-		SessionProperties properties = SessionProperties.create();
+		OMap properties = OMap.create();
 		boolean unmodifiable;
 		Boolean debug;
 
@@ -975,7 +989,7 @@ public abstract class Context implements MetaProvider {
 		 */
 		@FluentSetter
 		public Args properties(Map<String,Object> value) {
-			this.properties = SessionProperties.create(value);
+			this.properties = OMap.of(value);
 			return this;
 		}
 
@@ -1013,7 +1027,7 @@ public abstract class Context implements MetaProvider {
 				.create()
 				.filtered()
 				.append("Args", OMap.create().filtered()
-					.append("properties", properties.asMap())
+					.append("properties", properties)
 				);
 		}
 

@@ -52,7 +52,7 @@ public class Nls_Test {
 		}
 
 		public static String out(SerializerSession s) {
-			return s.getSessionProperties().getString("TestProperty").orElse(null);
+			return s.getSessionProperties().getString("TestProperty",null);
 		}
 	}
 
