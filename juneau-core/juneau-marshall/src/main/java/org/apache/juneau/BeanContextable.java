@@ -79,10 +79,10 @@ public abstract class BeanContextable extends Context {
 			registerBuilders(bcBuilder);
 		}
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public abstract Builder copy();
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public BeanContextable build() {
 			return (BeanContextable)super.build();
 		}
@@ -2894,14 +2894,14 @@ public abstract class BeanContextable extends Context {
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder annotations(Annotation...value) {
 			bcBuilder.annotations(value);
 			super.annotations(value);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder debug() {
 			bcBuilder.debug();
 			super.debug();

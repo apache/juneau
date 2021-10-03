@@ -296,7 +296,7 @@ public class RestContext extends Context {
 			}
 		}
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
@@ -2163,7 +2163,7 @@ public class RestContext extends Context {
 		 * <p class='bcode w800'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializerBuilder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
+		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2275,7 +2275,7 @@ public class RestContext extends Context {
 		 * <p class='bcode w800'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParserBuilder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
+		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -5953,7 +5953,7 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
@@ -5961,19 +5961,19 @@ public class RestContext extends Context {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
 			super.applyAnnotations(fromClasses);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(Method...fromMethods) {
 			super.applyAnnotations(fromMethods);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;

@@ -113,12 +113,12 @@ public class ConfigFileStore extends ConfigStore {
 			extensions = copyFrom.extensions;
 		}
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public ConfigFileStore build() {
 			return new ConfigFileStore(this);
 		}
@@ -288,25 +288,25 @@ public class ConfigFileStore extends ConfigStore {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
 			super.applyAnnotations(fromClasses);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(Method...fromMethods) {
 			super.applyAnnotations(fromMethods);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;

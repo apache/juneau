@@ -24,7 +24,7 @@ import org.apache.http.protocol.*;
  * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockRestClient} class.
  *
  * <p>
- * This class is instantiated by the {@link MockRestClientBuilder} class.
+ * This class is instantiated by the {@link MockRestClient.Builder} class.
  *
  * This implementation is NOT thread safe.
  */

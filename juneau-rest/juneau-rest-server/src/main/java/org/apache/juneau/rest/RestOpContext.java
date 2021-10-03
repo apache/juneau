@@ -134,7 +134,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		private BeanStore beanStore;
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
@@ -570,7 +570,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bcode w800'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializerBuilder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
+		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -646,7 +646,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bcode w800'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParserBuilder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
+		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2135,7 +2135,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
@@ -2143,19 +2143,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
 			super.applyAnnotations(fromClasses);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(Method...fromMethods) {
 			super.applyAnnotations(fromMethods);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;

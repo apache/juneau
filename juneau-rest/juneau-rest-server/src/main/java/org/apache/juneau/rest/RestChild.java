@@ -21,7 +21,7 @@ import org.apache.juneau.cp.*;
  * <p class='bcode w800'>
  * 	<jc>// Parent resource.</jc>
  * 	<jk>public class</jk> MyResource {
- * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+ * 		<jk>public</jk> MyResource(RestContext.Builder builder) <jk>throws</jk> Exception {
  *
  * 			<jc>// Register a child resource.</jc>
  * 			builder.children(<jk>new</jk> RestChild(<js>"/child"</js>, <jk>new</jk> MyChildResource());

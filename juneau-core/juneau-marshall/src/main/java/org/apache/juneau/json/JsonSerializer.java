@@ -199,12 +199,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			simpleMode = copyFrom.simpleMode;
 		}
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* ContextBuilder */
+		@Override /* Context.Builder */
 		public JsonSerializer build() {
 			return (JsonSerializer)super.build();
 		}
@@ -415,499 +415,499 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
 			super.applyAnnotations(fromClasses);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder applyAnnotations(Method...fromMethods) {
 			super.applyAnnotations(fromMethods);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextBuilder */
+		@Override /* Context.Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanClassVisibility(Visibility value) {
 			super.beanClassVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanConstructorVisibility(Visibility value) {
 			super.beanConstructorVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanFieldVisibility(Visibility value) {
 			super.beanFieldVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanMapPutReturnsOldValue() {
 			super.beanMapPutReturnsOldValue();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanMethodVisibility(Visibility value) {
 			super.beanMethodVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanProperties(Map<String,Object> values) {
 			super.beanProperties(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanProperties(String beanClassName, String properties) {
 			super.beanProperties(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			super.beanPropertiesExcludes(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			super.beanPropertiesReadOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			super.beanPropertiesWriteOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beansRequireDefaultConstructor() {
 			super.beansRequireDefaultConstructor();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beansRequireSerializable() {
 			super.beansRequireSerializable();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder beanDictionary(Class<?>...values) {
 			super.beanDictionary(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 			super.dictionaryOn(on, values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder disableBeansRequireSomeProperties() {
 			super.disableBeansRequireSomeProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder disableIgnoreMissingSetters() {
 			super.disableIgnoreMissingSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder disableIgnoreTransientFields() {
 			super.disableIgnoreTransientFields();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder disableIgnoreUnknownNullBeanProperties() {
 			super.disableIgnoreUnknownNullBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder disableInterfaceProxies() {
 			super.disableInterfaceProxies();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			super.example(pojoClass, json);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder findFluentSetters() {
 			super.findFluentSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			super.interfaceClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder interfaces(java.lang.Class<?>...value) {
 			super.interfaces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder notBeanClasses(Class<?>...values) {
 			super.notBeanClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder notBeanPackages(String...values) {
 			super.notBeanPackages(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder sortProperties() {
 			super.sortProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder sortProperties(java.lang.Class<?>...on) {
 			super.sortProperties(on);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder typeName(Class<?> on, String value) {
 			super.typeName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder typePropertyName(String value) {
 			super.typePropertyName(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder typePropertyName(Class<?> on, String value) {
 			super.typePropertyName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder useEnumNames() {
 			super.useEnumNames();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContextBuilder */
+		@Override /* GENERATED - BeanContext.Builder */
 		public Builder useJavaBeanIntrospector() {
 			super.useJavaBeanIntrospector();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanTraverseBuilder */
+		@Override /* GENERATED - BeanTraverse.Builder */
 		public Builder detectRecursions() {
 			super.detectRecursions();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanTraverseBuilder */
+		@Override /* GENERATED - BeanTraverse.Builder */
 		public Builder ignoreRecursions() {
 			super.ignoreRecursions();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanTraverseBuilder */
+		@Override /* GENERATED - BeanTraverse.Builder */
 		public Builder initialDepth(int value) {
 			super.initialDepth(value);
 			return this;
 		}
 
-		@Override /* GENERATED - BeanTraverseBuilder */
+		@Override /* GENERATED - BeanTraverse.Builder */
 		public Builder maxDepth(int value) {
 			super.maxDepth(value);
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder addBeanTypes() {
 			super.addBeanTypes();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder addRootType() {
 			super.addRootType();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder keepNullProperties() {
 			super.keepNullProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 			super.listener(value);
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder sortCollections() {
 			super.sortCollections();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder sortMaps() {
 			super.sortMaps();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder trimEmptyCollections() {
 			super.trimEmptyCollections();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder trimEmptyMaps() {
 			super.trimEmptyMaps();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder uriRelativity(UriRelativity value) {
 			super.uriRelativity(value);
 			return this;
 		}
 
-		@Override /* GENERATED - SerializerBuilder */
+		@Override /* GENERATED - Serializer.Builder */
 		public Builder uriResolution(UriResolution value) {
 			super.uriResolution(value);
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder fileCharset(Charset value) {
 			super.fileCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder maxIndent(int value) {
 			super.maxIndent(value);
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder quoteChar(char value) {
 			super.quoteChar(value);
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder sq() {
 			super.sq();
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder useWhitespace() {
 			super.useWhitespace();
 			return this;
 		}
 
-		@Override /* GENERATED - WriterSerializerBuilder */
+		@Override /* GENERATED - WriterSerializer.Builder */
 		public Builder ws() {
 			super.ws();
 			return this;
