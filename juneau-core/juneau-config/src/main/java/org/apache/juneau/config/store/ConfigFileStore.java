@@ -16,14 +16,17 @@ import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.StandardOpenOption.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
@@ -37,29 +40,288 @@ import org.apache.juneau.internal.*;
 public class ConfigFileStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default file store, all default values.*/
 	public static final ConfigFileStore DEFAULT = ConfigFileStore.create().build();
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends ConfigStore.Builder {
+
+		String directory, extensions;
+		Charset charset;
+		boolean enableWatcher, updateOnWrite;
+		WatcherSensitivity watcherSensitivity;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			directory = env("ConfigFileStore.directory", ".");
+			charset = env("ConfigFileStore.charset", Charset.defaultCharset());
+			enableWatcher = env("ConfigFileStore.enableWatcher", false);
+			watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
+			updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
+			extensions = env("ConfigFileStore.extensions", "cfg");
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(ConfigFileStore copyFrom) {
+			super(copyFrom);
+			directory = copyFrom.directory;
+			charset = copyFrom.charset;
+			enableWatcher = copyFrom.enableWatcher;
+			watcherSensitivity = copyFrom.watcherSensitivity;
+			updateOnWrite = copyFrom.updateOnWrite;
+			extensions = copyFrom.extensions;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			directory = copyFrom.directory;
+			charset = copyFrom.charset;
+			enableWatcher = copyFrom.enableWatcher;
+			watcherSensitivity = copyFrom.watcherSensitivity;
+			updateOnWrite = copyFrom.updateOnWrite;
+			extensions = copyFrom.extensions;
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* ContextBuilder */
+		public ConfigFileStore build() {
+			return new ConfigFileStore(this);
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Local file system directory.
+		 *
+		 * <p>
+		 * Identifies the path of the directory containing the configuration files.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.directory"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+		 * 		<li><js>"."</js>
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder directory(String value) {
+			directory = value;
+			return this;
+		}
+
+		/**
+		 * Local file system directory.
+		 *
+		 * <p>
+		 * Identifies the path of the directory containing the configuration files.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.directory"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+		 * 		<li><js>"."</js>.
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder directory(File value) {
+			directory = value.getAbsolutePath();
+			return this;
+		}
+
+		/**
+		 * Charset for external files.
+		 *
+		 * <p>
+		 * Identifies the charset of external files.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.charset"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
+		 * 		<li>{@link Charset#defaultCharset()}
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder charset(Charset value) {
+			charset = value;
+			return this;
+		}
+
+		/**
+		 * Use watcher.
+		 *
+		 * <p>
+		 * Use a file system watcher for file system changes.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>Calling {@link ConfigFileStore#close()} closes the watcher.
+		 * </ul>
+		 *
+		 *	<p>
+		 * 	The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.enableWatcher"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_ENABLEWATCHER"
+		 * 		<li><jk>false</jk>.
+		 * 	</ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder enableWatcher() {
+			enableWatcher = true;
+			return this;
+		}
+
+		/**
+		 * Watcher sensitivity.
+		 *
+		 * <p>
+		 * Determines how frequently the file system is polled for updates.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.watcherSensitivity"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
+		 * 		<li>{@link WatcherSensitivity#MEDIUM}
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder watcherSensitivity(WatcherSensitivity value) {
+			watcherSensitivity = value;
+			return this;
+		}
+
+		/**
+		 * Update-on-write.
+		 *
+		 * <p>
+		 * When enabled, the {@link ConfigFileStore#update(String, String)} method will be called immediately following
+		 * calls to {@link ConfigFileStore#write(String, String, String)} when the contents are changing.
+		 * <br>This allows for more immediate responses to configuration changes on file systems that use
+		 * polling watchers.
+		 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
+		 *
+		 *	<p>
+		 * 	The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.updateOnWrite"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_UPDATEONWRITE"
+		 * 		<li><jk>false</jk>.
+		 * 	</ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder updateOnWrite() {
+			updateOnWrite = true;
+			return this;
+		}
+
+		/**
+		 * File extensions.
+		 *
+		 * <p>
+		 * Defines what file extensions to search for when the config name does not have an extension.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"ConfigFileStore.extensions"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
+		 * 		<li><js>"cfg"</js>
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder extensions(String value) {
+			extensions = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Create a new builder for this object.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static ConfigFileStoreBuilder create() {
-		return new ConfigFileStoreBuilder();
-	}
-
 	@Override /* Context */
-	public ConfigFileStoreBuilder copy() {
-		return new ConfigFileStoreBuilder(this);
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	final String directory, extensions;
@@ -78,7 +340,7 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ConfigFileStore(ConfigFileStoreBuilder builder) {
+	protected ConfigFileStore(Builder builder) {
 		super(builder);
 		directory = builder.directory;
 		extensions = builder.extensions;

@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 
@@ -58,7 +57,7 @@ public @interface Html {
 	 * </p>
 	 *
 	 * <p>
-	 * This overrides the behavior specified by {@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}.
+	 * This overrides the behavior specified by {@link org.apache.juneau.html.HtmlSerializer.Builder#uriAnchorText(AnchorText)}.
 	 */
 	String anchorText() default "";
 
@@ -100,7 +99,7 @@ public @interface Html {
 	 * When <jk>true</jk>, don't add headers to tables.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders()}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#addKeyValueTableHeaders()}
 	 * </ul>
 	 */
 	boolean noTableHeaders() default false;
@@ -117,7 +116,7 @@ public @interface Html {
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

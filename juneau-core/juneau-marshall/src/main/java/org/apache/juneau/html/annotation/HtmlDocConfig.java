@@ -88,7 +88,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#aside(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#aside(String...)}
 	 * </ul>
 	 */
 	String[] aside() default {};
@@ -137,7 +137,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#asideFloat(AsideFloat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#asideFloat(AsideFloat)}
 	 * </ul>
 	 */
 	String asideFloat() default "DEFAULT";
@@ -177,7 +177,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#footer(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#footer(String...)}
 	 * </ul>
 	 */
 	String[] footer() default {};
@@ -215,7 +215,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#head(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#head(String...)}
 	 * </ul>
 	 */
 	String[] head() default {};
@@ -256,7 +256,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#header(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#header(String...)}
 	 * </ul>
 	 */
 	String[] header() default {};
@@ -299,7 +299,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#nav(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#nav(String...)}
 	 * </ul>
 	 */
 	String[] nav() default {};
@@ -361,7 +361,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#navlinks(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#navlinks(String...)}
 	 * </ul>
 	 */
 	String[] navlinks() default {};
@@ -390,7 +390,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#noResultsMessage(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#noResultsMessage(String)}
 	 * </ul>
 	 */
 	String noResultsMessage() default "";
@@ -414,7 +414,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#nowrap()}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#nowrap()}
 	 * </ul>
 	 */
 	String nowrap() default "";
@@ -454,7 +454,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#script(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#script(String...)}
 	 * </ul>
 	 */
 	String[] script() default {};
@@ -495,7 +495,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#style(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#style(String...)}
 	 * </ul>
 	 */
 	String[] style() default {};
@@ -523,7 +523,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#stylesheet(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#stylesheet(String...)}
 	 * </ul>
 	 */
 	String[] stylesheet() default {};
@@ -554,7 +554,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link HtmlDocSerializerBuilder#template(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#template(Class)}
 	 * </ul>
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.Null.class;

@@ -899,7 +899,7 @@ public class Remote_HeaderAnnotation_Test {
 		return basicHeader(key,val);
 	}
 
-	private static RestClientBuilder client(Class<?> c) {
+	private static RestClient.Builder client(Class<?> c) {
 		return MockRestClient.create(c);
 	}
 

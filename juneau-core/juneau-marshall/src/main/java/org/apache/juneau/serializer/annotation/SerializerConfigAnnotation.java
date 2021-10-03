@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class SerializerConfigAnnotation {
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link SerializerBuilder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.Serializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<SerializerConfig,SerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<SerializerConfig,Serializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class SerializerConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(SerializerConfig.class, SerializerBuilder.class, vr);
+			super(SerializerConfig.class, Serializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, SerializerBuilder b) {
+		public void apply(AnnotationInfo<SerializerConfig> ai, Serializer.Builder b) {
 			SerializerConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypes(x));
@@ -60,9 +60,9 @@ public class SerializerConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link OutputStreamSerializerBuilder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder}.
 	 */
-	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializerBuilder> {
+	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -70,11 +70,11 @@ public class SerializerConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public OutputStreamSerializerApply(VarResolverSession vr) {
-			super(SerializerConfig.class, OutputStreamSerializerBuilder.class, vr);
+			super(SerializerConfig.class, OutputStreamSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializerBuilder b) {
+		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializer.Builder b) {
 			SerializerConfig a = ai.getAnnotation();
 
 			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
@@ -82,9 +82,9 @@ public class SerializerConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link WriterSerializerBuilder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.WriterSerializer.Builder}.
 	 */
-	public static class WriterSerializerApply extends AnnotationApplier<SerializerConfig,WriterSerializerBuilder> {
+	public static class WriterSerializerApply extends AnnotationApplier<SerializerConfig,WriterSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -92,11 +92,11 @@ public class SerializerConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public WriterSerializerApply(VarResolverSession vr) {
-			super(SerializerConfig.class, WriterSerializerBuilder.class, vr);
+			super(SerializerConfig.class, WriterSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, WriterSerializerBuilder b) {
+		public void apply(AnnotationInfo<SerializerConfig> ai, WriterSerializer.Builder b) {
 			SerializerConfig a = ai.getAnnotation();
 
 			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));

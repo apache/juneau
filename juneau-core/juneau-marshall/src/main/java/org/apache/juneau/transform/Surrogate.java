@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -46,7 +45,7 @@ import org.apache.juneau.annotation.*;
  * </p>
  *
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link BeanContextBuilder#swaps(Class...)}
+ * Surrogate classes are associated with serializers and parsers using the {@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
  * method.
  * <p class='bcode w800'>
  * 	JsonSerializer s = JsonSerializer

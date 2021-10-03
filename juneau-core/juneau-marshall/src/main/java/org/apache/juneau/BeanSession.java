@@ -1082,11 +1082,11 @@ public class BeanSession extends ContextSession {
 	 * The locale is determined in the following order:
 	 * <ol>
 	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContextBuilder#locale(Locale)} setting on bean context.
+	 * 	<li>{@link BeanContext.Builder#locale(Locale)} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
 	 * </ol>
 	 *
-	 * @see BeanContextBuilder#locale(Locale)
+	 * @see BeanContext.Builder#locale(Locale)
 	 * @return The session locale.
 	 */
 	public Locale getLocale() {
@@ -1099,7 +1099,7 @@ public class BeanSession extends ContextSession {
 	 * <p>
 	 * For example, <js>"application/json"</js>.
 	 *
-	 * @see BeanContextBuilder#mediaType(MediaType)
+	 * @see BeanContext.Builder#mediaType(MediaType)
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() {
@@ -1107,7 +1107,7 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Returns the type property name as defined by {@link BeanContextBuilder#typePropertyName(String)}.
+	 * Returns the type property name as defined by {@link BeanContext.Builder#typePropertyName(String)}.
 	 *
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
@@ -1132,7 +1132,7 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Returns the bean registry defined in this bean context defined by {@link BeanContextBuilder#beanDictionary(Class...)}.
+	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(Class...)}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
@@ -1247,7 +1247,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Minimum bean class visibility.
 	 *
-	 * @see BeanContextBuilder#beanClassVisibility(Visibility)
+	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -1258,7 +1258,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
 	 *
-	 * @see BeanContextBuilder#beanConstructorVisibility(Visibility)
+	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -1269,7 +1269,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
-	 * @see BeanContextBuilder#beanDictionary(Class...)
+	 * @see BeanContext.Builder#beanDictionary(Class...)
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
@@ -1281,7 +1281,7 @@ public class BeanSession extends ContextSession {
 	 * Configuration property:  Minimum bean field visibility.
 	 *
 	 *
-	 * @see BeanContextBuilder#beanFieldVisibility(Visibility)
+	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -1292,7 +1292,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
-	 * @see BeanContextBuilder#beanMapPutReturnsOldValue()
+	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -1304,7 +1304,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Minimum bean method visibility.
 	 *
-	 * @see BeanContextBuilder#beanMethodVisibility(Visibility)
+	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
@@ -1315,7 +1315,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
-	 * @see BeanContextBuilder#beansRequireDefaultConstructor()
+	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -1327,7 +1327,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Beans require Serializable interface.
 	 *
-	 * @see BeanContextBuilder#beansRequireSerializable()
+	 * @see BeanContext.Builder#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -1339,7 +1339,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Beans require setters for getters.
 	 *
-	 * @see BeanContextBuilder#beansRequireSettersForGetters()
+	 * @see BeanContext.Builder#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -1351,7 +1351,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Beans require at least one property.
 	 *
-	 * @see BeanContextBuilder#disableBeansRequireSomeProperties()
+	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -1363,7 +1363,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Bean type property name.
 	 *
-	 * @see BeanContextBuilder#typePropertyName(String)
+	 * @see BeanContext.Builder#typePropertyName(String)
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
@@ -1377,7 +1377,7 @@ public class BeanSession extends ContextSession {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see BeanContextBuilder#findFluentSetters()
+	 * @see BeanContext.Builder#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -1388,7 +1388,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
 	 *
-	 * @see BeanContextBuilder#ignoreInvocationExceptionsOnGetters()
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -1399,7 +1399,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
 	 *
-	 * @see BeanContextBuilder#ignoreInvocationExceptionsOnSetters()
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -1410,7 +1410,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Silently ignore missing setters.
 	 *
-	 * @see BeanContextBuilder#disableIgnoreMissingSetters()
+	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -1421,7 +1421,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
-	 * @see BeanContextBuilder#ignoreUnknownBeanProperties()
+	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -1433,7 +1433,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
 	 *
-	 * @see BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()
+	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
 	 */
@@ -1444,7 +1444,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
-	 * @see BeanContextBuilder#notBeanClasses(Class...)
+	 * @see BeanContext.Builder#notBeanClasses(Class...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 */
@@ -1455,7 +1455,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
-	 * @see BeanContextBuilder#notBeanPackages(String...)
+	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of fully-qualified package names to exclude from being classified as beans.
 	 */
@@ -1466,7 +1466,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
-	 * @see BeanContextBuilder#notBeanPackages(String...)
+	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
 	 */
@@ -1477,7 +1477,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Bean property namer.
 	 *
-	 * @see BeanContextBuilder#propertyNamer(Class)
+	 * @see BeanContext.Builder#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
@@ -1488,7 +1488,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Sort bean properties.
 	 *
-	 * @see BeanContextBuilder#sortProperties()
+	 * @see BeanContext.Builder#sortProperties()
 	 * @return
 	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
@@ -1499,7 +1499,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Java object swaps.
 	 *
-	 * @see BeanContextBuilder#swaps(Class...)
+	 * @see BeanContext.Builder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
@@ -1514,10 +1514,10 @@ public class BeanSession extends ContextSession {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContextBuilder#timeZone(TimeZone)} setting on bean context.
+	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see BeanContextBuilder#timeZone(TimeZone)
+	 * @see BeanContext.Builder#timeZone(TimeZone)
 	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
 	 */
 	public final TimeZone getTimeZone() {
@@ -1531,10 +1531,10 @@ public class BeanSession extends ContextSession {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContextBuilder#timeZone(TimeZone)} setting on bean context.
+	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see BeanContextBuilder#timeZone(TimeZone)
+	 * @see BeanContext.Builder#timeZone(TimeZone)
 	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
 	 */
 	public final ZoneId getTimeZoneId() {
@@ -1544,7 +1544,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Use enum names.
 	 *
-	 * @see BeanContextBuilder#useEnumNames()
+	 * @see BeanContext.Builder#useEnumNames()
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
@@ -1555,7 +1555,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Use interface proxies.
 	 *
-	 * @see BeanContextBuilder#disableInterfaceProxies()
+	 * @see BeanContext.Builder#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -1567,7 +1567,7 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Configuration property:  Use Java Introspector.
 	 *
-	 * @see BeanContextBuilder#useJavaBeanIntrospector()
+	 * @see BeanContext.Builder#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */

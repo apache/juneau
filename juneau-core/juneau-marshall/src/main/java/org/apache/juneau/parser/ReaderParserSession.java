@@ -63,11 +63,11 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.

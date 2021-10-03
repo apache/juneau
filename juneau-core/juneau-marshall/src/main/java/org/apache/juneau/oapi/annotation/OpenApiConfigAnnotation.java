@@ -24,9 +24,9 @@ import org.apache.juneau.svl.*;
 public class OpenApiConfigAnnotation {
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiSerializerBuilder}.
+	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.oapi.OpenApiSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<OpenApiConfig,OpenApiSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<OpenApiConfig,OpenApiSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -34,11 +34,11 @@ public class OpenApiConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(OpenApiConfig.class, OpenApiSerializerBuilder.class, vr);
+			super(OpenApiConfig.class, OpenApiSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiSerializerBuilder b) {
+		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiSerializer.Builder b) {
 			OpenApiConfig a = ai.getAnnotation();
 
 			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
@@ -47,9 +47,9 @@ public class OpenApiConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiParserBuilder}.
+	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.oapi.OpenApiParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<OpenApiConfig,OpenApiParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<OpenApiConfig,OpenApiParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -57,11 +57,11 @@ public class OpenApiConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(OpenApiConfig.class, OpenApiParserBuilder.class, vr);
+			super(OpenApiConfig.class, OpenApiParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiParserBuilder b) {
+		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiParser.Builder b) {
 			OpenApiConfig a = ai.getAnnotation();
 
 			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));

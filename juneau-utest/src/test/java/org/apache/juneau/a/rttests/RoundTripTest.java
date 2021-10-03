@@ -188,7 +188,7 @@ public abstract class RoundTripTest {
 	protected String label;
 	public boolean debug = false;
 
-	public RoundTripTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		this.label = label;
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
 		Class<?>[] pojoSwaps = getPojoSwaps();

@@ -81,7 +81,7 @@ import org.apache.juneau.rest.*;
  * 		<ul class='javatree'>
  * 			<li class='jac'>{@link RestServlet}
  * 			<ul>
- * 				<li class='jm'>{@link RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+ * 				<li class='jm'>{@link RestServlet#onInit(RestContext.Builder) onInit(RestContext.Builder)}
  * 				<li class='jm'>{@link RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
  * 				<li class='jm'>{@link RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
  * 				<li class='jm'>{@link RestServlet#onDestroy(RestContext) onDestroy(RestContext)}

@@ -793,7 +793,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see HtmlSerializerBuilder#addBeanTypesHtml()
+	 * @see HtmlSerializer.Builder#addBeanTypesHtml()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -806,7 +806,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
-	 * @see HtmlSerializerBuilder#addKeyValueTableHeaders()
+	 * @see HtmlSerializer.Builder#addKeyValueTableHeaders()
 	 * @return
 	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
@@ -817,7 +817,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Look for link labels in URIs.
 	 *
-	 * @see HtmlSerializerBuilder#disableDetectLabelParameters()
+	 * @see HtmlSerializer.Builder#disableDetectLabelParameters()
 	 * @return
 	 * 	<jk>true</jk> if we should ook for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
@@ -828,7 +828,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 *
-	 * @see HtmlSerializerBuilder#disableDetectLinksInStrings()
+	 * @see HtmlSerializer.Builder#disableDetectLinksInStrings()
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
@@ -839,7 +839,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Link label parameter name.
 	 *
-	 * @see HtmlSerializerBuilder#labelParameter(String)
+	 * @see HtmlSerializer.Builder#labelParameter(String)
 	 * @return
 	 * 	The parameter name to look for when resolving link labels.
 	 */
@@ -850,7 +850,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Anchor text source.
 	 *
-	 * @see HtmlSerializerBuilder#uriAnchorText(AnchorText)
+	 * @see HtmlSerializer.Builder#uriAnchorText(AnchorText)
 	 * @return
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.

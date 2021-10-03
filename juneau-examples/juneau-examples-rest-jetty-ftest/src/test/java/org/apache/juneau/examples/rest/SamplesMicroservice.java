@@ -83,7 +83,7 @@ public class SamplesMicroservice {
 	/**
 	 * Create a new HTTP client.
 	 */
-	public static RestClientBuilder client() {
+	public static RestClient.Builder client() {
 		try {
 			return RestClient.create().rootUri(microserviceURI);
 		} catch (Exception e) {
@@ -94,14 +94,14 @@ public class SamplesMicroservice {
 	/**
 	 * Create a new HTTP client using the specified serializer and parser.
 	 */
-	public static RestClientBuilder client(Serializer s, Parser p) {
+	public static RestClient.Builder client(Serializer s, Parser p) {
 		return client().serializer(s).parser(p);
 	}
 
 	/**
 	 * Create a new HTTP client using the specified serializer and parser.
 	 */
-	public static RestClientBuilder client(Class<? extends Serializer> s, Class<? extends Parser> p) {
+	public static RestClient.Builder client(Class<? extends Serializer> s, Class<? extends Parser> p) {
 		return client().serializer(s).parser(p);
 	}
 }

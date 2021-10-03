@@ -113,7 +113,7 @@ public class SerializedHttpEntity_Test {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private HttpPartSchemaBuilder schema() {
+	private HttpPartSchema.Builder schema() {
 		return HttpPartSchema.create();
 	}
 

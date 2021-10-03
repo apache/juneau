@@ -149,11 +149,11 @@ public class MockServletRequest implements HttpServletRequest {
 	 * Adds the specified parent path variables to this servlet request.
 	 *
 	 * <p>
-	 * See {@link MockRestClientBuilder#pathVars(Map)} for an example.
+	 * See {@link MockRestClient.Builder#pathVars(Map)} for an example.
 	 *
 	 * @param pathVars The
 	 * @return This object (for method chaining).
-	 * @see MockRestClientBuilder#pathVars(Map)
+	 * @see MockRestClient.Builder#pathVars(Map)
 	 */
 	public MockServletRequest pathVars(Map<String,String> pathVars) {
 		if (isNotEmpty(pathVars))

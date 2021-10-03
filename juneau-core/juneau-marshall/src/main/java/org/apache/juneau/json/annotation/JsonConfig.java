@@ -69,7 +69,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonParserBuilder#validateEnd()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonParser.Builder#validateEnd()}
 	 * </ul>
 	 */
 	String validateEnd() default "";
@@ -86,7 +86,7 @@ public @interface JsonConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <ul class='notes'>
@@ -101,7 +101,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSerializerBuilder#addBeanTypesJson()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#addBeanTypesJson()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -127,7 +127,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#escapeSolidus()}
 	 * </ul>
 	 */
 	String escapeSolidus() default "";
@@ -166,7 +166,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSerializerBuilder#simpleMode()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleMode()}
 	 * </ul>
 	 */
 	String simpleMode() default "";

@@ -25,10 +25,10 @@ import java.lang.reflect.*;
  * <p>
  * Used in conjunction with the following bean context properties:
  * <ul class='javatree'>
- * 	<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
- * 	<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
- * 	<li class='jm'>{@link BeanContextBuilder#beanFieldVisibility(Visibility)}
- * 	<li class='jm'>{@link BeanContextBuilder#beanMethodVisibility(Visibility)}
+ * 	<li class='jm'>{@link BeanContext.Builder#beanConstructorVisibility(Visibility)}
+ * 	<li class='jm'>{@link BeanContext.Builder#beanClassVisibility(Visibility)}
+ * 	<li class='jm'>{@link BeanContext.Builder#beanFieldVisibility(Visibility)}
+ * 	<li class='jm'>{@link BeanContext.Builder#beanMethodVisibility(Visibility)}
  * </ul>
  */
 public enum Visibility {

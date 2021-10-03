@@ -77,7 +77,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 */
 	String addDescriptionsTo() default "";
@@ -114,7 +114,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 */
 	String addExamplesTo() default "";
@@ -137,7 +137,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 	 * </ul>
 	 */
 	String allowNestedDescriptions() default "";
@@ -160,7 +160,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
 	 * </ul>
 	 */
 	String allowNestedExamples() default "";
@@ -176,11 +176,11 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		This setting is ignored if {@link JsonSchemaGeneratorBuilder#useBeanDefs()} is not enabled.
+	 * 		This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 	 * </ul>
 	 */
 	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Null.class;
@@ -200,7 +200,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#ignoreTypes(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...)}
 	 * </ul>
 	 */
 	String ignoreTypes() default "";
@@ -235,7 +235,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#useBeanDefs()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()}
 	 * </ul>
 	 */
 	String useBeanDefs() default "";
@@ -256,7 +256,7 @@ public @interface JsonSchemaConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link BeanTraverseBuilder#ignoreRecursions()}.
+	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -280,7 +280,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#detectRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
 	 * </ul>
 	 */
 	String detectRecursions() default "";
@@ -289,7 +289,7 @@ public @interface JsonSchemaConfig {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanTraverseBuilder#detectRecursions()}.
+	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
@@ -308,7 +308,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#ignoreRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
 	 */
 	String ignoreRecursions() default "";
@@ -330,7 +330,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#initialDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
 	 */
 	String initialDepth() default "";
@@ -352,7 +352,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#maxDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
 	 */
 	String maxDepth() default "";

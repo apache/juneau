@@ -53,7 +53,7 @@ public @interface SoapXmlConfig {
 	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SoapXmlSerializerBuilder#soapAction(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.soap.SoapXmlSerializer.Builder#soapAction(String)}
 	 * </ul>
 	 */
 	String soapAction() default "";

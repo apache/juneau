@@ -92,7 +92,7 @@ public final class ParserGroup {
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Parser {
-		protected Inherit(ParserBuilder builder) {
+		protected Inherit(Parser.Builder builder) {
 			super(builder);
 		}
 	}
@@ -104,7 +104,7 @@ public final class ParserGroup {
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class NoInherit extends Parser {
-		protected NoInherit(ParserBuilder builder) {
+		protected NoInherit(Parser.Builder builder) {
 			super(builder);
 		}
 	}
@@ -128,7 +128,7 @@ public final class ParserGroup {
 	public static class Builder extends BeanBuilder<ParserGroup> {
 
 		List<Object> entries;
-		private BeanContextBuilder bcBuilder;
+		private BeanContext.Builder bcBuilder;
 
 		/**
 		 * Create an empty parser group builder.
@@ -164,8 +164,8 @@ public final class ParserGroup {
 		}
 
 		private Object copyBuilder(Object o) {
-			if (o instanceof ParserBuilder) {
-				ParserBuilder x = (ParserBuilder)o;
+			if (o instanceof Parser.Builder) {
+				Parser.Builder x = (Parser.Builder)o;
 				x = x.copy();
 				if (bcBuilder != null)
 					x.beanContext(bcBuilder);
@@ -194,7 +194,7 @@ public final class ParserGroup {
 		 * @param value The bean contest builder to associate.
 		 * @return This object (for method chaining).
 		 */
-		public Builder beanContext(BeanContextBuilder value) {
+		public Builder beanContext(BeanContext.Builder value) {
 			bcBuilder = value;
 			forEach(x -> x.beanContext(value));
 			return this;
@@ -206,7 +206,7 @@ public final class ParserGroup {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder beanContext(Consumer<BeanContextBuilder> operation) {
+		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
 			if (bcBuilder != null)
 				operation.accept(bcBuilder);
 			return this;
@@ -294,7 +294,7 @@ public final class ParserGroup {
 		private Object createBuilder(Object o) {
 			if (o instanceof Class) {
 				@SuppressWarnings("unchecked")
-				ParserBuilder b = Parser.createParserBuilder((Class<? extends Parser>)o);
+				Parser.Builder b = Parser.createParserBuilder((Class<? extends Parser>)o);
 				if (bcBuilder != null)
 					b.beanContext(bcBuilder);
 				o = b;
@@ -335,8 +335,8 @@ public final class ParserGroup {
 		 */
 		public boolean canApply(AnnotationWorkList work) {
 			for (Object o : entries)
-				if (o instanceof ParserBuilder)
-					if (((ParserBuilder)o).canApply(work))
+				if (o instanceof Parser.Builder)
+					if (((Parser.Builder)o).canApply(work))
 						return true;
 			return false;
 		}
@@ -357,8 +357,8 @@ public final class ParserGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public Builder forEach(Consumer<ParserBuilder> action) {
-			builders(ParserBuilder.class).forEach(action);
+		public Builder forEach(Consumer<Parser.Builder> action) {
+			builders(Parser.Builder.class).forEach(action);
 			return this;
 		}
 
@@ -368,8 +368,8 @@ public final class ParserGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public Builder forEachRP(Consumer<ReaderParserBuilder> action) {
-			return forEach(ReaderParserBuilder.class, action);
+		public Builder forEachRP(Consumer<ReaderParser.Builder> action) {
+			return forEach(ReaderParser.Builder.class, action);
 		}
 
 		/**
@@ -378,8 +378,8 @@ public final class ParserGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public Builder forEachISP(Consumer<InputStreamParserBuilder> action) {
-			return forEach(InputStreamParserBuilder.class, action);
+		public Builder forEachISP(Consumer<InputStreamParser.Builder> action) {
+			return forEach(InputStreamParser.Builder.class, action);
 		}
 
 		/**
@@ -389,20 +389,20 @@ public final class ParserGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public <T extends ParserBuilder> Builder forEach(Class<T> type, Consumer<T> action) {
+		public <T extends Parser.Builder> Builder forEach(Class<T> type, Consumer<T> action) {
 			builders(type).forEach(action);
 			return this;
 		}
 
 		/**
-		 * Returns direct access to the {@link Parser} and {@link ParserBuilder} objects in this builder.
+		 * Returns direct access to the {@link Parser} and {@link Parser.Builder} objects in this builder.
 		 *
 		 * <p>
 		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
 		 * as re-ordering/adding/removing entries.
 		 *
 		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link ParserBuilder} objects.
+		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder} objects.
 		 *
 		 * @return The inner list of entries in this builder.
 		 */
@@ -411,7 +411,7 @@ public final class ParserGroup {
 		}
 
 		@SuppressWarnings("unchecked")
-		private <T extends ParserBuilder> Stream<T> builders(Class<T> type) {
+		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
 		}
 
@@ -451,7 +451,7 @@ public final class ParserGroup {
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
-			if (o instanceof ParserBuilder)
+			if (o instanceof Parser.Builder)
 				return "builder:" + o.getClass().getName();
 			return "parser:" + o.getClass().getName();
 		}
@@ -494,7 +494,7 @@ public final class ParserGroup {
 	private Parser build(Object o) {
 		if (o instanceof Parser)
 			return (Parser)o;
-		return ((ParserBuilder)o).build();
+		return ((Parser.Builder)o).build();
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 	private static final int NUM_RUNS = 10;
 	private static final int SIZE_PARAM = 20000;
 
-	public RoundTripLargeObjectsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripLargeObjectsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

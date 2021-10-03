@@ -36,7 +36,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripMapsTest extends RoundTripTest {
 
-	public RoundTripMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripMapsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

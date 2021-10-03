@@ -34,7 +34,7 @@ public class RdfTest {
 		String rdfXml;
 		String expected;
 
-		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
+		RdfSerializer.Builder s = RdfSerializer.create().xmlabbrev()
 			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty();
@@ -194,7 +194,7 @@ public class RdfTest {
 	public void testCollectionFormatAnnotations() throws Exception {
 		B b = new B().init(), b2;
 		String rdfXml, expected;
-		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
+		RdfSerializer.Builder s = RdfSerializer.create().xmlabbrev()
 			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty();
@@ -427,7 +427,7 @@ public class RdfTest {
 	public void testCollectionFormatAnnotationOnClass() throws Exception {
 		C c = new C().init(), c2;
 		String rdfXml, expected;
-		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
+		RdfSerializer.Builder s = RdfSerializer.create().xmlabbrev()
 			.rdfxml_tab(3)
 			.sq()
 			.addRootProperty();

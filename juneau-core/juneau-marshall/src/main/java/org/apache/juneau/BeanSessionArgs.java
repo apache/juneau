@@ -61,11 +61,11 @@ public class BeanSessionArgs extends Context.Args {
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link BeanContextBuilder#locale(Locale)}.
+	 * If not specified, defaults to {@link BeanContext.Builder#locale(Locale)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanConfig#locale()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
+	 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
 	 * </ul>
 	 *
 	 * @param value
@@ -86,11 +86,11 @@ public class BeanSessionArgs extends Context.Args {
 	 * Specifies the default media type value for serializer and parser sessions.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link BeanContextBuilder#mediaType(MediaType)}.
+	 * If not specified, defaults to {@link BeanContext.Builder#mediaType(MediaType)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanConfig#mediaType()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
 	 * </ul>
 	 *
 	 * @param value
@@ -128,11 +128,11 @@ public class BeanSessionArgs extends Context.Args {
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link BeanContextBuilder#timeZone(TimeZone)}.
+	 * If not specified, defaults to {@link BeanContext.Builder#timeZone(TimeZone)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanConfig#timeZone()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
 	 * </ul>
 	 *
 	 * @param value

@@ -42,7 +42,7 @@ public class CommonParserTest {
 		return s.replaceFirst("<rdf:RDF[^>]+>\\s*", "").replaceAll("</rdf:RDF>$", "").trim().replaceAll("[\\r\\n]", "");
 	}
 
-	private RdfSerializerBuilder getBasicSerializer() {
+	private RdfSerializer.Builder getBasicSerializer() {
 		return RdfSerializer.create()
 			.sq()
 			.addLiteralTypes()

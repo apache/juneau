@@ -105,7 +105,7 @@ public class SerializedPart_Test {
 		return AList.of(o);
 	}
 
-	private HttpPartSchemaBuilder schema(HttpPartDataType dataType) {
+	private HttpPartSchema.Builder schema(HttpPartDataType dataType) {
 		return HttpPartSchema.create().type(dataType);
 	}
 }

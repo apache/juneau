@@ -43,7 +43,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Override the {@link UonSerializerBuilder#encoding()} setting.
+	 * @param encode Override the {@link org.apache.juneau.uon.UonSerializer.Builder#encoding()} setting.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -270,7 +270,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
-	 * @see UrlEncodingSerializerBuilder#expandedParams()
+	 * @see UrlEncodingSerializer.Builder#expandedParams()
 	 * @return
 	 * 	<jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * 	<br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.

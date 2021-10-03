@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class JsonSchemaConfigAnnotation {
 
 	/**
-	 * Applies {@link JsonSchemaConfig} annotations to a {@link JsonSchemaGeneratorBuilder}.
+	 * Applies {@link JsonSchemaConfig} annotations to a {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder}.
 	 */
-	public static class Apply extends AnnotationApplier<JsonSchemaConfig,JsonSchemaGeneratorBuilder> {
+	public static class Apply extends AnnotationApplier<JsonSchemaConfig,JsonSchemaGenerator.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class JsonSchemaConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(JsonSchemaConfig.class, JsonSchemaGeneratorBuilder.class, vr);
+			super(JsonSchemaConfig.class, JsonSchemaGenerator.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonSchemaConfig> ai, JsonSchemaGeneratorBuilder b) {
+		public void apply(AnnotationInfo<JsonSchemaConfig> ai, JsonSchemaGenerator.Builder b) {
 			JsonSchemaConfig a = ai.getAnnotation();
 
 			string(a.addDescriptionsTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addDescriptionsTo(x));

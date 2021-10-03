@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class HtmlDocConfigAnnotation {
 
 	/**
-	 * Applies {@link HtmlDocConfig} annotations to a {@link HtmlDocSerializerBuilder}.
+	 * Applies {@link HtmlDocConfig} annotations to a {@link org.apache.juneau.html.HtmlDocSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,12 +33,12 @@ public class HtmlDocConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(HtmlDocConfig.class, HtmlDocSerializerBuilder.class, vr);
+			super(HtmlDocConfig.class, HtmlDocSerializer.Builder.class, vr);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializerBuilder b) {
+		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializer.Builder b) {
 			HtmlDocConfig a = ai.getAnnotation();
 
 			strings(a.aside()).ifPresent(x -> b.aside(x));

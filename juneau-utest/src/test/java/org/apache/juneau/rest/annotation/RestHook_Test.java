@@ -197,7 +197,7 @@ public class RestHook_Test {
 	public static class C_Super {
 		protected OList events = new OList();
 		@RestHook(INIT)
-		public void init1c(RestContextBuilder builder) {
+		public void init1c(RestContext.Builder builder) {
 			events.add("super-1c");
 		}
 		@RestHook(INIT)
@@ -222,7 +222,7 @@ public class RestHook_Test {
 	public static class C_Sub extends C_Super {
 		@Override
 		@RestHook(INIT)
-		public void init1c(RestContextBuilder builder) {
+		public void init1c(RestContext.Builder builder) {
 			events.add("sub-1c");
 		}
 		@Override
@@ -245,7 +245,7 @@ public class RestHook_Test {
 	public static class C_Child extends C_Super {
 		@Override
 		@RestHook(INIT)
-		public void init1c(RestContextBuilder builder) {
+		public void init1c(RestContext.Builder builder) {
 			events.add("child-1c");
 		}
 		@RestHook(INIT)

@@ -86,7 +86,7 @@ public class ExampleAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -96,7 +96,7 @@ public class ExampleAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Example.class);
 		}
 
@@ -180,9 +180,9 @@ public class ExampleAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Example} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Example} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Example,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Example,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -190,11 +190,11 @@ public class ExampleAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Example.class, BeanContextBuilder.class, vr);
+			super(Example.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Example> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Example> ai, BeanContext.Builder b) {
 			Example a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

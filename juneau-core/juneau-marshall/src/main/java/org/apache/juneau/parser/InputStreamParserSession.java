@@ -58,7 +58,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -76,7 +76,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	/**
 	 * Configuration property:  Binary input format.
 	 *
-	 * @see InputStreamParserBuilder#binaryFormat(BinaryFormat)
+	 * @see InputStreamParser.Builder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */

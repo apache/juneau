@@ -20,27 +20,52 @@ import static java.util.Collections.*;
 import static java.util.Optional.*;
 
 import java.io.*;
+import java.lang.annotation.*;
+import java.lang.reflect.Method;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.logging.*;
 import java.util.zip.*;
 
+import javax.net.ssl.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
+import org.apache.http.auth.*;
+import org.apache.http.client.*;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.config.*;
+import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.config.*;
 import org.apache.http.conn.*;
+import org.apache.http.conn.routing.*;
+import org.apache.http.conn.socket.*;
+import org.apache.http.conn.util.*;
+import org.apache.http.cookie.*;
 import org.apache.http.entity.*;
+import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
+import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
+import org.apache.juneau.rest.client.RestResponse;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Mocked {@link RestClient}.
@@ -224,19 +249,19 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	private static Map<Class<?>,RestContext> REST_CONTEXTS = new ConcurrentHashMap<>();
 
 	/**
-	 * Creates a new {@link RestClientBuilder} configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
-	public static MockRestClientBuilder create(Object impl) {
-		return new MockRestClientBuilder().restBean(impl);
+	public static Builder create(Object impl) {
+		return new Builder().restBean(impl);
 	}
 
 	/**
-	 * Creates a new {@link RestClientBuilder} configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
 	 *
 	 * <p>
 	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
@@ -246,8 +271,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
-	public static MockRestClientBuilder createLax(Object impl) {
-		return new MockRestClientBuilder().restBean(impl).ignoreErrors().noTrace();
+	public static Builder createLax(Object impl) {
+		return new Builder().restBean(impl).ignoreErrors().noTrace();
 	}
 
 	/**
@@ -368,6 +393,1451 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters(ignore="debug")
+	public static class Builder extends RestClient.Builder {
+
+		Object restBean;
+		String contextPath, servletPath;
+		RestContext restContext;
+		Map<String,String> pathVars;
+
+		/**
+		 * No-arg constructor.
+		 *
+		 * <p>
+		 * Provided so that this class can be easily subclassed.
+		 */
+		protected Builder() {
+			super();
+			connectionManager(new MockHttpClientConnectionManager());
+			type(MockRestClient.class);
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			throw new NoSuchMethodError("Not implemented.");
+		}
+
+		/**
+		 * Specifies the {@link Rest}-annotated bean class or instance to test against.
+		 *
+		 * @param value The {@link Rest}-annotated bean class or instance.
+		 * @return This object (for method chaining).
+		 */
+		public Builder restBean(Object value) {
+			restBean = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the {@link RestContext} created for the REST bean.
+		 *
+		 * @param value The {@link RestContext} created for the REST bean.
+		 * @return This object (for method chaining).
+		 */
+		public Builder restContext(RestContext value) {
+			restContext = value;
+			return this;
+		}
+
+		/**
+		 * Identifies the context path for the REST resource.
+		 *
+		 * <p>
+		 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+		 * 	object correctly.
+		 *
+		 * <p>
+		 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+		 *
+		 * <p>
+		 * 	The following fixes are applied to non-conforming strings.
+		 * <ul>
+		 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+		 * 	<li>Trailing slashes are trimmed.
+		 * 	<li>Leading slash is added if needed.
+		 * </ul>
+		 *
+		 * @param value The context path.
+		 * @return This object (for method chaining).
+		 */
+		public Builder contextPath(String value) {
+			contextPath = toValidContextPath(value);
+			return this;
+		}
+
+		/**
+		 * Identifies the servlet path for the REST resource.
+		 *
+		 * <p>
+		 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+		 * 	object correctly.
+		 *
+		 * <p>
+		 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+		 *
+		 * <p>
+		 * 	The following fixes are applied to non-conforming strings.
+		 * <ul>
+		 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+		 * 	<li>Trailing slashes are trimmed.
+		 * 	<li>Leading slash is added if needed.
+		 * </ul>
+		 *
+		 * @param value The context path.
+		 * @return This object (for method chaining).
+		 */
+		public Builder servletPath(String value) {
+			servletPath = toValidContextPath(value);
+			return this;
+		}
+
+		/**
+		 * Add resolved path variables to this client.
+		 *
+		 * <p>
+		 * Allows you to add resolved parent path variables when performing tests on child resource classes.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// A parent class with a path variable.</jc>
+		 * 	<ja>@Rest</ja>(
+		 * 		path=<js>"/parent/{foo}"</js>,
+		 * 		children={
+		 * 			Child.<jk>class</jk>
+		 * 		}
+		 * 	)
+		 * 	<jk>public class</jk> Parent { ... }
+		 *
+		 * 	<jc>// A child class that uses the parent path variable.</jc>
+		 * 	<ja>@Rest</ja>
+		 * 	<jk>public class</jk> Child {
+		 *
+		 * 		<jk>@RestGet</jk>
+		 * 		<jk>public</jk> String get(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>) {
+		 * 			<jk>return</jk> <jv>foo<jv>;
+		 * 		}
+		 * 	}
+		 * </p>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Test the method that uses the parent path variable.</jc>
+		 * 	MockRestClient
+		 * 		.<jsm>create</jsm>(Child.<jk>class</jk>)
+		 * 		.simpleJson()
+		 * 		.pathVars(<js>"foo"</js>,<js>"bar"</js>)
+		 * 		.build()
+		 * 		.get(<js>"/"</js>)
+		 * 		.run()
+		 * 		.assertStatus().code().is(200)
+		 * 		.assertBody().is(<js>"bar"</js>);
+		 * </p>
+		 *
+		 * <review>Needs review</review>
+		 *
+		 * @param value The path variables.
+		 * @return This object (for method chaining).
+		 * @see MockServletRequest#pathVars(Map)
+		 */
+		public Builder pathVars(Map<String,String> value) {
+			pathVars = value;
+			return this;
+		}
+
+		/**
+		 * Add resolved path variables to this client.
+		 *
+		 * <p>
+		 * Identical to {@link #pathVars(Map)} but allows you to specify as a list of key/value pairs.
+		 *
+		 * @param pairs The key/value pairs.  Must be an even number of parameters.
+		 * @return This object (for method chaining).
+		 */
+		public Builder pathVars(String...pairs) {
+			return pathVars(AMap.<String,String>ofPairs((Object[])pairs));
+		}
+
+		/**
+		 * Suppress logging on this client.
+		 *
+		 * @return This object.
+		 */
+		public Builder suppressLogging() {
+			return logRequests(DetailLevel.NONE, null, null);
+		}
+
+		@Override /* ContextBuilder */
+		public Builder debug() {
+			header("Debug", "true");
+			super.debug();
+			return this;
+		}
+
+		@Override /* ContextBuilder */
+		public MockRestClient build() {
+			return (MockRestClient)super.build();
+		}
+
+		@Override /* ContextBuilder */
+		public <T extends RestClient> T build(Class<T> c) {
+			return super.build(c);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder accept(String value) {
+			super.accept(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder acceptCharset(String value) {
+			super.acceptCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder acceptEncoding(String value) {
+			super.acceptEncoding(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder acceptLanguage(String value) {
+			super.acceptLanguage(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
+			super.addInterceptorFirst(itcp);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
+			super.addInterceptorFirst(itcp);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
+			super.addInterceptorLast(itcp);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
+			super.addInterceptorLast(itcp);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder authorization(String value) {
+			super.authorization(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder backoffManager(BackoffManager backoffManager) {
+			super.backoffManager(backoffManager);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder basicAuth(String host, int port, String user, String pw) {
+			super.basicAuth(host, port, user, pw);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder cacheControl(String value) {
+			super.cacheControl(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder callHandler(Class<? extends org.apache.juneau.rest.client.RestCallHandler> value) {
+			super.callHandler(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder clientVersion(String value) {
+			super.clientVersion(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder connection(String value) {
+			super.connection(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
+			super.connectionBackoffStrategy(connectionBackoffStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder connectionManager(HttpClientConnectionManager connManager) {
+			super.connectionManager(connManager);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder connectionManagerShared(boolean shared) {
+			super.connectionManagerShared(shared);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
+			super.connectionReuseStrategy(reuseStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
+			super.connectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder console(PrintStream value) {
+			super.console(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
+			super.contentDecoderRegistry(contentDecoderMap);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder contentEncoding(String value) {
+			super.contentEncoding(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder contentType(String value) {
+			super.contentType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder debugOutputLines(int value) {
+			super.debugOutputLines(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
+			super.defaultAuthSchemeRegistry(authSchemeRegistry);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultConnectionConfig(ConnectionConfig config) {
+			super.defaultConnectionConfig(config);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
+			super.defaultCookieSpecRegistry(cookieSpecRegistry);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultCookieStore(CookieStore cookieStore) {
+			super.defaultCookieStore(cookieStore);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
+			super.defaultCredentialsProvider(credentialsProvider);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultRequestConfig(RequestConfig config) {
+			super.defaultRequestConfig(config);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder defaultSocketConfig(SocketConfig config) {
+			super.defaultSocketConfig(config);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder disableAuthCaching() {
+			super.disableAuthCaching();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder disableAutomaticRetries() {
+			super.disableAutomaticRetries();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder disableConnectionState() {
+			super.disableConnectionState();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder disableContentCompression() {
+			super.disableContentCompression();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder disableCookieManagement() {
+			super.disableCookieManagement();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder disableRedirectHandling() {
+			super.disableRedirectHandling();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder errorCodes(Predicate<Integer> value) {
+			super.errorCodes(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder evictExpiredConnections() {
+			super.evictExpiredConnections();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
+			super.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
+			super.executorService(executorService, shutdownOnClose);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder formData(NameValuePair...parts) {
+			super.formData(parts);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder formData(String name, String value) {
+			super.formData(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder formData(String name, Supplier<String> value) {
+			super.formData(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder from(String value) {
+			super.from(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder header(String name, String value) {
+			super.header(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder header(String name, Supplier<String> value) {
+			super.header(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder headers(Header...parts) {
+			super.headers(parts);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder host(String value) {
+			super.host(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder html() {
+			super.html();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder htmlDoc() {
+			super.htmlDoc();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder htmlStrippedDoc() {
+			super.htmlStrippedDoc();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder httpClient(CloseableHttpClient value) {
+			super.httpClient(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder httpClientBuilder(HttpClientBuilder value) {
+			super.httpClientBuilder(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder httpProcessor(HttpProcessor httpprocessor) {
+			super.httpProcessor(httpprocessor);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder ignoreErrors() {
+			super.ignoreErrors();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder interceptors(java.lang.Class<?>...values) throws Exception{
+			super.interceptors(values);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder interceptors(Object...value) {
+			super.interceptors(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder json() {
+			super.json();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
+			super.keepAliveStrategy(keepAliveStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder keepHttpClientOpen() {
+			super.keepHttpClientOpen();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder detectLeaks() {
+			super.detectLeaks();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
+			super.logRequests(detail, level, test);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder logToConsole() {
+			super.logToConsole();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder logger(Logger value) {
+			super.logger(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder marshall(Marshall value) {
+			super.marshall(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder marshalls(Marshall...value) {
+			super.marshalls(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder maxConnPerRoute(int maxConnPerRoute) {
+			super.maxConnPerRoute(maxConnPerRoute);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder maxConnTotal(int maxConnTotal) {
+			super.maxConnTotal(maxConnTotal);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder maxForwards(Integer value) {
+			super.maxForwards(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder mediaType(String value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder msgPack() {
+			super.msgPack();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder noTrace() {
+			super.noTrace();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
+			super.oapiCollectionFormat(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder oapiFormat(HttpPartFormat value) {
+			super.oapiFormat(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder openApi() {
+			super.openApi();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder origin(String value) {
+			super.origin(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder paramFormat(ParamFormat value) {
+			super.paramFormat(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder paramFormatPlain() {
+			super.paramFormatPlain();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder parser(Class<? extends org.apache.juneau.parser.Parser> value) {
+			super.parser(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder parser(Parser value) {
+			super.parser(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		@SuppressWarnings("unchecked")
+		public Builder parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
+			super.parsers(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder parsers(Parser...value) {
+			super.parsers(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder partParser(Class<? extends org.apache.juneau.httppart.HttpPartParser> value) {
+			super.partParser(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder partParser(HttpPartParser value) {
+			super.partParser(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder partSerializer(Class<? extends org.apache.juneau.httppart.HttpPartSerializer> value) {
+			super.partSerializer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder partSerializer(HttpPartSerializer value) {
+			super.partSerializer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder pathData(NameValuePair...parts) {
+			super.pathData(parts);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder pathData(String name, String value) {
+			super.pathData(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder pathData(String name, Supplier<String> value) {
+			super.pathData(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder plainText() {
+			super.plainText();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder pooled() {
+			super.pooled();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder pragma(String value) {
+			super.pragma(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder proxy(HttpHost proxy) {
+			super.proxy(proxy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
+			super.proxyAuthenticationStrategy(proxyAuthStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder proxyAuthorization(String value) {
+			super.proxyAuthorization(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
+			super.publicSuffixMatcher(publicSuffixMatcher);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder queryData(NameValuePair...parts) {
+			super.queryData(parts);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder queryData(String name, String value) {
+			super.queryData(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder queryData(String name, Supplier<String> value) {
+			super.queryData(name, value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder redirectStrategy(RedirectStrategy redirectStrategy) {
+			super.redirectStrategy(redirectStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder requestExecutor(HttpRequestExecutor requestExec) {
+			super.requestExecutor(requestExec);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder retryHandler(HttpRequestRetryHandler retryHandler) {
+			super.retryHandler(retryHandler);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder rootUri(Object value) {
+			super.rootUri(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder routePlanner(HttpRoutePlanner routePlanner) {
+			super.routePlanner(routePlanner);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder schemePortResolver(SchemePortResolver schemePortResolver) {
+			super.schemePortResolver(schemePortResolver);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder serializer(Class<? extends org.apache.juneau.serializer.Serializer> value) {
+			super.serializer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder serializer(Serializer value) {
+			super.serializer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		@SuppressWarnings("unchecked")
+		public Builder serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
+			super.serializers(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder serializers(Serializer...value) {
+			super.serializers(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
+			super.serviceUnavailableRetryStrategy(serviceUnavailStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder simpleJson() {
+			super.simpleJson();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder skipEmptyFormData() {
+			super.skipEmptyFormData();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder skipEmptyFormData(boolean value) {
+			super.skipEmptyFormData(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder skipEmptyHeaderData() {
+			super.skipEmptyHeaderData();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder skipEmptyHeaderData(boolean value) {
+			super.skipEmptyHeaderData(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder skipEmptyQueryData() {
+			super.skipEmptyQueryData();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder skipEmptyQueryData(boolean value) {
+			super.skipEmptyQueryData(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder sq() {
+			super.sq();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder sslContext(SSLContext sslContext) {
+			super.sslContext(sslContext);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
+			super.sslHostnameVerifier(hostnameVerifier);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
+			super.sslSocketFactory(sslSocketFactory);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder strict() {
+			super.strict();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
+			super.targetAuthenticationStrategy(targetAuthStrategy);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder trimEmptyCollections() {
+			super.trimEmptyCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder trimEmptyMaps() {
+			super.trimEmptyMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder trimStringsOnRead() {
+			super.trimStringsOnRead();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder trimStringsOnWrite() {
+			super.trimStringsOnWrite();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder uon() {
+			super.uon();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder uriRelativity(UriRelativity value) {
+			super.uriRelativity(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder uriResolution(UriResolution value) {
+			super.uriResolution(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder urlEnc() {
+			super.urlEnc();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder useSystemProperties() {
+			super.useSystemProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder useWhitespace() {
+			super.useWhitespace();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder userAgent(String value) {
+			super.userAgent(value);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
+			super.userTokenHandler(userTokenHandler);
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder ws() {
+			super.ws();
+			return this;
+		}
+
+		@Override /* GENERATED - RestClientBuilder */
+		public Builder xml() {
+			super.xml();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -387,7 +1857,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	public MockRestClient(MockRestClientBuilder builder) {
+	protected MockRestClient(Builder builder) {
 		super(preInit(builder));
 		restContext = builder.restContext;
 		contextPath = ofNullable(builder.contextPath).orElse("");
@@ -400,7 +1870,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			((MockHttpClientConnectionManager)ccm).init(this);
 	}
 
-	private static MockRestClientBuilder preInit(MockRestClientBuilder builder) {
+	private static Builder preInit(Builder builder) {
 		try {
 			Object restBean = builder.restBean;
 			String contextPath = builder.contextPath;

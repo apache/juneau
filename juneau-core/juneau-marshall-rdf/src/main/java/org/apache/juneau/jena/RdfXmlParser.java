@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
 /**
  * Subclass of {@link RdfParser} for parsing RDF in standard XML notation.
  */
@@ -26,29 +24,26 @@ public class RdfXmlParser extends RdfParser {
 	/** Default XML parser, all default settings.*/
 	public static final RdfXmlParser DEFAULT = new RdfXmlParser(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfParser.Builder create() {
+		return RdfParser.create().xml();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Instantiates a new clean-slate {@link RdfParserBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfParserBuilder} object.
-	 */
-	public static RdfParserBuilder create() {
-		return new RdfParserBuilder().xml();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected RdfXmlParser(RdfParserBuilder builder) {
-		super(builder.language(LANG_RDF_XML).consumes("text/xml+rdf"));
+	protected RdfXmlParser(RdfParser.Builder builder) {
+		super(builder.xml().consumes("text/xml+rdf"));
 	}
 }

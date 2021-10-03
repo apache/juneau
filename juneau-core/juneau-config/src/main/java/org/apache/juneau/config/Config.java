@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
@@ -25,11 +26,12 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.config.encode.ConfigEncoder;
+import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -45,6 +47,10 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public final class Config extends Context implements ConfigEventListener, Writable {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
 	private static volatile Config SYSTEM_DEFAULT = findSystemDefault();
@@ -146,6 +152,357 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return null;
 	}
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Same as {@link #create()} but initializes the builder with the specified config name.
+	 *
+	 * @param name The configuration name.
+	 * @return A new builder.
+	 */
+	public static Builder create(String name) {
+		return new Builder().name(name);
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends Context.Builder {
+
+		String name;
+		ConfigStore store;
+		WriterSerializer serializer;
+		ReaderParser parser;
+		ConfigEncoder encoder;
+		VarResolver varResolver;
+		int binaryLineLength;
+		BinaryFormat binaryFormat;
+		boolean multiLineValuesOnSeparateLines, readOnly;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			name = env("Config.name", "Configuration.cfg");
+			store = ConfigFileStore.DEFAULT;
+			serializer = SimpleJsonSerializer.DEFAULT;
+			parser = JsonParser.DEFAULT;
+			encoder = ConfigXorEncoder.INSTANCE;
+			varResolver = VarResolver.DEFAULT;
+			binaryLineLength = env("Config.binaryLineLength", -1);
+			binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
+			multiLineValuesOnSeparateLines = env("Config.multiLineValuesOnSeparateLines", false);
+			readOnly = env("Config.readOnly", false);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(Config copyFrom) {
+			super(copyFrom);
+			name = copyFrom.name;
+			store = copyFrom.store;
+			serializer = copyFrom.serializer;
+			parser = copyFrom.parser;
+			encoder = copyFrom.encoder;
+			varResolver = copyFrom.varResolver;
+			binaryLineLength = copyFrom.binaryLineLength;
+			binaryFormat = copyFrom.binaryFormat;
+			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+			readOnly = copyFrom.readOnly;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			name = copyFrom.name;
+			store = copyFrom.store;
+			serializer = copyFrom.serializer;
+			parser = copyFrom.parser;
+			encoder = copyFrom.encoder;
+			varResolver = copyFrom.varResolver;
+			binaryLineLength = copyFrom.binaryLineLength;
+			binaryFormat = copyFrom.binaryFormat;
+			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+			readOnly = copyFrom.readOnly;
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* ContextBuilder */
+		public Config build() {
+			try {
+				return new Config(this);
+			} catch (IOException e) {
+				throw runtimeException(e);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Configuration name.
+		 *
+		 * <p>
+		 * Specifies the configuration name.
+		 * <br>This is typically the configuration file name, although
+		 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.name"
+		 * 		<li>Environment variable <js>"CONFIG_NAME"
+		 * 		<li><js>"Configuration.cfg"</js>
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder name(String value) {
+			name = value;
+			return this;
+		}
+
+		/**
+		 * Configuration store.
+		 *
+		 * <p>
+		 * The configuration store used for retrieving and storing configurations.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link ConfigFileStore#DEFAULT}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder store(ConfigStore value) {
+			store = value;
+			return this;
+		}
+
+		/**
+		 * Configuration store.
+		 *
+		 * <p>
+		 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder memStore() {
+			store = ConfigMemoryStore.DEFAULT;
+			return this;
+		}
+
+		/**
+		 * POJO serializer.
+		 *
+		 * <p>
+		 * The serializer to use for serializing POJO values.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}
+		 * @return This object (for method chaining).
+		 */
+		public Builder serializer(WriterSerializer value) {
+			serializer = value;
+			return this;
+		}
+
+		/**
+		 * POJO parser.
+		 *
+		 * <p>
+		 * The parser to use for parsing values to POJOs.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link JsonParser#DEFAULT}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder parser(ReaderParser value) {
+			parser = value;
+			return this;
+		}
+
+		/**
+		 * Value encoder.
+		 *
+		 * <p>
+		 * The encoder to use for encoding encoded configuration values.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder encoder(ConfigEncoder value) {
+			encoder = value;
+			return this;
+		}
+
+		/**
+		 * SVL variable resolver.
+		 *
+		 * <p>
+		 * The resolver to use for resolving SVL variables.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link VarResolver#DEFAULT}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder varResolver(VarResolver value) {
+			varResolver = value;
+			return this;
+		}
+
+		/**
+		 * Binary value line length.
+		 *
+		 * <p>
+		 * When serializing binary values, lines will be split after this many characters.
+		 * <br>Use <c>-1</c> to represent no line splitting.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.binaryLineLength"
+		 * 		<li>Environment variable <js>"CONFIG_BINARYLINELENGTH"
+		 * 		<li><c>-1</c>
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder binaryLineLength(int value) {
+			binaryLineLength = value;
+			return this;
+		}
+
+		/**
+		 * Binary value format.
+		 *
+		 * <p>
+		 * The format to use when persisting byte arrays.
+		 *
+		 * <p>
+		 * Possible values:
+		 * <ul>
+		 * 	<li>{@link BinaryFormat#BASE64} - BASE64-encoded string.
+		 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
+		 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.binaryFormat"
+		 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"
+		 * 		<li>{@link BinaryFormat#BASE64}
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder binaryFormat(BinaryFormat value) {
+			binaryFormat = value;
+			return this;
+		}
+
+		/**
+		 * Multi-line values on separate lines.
+		 *
+		 * <p>
+		 * When enabled, multi-line values will always be placed on a separate line from the key.
+		 *
+		 * <p>
+		 * The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.multiLineValuesOnSeparateLine"
+		 * 		<li>Environment variable <js>"CONFIG_MULTILINEVALUESONSEPARATELINE"
+		 * 		<li><jk>false</jk>
+		 * 	</ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder multiLineValuesOnSeparateLines() {
+			multiLineValuesOnSeparateLines = true;
+			return this;
+		}
+
+		/**
+		 * Read-only mode.
+		 *
+		 * <p>
+		 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
+		 *
+		 * <p>
+		 * 	The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"Config.readOnly"
+		 * 		<li>Environment variable <js>"CONFIG_READONLY"
+		 * 		<li><jk>false</jk>
+		 * 	</ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder readOnly() {
+			readOnly = true;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -166,34 +523,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
 
 
-	/**
-	 * Instantiates a new clean-slate {@link ConfigBuilder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> ConfigBuilder()</code>.
-	 *
-	 * @return A new {@link ConfigBuilder} object.
-	 */
-	public static ConfigBuilder create() {
-		return new ConfigBuilder();
-	}
-
-	/**
-	 * Same as {@link #create()} but initializes the builder with the specified config name.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> ConfigBuilder().name(name)</code>.
-	 *
-	 * @param name The configuration name.
-	 * @return A new {@link ConfigBuilder} object.
-	 */
-	public static ConfigBuilder create(String name) {
-		return new ConfigBuilder().name(name);
-	}
-
 	@Override /* Context */
-	public ConfigBuilder copy() {
-		return new ConfigBuilder(this);
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**
@@ -202,7 +534,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param builder The builder for this object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Config(ConfigBuilder builder) throws IOException {
+	protected Config(Builder builder) throws IOException {
 		super(builder);
 
 		name = builder.name;
@@ -760,7 +1092,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <p>
-	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link ConfigBuilder#binaryFormat(BinaryFormat)} setting.
+	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link Builder#binaryFormat(BinaryFormat)} setting.
 	 *
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.

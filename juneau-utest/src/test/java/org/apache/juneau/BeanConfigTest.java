@@ -611,7 +611,7 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testClassMetaCaching() throws Exception {
-		ParserBuilder p1, p2;
+		Parser.Builder p1, p2;
 
 		p1 = JsonParser.create();
 		p2 = JsonParser.create();
@@ -779,12 +779,12 @@ public class BeanConfigTest {
 	public static class DummyPojoSwapC extends MapSwap<C> {}
 	public static class C {}
 
-	private void assertSameCache(ParserBuilder p1b, ParserBuilder p2b) {
+	private void assertSameCache(Parser.Builder p1b, Parser.Builder p2b) {
 		Parser p1 = p1b.build(), p2 = p2b.build();
 		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}
 
-	private void assertDifferentCache(ParserBuilder p1b, ParserBuilder p2b) {
+	private void assertDifferentCache(Parser.Builder p1b, Parser.Builder p2b) {
 		Parser p1 = p1b.build(), p2 = p2b.build();
 		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}

@@ -90,7 +90,7 @@ public class XmlAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -101,7 +101,7 @@ public class XmlAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Xml.class);
 		}
 

@@ -91,7 +91,7 @@ public class SwapAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -103,7 +103,7 @@ public class SwapAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Swap.class);
 		}
 
@@ -240,9 +240,9 @@ public class SwapAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Swap} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Swap} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Swap,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Swap,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -250,11 +250,11 @@ public class SwapAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Swap.class, BeanContextBuilder.class, vr);
+			super(Swap.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Swap> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Swap> ai, BeanContext.Builder b) {
 			Swap a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

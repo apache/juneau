@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 
 import org.apache.juneau.internal.*;
@@ -21,25 +23,105 @@ import org.apache.juneau.internal.*;
  */
 public abstract class BasicRuntimeException extends RuntimeException {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
-	final boolean unmodifiable;
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a new builder for this bean.
-	 *
-	 * @return A new builder for this bean.
+	 * Builder class.
 	 */
-	public static BasicRuntimeExceptionBuilder create() {
-		return new BasicRuntimeExceptionBuilder();
+	@FluentSetters
+	public static class Builder {
+
+		String message;
+		Throwable causedBy;
+		boolean unmodifiable;
+
+		/**
+		 * Default constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy.
+		 */
+		protected Builder(BasicRuntimeException copyFrom) {
+			message = copyFrom.getMessage();
+			causedBy = copyFrom.getCause();
+			unmodifiable = copyFrom.unmodifiable;
+		}
+
+		/**
+		 * Specifies the exception message.
+		 *
+		 * @param msg The exception message.  Can be <jk>null</jk>.
+		 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+		 * @param args The exception message arguments.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder message(String msg, Object...args) {
+			message = format(msg, args);
+			return this;
+		}
+
+		/**
+		 * Specifies the caused-by exception.
+		 *
+		 * @param value The caused-by exception.  Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder causedBy(Throwable value) {
+			causedBy = value;
+			return this;
+		}
+
+		/**
+		 * Specifies whether this exception should be unmodifiable after creation.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder unmodifiable() {
+			unmodifiable = true;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		// </FluentSetters>
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	final boolean unmodifiable;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this exception.
 	 */
-	public BasicRuntimeException(BasicRuntimeExceptionBuilder builder) {
+	public BasicRuntimeException(Builder builder) {
 		super(builder.message, builder.causedBy);
 		this.unmodifiable = builder.unmodifiable;
 	}

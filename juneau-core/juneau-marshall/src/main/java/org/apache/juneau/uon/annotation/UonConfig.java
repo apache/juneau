@@ -72,7 +72,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link UonParserBuilder#decoding()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#decoding()}
 	 * </ul>
 	 */
 	String decoding() default "";
@@ -96,7 +96,7 @@ public @interface UonConfig {
 	 * </ul>
 
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link UonParserBuilder#validateEnd()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
 	 * </ul>
 	 */
 	String validateEnd() default "";
@@ -113,7 +113,7 @@ public @interface UonConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <ul class='notes'>
@@ -128,7 +128,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link UonSerializerBuilder#addBeanTypesUon()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#addBeanTypesUon()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -165,7 +165,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link UonSerializerBuilder#encoding()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#encoding()}
 	 * </ul>
 	 */
 	String encoding() default "";
@@ -188,7 +188,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
 	 * </ul>
 	 */
 	String paramFormat() default "";

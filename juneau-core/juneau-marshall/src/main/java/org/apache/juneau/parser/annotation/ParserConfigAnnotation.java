@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class ParserConfigAnnotation {
 
 	/**
-	 * Applies {@link ParserConfig} annotations to a {@link ParserBuilder}.
+	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.Parser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<ParserConfig,ParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<ParserConfig,Parser.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class ParserConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(ParserConfig.class, ParserBuilder.class, vr);
+			super(ParserConfig.class, Parser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, ParserBuilder b) {
+		public void apply(AnnotationInfo<ParserConfig> ai, Parser.Builder b) {
 			ParserConfig a = ai.getAnnotation();
 
 			bool(a.autoCloseStreams()).ifPresent(x -> b.autoCloseStreams(x));
@@ -50,9 +50,9 @@ public class ParserConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link ParserConfig} annotations to a {@link InputStreamParserBuilder}.
+	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.InputStreamParser.Builder}.
 	 */
-	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParserBuilder> {
+	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -60,11 +60,11 @@ public class ParserConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public InputStreamParserApply(VarResolverSession vr) {
-			super(ParserConfig.class, InputStreamParserBuilder.class, vr);
+			super(ParserConfig.class, InputStreamParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParserBuilder b) {
+		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParser.Builder b) {
 			ParserConfig a = ai.getAnnotation();
 
 			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
@@ -72,9 +72,9 @@ public class ParserConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link ParserConfig} annotations to a {@link ReaderParserBuilder}.
+	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.ReaderParser.Builder}.
 	 */
-	public static class ReaderParserApply extends AnnotationApplier<ParserConfig,ReaderParserBuilder> {
+	public static class ReaderParserApply extends AnnotationApplier<ParserConfig,ReaderParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -82,11 +82,11 @@ public class ParserConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ReaderParserApply(VarResolverSession vr) {
-			super(ParserConfig.class, ReaderParserBuilder.class, vr);
+			super(ParserConfig.class, ReaderParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, ReaderParserBuilder b) {
+		public void apply(AnnotationInfo<ParserConfig> ai, ReaderParser.Builder b) {
 			ParserConfig a = ai.getAnnotation();
 
 			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));

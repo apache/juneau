@@ -85,7 +85,7 @@ public class UriAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -93,7 +93,7 @@ public class UriAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Uri.class);
 		}
 
@@ -158,9 +158,9 @@ public class UriAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Uri} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Uri} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Uri,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Uri,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -168,11 +168,11 @@ public class UriAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Uri.class, BeanContextBuilder.class, vr);
+			super(Uri.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uri> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Uri> ai, BeanContext.Builder b) {
 			Uri a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

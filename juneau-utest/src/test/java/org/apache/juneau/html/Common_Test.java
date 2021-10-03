@@ -33,7 +33,7 @@ public class Common_Test {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
+		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -65,7 +65,7 @@ public class Common_Test {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
+		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -98,7 +98,7 @@ public class Common_Test {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
+		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -131,7 +131,7 @@ public class Common_Test {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
+		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -346,7 +346,7 @@ public class Common_Test {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().maxDepth(Integer.MAX_VALUE);
+		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

@@ -86,7 +86,7 @@ public class MarshalledAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTBuilder {
@@ -97,7 +97,7 @@ public class MarshalledAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Marshalled.class);
 		}
 
@@ -187,9 +187,9 @@ public class MarshalledAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Marshalled} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Marshalled} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Marshalled,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Marshalled,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -197,11 +197,11 @@ public class MarshalledAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Marshalled.class, BeanContextBuilder.class, vr);
+			super(Marshalled.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Marshalled> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Marshalled> ai, BeanContext.Builder b) {
 			Marshalled a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

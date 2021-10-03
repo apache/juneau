@@ -13,7 +13,15 @@
 package org.apache.juneau;
 
 
+import static org.apache.juneau.internal.SystemEnv.*;
+
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.util.*;
+
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
@@ -24,6 +32,613 @@ import org.apache.juneau.collections.*;
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  */
 public abstract class BeanTraverseContext extends BeanContextable {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public abstract static class Builder extends BeanContextable.Builder {
+
+		boolean detectRecursions, ignoreRecursions;
+		int initialDepth, maxDepth;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			detectRecursions = env("BeanTraverseBuilder.detectRecursions", false);
+			ignoreRecursions = env("BeanTraverseBuilder.ignoreRecursions", false);
+			initialDepth = env("BeanTraverseBuilder.initialDepth", 0);
+			maxDepth = env("BeanTraverseBuilder.maxDepth", 100);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(BeanTraverseContext copyFrom) {
+			super(copyFrom);
+			detectRecursions = copyFrom.detectRecursions;
+			ignoreRecursions = copyFrom.ignoreRecursions;
+			initialDepth = copyFrom.initialDepth;
+			maxDepth = copyFrom.maxDepth;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			detectRecursions = copyFrom.detectRecursions;
+			ignoreRecursions = copyFrom.ignoreRecursions;
+			initialDepth = copyFrom.initialDepth;
+			maxDepth = copyFrom.maxDepth;
+		}
+
+		@Override /* ContextBuilder */
+		public abstract Builder copy();
+
+		@Override /* ContextBuilder */
+		public BeanTraverseContext build() {
+			return (BeanTraverseContext)super.build();
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Automatically detect POJO recursions.
+		 *
+		 * <p>
+		 * When enabled, specifies that recursions should be checked for during traversal.
+		 *
+		 * <p>
+		 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+		 * <br>In general, unchecked recursions cause stack-overflow-errors.
+		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>
+		 * 		Checking for recursion can cause a small performance penalty.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.detectRecursions()
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>f</jf>;
+		 * 	}
+		 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+		 * 	<jv>serializer</jv>.<jf>f</jf> = <jv>serializer</jv>;
+		 *
+		 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder detectRecursions() {
+			return detectRecursions(true);
+		}
+
+		/**
+		 * Same as {@link #detectRecursions()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder detectRecursions(boolean value) {
+			detectRecursions = value;
+			return this;
+		}
+
+		/**
+		 * Ignore recursion errors.
+		 *
+		 * <p>
+		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+		 *
+		 * <p>
+		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+		 * 	the following when this setting is <jk>true</jk>...
+		 *
+		 * <p class='bcode w800'>
+		 * 	{A:{B:{C:<jk>null</jk>}}}
+		 * </p>
+		 *
+		 * <ul class='notes'>
+		 * 	<li>
+		 * 		Checking for recursion can cause a small performance penalty.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer ignores recursions.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.ignoreRecursions()
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>f</jf>;
+		 * 	}
+		 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+		 * 	<jv>myBean</jv>.<jf>f</jf> = <jv>myBean</jv>;
+		 *
+		 * 	<jc>// Produces "{f:null}"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder ignoreRecursions() {
+			return ignoreRecursions(true);
+		}
+
+		/**
+		 * Same as {@link #ignoreRecursions()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder ignoreRecursions(boolean value) {
+			ignoreRecursions = value;
+			return this;
+		}
+
+		/**
+		 * Initial depth.
+		 *
+		 * <p>
+		 * The initial indentation level at the root.
+		 *
+		 * <p>
+		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.ws()
+		 * 		.initialDepth(2)
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is <c>0</c>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder initialDepth(int value) {
+			initialDepth = value;
+			return this;
+		}
+
+		/**
+		 * Max traversal depth.
+		 *
+		 * <p>
+		 * When enabled, abort traversal if specified depth is reached in the POJO tree.
+		 *
+		 * <p>
+		 * If this depth is exceeded, an exception is thrown.
+		 *
+		 * <p>
+		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that throws an exception if the depth reaches greater than 20.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.maxDepth(20)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='jm'>{@link Builder#maxDepth(int)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is <c>100</c>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder maxDepth(int value) {
+			maxDepth = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -41,7 +656,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BeanTraverseContext(BeanTraverseBuilder builder) {
+	protected BeanTraverseContext(Builder builder) {
 		super(builder);
 
 		maxDepth = builder.maxDepth;
@@ -53,7 +668,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	}
 
 	@Override
-	public abstract BeanTraverseBuilder copy();
+	public abstract Builder copy();
 
 	@Override /* Context */
 	public BeanTraverseSession createSession() {
@@ -73,7 +688,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Automatically detect POJO recursions.
 	 *
-	 * @see BeanTraverseBuilder#detectRecursions()
+	 * @see Builder#detectRecursions()
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
@@ -84,7 +699,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Ignore recursion errors.
 	 *
-	 * @see BeanTraverseBuilder#ignoreRecursions()
+	 * @see Builder#ignoreRecursions()
 	 * @return
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
@@ -96,7 +711,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Initial depth.
 	 *
-	 * @see BeanTraverseBuilder#initialDepth(int)
+	 * @see Builder#initialDepth(int)
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
@@ -107,7 +722,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Max traversal depth.
 	 *
-	 * @see BeanTraverseBuilder#maxDepth(int)
+	 * @see Builder#maxDepth(int)
 	 * @return
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.

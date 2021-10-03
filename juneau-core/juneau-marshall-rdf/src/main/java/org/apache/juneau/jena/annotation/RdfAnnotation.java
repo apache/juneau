@@ -104,7 +104,7 @@ public class RdfAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Rdf.class);
 		}
 
@@ -241,9 +241,9 @@ public class RdfAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link RdfSerializerBuilder}.
+	 * Applies targeted {@link Rdf} annotations to a {@link RdfSerializer.Builder}.
 	 */
-	public static class SerializerApplier extends AnnotationApplier<Rdf,RdfSerializerBuilder> {
+	public static class SerializerApplier extends AnnotationApplier<Rdf,RdfSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -252,11 +252,11 @@ public class RdfAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApplier(VarResolverSession vr) {
-			super(Rdf.class, RdfSerializerBuilder.class, vr);
+			super(Rdf.class, RdfSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rdf> ai, RdfSerializerBuilder b) {
+		public void apply(AnnotationInfo<Rdf> ai, RdfSerializer.Builder b) {
 			Rdf a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
@@ -267,9 +267,9 @@ public class RdfAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link RdfParserBuilder}.
+	 * Applies targeted {@link Rdf} annotations to a {@link RdfParser.Builder}.
 	 */
-	public static class ParserApplier extends AnnotationApplier<Rdf,RdfParserBuilder> {
+	public static class ParserApplier extends AnnotationApplier<Rdf,RdfParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -278,11 +278,11 @@ public class RdfAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApplier(VarResolverSession vr) {
-			super(Rdf.class, RdfParserBuilder.class, vr);
+			super(Rdf.class, RdfParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rdf> ai, RdfParserBuilder b) {
+		public void apply(AnnotationInfo<Rdf> ai, RdfParser.Builder b) {
 			Rdf a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

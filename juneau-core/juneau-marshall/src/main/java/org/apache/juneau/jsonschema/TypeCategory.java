@@ -20,8 +20,8 @@ import org.apache.juneau.internal.*;
  * Represents possible values for JSONSCHEMA_addExamplesTo and JSONSCHEMA_addDescriptionsTo.
  *
  * <ul class='javatree'>
- * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...)}
- * 	<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(TypeCategory...)}
+ * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
+ * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
  * </ul>
  */
 public enum TypeCategory {

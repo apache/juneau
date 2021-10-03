@@ -13,19 +13,26 @@
 package org.apache.juneau.parser;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Parent class for all Juneau parsers.
@@ -126,7 +133,7 @@ public abstract class Parser extends BeanContextable {
 	 * Represents no Parser.
 	 */
 	public static abstract class Null extends Parser {
-		private Null(ParserBuilder builder) {
+		private Null(Builder builder) {
 			super(builder);
 		}
 	}
@@ -141,10 +148,770 @@ public abstract class Parser extends BeanContextable {
 	 * @param c The builder to create.
 	 * @return A new builder.
 	 */
-	public static ParserBuilder createParserBuilder(Class<? extends Parser> c) {
-		return (ParserBuilder)Context.createBuilder(c);
+	public static Builder createParserBuilder(Class<? extends Parser> c) {
+		return (Builder)Context.createBuilder(c);
 	}
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public abstract static class Builder extends BeanContextable.Builder {
+
+		boolean autoCloseStreams, strict, trimStrings, unbuffered;
+		String consumes;
+		int debugOutputLines;
+		Class<? extends ParserListener> listener;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			autoCloseStreams = env("Parser.autoCloseStreams", false);
+			strict = env("Parser.strict", false);
+			trimStrings = env("Parser.trimStrings", false);
+			unbuffered = env("Parser.unbuffered", false);
+			debugOutputLines = env("Parser.debugOutputLines", 5);
+			listener = null;
+			consumes = null;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(Parser copyFrom) {
+			super(copyFrom);
+			autoCloseStreams = copyFrom.autoCloseStreams;
+			strict = copyFrom.strict;
+			trimStrings = copyFrom.trimStrings;
+			unbuffered = copyFrom.unbuffered;
+			debugOutputLines = copyFrom.debugOutputLines;
+			listener = copyFrom.listener;
+			consumes = copyFrom.consumes;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			autoCloseStreams = copyFrom.autoCloseStreams;
+			strict = copyFrom.strict;
+			trimStrings = copyFrom.trimStrings;
+			unbuffered = copyFrom.unbuffered;
+			debugOutputLines = copyFrom.debugOutputLines;
+			listener = copyFrom.listener;
+			consumes = copyFrom.consumes;
+		}
+
+		@Override /* ContextBuilder */
+		public abstract Builder copy();
+
+		@Override /* ContextBuilder */
+		public Parser build() {
+			return (Parser)super.build();
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Specifies the media type that this parser consumes.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder consumes(String value) {
+			this.consumes = value;
+			return this;
+		}
+
+		/**
+		 * Returns the current value for the 'consumes' property.
+		 *
+		 * @return The current value for the 'consumes' property.
+		 */
+		public String getConsumes() {
+			return consumes;
+		}
+
+		/**
+		 * Auto-close streams.
+		 *
+		 * <p>
+		 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+		 * after parsing is complete.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a parser using strict mode.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.autoCloseStreams()
+		 * 		.build();
+		 *
+		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>myReader</jv>, MyBean.<jk>class</jk>);
+		 *
+		 * 	<jsm>assertTrue</jsm>(r.isClosed());
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder autoCloseStreams() {
+			return autoCloseStreams(true);
+		}
+
+		/**
+		 * Same as {@link #autoCloseStreams()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder autoCloseStreams(boolean value) {
+			autoCloseStreams = value;
+			return this;
+		}
+
+		/**
+		 * Debug output lines.
+		 *
+		 * <p>
+		 * When parse errors occur, this specifies the number of lines of input before and after the
+		 * error location to be printed as part of the exception message.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
+		 * 		.debugOuputLines(100)
+		 * 		.build();
+		 *
+		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
+		 * 	<jk>try</jk> {
+		 * 		<jv>parser</jv>.parse(<jv>myReader</jv>, Object.<jk>class</jk>);
+		 * 	} <jk>catch</jk> (ParseException e) {
+		 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+		 * 	}
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default value is <c>5</c>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder debugOutputLines(int value) {
+			debugOutputLines = value;
+			return this;
+		}
+
+		/**
+		 * Parser listener.
+		 *
+		 * <p>
+		 * Class used to listen for errors and warnings that occur during parsing.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Define our parser listener.</jc>
+		 * 	<jc>// Simply captures all unknown bean property events.</jc>
+		 * 	<jk>public class</jk> MyParserListener <jk>extends</jk> ParserListener {
+		 *
+		 * 		<jc>// A simple property to store our events.</jc>
+		 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onUnknownBeanProperty(ParserSession <jv>session</jv>, String <jv>propertyName</jv>, Class&lt;T&gt; <jv>beanClass</jv>, T <jv>bean</jv>) {
+		 * 			Position <jv>position</jv> = <jv>parser</jv>.getPosition();
+		 * 			<jf>events</jf>.add(<jv>propertyName</jv> + <js>","</js> + <jv>position</jv>.getLine() + <js>","</js> + <jv>position</jv>.getColumn());
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser using our listener.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.listener(MyParserListener.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a session object.</jc>
+		 * 	<jc>// Needed because listeners are created per-session.</jc>
+		 * 	<jk>try</jk> (ReaderParserSession <jv>session</jv> = <jv>parser</jv>.createSession()) {
+		 *
+		 * 		<jc>// Parse some JSON object.</jc>
+		 * 		MyBean <jv>myBean</jv> = <jv>session</jv>.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
+		 *
+		 * 		<jc>// Get the listener.</jc>
+		 * 		MyParserListener <jv>listener</jv> = <jv>session</jv>.getListener(MyParserListener.<jk>class</jk>);
+		 *
+		 * 		<jc>// Dump the results to the console.</jc>
+		 * 		SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
+		 * 	}
+		 * </p>
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder listener(Class<? extends ParserListener> value) {
+			listener = value;
+			return this;
+		}
+
+		/**
+		 * Strict mode.
+		 *
+		 * <p>
+		 * When enabled, strict mode for the parser is enabled.
+		 *
+		 * <p>
+		 * Strict mode can mean different things for different parsers.
+		 *
+		 * <table class='styled'>
+		 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
+		 * 	<tr>
+		 * 		<td>All reader-based parsers</td>
+		 * 		<td>
+		 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+		 * 			Otherwise, malformed input is ignored.
+		 * 		</td>
+		 * 	</tr>
+		 * 	<tr>
+		 * 		<td>{@link JsonParser}</td>
+		 * 		<td>
+		 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+		 * 			<ul>
+		 * 				<li>Unquoted attributes.
+		 * 				<li>Missing attribute values.
+		 * 				<li>Concatenated strings.
+		 * 				<li>Javascript comments.
+		 * 				<li>Numbers and booleans when Strings are expected.
+		 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+		 * 			</ul>
+		 * 		</td>
+		 * 	</tr>
+		 * </table>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a parser using strict mode.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.strict()
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it.</jc>
+		 * 	<jk>try</jk> {
+		 * 		String <jv>json</jv> = <js>"{unquotedAttr:'value'}"</js>;
+		 * 		<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	} <jk>catch</jk> (ParseException e) {
+		 * 		<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+		 * 	}
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder strict() {
+			return strict(true);
+		}
+
+		/**
+		 * Same as {@link #strict()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder strict(boolean value) {
+			strict = value;
+			return this;
+		}
+
+		/**
+		 * Trim parsed strings.
+		 *
+		 * <p>
+		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+		 * the POJO.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a parser with trim-strings enabled.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.trimStrings()
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it.</jc>
+		 * 	String <jv>json</jv> = <js>"{' foo ':' bar '}"</js>;
+		 * 	Map&lt;String,String&gt; <jv>myMap</jv> = <jv>parser</jv>.parse(<jv>json</jv>, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+		 *
+		 * 	<jc>// Make sure strings are parsed.</jc>
+		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>myMap</jv>.get(<js>"foo"</js>));
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder trimStrings() {
+			return trimStrings(true);
+		}
+
+		/**
+		 * Same as {@link #trimStrings()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder trimStrings(boolean value) {
+			trimStrings = value;
+			return this;
+		}
+
+		/**
+		 * Unbuffered.
+		 *
+		 * <p>
+		 * When enabled, don't use internal buffering during parsing.
+		 *
+		 * <p>
+		 * This is useful in cases when you want to parse the same input stream or reader multiple times
+		 * because it may contain multiple independent POJOs to parse.
+		 * <br>Buffering would cause the parser to read past the current POJO in the stream.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a parser using strict mode.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser.
+		 * 		.<jsm>create</jsm>()
+		 * 		.unbuffered(<jk>true</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
+		 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
+		 * 	ReaderParserSession <jv>session</jv> = <jv>parser</jv>.createSession();
+		 *
+		 * 	<jc>// Read input with multiple POJOs</jc>
+		 * 	Reader <jv>json</jv> = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
+		 * 	MyBean <jv>myBean1</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean2</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <ul class='notes'>
+		 * 	<li>
+		 * 		This only allows for multi-input streams for the following parsers:
+		 * 		<ul>
+		 * 			<li class='jc'>{@link JsonParser}
+		 * 			<li class='jc'>{@link UonParser}
+		 * 		</ul>
+		 * 		It has no effect on the following parsers:
+		 * 		<ul>
+		 * 			<li class='jc'>{@link MsgPackParser} - It already doesn't use buffering.
+		 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
+		 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
+		 * 		</ul>
+		 * </ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder unbuffered() {
+			return unbuffered(true);
+		}
+
+		/**
+		 * Same as {@link #unbuffered()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder unbuffered(boolean value) {
+			unbuffered = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -162,7 +929,7 @@ public abstract class Parser extends BeanContextable {
 	 *
 	 * @param builder The builder this object.
 	 */
-	protected Parser(ParserBuilder builder) {
+	protected Parser(Builder builder) {
 		super(builder);
 
 		consumes = builder.consumes;
@@ -181,7 +948,7 @@ public abstract class Parser extends BeanContextable {
 	}
 
 	@Override /* Context */
-	public abstract ParserBuilder copy();
+	public abstract Builder copy();
 
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -264,11 +1031,11 @@ public abstract class Parser extends BeanContextable {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -276,7 +1043,7 @@ public abstract class Parser extends BeanContextable {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.
@@ -539,7 +1306,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Auto-close streams.
 	 *
-	 * @see ParserBuilder#autoCloseStreams()
+	 * @see Builder#autoCloseStreams()
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -551,7 +1318,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Debug output lines.
 	 *
-	 * @see ParserBuilder#debugOutputLines(int)
+	 * @see Builder#debugOutputLines(int)
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -562,7 +1329,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Parser listener.
 	 *
-	 * @see ParserBuilder#listener(Class)
+	 * @see Builder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
@@ -573,7 +1340,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Strict mode.
 	 *
-	 * @see ParserBuilder#strict()
+	 * @see Builder#strict()
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
@@ -584,7 +1351,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Trim parsed strings.
 	 *
-	 * @see ParserBuilder#trimStrings()
+	 * @see Builder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -596,7 +1363,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Unbuffered.
 	 *
-	 * @see ParserBuilder#unbuffered()
+	 * @see Builder#unbuffered()
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */

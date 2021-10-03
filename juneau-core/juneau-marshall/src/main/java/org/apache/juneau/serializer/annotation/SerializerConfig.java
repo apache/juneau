@@ -68,7 +68,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)}
 	 * </ul>
 	 */
 	String binaryFormat() default "";
@@ -92,8 +92,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -108,7 +108,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -127,8 +127,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jm'>{@link SerializerBuilder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -143,7 +143,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#addRootType()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
 	 * </ul>
 	 */
 	String addRootType() default "";
@@ -173,7 +173,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#keepNullProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
 	 * </ul>
 	 */
 	String keepNullProperties() default "";
@@ -185,7 +185,7 @@ public @interface SerializerConfig {
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#listener(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#listener(Class)}
 	 * </ul>
 	 */
 	Class<? extends SerializerListener> listener() default SerializerListener.Null.class;
@@ -211,7 +211,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#sortCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortCollections()}
 	 * </ul>
 	 */
 	String sortCollections() default "";
@@ -237,7 +237,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#sortMaps()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortMaps()}
 	 * </ul>
 	 */
 	String sortMaps() default "";
@@ -269,7 +269,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#trimEmptyCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyCollections()}
 	 * </ul>
 	 */
 	String trimEmptyCollections() default "";
@@ -299,7 +299,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#trimEmptyMaps()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyMaps()}
 	 * </ul>
 	 */
 	String trimEmptyMaps() default "";
@@ -322,7 +322,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#trimStrings()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimStrings()}
 	 * </ul>
 	 */
 	String trimStrings() default "";
@@ -342,7 +342,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#uriContext(UriContext)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriContext(UriContext)}
 	 * </ul>
 	 */
 	String uriContext() default "";
@@ -370,7 +370,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */
@@ -400,7 +400,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
 	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */
@@ -433,7 +433,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link WriterSerializerBuilder#fileCharset(java.nio.charset.Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#fileCharset(java.nio.charset.Charset)}
 	 * </ul>
 	 */
 	String fileCharset() default "";
@@ -456,7 +456,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
 	 * </ul>
 	 */
 	String maxIndent() default "";
@@ -477,7 +477,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
 	 * </ul>
 	 */
 	String quoteChar() default "";
@@ -503,7 +503,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link WriterSerializerBuilder#streamCharset(Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#streamCharset(Charset)}
 	 * </ul>
 	 */
 	String streamCharset() default "";
@@ -526,7 +526,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
 	 * </ul>
 	 */
 	String useWhitespace() default "";
@@ -547,7 +547,7 @@ public @interface SerializerConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link BeanTraverseBuilder#ignoreRecursions()}.
+	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -571,7 +571,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#detectRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
 	 * </ul>
 	 */
 	String detectRecursions() default "";
@@ -580,7 +580,7 @@ public @interface SerializerConfig {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanTraverseBuilder#detectRecursions()}.
+	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
@@ -599,7 +599,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#ignoreRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
 	 */
 	String ignoreRecursions() default "";
@@ -621,7 +621,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#initialDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
 	 */
 	String initialDepth() default "";
@@ -643,7 +643,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseBuilder#maxDepth}
+	 * 	<li class='jm'>{@link BeanTraverseContext.Builder#maxDepth}
 	 * </ul>
 	 */
 	String maxDepth() default "";

@@ -939,7 +939,7 @@ public class Remote_QueryAnnotation_Test {
 		return basicPart(key,val);
 	}
 
-	private static RestClientBuilder client(Class<?> c) {
+	private static RestClient.Builder client(Class<?> c) {
 		return MockRestClient.create(c);
 	}
 

@@ -86,7 +86,7 @@ public class ResponseBodyAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
@@ -94,7 +94,7 @@ public class ResponseBodyAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(ResponseBody.class);
 		}
 
@@ -153,9 +153,9 @@ public class ResponseBodyAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link ResponseBody} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link ResponseBody} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<ResponseBody,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<ResponseBody,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -163,11 +163,11 @@ public class ResponseBodyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(ResponseBody.class, BeanContextBuilder.class, vr);
+			super(ResponseBody.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseBody> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<ResponseBody> ai, BeanContext.Builder b) {
 			ResponseBody a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

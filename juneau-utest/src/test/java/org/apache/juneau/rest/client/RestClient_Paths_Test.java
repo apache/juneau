@@ -92,7 +92,7 @@ public class RestClient_Paths_Test {
 		return serializedPart(name, val).schema(schema);
 	}
 
-	private static RestClientBuilder client() {
+	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class).simpleJson();
 	}
 }

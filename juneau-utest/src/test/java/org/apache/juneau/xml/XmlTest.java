@@ -350,7 +350,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testXmlFormatAttrWithNs() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq();
+		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		M t = new M();
 		String r = null;
@@ -521,7 +521,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T1 t = new T1();
@@ -573,7 +573,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnClassWithElementName() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T2 t = new T2();
@@ -624,7 +624,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnPackageNoNsOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq();
+		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T3 t = new T3();
@@ -676,7 +676,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnPackageNoNsOnClassElementNameOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T4 t = new T4();
@@ -727,7 +727,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnPackageNsOnClassElementNameOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq();
+		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T5 t = new T5();
@@ -780,7 +780,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnPackageNsOnClassNoElementNameOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T6 t = new T6();
@@ -832,7 +832,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testComboOfNsAndOverriddenBeanPropertyNames() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T7 t = new T7();
@@ -881,7 +881,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testXmlNsAnnotation() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T8 t = new T8();
@@ -932,7 +932,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testXmlNsOnPackageNsUriInXmlNs() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T9 t = new T9();
@@ -983,7 +983,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testXmlAttrs() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq();
+		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
 

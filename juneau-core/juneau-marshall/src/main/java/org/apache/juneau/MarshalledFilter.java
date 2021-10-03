@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -21,34 +23,117 @@ import org.apache.juneau.annotation.*;
  * Marshall filters are used to control aspects of how POJOs are handled during serialization and parsing.
  *
  * <p>
- * Marshall filters are created by {@link MarshalledFilterBuilder} which is the programmatic equivalent to the {@link Marshalled @Marshalled}
+ * Marshall filters are created by {@link Builder} which is the programmatic equivalent to the {@link Marshalled @Marshalled}
  * annotation.
  */
 public final class MarshalledFilter {
 
-	private final Class<?> marshalledClass;
-
-	private final Class<?> implClass;
-	private final String example;
-
-	/**
-	 * Constructor.
-	 */
-	MarshalledFilter(MarshalledFilterBuilder builder) {
-		this.marshalledClass = builder.marshalledClass;
-		this.implClass = builder.implClass;
-		this.example = builder.example;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Create a new instance of this POJO filter.
 	 *
 	 * @param <T> The POJO class being filtered.
 	 * @param marshalledClass The POJO class being filtered.
-	 * @return A new {@link MarshalledFilterBuilder} object.
+	 * @return A new {@link Builder} object.
 	 */
-	public static <T> MarshalledFilterBuilder create(Class<T> marshalledClass) {
-		return new MarshalledFilterBuilder(marshalledClass);
+	public static <T> Builder create(Class<T> marshalledClass) {
+		return new Builder(marshalledClass);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
+
+		Class<?> marshalledClass;
+
+		Class<?> implClass;
+		String example;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param marshalledClass The class that this filter applies to.
+		 */
+		protected Builder(Class<?> marshalledClass) {
+			this.marshalledClass = marshalledClass;
+		}
+
+		/**
+		 * Applies the information in the specified list of {@link Marshalled @Marshalled} annotations to this filter.
+		 *
+		 * @param annotations The annotations to apply.
+		 * @return This object (for method chaining).
+		 */
+		public Builder applyAnnotations(List<Marshalled> annotations) {
+
+			for (Marshalled b : annotations) {
+
+				if (b.implClass() != Null.class)
+					implClass(b.implClass());
+
+				if (! b.example().isEmpty())
+					example(b.example());
+			}
+			return this;
+		}
+
+		/**
+		 * Implementation class.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
+		public Builder implClass(Class<?> value) {
+			this.implClass = value;
+			return this;
+		}
+
+		/**
+		 * POJO example in Simplified JSON format.
+		 *
+		 * @param value The new value for this annotation.
+		 * @return This object (for method chaining).
+		 */
+		public Builder example(String value) {
+			this.example = value;
+			return this;
+		}
+
+		/**
+		 * Creates a {@link MarshalledFilter} with settings in this builder class.
+		 *
+		 * @return A new {@link MarshalledFilter} instance.
+		 */
+		public MarshalledFilter build() {
+			return new MarshalledFilter(this);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Class<?> marshalledClass;
+	private final Class<?> implClass;
+	private final String example;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected MarshalledFilter(Builder builder) {
+		this.marshalledClass = builder.marshalledClass;
+		this.implClass = builder.implClass;
+		this.example = builder.example;
 	}
 
 	/**

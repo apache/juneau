@@ -33,7 +33,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().ssq();
 		JsonParser p = JsonParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -64,7 +64,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().ssq();
 		JsonParser p = JsonParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -97,7 +97,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().ssq();
 		JsonParser p = JsonParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -130,7 +130,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().ssq();
 		JsonParser p = JsonParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -238,7 +238,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().ssq().maxDepth(Integer.MAX_VALUE);
+		JsonSerializer.Builder s = JsonSerializer.create().ssq().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

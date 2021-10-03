@@ -38,7 +38,7 @@ public class RrpcRestOpContext extends RestOpContext {
 	 * @param builder The builder for this method context.
 	 * @throws ServletException Problem with metadata was detected.
 	 */
-	public RrpcRestOpContext(RestOpContextBuilder builder) throws ServletException {
+	protected RrpcRestOpContext(RestOpContext.Builder builder) throws ServletException {
 		super(builder);
 
 		ClassMeta<?> interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());

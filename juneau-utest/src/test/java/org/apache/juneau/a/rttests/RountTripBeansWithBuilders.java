@@ -30,7 +30,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RountTripBeansWithBuilders extends RoundTripTest {
 
-	public RountTripBeansWithBuilders(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RountTripBeansWithBuilders(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 		applyAnnotations(AcConfig.class);
 	}

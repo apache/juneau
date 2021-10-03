@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class JsoConfigAnnotation {
 
 	/**
-	 * Applies {@link JsoConfig} annotations to a {@link JsoSerializerBuilder}.
+	 * Applies {@link JsoConfig} annotations to a {@link org.apache.juneau.jso.JsoSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<JsoConfig,JsoSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<JsoConfig,JsoSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,18 +33,18 @@ public class JsoConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(JsoConfig.class, JsoSerializerBuilder.class, vr);
+			super(JsoConfig.class, JsoSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsoConfig> ai, JsoSerializerBuilder b) {
+		public void apply(AnnotationInfo<JsoConfig> ai, JsoSerializer.Builder b) {
 		}
 	}
 
 	/**
-	 * Applies {@link JsoConfig} annotations to a {@link JsoParserBuilder}.
+	 * Applies {@link JsoConfig} annotations to a {@link org.apache.juneau.jso.JsoParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<JsoConfig,JsoParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<JsoConfig,JsoParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -52,11 +52,11 @@ public class JsoConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(JsoConfig.class, JsoParserBuilder.class, vr);
+			super(JsoConfig.class, JsoParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsoConfig> ai, JsoParserBuilder b) {
+		public void apply(AnnotationInfo<JsoConfig> ai, JsoParser.Builder b) {
 		}
 	}
 }

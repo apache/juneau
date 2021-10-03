@@ -53,7 +53,7 @@ public class Html_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void a02_testAnchorTextOptions() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
+		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
 		TestURI t = new TestURI();
 		String r;
 		String expected = null;

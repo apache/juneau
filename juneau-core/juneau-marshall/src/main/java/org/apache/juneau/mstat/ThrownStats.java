@@ -19,10 +19,136 @@ import static java.util.Optional.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
+
 /**
  * Represents an entry in {@link ThrownStore}.
  */
 public class ThrownStats implements Cloneable {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder {
+
+		Throwable throwable;
+		long hash;
+		List<String> stackTrace;
+		ThrownStats causedBy;
+
+		BeanCreator<ThrownStats> creator = BeanCreator.of(ThrownStats.class).builder(this);
+
+		/**
+		 * Create a new {@link ThrownStats} using this builder.
+		 *
+		 * @return A new {@link ThrownStats}
+		 */
+		public ThrownStats build() {
+			return creator.run();
+		}
+
+		/**
+		 * Specifies the bean store to use for instantiating the {@link ThrownStats} object.
+		 *
+		 * <p>
+		 * Can be used to instantiate {@link ThrownStats} implementations with injected constructor argument beans.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder beanStore(BeanStore value) {
+			creator.store(value);
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link ThrownStats} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder type(Class<? extends ThrownStats> value) {
+			creator.type(value == null ? ThrownStats.class : value);
+			return this;
+		}
+
+		/**
+		 * Specifies the thrown exception.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder throwable(Throwable value) {
+			this.throwable = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the calculated hash.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder hash(long value) {
+			this.hash = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the normalized stacktrace.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder stackTrace(List<String> value) {
+			this.stackTrace = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the caused-by exception.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder causedBy(ThrownStats value) {
+			this.causedBy = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final long guid;
 	private final long hash;
@@ -35,20 +161,11 @@ public class ThrownStats implements Cloneable {
 	private final AtomicLong firstOccurrence, lastOccurrence;
 
 	/**
-	 * Static creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static ThrownStatsBuilder create() {
-		return new ThrownStatsBuilder();
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public ThrownStats(ThrownStatsBuilder builder) {
+	protected ThrownStats(Builder builder) {
 		this.guid = new Random().nextLong();
 		this.thrownClass = builder.throwable.getClass();
 		this.firstMessage = builder.throwable.getMessage();

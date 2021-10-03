@@ -61,7 +61,7 @@ public @interface XmlConfig {
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlParserBuilder#eventAllocator(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#eventAllocator(Class)}
 	 * </ul>
 	 */
 	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Null.class;
@@ -85,7 +85,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlParserBuilder#preserveRootElement()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#preserveRootElement()}
 	 * </ul>
 	 */
 	String preserveRootElement() default "";
@@ -102,7 +102,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlParserBuilder#reporter(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#reporter(Class)}
 	 * </ul>
 	 */
 	Class<? extends XMLReporter> reporter() default XmlReporter.Null.class;
@@ -114,7 +114,7 @@ public @interface XmlConfig {
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlParserBuilder#resolver(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#resolver(Class)}
 	 * </ul>
 	 */
 	Class<? extends XMLResolver> resolver() default XmlResolver.Null.class;
@@ -140,7 +140,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlParserBuilder#validating()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#validating()}
 	 * </ul>
 	 */
 	String validating() default "";
@@ -157,7 +157,7 @@ public @interface XmlConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <ul class='notes'>
@@ -172,7 +172,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlSerializerBuilder#addBeanTypesXml()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addBeanTypesXml()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -191,13 +191,13 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		This setting is ignored if {@link XmlSerializerBuilder#enableNamespaces()} is not enabled.
+	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -210,7 +210,7 @@ public @interface XmlConfig {
 	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link XmlSerializerBuilder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
+	 * Used in conjunction with {@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
 	 *
 	 * <p>
@@ -218,13 +218,13 @@ public @interface XmlConfig {
 	 * the root element is serialized.
 	 *
 	 * <p>
-	 * This setting is ignored if {@link XmlSerializerBuilder#enableNamespaces()} is not enabled.
+	 * This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link XmlSerializerBuilder#namespaces(Namespace...)} property.
+	 * 		disabled, and that namespaces be manually defined through the {@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)} property.
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -236,7 +236,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlSerializerBuilder#disableAutoDetectNamespaces()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -254,7 +254,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -278,7 +278,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlSerializerBuilder#enableNamespaces()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
@@ -296,7 +296,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link XmlSerializerBuilder#namespaces(Namespace...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */

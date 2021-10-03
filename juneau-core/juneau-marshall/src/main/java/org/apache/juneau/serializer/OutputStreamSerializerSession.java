@@ -97,7 +97,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Binary output format.
 	 *
-	 * @see OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)
+	 * @see OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */

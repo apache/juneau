@@ -167,7 +167,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	The serialized object.
 	 * 	<br>Character-based serializers will return a <c>String</c>
-	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)} setting.
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public abstract String serializeToString(Object o) throws SerializeException;
@@ -607,7 +607,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * Returns the parser-side expected type for the object.
 	 *
 	 * <p>
-	 * The return value depends on the {@link SerializerBuilder#addRootType()} setting.
+	 * The return value depends on the {@link Serializer.Builder#addRootType()} setting.
 	 * When disabled, the parser already knows the Java POJO type being parsed, so there is
 	 * no reason to add <js>"_type"</js> attributes to the root-level object.
 	 *
@@ -707,7 +707,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see SerializerBuilder#addBeanTypes()
+	 * @see Serializer.Builder#addBeanTypes()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -719,7 +719,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
-	 * @see SerializerBuilder#addRootType()
+	 * @see Serializer.Builder#addRootType()
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
@@ -739,7 +739,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
-	 * @see SerializerBuilder#sortCollections()
+	 * @see Serializer.Builder#sortCollections()
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
@@ -750,7 +750,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Sort maps alphabetically.
 	 *
-	 * @see SerializerBuilder#sortMaps()
+	 * @see Serializer.Builder#sortMaps()
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
@@ -761,7 +761,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
-	 * @see SerializerBuilder#trimEmptyCollections()
+	 * @see Serializer.Builder#trimEmptyCollections()
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
@@ -772,7 +772,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Trim empty maps.
 	 *
-	 * @see SerializerBuilder#trimEmptyMaps()
+	 * @see Serializer.Builder#trimEmptyMaps()
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
@@ -783,7 +783,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Don't trim null bean property values.
 	 *
-	 * @see SerializerBuilder#keepNullProperties()
+	 * @see Serializer.Builder#keepNullProperties()
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
@@ -794,7 +794,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  Trim strings.
 	 *
-	 * @see SerializerBuilder#trimStrings()
+	 * @see Serializer.Builder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
@@ -805,7 +805,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  URI context bean.
 	 *
-	 * @see SerializerBuilder#uriContext(UriContext)
+	 * @see Serializer.Builder#uriContext(UriContext)
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
@@ -816,7 +816,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  URI relativity.
 	 *
-	 * @see SerializerBuilder#uriRelativity(UriRelativity)
+	 * @see Serializer.Builder#uriRelativity(UriRelativity)
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
@@ -827,7 +827,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Configuration property:  URI resolution.
 	 *
-	 * @see SerializerBuilder#uriResolution(UriResolution)
+	 * @see Serializer.Builder#uriResolution(UriResolution)
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */

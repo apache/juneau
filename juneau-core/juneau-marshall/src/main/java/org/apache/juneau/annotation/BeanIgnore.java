@@ -17,8 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-
 /**
  * Ignore classes, fields, and methods from being interpreted as bean or bean components.
  *
@@ -46,7 +44,7 @@ public @interface BeanIgnore {
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields/constructors.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 
@@ -59,7 +58,7 @@ public class OpSwaggerAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AnnotationBuilder {
@@ -71,7 +70,7 @@ public class OpSwaggerAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(OpSwagger.class);
 		}
 

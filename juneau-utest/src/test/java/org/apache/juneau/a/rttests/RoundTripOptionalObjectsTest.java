@@ -29,7 +29,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripOptionalObjectsTest extends RoundTripTest {
 
-	public RoundTripOptionalObjectsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripOptionalObjectsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

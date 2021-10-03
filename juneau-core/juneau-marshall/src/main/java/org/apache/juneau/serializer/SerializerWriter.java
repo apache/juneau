@@ -189,8 +189,8 @@ public class SerializerWriter extends Writer {
 	 * {@link URI} objects, or any other type that returns a URI via it's <c>toString()</c> method.
 	 *
 	 * <p>
-	 * The URI is resolved based on the {@link SerializerBuilder#uriRelativity(UriRelativity)} and
-	 * {@link SerializerBuilder#uriResolution(UriResolution)} settings and the {@link UriContext} that's part of the
+	 * The URI is resolved based on the {@link Serializer.Builder#uriRelativity(UriRelativity)} and
+	 * {@link Serializer.Builder#uriResolution(UriResolution)} settings and the {@link UriContext} that's part of the
 	 * session.
 	 *
 	 * @param uri The URI to serialize.

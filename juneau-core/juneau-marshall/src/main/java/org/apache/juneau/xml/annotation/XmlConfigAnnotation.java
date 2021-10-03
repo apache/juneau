@@ -23,9 +23,9 @@ import org.apache.juneau.xml.*;
 public class XmlConfigAnnotation {
 
 	/**
-	 * Applies {@link XmlConfig} annotations to a {@link XmlSerializerBuilder}.
+	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<XmlConfig,XmlSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<XmlConfig,XmlSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class XmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(XmlConfig.class, XmlSerializerBuilder.class, vr);
+			super(XmlConfig.class, XmlSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<XmlConfig> ai, XmlSerializerBuilder b) {
+		public void apply(AnnotationInfo<XmlConfig> ai, XmlSerializer.Builder b) {
 			XmlConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesXml(x));
@@ -50,9 +50,9 @@ public class XmlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link XmlConfig} annotations to a {@link XmlParserBuilder}.
+	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -60,11 +60,11 @@ public class XmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(XmlConfig.class, XmlParserBuilder.class, vr);
+			super(XmlConfig.class, XmlParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<XmlConfig> ai, XmlParserBuilder b) {
+		public void apply(AnnotationInfo<XmlConfig> ai, XmlParser.Builder b) {
 			XmlConfig a = ai.getAnnotation();
 
 			type(a.eventAllocator()).ifPresent(x -> b.eventAllocator(x));

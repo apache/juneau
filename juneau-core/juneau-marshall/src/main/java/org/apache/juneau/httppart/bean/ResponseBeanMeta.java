@@ -136,7 +136,7 @@ public class ResponseBeanMeta {
 		AnnotationWorkList annotations;
 		Class<? extends HttpPartSerializer> partSerializer;
 		Class<? extends HttpPartParser> partParser;
-		HttpPartSchemaBuilder schema = HttpPartSchema.create();
+		HttpPartSchema.Builder schema = HttpPartSchema.create();
 
 		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = new LinkedHashMap<>();
 		ResponseBeanPropertyMeta.Builder bodyMethod;

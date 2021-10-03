@@ -24,29 +24,25 @@ public class NTripleSerializer extends RdfSerializer {
 	/** Default N-Triple serializer, all default settings.*/
 	public static final NTripleSerializer DEFAULT = new NTripleSerializer(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfSerializer.Builder create() {
+		return RdfSerializer.create().ntriple();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfSerializerBuilder} object.
-	 */
-	public static RdfSerializerBuilder create() {
-		return new RdfSerializerBuilder().ntriple();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param cp The property store containing all the settings for this object.
 	 */
-	protected NTripleSerializer(RdfSerializerBuilder builder) {
+	protected NTripleSerializer(RdfSerializer.Builder builder) {
 		super(builder.ntriple());
 	}
 }

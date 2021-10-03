@@ -77,7 +77,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.apply(BeanTraverseBuilder.class, x -> x.initialDepth(2))
+				.apply(BeanTraverseContext.Builder.class, x -> x.initialDepth(2))
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
@@ -106,7 +106,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("x")
 				.rdfXmlT("x")
 				.rdfXmlR("x")
-				.apply(BeanTraverseBuilder.class, x -> x.detectRecursions())
+				.apply(BeanTraverseContext.Builder.class, x -> x.detectRecursions())
 				.exceptionMsg("Recursion occurred")
 			},
 			{ 	/* 2 */
@@ -136,7 +136,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.apply(BeanTraverseBuilder.class, x -> x.ignoreRecursions())
+				.apply(BeanTraverseContext.Builder.class, x -> x.ignoreRecursions())
 			},
 			{ 	/* 3 */
 				new ComboInput<>(
@@ -165,7 +165,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.apply(BeanTraverseBuilder.class, x -> x.maxDepth(1))
+				.apply(BeanTraverseContext.Builder.class, x -> x.maxDepth(1))
 			},
 		});
 	}

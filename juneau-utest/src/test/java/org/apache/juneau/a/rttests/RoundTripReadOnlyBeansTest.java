@@ -27,7 +27,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripReadOnlyBeansTest extends RoundTripTest {
 
-	public RoundTripReadOnlyBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripReadOnlyBeansTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

@@ -24,7 +24,7 @@ import org.apache.http.protocol.*;
  *
  * <p class='w900'>
  * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,HttpRequest,HttpContext)}.
- * <br>This can also be accomplished by providing your own {@link RestClientBuilder#connectionManager(org.apache.http.conn.HttpClientConnectionManager) connection manager}
+ * <br>This can also be accomplished by providing your own {@link RestClient.Builder#connectionManager(org.apache.http.conn.HttpClientConnectionManager) connection manager}
  * or subclassing {@link RestClient}, but this provides a simpler way of handling the requests yourself.
  *
  * <p>
@@ -56,7 +56,7 @@ import org.apache.http.protocol.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jm'>{@link RestClientBuilder#callHandler()}
+ * 	<li class='jm'>{@link RestClient.Builder#callHandler()}
  * </ul>
  */
 public interface RestCallHandler {

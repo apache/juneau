@@ -103,7 +103,7 @@ public class BasicMediaRangeArrayHeader_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClientBuilder client() {
+	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class);
 	}
 }

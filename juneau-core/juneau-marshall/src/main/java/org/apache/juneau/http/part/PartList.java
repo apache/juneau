@@ -239,7 +239,7 @@ public class PartList {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(PartList.class);
 			entries = new ArrayList<>();
 		}
@@ -247,9 +247,9 @@ public class PartList {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The bean to copy.
 		 */
-		public Builder(PartList copyFrom) {
+		protected Builder(PartList copyFrom) {
 			super(copyFrom.getClass());
 			entries = new ArrayList<>(copyFrom.entries.length);
 			for (int i = 0; i < copyFrom.entries.length; i++)
@@ -260,7 +260,7 @@ public class PartList {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);

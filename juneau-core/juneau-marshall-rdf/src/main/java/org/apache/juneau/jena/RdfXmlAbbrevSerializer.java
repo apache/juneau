@@ -24,29 +24,25 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	/** Default RDF/XML serializer, all default settings.*/
 	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfSerializer.Builder create() {
+		return RdfSerializer.create().xmlabbrev();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfSerializerBuilder} object.
-	 */
-	public static RdfSerializerBuilder create() {
-		return new RdfSerializerBuilder().xmlabbrev();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected RdfXmlAbbrevSerializer(RdfSerializerBuilder builder) {
+	protected RdfXmlAbbrevSerializer(RdfSerializer.Builder builder) {
 		super(builder.xmlabbrev());
 	}
 }

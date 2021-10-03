@@ -29,7 +29,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class CommonTest {
 
-	private RdfSerializerBuilder getBasicSerializer() {
+	private RdfSerializer.Builder getBasicSerializer() {
 		return RdfSerializer.create()
 			.sq()
 			.rdfxml_allowBadUris()
@@ -46,7 +46,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -77,7 +77,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -110,7 +110,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -144,7 +144,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -177,7 +177,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		E1 t1 = E1.create(), t2;
 		String r;
@@ -218,7 +218,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		List<F> l1 = new LinkedList<>(), l2;
 		F t = F.create();
@@ -248,7 +248,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testURIAttr() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 
 		G t = new G();
@@ -275,7 +275,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev().sq().maxDepth(Integer.MAX_VALUE);
+		RdfSerializer.Builder s = RdfSerializer.create().xmlabbrev().sq().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

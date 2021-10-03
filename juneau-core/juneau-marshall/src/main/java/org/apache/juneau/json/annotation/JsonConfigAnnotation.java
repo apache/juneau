@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class JsonConfigAnnotation {
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link JsonSerializerBuilder}.
+	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class JsonConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(JsonConfig.class, JsonSerializerBuilder.class, vr);
+			super(JsonConfig.class, JsonSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, JsonSerializerBuilder b) {
+		public void apply(AnnotationInfo<JsonConfig> ai, JsonSerializer.Builder b) {
 			JsonConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesJson(x));
@@ -47,9 +47,9 @@ public class JsonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link JsonParserBuilder}.
+	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -57,11 +57,11 @@ public class JsonConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(JsonConfig.class, JsonParserBuilder.class, vr);
+			super(JsonConfig.class, JsonParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, JsonParserBuilder b) {
+		public void apply(AnnotationInfo<JsonConfig> ai, JsonParser.Builder b) {
 			JsonConfig a = ai.getAnnotation();
 
 			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));

@@ -24,7 +24,6 @@ import static org.apache.juneau.http.HttpParts.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.BeanContextableBuilder;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
@@ -2570,8 +2569,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 				}
 			};
 		}
+
 		@Override
-		public BeanContextableBuilder copy() {
+		public Builder copy() {
 			return null;
 		}
 	}

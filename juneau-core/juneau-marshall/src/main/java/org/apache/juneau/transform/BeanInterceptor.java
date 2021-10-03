@@ -43,7 +43,7 @@ package org.apache.juneau.transform;
  * Bean interceptors are registered in the following way:
  * <ul class='javatree'>
  * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor() @Bean(interceptor)}
- * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanInterceptor(Class,Class)}
+ * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanInterceptor(Class,Class)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

@@ -78,7 +78,7 @@ public class RestClient_Config_OpenApi_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClientBuilder client() {
+	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class);
 	}
 }

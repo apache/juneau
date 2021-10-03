@@ -55,7 +55,7 @@ public @interface Bean {
 	 * 	<li class='ja'>{@link Beanp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 */
 	Class<?>[] dictionary() default {};
@@ -117,9 +117,9 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Map)}
 	 * </ul>
 	 */
 	String excludeProperties() default "";
@@ -150,7 +150,7 @@ public @interface Bean {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#findFluentSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
 	 * </ul>
 	 */
 	boolean findFluentSetters() default false;
@@ -216,7 +216,7 @@ public @interface Bean {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
 	 * It is ignored when the annotation is applied directly to classes.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>
@@ -299,9 +299,9 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Map)}
 	 * </ul>
 	 */
 	String properties() default "";
@@ -320,7 +320,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default BasicPropertyNamer.class;
@@ -345,9 +345,9 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
 	 * </ul>
 	 */
 	String readOnlyProperties() default "";
@@ -372,7 +372,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#sortProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
 	 * </ul>
 	 */
 	boolean sort() default false;
@@ -423,7 +423,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 */
 	String typeName() default "";
@@ -446,7 +446,7 @@ public @interface Bean {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#typePropertyName(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 */
 	String typePropertyName() default "";
@@ -476,9 +476,9 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
 	 */
 	String writeOnlyProperties() default "";

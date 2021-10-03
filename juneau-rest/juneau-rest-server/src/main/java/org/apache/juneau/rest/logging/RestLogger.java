@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.mstat.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -46,9 +45,9 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='jm'>{@link RestContextBuilder#callLogger()}
- * 	<li class='jm'>{@link RestContextBuilder#debugEnablement()}
- * 	<li class='jm'>{@link RestContextBuilder#debugOn(String)}
+ * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
+ * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
+ * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugOn(String)}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc RestLoggingAndDebugging}

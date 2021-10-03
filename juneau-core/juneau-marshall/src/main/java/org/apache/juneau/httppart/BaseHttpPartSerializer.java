@@ -20,19 +20,14 @@ import org.apache.juneau.serializer.*;
  */
 public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected BaseHttpPartSerializer(Builder builder) {
-		super(builder);
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * The builder class for this object.
+	 * Builder class.
 	 */
-	public abstract static class Builder extends BeanContextableBuilder {
+	public abstract static class Builder extends BeanContextable.Builder {
 
 		/**
 		 * Constructor.
@@ -48,6 +43,19 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 		protected Builder(Builder builder) {
 			super(builder);
 		}
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected BaseHttpPartSerializer(Builder builder) {
+		super(builder);
 	}
 
 	/**

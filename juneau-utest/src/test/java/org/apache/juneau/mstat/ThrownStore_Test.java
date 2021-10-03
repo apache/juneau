@@ -240,7 +240,7 @@ public class ThrownStore_Test {
 	public static class B6a {}
 
 	public static class B6b extends ThrownStats {
-		public B6b(ThrownStatsBuilder b, B6a x) throws Exception {
+		public B6b(ThrownStats.Builder b, B6a x) throws Exception {
 			super(b);
 			if (x == null)
 				throw new RuntimeException("Bad");
@@ -248,7 +248,7 @@ public class ThrownStore_Test {
 	}
 
 	public static class B6c extends ThrownStats {
-		public B6c(ThrownStatsBuilder b, Optional<B6a> x) throws Exception {
+		public B6c(ThrownStats.Builder b, Optional<B6a> x) throws Exception {
 			super(b);
 			if (x == null)
 				throw new RuntimeException("Bad");

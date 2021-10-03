@@ -65,7 +65,7 @@ public @interface Beanc {
 	 * Dynamically apply this annotation to the specified constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing constructor.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing constructor.
 	 * It is ignored when the annotation is applied directly to constructors.
 	 *
 	 * <p>

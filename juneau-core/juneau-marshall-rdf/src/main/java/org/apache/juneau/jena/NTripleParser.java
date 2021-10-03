@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
 /**
  * Subclass of {@link RdfParser} for parsing RDF in N-Triple notation.
  */
@@ -26,29 +24,25 @@ public class NTripleParser extends RdfParser {
 	/** Default N-Triple parser, all default settings.*/
 	public static final NTripleParser DEFAULT = new NTripleParser(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfParser.Builder create() {
+		return RdfParser.create().ntriple();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfParserBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfParserBuilder} object.
-	 */
-	public static RdfParserBuilder create() {
-		return new RdfParserBuilder().ntriple();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected NTripleParser(RdfParserBuilder builder) {
-		super(builder.language(LANG_NTRIPLE).consumes("text/n-triple"));
+	protected NTripleParser(RdfParser.Builder builder) {
+		super(builder.ntriple().consumes("text/n-triple"));
 	}
 }

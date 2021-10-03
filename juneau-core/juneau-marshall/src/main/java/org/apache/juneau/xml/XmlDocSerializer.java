@@ -33,6 +33,19 @@ import org.apache.juneau.serializer.*;
 public class XmlDocSerializer extends XmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return (Builder)new Builder().type(XmlDocSerializer.class);
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -44,7 +57,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Ns(XmlSerializerBuilder builder) {
+		protected Ns(XmlSerializer.Builder builder) {
 			super(builder.enableNamespaces());
 		}
 	}
@@ -58,7 +71,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected XmlDocSerializer(XmlSerializerBuilder builder) {
+	protected XmlDocSerializer(XmlSerializer.Builder builder) {
 		super(builder);
 	}
 

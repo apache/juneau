@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * @param <T> The bean type to create for this builder.
  */
 @FluentSetters(returns="HttpExceptionBuilder<T>")
-public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeExceptionBuilder {
+public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeException.Builder {
 
 	BasicStatusLine statusLine;
 	HeaderList headers = HeaderList.EMPTY;

@@ -78,13 +78,13 @@ public class RestAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
 	public static class Builder extends TargetedAnnotationTBuilder {
 
-		Class<? extends RestContextBuilder> builder = RestContextBuilder.Null.class;
+		Class<? extends RestContext.Builder> builder = RestContext.Builder.Null.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Null.class;
@@ -111,7 +111,7 @@ public class RestAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Rest.class);
 		}
 
@@ -703,7 +703,7 @@ public class RestAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Rest {
 
-		private final Class<? extends RestContextBuilder> builder;
+		private final Class<? extends RestContext.Builder> builder;
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;
 		private final Class<? extends HttpPartSerializer> partSerializer;
@@ -784,7 +784,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestContextBuilder> builder() {
+		public Class<? extends RestContext.Builder> builder() {
 			return builder;
 		}
 
@@ -1044,9 +1044,9 @@ public class RestAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies {@link Rest} annotations to a {@link RestContextBuilder}.
+	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestContext.Builder}.
 	 */
-	public static class RestContextApply extends AnnotationApplier<Rest,RestContextBuilder> {
+	public static class RestContextApply extends AnnotationApplier<Rest,RestContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -1054,11 +1054,11 @@ public class RestAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestContextApply(VarResolverSession vr) {
-			super(Rest.class, RestContextBuilder.class, vr);
+			super(Rest.class, RestContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestContextBuilder b) {
+		public void apply(AnnotationInfo<Rest> ai, RestContext.Builder b) {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
@@ -1104,9 +1104,9 @@ public class RestAnnotation {
 	}
 
 	/**
-	 * Applies {@link Rest} annotations to a {@link RestOpContextBuilder}.
+	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<Rest,RestOpContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<Rest,RestOpContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -1114,11 +1114,11 @@ public class RestAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestOpContextApply(VarResolverSession vr) {
-			super(Rest.class, RestOpContextBuilder.class, vr);
+			super(Rest.class, RestOpContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestOpContextBuilder b) {
+		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
 			Rest a = ai.getAnnotation();
 
 			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));

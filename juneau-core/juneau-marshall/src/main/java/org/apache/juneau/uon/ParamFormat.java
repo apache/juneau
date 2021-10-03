@@ -13,7 +13,7 @@
 package org.apache.juneau.uon;
 
 /**
- * Identifies the possible values for the {@link UonSerializerBuilder#paramFormat(ParamFormat)} setting.
+ * Identifies the possible values for the {@link UonSerializer.Builder#paramFormat(ParamFormat)} setting.
  */
 public enum ParamFormat {
 

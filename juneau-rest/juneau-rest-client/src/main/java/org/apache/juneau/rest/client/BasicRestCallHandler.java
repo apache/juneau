@@ -21,7 +21,7 @@ import org.apache.http.protocol.*;
 /**
  * Default HTTP call handler.
  *
- * Can be subclasses and specified via {@link RestClientBuilder#callHandler()}.
+ * Can be subclasses and specified via {@link RestClient.Builder#callHandler()}.
  */
 public class BasicRestCallHandler implements RestCallHandler {
 

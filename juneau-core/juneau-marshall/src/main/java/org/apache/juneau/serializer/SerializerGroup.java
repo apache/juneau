@@ -84,7 +84,7 @@ public final class SerializerGroup {
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Serializer {
-		protected Inherit(SerializerBuilder builder) {
+		protected Inherit(Serializer.Builder builder) {
 			super(builder);
 		}
 	}
@@ -96,7 +96,7 @@ public final class SerializerGroup {
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class NoInherit extends Serializer {
-		protected NoInherit(SerializerBuilder builder) {
+		protected NoInherit(Serializer.Builder builder) {
 			super(builder);
 		}
 	}
@@ -120,7 +120,7 @@ public final class SerializerGroup {
 	public static class Builder extends BeanBuilder<SerializerGroup> {
 
 		List<Object> entries;
-		private BeanContextBuilder bcBuilder;
+		private BeanContext.Builder bcBuilder;
 
 		/**
 		 * Create an empty serializer group builder.
@@ -156,8 +156,8 @@ public final class SerializerGroup {
 		}
 
 		private Object copyBuilder(Object o) {
-			if (o instanceof SerializerBuilder) {
-				SerializerBuilder x = (SerializerBuilder)o;
+			if (o instanceof Serializer.Builder) {
+				Serializer.Builder x = (Serializer.Builder)o;
 				x = x.copy();
 				if (bcBuilder != null)
 					x.beanContext(bcBuilder);
@@ -186,7 +186,7 @@ public final class SerializerGroup {
 		 * @param value The bean contest builder to associate.
 		 * @return This object (for method chaining).
 		 */
-		public Builder beanContext(BeanContextBuilder value) {
+		public Builder beanContext(BeanContext.Builder value) {
 			bcBuilder = value;
 			forEach(x -> x.beanContext(value));
 			return this;
@@ -198,7 +198,7 @@ public final class SerializerGroup {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder beanContext(Consumer<BeanContextBuilder> operation) {
+		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
 			if (bcBuilder != null)
 				operation.accept(bcBuilder);
 			return this;
@@ -283,7 +283,7 @@ public final class SerializerGroup {
 		private Object createBuilder(Object o) {
 			if (o instanceof Class) {
 				@SuppressWarnings("unchecked")
-				SerializerBuilder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
+				Serializer.Builder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
 				if (bcBuilder != null)
 					b.beanContext(bcBuilder);
 				o = b;
@@ -324,8 +324,8 @@ public final class SerializerGroup {
 		 */
 		public boolean canApply(AnnotationWorkList work) {
 			for (Object o : entries)
-				if (o instanceof SerializerBuilder)
-					if (((SerializerBuilder)o).canApply(work))
+				if (o instanceof Serializer.Builder)
+					if (((Serializer.Builder)o).canApply(work))
 						return true;
 			return false;
 		}
@@ -346,8 +346,8 @@ public final class SerializerGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public Builder forEach(Consumer<SerializerBuilder> action) {
-			builders(SerializerBuilder.class).forEach(action);
+		public Builder forEach(Consumer<Serializer.Builder> action) {
+			builders(Serializer.Builder.class).forEach(action);
 			return this;
 		}
 
@@ -357,8 +357,8 @@ public final class SerializerGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public Builder forEachWS(Consumer<WriterSerializerBuilder> action) {
-			return forEach(WriterSerializerBuilder.class, action);
+		public Builder forEachWS(Consumer<WriterSerializer.Builder> action) {
+			return forEach(WriterSerializer.Builder.class, action);
 		}
 
 		/**
@@ -367,8 +367,8 @@ public final class SerializerGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public Builder forEachOSS(Consumer<OutputStreamSerializerBuilder> action) {
-			return forEach(OutputStreamSerializerBuilder.class, action);
+		public Builder forEachOSS(Consumer<OutputStreamSerializer.Builder> action) {
+			return forEach(OutputStreamSerializer.Builder.class, action);
 		}
 
 		/**
@@ -378,20 +378,20 @@ public final class SerializerGroup {
 		 * @param action The action to perform.
 		 * @return This object (for method chaining).
 		 */
-		public <T extends SerializerBuilder> Builder forEach(Class<T> type, Consumer<T> action) {
+		public <T extends Serializer.Builder> Builder forEach(Class<T> type, Consumer<T> action) {
 			builders(type).forEach(action);
 			return this;
 		}
 
 		/**
-		 * Returns direct access to the {@link Serializer} and {@link SerializerBuilder} objects in this builder.
+		 * Returns direct access to the {@link Serializer} and {@link Serializer.Builder} objects in this builder.
 		 *
 		 * <p>
 		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
 		 * as re-ordering/adding/removing entries.
 		 *
 		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Serializer} and {@link SerializerBuilder} objects.
+		 * Note that it is up to the user to ensure that the list only contains {@link Serializer} and {@link Serializer.Builder} objects.
 		 *
 		 * @return The inner list of entries in this builder.
 		 */
@@ -400,7 +400,7 @@ public final class SerializerGroup {
 		}
 
 		@SuppressWarnings("unchecked")
-		private <T extends SerializerBuilder> Stream<T> builders(Class<T> type) {
+		private <T extends Serializer.Builder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
 		}
 
@@ -444,7 +444,7 @@ public final class SerializerGroup {
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
-			if (o instanceof SerializerBuilder)
+			if (o instanceof Serializer.Builder)
 				return "builder:" + o.getClass().getName();
 			return "serializer:" + o.getClass().getName();
 		}
@@ -492,7 +492,7 @@ public final class SerializerGroup {
 	private Serializer build(Object o) {
 		if (o instanceof Serializer)
 			return (Serializer)o;
-		return ((SerializerBuilder)o).build();
+		return ((Serializer.Builder)o).build();
 	}
 
 	/**

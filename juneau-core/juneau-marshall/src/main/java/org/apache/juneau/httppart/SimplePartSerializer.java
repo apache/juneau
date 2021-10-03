@@ -14,7 +14,6 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -34,9 +33,9 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	public static final SimplePartSerializer DEFAULT = create().build();
 
 	/**
-	 * Static creator.
+	 * Creates a new builder for this object.
 	 *
-	 * @return A new builder for this object.
+	 * @return A new builder.
 	 */
 	public static Builder create() {
 		return new Builder();
@@ -51,12 +50,20 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	 */
 	public static class Builder extends BaseHttpPartSerializer.Builder {
 
-		Builder() {
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
 			super();
 		}
 
-		Builder(Builder builder) {
-			super(builder);
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 		}
 
 		@Override
@@ -65,7 +72,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		}
 
 		@Override
-		public BeanContextableBuilder copy() {
+		public Builder copy() {
 			return new Builder(this);
 		}
 	}

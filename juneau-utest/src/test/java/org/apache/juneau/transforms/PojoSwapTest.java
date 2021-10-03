@@ -76,8 +76,8 @@ public class PojoSwapTest {
 
 		SerializerGroup g = SerializerGroup.create()
 			.add(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
-			.forEach(WriterSerializerBuilder.class, x -> x.sq())
-			.forEach(SerializerBuilder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))
+			.forEach(WriterSerializer.Builder.class, x -> x.sq())
+			.forEach(Serializer.Builder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))
 			.build();
 
 		MyPojo myPojo = new MyPojo();

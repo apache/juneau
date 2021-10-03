@@ -45,7 +45,7 @@ public class MockStreamSerializer extends OutputStreamSerializer {
 		};
 	}
 
-	public static class Builder extends OutputStreamSerializerBuilder {
+	public static class Builder extends OutputStreamSerializer.Builder {
 		MockStreamSerializerFunction function = (s,o) -> StringUtils.stringify(o).getBytes();
 		Function<SerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
 

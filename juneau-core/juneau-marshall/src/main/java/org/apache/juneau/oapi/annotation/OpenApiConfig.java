@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.msgpack.*;
-import org.apache.juneau.oapi.*;
 
 /**
  * Annotation for specifying config properties defined in {@link MsgPackSerializer} and {@link MsgPackParser}.
@@ -74,8 +73,8 @@ public @interface OpenApiConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link OpenApiSerializerBuilder#format(HttpPartFormat)}
-	 * 	<li class='jm'>{@link OpenApiParserBuilder#format(HttpPartFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#format(HttpPartFormat)}
 	 * </ul>
 	 */
 	String format() default "";
@@ -101,8 +100,8 @@ public @interface OpenApiConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link OpenApiSerializerBuilder#collectionFormat(HttpPartCollectionFormat)}
-	 * 	<li class='jm'>{@link OpenApiParserBuilder#collectionFormat(HttpPartCollectionFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
 	 * </ul>
 	 */
 	String collectionFormat() default "";

@@ -34,6 +34,15 @@ public class SimpleJsonParser extends JsonParser {
 	/** Default parser, Accept=application/json+simple. */
 	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static JsonParser.Builder create() {
+		return JsonParser.create().consumes("application/json+simple,text/json+simple,application/json,text/json");
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -43,25 +52,13 @@ public class SimpleJsonParser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SimpleJsonParser(JsonParserBuilder builder) {
+	protected SimpleJsonParser(JsonParser.Builder builder) {
 		super(builder);
 	}
 
 	@Override /* Context */
-	public JsonParserBuilder copy() {
-		return new JsonParserBuilder(this);
-	}
-
-	/**
-	 * Instantiates a new clean-slate {@link JsonParserBuilder} object.
-	 *
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link JsonParserBuilder} object.
-	 */
-	public static JsonParserBuilder create() {
-		return JsonParser.create().consumes("application/json+simple,text/json+simple,application/json,text/json");
+	public JsonParser.Builder copy() {
+		return new JsonParser.Builder(this);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

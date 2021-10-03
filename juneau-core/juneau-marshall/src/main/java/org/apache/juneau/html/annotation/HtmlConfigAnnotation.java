@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class HtmlConfigAnnotation {
 
 	/**
-	 * Applies {@link HtmlConfig} annotations to a {@link HtmlSerializerBuilder}.
+	 * Applies {@link HtmlConfig} annotations to a {@link org.apache.juneau.html.HtmlSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<HtmlConfig,HtmlSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<HtmlConfig,HtmlSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class HtmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(HtmlConfig.class, HtmlSerializerBuilder.class, vr);
+			super(HtmlConfig.class, HtmlSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlSerializerBuilder b) {
+		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlSerializer.Builder b) {
 			HtmlConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesHtml(x));
@@ -50,9 +50,9 @@ public class HtmlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link HtmlConfig} annotations to a {@link HtmlParserBuilder}.
+	 * Applies {@link HtmlConfig} annotations to a {@link org.apache.juneau.html.HtmlParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<HtmlConfig,HtmlParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<HtmlConfig,HtmlParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -60,11 +60,11 @@ public class HtmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(HtmlConfig.class, HtmlParserBuilder.class, vr);
+			super(HtmlConfig.class, HtmlParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlParserBuilder b) {
+		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlParser.Builder b) {
 		}
 	}
 }

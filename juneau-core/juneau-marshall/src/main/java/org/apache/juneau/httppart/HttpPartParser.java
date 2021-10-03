@@ -92,8 +92,8 @@ public interface HttpPartParser {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Creator beanContext(BeanContextBuilder value) {
-			builder(BeanContextableBuilder.class).ifPresent(x -> x.beanContext(value));
+		public Creator beanContext(BeanContext.Builder value) {
+			builder(BeanContextable.Builder.class).ifPresent(x -> x.beanContext(value));
 			return this;
 		}
 	}

@@ -23,7 +23,7 @@ import org.junit.*;
 public class Rest_Context_Test {
 
 	public static class X1 extends RestContext {
-		public X1(RestContextBuilder builder) throws Exception {
+		public X1(RestContext.Builder builder) throws Exception {
 			super(builder);
 		}
 	}
@@ -63,7 +63,7 @@ public class Rest_Context_Test {
 	@Rest
 	public static class A4 extends A1 {
 		 @RestHook(HookEvent.INIT)
-		 public void init(RestContextBuilder builder) throws Exception {
+		 public void init(RestContext.Builder builder) throws Exception {
 			 builder.type(X1.class);
 		 }
 	}

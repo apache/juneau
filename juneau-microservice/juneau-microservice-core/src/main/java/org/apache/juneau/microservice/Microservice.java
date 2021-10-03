@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.ClassUtils.className;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -28,10 +29,12 @@ import java.util.jar.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 
+import org.apache.juneau.ExecutableException;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
+import org.apache.juneau.config.vars.ConfigVar;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
@@ -87,6 +90,10 @@ import org.apache.juneau.cp.Messages;
  */
 public class Microservice implements ConfigEventListener {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static volatile Microservice INSTANCE;
 
 	private static void setInstance(Microservice m) {
@@ -110,13 +117,432 @@ public class Microservice implements ConfigEventListener {
 		}
 	}
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new microservice builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
+
+		Args args;
+		ManifestFile manifest;
+		Logger logger;
+		LogConfig logConfig;
+		Config config;
+		String configName;
+		ConfigStore configStore;
+		Config.Builder configBuilder = Config.create();
+		Boolean consoleEnabled;
+		List<ConsoleCommand> consoleCommands = new ArrayList<>();
+		VarResolver.Builder varResolver = VarResolver.create().defaultVars().vars(ConfigVar.class);
+		Scanner consoleReader;
+		PrintWriter consoleWriter;
+		MicroserviceListener listener;
+		File workingDir = System.getProperty("juneau.workingDir") == null ? null : new File(System.getProperty("juneau.workingDir"));
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy.
+		 */
+		protected Builder(Builder copyFrom) {
+			this.args = copyFrom.args;
+			this.manifest = copyFrom.manifest;
+			this.logger = copyFrom.logger;
+			this.configName = copyFrom.configName;
+			this.logConfig = copyFrom.logConfig == null ? null : copyFrom.logConfig.copy();
+			this.consoleEnabled = copyFrom.consoleEnabled;
+			this.configBuilder = copyFrom.configBuilder;
+			this.varResolver = copyFrom.varResolver;
+			this.consoleReader = copyFrom.consoleReader;
+			this.consoleWriter = copyFrom.consoleWriter;
+			this.workingDir = copyFrom.workingDir;
+		}
+
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		/**
+		 * Instantiate a new microservice using the settings defined on this builder.
+		 *
+		 * @return A new microservice.
+		 * @throws Exception Error occurred.
+		 */
+		public Microservice build() throws Exception {
+			return new Microservice(this);
+		}
+
+		/**
+		 * Specifies the command-line arguments passed into the Java command.
+		 *
+		 * <p>
+		 * This is required if you use {@link Microservice#getArgs()} or <c>$A</c> string variables.
+		 *
+		 * @param args
+		 * 	The command-line arguments passed into the Java command as a pre-parsed {@link Args} object.
+		 * @return This object (for method chaining).
+		 */
+		public Builder args(Args args) {
+			this.args = args;
+			return this;
+		}
+
+		/**
+		 * Specifies the command-line arguments passed into the Java command.
+		 *
+		 * <p>
+		 * This is required if you use {@link Microservice#getArgs()} or <c>$A</c> string variables.
+		 *
+		 * @param args
+		 * 	The command-line arguments passed into the Java command as the raw command-line arguments.
+		 * @return This object (for method chaining).
+		 */
+		public Builder args(String...args) {
+			this.args = new Args(args);
+			return this;
+		}
+
+		/**
+		 * Specifies the manifest file of the jar file this microservice is contained within.
+		 *
+		 * <p>
+		 * This is required if you use {@link Microservice#getManifest()}.
+		 * It's also used to locate initialization values such as <c>Main-Config</c>.
+		 *
+		 * <p>
+		 * If you do not specify the manifest file, we attempt to resolve it through the following methods:
+		 * <ol class='spaced-list'>
+		 * 	<li>
+		 * 		Looking on the file system for a file at <js>"META-INF/MANIFEST.MF"</js>.
+		 * 		This is primarily to allow for running microservices from within eclipse workspaces where the manifest file
+		 * 		is located in the project root.
+		 * 	<li>
+		 * 		Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
+		 * </ol>
+		 *
+		 * @param value
+		 * 	The manifest file of this microservice.
+		 * 	<br>Can be any of the following types:
+		 * 	<ul>
+		 * 		<li>{@link ManifestFile}
+		 * 		<li>{@link Manifest}
+		 * 		<li>{@link Reader} - Containing the raw contents of the manifest.  Note that the input must end with a newline.
+		 * 		<li>{@link InputStream} - Containing the raw contents of the manifest.  Note that the input must end with a newline.
+		 * 		<li>{@link File} - File containing the raw contents of the manifest.
+		 * 		<li>{@link String} - Path to file containing the raw contents of the manifest.
+		 * 		<li>{@link Class} - Finds and loads the manifest file of the jar file that the specified class is contained within.
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 * @throws IOException Thrown by underlying stream.
+		 */
+		public Builder manifest(Object value) throws IOException {
+			if (value == null)
+				this.manifest = null;
+			else if (value instanceof ManifestFile)
+				this.manifest = (ManifestFile)value;
+			else if (value instanceof Manifest)
+				this.manifest = new ManifestFile((Manifest)value);
+			else if (value instanceof Reader)
+				this.manifest = new ManifestFile((Reader)value);
+			else if (value instanceof InputStream)
+				this.manifest = new ManifestFile((InputStream)value);
+			else if (value instanceof File)
+				this.manifest = new ManifestFile((File)value);
+			else if (value instanceof String)
+				this.manifest = new ManifestFile(resolveFile((String)value));
+			else if (value instanceof Class)
+				this.manifest = new ManifestFile((Class<?>)value);
+			else
+				throw runtimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", className(value));
+
+			return this;
+		}
+
+		/**
+		 * Specifies the logger used by the microservice and returned by the {@link Microservice#getLogger()} method.
+		 *
+		 * <p>
+		 * Calling this method overrides the default logging mechanism controlled by the {@link #logConfig(LogConfig)} method.
+		 *
+		 * @param logger The logger to use for logging microservice messages.
+		 * @return This object (for method chaining).
+		 */
+		public Builder logger(Logger logger) {
+			this.logger = logger;
+			return this;
+		}
+
+		/**
+		 * Specifies logging instructions for the microservice.
+		 *
+		 * <p>
+		 * If not specified, the values are taken from the <js>"Logging"</js> section of the configuration.
+		 *
+		 * <p>
+		 * This method is ignored if {@link #logger(Logger)} is used to set the microservice logger.
+		 *
+		 * @param logConfig The log configuration.
+		 * @return This object (for method chaining).
+		 */
+		public Builder logConfig(LogConfig logConfig) {
+			this.logConfig = logConfig;
+			return this;
+		}
+
+		/**
+		 * Specifies the config for initializing this microservice.
+		 *
+		 * <p>
+		 * Calling this method overrides the default configuration controlled by the {@link #configName(String)} and {@link #configStore(ConfigStore)} methods.
+		 *
+		 * @param config The configuration.
+		 * @return This object (for method chaining).
+		 */
+		public Builder config(Config config) {
+			this.config = config;
+			return this;
+		}
+
+		/**
+		 * Specifies the config name for initializing this microservice.
+		 *
+		 * <p>
+		 * If you do not specify the config file location, we attempt to resolve it through the following methods:
+		 * <ol class='spaced-list'>
+		 * 	<li>
+		 * 		Resolve file first in working directory, then in classpath, using the following names:
+		 * 		<ul>
+		 * 			<li>
+		 * 				The <js>"configFile"</js> argument in the command line arguments passed in through the constructor.
+		 * 			<li>
+		 * 				The value of the <c>Main-Config</c> entry in the manifest file.
+		 * 			<li>
+		 * 				A config file in the same location and with the same name as the executable jar file.
+		 * 				(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
+		 * 		</ul>
+		 * 	<li>
+		 * 		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
+		 * 	<li>
+		 * 		Resolve any of the following files in the classpath:  <js>"juneau.cfg"</js>, <js>"system.cfg"</js>
+		 * </ol>
+		 *
+		 * <p>
+		 * If no configuration file is found, and empty in-memory configuration is used.
+		 *
+		 * @param configName The configuration name.
+		 * @return This object (for method chaining).
+		 */
+		public Builder configName(String configName) {
+			this.configName = configName;
+			return this;
+		}
+
+		/**
+		 * Specifies the config store to use for storing and retrieving configurations.
+		 *
+		 * <p>
+		 * By default, we use a {@link ConfigFileStore} store for configuration files.
+		 *
+		 * @param configStore The configuration name.
+		 * @return This object (for method chaining).
+		 */
+		public Builder configStore(ConfigStore configStore) {
+			this.configStore = configStore;
+			return this;
+		}
+
+		/**
+		 * Specifies that the Java console is enabled for this microservice.
+		 *
+		 * <p>
+		 * If not specified, this value is taken from the <js>"Console/enabled"</js> configuration setting.
+		 * If not specified in the configuration, defaults to <jk>false</jk>.
+		 *
+		 * @param consoleEnabled <jk>true</jk> if the Java console is enabled for this microservice.
+		 * @return This object (for method chaining).
+		 */
+		public Builder consoleEnabled(boolean consoleEnabled) {
+			this.consoleEnabled = consoleEnabled;
+			return this;
+		}
+
+		/**
+		 * Specifies console commands to make available on the Java console.
+		 *
+		 * <p>
+		 * Note that these are ignored if the console is not enabled via {@link #consoleEnabled(boolean)}.
+		 *
+		 * <p>
+		 * This list augments the commands defined via the <js>"Console/commands"</js> configuration setting.
+		 *
+		 * <p>
+		 * This method can only be used on console commands with no-arg constructors.
+		 *
+		 * @param consoleCommands The list of console commands to append to the list of available commands.
+		 * @return This object (for method chaining).
+		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws ExecutableException {
+			try {
+				for (Class<? extends ConsoleCommand> cc : consoleCommands)
+					this.consoleCommands.add(cc.newInstance());
+			} catch (InstantiationException | IllegalAccessException e) {
+				throw new ExecutableException(e);
+			}
+			return this;
+		}
+
+		/**
+		 * Specifies console commands to make available on the Java console.
+		 *
+		 * <p>
+		 * Note that these are ignored if the console is not enabled via {@link #consoleEnabled(boolean)}.
+		 *
+		 * <p>
+		 * This list augments the commands defined via the <js>"Console/commands"</js> configuration setting.
+		 *
+		 * @param consoleCommands The list of console commands to append to the list of available commands.
+		 * @return This object (for method chaining).
+		 */
+		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
+			Collections.addAll(this.consoleCommands, consoleCommands);
+			return this;
+		}
+
+		/**
+		 * Specifies the console input and output.
+		 *
+		 * <p>
+		 * If not specified, uses the console returned by {@link System#console()}.
+		 * If that is not available, uses {@link System#in} and {@link System#out}.
+		 *
+		 * <p>
+		 * Note that these are ignored if the console is not enabled via {@link #consoleEnabled(boolean)}.
+		 *
+		 * @param consoleReader The console input.
+		 * @param consoleWriter The console output.
+		 * @return This object (for method chaining).
+		 */
+		public Builder console(Scanner consoleReader, PrintWriter consoleWriter) {
+			this.consoleReader = consoleReader;
+			this.consoleWriter = consoleWriter;
+			return this;
+		}
+
+		/**
+		 * Augments the set of variables defined in the configuration and var resolver.
+		 *
+		 * <p>
+		 * This calls {@link VarResolverBuilder#vars(Class[])} on the var resolver used to construct the configuration
+		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
+		 *
+		 * @param vars The set of variables to append to the var resolver builder.
+		 * @return This object (for method chaining).
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder vars(Class<? extends Var>...vars) {
+			varResolver.vars(vars);
+			return this;
+		}
+
+		/**
+		 * Adds a bean for vars defined in the var resolver.
+		 *
+		 * <p>
+		 * This calls {@link VarResolverBuilder#bean(Class,Object)} on the var resolver used to construct the configuration
+		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
+		 *
+		 * @param c The bean type.
+		 * @param value The bean.
+		 * @param <T> The bean type.
+		 * @return This object (for method chaining).
+		 */
+		public <T> Builder varBean(Class<T> c, T value) {
+			varResolver.bean(c, value);
+			return this;
+		}
+
+		/**
+		 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
+		 *
+		 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
+		 * @return This object (for method chaining).
+		 */
+		public Builder workingDir(File workingDir) {
+			this.workingDir = workingDir;
+			return this;
+		}
+
+		/**
+		 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
+		 *
+		 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
+		 * @return This object (for method chaining).
+		 */
+		public Builder workingDir(String workingDir) {
+			this.workingDir = new File(workingDir);
+			return this;
+		}
+
+		/**
+		 * Registers an event listener for this microservice.
+		 *
+		 * @param listener An event listener for this microservice.
+		 * @return This object (for method chaining).
+		 */
+		public Builder listener(MicroserviceListener listener) {
+			this.listener = listener;
+			return this;
+		}
+
+		/**
+		 * Resolves the specified path.
+		 *
+		 * <p>
+		 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
+		 *
+		 * @param path The path to resolve.
+		 * @return The resolved file.
+		 */
+		protected File resolveFile(String path) {
+			if (Paths.get(path).isAbsolute())
+				return new File(path);
+			if (workingDir != null)
+				return new File(workingDir, path);
+			return new File(path);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	final Messages messages = Messages.of(Microservice.class);
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties set in constructor
-	//-----------------------------------------------------------------------------------------------------------------
-	private final MicroserviceBuilder builder;
+	private final Builder builder;
 	private final Args args;
 	private final Config config;
 	private final ManifestFile manifest;
@@ -130,19 +556,7 @@ public class Microservice implements ConfigEventListener {
 	final File workingDir;
 	private final String configName;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties set in init()
-	//-----------------------------------------------------------------------------------------------------------------
 	private volatile Logger logger;
-
-	/**
-	 * Creates a new microservice builder.
-	 *
-	 * @return A new microservice builder.
-	 */
-	public static MicroserviceBuilder create() {
-		return new MicroserviceBuilder();
-	}
 
 	/**
 	 * Constructor.
@@ -152,7 +566,7 @@ public class Microservice implements ConfigEventListener {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings("resource")
-	protected Microservice(MicroserviceBuilder builder) throws IOException, ParseException {
+	protected Microservice(Builder builder) throws IOException, ParseException {
 		setInstance(this);
 		this.builder = builder.copy();
 		this.workingDir = builder.workingDir;
@@ -195,7 +609,7 @@ public class Microservice implements ConfigEventListener {
 		// Try to resolve the configuration if not specified.
 		// --------------------------------------------------------------------------------
 		Config config = builder.config;
-		ConfigBuilder configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(ConfigMemoryStore.DEFAULT);
+		Config.Builder configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(ConfigMemoryStore.DEFAULT);
 		if (config == null) {
 			ConfigStore store = builder.configStore;
 			ConfigFileStore cfs = workingDir == null ? ConfigFileStore.DEFAULT : ConfigFileStore.create().directory(workingDir).build();
@@ -489,8 +903,8 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Subclasses can set their own config file by using the following methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link MicroserviceBuilder#configStore(ConfigStore)}
-	 * 	<li class='jm'>{@link MicroserviceBuilder#configName(String)}
+	 * 	<li class='jm'>{@link Builder#configStore(ConfigStore)}
+	 * 	<li class='jm'>{@link Builder#configName(String)}
 	 * </ul>
 	 *
 	 * <p>
@@ -599,8 +1013,8 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Variables can be controlled by the following methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link MicroserviceBuilder#vars(Class...)}
-	 * 	<li class='jm'>{@link MicroserviceBuilder#varBean(Class,Object)}
+	 * 	<li class='jm'>{@link Builder#vars(Class...)}
+	 * 	<li class='jm'>{@link Builder#varBean(Class,Object)}
 	 * </ul>
 	 *
 	 * @return The VarResolver used by this Microservice, or <jk>null</jk> if it was never created.

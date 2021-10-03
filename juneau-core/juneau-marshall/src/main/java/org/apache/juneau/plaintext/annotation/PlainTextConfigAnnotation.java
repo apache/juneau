@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class PlainTextConfigAnnotation {
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link PlainTextSerializerBuilder}.
+	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.plaintext.PlainTextSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<PlainTextConfig,PlainTextSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<PlainTextConfig,PlainTextSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,18 +33,18 @@ public class PlainTextConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(PlainTextConfig.class, PlainTextSerializerBuilder.class, vr);
+			super(PlainTextConfig.class, PlainTextSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializerBuilder b) {
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {
 		}
 	}
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link PlainTextParserBuilder}.
+	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.plaintext.PlainTextParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<PlainTextConfig,PlainTextParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<PlainTextConfig,PlainTextParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -52,11 +52,11 @@ public class PlainTextConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(PlainTextConfig.class, PlainTextParserBuilder.class, vr);
+			super(PlainTextConfig.class, PlainTextParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParserBuilder b) {
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParser.Builder b) {
 		}
 	}
 }

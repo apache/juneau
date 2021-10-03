@@ -96,11 +96,11 @@ public class TestMicroservice {
 	/**
 	 * Create a new HTTP client.
 	 */
-	public static RestClientBuilder client() {
+	public static RestClient.Builder client() {
 		try {
 			final RequestLine[] currentRequest = new RequestLine[1];
 			final StatusLine[] currentResponse = new StatusLine[1];
-			RestClientBuilder rc = RestClient.create()
+			RestClient.Builder rc = RestClient.create()
 				.json()
 				.rootUri(microserviceURI)
 				.noTrace();
@@ -135,14 +135,14 @@ public class TestMicroservice {
 	/**
 	 * Create a new HTTP client using the specified serializer and parser.
 	 */
-	public static RestClientBuilder client(Serializer s, Parser p) {
+	public static RestClient.Builder client(Serializer s, Parser p) {
 		return client().serializer(s).parser(p);
 	}
 
 	/**
 	 * Create a new HTTP client using the specified serializer and parser.
 	 */
-	public static RestClientBuilder client(Class<? extends Serializer> s, Class<? extends Parser> p) {
+	public static RestClient.Builder client(Class<? extends Serializer> s, Class<? extends Parser> p) {
 		return client().serializer(s).parser(p);
 	}
 

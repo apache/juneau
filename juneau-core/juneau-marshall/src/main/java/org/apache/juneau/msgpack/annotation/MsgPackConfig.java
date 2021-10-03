@@ -58,7 +58,7 @@ public @interface MsgPackConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link SerializerBuilder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <ul class='notes'>
@@ -73,7 +73,7 @@ public @interface MsgPackConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link MsgPackSerializerBuilder#addBeanTypesMsgPack()}
+	 * 	<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializer.Builder#addBeanTypesMsgPack()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";

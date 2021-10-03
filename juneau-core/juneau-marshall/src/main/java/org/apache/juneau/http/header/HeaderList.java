@@ -251,7 +251,7 @@ public class HeaderList {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(HeaderList.class);
 			entries = new ArrayList<>();
 		}
@@ -259,7 +259,7 @@ public class HeaderList {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The bean to copy.
 		 */
 		protected Builder(HeaderList copyFrom) {
 			super(copyFrom.getClass());
@@ -272,7 +272,7 @@ public class HeaderList {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);

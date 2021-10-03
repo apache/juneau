@@ -74,7 +74,7 @@ public class NamePropertyAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationMFBuilder {
@@ -82,7 +82,7 @@ public class NamePropertyAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(NameProperty.class);
 		}
 
@@ -135,9 +135,9 @@ public class NamePropertyAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link NameProperty} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link NameProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<NameProperty,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<NameProperty,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -145,11 +145,11 @@ public class NamePropertyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(NameProperty.class, BeanContextBuilder.class, vr);
+			super(NameProperty.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<NameProperty> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<NameProperty> ai, BeanContext.Builder b) {
 			NameProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))

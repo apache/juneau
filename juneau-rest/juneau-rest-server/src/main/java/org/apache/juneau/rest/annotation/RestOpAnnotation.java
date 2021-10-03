@@ -58,7 +58,7 @@ public class RestOpAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
@@ -78,7 +78,7 @@ public class RestOpAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(RestOp.class);
 		}
 
@@ -612,9 +612,9 @@ public class RestOpAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies {@link RestOp} annotations to a {@link RestOpContextBuilder}.
+	 * Applies {@link RestOp} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestOp,RestOpContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestOp,RestOpContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -622,11 +622,11 @@ public class RestOpAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestOpContextApply(VarResolverSession vr) {
-			super(RestOp.class, RestOpContextBuilder.class, vr);
+			super(RestOp.class, RestOpContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestOp> ai, RestOpContextBuilder b) {
+		public void apply(AnnotationInfo<RestOp> ai, RestOpContext.Builder b) {
 			RestOp a = ai.getAnnotation();
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));

@@ -131,7 +131,7 @@ public class Remote_ResponseAnnotation_Test {
 		return MockRestClient.create(rest).build().getRemote(t);
 	}
 
-	private static <T> MockRestClientBuilder client(Class<?> rest) {
+	private static <T> MockRestClient.Builder client(Class<?> rest) {
 		return MockRestClient.create(rest);
 	}
 }

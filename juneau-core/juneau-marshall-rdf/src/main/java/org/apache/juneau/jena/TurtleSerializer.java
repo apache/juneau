@@ -24,29 +24,25 @@ public class TurtleSerializer extends RdfSerializer {
 	/** Default Turtle serializer, all default settings.*/
 	public static final TurtleSerializer DEFAULT = new TurtleSerializer(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfSerializer.Builder create() {
+		return RdfSerializer.create().turtle();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfSerializerBuilder} object.
-	 */
-	public static RdfSerializerBuilder create() {
-		return new RdfSerializerBuilder().turtle();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param cp The property store containing all the settings for this object.
 	 */
-	protected TurtleSerializer(RdfSerializerBuilder builder) {
+	protected TurtleSerializer(RdfSerializer.Builder builder) {
 		super(builder.turtle());
 	}
 }

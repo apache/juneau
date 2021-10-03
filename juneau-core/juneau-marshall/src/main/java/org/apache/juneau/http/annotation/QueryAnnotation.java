@@ -150,7 +150,7 @@ public class QueryAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -166,7 +166,7 @@ public class QueryAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Query.class);
 		}
 
@@ -1089,9 +1089,9 @@ public class QueryAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Query} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Query} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Query,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Query,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -1099,11 +1099,11 @@ public class QueryAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Query.class, BeanContextBuilder.class, vr);
+			super(Query.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Query> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Query> ai, BeanContext.Builder b) {
 			Query a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

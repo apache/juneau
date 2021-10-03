@@ -62,7 +62,7 @@ public class MockReaderParser extends ReaderParser implements HttpPartParser {
 		};
 	}
 
-	public static class Builder extends ReaderParserBuilder {
+	public static class Builder extends ReaderParser.Builder {
 		MockReaderParserFunction function;
 		MockReaderParserPartFunction partFunction;
 

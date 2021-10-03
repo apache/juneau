@@ -33,7 +33,7 @@ import org.junit.*;
 
 public class ConfigTest {
 
-	private ConfigBuilder cb = new ConfigBuilder().store(ConfigMemoryStore.DEFAULT).name("Test.cfg");
+	private Config.Builder cb = Config.create().store(ConfigMemoryStore.DEFAULT).name("Test.cfg");
 
 	private Config init(String...lines) {
 		ConfigMemoryStore.DEFAULT.update("Test.cfg", lines);

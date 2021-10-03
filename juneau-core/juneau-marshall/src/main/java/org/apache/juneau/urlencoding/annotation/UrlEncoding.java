@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -44,8 +43,8 @@ public @interface UrlEncoding {
 	 * When true, bean properties of type array or Collection will be expanded into multiple key/value pairings.
 	 *
 	 * <p>
-	 * This annotation is identical in behavior to using the {@link UrlEncodingSerializerBuilder#expandedParams()}
-	 * and {@link UrlEncodingParserBuilder#expandedParams()} properties, but applies to only instances of this bean.
+	 * This annotation is identical in behavior to using the {@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}
+	 * and {@link org.apache.juneau.urlencoding.UrlEncodingParser.Builder#expandedParams()} properties, but applies to only instances of this bean.
 	 */
 	boolean expandedParams() default false;
 
@@ -53,7 +52,7 @@ public @interface UrlEncoding {
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

@@ -140,7 +140,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
 	 * <p>
-	 * If not specified, defaults to {@link SerializerBuilder#uriContext(UriContext)}.
+	 * If not specified, defaults to {@link Serializer.Builder#uriContext(UriContext)}.
 	 *
 	 * @param value
 	 * 	The new property value.

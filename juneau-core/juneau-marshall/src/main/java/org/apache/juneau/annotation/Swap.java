@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -78,7 +77,7 @@ public @interface Swap {
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
 	 * It is ignored when the annotation is applied directly to classes.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

@@ -13,12 +13,14 @@
 package org.apache.juneau.config.store;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.internal.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a storage location for configuration files.
@@ -34,6 +36,80 @@ import org.apache.juneau.config.internal.*;
 public abstract class ConfigStore extends Context implements Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public abstract static class Builder extends Context.Builder {
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(ConfigStore copyFrom) {
+			super(copyFrom);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+		}
+
+		@Override /* ContextBuilder */
+		public abstract Builder copy();
+
+		@Override
+		public abstract ConfigStore build();
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -45,7 +121,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ConfigStore(ConfigStoreBuilder builder) {
+	protected ConfigStore(Builder builder) {
 		super(builder);
 	}
 

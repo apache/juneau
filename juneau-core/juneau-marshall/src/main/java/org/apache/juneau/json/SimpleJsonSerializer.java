@@ -39,11 +39,20 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Default serializer, single quotes, {@link JsonSerializerBuilder#simpleMode() simple mode}. */
+	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleMode() simple mode}. */
 	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(create());
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(create());
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static JsonSerializer.Builder create() {
+		return (JsonSerializer.Builder)JsonSerializer.create().simpleMode().quoteChar('\'').produces("application/json").accept("application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9").type(SimpleJsonSerializer.class);
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static subclasses
@@ -57,7 +66,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(JsonSerializerBuilder builder) {
+		protected Readable(JsonSerializer.Builder builder) {
 			super(builder.simpleMode().quoteChar('\'').useWhitespace());
 		}
 	}
@@ -71,20 +80,12 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SimpleJsonSerializer(JsonSerializerBuilder builder) {
+	protected SimpleJsonSerializer(JsonSerializer.Builder builder) {
 		super(builder.simpleMode().quoteChar('\''));
 	}
 
-	/**
-	 * Instantiates a new clean-slate {@link JsonSerializerBuilder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> JsonSerializerBuilder()</code>.
-	 *
-	 * @return A new {@link JsonSerializerBuilder} object.
-	 */
-	public static JsonSerializerBuilder create() {
-		return new JsonSerializerBuilder().simpleMode().quoteChar('\'').produces("application/json").accept("application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9");
+	@Override /* Context */
+	public Builder copy() {
+		return new Builder(this);
 	}
-
 }

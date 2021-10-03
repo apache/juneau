@@ -57,7 +57,7 @@ public class RestGetAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
@@ -76,7 +76,7 @@ public class RestGetAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(RestGet.class);
 		}
 
@@ -507,9 +507,9 @@ public class RestGetAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies {@link RestGet} annotations to a {@link RestOpContextBuilder}.
+	 * Applies {@link RestGet} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestGet,RestOpContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestGet,RestOpContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -517,11 +517,11 @@ public class RestGetAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestOpContextApply(VarResolverSession vr) {
-			super(RestGet.class, RestOpContextBuilder.class, vr);
+			super(RestGet.class, RestOpContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestGet> ai, RestOpContextBuilder b) {
+		public void apply(AnnotationInfo<RestGet> ai, RestOpContext.Builder b) {
 			RestGet a = ai.getAnnotation();
 
 			b.httpMethod("get");

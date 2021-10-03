@@ -47,7 +47,7 @@ public class MockStreamParser extends InputStreamParser {
 		};
 	}
 
-	public static class Builder extends InputStreamParserBuilder {
+	public static class Builder extends InputStreamParser.Builder {
 		MockStreamParserFunction function;
 
 		public Builder function(MockStreamParserFunction value) {

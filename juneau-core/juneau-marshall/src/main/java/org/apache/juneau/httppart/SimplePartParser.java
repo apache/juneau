@@ -14,7 +14,6 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -54,9 +53,9 @@ public class SimplePartParser extends BaseHttpPartParser {
 	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.createPartSession(null);
 
 	/**
-	 * Static creator.
+	 * Creates a new builder for this object.
 	 *
-	 * @return A new builder for this object.
+	 * @return A new builder.
 	 */
 	public static Builder create() {
 		return new Builder();
@@ -71,12 +70,20 @@ public class SimplePartParser extends BaseHttpPartParser {
 	 */
 	public static class Builder extends BaseHttpPartParser.Builder {
 
-		Builder() {
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
 			super();
 		}
 
-		Builder(Builder builder) {
-			super(builder);
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
 		}
 
 		@Override
@@ -85,7 +92,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 		}
 
 		@Override
-		public BeanContextableBuilder copy() {
+		public Builder copy() {
 			return new Builder(this);
 		}
 	}

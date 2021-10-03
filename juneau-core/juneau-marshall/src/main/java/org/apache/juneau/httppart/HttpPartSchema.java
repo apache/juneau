@@ -15,6 +15,7 @@ package org.apache.juneau.httppart;
 import static java.util.Collections.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -29,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 
@@ -52,7 +54,7 @@ import org.apache.juneau.reflect.*;
 public class HttpPartSchema {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of this object, all default settings. */
@@ -145,30 +147,13 @@ public class HttpPartSchema {
 	/** UON-formated object type */
 	public static final HttpPartSchema T_OBJECT_UON = HttpPartSchema.tObjectUon().build();
 
-
-	final String name;
-	final String _default;
-	final Set<String> _enum;
-	final Map<String,HttpPartSchema> properties;
-	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
-	final HttpPartCollectionFormat collectionFormat;
-	final HttpPartDataType type;
-	final HttpPartFormat format;
-	final Pattern pattern;
-	final HttpPartSchema items, additionalProperties;
-	final Number maximum, minimum, multipleOf;
-	final Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
-	final Class<? extends HttpPartParser> parser;
-	final Class<? extends HttpPartSerializer> serializer;
-	final ClassMeta<?> parsedType;
-
 	/**
 	 * Instantiates a new builder for this object.
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder create() {
-		return new HttpPartSchemaBuilder();
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
@@ -176,7 +161,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tBoolean() {
+	public static Builder tBoolean() {
 		return create().tBoolean();
 	}
 
@@ -185,7 +170,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tFile() {
+	public static Builder tFile() {
 		return create().tFile();
 	}
 
@@ -194,7 +179,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tInteger() {
+	public static Builder tInteger() {
 		return create().tInteger();
 	}
 
@@ -203,7 +188,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tInt32() {
+	public static Builder tInt32() {
 		return create().tInteger().fInt32();
 	}
 
@@ -212,7 +197,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tInt64() {
+	public static Builder tInt64() {
 		return create().tInteger().fInt64();
 	}
 
@@ -221,7 +206,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tNone() {
+	public static Builder tNone() {
 		return create().tNone();
 	}
 
@@ -230,7 +215,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tNumber() {
+	public static Builder tNumber() {
 		return create().tNumber();
 	}
 
@@ -239,7 +224,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tFloat() {
+	public static Builder tFloat() {
 		return create().tNumber().fFloat();
 	}
 
@@ -248,7 +233,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tDouble() {
+	public static Builder tDouble() {
 		return create().tNumber().fDouble();
 	}
 
@@ -257,7 +242,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tString() {
+	public static Builder tString() {
 		return create().tString();
 	}
 
@@ -266,7 +251,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tByte() {
+	public static Builder tByte() {
 		return create().tString().fByte();
 	}
 
@@ -275,7 +260,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tBinary() {
+	public static Builder tBinary() {
 		return create().tString().fBinary();
 	}
 
@@ -284,7 +269,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tBinarySpaced() {
+	public static Builder tBinarySpaced() {
 		return create().tString().fBinarySpaced();
 	}
 
@@ -293,7 +278,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tDate() {
+	public static Builder tDate() {
 		return create().tString().fDate();
 	}
 
@@ -302,7 +287,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tDateTime() {
+	public static Builder tDateTime() {
 		return create().tString().fDateTime();
 	}
 
@@ -311,7 +296,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tUon() {
+	public static Builder tUon() {
 		return create().tString().fUon();
 	}
 
@@ -320,7 +305,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArray() {
+	public static Builder tArray() {
 		return create().tArray();
 	}
 
@@ -330,7 +315,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArray(HttpPartSchemaBuilder items) {
+	public static Builder tArray(Builder items) {
 		return create().tArray().items(items);
 	}
 
@@ -339,7 +324,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayCsv() {
+	public static Builder tArrayCsv() {
 		return create().tArray().cfCsv();
 	}
 
@@ -349,7 +334,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayCsv(HttpPartSchemaBuilder items) {
+	public static Builder tArrayCsv(Builder items) {
 		return create().tArray().cfCsv().items(items);
 	}
 
@@ -358,7 +343,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayPipes() {
+	public static Builder tArrayPipes() {
 		return create().tArray().cfPipes();
 	}
 
@@ -368,7 +353,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayPipes(HttpPartSchemaBuilder items) {
+	public static Builder tArrayPipes(Builder items) {
 		return create().tArray().cfPipes().items(items);
 	}
 
@@ -377,7 +362,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArraySsv() {
+	public static Builder tArraySsv() {
 		return create().tArray().cfSsv();
 	}
 
@@ -387,7 +372,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArraySsv(HttpPartSchemaBuilder items) {
+	public static Builder tArraySsv(Builder items) {
 		return create().tArray().cfSsv().items(items);
 	}
 
@@ -396,7 +381,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayTsv() {
+	public static Builder tArrayTsv() {
 		return create().tArray().cfTsv();
 	}
 
@@ -406,7 +391,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayTsv(HttpPartSchemaBuilder items) {
+	public static Builder tArrayTsv(Builder items) {
 		return create().tArray().cfTsv().items(items);
 	}
 
@@ -415,7 +400,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayUon() {
+	public static Builder tArrayUon() {
 		return create().tArray().cfUon();
 	}
 
@@ -425,7 +410,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayUon(HttpPartSchemaBuilder items) {
+	public static Builder tArrayUon(Builder items) {
 		return create().tArray().cfUon().items(items);
 	}
 
@@ -434,7 +419,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayMulti() {
+	public static Builder tArrayMulti() {
 		return create().tArray().cfMulti();
 	}
 
@@ -444,7 +429,7 @@ public class HttpPartSchema {
 	 * @param items The schema of the array items.
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tArrayMulti(HttpPartSchemaBuilder items) {
+	public static Builder tArrayMulti(Builder items) {
 		return create().tArray().cfMulti().items(items);
 	}
 
@@ -453,7 +438,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tObject() {
+	public static Builder tObject() {
 		return create().tObject();
 	}
 
@@ -462,7 +447,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tObjectCsv() {
+	public static Builder tObjectCsv() {
 		return create().tObject().cfCsv();
 	}
 
@@ -471,7 +456,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tObjectPipes() {
+	public static Builder tObjectPipes() {
 		return create().tObject().cfPipes();
 	}
 
@@ -480,7 +465,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tObjectSsv() {
+	public static Builder tObjectSsv() {
 		return create().tObject().cfSsv();
 	}
 
@@ -489,7 +474,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tObjectTsv() {
+	public static Builder tObjectTsv() {
 		return create().tObject().cfTsv();
 	}
 
@@ -498,7 +483,7 @@ public class HttpPartSchema {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static HttpPartSchemaBuilder tObjectUon() {
+	public static Builder tObjectUon() {
 		return create().tObject().cfUon();
 	}
 
@@ -602,7 +587,7 @@ public class HttpPartSchema {
 	 * @param type The schema type value.
 	 * @return A new builder.
 	 */
-	public static HttpPartSchemaBuilder create(String type) {
+	public static Builder create(String type) {
 		return create().type(type);
 	}
 
@@ -613,7 +598,7 @@ public class HttpPartSchema {
 	 * @param format The schema format value.
 	 * @return A new builder.
 	 */
-	public static HttpPartSchemaBuilder create(String type, String format) {
+	public static Builder create(String type, String format) {
 		return create().type(type).format(format);
 	}
 
@@ -640,7 +625,2697 @@ public class HttpPartSchema {
 		return create().name(defaultName).apply(a).build();
 	}
 
-	HttpPartSchema(HttpPartSchemaBuilder b) {
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
+		String name, _default;
+		Set<Integer> codes;
+		Set<String> _enum;
+		Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
+		HttpPartCollectionFormat collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
+		HttpPartDataType type = HttpPartDataType.NO_TYPE;
+		HttpPartFormat format = HttpPartFormat.NO_FORMAT;
+		Pattern pattern;
+		Number maximum, minimum, multipleOf;
+		Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
+		Map<String,Object> properties;
+		Object items, additionalProperties;
+		boolean noValidate;
+		Class<? extends HttpPartParser> parser;
+		Class<? extends HttpPartSerializer> serializer;
+
+		/**
+		 * Instantiates a new {@link HttpPartSchema} object based on the configuration of this builder.
+		 *
+		 * <p>
+		 * This method can be called multiple times to produce new schema objects.
+		 *
+		 * @return
+		 * 	A new {@link HttpPartSchema} object.
+		 * 	<br>Never <jk>null</jk>.
+		 */
+		public HttpPartSchema build() {
+			return new HttpPartSchema(this);
+		}
+
+		Builder apply(Class<? extends Annotation> c, ParamInfo mpi) {
+			apply(c, mpi.getParameterType().innerType());
+			for (Annotation a : mpi.getDeclaredAnnotations())
+				if (c.isInstance(a))
+					apply(a);
+			return this;
+		}
+
+		Builder apply(Class<? extends Annotation> c, Method m) {
+			apply(c, m.getGenericReturnType());
+			Annotation a = m.getAnnotation(c);
+			if (a != null)
+				return apply(a);
+			return this;
+		}
+
+		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+			if (t instanceof Class<?>) {
+				ClassInfo ci = ClassInfo.of((Class<?>)t);
+				for (Annotation a : ci.getAnnotations(c))
+					apply(a);
+			} else if (Value.isType(t)) {
+				apply(c, Value.getParameterType(t));
+			}
+			return this;
+		}
+
+		/**
+		 * Apply the specified annotation to this schema.
+		 *
+		 * @param a The annotation to apply.
+		 * @return This object (for method chaining).
+		 */
+		public Builder apply(Annotation a) {
+			if (a instanceof Body)
+				apply((Body)a);
+			else if (a instanceof Header)
+				apply((Header)a);
+			else if (a instanceof FormData)
+				apply((FormData)a);
+			else if (a instanceof Query)
+				apply((Query)a);
+			else if (a instanceof Path)
+				apply((Path)a);
+			else if (a instanceof Response)
+				apply((Response)a);
+			else if (a instanceof ResponseHeader)
+				apply((ResponseHeader)a);
+			else if (a instanceof HasQuery)
+				apply((HasQuery)a);
+			else if (a instanceof HasFormData)
+				apply((HasFormData)a);
+			else if (a instanceof Schema)
+				apply((Schema)a);
+			else
+				throw runtimeException("Builder.apply(@{0}) not defined", className(a));
+			return this;
+		}
+
+		Builder apply(Body a) {
+			required(a.required() || a.r());
+			allowEmptyValue(! (a.required() || a.r()));
+			apply(a.schema());
+			return this;
+		}
+
+		Builder apply(Header a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			required(a.required() || a.r());
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			allowEmptyValue(a.allowEmptyValue() || a.aev());
+			items(a.items());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			skipIfEmpty(a.skipIfEmpty() || a.sie());
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+
+		Builder apply(ResponseHeader a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			items(a.items());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			allowEmptyValue(false);
+			serializer(a.serializer());
+			return this;
+		}
+
+		Builder apply(FormData a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			required(a.required() || a.r());
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			allowEmptyValue(a.allowEmptyValue() || a.aev());
+			items(a.items());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			skipIfEmpty(a.skipIfEmpty() || a.sie());
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+
+		Builder apply(Query a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			required(a.required() || a.r());
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			allowEmptyValue(a.allowEmptyValue() || a.aev());
+			items(a.items());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			skipIfEmpty(a.skipIfEmpty() || a.sie());
+			parser(a.parser());
+			serializer(a.serializer());
+			return this;
+		}
+
+		Builder apply(Path a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			items(a.items());
+			allowEmptyValue(a.allowEmptyValue() || a.aev());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			parser(a.parser());
+			serializer(a.serializer());
+
+			// Path remainder always allows empty value.
+			if (startsWith(name, '/')) {
+				allowEmptyValue();
+				required(false);
+			} else {
+				required(a.required() && a.r());
+			}
+
+			return this;
+		}
+
+		Builder apply(Response a) {
+			codes(a.value());
+			codes(a.code());
+			required(false);
+			allowEmptyValue(true);
+			serializer(a.serializer());
+			parser(a.parser());
+			apply(a.schema());
+			return this;
+		}
+
+		Builder apply(Items a) {
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			items(a.items());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			return this;
+		}
+
+		Builder apply(SubItems a) {
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			items(HttpPartSchema.toOMap(a.items()));
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			return this;
+		}
+
+		Builder apply(Schema a) {
+			type(firstNonEmpty(a.type(), a.t()));
+			format(firstNonEmpty(a.format(), a.f()));
+			items(a.items());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			maximum(toNumber(a.maximum(), a.max()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			minimum(toNumber(a.minimum(), a.min()));
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minLength(firstNmo(a.minLength(), a.minl()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			uniqueItems(a.uniqueItems() || a.ui());
+			_enum(toSet(a._enum(), a.e()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			maxProperties(firstNmo(a.maxProperties(), a.maxp()));
+			minProperties(firstNmo(a.minProperties(), a.minp()));
+			properties(HttpPartSchema.toOMap(a.properties()));
+			additionalProperties(HttpPartSchema.toOMap(a.additionalProperties()));
+			return this;
+		}
+
+		Builder apply(HasQuery a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			return this;
+		}
+
+		Builder apply(HasFormData a) {
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			return this;
+		}
+
+		Builder apply(OMap m) {
+			if (m != null && ! m.isEmpty()) {
+				_default(m.getString("default"));
+				_enum(HttpPartSchema.toSet(m.getString("enum")));
+				allowEmptyValue(m.getBoolean("allowEmptyValue"));
+				exclusiveMaximum(m.getBoolean("exclusiveMaximum"));
+				exclusiveMinimum(m.getBoolean("exclusiveMinimum"));
+				required(m.getBoolean("required"));
+				uniqueItems(m.getBoolean("uniqueItems"));
+				collectionFormat(m.getString("collectionFormat"));
+				type(m.getString("type"));
+				format(m.getString("format"));
+				pattern(m.getString("pattern"));
+				maximum(m.get("maximum", Number.class));
+				minimum(m.get("minimum", Number.class));
+				multipleOf(m.get("multipleOf", Number.class));
+				maxItems(m.get("maxItems", Long.class));
+				maxLength(m.get("maxLength", Long.class));
+				maxProperties(m.get("maxProperties", Long.class));
+				minItems(m.get("minItems", Long.class));
+				minLength(m.get("minLength", Long.class));
+				minProperties(m.get("minProperties", Long.class));
+
+				items(m.getMap("items"));
+				properties(m.getMap("properties"));
+				additionalProperties(m.getMap("additionalProperties"));
+
+				apply(m.getMap("schema", null));
+			}
+			return this;
+		}
+
+		/**
+		 * <mk>name</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder name(String value) {
+			if (isNotEmpty(value))
+				name = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #name(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder n(String value) {
+			return name(value);
+		}
+
+		/**
+		 * <mk>httpStatusCode</mk> key.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerResponsesObject Responses}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if <jk>null</jk> or an empty array.
+		 * @return This object (for method chaining).
+		 */
+		public Builder codes(int[] value) {
+			if (value != null && value.length != 0)
+				for (int v : value)
+					code(v);
+			return this;
+		}
+
+		/**
+		 * <mk>httpStatusCode</mk> key.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerResponsesObject Responses}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <c>0</c>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder code(int value) {
+			if (value != 0) {
+				if (codes == null)
+					codes = new TreeSet<>();
+				codes.add(value);
+			}
+			return this;
+		}
+
+		/**
+		 * <mk>required</mk> field.
+		 *
+		 * <p>
+		 * Determines whether the parameter is mandatory.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder required(Boolean value) {
+			required = resolve(value, required);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #required(Boolean)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder r(Boolean value) {
+			return required(value);
+		}
+
+		/**
+		 * <mk>required</mk> field.
+		 *
+		 * <p>
+		 * Determines whether the parameter is mandatory.
+		 *
+		 * <p>
+		 * Same as {@link #required(Boolean)} but takes in a boolean value as a string.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder required(String value) {
+			required = resolve(value, required);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #required(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder r(String value) {
+			return required(value);
+		}
+
+		/**
+		 * <mk>required</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>required(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder required() {
+			return required(true);
+		}
+
+		/**
+		 * Synonym for {@link #required()}.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder r() {
+			return required();
+		}
+
+		/**
+		 * <mk>type</mk> field.
+		 *
+		 * <p>
+		 * The type of the parameter.
+		 *
+		 * <p>
+		 * The possible values are:
+		 * <ul class='spaced-list'>
+		 * 	<li>
+		 * 		<js>"string"</js>
+		 * 		<br>Parameter must be a string or a POJO convertible from a string.
+		 * 	<li>
+		 * 		<js>"number"</js>
+		 * 		<br>Parameter must be a number primitive or number object.
+		 * 		<br>If parameter is <c>Object</c>, creates either a <c>Float</c> or <c>Double</c> depending on the size of the number.
+		 * 	<li>
+		 * 		<js>"integer"</js>
+		 * 		<br>Parameter must be a integer/long primitive or integer/long object.
+		 * 		<br>If parameter is <c>Object</c>, creates either a <c>Short</c>, <c>Integer</c>, or <c>Long</c> depending on the size of the number.
+		 * 	<li>
+		 * 		<js>"boolean"</js>
+		 * 		<br>Parameter must be a boolean primitive or object.
+		 * 	<li>
+		 * 		<js>"array"</js>
+		 * 		<br>Parameter must be an array or collection.
+		 * 		<br>Elements must be strings or POJOs convertible from strings.
+		 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
+		 * 	<li>
+		 * 		<js>"object"</js>
+		 * 		<br>Parameter must be a map or bean.
+		 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+		 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
+		 * 	<li>
+		 * 		<js>"file"</js>
+		 * 		<br>This type is currently not supported.
+		 * </ul>
+		 *
+		 * <p>
+		 * If the type is not specified, it will be auto-detected based on the parameter class type.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerSecuritySchemeObject SecurityScheme}
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder type(String value) {
+			try {
+				if (isNotEmpty(value))
+					type = HttpPartDataType.fromString(value);
+			} catch (Exception e) {
+				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
+			}
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #type(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder t(String value) {
+			return type(value);
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.STRING)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tString() {
+			type = HttpPartDataType.STRING;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.NUMBER)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tNumber() {
+			type = HttpPartDataType.NUMBER;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.INTEGER)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tInteger() {
+			type = HttpPartDataType.INTEGER;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.BOOLEAN)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tBoolean() {
+			type = HttpPartDataType.BOOLEAN;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.ARRAY)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tArray() {
+			type = HttpPartDataType.ARRAY;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.OBJECT)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tObject() {
+			type = HttpPartDataType.OBJECT;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.FILE)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tFile() {
+			type = HttpPartDataType.FILE;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>type(HttpPartDataType.NO_TYPE)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder tNone() {
+			type = HttpPartDataType.NO_TYPE;
+			return this;
+		}
+
+		/**
+		 * <mk>type</mk> field.
+		 *
+		 * <p>
+		 * The type of the parameter.
+		 *
+		 * <p>
+		 * The possible values are:
+		 * <ul class='javatree'>
+		 * 	<li class='jc'>{@link HttpPartDataType}
+		 * 	<ul>
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartDataType#STRING STRING}
+		 * 			<br>Parameter must be a string or a POJO convertible from a string.
+		 * 			<li>
+		 * 			{@link HttpPartDataType#NUMBER NUMBER}
+		 * 			<br>Parameter must be a number primitive or number object.
+		 * 			<br>If parameter is <c>Object</c>, creates either a <c>Float</c> or <c>Double</c> depending on the size of the number.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartDataType#INTEGER INTEGER}
+		 * 			<br>Parameter must be a integer/long primitive or integer/long object.
+		 * 			<br>If parameter is <c>Object</c>, creates either a <c>Short</c>, <c>Integer</c>, or <c>Long</c> depending on the size of the number.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartDataType#BOOLEAN BOOLEAN}
+		 * 			<br>Parameter must be a boolean primitive or object.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartDataType#ARRAY ARRAY}
+		 * 			<br>Parameter must be an array or collection.
+		 * 			<br>Elements must be strings or POJOs convertible from strings.
+		 * 			<br>If parameter is <c>Object</c>, creates an {@link OList}.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartDataType#OBJECT OBJECT}
+		 * 			<br>Parameter must be a map or bean.
+		 * 			<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+		 * 			<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartDataType#FILE FILE}
+		 * 			<br>This type is currently not supported.
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * <p>
+		 * If the type is not specified, it will be auto-detected based on the parameter class type.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerSecuritySchemeObject SecurityScheme}
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder type(HttpPartDataType value) {
+			this.type = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #type(HttpPartDataType)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder t(HttpPartDataType value) {
+			return type(value);
+		}
+
+		/**
+		 * <mk>format</mk> field.
+		 *
+		 * <p>
+		 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
+		 *
+		 * <p>
+		 * The possible values are:
+		 * <ul class='spaced-list'>
+		 * 	<li>
+		 * 		<js>"int32"</js> - Signed 32 bits.
+		 * 		<br>Only valid with type <js>"integer"</js>.
+		 * 	<li>
+		 * 		<js>"int64"</js> - Signed 64 bits.
+		 * 		<br>Only valid with type <js>"integer"</js>.
+		 * 	<li>
+		 * 		<js>"float"</js> - 32-bit floating point number.
+		 * 		<br>Only valid with type <js>"number"</js>.
+		 * 	<li>
+		 * 		<js>"double"</js> - 64-bit floating point number.
+		 * 		<br>Only valid with type <js>"number"</js>.
+		 * 	<li>
+		 * 		<js>"byte"</js> - BASE-64 encoded characters.
+		 * 		<br>Only valid with type <js>"string"</js>.
+		 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 	<li>
+		 * 		<js>"binary"</js> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+		 * 		<br>Only valid with type <js>"string"</js>.
+		 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 	<li>
+		 * 		<js>"binary-spaced"</js> - Hexadecimal encoded octets, spaced (e.g. <js>"00 FF"</js>).
+		 * 		<br>Only valid with type <js>"string"</js>.
+		 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 	<li>
+		 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+		 * 		<br>Only valid with type <js>"string"</js>.
+		 * 	<li>
+		 * 		<js>"date-time"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+		 * 		<br>Only valid with type <js>"string"</js>.
+		 * 	<li>
+		 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
+		 * 		<br>This format does not affect the serialization or parsing of the parameter.
+		 * 	<li>
+		 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
+		 * 		<br>Only valid with type <js>"object"</js>.
+		 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
+		 * </ul>
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or an empty string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder format(String value) {
+			try {
+				if (isNotEmpty(value))
+					format = HttpPartFormat.fromString(value);
+			} catch (Exception e) {
+				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
+			}
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #format(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder f(String value) {
+			return format(value);
+		}
+
+		/**
+		 * <mk>format</mk> field.
+		 *
+		 * <p>
+		 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
+		 *
+		 * <p>
+		 * The possible values are:
+		 * <ul class='javatree'>
+		 * 	<ul class='jc'>{@link HttpPartFormat}
+		 * 	<ul>
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.
+		 * 			<br>Only valid with type <js>"integer"</js>.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#INT64 INT64} - Signed 64 bits.
+		 * 			<br>Only valid with type <js>"integer"</js>.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
+		 * 			<br>Only valid with type <js>"number"</js>.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
+		 * 			<br>Only valid with type <js>"number"</js>.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
+		 * 			<br>Only valid with type <js>"string"</js>.
+		 * 			<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+		 * 			<br>Only valid with type <js>"string"</js>.
+		 * 			<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Hexadecimal encoded octets, spaced (e.g. <js>"00 FF"</js>).
+		 * 			<br>Only valid with type <js>"string"</js>.
+		 * 			<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+		 * 			<br>Only valid with type <js>"string"</js>.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+		 * 			<br>Only valid with type <js>"string"</js>.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
+		 * 			<br>This format does not affect the serialization or parsing of the parameter.
+		 * 		<li class='jf'>
+		 * 			{@link HttpPartFormat#UON UON} - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
+		 * 			<br>Only valid with type <js>"object"</js>.
+		 * 			<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder format(HttpPartFormat value) {
+			format = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #format(HttpPartFormat)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder f(HttpPartFormat value) {
+			return format(value);
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.INT32)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fInt32() {
+			format = HttpPartFormat.INT32;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.INT64)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fInt64() {
+			format = HttpPartFormat.INT64;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.FLOAT)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fFloat() {
+			format = HttpPartFormat.FLOAT;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.DOUBLE)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fDouble() {
+			format = HttpPartFormat.DOUBLE;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.BYTE)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fByte() {
+			format = HttpPartFormat.BYTE;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.BINARY)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fBinary() {
+			format = HttpPartFormat.BINARY;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.BINARY_SPACED)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fBinarySpaced() {
+			format = HttpPartFormat.BINARY_SPACED;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.DATE)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fDate() {
+			format = HttpPartFormat.DATE;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.DATE_TIME)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fDateTime() {
+			format = HttpPartFormat.DATE_TIME;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.PASSWORD)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fPassword() {
+			format = HttpPartFormat.PASSWORD;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.UON)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fUon() {
+			format = HttpPartFormat.UON;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>format(HttpPartFormat.NO_FORMAT)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder fNone() {
+			format = HttpPartFormat.NO_FORMAT;
+			return this;
+		}
+
+		/**
+		 * <mk>allowEmptyValue</mk> field.
+		 *
+		 * <p>
+		 * Sets the ability to pass empty-valued parameters.
+		 * <br>This is valid only for either query or formData parameters and allows you to send a parameter with a name only or an empty value.
+		 * <br>The default value is <jk>false</jk>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder allowEmptyValue(Boolean value) {
+			allowEmptyValue = resolve(value, allowEmptyValue);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #allowEmptyValue(Boolean)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder aev(Boolean value) {
+			return allowEmptyValue(value);
+		}
+
+		/**
+		 * <mk>allowEmptyValue</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #allowEmptyValue(Boolean)} but takes in a string boolean value.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder allowEmptyValue(String value) {
+			allowEmptyValue = resolve(value, allowEmptyValue);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #allowEmptyValue(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder aev(String value) {
+			return allowEmptyValue(value);
+		}
+
+		/**
+		 * <mk>allowEmptyValue</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>allowEmptyValue(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder allowEmptyValue() {
+			return allowEmptyValue(true);
+		}
+
+		/**
+		 * Synonym for {@link #allowEmptyValue()}.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder aev() {
+			return allowEmptyValue(true);
+		}
+
+		/**
+		 * <mk>items</mk> field.
+		 *
+		 * <p>
+		 * Describes the type of items in the array.
+		 * <p>
+		 * Required if <c>type</c> is <js>"array"</js>.
+		 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder items(Builder value) {
+			if (value != null)
+				this.items = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #items(Builder)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder i(Builder value) {
+			return items(value);
+		}
+
+		/**
+		 * <mk>items</mk> field.
+		 *
+		 * <p>
+		 * Describes the type of items in the array.
+		 * <p>
+		 * Required if <c>type</c> is <js>"array"</js>.
+		 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder items(HttpPartSchema value) {
+			if (value != null)
+				this.items = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #items(HttpPartSchema)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder i(HttpPartSchema value) {
+			return items(value);
+		}
+
+		Builder items(OMap value) {
+			if (value != null && ! value.isEmpty())
+				items = HttpPartSchema.create().apply(value);
+			return this;
+		}
+
+		Builder items(Items value) {
+			if (! ItemsAnnotation.empty(value))
+				items = HttpPartSchema.create().apply(value);
+			return this;
+		}
+
+		Builder items(SubItems value) {
+			if (! SubItemsAnnotation.empty(value))
+				items = HttpPartSchema.create().apply(value);
+			return this;
+		}
+
+
+		/**
+		 * <mk>collectionFormat</mk> field.
+		 *
+		 * <p>
+		 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+		 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+		 *
+		 * <br>Possible values are:
+		 * <ul class='spaced-list'>
+		 * 	<li>
+		 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+		 * 	<li>
+		 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+		 * 	<li>
+		 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+		 * 	<li>
+		 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+		 * 	<li>
+		 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+		 * 	<li>
+		 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
+		 * 	<li>
+		 * </ul>
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <p>
+		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder collectionFormat(String value) {
+			try {
+				if (isNotEmpty(value))
+					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
+			} catch (Exception e) {
+				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
+			}
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #collectionFormat(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder cf(String value) {
+			return collectionFormat(value);
+		}
+
+		/**
+		 * <mk>collectionFormat</mk> field.
+		 *
+		 * <p>
+		 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+		 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+		 *
+		 * <br>Possible values are:
+		 * <ul class='javatree'>
+		 * 	<ul class='jc'>{@link HttpPartCollectionFormat}
+		 * 	<ul>
+		 * 		<li>
+		 * 			{@link HttpPartCollectionFormat#CSV CSV} (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+		 * 		<li>
+		 * 			{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+		 * 		<li>
+		 * 			{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+		 * 		<li>
+		 * 			{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+		 * 		<li>
+		 * 			{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+		 * 		<li>
+		 * 			{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <p>
+		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder collectionFormat(HttpPartCollectionFormat value) {
+			collectionFormat = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #collectionFormat(HttpPartCollectionFormat)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder cf(HttpPartCollectionFormat value) {
+			return collectionFormat(value);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.CSV)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfCsv() {
+			return collectionFormat(HttpPartCollectionFormat.CSV);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.SSV)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfSsv() {
+			return collectionFormat(HttpPartCollectionFormat.SSV);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.TSV)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfTsv() {
+			return collectionFormat(HttpPartCollectionFormat.TSV);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.PIPES)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfPipes() {
+			return collectionFormat(HttpPartCollectionFormat.PIPES);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.MULTI)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfMulti() {
+			return collectionFormat(HttpPartCollectionFormat.MULTI);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.UONC)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfUon() {
+			return collectionFormat(HttpPartCollectionFormat.UONC);
+		}
+
+		/**
+		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.NO_COLLECTION_FORMAT)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cfNone() {
+			return collectionFormat(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+		}
+
+		/**
+		 * <mk>default</mk> field.
+		 *
+		 * <p>
+		 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
+		 * <br>(Note: "default" has no meaning for required parameters.)
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder _default(String value) {
+			if (value != null)
+				this._default = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #_default(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder df(String value) {
+			return _default(value);
+		}
+
+		/**
+		 * <mk>maximum</mk> field.
+		 *
+		 * <p>
+		 * Defines the maximum value for a parameter of numeric types.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maximum(Number value) {
+			if (value != null)
+				this.maximum = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maximum(Number)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder max(Number value) {
+			return maximum(value);
+		}
+
+		/**
+		 * <mk>exclusiveMaximum</mk> field.
+		 *
+		 * <p>
+		 * Defines whether the maximum is matched exclusively.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 * <br>If <jk>true</jk>, must be accompanied with <c>maximum</c>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMaximum(Boolean value) {
+			exclusiveMaximum = resolve(value, exclusiveMaximum);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #exclusiveMaximum(Boolean)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder emax(Boolean value) {
+			return exclusiveMaximum(value);
+		}
+
+		/**
+		 * <mk>exclusiveMaximum</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #exclusiveMaximum(Boolean)} but takes in a string boolean value.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMaximum(String value) {
+			exclusiveMaximum = resolve(value, exclusiveMaximum);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #exclusiveMaximum(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder emax(String value) {
+			return exclusiveMaximum(value);
+		}
+
+		/**
+		 * <mk>exclusiveMaximum</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>exclusiveMaximum(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMaximum() {
+			return exclusiveMaximum(true);
+		}
+
+		/**
+		 * Synonym for {@link #exclusiveMaximum()}.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder emax() {
+			return exclusiveMaximum();
+		}
+
+		/**
+		 * <mk>minimum</mk> field.
+		 *
+		 * <p>
+		 * Defines the minimum value for a parameter of numeric types.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minimum(Number value) {
+			if (value != null)
+				this.minimum = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minimum(Number)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder min(Number value) {
+			return minimum(value);
+		}
+
+		/**
+		 * <mk>exclusiveMinimum</mk> field.
+		 *
+		 * <p>
+		 * Defines whether the minimum is matched exclusively.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 * <br>If <jk>true</jk>, must be accompanied with <c>minimum</c>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMinimum(Boolean value) {
+			exclusiveMinimum = resolve(value, exclusiveMinimum);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #exclusiveMinimum(Boolean)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder emin(Boolean value) {
+			return exclusiveMinimum(value);
+		}
+
+		/**
+		 * <mk>exclusiveMinimum</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #exclusiveMinimum(Boolean)} but takes in a string boolean value.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMinimum(String value) {
+			exclusiveMinimum = resolve(value, exclusiveMinimum);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #exclusiveMinimum(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder emin(String value) {
+			return exclusiveMinimum(value);
+		}
+
+		/**
+		 * <mk>exclusiveMinimum</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>exclusiveMinimum(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder exclusiveMinimum() {
+			return exclusiveMinimum(true);
+		}
+
+		/**
+		 * Synonym for {@link #exclusiveMinimum()}.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder emin() {
+			return exclusiveMinimum();
+		}
+
+		/**
+		 * <mk>maxLength</mk> field.
+		 *
+		 * <p>
+		 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
+		 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"string"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxLength(Long value) {
+			maxLength = resolve(value, maxLength);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maxLength(Long)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxl(Long value) {
+			return maxLength(value);
+		}
+
+		/**
+		 * <mk>maxLength</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #maxLength(Long)} but takes in a string number.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxLength(String value) {
+			maxLength = resolve(value, maxLength);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maxLength(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxl(String value) {
+			return maxLength(value);
+		}
+
+		/**
+		 * <mk>minLength</mk> field.
+		 *
+		 * <p>
+		 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
+		 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"string"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minLength(Long value) {
+			minLength = resolve(value, minLength);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minLength(Long)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minl(Long value) {
+			return minLength(value);
+		}
+
+		/**
+		 * <mk>minLength</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #minLength(Long)} but takes in a string number.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minLength(String value) {
+			minLength = resolve(value, minLength);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minLength(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minl(String value) {
+			return minLength(value);
+		}
+
+		/**
+		 * <mk>pattern</mk> field.
+		 *
+		 * <p>
+		 * A string input is valid if it matches the specified regular expression pattern.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"string"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder pattern(String value) {
+			try {
+				if (isNotEmpty(value))
+					this.pattern = Pattern.compile(value);
+			} catch (Exception e) {
+				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
+			}
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #pattern(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder p(String value) {
+			return pattern(value);
+		}
+
+		/**
+		 * <mk>maxItems</mk> field.
+		 *
+		 * <p>
+		 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxItems(Long value) {
+			maxItems = resolve(value, maxItems);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maxItems(Long)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxi(Long value) {
+			return maxItems(value);
+		}
+
+		/**
+		 * <mk>maxItems</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #maxItems(Long)} but takes in a string number.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxItems(String value) {
+			maxItems = resolve(value, maxItems);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maxItems(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxi(String value) {
+			return maxItems(value);
+		}
+
+		/**
+		 * <mk>minItems</mk> field.
+		 *
+		 * <p>
+		 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minItems(Long value) {
+			minItems = resolve(value, minItems);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minItems(Long)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mini(Long value) {
+			return minItems(value);
+		}
+
+		/**
+		 * <mk>minItems</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #minItems(Long)} but takes in a string number.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minItems(String value) {
+			minItems = resolve(value, minItems);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minItems(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mini(String value) {
+			return minItems(value);
+		}
+
+		/**
+		 * <mk>uniqueItems</mk> field.
+		 *
+		 * <p>
+		 * If <jk>true</jk>, the input validates successfully if all of its elements are unique.
+		 *
+		 * <p>
+		 * <br>If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
+		 * <br>Otherwise, the collection or array is checked for duplicate items.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"array"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder uniqueItems(Boolean value) {
+			uniqueItems = resolve(value, uniqueItems);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #uniqueItems(Boolean)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder ui(Boolean value) {
+			return uniqueItems(value);
+		}
+
+		/**
+		 * <mk>uniqueItems</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #uniqueItems(Boolean)} but takes in a string boolean.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty..
+		 * @return This object (for method chaining).
+		 */
+		public Builder uniqueItems(String value) {
+			uniqueItems = resolve(value, uniqueItems);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #uniqueItems(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder ui(String value) {
+			return uniqueItems(value);
+		}
+
+		/**
+		 * <mk>uniqueItems</mk> field.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>uniqueItems(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder uniqueItems() {
+			return uniqueItems(true);
+		}
+
+		/**
+		 * Synonym for {@link #uniqueItems()}.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder ui() {
+			return uniqueItems();
+		}
+
+		/**
+		 * <mk>skipIfEmpty</mk> field.
+		 *
+		 * <p>
+		 * Identifies whether an item should be skipped during serialization if it's empty.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder skipIfEmpty(Boolean value) {
+			skipIfEmpty = resolve(value, skipIfEmpty);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #skipIfEmpty(Boolean)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder sie(Boolean value) {
+			return skipIfEmpty(value);
+		}
+
+		/**
+		 * <mk>skipIfEmpty</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #skipIfEmpty(Boolean)} but takes in a string boolean.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder skipIfEmpty(String value) {
+			skipIfEmpty = resolve(value, skipIfEmpty);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #skipIfEmpty(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder sie(String value) {
+			return skipIfEmpty(value);
+		}
+
+		/**
+		 * Identifies whether an item should be skipped if it's empty.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>skipIfEmpty(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder skipIfEmpty() {
+			return skipIfEmpty(true);
+		}
+
+		/**
+		 * Synonym for {@link #skipIfEmpty()}.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder sie() {
+			return skipIfEmpty();
+		}
+
+		/**
+		 * <mk>enum</mk> field.
+		 *
+		 * <p>
+		 * If specified, the input validates successfully if it is equal to one of the elements in this array.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
+		 * @return This object (for method chaining).
+		 */
+		public Builder _enum(Set<String> value) {
+			if (value != null && ! value.isEmpty())
+				this._enum = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #_enum(Set)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder e(Set<String> value) {
+			return _enum(value);
+		}
+
+		/**
+		 * <mk>_enum</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #_enum(Set)} but takes in a var-args array.
+		 *
+		 * @param values
+		 * 	The new values for this property.
+		 * 	<br>Ignored if value is empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder _enum(String...values) {
+			return _enum(ASet.of(values));
+		}
+
+		/**
+		 * Synonym for {@link #_enum(String...)}.
+		 *
+		 * @param values
+		 * 	The new values for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder e(String...values) {
+			return _enum(values);
+		}
+
+		/**
+		 * <mk>multipleOf</mk> field.
+		 *
+		 * <p>
+		 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
+		 *
+		 * <p>
+		 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ExtSwaggerItemsObject Items}
+		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder multipleOf(Number value) {
+			if (value != null)
+				this.multipleOf = value;
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #multipleOf(Number)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mo(Number value) {
+			return multipleOf(value);
+		}
+
+		/**
+		 * <mk>mapProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxProperties(Long value) {
+			maxProperties = resolve(value, maxProperties);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maxProperties(Long)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxp(Long value) {
+			return maxProperties(value);
+		}
+
+		/**
+		 * <mk>mapProperties</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #maxProperties(Long)} but takes in a string number.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxProperties(String value) {
+			maxProperties = resolve(value, maxProperties);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #maxProperties(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder maxp(String value) {
+			return maxProperties(value);
+		}
+
+		/**
+		 * <mk>minProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minProperties(Long value) {
+			minProperties = resolve(value, minProperties);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minProperties(Long)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minp(Long value) {
+			return minProperties(value);
+		}
+
+		/**
+		 * <mk>minProperties</mk> field.
+		 *
+		 * <p>
+		 * Same as {@link #minProperties(Long)} but takes in a string boolean.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minProperties(String value) {
+			minProperties = resolve(value, minProperties);
+			return this;
+		}
+
+		/**
+		 * Synonym for {@link #minProperties(String)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder minp(String value) {
+			return minProperties(value);
+		}
+
+		/**
+		 * <mk>properties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param key
+		 *	The property name.
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder property(String key, Builder value) {
+			if ( key != null && value != null) {
+				if (properties == null)
+					properties = new LinkedHashMap<>();
+				properties.put(key, value);
+			}
+			return this;
+		}
+
+		/**
+		 * <mk>properties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param key
+		 *	The property name.
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder property(String key, HttpPartSchema value) {
+			if ( key != null && value != null) {
+				if (properties == null)
+					properties = new LinkedHashMap<>();
+				properties.put(key, value);
+			}
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>property(key, value)</c>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param key
+		 *	The property name.
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder p(String key, Builder value) {
+			return property(key, value);
+		}
+
+		/**
+		 * Shortcut for <c>property(key, value)</c>.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param key
+		 *	The property name.
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder p(String key, HttpPartSchema value) {
+			return property(key, value);
+		}
+
+		private Builder properties(OMap value) {
+			if (value != null && ! value.isEmpty())
+			for (Map.Entry<String,Object> e : value.entrySet())
+				property(e.getKey(), HttpPartSchema.create().apply((OMap)e.getValue()));
+			return this;
+		}
+
+		/**
+		 * <mk>additionalProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder additionalProperties(Builder value) {
+			if (value != null)
+				additionalProperties = value;
+			return this;
+		}
+
+		/**
+		 * <mk>additionalProperties</mk> field.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder additionalProperties(HttpPartSchema value) {
+			if (value != null)
+				additionalProperties = value;
+			return this;
+		}
+
+		/**
+		 * Shortcut for <c>additionalProperties(value)</c>
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder ap(Builder value) {
+			return additionalProperties(value);
+		}
+
+		/**
+		 * Shortcut for <c>additionalProperties(value)</c>
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or empty.
+		 * @return This object (for method chaining).
+		 */
+		public Builder ap(HttpPartSchema value) {
+			return additionalProperties(value);
+		}
+
+		private Builder additionalProperties(OMap value) {
+			if (value != null && ! value.isEmpty())
+				additionalProperties = HttpPartSchema.create().apply(value);
+			return this;
+		}
+
+		/**
+		 * Identifies the part serializer to use for serializing this part.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Null}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder serializer(Class<? extends HttpPartSerializer> value) {
+			if (value != null && value != HttpPartSerializer.Null.class)
+				serializer = value;
+			return this;
+		}
+
+		/**
+		 * Identifies the part parser to use for parsing this part.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Null}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder parser(Class<? extends HttpPartParser> value) {
+			if (value != null && value != HttpPartParser.Null.class)
+				parser = value;
+			return this;
+		}
+
+		/**
+		 * Disables Swagger schema usage validation checking.
+		 *
+		 * @param value Specify <jk>true</jk> to prevent {@link ContextRuntimeException} from being thrown if invalid Swagger usage was detected.
+		 * @return This object (for method chaining).
+		 */
+		public Builder noValidate(Boolean value) {
+			if (value != null)
+				this.noValidate = value;
+			return this;
+		}
+
+		/**
+		 * Disables Swagger schema usage validation checking.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>noValidate(<jk>true</jk>);</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder noValidate() {
+			return noValidate(true);
+		}
+
+		private Boolean resolve(String newValue, Boolean oldValue) {
+			return isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
+		}
+
+		private Boolean resolve(Boolean newValue, Boolean oldValue) {
+			return newValue == null ? oldValue : newValue;
+		}
+
+		private Long resolve(String newValue, Long oldValue) {
+			return isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
+		}
+
+		private Long resolve(Long newValue, Long oldValue) {
+			return (newValue == null || newValue == -1) ? oldValue : newValue;
+		}
+
+		private Set<String> toSet(String[]...s) {
+			return HttpPartSchema.toSet(s);
+		}
+
+		private Number toNumber(String...s) {
+			return HttpPartSchema.toNumber(s);
+		}
+
+		private Long firstNmo(Long...l) {
+			for (Long ll : l)
+				if (ll != null && ll != -1)
+					return ll;
+			return null;
+		}
+
+		private String joinnlOrNull(String[]...s) {
+			for (String[] ss : s)
+				if (ss.length > 0)
+					return joinnl(ss);
+			return null;
+		}
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	final String name;
+	final String _default;
+	final Set<String> _enum;
+	final Map<String,HttpPartSchema> properties;
+	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
+	final HttpPartCollectionFormat collectionFormat;
+	final HttpPartDataType type;
+	final HttpPartFormat format;
+	final Pattern pattern;
+	final HttpPartSchema items, additionalProperties;
+	final Number maximum, minimum, multipleOf;
+	final Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
+	final Class<? extends HttpPartParser> parser;
+	final Class<? extends HttpPartSerializer> serializer;
+	final ClassMeta<?> parsedType;
+
+	HttpPartSchema(Builder b) {
 		this.name = b.name;
 		this._default = b._default;
 		this._enum = copy(b._enum);
@@ -864,7 +3539,7 @@ public class HttpPartSchema {
 	 * Returns the name of the object described by this schema, for example the query or form parameter name.
 	 *
 	 * @return The name, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#name(String)
+	 * @see Builder#name(String)
 	 */
 	public String getName() {
 		return name;
@@ -874,7 +3549,7 @@ public class HttpPartSchema {
 	 * Returns the <c>type</c> field of this schema.
 	 *
 	 * @return The <c>type</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#type(String)
+	 * @see Builder#type(String)
 	 */
 	public HttpPartDataType getType() {
 		return type;
@@ -887,7 +3562,7 @@ public class HttpPartSchema {
 	 * 	The class meta of the object.
 	 * 	<br>Used to auto-detect the type if the type was not specified.
 	 * @return The format field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#format(String)
+	 * @see Builder#format(String)
 	 */
 	public HttpPartDataType getType(ClassMeta<?> cm) {
 		if (type != HttpPartDataType.NO_TYPE)
@@ -912,7 +3587,7 @@ public class HttpPartSchema {
 	 * Returns the <c>default</c> field of this schema.
 	 *
 	 * @return The default value for this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#_default(String)
+	 * @see Builder#_default(String)
 	 */
 	public String getDefault() {
 		return _default;
@@ -922,7 +3597,7 @@ public class HttpPartSchema {
 	 * Returns the <c>collectionFormat</c> field of this schema.
 	 *
 	 * @return The <c>collectionFormat</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#collectionFormat(String)
+	 * @see Builder#collectionFormat(String)
 	 */
 	public HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
@@ -931,7 +3606,7 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <c>format</c> field of this schema.
 	 *
-	 * @see HttpPartSchemaBuilder#format(String)
+	 * @see Builder#format(String)
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
 	 */
 	public HttpPartFormat getFormat() {
@@ -945,7 +3620,7 @@ public class HttpPartSchema {
 	 * 	The class meta of the object.
 	 * 	<br>Used to auto-detect the format if the format was not specified.
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#format(String)
+	 * @see Builder#format(String)
 	 */
 	public HttpPartFormat getFormat(ClassMeta<?> cm) {
 		if (format != HttpPartFormat.NO_FORMAT)
@@ -967,7 +3642,7 @@ public class HttpPartSchema {
 	 * Returns the <c>maximum</c> field of this schema.
 	 *
 	 * @return The schema for child items of the object represented by this schema, or <jk>null</jk> if not defined.
-	 * @see HttpPartSchemaBuilder#items(HttpPartSchemaBuilder)
+	 * @see Builder#items(Builder)
 	 */
 	public HttpPartSchema getItems() {
 		return items;
@@ -977,7 +3652,7 @@ public class HttpPartSchema {
 	 * Returns the <c>maximum</c> field of this schema.
 	 *
 	 * @return The <c>maximum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#maximum(Number)
+	 * @see Builder#maximum(Number)
 	 */
 	public Number getMaximum() {
 		return maximum;
@@ -987,7 +3662,7 @@ public class HttpPartSchema {
 	 * Returns the <c>minimum</c> field of this schema.
 	 *
 	 * @return The <c>minimum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#minimum(Number)
+	 * @see Builder#minimum(Number)
 	 */
 	public Number getMinimum() {
 		return minimum;
@@ -997,7 +3672,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#multipleOf(Number)
+	 * @see Builder#multipleOf(Number)
 	 */
 	public Number getMultipleOf() {
 		return multipleOf;
@@ -1007,7 +3682,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#pattern(String)
+	 * @see Builder#pattern(String)
 	 */
 	public Pattern getPattern() {
 		return pattern;
@@ -1017,7 +3692,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#maxLength(Long)
+	 * @see Builder#maxLength(Long)
 	 */
 	public Long getMaxLength() {
 		return maxLength;
@@ -1027,7 +3702,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#minLength(Long)
+	 * @see Builder#minLength(Long)
 	 */
 	public Long getMinLength() {
 		return minLength;
@@ -1037,7 +3712,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#maxItems(Long)
+	 * @see Builder#maxItems(Long)
 	 */
 	public Long getMaxItems() {
 		return maxItems;
@@ -1047,7 +3722,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#minItems(Long)
+	 * @see Builder#minItems(Long)
 	 */
 	public Long getMinItems() {
 		return minItems;
@@ -1057,7 +3732,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#maxProperties(Long)
+	 * @see Builder#maxProperties(Long)
 	 */
 	public Long getMaxProperties() {
 		return maxProperties;
@@ -1067,7 +3742,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#minProperties(Long)
+	 * @see Builder#minProperties(Long)
 	 */
 	public Long getMinProperties() {
 		return minProperties;
@@ -1077,7 +3752,7 @@ public class HttpPartSchema {
 	 * Returns the <c>exclusiveMaximum</c> field of this schema.
 	 *
 	 * @return The <c>exclusiveMaximum</c> field of this schema.
-	 * @see HttpPartSchemaBuilder#exclusiveMaximum(Boolean)
+	 * @see Builder#exclusiveMaximum(Boolean)
 	 */
 	public boolean isExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -1087,7 +3762,7 @@ public class HttpPartSchema {
 	 * Returns the <c>exclusiveMinimum</c> field of this schema.
 	 *
 	 * @return The <c>exclusiveMinimum</c> field of this schema.
-	 * @see HttpPartSchemaBuilder#exclusiveMinimum(Boolean)
+	 * @see Builder#exclusiveMinimum(Boolean)
 	 */
 	public boolean isExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -1097,7 +3772,7 @@ public class HttpPartSchema {
 	 * Returns the <c>uniqueItems</c> field of this schema.
 	 *
 	 * @return The <c>uniqueItems</c> field of this schema.
-	 * @see HttpPartSchemaBuilder#uniqueItems(Boolean)
+	 * @see Builder#uniqueItems(Boolean)
 	 */
 	public boolean isUniqueItems() {
 		return uniqueItems;
@@ -1107,7 +3782,7 @@ public class HttpPartSchema {
 	 * Returns the <c>required</c> field of this schema.
 	 *
 	 * @return The <c>required</c> field of this schema.
-	 * @see HttpPartSchemaBuilder#required(Boolean)
+	 * @see Builder#required(Boolean)
 	 */
 	public boolean isRequired() {
 		return required;
@@ -1117,7 +3792,7 @@ public class HttpPartSchema {
 	 * Returns the <c>skipIfEmpty</c> field of this schema.
 	 *
 	 * @return The <c>skipIfEmpty</c> field of this schema.
-	 * @see HttpPartSchemaBuilder#skipIfEmpty(Boolean)
+	 * @see Builder#skipIfEmpty(Boolean)
 	 */
 	public boolean isSkipIfEmpty() {
 		return skipIfEmpty;
@@ -1127,7 +3802,7 @@ public class HttpPartSchema {
 	 * Returns the <c>allowEmptyValue</c> field of this schema.
 	 *
 	 * @return The <c>skipIfEmpty</c> field of this schema.
-	 * @see HttpPartSchemaBuilder#skipIfEmpty(Boolean)
+	 * @see Builder#skipIfEmpty(Boolean)
 	 */
 	public boolean isAllowEmptyValue() {
 		return allowEmptyValue;
@@ -1137,7 +3812,7 @@ public class HttpPartSchema {
 	 * Returns the <c>enum</c> field of this schema.
 	 *
 	 * @return The <c>enum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#_enum(Set)
+	 * @see Builder#_enum(Set)
 	 */
 	public Set<String> getEnum() {
 		return _enum;
@@ -1147,7 +3822,7 @@ public class HttpPartSchema {
 	 * Returns the <c>parser</c> field of this schema.
 	 *
 	 * @return The <c>parser</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#parser(Class)
+	 * @see Builder#parser(Class)
 	 */
 	public Class<? extends HttpPartParser> getParser() {
 		return parser;
@@ -1157,7 +3832,7 @@ public class HttpPartSchema {
 	 * Returns the <c>serializer</c> field of this schema.
 	 *
 	 * @return The <c>serializer</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#serializer(Class)
+	 * @see Builder#serializer(Class)
 	 */
 	public Class<? extends HttpPartSerializer> getSerializer() {
 		return serializer;
@@ -1443,7 +4118,7 @@ public class HttpPartSchema {
 			return null;
 		if (in instanceof HttpPartSchema)
 			return (HttpPartSchema)in;
-		return ((HttpPartSchemaBuilder)in).noValidate(noValidate).build();
+		return ((Builder)in).noValidate(noValidate).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

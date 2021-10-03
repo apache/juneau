@@ -58,14 +58,14 @@ public class BasicStatusLine implements StatusLine {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
+		 * @param copyFrom The bean to copy.
 		 */
-		public Builder(BasicStatusLine copyFrom) {
+		protected Builder(BasicStatusLine copyFrom) {
 			protocolVersion = copyFrom.protocolVersion;
 			statusCode = copyFrom.statusCode;
 			reasonPhrase = copyFrom.reasonPhrase;

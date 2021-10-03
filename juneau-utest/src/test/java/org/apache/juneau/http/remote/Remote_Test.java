@@ -623,7 +623,7 @@ public class Remote_Test {
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static RestClientBuilder client(Class<?> c) {
+	private static RestClient.Builder client(Class<?> c) {
 		return MockRestClient.create(c).noTrace().simpleJson();
 	}
 

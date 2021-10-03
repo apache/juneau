@@ -116,11 +116,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParserBuilder#fileCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder#fileCharset(Charset)}).
 	 * 	</ul>
 	 * 	<br>For byte-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -128,7 +128,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParserBuilder#binaryFormat(BinaryFormat)} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -311,7 +311,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link BeanContextBuilder#ignoreUnknownBeanProperties()} setting on this parser is
+	 * 	Automatically thrown if {@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
@@ -376,11 +376,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -420,11 +420,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParserBuilder#fileCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -927,7 +927,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Auto-close streams.
 	 *
-	 * @see ParserBuilder#autoCloseStreams()
+	 * @see Parser.Builder#autoCloseStreams()
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -939,7 +939,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Debug output lines.
 	 *
-	 * @see ParserBuilder#debugOutputLines(int)
+	 * @see Parser.Builder#debugOutputLines(int)
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -959,7 +959,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Strict mode.
 	 *
-	 * @see ParserBuilder#strict()
+	 * @see Parser.Builder#strict()
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
@@ -970,7 +970,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim parsed strings.
 	 *
-	 * @see ParserBuilder#trimStrings()
+	 * @see Parser.Builder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -982,7 +982,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Unbuffered.
 	 *
-	 * @see ParserBuilder#unbuffered()
+	 * @see Parser.Builder#unbuffered()
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
@@ -997,7 +997,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Parser listener.
 	 *
-	 * @see ParserBuilder#listener(Class)
+	 * @see Parser.Builder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */

@@ -14,7 +14,11 @@ package org.apache.juneau.xml;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -23,6 +27,8 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -45,6 +51,620 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	/** Default parser, all default settings.*/
 	public static final XmlParser DEFAULT = new XmlParser(create());
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends ReaderParser.Builder {
+
+		boolean preserveRootElement, validating;
+		Class<? extends XMLEventAllocator> eventAllocator;
+		Class<? extends XMLReporter> reporter;
+		Class<? extends XMLResolver> resolver;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			consumes("text/xml,application/xml");
+			type(XmlParser.class);
+			preserveRootElement = env("XmlParser.preserveRootElement", false);
+			validating = env("XmlParser.validating", false);
+			eventAllocator = null;
+			reporter = null;
+			resolver = null;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(XmlParser copyFrom) {
+			super(copyFrom);
+			preserveRootElement = copyFrom.preserveRootElement;
+			validating = copyFrom.validating;
+			eventAllocator = copyFrom.eventAllocator;
+			reporter = copyFrom.reporter;
+			resolver = copyFrom.resolver;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			preserveRootElement = copyFrom.preserveRootElement;
+			validating = copyFrom.validating;
+			eventAllocator = copyFrom.eventAllocator;
+			reporter = copyFrom.reporter;
+			resolver = copyFrom.resolver;
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* ContextBuilder */
+		public XmlParser build() {
+			return (XmlParser)super.build();
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * XML event allocator.
+		 *
+		 * <p>
+		 * Associates an {@link XMLEventAllocator} with this parser.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder eventAllocator(Class<? extends XMLEventAllocator> value) {
+			eventAllocator = value;
+			return this;
+		}
+
+		/**
+		 * Preserve root element during generalized parsing.
+		 *
+		 * <p>
+		 * When enabled, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
+		 * is the root element name.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Parser with preserve-root-element.</jc>
+		 * 	ReaderParser <jv>parser1</jv> = XmlParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.preserveRootElement()
+		 * 		.build();
+		 *
+		 * 	<jc>// Parser without preserve-root-element (the default behavior).</jc>
+		 * 	ReaderParser <jv>parser2</jv> = XmlParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.build();
+		 *
+		 * 	String <jv>xml</jv> = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
+		 *
+		 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
+		 * 	OMap <jv>myMap1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
+		 *
+		 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
+		 * 	OMap <jv>myMap2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class)</jk>;
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder preserveRootElement() {
+			return preserveRootElement(true);
+		}
+
+		/**
+		 * Same as {@link #preserveRootElement()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder preserveRootElement(boolean value) {
+			preserveRootElement = value;
+			return this;
+		}
+
+		/**
+		 * XML reporter.
+		 *
+		 * <p>
+		 * Associates an {@link XMLReporter} with this parser.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder reporter(Class<? extends XMLReporter> value) {
+			reporter = value;
+			return this;
+		}
+
+		/**
+		 * XML resolver.
+		 *
+		 * <p>
+		 * Associates an {@link XMLResolver} with this parser.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder resolver(Class<? extends XMLResolver> value) {
+			resolver = value;
+			return this;
+		}
+
+		/**
+		 * Enable validation.
+		 *
+		 * <p>
+		 * If <jk>true</jk>, XML document will be validated.
+		 *
+		 * <p>
+		 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder validating() {
+			return validating(true);
+		}
+
+		/**
+		 * Same as {@link #validating()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder validating(boolean value) {
+			validating = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		@Override /* GENERATED - ParserBuilder */
+		public Builder autoCloseStreams() {
+			super.autoCloseStreams();
+			return this;
+		}
+
+		@Override /* GENERATED - ParserBuilder */
+		public Builder debugOutputLines(int value) {
+			super.debugOutputLines(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ParserBuilder */
+		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ParserBuilder */
+		public Builder strict() {
+			super.strict();
+			return this;
+		}
+
+		@Override /* GENERATED - ParserBuilder */
+		public Builder trimStrings() {
+			super.trimStrings();
+			return this;
+		}
+
+		@Override /* GENERATED - ParserBuilder */
+		public Builder unbuffered() {
+			super.unbuffered();
+			return this;
+		}
+
+		@Override /* GENERATED - ReaderParserBuilder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ReaderParserBuilder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -70,7 +690,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * @param builder
 	 * 	The property store containing all the settings for this object.
 	 */
-	protected XmlParser(XmlParserBuilder builder) {
+	protected XmlParser(Builder builder) {
 		super(builder);
 		validating = builder.validating;
 		preserveRootElement = builder.preserveRootElement;
@@ -84,24 +704,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	}
 
 	@Override /* Context */
-	public XmlParserBuilder copy() {
-		return new XmlParserBuilder(this);
-	}
-
-	/**
-	 * Instantiates a new clean-slate {@link XmlParserBuilder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> XmlParserBuilder()</code>.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link XmlParserBuilder} object.
-	 */
-	public static XmlParserBuilder create() {
-		return new XmlParserBuilder();
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	@Override /* Parser */
@@ -156,7 +760,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * XML event allocator.
 	 *
-	 * @see XmlParserBuilder#eventAllocator(Class)
+	 * @see Builder#eventAllocator(Class)
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -167,7 +771,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * Preserve root element during generalized parsing.
 	 *
-	 * @see XmlParserBuilder#preserveRootElement()
+	 * @see Builder#preserveRootElement()
 	 * @return
 	 * 	<jk>true</jk> if when parsing into a generic {@link OMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
@@ -179,7 +783,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * XML reporter.
 	 *
-	 * @see XmlParserBuilder#reporter(Class)
+	 * @see Builder#reporter(Class)
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -190,7 +794,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * XML resolver.
 	 *
-	 * @see XmlParserBuilder#resolver(Class)
+	 * @see Builder#resolver(Class)
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -201,7 +805,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	/**
 	 * Enable validation.
 	 *
-	 * @see XmlParserBuilder#validating()
+	 * @see Builder#validating()
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */

@@ -189,6 +189,8 @@ public abstract class Context implements MetaProvider {
 			return null;
 		}
 
+		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
+
 		/**
 		 * Build the object.
 		 *
@@ -201,12 +203,16 @@ public abstract class Context implements MetaProvider {
 				return impl;
 			if (type == null)
 				throw runtimeException("Context class not specified.");
-			try {
+			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+			if (cci == null) {
 				ClassInfo ci = ClassInfo.of(type);
-				ConstructorInfo cc = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
-				if (cc != null)
-					return cc.invoke(this);
-				throw runtimeException("Constructor not found for class {0}", type);
+				cci = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
+				if (cci == null)
+					throw runtimeException("Constructor not found for class {0}", type);
+				CONTEXT_CONSTRUCTORS.put(type, cci);
+			}
+			try {
+				return cci.invoke(this);
 			} catch (ExecutableException e) {
 				throw runtimeException(e, "Error occurred trying to create context.");
 			}
@@ -665,7 +671,7 @@ public abstract class Context implements MetaProvider {
 		 * 		When bean getters throws exceptions, the exception includes the object stack information
 		 * 		in order to determine how that method was invoked.
 		 * 	<li>
-		 * 		Enables {@link BeanTraverseBuilder#detectRecursions()}.
+		 * 		Enables {@link BeanTraverseContext.Builder#detectRecursions()}.
 		 * </ul>
 		 *
 		 * <p>

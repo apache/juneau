@@ -748,7 +748,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see XmlSerializerBuilder#addBeanTypesXml()
+	 * @see XmlSerializer.Builder#addBeanTypesXml()
 	 * @return
 	 * 	<jk>true</jk> if<js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -761,7 +761,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
 	 *
-	 * @see XmlSerializerBuilder#addNamespaceUrisToRoot()
+	 * @see XmlSerializer.Builder#addNamespaceUrisToRoot()
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
@@ -772,7 +772,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * @see XmlSerializerBuilder#disableAutoDetectNamespaces()
+	 * @see XmlSerializer.Builder#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
@@ -783,7 +783,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default namespace.
 	 *
-	 * @see XmlSerializerBuilder#defaultNamespace(Namespace)
+	 * @see XmlSerializer.Builder#defaultNamespace(Namespace)
 	 * @return
 	 * 	The default namespace URI for this document.
 	 */
@@ -794,7 +794,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
 	 *
-	 * @see XmlSerializerBuilder#enableNamespaces()
+	 * @see XmlSerializer.Builder#enableNamespaces()
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */
@@ -805,7 +805,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default namespaces.
 	 *
-	 * @see XmlSerializerBuilder#namespaces(Namespace...)
+	 * @see XmlSerializer.Builder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */

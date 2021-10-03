@@ -17,7 +17,6 @@ import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
@@ -97,7 +96,7 @@ public class ExternalDocsAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AnnotationBuilder {
@@ -108,7 +107,7 @@ public class ExternalDocsAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(ExternalDocs.class);
 		}
 

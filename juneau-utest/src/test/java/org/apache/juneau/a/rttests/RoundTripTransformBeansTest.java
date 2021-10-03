@@ -41,7 +41,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripTransformBeansTest extends RoundTripTest {
 
-	public RoundTripTransformBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripTransformBeansTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s == null ? null : s.applyAnnotations(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class), p == null ? null : p.applyAnnotations(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class), flags);
 
 	}

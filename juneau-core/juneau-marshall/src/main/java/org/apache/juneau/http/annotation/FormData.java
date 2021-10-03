@@ -443,10 +443,10 @@ public @interface FormData {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
-	 * 	<li class='jc'>{@link JsonSchemaGeneratorBuilder}
+	 * 	<li class='jc'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder}
 	 * 	<ul>
-	 * 		<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(TypeCategory...) addExamplesTo(TypeCategory...)}
-	 * 		<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples() allowNestedExamples()}
+	 * 		<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) addExamplesTo(TypeCategory...)}
+	 * 		<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() allowNestedExamples()}
 	 * 	</ul>
 	 * </ul>
 	 *

@@ -13,12 +13,18 @@
 package org.apache.juneau.xml;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -119,7 +125,7 @@ import org.apache.juneau.serializer.*;
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// c
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer without namespaces. */
@@ -140,6 +146,15 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static subclasses
 	//-------------------------------------------------------------------------------------------------------------------
@@ -152,7 +167,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Sq(XmlSerializerBuilder builder) {
+		protected Sq(Builder builder) {
 			super(builder.quoteChar('\''));
 		}
 	}
@@ -165,7 +180,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SqReadable(XmlSerializerBuilder builder) {
+		protected SqReadable(Builder builder) {
 			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
@@ -178,7 +193,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Ns(XmlSerializerBuilder builder) {
+		protected Ns(Builder builder) {
 			super(builder.enableNamespaces());
 		}
 	}
@@ -191,7 +206,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected NsSq(XmlSerializerBuilder builder) {
+		protected NsSq(Builder builder) {
 			super(builder.enableNamespaces().quoteChar('\''));
 		}
 	}
@@ -204,7 +219,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected NsSqReadable(XmlSerializerBuilder builder) {
+		protected NsSqReadable(Builder builder) {
 			super(builder.enableNamespaces().quoteChar('\'').useWhitespace());
 		}
 	}
@@ -213,6 +228,784 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	protected static final Namespace
 		DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau"),
 		DEFAULT_XS_NAMESPACE = Namespace.of("xs", "http://www.w3.org/2001/XMLSchema");
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends WriterSerializer.Builder {
+
+		boolean addBeanTypesXml, addNamespaceUrisToRoot, disableAutoDetectNamespaces, enableNamespaces;
+		Namespace defaultNamespace;
+		List<Namespace> namespaces;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			produces("text/xml");
+			type(XmlSerializer.class);
+			addBeanTypesXml = env("XmlSerializer.addBeanTypes", false);
+			addNamespaceUrisToRoot = env("XmlSerializer.addNamespaceUrisToRoot", false);
+			disableAutoDetectNamespaces = env("XmlSerializer.disableAutoDetectNamespaces", false);
+			enableNamespaces = env("XmlSerializer.enableNamespaces", false);
+			defaultNamespace = null;
+			namespaces = null;
+
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(XmlSerializer copyFrom) {
+			super(copyFrom);
+			addBeanTypesXml = copyFrom.addBeanTypesXml;
+			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
+			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+			enableNamespaces = copyFrom.enableNamespaces;
+			defaultNamespace = copyFrom.defaultNamespace;
+			namespaces = copyFrom.namespaces.length == 0 ? null : AList.of(copyFrom.namespaces);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			addBeanTypesXml = copyFrom.addBeanTypesXml;
+			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
+			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
+			enableNamespaces = copyFrom.enableNamespaces;
+			defaultNamespace = copyFrom.defaultNamespace;
+			namespaces = copyFrom.namespaces == null ? null : AList.of(copyFrom.namespaces);
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* ContextBuilder */
+		public XmlSerializer build() {
+			return (XmlSerializer)super.build();
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Add <js>"_type"</js> properties when needed.
+		 *
+		 * <p>
+		 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+		 * through reflection.
+		 *
+		 * <p>
+		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+		 *
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder addBeanTypesXml() {
+			return addBeanTypesXml(true);
+		}
+
+		/**
+		 * Same as {@link #addBeanTypesXml()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder addBeanTypesXml(boolean value) {
+			addBeanTypesXml = value;
+			return this;
+		}
+
+		/**
+		 * Add namespace URLs to the root element.
+		 *
+		 * <p>
+		 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
+		 *
+		 * <p>
+		 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * </ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder addNamespaceUrisToRoot() {
+			return addNamespaceUrisToRoot(true);
+		}
+
+		/**
+		 * Same as {@link #addNamespaceUrisToRoot()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder addNamespaceUrisToRoot(boolean value) {
+			addNamespaceUrisToRoot = value;
+			return this;
+		}
+
+		/**
+		 * Don't auto-detect namespace usage.
+		 *
+		 * <p>
+		 * Don't detect namespace usage before serialization.
+		 *
+		 * <p>
+		 * Used in conjunction with {@link Builder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
+		 * root element to only those that will be used in the resulting document.
+		 *
+		 * <p>
+		 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+		 * the root element is serialized.
+		 *
+		 * <p>
+		 * This setting is ignored if {@link Builder#enableNamespaces()} is not enabled.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>
+		 * 		Auto-detection of namespaces can be costly performance-wise.
+		 * 		<br>In high-performance environments, it's recommended that namespace detection be
+		 * 		disabled, and that namespaces be manually defined through the {@link Builder#namespaces(Namespace...)} property.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * </ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder disableAutoDetectNamespaces() {
+			return disableAutoDetectNamespaces(true);
+		}
+
+		/**
+		 * Same as {@link #disableAutoDetectNamespaces()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder disableAutoDetectNamespaces(boolean value) {
+			disableAutoDetectNamespaces = value;
+			return this;
+		}
+
+		/**
+		 * Default namespace.
+		 *
+		 * <p>
+		 * Specifies the default namespace URI for this document.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <js>"juneau: http://www.apache.org/2013/Juneau"</js>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder defaultNamespace(Namespace value) {
+			defaultNamespace = value;
+			return this;
+		}
+
+		/**
+		 * Enable support for XML namespaces.
+		 *
+		 * <p>
+		 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * </ul>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder enableNamespaces() {
+			return enableNamespaces(true);
+		}
+
+		/**
+		 * Same as {@link #enableNamespaces()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder enableNamespaces(boolean value) {
+			enableNamespaces = value;
+			return this;
+		}
+
+		/**
+		 * Enable support for XML namespaces.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder ns() {
+			return enableNamespaces();
+		}
+
+		/**
+		 * Default namespaces.
+		 *
+		 * <p>
+		 * The default list of namespaces associated with this serializer.
+		 *
+		 * @param values The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder namespaces(Namespace...values) {
+			if (namespaces == null)
+				namespaces = new ArrayList<>();
+			Collections.addAll(namespaces, values);
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override
+		public Builder produces(String value) {
+			super.produces(value);
+			return this;
+		}
+
+		@Override
+		public Builder accept(String value) {
+			super.accept(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimEmptyCollections() {
+			super.trimEmptyCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimEmptyMaps() {
+			super.trimEmptyMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimStrings() {
+			super.trimStrings();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriRelativity(UriRelativity value) {
+			super.uriRelativity(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriResolution(UriResolution value) {
+			super.uriResolution(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder sq() {
+			super.sq();
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder useWhitespace() {
+			super.useWhitespace();
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder ws() {
+			super.ws();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -238,7 +1031,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected XmlSerializer(XmlSerializerBuilder builder) {
+	protected XmlSerializer(Builder builder) {
 		super(builder);
 		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
 		enableNamespaces = builder.enableNamespaces;
@@ -251,24 +1044,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	@Override /* Context */
-	public XmlSerializerBuilder copy() {
-		return new XmlSerializerBuilder(this);
-	}
-
-	/**
-	 * Instantiates a new clean-slate {@link XmlSerializerBuilder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> XmlSerializerBuilder()</code>.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link XmlSerializerBuilder} object.
-	 */
-	public static XmlSerializerBuilder create() {
-		return new XmlSerializerBuilder();
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	@Override /* Serializer */
@@ -322,7 +1099,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see XmlSerializerBuilder#addBeanTypesXml()
+	 * @see Builder#addBeanTypesXml()
 	 * @return
 	 * 	<jk>true</jk> if<js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -335,7 +1112,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Add namespace URLs to the root element.
 	 *
-	 * @see XmlSerializerBuilder#addNamespaceUrisToRoot()
+	 * @see Builder#addNamespaceUrisToRoot()
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
@@ -346,7 +1123,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Auto-detect namespace usage.
 	 *
-	 * @see XmlSerializerBuilder#disableAutoDetectNamespaces()
+	 * @see Builder#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
@@ -357,7 +1134,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Default namespace.
 	 *
-	 * @see XmlSerializerBuilder#defaultNamespace(Namespace)
+	 * @see Builder#defaultNamespace(Namespace)
 	 * @return
 	 * 	The default namespace URI for this document.
 	 */
@@ -368,7 +1145,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Enable support for XML namespaces.
 	 *
-	 * @see XmlSerializerBuilder#enableNamespaces()
+	 * @see Builder#enableNamespaces()
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */
@@ -379,7 +1156,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Default namespaces.
 	 *
-	 * @see XmlSerializerBuilder#namespaces(Namespace...)
+	 * @see Builder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */

@@ -55,7 +55,7 @@ public class RestDeleteAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
@@ -72,7 +72,7 @@ public class RestDeleteAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(RestDelete.class);
 		}
 
@@ -450,9 +450,9 @@ public class RestDeleteAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies {@link RestDelete} annotations to a {@link RestOpContextBuilder}.
+	 * Applies {@link RestDelete} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestDelete,RestOpContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestDelete,RestOpContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -460,11 +460,11 @@ public class RestDeleteAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestOpContextApply(VarResolverSession vr) {
-			super(RestDelete.class, RestOpContextBuilder.class, vr);
+			super(RestDelete.class, RestOpContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestDelete> ai, RestOpContextBuilder b) {
+		public void apply(AnnotationInfo<RestDelete> ai, RestOpContext.Builder b) {
 			RestDelete a = ai.getAnnotation();
 
 			b.httpMethod("delete");

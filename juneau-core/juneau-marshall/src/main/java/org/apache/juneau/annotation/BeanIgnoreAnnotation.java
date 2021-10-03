@@ -86,7 +86,7 @@ public class BeanIgnoreAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFCBuilder {
@@ -94,7 +94,7 @@ public class BeanIgnoreAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(BeanIgnore.class);
 		}
 
@@ -165,9 +165,9 @@ public class BeanIgnoreAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link BeanIgnore} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link BeanIgnore} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<BeanIgnore,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<BeanIgnore,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -175,11 +175,11 @@ public class BeanIgnoreAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(BeanIgnore.class, BeanContextBuilder.class, vr);
+			super(BeanIgnore.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanIgnore> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<BeanIgnore> ai, BeanContext.Builder b) {
 			BeanIgnore a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

@@ -314,11 +314,11 @@ public class RestClient_Headers_Test {
 		return serializedHeader(name, val).schema(schema);
 	}
 
-	private static RestClientBuilder checkFooClient() {
+	private static RestClient.Builder checkFooClient() {
 		return MockRestClient.create(A.class).simpleJson().header("Check","Foo");
 	}
 
-	private static RestClientBuilder checkClient(String headerToCheck) {
+	private static RestClient.Builder checkClient(String headerToCheck) {
 		return MockRestClient.create(A.class).simpleJson().header("Check",headerToCheck).noTrace();
 	}
 }

@@ -15,9 +15,12 @@ package org.apache.juneau.config.store;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -29,29 +32,106 @@ import org.apache.juneau.collections.*;
 public class ConfigMemoryStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
+	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default memory store, all default values.*/
 	public static final ConfigMemoryStore DEFAULT = ConfigMemoryStore.create().build();
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends ConfigStore.Builder {
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(ConfigMemoryStore copyFrom) {
+			super(copyFrom);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* ContextBuilder */
+		public ConfigMemoryStore build() {
+			return new ConfigMemoryStore(this);
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Create a new builder for this object.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static ConfigMemoryStoreBuilder create() {
-		return new ConfigMemoryStoreBuilder();
-	}
-
 	@Override /* Context */
-	public ConfigMemoryStoreBuilder copy() {
-		return new ConfigMemoryStoreBuilder(this);
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
@@ -61,7 +141,7 @@ public class ConfigMemoryStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ConfigMemoryStore(ConfigMemoryStoreBuilder builder) {
+	protected ConfigMemoryStore(Builder builder) {
 		super(builder);
 	}
 

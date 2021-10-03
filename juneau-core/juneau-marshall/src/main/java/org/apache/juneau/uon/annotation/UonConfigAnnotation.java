@@ -23,9 +23,9 @@ import org.apache.juneau.uon.*;
 public class UonConfigAnnotation {
 
 	/**
-	 * Applies {@link UonConfig} annotations to a {@link UonSerializerBuilder}.
+	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<UonConfig,UonSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<UonConfig,UonSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class UonConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(UonConfig.class, UonSerializerBuilder.class, vr);
+			super(UonConfig.class, UonSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UonConfig> ai, UonSerializerBuilder b) {
+		public void apply(AnnotationInfo<UonConfig> ai, UonSerializer.Builder b) {
 			UonConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesUon(x));
@@ -47,9 +47,9 @@ public class UonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link UonConfig} annotations to a {@link UonParserBuilder}.
+	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<UonConfig,UonParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<UonConfig,UonParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -57,11 +57,11 @@ public class UonConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(UonConfig.class, UonParserBuilder.class, vr);
+			super(UonConfig.class, UonParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UonConfig> ai, UonParserBuilder b) {
+		public void apply(AnnotationInfo<UonConfig> ai, UonParser.Builder b) {
 			UonConfig a = ai.getAnnotation();
 
 			bool(a.decoding()).ifPresent(x -> b.decoding(x));

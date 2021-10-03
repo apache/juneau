@@ -29,6 +29,10 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({"unchecked"})
 public class XmlValidatorParser extends XmlParser {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	public XmlValidatorParser() {
 		super(create());
 	}

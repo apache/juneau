@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class SoapXmlConfigAnnotation {
 
 	/**
-	 * Applies {@link SoapXmlConfig} annotations to a {@link SoapXmlSerializerBuilder}.
+	 * Applies {@link SoapXmlConfig} annotations to a {@link org.apache.juneau.soap.SoapXmlSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<SoapXmlConfig,SoapXmlSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<SoapXmlConfig,SoapXmlSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class SoapXmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(SoapXmlConfig.class, SoapXmlSerializerBuilder.class, vr);
+			super(SoapXmlConfig.class, SoapXmlSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SoapXmlConfig> ai, SoapXmlSerializerBuilder b) {
+		public void apply(AnnotationInfo<SoapXmlConfig> ai, SoapXmlSerializer.Builder b) {
 			SoapXmlConfig a = ai.getAnnotation();
 
 			string(a.soapAction()).ifPresent(x -> b.soapAction(x));

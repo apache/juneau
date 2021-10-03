@@ -110,7 +110,7 @@ public class BodyAnnotation {
  	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
@@ -122,7 +122,7 @@ public class BodyAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Body.class);
 		}
 
@@ -372,9 +372,9 @@ public class BodyAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Body} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Body} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Body,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Body,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -382,11 +382,11 @@ public class BodyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Body.class, BeanContextBuilder.class, vr);
+			super(Body.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Body> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Body> ai, BeanContext.Builder b) {
 			Body a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

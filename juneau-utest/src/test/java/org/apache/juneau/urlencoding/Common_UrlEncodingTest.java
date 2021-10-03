@@ -34,7 +34,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
+		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		A t1 = A.create(), t2;
 
 		String r = s.build().serialize(t1);
@@ -64,7 +64,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
+		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		B t1 = B.create(), t2;
 		String r;
 
@@ -96,7 +96,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
+		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		C t1 = C.create(), t2;
 		String r;
 
@@ -128,7 +128,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
+		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		D t1 = D.create(), t2;
 		String r;
 
@@ -232,7 +232,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create().maxDepth(Integer.MAX_VALUE);
+		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

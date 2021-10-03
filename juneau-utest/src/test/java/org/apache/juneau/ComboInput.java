@@ -38,8 +38,8 @@ public class ComboInput<T> {
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
 	List<Tuple2<Class<?>,Consumer<?>>> applies = AList.create();
 
-	public ComboInput<T> beanContext(Consumer<BeanContextBuilder> c) {
-		apply(BeanContextBuilder.class, c);
+	public ComboInput<T> beanContext(Consumer<BeanContext.Builder> c) {
+		apply(BeanContext.Builder.class, c);
 		return this;
 	}
 

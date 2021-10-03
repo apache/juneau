@@ -33,8 +33,8 @@ public class BuilderSwap<T,B> {
 
 	private final Class<T> pojoClass;
 	private final Class<B> builderClass;
-	private final Constructor<T> pojoConstructor;      // public Pojo(Builder);
-	private final Constructor<B> builderConstructor;   // public Builder();
+	private final Constructor<T> pojoConstructor;          // public Pojo(Builder);
+	private final Constructor<B> builderConstructor;       // protected Builder();
 	private final MethodInfo createBuilderMethod;          // Builder create();
 	private final MethodInfo createPojoMethod;             // Pojo build();
 	private ClassMeta<?> builderClassMeta;

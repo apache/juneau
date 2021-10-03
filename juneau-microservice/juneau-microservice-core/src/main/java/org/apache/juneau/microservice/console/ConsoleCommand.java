@@ -16,7 +16,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.microservice.*;
 
 /**
  * Implements a command that can be invoked from the console of the microservice.

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
 /**
  * Subclass of {@link RdfParser} for parsing RDF in N3 notation.
  */
@@ -26,29 +24,25 @@ public class N3Parser extends RdfParser {
 	/** Default N3 parser, all default settings.*/
 	public static final N3Parser DEFAULT = new N3Parser(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfParser.Builder create() {
+		return RdfParser.create().n3();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfParserBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfParserBuilder} object.
-	 */
-	public static RdfParserBuilder create() {
-		return new RdfParserBuilder().n3();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param cp The property store containing all the settings for this object.
 	 */
-	protected N3Parser(RdfParserBuilder builder) {
-		super(builder.language(LANG_N3).consumes("text/n3"));
+	protected N3Parser(RdfParser.Builder builder) {
+		super(builder.n3().consumes("text/n3"));
 	}
 }

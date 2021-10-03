@@ -14,7 +14,6 @@ package org.apache.juneau.rest.mock;
 
 import java.io.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.rest.client.*;
 
 /**
  * A capturing {@link PrintStream} that allows you to easily capture console output.
@@ -24,7 +23,7 @@ import org.apache.juneau.rest.client.*;
  * constraints if you heavily use this class.
  *
  * <p>
- * Typically used in conjunction with the {@link RestClientBuilder#console(PrintStream)} to capture console output for
+ * Typically used in conjunction with the {@link org.apache.juneau.rest.client.RestClient.Builder#console(PrintStream)} to capture console output for
  * testing purposes.
  *
  * <h5 class='figure'>Example:</h5>

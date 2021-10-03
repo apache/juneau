@@ -14,8 +14,8 @@ package org.apache.juneau.jena.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.jena.RdfCollectionFormat;
-import org.apache.juneau.jena.RdfParserBuilder;
-import org.apache.juneau.jena.RdfSerializerBuilder;
+import org.apache.juneau.jena.RdfParser;
+import org.apache.juneau.jena.RdfSerializer;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.Namespace;
@@ -26,9 +26,9 @@ import org.apache.juneau.xml.Namespace;
 public class RdfConfigAnnotation {
 
 	/**
-	 * Applies {@link RdfConfig} annotations to a {@link RdfSerializerBuilder}.
+	 * Applies {@link RdfConfig} annotations to a {@link RdfSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<RdfConfig,RdfSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<RdfConfig,RdfSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -37,11 +37,11 @@ public class RdfConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(RdfConfig.class, RdfSerializerBuilder.class, vr);
+			super(RdfConfig.class, RdfSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RdfConfig> ai, RdfSerializerBuilder b) {
+		public void apply(AnnotationInfo<RdfConfig> ai, RdfSerializer.Builder b) {
 			RdfConfig a = ai.getAnnotation();
 
 			string(a.language()).ifPresent(x -> b.language(x));
@@ -81,9 +81,9 @@ public class RdfConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link RdfConfig} annotations to a {@link RdfParserBuilder}.
+	 * Applies {@link RdfConfig} annotations to a {@link RdfParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<RdfConfig,RdfParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<RdfConfig,RdfParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -92,11 +92,11 @@ public class RdfConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(RdfConfig.class, RdfParserBuilder.class, vr);
+			super(RdfConfig.class, RdfParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RdfConfig> ai, RdfParserBuilder b) {
+		public void apply(AnnotationInfo<RdfConfig> ai, RdfParser.Builder b) {
 			RdfConfig a = ai.getAnnotation();
 
 			string(a.language()).ifPresent(x -> b.language(x));

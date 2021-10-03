@@ -57,7 +57,7 @@ public class RestPostAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
@@ -77,7 +77,7 @@ public class RestPostAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(RestPost.class);
 		}
 
@@ -594,9 +594,9 @@ public class RestPostAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies {@link RestPost} annotations to a {@link RestOpContextBuilder}.
+	 * Applies {@link RestPost} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestPost,RestOpContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestPost,RestOpContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -604,11 +604,11 @@ public class RestPostAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestOpContextApply(VarResolverSession vr) {
-			super(RestPost.class, RestOpContextBuilder.class, vr);
+			super(RestPost.class, RestOpContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestPost> ai, RestOpContextBuilder b) {
+		public void apply(AnnotationInfo<RestPost> ai, RestOpContext.Builder b) {
 			RestPost a = ai.getAnnotation();
 
 			b.httpMethod("post");

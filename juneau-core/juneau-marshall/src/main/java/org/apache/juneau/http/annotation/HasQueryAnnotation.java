@@ -14,7 +14,6 @@ package org.apache.juneau.http.annotation;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -46,7 +45,7 @@ public class HasQueryAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AnnotationBuilder {
@@ -56,7 +55,7 @@ public class HasQueryAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(HasQuery.class);
 		}
 

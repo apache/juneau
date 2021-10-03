@@ -16,10 +16,19 @@ import static java.util.Optional.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Collections.*;
 
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
+import java.util.regex.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJOs to HTTP responses as HTML documents.
@@ -70,6 +79,1317 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends HtmlStrippedDocSerializer.Builder {
+
+		List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;
+		AsideFloat asideFloat;
+		String noResultsMessage;
+		boolean nowrap;
+		Class<? extends HtmlDocTemplate> template;
+		List<Class<? extends HtmlWidget>> widgets;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			produces("text/html");
+			accept("text/html");
+			type(HtmlDocSerializer.class);
+			asideFloat = AsideFloat.RIGHT;
+			noResultsMessage = "<p>no results</p>";
+			template = BasicHtmlDocTemplate.class;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(HtmlDocSerializer copyFrom) {
+			super(copyFrom);
+			aside = copy(copyFrom.aside);
+			footer = copy(copyFrom.footer);
+			head = copy(copyFrom.head);
+			header = copy(copyFrom.header);
+			nav = copy(copyFrom.nav);
+			navlinks = copy(copyFrom.navlinks);
+			script = copy(copyFrom.script);
+			style = copy(copyFrom.style);
+			stylesheet = copy(copyFrom.stylesheet);
+			asideFloat = copyFrom.asideFloat;
+			noResultsMessage = copyFrom.noResultsMessage;
+			nowrap = copyFrom.nowrap;
+			template = copyFrom.template;
+			widgets = copy(copyFrom.widgets);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			aside = copy(copyFrom.aside);
+			footer = copy(copyFrom.footer);
+			head = copy(copyFrom.head);
+			header = copy(copyFrom.header);
+			nav = copy(copyFrom.nav);
+			navlinks = copy(copyFrom.navlinks);
+			script = copy(copyFrom.script);
+			style = copy(copyFrom.style);
+			stylesheet = copy(copyFrom.stylesheet);
+			asideFloat = copyFrom.asideFloat;
+			noResultsMessage = copyFrom.noResultsMessage;
+			nowrap = copyFrom.nowrap;
+			template = copyFrom.template;
+			widgets = copy(copyFrom.widgets);
+		}
+
+		@Override /* ContextBuilder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* ContextBuilder */
+		public HtmlDocSerializer build() {
+			return (HtmlDocSerializer)super.build();
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Aside section contents.
+		 *
+		 * <p>
+		 * Allows you to specify the contents of the aside section on the HTML page.
+		 * The aside section floats on the right of the page for providing content supporting the serialized content of
+		 * the page.
+		 *
+		 * <p>
+		 * By default, the aside section is empty.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.aside(
+		 * 			<js>"&lt;ul&gt;"</js>,
+		 * 			<js>"	&lt;li&gt;Item 1"</js>,
+		 * 			<js>"	&lt;li&gt;Item 2"</js>,
+		 * 			<js>"	&lt;li&gt;Item 3"</js>,
+		 * 			<js>"&lt;/ul&gt;"</js>
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <ul class='notes'>
+		 * 	<li>
+		 * 		Format: HTML
+		 * 	<li>
+		 * 		Supports {@doc RestSvlVariables}
+		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+		 * 	<li>
+		 * 		A value of <js>"NONE"</js> can be used to force no value.
+		 * 	<li>
+		 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+		 * 	<li>
+		 * 		Multiple values are combined with newlines into a single string.
+		 * 	<li>
+		 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+		 * 	<li>
+		 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+		 * 		parent class.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder aside(String...value) {
+			aside = merge(aside, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of aside section contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #aside(String...)}.
+		 *
+		 * @return The list of aside section contents.
+		 * @see #aside(String...)
+		 */
+		public List<String> aside() {
+			if (aside == null)
+				aside = new ArrayList<>();
+			return aside;
+		}
+
+		/**
+		 * Float aside section contents.
+		 *
+		 * <p>
+		 * Allows you to position the aside contents of the page around the main contents.
+		 *
+		 * <p>
+		 * By default, the aside section is floated to the right.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.aside(
+		 * 			<js>"&lt;ul&gt;"</js>,
+		 * 			<js>"	&lt;li&gt;Item 1"</js>,
+		 * 			<js>"	&lt;li&gt;Item 2"</js>,
+		 * 			<js>"	&lt;li&gt;Item 3"</js>,
+		 * 			<js>"&lt;/ul&gt;"</js>
+		 * 		)
+		 * 		.asideFloat(<jsf>RIGHT</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder asideFloat(AsideFloat value) {
+			asideFloat = value;
+			return this;
+		}
+
+		/**
+		 * Footer section contents.
+		 *
+		 * <p>
+		 * Allows you to specify the contents of the footer section on the HTML page.
+		 *
+		 * <p>
+		 * By default, the footer section is empty.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.footer(
+		 * 			<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder footer(String...value) {
+			footer = merge(footer, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of footer section contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #footer(String...)}.
+		 *
+		 * @return The list of footer section contents.
+		 * @see #footer(String...)
+		 */
+		public List<String> footer() {
+			if (footer == null)
+				footer = new ArrayList<>();
+			return footer;
+		}
+
+		/**
+		 * Additional head section content.
+		 *
+		 * <p>
+		 * Adds the specified HTML content to the head section of the page.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.head(
+		 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder head(String...value) {
+			head = merge(head, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of head section contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #head(String...)}.
+		 *
+		 * @return The list of head section contents.
+		 * @see #head(String...)
+		 */
+		public List<String> head() {
+			if (head == null)
+				head = new ArrayList<>();
+			return head;
+		}
+
+		/**
+		 * Header section contents.
+		 *
+		 * <p>
+		 * Allows you to override the contents of the header section on the HTML page.
+		 * The header section normally contains the title and description at the top of the page.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.header(
+		 * 			<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
+		 * 		)
+		 * 		.build()
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder header(String...value) {
+			header = merge(header, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of header section contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #header(String...)}.
+		 *
+		 * @return The list of header section contents.
+		 * @see #header(String...)
+		 */
+		public List<String> header() {
+			if (header == null)
+				header = new ArrayList<>();
+			return header;
+		}
+
+		/**
+		 * Nav section contents.
+		 *
+		 * <p>
+		 * Allows you to override the contents of the nav section on the HTML page.
+		 * The nav section normally contains the page links at the top of the page.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.nav(
+		 * 			<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
+		 * 		)
+		 * 		.build()
+		 * </p>
+		 *
+		 * <p>
+		 * When this property is specified, the {@link Builder#navlinks(String...)} property is ignored.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder nav(String...value) {
+			nav = merge(nav, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of nav section contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #nav(String...)}.
+		 *
+		 * @return The list of nav section contents.
+		 * @see #nav(String...)
+		 */
+		public List<String> nav() {
+			if (nav == null)
+				nav = new ArrayList<>();
+			return nav;
+		}
+
+		/**
+		 * Page navigation links.
+		 *
+		 * <p>
+		 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
+		 *
+		 * <p>
+		 * This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
+		 *
+		 * <p>
+		 * The value is an array of strings with two possible values:
+		 * <ul>
+		 * 	<li>A key-value pair representing a hyperlink label and href:
+		 * 		<br><js>"google: http://google.com"</js>
+		 * 	<li>Arbitrary HTML.
+		 * </ul>
+		 *
+		 * <p>
+		 * Relative URLs are considered relative to the servlet path.
+		 * For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
+		 * URL is <js>"foo"</js>, the link becomes <js>"http://localhost/myContext/myServlet/foo"</js>.
+		 * Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
+		 * can also be used in addition to various other protocols specified by {@link UriResolver} such as
+		 * <js>"servlet:/..."</js>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.navlinks(
+		 * 			<js>"api: servlet:/api"</js>,
+		 * 			<js>"stats: servlet:/stats"</js>,
+		 * 			<js>"doc: doc"</js>
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder navlinks(String...value) {
+			navlinks = mergeNavLinks(navlinks, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of navlinks section contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #navlinks(String...)}.
+		 *
+		 * @return The list of navlinks section contents.
+		 * @see #navlinks(String...)
+		 */
+		public List<String> navlinks() {
+			if (navlinks == null)
+				navlinks = new ArrayList<>();
+			return navlinks;
+		}
+
+		/**
+		 * No-results message.
+		 *
+		 * <p>
+		 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.noResultsMessage("&lt;b&gt;This interface is great!&lt;/b&gt;"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder noResultsMessage(String value) {
+			noResultsMessage = value;
+			return this;
+		}
+
+		/**
+		 * Prevent word wrap on page.
+		 *
+		 * <p>
+		 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder nowrap() {
+			return nowrap(true);
+		}
+
+		/**
+		 * Same as {@link #nowrap()} but allows you to explicitly specify the boolean value.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 * @see #nowrap()
+		 */
+		@FluentSetter
+		public Builder nowrap(boolean value) {
+			nowrap = value;
+			return this;
+		}
+
+		/**
+		 * Adds the specified Javascript code to the HTML page.
+		 *
+		 * <p>
+		 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.script(<js>"alert('hello!');"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The value to add to this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder script(String...value) {
+			script = merge(script, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of page script contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #script(String...)}.
+		 *
+		 * @return The list of page script contents.
+		 * @see #script(String...)
+		 */
+		public List<String> script() {
+			if (script == null)
+				script = new ArrayList<>();
+			return script;
+		}
+
+		/**
+		 * Adds the specified CSS instructions to the HTML page.
+		 *
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.style(
+		 * 			<js>"h3 { color: red; }"</js>,
+		 * 			<js>"h5 { font-weight: bold; }"</js>
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The value to add to this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder style(String...value) {
+			style = merge(style, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of page style contents.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #style(String...)}.
+		 *
+		 * @return The list of page style contents.
+		 * @see #style(String...)
+		 */
+		public List<String> style() {
+			if (style == null)
+				style = new ArrayList<>();
+			return style;
+		}
+
+		/**
+		 * Adds to the list of stylesheet URLs.
+		 *
+		 * <p>
+		 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
+		 *
+		 * @param value
+		 * 	The value to add to this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder stylesheet(String...value) {
+			stylesheet = merge(stylesheet, value);
+			return this;
+		}
+
+		/**
+		 * Returns the list of stylesheet URLs.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #stylesheet(String...)}.
+		 *
+		 * @return The list of stylesheet URLs.
+		 * @see #stylesheet(String...)
+		 */
+		public List<String> stylesheet() {
+			if (stylesheet == null)
+				stylesheet = new ArrayList<>();
+			return stylesheet;
+		}
+
+		/**
+		 * HTML document template.
+		 *
+		 * <p>
+		 * Specifies the template to use for serializing the page.
+		 *
+		 * <p>
+		 * By default, the {@link BasicHtmlDocTemplate} class is used to construct the contents of the HTML page, but
+		 * can be overridden with your own custom implementation class.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.template9MySpecialDocTemplate.<jk>class</jk>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder template(Class<? extends HtmlDocTemplate> value) {
+			template = value;
+			return this;
+		}
+
+		/**
+		 * HTML Widgets.
+		 *
+		 * <p>
+		 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+		 * generate arbitrary replacement text.
+		 *
+		 * Widgets resolve the following variables:
+		 * <ul class='spaced-list'>
+		 * 	<li><js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
+		 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.
+		 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
+		 * 			 in the HTML page.
+		 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.
+		 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
+		 * 			 in the HTML page.
+		 * </ul>
+		 *
+		 * <p>
+		 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+		 * and aside section of the page:
+		 *
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.widgets(
+		 * 			MyWidget.<jk>class</jk>
+		 * 		)
+		 * 		.navlinks(
+		 * 			<js>"$W{MyWidget}"</js>
+		 * 		)
+		 * 		.aside(
+		 * 			<js>"Check out this widget:  $W{MyWidget}"</js>
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <ul class='notes'>
+		 * 	<li>
+		 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc RestHtmlWidgets}
+		 * </ul>
+		 *
+		 * @param values The values to add to this setting.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		@SuppressWarnings("unchecked")
+		public Builder widgets(Class<? extends HtmlWidget>...values) {
+			Collections.addAll(widgets(), values);
+			return this;
+		}
+
+		/**
+		 * Returns the list of page widgets.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #widgets(Class...)}.
+		 *
+		 * @return The list of page widgets.
+		 * @see #widgets(Class...)
+		 */
+		public List<Class<? extends HtmlWidget>> widgets() {
+			if (widgets == null)
+				widgets = new ArrayList<>();
+			return widgets;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimEmptyCollections() {
+			super.trimEmptyCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimEmptyMaps() {
+			super.trimEmptyMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimStrings() {
+			super.trimStrings();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriRelativity(UriRelativity value) {
+			super.uriRelativity(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriResolution(UriResolution value) {
+			super.uriResolution(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder sq() {
+			super.sq();
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder useWhitespace() {
+			super.useWhitespace();
+			return this;
+		}
+
+		@Override /* GENERATED - WriterSerializerBuilder */
+		public Builder ws() {
+			super.ws();
+			return this;
+		}
+
+		@Override /* GENERATED - XmlSerializerBuilder */
+		public Builder addNamespaceUrisToRoot() {
+			super.addNamespaceUrisToRoot();
+			return this;
+		}
+
+		@Override /* GENERATED - XmlSerializerBuilder */
+		public Builder disableAutoDetectNamespaces() {
+			super.disableAutoDetectNamespaces();
+			return this;
+		}
+
+		@Override /* GENERATED - XmlSerializerBuilder */
+		public Builder enableNamespaces() {
+			super.enableNamespaces();
+			return this;
+		}
+
+		@Override /* GENERATED - XmlSerializerBuilder */
+		public Builder namespaces(Namespace...values) {
+			super.namespaces(values);
+			return this;
+		}
+
+		@Override /* GENERATED - XmlSerializerBuilder */
+		public Builder ns() {
+			super.ns();
+			return this;
+		}
+
+		@Override /* GENERATED - HtmlSerializerBuilder */
+		public Builder addKeyValueTableHeaders() {
+			super.addKeyValueTableHeaders();
+			return this;
+		}
+
+		@Override /* GENERATED - HtmlSerializerBuilder */
+		public Builder disableDetectLabelParameters() {
+			super.disableDetectLabelParameters();
+			return this;
+		}
+
+		@Override /* GENERATED - HtmlSerializerBuilder */
+		public Builder disableDetectLinksInStrings() {
+			super.disableDetectLinksInStrings();
+			return this;
+		}
+
+		@Override /* GENERATED - HtmlSerializerBuilder */
+		public Builder labelParameter(String value) {
+			super.labelParameter(value);
+			return this;
+		}
+
+		@Override /* GENERATED - HtmlSerializerBuilder */
+		public Builder uriAnchorText(AnchorText value) {
+			super.uriAnchorText(value);
+			return this;
+		}
+
+		// </FluentSetters>
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Helpers
+		//-----------------------------------------------------------------------------------------------------------------
+
+		private static <T> List<T> copy(List<T> s) {
+			return s == null || s.isEmpty() ? null : new ArrayList<>(s);
+		}
+
+		private static <T> List<T> copy(T[] s) {
+			return s.length == 0 ? null : new ArrayList<>(Arrays.asList(s));
+		}
+
+		private List<String> merge(List<String> old, String[] newValues) {
+			List<String> x = new ArrayList<>(newValues.length);
+			for (String s : newValues) {
+				if ("NONE".equals(s)) {
+					if (old != null)
+						old.clear();
+				} else if ("INHERIT".equals(s)) {
+					if (old != null)
+						x.addAll(old);
+				} else {
+					x.add(s);
+				}
+			}
+			return x;
+		}
+
+		private List<String> mergeNavLinks(List<String> old, String[] newValues) {
+			List<String> x = new ArrayList<>(newValues.length);
+			for (String s : newValues) {
+				if ("NONE".equals(s)) {
+					if (old != null)
+						old.clear();
+				} else if ("INHERIT".equals(s)) {
+					if (old != null)
+						x.addAll(old);
+				} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
+					Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
+					lm.matches();
+					String key = lm.group(1);
+					int index = Math.min(x.size(), Integer.parseInt(lm.group(2)));
+					String remainder = lm.group(3);
+					x.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+				} else {
+					x.add(s);
+				}
+			}
+			return x;
+		}
+
+		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -91,7 +1411,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected HtmlDocSerializer(HtmlDocSerializerBuilder builder) {
+	protected HtmlDocSerializer(Builder builder) {
 		super(builder);
 		style = ofNullable(builder.style).map(x -> toArray(x)).orElse(new String[0]);
 		stylesheet = ofNullable(builder.stylesheet).map(x -> toArray(x)).orElse(new String[0]);
@@ -114,24 +1434,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* Context */
-	public HtmlDocSerializerBuilder copy() {
-		return new HtmlDocSerializerBuilder(this);
-	}
-
-	/**
-	 * Instantiates a new clean-slate {@link HtmlDocSerializerBuilder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> HtmlDocSerializerBuilder()</code>.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link HtmlDocSerializerBuilder} object.
-	 */
-	public static HtmlDocSerializerBuilder create() {
-		return new HtmlDocSerializerBuilder();
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	@Override /* Serializer */
@@ -158,7 +1462,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Aside section contents.
 	 *
-	 * @see HtmlDocSerializerBuilder#aside(String...)
+	 * @see Builder#aside(String...)
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
@@ -169,7 +1473,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Float side section contents.
 	 *
-	 * @see HtmlDocSerializerBuilder#asideFloat(AsideFloat)
+	 * @see Builder#asideFloat(AsideFloat)
 	 * @return
 	 * 	How to float the aside contents on the page.
 	 */
@@ -180,7 +1484,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Footer section contents.
 	 *
-	 * @see HtmlDocSerializerBuilder#footer(String...)
+	 * @see Builder#footer(String...)
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
@@ -191,7 +1495,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Additional head section content.
 	 *
-	 * @see HtmlDocSerializerBuilder#head(String...)
+	 * @see Builder#head(String...)
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
@@ -202,7 +1506,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Header section contents.
 	 *
-	 * @see HtmlDocSerializerBuilder#header(String...)
+	 * @see Builder#header(String...)
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
@@ -213,7 +1517,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Nav section contents.
 	 *
-	 * @see HtmlDocSerializerBuilder#nav(String...)
+	 * @see Builder#nav(String...)
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
@@ -224,7 +1528,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Page navigation links.
 	 *
-	 * @see HtmlDocSerializerBuilder#navlinks(String...)
+	 * @see Builder#navlinks(String...)
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
@@ -235,7 +1539,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * No-results message.
 	 *
-	 * @see HtmlDocSerializerBuilder#noResultsMessage(String)
+	 * @see Builder#noResultsMessage(String)
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
@@ -246,7 +1550,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Prevent word wrap on page.
 	 *
-	 * @see HtmlDocSerializerBuilder#nowrap()
+	 * @see Builder#nowrap()
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
 	 */
@@ -257,7 +1561,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Javascript code.
 	 *
-	 * @see HtmlDocSerializerBuilder#script(String...)
+	 * @see Builder#script(String...)
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
@@ -268,7 +1572,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * CSS style code.
 	 *
-	 * @see HtmlDocSerializerBuilder#style(String...)
+	 * @see Builder#style(String...)
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
@@ -279,7 +1583,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Stylesheet import URLs.
 	 *
-	 * @see HtmlDocSerializerBuilder#stylesheet(String...)
+	 * @see Builder#stylesheet(String...)
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
@@ -290,7 +1594,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * HTML document template.
 	 *
-	 * @see HtmlDocSerializerBuilder#template(Class)
+	 * @see Builder#template(Class)
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
@@ -301,7 +1605,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * HTML widgets.
 	 *
-	 * @see HtmlDocSerializerBuilder#widgets(Class...)
+	 * @see Builder#widgets(Class...)
 	 * @return
 	 * 	Widgets defined on this serializers.
 	 */

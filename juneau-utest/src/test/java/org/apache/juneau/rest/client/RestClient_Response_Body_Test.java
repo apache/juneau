@@ -80,7 +80,7 @@ public class RestClient_Response_Body_Test {
 			this.headers = o;
 			return this;
 		}
-		public TestClient(MockRestClientBuilder builder) {
+		public TestClient(MockRestClient.Builder builder) {
 			super(builder);
 		}
 		@Override
@@ -322,7 +322,7 @@ public class RestClient_Response_Body_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClientBuilder client() {
+	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class).simpleJson();
 	}
 

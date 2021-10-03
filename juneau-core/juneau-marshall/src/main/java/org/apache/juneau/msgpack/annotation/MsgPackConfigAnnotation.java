@@ -23,9 +23,9 @@ import org.apache.juneau.svl.*;
 public class MsgPackConfigAnnotation {
 
 	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackSerializerBuilder}.
+	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.msgpack.MsgPackSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<MsgPackConfig,MsgPackSerializerBuilder> {
+	public static class SerializerApply extends AnnotationApplier<MsgPackConfig,MsgPackSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -33,11 +33,11 @@ public class MsgPackConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(MsgPackConfig.class, MsgPackSerializerBuilder.class, vr);
+			super(MsgPackConfig.class, MsgPackSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackSerializerBuilder b) {
+		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackSerializer.Builder b) {
 			MsgPackConfig a = ai.getAnnotation();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesMsgPack(x));
@@ -45,9 +45,9 @@ public class MsgPackConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackParserBuilder}.
+	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.msgpack.MsgPackParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParserBuilder> {
+	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -55,11 +55,11 @@ public class MsgPackConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(MsgPackConfig.class, MsgPackParserBuilder.class, vr);
+			super(MsgPackConfig.class, MsgPackParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParserBuilder b) {
+		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParser.Builder b) {
 		}
 	}
 }

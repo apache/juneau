@@ -110,7 +110,7 @@ public class ResponseHeader implements Header {
 	 * Specifies the part parser to use for this header.
 	 *
 	 * <p>
-	 * If not specified, uses the part parser defined on the client by calling {@link RestClientBuilder#partParser(Class)}.
+	 * If not specified, uses the part parser defined on the client by calling {@link RestClient.Builder#partParser(Class)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this header.

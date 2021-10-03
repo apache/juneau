@@ -130,7 +130,7 @@ public class ResponseBody implements HttpEntity {
 	 * Specifies the parser to use for this body.
 	 *
 	 * <p>
-	 * If not specified, uses the parser defined on the client set via {@link RestClientBuilder#parser(Class)}.
+	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this body.
@@ -761,7 +761,7 @@ public class ResponseBody implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
 	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> asFuture(final Class<T> type) throws RestCallException {
@@ -794,7 +794,7 @@ public class ResponseBody implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
 	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> asFuture(final ClassMeta<T> type) throws RestCallException {
@@ -833,7 +833,7 @@ public class ResponseBody implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
 	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> asFuture(final Type type, final Type...args) throws RestCallException {
@@ -891,7 +891,7 @@ public class ResponseBody implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
 	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
 	public Future<String> asStringFuture() throws RestCallException {

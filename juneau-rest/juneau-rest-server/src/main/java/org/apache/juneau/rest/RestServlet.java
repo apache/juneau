@@ -260,7 +260,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Method that gets called during servlet initialization.
 	 *
 	 * <p>
-	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContextBuilder}
+	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext.Builder}
 	 * object has been created and initialized with the annotations defined on the class, but before the
 	 * {@link RestContext} object has been created.
 	 *
@@ -299,7 +299,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @throws Exception Any exception thrown will cause servlet to fail startup.
 	 */
 	@RestHook(INIT)
-	public void onInit(RestContextBuilder builder) throws Exception {}
+	public void onInit(RestContext.Builder builder) throws Exception {}
 
 	/**
 	 * Method that gets called immediately after servlet initialization.

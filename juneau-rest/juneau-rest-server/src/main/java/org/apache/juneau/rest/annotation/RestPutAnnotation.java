@@ -57,7 +57,7 @@ public class RestPutAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
@@ -77,7 +77,7 @@ public class RestPutAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(RestPut.class);
 		}
 
@@ -594,9 +594,9 @@ public class RestPutAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies {@link RestPut} annotations to a {@link RestOpContextBuilder}.
+	 * Applies {@link RestPut} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestPut,RestOpContextBuilder> {
+	public static class RestOpContextApply extends AnnotationApplier<RestPut,RestOpContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -604,11 +604,11 @@ public class RestPutAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public RestOpContextApply(VarResolverSession vr) {
-			super(RestPut.class, RestOpContextBuilder.class, vr);
+			super(RestPut.class, RestOpContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestPut> ai, RestOpContextBuilder b) {
+		public void apply(AnnotationInfo<RestPut> ai, RestOpContext.Builder b) {
 			RestPut a = ai.getAnnotation();
 
 			b.httpMethod("put");

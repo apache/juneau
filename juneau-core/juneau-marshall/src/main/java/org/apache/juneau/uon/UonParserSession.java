@@ -62,7 +62,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * Create a specialized parser session for parsing URL parameters.
 	 *
 	 * <p>
-	 * The main difference is that characters are never decoded, and the {@link UonParserBuilder#decoding()}
+	 * The main difference is that characters are never decoded, and the {@link UonParser.Builder#decoding()}
 	 * property is always ignored.
 	 *
 	 * @param ctx
@@ -830,7 +830,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
-	 * @see UonParserBuilder#decoding()
+	 * @see UonParser.Builder#decoding()
 	 * @return
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
@@ -842,7 +842,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Configuration property:  Validate end.
 	 *
-	 * @see UonParserBuilder#validateEnd()
+	 * @see UonParser.Builder#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

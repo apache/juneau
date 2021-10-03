@@ -106,7 +106,7 @@ public class BeanAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTBuilder {
@@ -121,7 +121,7 @@ public class BeanAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Bean.class);
 		}
 
@@ -504,9 +504,9 @@ public class BeanAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Bean} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Bean} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Bean,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Bean,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -514,11 +514,11 @@ public class BeanAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Bean.class, BeanContextBuilder.class, vr);
+			super(Bean.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Bean> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Bean> ai, BeanContext.Builder b) {
 			Bean a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

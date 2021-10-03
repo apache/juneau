@@ -100,7 +100,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#clientVersionHeader(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
 	 */
 	String clientVersion() default "";
@@ -109,7 +109,7 @@ public @interface RestGet {
 	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#type(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#type(Class)}
 	 * </ul>
 	 */
 	Class<? extends RestOpContext> contextClass() default RestOpContext.Null.class;
@@ -121,7 +121,7 @@ public @interface RestGet {
 	 * Associates one or more {@link RestConverter converters} with this method.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#converters()} - Registering converters with REST resources.
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
 	 * </ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};
@@ -154,7 +154,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#debugEnablement()}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
 	 */
 	String debug() default "";
@@ -183,8 +183,8 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#defaultCharset(Charset)}
-	 * 	<li class='jm'>{@link RestOpContextBuilder#defaultCharset(Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
 	 * </ul>
 	 */
@@ -250,7 +250,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#defaultRequestAttributes(NamedAttribute...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
 	 */
@@ -276,7 +276,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#defaultRequestHeaders(org.apache.http.Header...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 */
 	String[] defaultRequestHeaders() default {};
@@ -301,7 +301,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#defaultResponseHeaders(org.apache.http.Header...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 */
 	String[] defaultResponseHeaders() default {};
@@ -366,7 +366,7 @@ public @interface RestGet {
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
 	 * <p class='bcode w800'>
-	 * 	RestOpContextBuilder <jv>builder</jv> = RestOpContextBuilder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
 	 * </p>
 	 *
@@ -383,7 +383,7 @@ public @interface RestGet {
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#guards()}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
@@ -454,7 +454,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#produces(MediaType...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#produces(MediaType...)}
 	 * </ul>
 	 */
 	String[] produces() default {};
@@ -498,7 +498,7 @@ public @interface RestGet {
 	 * 	<li>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestOpContextBuilder#rolesDeclared(String...)}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -507,7 +507,7 @@ public @interface RestGet {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#roleGuard(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
 	 */
 	String roleGuard() default "";
@@ -536,7 +536,7 @@ public @interface RestGet {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestOpContextBuilder#rolesDeclared(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
 	 */
 	String rolesDeclared() default "";
@@ -583,7 +583,7 @@ public @interface RestGet {
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
 	 * <p class='bcode w800'>
-	 * 	RestOpContextBuilder <jv>builder</jv> = RestOpContextBuilder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getSerializers().set(<jv>classes</jv>);
 	 * </p>
 	 *

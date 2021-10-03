@@ -150,7 +150,7 @@ public class HeaderAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -166,7 +166,7 @@ public class HeaderAnnotation {
 		/**
 		 * Constructor.
 		 */
-		public Builder() {
+		protected Builder() {
 			super(Header.class);
 		}
 
@@ -1090,9 +1090,9 @@ public class HeaderAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Header} annotations to a {@link BeanContextBuilder}.
+	 * Applies targeted {@link Header} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Header,BeanContextBuilder> {
+	public static class Applier extends AnnotationApplier<Header,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -1100,11 +1100,11 @@ public class HeaderAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Header.class, BeanContextBuilder.class, vr);
+			super(Header.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Header> ai, BeanContextBuilder b) {
+		public void apply(AnnotationInfo<Header> ai, BeanContext.Builder b) {
 			Header a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

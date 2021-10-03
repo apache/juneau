@@ -34,7 +34,7 @@ import org.junit.runners.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 
-	public RoundTripObjectsAsStringsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripObjectsAsStringsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

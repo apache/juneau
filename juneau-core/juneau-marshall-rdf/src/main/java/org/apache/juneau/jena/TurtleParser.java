@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
 /**
  * Subclass of {@link RdfParser} for parsing RDF in Turtle notation.
  */
@@ -26,29 +24,25 @@ public class TurtleParser extends RdfParser {
 	/** Default Turtle parser, all default settings.*/
 	public static final TurtleParser DEFAULT = new TurtleParser(create());
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static RdfParser.Builder create() {
+		return RdfParser.create().turtle();
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Instantiates a new clean-slate {@link RdfParserBuilder} object.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link RdfParserBuilder} object.
-	 */
-	public static RdfParserBuilder create() {
-		return new RdfParserBuilder().turtle();
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected TurtleParser(RdfParserBuilder builder) {
-		super(builder.language(LANG_TURTLE).consumes("text/turtle"));
+	protected TurtleParser(RdfParser.Builder builder) {
+		super(builder.turtle().consumes("text/turtle"));
 	}
 }

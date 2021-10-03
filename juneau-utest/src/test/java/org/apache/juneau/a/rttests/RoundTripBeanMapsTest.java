@@ -41,7 +41,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	static Class<?>[] ANNOTATED_CLASSES={L2Config.class, M2Config.class};
 
-	public RoundTripBeanMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripBeanMapsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -591,8 +591,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testInterfaceClassUsingBeanFilter() throws Exception {
-		SerializerBuilder s = getSerializer().copy();
-		ParserBuilder p = getParser() == null ? null : getParser().copy();
+		Serializer.Builder s = getSerializer().copy();
+		Parser.Builder p = getParser() == null ? null : getParser().copy();
 		FB2 t;
 		Object r;
 

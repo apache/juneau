@@ -55,7 +55,7 @@ public @interface Beanp {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * <p>
@@ -105,7 +105,7 @@ public @interface Beanp {
 	 * However, this property can be used to assign a different property name from the automatically inferred value.
 	 *
 	 * <p>
-	 * If the {@link BeanContextBuilder#beanFieldVisibility(Visibility)} setting on the bean context excludes this field (e.g. the
+	 * If the {@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)} setting on the bean context excludes this field (e.g. the
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
 	 *
@@ -201,7 +201,7 @@ public @interface Beanp {
 	 *
 	 * <div class='info'>
 	 * 	Note that if you're not interested in these additional properties, you can also use the
-	 * 	{@link BeanContextBuilder#ignoreUnknownBeanProperties()} setting to ignore values that don't fit into existing
+	 * 	{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()} setting to ignore values that don't fit into existing
 	 * 	properties.
 	 * </div>
 	 * <div class='info'>
@@ -214,7 +214,7 @@ public @interface Beanp {
 	 * Dynamically apply this annotation to the specified fields/methods.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing field/method.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing field/method.
 	 * It is ignored when the annotation is applied directly to fields/methods.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>
@@ -369,9 +369,9 @@ public @interface Beanp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
 	 * </ul>
 	 */
 	String ro() default "";
@@ -445,9 +445,9 @@ public @interface Beanp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
 	 */
 	String wo() default "";

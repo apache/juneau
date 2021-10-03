@@ -25,7 +25,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class CommonXmlTest {
 
-	private RdfSerializerBuilder getBasicSerializer() {
+	private RdfSerializer.Builder getBasicSerializer() {
 		return RdfSerializer.create()
 			.sq()
 			.rdfxml_allowBadUris()
@@ -42,7 +42,7 @@ public class CommonXmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanUriAnnotation() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 		String r;
@@ -70,7 +70,7 @@ public class CommonXmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanUriAnnotationOnlyUriProperty() throws Exception {
-		RdfSerializerBuilder s = getBasicSerializer();
+		RdfSerializer.Builder s = getBasicSerializer();
 		RdfParser p = RdfXmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;

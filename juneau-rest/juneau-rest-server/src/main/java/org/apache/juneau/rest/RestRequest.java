@@ -1530,8 +1530,8 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(Class)}
-	 * 	<li class='jm'>{@link RestContextBuilder#swaggerProvider(SwaggerProvider)}
+	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
+	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 	 * 	<li class='link'>{@doc RestSwagger}
 	 * </ul>
 	 *
@@ -1821,7 +1821,7 @@ public final class RestRequest {
 	 * The config file is identified via one of the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Rest#config()}
-	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
+	 * 	<li class='jm'>{@link RestContext.Builder#config(Config)}
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>

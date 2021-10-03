@@ -13,17 +13,828 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.SystemEnv.*;
 import static java.util.Optional.*;
 
+import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  * {@review}
  */
 public abstract class WriterSerializer extends Serializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public abstract static class Builder extends Serializer.Builder {
+
+		boolean useWhitespace;
+		Charset fileCharset, streamCharset;
+		int maxIndent;
+		Character quoteChar, quoteCharOverride;
+
+		/**
+		 * Constructor, default settings.
+		 */
+		protected Builder() {
+			super();
+			fileCharset = Charset.defaultCharset();
+			streamCharset = IOUtils.UTF8;
+			maxIndent = env("WriterSerializer.maxIndent", 100);
+			quoteChar = env("WriterSerializer.quoteChar", (Character)null);
+			quoteCharOverride = env("WriterSerializer.quoteCharOverride", (Character)null);
+			useWhitespace = env("WriterSerializer.useWhitespace", false);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(WriterSerializer copyFrom) {
+			super(copyFrom);
+			fileCharset = copyFrom.fileCharset;
+			streamCharset = copyFrom.streamCharset;
+			maxIndent = copyFrom.maxIndent;
+			quoteChar = copyFrom.quoteChar;
+			quoteCharOverride = copyFrom.quoteCharOverride;
+			useWhitespace = copyFrom.useWhitespace;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			fileCharset = copyFrom.fileCharset;
+			streamCharset = copyFrom.streamCharset;
+			maxIndent = copyFrom.maxIndent;
+			quoteChar = copyFrom.quoteChar;
+			quoteCharOverride = copyFrom.quoteCharOverride;
+			useWhitespace = copyFrom.useWhitespace;
+		}
+
+		@Override /* ContextBuilder */
+		public abstract Builder copy();
+
+		@Override /* ContextBuilder */
+		public WriterSerializer build() {
+			return (WriterSerializer)super.build();
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * File charset.
+		 *
+		 * <p>
+		 * The character set to use for writing <c>Files</c> to the file system.
+		 *
+		 * <p>
+		 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
+		 * 	<jv>serializer</jv>.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the system JVM setting.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder fileCharset(Charset value) {
+			fileCharset = value;
+			return this;
+		}
+
+		/**
+		 * Maximum indentation.
+		 *
+		 * <p>
+		 * Specifies the maximum indentation level in the serialized document.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>This setting does not apply to the RDF serializers.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.ws()  <jc>// Enable whitespace</jc>
+		 * 		.maxIndent(20)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <c>100</c>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder maxIndent(int value) {
+			maxIndent = value;
+			return this;
+		}
+
+		/**
+		 *  Quote character.
+		 *
+		 * <p>
+		 * Specifies the character to use for quoting attributes and values.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>This setting does not apply to the RDF serializers.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that uses single quotes.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.quoteChar(<js>'\''</js>)
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a single property</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Produces {'foo':'bar'}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <js>'"'</js>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder quoteChar(char value) {
+			quoteChar = value;
+			return this;
+		}
+
+		/**
+		 * Quote character override.
+		 *
+		 * <p>
+		 * Similar to {@link #quoteChar(char)} but takes precedence over that setting.
+		 *
+		 * <p>
+		 * Allows you to override the quote character even if it's set by a subclass such as {@link SimpleJsonSerializer}.
+		 *
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder quoteCharOverride(char value) {
+			quoteCharOverride = value;
+			return this;
+		}
+
+		/**
+		 *  Quote character.
+		 *
+		 * <p>
+		 * Specifies to use single quotes for quoting attributes and values.
+		 *
+		 * <ul class='notes'>
+		 * 	<li>This setting does not apply to the RDF serializers.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that uses single quotes.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.sq()
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a single property</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Produces {'foo':'bar'}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder sq() {
+			return quoteChar('\'');
+		}
+
+		/**
+		 * Output stream charset.
+		 *
+		 * <p>
+		 * The character set to use when writing to <c>OutputStreams</c>.
+		 *
+		 * <p>
+		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it to write to a UTF-8 encoded output stream.</jc>
+		 * 	<jv>serializer</jv>.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is the system JVM setting.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder streamCharset(Charset value) {
+			streamCharset = value;
+			return this;
+		}
+
+		/**
+		 *  Use whitespace.
+		 *
+		 * <p>
+		 * When enabled, whitespace is added to the output to improve readability.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.useWhitespace()
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a single property</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder useWhitespace() {
+			return useWhitespace(true);
+		}
+
+		/**
+		 * Same as {@link #useWhitespace()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder useWhitespace(boolean value) {
+			useWhitespace = value;
+			return this;
+		}
+
+		/**
+		 *  Use whitespace.
+		 *
+		 * <p>
+		 * When enabled, whitespace is added to the output to improve readability.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.ws()
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a single property</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Serializer.Builder ws() {
+			return useWhitespace();
+		}
+
+		// <FluentSetters>
+
+		@Override
+		public Builder produces(String value) {
+			super.produces(value);
+			return this;
+		}
+
+		@Override
+		public Builder accept(String value) {
+			super.accept(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextBuilder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder beanDictionary(Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanClasses(Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanContextBuilder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - BeanTraverseBuilder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimEmptyCollections() {
+			super.trimEmptyCollections();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimEmptyMaps() {
+			super.trimEmptyMaps();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder trimStrings() {
+			super.trimStrings();
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriRelativity(UriRelativity value) {
+			super.uriRelativity(value);
+			return this;
+		}
+
+		@Override /* GENERATED - SerializerBuilder */
+		public Builder uriResolution(UriResolution value) {
+			super.uriResolution(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -42,7 +853,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected WriterSerializer(WriterSerializerBuilder builder) {
+	protected WriterSerializer(Builder builder) {
 		super(builder);
 
 		maxIndent = builder.maxIndent;
@@ -56,7 +867,7 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	@Override
-	public abstract WriterSerializerBuilder copy();
+	public abstract Builder copy();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
@@ -126,7 +937,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * File charset.
 	 *
-	 * @see WriterSerializerBuilder#fileCharset(Charset)
+	 * @see Builder#fileCharset(Charset)
 	 * @return
 	 * 	The character set to use when writing to <c>Files</c> on the file system.
 	 */
@@ -137,7 +948,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Maximum indentation.
 	 *
-	 * @see WriterSerializerBuilder#maxIndent(int)
+	 * @see Builder#maxIndent(int)
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
@@ -148,7 +959,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Quote character.
 	 *
-	 * @see WriterSerializerBuilder#quoteChar(char)
+	 * @see Builder#quoteChar(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
@@ -159,7 +970,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Quote character.
 	 *
-	 * @see WriterSerializerBuilder#quoteChar(char)
+	 * @see Builder#quoteChar(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
@@ -170,7 +981,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Output stream charset.
 	 *
-	 * @see WriterSerializerBuilder#streamCharset(Charset)
+	 * @see Builder#streamCharset(Charset)
 	 * @return
 	 * 	The character set to use when writing to <c>OutputStreams</c> and byte arrays.
 	 */
@@ -181,7 +992,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Trim strings.
 	 *
-	 * @see WriterSerializerBuilder#useWhitespace()
+	 * @see Builder#useWhitespace()
 	 * @return
 	 * 	When enabled, whitespace is added to the output to improve readability.
 	 */

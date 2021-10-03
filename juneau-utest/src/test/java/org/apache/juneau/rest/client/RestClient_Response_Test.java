@@ -60,7 +60,7 @@ public class RestClient_Response_Test {
 	}
 
 	public static class A1 extends MockRestClient {
-		public A1(MockRestClientBuilder b) {
+		public A1(MockRestClient.Builder b) {
 			super(b);
 		}
 		@Override
@@ -258,19 +258,19 @@ public class RestClient_Response_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClientBuilder client() {
+	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class).simpleJson();
 	}
 
-	private static RestClientBuilder client(Class<?> c) {
+	private static RestClient.Builder client(Class<?> c) {
 		return MockRestClient.create(c).simpleJson();
 	}
 
-	private static RestClientBuilder checkFooClient(Class<?> c) {
+	private static RestClient.Builder checkFooClient(Class<?> c) {
 		return MockRestClient.create(c).simpleJson().header("Check","Foo");
 	}
 
-	private static RestClientBuilder checkClient(Class<?> c, String headerToCheck) {
+	private static RestClient.Builder checkClient(Class<?> c, String headerToCheck) {
 		return MockRestClient.create(c).simpleJson().header("Check",headerToCheck);
 	}
 }

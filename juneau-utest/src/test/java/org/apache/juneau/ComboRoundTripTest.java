@@ -62,14 +62,14 @@ public abstract class ComboRoundTripTest {
 		if (s2 == null) {
 			s2 = applySettings(s);
 			if (! (comboInput.swaps.isEmpty() && comboInput.applies.isEmpty())) {
-				SerializerBuilder b = s2.copy();
+				Serializer.Builder b = s2.copy();
 				b.swaps((Class<?>[])comboInput.swaps.toArray(new Class[0]));
 				List<Tuple2<Class<?>,Consumer<?>>> pairs = comboInput.applies;
 				for (Tuple2<Class<?>,Consumer<?>> pair : pairs) {
-					if (pair.getA().equals(BeanContextBuilder.class))
-						b.beanContext((Consumer<BeanContextBuilder>) pair.getB());
+					if (pair.getA().equals(BeanContext.Builder.class))
+						b.beanContext((Consumer<BeanContext.Builder>) pair.getB());
 					else if (pair.getA().isInstance(b))
-						b.apply(SerializerBuilder.class, (Consumer<SerializerBuilder>) pair.getB());
+						b.apply(Serializer.Builder.class, (Consumer<Serializer.Builder>) pair.getB());
 				}
 				s2 = b.build();
 			}
@@ -83,14 +83,14 @@ public abstract class ComboRoundTripTest {
 		if (p2 == null) {
 			p2 = applySettings(p);
 			if (! (comboInput.swaps.isEmpty() && comboInput.applies.isEmpty())) {
-				ParserBuilder b = p2.copy();
+				Parser.Builder b = p2.copy();
 				b.swaps((Class<?>[])comboInput.swaps.toArray(new Class[0]));
 				List<Tuple2<Class<?>,Consumer<?>>> pairs = comboInput.applies;
 				for (Tuple2<Class<?>,Consumer<?>> pair : pairs) {
-					if (pair.getA().equals(BeanContextBuilder.class))
-						b.beanContext((Consumer<BeanContextBuilder>) pair.getB());
+					if (pair.getA().equals(BeanContext.Builder.class))
+						b.beanContext((Consumer<BeanContext.Builder>) pair.getB());
 					else if (pair.getA().isInstance(b))
-						b.apply(ParserBuilder.class, (Consumer<ParserBuilder>) pair.getB());
+						b.apply(Parser.Builder.class, (Consumer<Parser.Builder>) pair.getB());
 				}
 				p2 = b.build();
 			}
