@@ -18,13 +18,18 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.IOException;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
+import java.util.function.*;
 
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -39,22 +44,146 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class HtmlParserSession extends XmlParserSession {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private static final Set<String> whitespaceElements = ASet.of("br","bs","sp","ff");
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(HtmlParser ctx) {
+		return new Builder(ctx);
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends XmlParserSession.Builder {
+
+		HtmlParser ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(HtmlParser ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public HtmlParserSession build() {
+			return new HtmlParserSession(this);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final HtmlParser ctx;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected HtmlParserSession(HtmlParser ctx, ParserSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
+	protected HtmlParserSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
 	}
 
 	@Override /* ParserSession */

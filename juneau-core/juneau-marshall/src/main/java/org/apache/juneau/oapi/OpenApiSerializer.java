@@ -24,7 +24,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -788,23 +787,19 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		return new Builder(this);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Context */
-	public OpenApiSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public OpenApiSerializerSession.Builder createSession() {
+		return OpenApiSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public OpenApiSerializerSession createSession(SerializerSessionArgs args) {
-		return new OpenApiSerializerSession(this, args);
+	@Override /* Context */
+	public OpenApiSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	@Override /* HttpPartSerializer */
-	public OpenApiSerializerSession createPartSession(SerializerSessionArgs args) {
-		return new OpenApiSerializerSession(this, args);
+	public OpenApiSerializerSession getPartSession() {
+		return OpenApiSerializerSession.create(this).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

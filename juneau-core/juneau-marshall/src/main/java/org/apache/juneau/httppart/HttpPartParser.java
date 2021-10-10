@@ -15,7 +15,6 @@ package org.apache.juneau.httppart;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 
 /**
  * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
@@ -105,10 +104,9 @@ public interface HttpPartParser {
 	/**
 	 * Creates a new parser session.
 	 *
-	 * @param args The runtime arguments for the session.
 	 * @return A new parser session.
 	 */
-	public HttpPartParserSession createPartSession(ParserSessionArgs args);
+	public HttpPartParserSession getPartSession();
 
 	/**
 	 * Returns metadata about the specified class.

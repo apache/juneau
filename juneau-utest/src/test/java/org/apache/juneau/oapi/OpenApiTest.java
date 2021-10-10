@@ -20,7 +20,6 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.testutils.*;
@@ -34,14 +33,13 @@ public class OpenApiTest {
 
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;
-	public static final BeanSession BS = DS.createSession();
 
 	private String serialize(HttpPartSchema schema, Object in) throws Exception {
-		return DS.createSession().serialize(null, schema, in);
+		return DS.serialize(null, schema, in);
 	}
 
 	private <T> T parse(HttpPartSchema schema, String in, Class<T> c, Class<?>...args) throws Exception {
-		return DP.createSession().parse(null, schema, in, DP.getClassMeta(c, args));
+		return DP.parse(null, schema, in, DP.getClassMeta(c, args));
 	}
 
 	@Before

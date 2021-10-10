@@ -37,27 +37,32 @@ public class XmlValidatorParser extends XmlParser {
 		super(create());
 	}
 
-	@Override /* Parser */
-	public XmlParserSession createSession(ParserSessionArgs args) {
-		return new XmlParserSession(null, args) {
-
+	@Override /* Context */
+	public XmlParserSession.Builder createSession() {
+		return new XmlParserSession.Builder(XmlParser.DEFAULT) {
 			@Override
-			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-				try {
-					return (T)validate(pipe.getReader());
-				} catch (Exception e) {
-					throw new ParseException(e);
-				}
-			}
+			public XmlParserSession build() {
+				return new XmlParserSession(this) {
 
-			@Override /* ReaderParser */
-			protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-				return (Map<K,V>)validate(pipe.getReader());
-			}
+					@Override
+					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+						try {
+							return (T)validate(pipe.getReader());
+						} catch (Exception e) {
+							throw new ParseException(e);
+						}
+					}
 
-			@Override /* ReaderParser */
-			protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-				return (Collection<E>)validate(pipe.getReader());
+					@Override /* ReaderParser */
+					protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+						return (Map<K,V>)validate(pipe.getReader());
+					}
+
+					@Override /* ReaderParser */
+					protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+						return (Collection<E>)validate(pipe.getReader());
+					}
+				};
 			}
 		};
 	}

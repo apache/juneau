@@ -17,10 +17,12 @@ import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.ParseException;
@@ -36,30 +38,76 @@ import org.apache.juneau.transform.*;
  */
 public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(JsonSchemaGenerator ctx) {
+		return new Builder(ctx);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends BeanTraverseSession.Builder {
+
+		JsonSchemaGenerator ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(JsonSchemaGenerator ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public JsonSchemaGeneratorSession build() {
+			return new JsonSchemaGeneratorSession(this);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final JsonSchemaGenerator ctx;
 	private final Map<String,OMap> defs;
 	private JsonSerializerSession jsSession;
 	private JsonParserSession jpSession;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param builder The builder for this object.
 	 */
-	protected JsonSchemaGeneratorSession(JsonSchemaGenerator ctx, BeanSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
-		if (isUseBeanDefs())
-			defs = new TreeMap<>();
-		else
-			defs = null;
+	protected JsonSchemaGeneratorSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		defs = isUseBeanDefs() ? new TreeMap<>() : null;
 	}
 
 	/**
@@ -286,13 +334,13 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	private String toJson(Object o) throws SerializeException {
 		if (jsSession == null)
-			jsSession = ctx.getJsonSerializer().createSession(null);
+			jsSession = ctx.getJsonSerializer().getSession();
 		return jsSession.serializeToString(o);
 	}
 
 	private JsonParserSession jpSession() {
 		if (jpSession == null)
-			jpSession = ctx.getJsonParser().createSession(null);
+			jpSession = ctx.getJsonParser().getSession();
 		return jpSession;
 	}
 

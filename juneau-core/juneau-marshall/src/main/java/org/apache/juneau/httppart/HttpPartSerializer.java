@@ -14,7 +14,6 @@ package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
@@ -118,8 +117,7 @@ public interface HttpPartSerializer {
 	/**
 	 * Creates a new serializer session.
 	 *
-	 * @param args The runtime arguments for the session.
 	 * @return A new serializer session.
 	 */
-	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args);
+	public HttpPartSerializerSession getPartSession();
 }

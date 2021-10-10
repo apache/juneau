@@ -26,7 +26,6 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.stream.*;
@@ -194,13 +193,13 @@ public class BeanContext extends Context {
 
 
 	/** Default config.  All default settings. */
-	public static final BeanContext DEFAULT = BeanContext.create().build();
+	public static final BeanContext DEFAULT = create().build();
 
 	/** Default config.  All default settings except sort bean properties. */
-	public static final BeanContext DEFAULT_SORTED = BeanContext.create().sortProperties().build();
+	public static final BeanContext DEFAULT_SORTED = create().sortProperties().build();
 
 	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
-	public  static final BeanSession DEFAULT_SESSION = new BeanSession(DEFAULT, DEFAULT.createDefaultBeanSessionArgs().unmodifiable());
+	public  static final BeanSession DEFAULT_SESSION = DEFAULT.createSession().unmodifiable().build();
 
 	/**
 	 * Creates a new builder for this object.
@@ -2488,7 +2487,7 @@ public class BeanContext extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Locale.
 		 *
 		 * <p>
-		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSessionArgs#locale(Locale)}.
+		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSession.Builder#locale(Locale)}.
 		 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
 		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
 		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
@@ -2523,7 +2522,7 @@ public class BeanContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2539,7 +2538,7 @@ public class BeanContext extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Media type.
 		 *
 		 * <p>
-		 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSessionArgs#mediaType(MediaType)}.
+		 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSession.Builder#mediaType(MediaType)}.
 		 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
 		 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
 		 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
@@ -2574,7 +2573,7 @@ public class BeanContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -3087,7 +3086,7 @@ public class BeanContext extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>
-		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSessionArgs#timeZone(TimeZone)}.
+		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSession.Builder#timeZone(TimeZone)}.
 		 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
 		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
 		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
@@ -3121,7 +3120,7 @@ public class BeanContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -3494,6 +3493,7 @@ public class BeanContext extends Context {
 	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
 	private final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
 
+	private final BeanSession defaultSession;
 	private volatile WriterSerializer beanToStringSerializer;
 
 	/**
@@ -3566,6 +3566,7 @@ public class BeanContext extends Context {
 		cmClass = cmCache.get(Class.class);
 
 		beanRegistry = new BeanRegistry(this, null);
+		defaultSession = createSession().unmodifiable().build();
 	}
 
 	@Override /* Context */
@@ -3573,75 +3574,14 @@ public class BeanContext extends Context {
 		return new Builder(this);
 	}
 
-	/**
-	 * Create a new bean session based on the properties defined on this context.
-	 *
-	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
-	 *
-	 * @return A new session object.
-	 */
 	@Override /* Context */
-	public BeanSession createSession() {
-		return createBeanSession(defaultArgs());
-	}
-
-	/**
-	 * Create a new bean session based on the properties defined on this context combined with the specified
-	 * runtime args.
-	 *
-	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
-	 *
-	 * @param args
-	 * 	The session arguments.
-	 * @return A new session object.
-	 */
-	public BeanSession createSession(BeanSessionArgs args) {
-		return createBeanSession(args);
+	public BeanSession.Builder createSession() {
+		return BeanSession.create(this);
 	}
 
 	@Override /* Context */
-	public final ContextSession createSession(Context.Args args) {
-		throw new NoSuchMethodError();
-	}
-
-	/**
-	 * Same as {@link #createSession(BeanSessionArgs)} except always returns a {@link BeanSession} object unlike {@link #createSession(BeanSessionArgs)}
-	 * which is meant to be overridden by subclasses.
-	 *
-	 * @param args The session arguments.
-	 * @return A new session object.
-	 */
-	public final BeanSession createBeanSession(BeanSessionArgs args) {
-		return new BeanSession(this, args);
-	}
-
-	/**
-	 * Same as {@link #createSession()} except always returns a {@link BeanSession} object unlike {@link #createSession()}
-	 * which is meant to be overridden by subclasses.
-	 *
-	 * @return A new session object.
-	 */
- 	public final BeanSession createBeanSession() {
-		return new BeanSession(this, createDefaultBeanSessionArgs());
-	}
-
- 	@Override /* Context */
-	public BeanSessionArgs defaultArgs() {
- 		return createDefaultBeanSessionArgs();
-	}
-
-	/**
-	 * Same as {@link #defaultArgs()} except always returns a {@link BeanSessionArgs} unlike
-	 * {@link #createDefaultBeanSessionArgs()} which is meant to be overridden by subclasses.
-	 *
-	 * @return A new session arguments object.
-	 */
-	public final BeanSessionArgs createDefaultBeanSessionArgs() {
-		return new BeanSessionArgs();
+	public BeanSession getSession() {
+		return defaultSession;
 	}
 
 	/**
@@ -3655,6 +3595,105 @@ public class BeanContext extends Context {
 	 */
 	public final boolean hasSameCache(BeanContext bc) {
 		return bc.cmCache == this.cmCache;
+	}
+
+	/**
+	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().toBeanMap(<jv>c</jv>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a bean map around a bean instance</jc>
+	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param o The object to wrap in a map interface.  Must not be null.
+	 * @return The wrapped object.
+	 * @see BeanSession#toBeanMap(Object)
+	 */
+	public <T> BeanMap<T> toBeanMap(T o) {
+		return defaultSession.toBeanMap(o);
+	}
+
+	/**
+	 * Creates a new {@link BeanMap} object (a modifiable {@link Map}) of the given class with uninitialized
+	 * property values.
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().newBeanMap(<jv>c</jv>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
+	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param c The name of the class to create a new instance of.
+	 * @return A new instance of the class.
+	 * @see BeanSession#newBeanMap(Class)
+	 */
+	public <T> BeanMap<T> newBeanMap(Class<T> c) {
+		return defaultSession.newBeanMap(c);
+	}
+
+	/**
+	 * Converts the specified value to the specified class type.
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().convertToType(<jv>value</jv>, <jv>type</jv>);</c>
+	 *
+	 * @param <T> The class type to convert the value to.
+	 * @param value The value to convert.
+	 * @param type The class type to convert the value to.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 * @return The converted value.
+	 * @see BeanSession#convertToType(Object, Class)
+	 */
+	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
+		return defaultSession.convertToType(value, type);
+	}
+
+	/**
+	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
+	 * be instantiated within another class instance.
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().convertToMemberType(<jv>outer</jv>, <jv>value</jv>, <jv>type</jv>);</c>
+	 *
+	 * @param <T> The class type to convert the value to.
+	 * @param outer
+	 * 	If class is a member class, this is the instance of the containing class.
+	 * 	Should be <jk>null</jk> if not a member class.
+	 * @param value The value to convert.
+	 * @param type The class type to convert the value to.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 * @return The converted value.
+	 * @see BeanSession#convertToMemberType(Object, Object, Class)
+	 */
+	public final <T> T convertToMemberType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
+		return defaultSession.convertToMemberType(outer, value, getClassMeta(type));
+	}
+
+	/**
+	 * Same as {@link #convertToType(Object, Class)}, but allows for complex data types consisting of collections or maps.
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().convertToType(<jv>value</jv>, <jv>type</jv>, <jv>args</jv>);</c>
+	 *
+	 * @param <T> The class type to convert the value to.
+	 * @param value The value to be converted.
+	 * @param type The target object type.
+	 * @param args The target object parameter types.
+	 * @return The converted type.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 * @see BeanSession#convertToType(Object, Type, Type...)
+	 */
+	public final <T> T convertToType(Object value, Type type, Type...args) throws InvalidDataConversionException {
+		return (T)defaultSession.convertToMemberType(null, value, getClassMeta(type, args));
 	}
 
 	/**

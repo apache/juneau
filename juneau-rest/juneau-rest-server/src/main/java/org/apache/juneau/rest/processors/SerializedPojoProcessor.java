@@ -55,21 +55,19 @@ public final class SerializedPojoProcessor implements ResponseProcessor {
 				else
 					res.setHeader(ContentType.of(responseType.toString()));
 
-				SerializerSession session = s.createSession(
-					SerializerSessionArgs
-						.create()
-						.properties(req.getAttributes().asMap())
-						.javaMethod(req.getOpContext().getJavaMethod())
-						.locale(req.getLocale())
-						.timeZone(req.getTimeZone().orElse(null))
-						.mediaType(mediaType)
-						.streamCharset(res.getCharset())
-						.schema(schema)
-						.debug(req.isDebug() ? true : null)
-						.uriContext(req.getUriContext())
-						.useWhitespace(req.isPlainText() ? true : null)
-						.resolver(req.getVarResolverSession())
-				);
+				SerializerSession session = s
+					.createSession()
+					.properties(req.getAttributes().asMap())
+					.javaMethod(req.getOpContext().getJavaMethod())
+					.locale(req.getLocale())
+					.timeZone(req.getTimeZone().orElse(null))
+					.mediaType(mediaType)
+					.ifType(WriterSerializerSession.Builder.class, x -> x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? true : null))
+					.schema(schema)
+					.debug(req.isDebug() ? true : null)
+					.uriContext(req.getUriContext())
+					.resolver(req.getVarResolverSession())
+					.build();
 
 				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
 					res.addHeader(h.getKey(), h.getValue());

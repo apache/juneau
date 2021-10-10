@@ -24,7 +24,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -139,6 +138,15 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
 	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(create());
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static subclasses
@@ -848,35 +856,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		return new Builder(this);
 	}
 
-	/**
-	 * Instantiates a new clean-slate {@link Builder} object.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> Builder()</code>.
-	 *
-	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
-	 * the settings of the object called on.
-	 *
-	 * @return A new {@link Builder} object.
-	 */
-	public static Builder create() {
-		return new Builder();
+	@Override /* Context */
+	public UrlEncodingSerializerSession.Builder createSession() {
+		return UrlEncodingSerializerSession.create(this);
 	}
-
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public UrlEncodingSerializerSession createSession() {
-		return createSession(defaultArgs());
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializerSession createSession(SerializerSessionArgs args) {
-		return new UrlEncodingSerializerSession(this, null, args);
+	public UrlEncodingSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

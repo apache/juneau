@@ -32,7 +32,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class OpenApiPartParser_Test {
 
-	static OpenApiParserSession p = OpenApiParser.DEFAULT.createSession();
+	static OpenApiParserSession p = OpenApiParser.DEFAULT.getSession();
 
 	private static <T> T parse(HttpPartSchema schema, String input, Class<T> type) throws SchemaValidationException, ParseException {
 		return p.parse(null, schema, input, p.getClassMeta(type));

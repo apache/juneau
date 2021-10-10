@@ -13,10 +13,17 @@
 package org.apache.juneau.html;
 
 import java.io.IOException;
+import java.lang.reflect.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import org.apache.juneau.BeanRecursionException;
+import org.apache.juneau.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.
@@ -26,20 +33,150 @@ import org.apache.juneau.serializer.*;
  */
 public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(HtmlSchemaDocSerializer ctx) {
+		return new Builder(ctx);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends HtmlDocSerializerSession.Builder {
+
+		HtmlSchemaDocSerializer ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(HtmlSchemaDocSerializer ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public HtmlSchemaDocSerializerSession build() {
+			return new HtmlSchemaDocSerializerSession(this);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder useWhitespace(Boolean value) {
+			super.useWhitespace(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder resolver(VarResolverSession value) {
+			super.resolver(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final JsonSchemaGeneratorSession genSession;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected HtmlSchemaDocSerializerSession(HtmlSchemaDocSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
-		this.genSession = ctx.getGenerator().createSession(args);
+	protected HtmlSchemaDocSerializerSession(Builder builder) {
+		super(builder);
+		genSession = builder.ctx.getGenerator().getSession();
 	}
 
 	@Override /* SerializerSession */

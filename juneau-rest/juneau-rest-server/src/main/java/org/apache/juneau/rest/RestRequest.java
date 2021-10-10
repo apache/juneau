@@ -44,6 +44,7 @@ import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.cp.Messages;
@@ -121,10 +122,6 @@ public final class RestRequest {
 	private final RequestAttributes attrs;
 	private final HttpPartParserSession partParserSession;
 	private final RestCall call;
-	private final SerializerSessionArgs serializerSessionArgs;
-	private final ParserSessionArgs parserSessionArgs;
-
-	private final Map<HttpPartSerializer,HttpPartSerializerSession> partSerializerSessions = new IdentityHashMap<>();
 
 	// Lazy initialized.
 	private VarResolverSession varSession;
@@ -163,27 +160,9 @@ public final class RestRequest {
 
 		pathParams = new RequestPathParams(call, this, true);
 
-		beanSession = opContext.getBeanContext().createSession();
+		beanSession = opContext.getBeanContext().getSession();
 
-		parserSessionArgs =
-			ParserSessionArgs
-				.create()
-				.javaMethod(opContext.getJavaMethod())
-				.locale(getLocale())
-				.timeZone(getTimeZone().orElse(null))
-				.debug(isDebug() ? true : null);
-
-		partParserSession = opContext.getPartParser().createPartSession(parserSessionArgs);
-
-		serializerSessionArgs = SerializerSessionArgs
-			.create()
-			.javaMethod(opContext.getJavaMethod())
-			.locale(getLocale())
-			.timeZone(getTimeZone().orElse(null))
-			.debug(isDebug() ? true : null)
-			.uriContext(getUriContext())
-			.resolver(getVarResolverSession())
-			.useWhitespace(isPlainText() ? true : null);
+		partParserSession = opContext.getPartParser().getPartSession();
 
 		pathParams.parser(partParserSession);
 
@@ -1948,39 +1927,6 @@ public final class RestRequest {
 		}
 	}
 
-	/**
-	 * Returns the session arguments to pass to serializers.
-	 *
-	 * @return The session arguments to pass to serializers.
-	 */
-	public SerializerSessionArgs getSerializerSessionArgs() {
-		return serializerSessionArgs;
-	}
-
-	/**
-	 * Returns the session arguments to pass to parsers.
-	 *
-	 * @return The session arguments to pass to parsers.
-	 */
-	public ParserSessionArgs getParserSessionArgs() {
-		return parserSessionArgs;
-	}
-
-	/**
-	 * Creates a session of the specified part serializer.
-	 *
-	 * @param serializer The serializer to create a session for.
-	 * @return A session of the specified serializer.
-	 */
-	public HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {
-		HttpPartSerializerSession s = partSerializerSessions.get(serializer);
-		if (s == null) {
-			s = serializer.createPartSession(getSerializerSessionArgs());
-			partSerializerSessions.put(serializer, s);
-		}
-		return s;
-	}
-
 	/* Called by RestCall.finish() */
 	void close() {
 		if (config != null) {
@@ -2032,7 +1978,7 @@ public final class RestRequest {
 	 * @return The part serializer session for this request.
 	 */
 	public HttpPartSerializerSession getPartSerializerSession() {
-		return getPartSerializerSession(opContext.getPartSerializer());
+		return opContext.getPartSerializer().getPartSession();
 	}
 
 	@Override /* Object */

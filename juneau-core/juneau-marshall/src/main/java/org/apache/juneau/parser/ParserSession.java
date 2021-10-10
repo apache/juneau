@@ -20,10 +20,13 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -37,9 +40,158 @@ import org.apache.juneau.utils.*;
  */
 public abstract class ParserSession extends BeanSession {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public abstract static class Builder extends BeanSession.Builder {
+
+		Parser ctx;
+		Method javaMethod;
+		Object outer;
+		HttpPartSchema schema;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(Parser ctx) {
+			super(ctx.getBeanContext());
+			this.ctx = ctx;
+			mediaTypeDefault(ctx.getPrimaryMediaType());
+		}
+
+		@Override
+		public abstract ParserSession build();
+
+		/**
+		 * The java method that called this serializer, usually the method in a REST servlet.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder javaMethod(Method value) {
+			this.javaMethod = value;
+			return this;
+		}
+
+		/**
+		 * The outer object for instantiating top-level non-static inner classes.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder outer(Object value) {
+			this.outer = value;
+			return this;
+		}
+
+		/**
+		 * HTTP-part schema.
+		 *
+		 * <p>
+		 * Used for schema-based serializers and parsers to define additional formatting.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder schema(HttpPartSchema value) {
+			if (value != null)
+				this.schema = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #schema(HttpPartSchema)} but doesn't overwrite the value if it is already set.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder schemaDefault(HttpPartSchema value) {
+			if (value != null && schema == null)
+				this.schema = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private final Parser ctx;
 	private final Method javaMethod;
 	private final Object outer;
+	private final Stack<StringBuilder> sbStack;
+	private final HttpPartSchema schema;
 
 	// Writable properties.
 	private BeanPropertyMeta currentProperty;
@@ -51,21 +203,18 @@ public abstract class ParserSession extends BeanSession {
 	private ParserPipe pipe;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected ParserSession(Parser ctx, ParserSessionArgs args) {
-		super(ctx.getBeanContext(), args == null ? ParserSessionArgs.DEFAULT : args);
-		args = args == null ? ParserSessionArgs.DEFAULT : args;
-		this.ctx = ctx;
-		javaMethod = args.javaMethod;
-		outer = args.outer;
+	protected ParserSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		javaMethod = builder.javaMethod;
+		outer = builder.outer;
+		schema = builder.schema;
 		listener = ClassUtils.castOrCreate(ParserListener.class, ctx.getListener());
+		sbStack = new Stack<>();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -920,6 +1069,32 @@ public abstract class ParserSession extends BeanSession {
 		}
 	}
 
+	/**
+	 * Creates a reusable {@link StringBuilder} object from an internal pool.
+	 *
+	 * <p>
+	 * String builders are returned to the pool by calling {@link #returnStringBuilder(StringBuilder)}.
+	 *
+	 * @return A new or previously returned string builder.
+	 */
+	protected final StringBuilder getStringBuilder() {
+		if (sbStack.isEmpty())
+			return new StringBuilder();
+		return sbStack.pop();
+	}
+
+	/**
+	 * Returns a {@link StringBuilder} object back into the internal reuse pool.
+	 *
+	 * @param sb The string builder to return to the pool.  No-op if <jk>null</jk>.
+	 */
+	protected final void returnStringBuilder(StringBuilder sb) {
+		if (sb == null)
+			return;
+		sb.setLength(0);
+		sbStack.push(sb);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -988,6 +1163,15 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	protected final boolean isUnbuffered() {
 		return ctx.isUnbuffered();
+	}
+
+	/**
+	 * HTTP part schema of object being parsed.
+	 *
+	 * @return HTTP part schema of object being parsed, or <jk>null</jk> if not specified.
+	 */
+	public final HttpPartSchema getSchema() {
+		return schema;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

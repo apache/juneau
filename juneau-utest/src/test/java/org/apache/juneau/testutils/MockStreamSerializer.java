@@ -35,14 +35,24 @@ public class MockStreamSerializer extends OutputStreamSerializer {
 		return new Builder();
 	}
 
-	@Override /* Serializer */
-	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
-		return new OutputStreamSerializerSession(this, args) {
-			@Override /* SerializerSession */
-			protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-				out.getOutputStream().write(function.apply(this, o));
+	@Override /* Context */
+	public OutputStreamSerializerSession.Builder createSession() {
+		return new OutputStreamSerializerSession.Builder(this) {
+			@Override
+			public OutputStreamSerializerSession build() {
+				return new OutputStreamSerializerSession(this) {
+					@Override /* SerializerSession */
+					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+						out.getOutputStream().write(function.apply(this, o));
+					}
+				};
 			}
 		};
+	}
+
+	@Override /* Context */
+	public OutputStreamSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	public static class Builder extends OutputStreamSerializer.Builder {

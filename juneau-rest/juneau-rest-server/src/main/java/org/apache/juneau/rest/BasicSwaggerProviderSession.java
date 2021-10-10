@@ -210,7 +210,7 @@ public class BasicSwaggerProviderSession {
 		// Iterate through all the @RestOp methods.
 		for (RestOpContext sm : context.getOpContexts()) {
 
-			BeanSession bs = sm.getBeanContext().createBeanSession();
+			BeanSession bs = sm.getBeanContext().getSession();
 
 			Method m = sm.getJavaMethod();
 			MethodInfo mi = MethodInfo.of(m);
@@ -830,15 +830,14 @@ public class BasicSwaggerProviderSession {
 			if (mt != MediaType.HTML) {
 				Serializer s2 = sm.getSerializers().getSerializer(mt);
 				if (s2 != null) {
-					SerializerSessionArgs args =
-						SerializerSessionArgs
-							.create()
+					try {
+						String eVal = s2
+							.createSession()
 							.locale(locale)
 							.mediaType(mt)
-							.useWhitespace(true)
-						;
-					try {
-						String eVal = s2.createSession(args).serializeToString(example);
+							.ifType(WriterSerializerSession.Builder.class, x -> x.useWhitespace(true))
+							.build()
+							.serializeToString(example);
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {
 						System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());  // NOT DEBUG

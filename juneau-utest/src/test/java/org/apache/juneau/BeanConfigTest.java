@@ -37,7 +37,7 @@ public class BeanConfigTest {
 	@Test
 	public void testBasic() throws Exception {
 
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 
 		Person p1 = new Person();
 		p1.setName("John Doe");
@@ -65,7 +65,7 @@ public class BeanConfigTest {
 		m3.put("age", new Integer(p2.getAge()));
 		m3.put("address", p2.getAddress());
 
-		Map pm1 = session.toBeanMap(p1);
+		Map pm1 = bc.toBeanMap(p1);
 
 		if (pm1.size() != m1.size())
 			fail("Bean Map size failed for: " + p1 + " / " + pm1.size()+ " / " + m1.size());
@@ -84,14 +84,14 @@ public class BeanConfigTest {
 
 		BeanMap bm1 = null;
 		// Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
-		assertThrown(()->session.newBeanMap(Address.class)).isType(BeanRuntimeException.class);
-		bm1 = session.toBeanMap(new Address("street", "city", "state", "zip"));
+		assertThrown(()->bc.newBeanMap(Address.class)).isType(BeanRuntimeException.class);
+		bm1 = bc.toBeanMap(new Address("street", "city", "state", "zip"));
 
-		BeanMap bm2 = session.newBeanMap(java.lang.Integer.class);
+		BeanMap bm2 = bc.newBeanMap(java.lang.Integer.class);
 		if (bm2 != null)
 			fail("java.lang.Integer incorrectly desingated as bean type.");
 
-		BeanMap bm3 = session.newBeanMap(java.lang.Class.class);
+		BeanMap bm3 = bc.newBeanMap(java.lang.Class.class);
 		if (bm3 != null)
 			fail("java.lang.Class incorrectly desingated as bean type.");
 
@@ -112,7 +112,7 @@ public class BeanConfigTest {
 		if (!m2.keySet().equals(temp))
 			fail("Iteration over bean adpater key set failed: " + a + " / " + m4.keySet() + " / " + m2.keySet());
 
-		BeanMap bm4 = session.toBeanMap(p2);
+		BeanMap bm4 = bc.toBeanMap(p2);
 		if (bm4 == null) {
 			fail("Failed to identify class as bean type: " + p2.getClass());
 			return;
@@ -280,110 +280,110 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testBeanContextConvertToType() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		Object o;
 
 		// Primitive nulls.
 		o = null;
-		assertEquals(new Integer(0), session.convertToType(o, Integer.TYPE));
-		assertEquals(new Short((short) 0), session.convertToType(o, Short.TYPE));
-		assertEquals(new Long(0), session.convertToType(o, Long.TYPE));
-		assertEquals(new Float(0), session.convertToType(o, Float.TYPE));
-		assertEquals(new Double(0), session.convertToType(o, Double.TYPE));
-		assertEquals(new Byte((byte) 0), session.convertToType(o, Byte.TYPE));
-		assertEquals(new Character((char) 0), session.convertToType(o, Character.TYPE));
-		assertEquals(Boolean.FALSE, session.convertToType(o, Boolean.TYPE));
+		assertEquals(new Integer(0), bc.convertToType(o, Integer.TYPE));
+		assertEquals(new Short((short) 0), bc.convertToType(o, Short.TYPE));
+		assertEquals(new Long(0), bc.convertToType(o, Long.TYPE));
+		assertEquals(new Float(0), bc.convertToType(o, Float.TYPE));
+		assertEquals(new Double(0), bc.convertToType(o, Double.TYPE));
+		assertEquals(new Byte((byte) 0), bc.convertToType(o, Byte.TYPE));
+		assertEquals(new Character((char) 0), bc.convertToType(o, Character.TYPE));
+		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.TYPE));
 
 		o = "1";
 
-		assertEquals(new Integer(1), session.convertToType(o, Integer.class));
-		assertEquals(new Short((short) 1), session.convertToType(o, Short.class));
-		assertEquals(new Long(1), session.convertToType(o, Long.class));
-		assertEquals(new Float(1), session.convertToType(o, Float.class));
-		assertEquals(new Double(1), session.convertToType(o, Double.class));
-		assertEquals(new Byte((byte) 1), session.convertToType(o, Byte.class));
-		assertEquals(new Character('1'), session.convertToType(o, Character.class));
-		assertEquals(Boolean.FALSE, session.convertToType(o, Boolean.class));
+		assertEquals(new Integer(1), bc.convertToType(o, Integer.class));
+		assertEquals(new Short((short) 1), bc.convertToType(o, Short.class));
+		assertEquals(new Long(1), bc.convertToType(o, Long.class));
+		assertEquals(new Float(1), bc.convertToType(o, Float.class));
+		assertEquals(new Double(1), bc.convertToType(o, Double.class));
+		assertEquals(new Byte((byte) 1), bc.convertToType(o, Byte.class));
+		assertEquals(new Character('1'), bc.convertToType(o, Character.class));
+		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.class));
 
-		assertEquals(new Integer(1), session.convertToType(o, Integer.TYPE));
-		assertEquals(new Short((short) 1), session.convertToType(o, Short.TYPE));
-		assertEquals(new Long(1), session.convertToType(o, Long.TYPE));
-		assertEquals(new Float(1), session.convertToType(o, Float.TYPE));
-		assertEquals(new Double(1), session.convertToType(o, Double.TYPE));
-		assertEquals(new Byte((byte) 1), session.convertToType(o, Byte.TYPE));
-		assertEquals(new Character('1'), session.convertToType(o, Character.TYPE));
-		assertEquals(Boolean.FALSE, session.convertToType(o, Boolean.TYPE));
+		assertEquals(new Integer(1), bc.convertToType(o, Integer.TYPE));
+		assertEquals(new Short((short) 1), bc.convertToType(o, Short.TYPE));
+		assertEquals(new Long(1), bc.convertToType(o, Long.TYPE));
+		assertEquals(new Float(1), bc.convertToType(o, Float.TYPE));
+		assertEquals(new Double(1), bc.convertToType(o, Double.TYPE));
+		assertEquals(new Byte((byte) 1), bc.convertToType(o, Byte.TYPE));
+		assertEquals(new Character('1'), bc.convertToType(o, Character.TYPE));
+		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.TYPE));
 
 		o = new Integer(1);
 
-		assertEquals(new Integer(1), session.convertToType(o, Integer.TYPE));
-		assertEquals(new Short((short) 1), session.convertToType(o, Short.TYPE));
-		assertEquals(new Long(1), session.convertToType(o, Long.TYPE));
-		assertEquals(new Float(1), session.convertToType(o, Float.TYPE));
-		assertEquals(new Double(1), session.convertToType(o, Double.TYPE));
-		assertEquals(new Byte((byte) 1), session.convertToType(o, Byte.TYPE));
-		assertEquals(new Character('1'), session.convertToType(o, Character.TYPE));
-		assertEquals(Boolean.TRUE, session.convertToType(o, Boolean.TYPE));
+		assertEquals(new Integer(1), bc.convertToType(o, Integer.TYPE));
+		assertEquals(new Short((short) 1), bc.convertToType(o, Short.TYPE));
+		assertEquals(new Long(1), bc.convertToType(o, Long.TYPE));
+		assertEquals(new Float(1), bc.convertToType(o, Float.TYPE));
+		assertEquals(new Double(1), bc.convertToType(o, Double.TYPE));
+		assertEquals(new Byte((byte) 1), bc.convertToType(o, Byte.TYPE));
+		assertEquals(new Character('1'), bc.convertToType(o, Character.TYPE));
+		assertEquals(Boolean.TRUE, bc.convertToType(o, Boolean.TYPE));
 
 		o = new Integer(0);
-		assertEquals(Boolean.FALSE, session.convertToType(o, Boolean.TYPE));
+		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.TYPE));
 
 		// Bean
 		o = "{name:'x',age:123}";
-		assertEquals("x", session.convertToType(o, Person.class).getName());
-		assertEquals(123, session.convertToType(o, Person.class).getAge());
+		assertEquals("x", bc.convertToType(o, Person.class).getName());
+		assertEquals(123, bc.convertToType(o, Person.class).getAge());
 
 		// Read-only bean
 		o = "{name:'x',age:123}";
-		assertEquals("x", session.convertToType(o, ReadOnlyPerson.class).getName());
-		assertEquals(123, session.convertToType(o, ReadOnlyPerson.class).getAge());
+		assertEquals("x", bc.convertToType(o, ReadOnlyPerson.class).getName());
+		assertEquals(123, bc.convertToType(o, ReadOnlyPerson.class).getAge());
 
 		// Class with forString(String) method.
 		o = UUID.randomUUID();
-		assertEquals(o, session.convertToType(o.toString(), UUID.class));
+		assertEquals(o, bc.convertToType(o.toString(), UUID.class));
 
 		// Class with Constructor(String).
 		o = "xxx";
-		File file = session.convertToType(o, File.class);
+		File file = bc.convertToType(o, File.class);
 		assertEquals("xxx", file.getName());
 
 		// List of ints to array
 		o = OList.of(1, 2, 3);
-		assertEquals(1, session.convertToType(o, int[].class)[0]);
+		assertEquals(1, bc.convertToType(o, int[].class)[0]);
 
 		// List of beans to array
 		o = OList.of(new ReadOnlyPerson("x", 123));
-		assertEquals("x", session.convertToType(o, ReadOnlyPerson[].class)[0].getName());
+		assertEquals("x", bc.convertToType(o, ReadOnlyPerson[].class)[0].getName());
 
 		// Multi-dimensional array of beans.
 		o = OList.ofCollections(OList.of(new ReadOnlyPerson("x", 123)));
-		assertEquals("x", session.convertToType(o, ReadOnlyPerson[][].class)[0][0].getName());
+		assertEquals("x", bc.convertToType(o, ReadOnlyPerson[][].class)[0][0].getName());
 
 		// Array of strings to array of ints
 		o = new String[] { "1", "2", "3" };
-		assertEquals(new Integer(1), session.convertToType(o, Integer[].class)[0]);
-		assertEquals(1, session.convertToType(o, int[].class)[0]);
+		assertEquals(new Integer(1), bc.convertToType(o, Integer[].class)[0]);
+		assertEquals(1, bc.convertToType(o, int[].class)[0]);
 
 		// Array to list
 		o = new Integer[] { 1, 2, 3 };
-		assertEquals(new Integer(1), session.convertToType(o, LinkedList.class).get(0));
+		assertEquals(new Integer(1), bc.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
 		o = AMap.of(1, "foo");
-		assertEquals("foo", session.convertToType(o, TreeMap.class).firstEntry().getValue());
+		assertEquals("foo", bc.convertToType(o, TreeMap.class).firstEntry().getValue());
 
 		// String to TreeMap
 		o = "{1:'foo'}";
-		assertEquals("foo", session.convertToType(o, TreeMap.class).firstEntry().getValue());
+		assertEquals("foo", bc.convertToType(o, TreeMap.class).firstEntry().getValue());
 
 		// String to generic Map
-		assertEquals("foo", session.convertToType(o, Map.class).values().iterator().next());
+		assertEquals("foo", bc.convertToType(o, Map.class).values().iterator().next());
 
 		// Array to String
 		o = new Object[] { "a", 1, false };
-		assertEquals("['a',1,false]", session.convertToType(o, String.class));
+		assertEquals("['a',1,false]", bc.convertToType(o, String.class));
 		o = new Object[][] { { "a", 1, false } };
-		assertEquals("[['a',1,false]]", session.convertToType(o, String.class));
+		assertEquals("[['a',1,false]]", bc.convertToType(o, String.class));
 
 	}
 
@@ -392,16 +392,16 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testReadOnlyProperties() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		Object o;
 
 		// Bean to String
 		o = new ReadOnlyPerson("x", 123);
-		assertEquals("{name:'x',age:123}", session.convertToType(o, String.class));
+		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
 		o = OList.of(OMap.ofJson("{name:'x',age:1}"), OMap.ofJson("{name:'y',age:2}"));
-		assertEquals(1, session.convertToType(o, ReadOnlyPerson[].class)[0].getAge());
+		assertEquals(1, bc.convertToType(o, ReadOnlyPerson[].class)[0].getAge());
 	}
 
 
@@ -432,16 +432,16 @@ public class BeanConfigTest {
 
 	@Test
 	public void testReadOnlyProperties_usingConfig() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build().createSession();
+		BeanContext bc = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
 		Object o;
 
 		// Bean to String
 		o = new ReadOnlyPerson2("x", 123);
-		assertEquals("{name:'x',age:123}", session.convertToType(o, String.class));
+		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
 		o = OList.of(OMap.ofJson("{name:'x',age:1}"), OMap.ofJson("{name:'y',age:2}"));
-		assertEquals(1, session.convertToType(o, ReadOnlyPerson2[].class)[0].getAge());
+		assertEquals(1, bc.convertToType(o, ReadOnlyPerson2[].class)[0].getAge());
 	}
 
 
@@ -482,17 +482,17 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testEnums() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		Object o;
 
 		// Enum
 		o = "ENUM2";
-		assertEquals(TestEnum.ENUM2, session.convertToType(o, TestEnum.class));
-		assertEquals("ENUM2", session.convertToType(TestEnum.ENUM2, String.class));
+		assertEquals(TestEnum.ENUM2, bc.convertToType(o, TestEnum.class));
+		assertEquals("ENUM2", bc.convertToType(TestEnum.ENUM2, String.class));
 
 		// Array of enums
 		o = new String[] { "ENUM2" };
-		assertEquals(TestEnum.ENUM2, session.convertToType(o, TestEnum[].class)[0]);
+		assertEquals(TestEnum.ENUM2, bc.convertToType(o, TestEnum[].class)[0]);
 	}
 
 	public enum TestEnum {
@@ -589,7 +589,7 @@ public class BeanConfigTest {
 	@Test
 	public void testFluentStyleSetters() throws Exception {
 		B2 t = new B2().init();
-		BeanMap m = BeanContext.DEFAULT.createSession().toBeanMap(t);
+		BeanMap m = BeanContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 2);
 		assertEquals(t.f1, 2);
 	}
@@ -811,8 +811,8 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test(timeout=1000) // Should be around 100ms at most.
 	public void testAddingToArrayProperty() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
-		BeanMap<D> bm = session.newBeanMap(D.class);
+		BeanContext bc = BeanContext.DEFAULT;
+		BeanMap<D> bm = bc.newBeanMap(D.class);
 		for (int i = 0; i < 5000; i++) {
 			bm.add("f1", i);
 			bm.add("f2", i);
@@ -855,15 +855,15 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testBlanks() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 
 		// Blanks get interpreted as the default value for primitives and null for boxed objects.
-		assertEquals(0, (int)session.convertToType("", int.class));
-		assertNull(session.convertToType("", Integer.class));
+		assertEquals(0, (int)bc.convertToType("", int.class));
+		assertNull(bc.convertToType("", Integer.class));
 
 		// Booleans are handled different since 'new Boolean("")' is valid and resolves to false
 		// while 'new Integer("")' produces an exception.
-		assertEquals(false, (boolean)session.convertToType("", boolean.class));
-		assertEquals(null, session.convertToType("", Boolean.class));
+		assertEquals(false, (boolean)bc.convertToType("", boolean.class));
+		assertEquals(null, bc.convertToType("", Boolean.class));
 	}
 }

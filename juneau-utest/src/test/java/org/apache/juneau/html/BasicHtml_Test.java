@@ -3021,7 +3021,7 @@ public class BasicHtml_Test {
 		});
 	}
 
-	private static final BeanSession BEANSESSION = BeanContext.DEFAULT.createSession();
+	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;
 
 	/**
 	 * Creates a ClassMeta for the given types.

@@ -29,11 +29,11 @@ public class AnnotationsTest {
 	//====================================================================================================
 	@Test
 	public void testBeanWithExplicitProperties() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
 		// Basic test
-		bm = session.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
+		bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
@@ -60,11 +60,11 @@ public class AnnotationsTest {
 
 	@Test
 	public void testBeanWithExplicitProperties2() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
 		// Basic test
-		bm = session.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
+		bm = bc.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
@@ -91,11 +91,11 @@ public class AnnotationsTest {
 
 	@Test
 	public void testBeanWithExplicitProperties3() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
 		// Basic test
-		bm = session.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
+		bm = bc.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
@@ -122,11 +122,11 @@ public class AnnotationsTest {
 
 	@Test
 	public void testBeanWithExplicitProperties_usingConfig() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build().createSession();
+		BeanContext bc = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
 		BeanMap bm = null;
 
 		// Basic test
-		bm = session.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
+		bm = bc.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
@@ -149,7 +149,7 @@ public class AnnotationsTest {
 			this.name = name;
 		}
 	}
-	
+
 	@Bean(on="Person4",properties="age,name")
 	public static class PersonConfig {}
 
@@ -158,11 +158,11 @@ public class AnnotationsTest {
 	//====================================================================================================
 	@Test
 	public void testForOnlyPublicFields() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
 		// Make sure only public fields are detected
-		bm = session.newBeanMap(A.class).load("{publicField:123}");
+		bm = bc.newBeanMap(A.class).load("{publicField:123}");
 		assertNotNull("F1", bm);
 		assertNotNull("F2", bm.getBean());
 		assertObject(bm.getBean()).asJson().is("{publicField:123}");

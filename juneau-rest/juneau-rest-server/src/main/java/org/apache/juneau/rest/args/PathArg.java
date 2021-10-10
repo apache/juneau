@@ -104,7 +104,7 @@ public class PathArg implements RestOpArg {
 			call.getRestRequest().getPathParams().getAll().stream().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getBeanSession().convertToType(m, type);
 		}
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		return call.getRestRequest().getPathParams().get(name).parser(ps).schema(schema).asType(type).orElse(null);
 	}
 }

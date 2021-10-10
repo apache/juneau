@@ -60,7 +60,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 					return this.beanProps.equals(((BeanProxyInvocationHandler<?>)ih).beanProps);
 				}
 			}
-			BeanMap<Object> bean = this.meta.ctx.createSession().toBeanMap(arg);
+			BeanMap<Object> bean = this.meta.ctx.toBeanMap(arg);
 			return this.beanProps.equals(bean);
 		}
 

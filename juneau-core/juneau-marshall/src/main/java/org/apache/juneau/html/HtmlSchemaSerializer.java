@@ -25,7 +25,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -922,13 +921,13 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	}
 
 	@Override /* Context */
-	public HtmlSchemaSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public HtmlSchemaSerializerSession.Builder createSession() {
+		return HtmlSchemaSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public HtmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSchemaSerializerSession(this, args);
+	@Override /* Context */
+	public HtmlSchemaSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	JsonSchemaGenerator getGenerator() {

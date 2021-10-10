@@ -14,9 +14,9 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -26,54 +26,261 @@ import java.time.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 import java.util.logging.*;
 
 import javax.xml.bind.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
- * ContextSession object that lives for the duration of a single use of {@link Serializer} or {@link Parser}.
+ * Session object that lives for the duration of a single use of {@link BeanContext}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * Typically session objects are not thread safe nor reusable.  However, bean sessions do not maintain any state and
+ * thus can be safely cached and reused.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanSession extends ContextSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
 
+	/**
+	 * Creates a builder of this object.
+	 *
+	 * @param ctx The context creating this builder.
+	 * @return A new builder.
+	 */
+	public static Builder create(BeanContext ctx) {
+		return new Builder(ctx);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends ContextSession.Builder {
+
+		BeanContext ctx;
+		TimeZone timeZone;
+		Locale locale;
+		MediaType mediaType;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(BeanContext ctx) {
+			super(ctx);
+			this.ctx = ctx;
+			timeZone = ctx.timeZone;
+			locale = ctx.locale;
+			mediaType = ctx.mediaType;
+		}
+
+		/**
+		 * Build the object.
+		 *
+		 * @return The built object.
+		 */
+		@Override
+		public BeanSession build() {
+			return new BeanSession(this);
+		}
+
+		/**
+		 * The session locale.
+		 *
+		 * <p>
+		 * Specifies the default locale for serializer and parser sessions.
+		 *
+		 * <p>
+		 * If not specified, defaults to {@link BeanContext.Builder#locale(Locale)}.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='ja'>{@link BeanConfig#locale()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder locale(Locale value) {
+			if (value != null)
+				locale = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #locale(Locale)} but doesn't overwrite the value if it is already set.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder localeDefault(Locale value) {
+			if (value != null && locale == null)
+				locale = value;
+			return this;
+		}
+
+		/**
+		 * The session media type.
+		 *
+		 * <p>
+		 * Specifies the default media type value for serializer and parser sessions.
+		 *
+		 * <p>
+		 * If not specified, defaults to {@link BeanContext.Builder#mediaType(MediaType)}.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='ja'>{@link BeanConfig#mediaType()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder mediaType(MediaType value) {
+			if (value != null)
+				mediaType = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #mediaType(MediaType)} but doesn't overwrite the value if it is already set.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder mediaTypeDefault(MediaType value) {
+			if (value != null && mediaType == null)
+				mediaType = value;
+			return this;
+		}
+
+		/**
+		 * The session timezone.
+		 *
+		 * <p>
+		 * Specifies the default timezone for serializer and parser sessions.
+		 *
+		 * <p>
+		 * If not specified, defaults to {@link BeanContext.Builder#timeZone(TimeZone)}.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='ja'>{@link BeanConfig#timeZone()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder timeZone(TimeZone value) {
+			if (value != null)
+				timeZone = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #timeZone(TimeZone)} but doesn't overwrite the value if it is already set.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder timeZoneDefault(TimeZone value) {
+			if (value != null && timeZone == null)
+				timeZone = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED - ContextSession.Builder */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextSession.Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextSession.Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextSession.Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED - ContextSession.Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final BeanContext ctx;
-	private final HttpPartSchema schema;
-	private final Stack<StringBuilder> sbStack;
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
-		schema = args.schema;
-		sbStack = args.unmodifiable ? null : new Stack<>();
-		locale = ofNullable(args.locale).orElse(ctx.getDefaultLocale());
-		timeZone = ofNullable(args.timeZone).orElse(ctx.getDefaultTimeZone());
-		mediaType = ofNullable(args.mediaType).orElse(ctx.getDefaultMediaType());
+	protected BeanSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		locale = builder.locale;
+		timeZone = builder.timeZone;
+		mediaType = builder.mediaType;
 	}
 
 	/**
@@ -1141,33 +1348,6 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Creates a reusable {@link StringBuilder} object from an internal pool.
-	 *
-	 * <p>
-	 * String builders are returned to the pool by calling {@link #returnStringBuilder(StringBuilder)}.
-	 *
-	 * @return A new or previously returned string builder.
-	 */
-	protected final StringBuilder getStringBuilder() {
-		if (sbStack == null || sbStack.isEmpty())
-			return new StringBuilder();
-		return sbStack.pop();
-	}
-
-	/**
-	 * Returns a {@link StringBuilder} object back into the internal reuse pool.
-	 *
-	 * @param sb The string builder to return to the pool.  No-op if <jk>null</jk>.
-	 */
-	protected final void returnStringBuilder(StringBuilder sb) {
-		if (sb == null)
-			return;
-		sb.setLength(0);
-		if (sbStack != null)
-			sbStack.push(sb);
-	}
-
-	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
 	 *
 	 * <p>
@@ -1579,15 +1759,6 @@ public class BeanSession extends ContextSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * HTTP part schema of object being serialized or parsed.
-	 *
-	 * @return HTTP part schema of object being serialized or parsed, or <jk>null</jk> if not specified.
-	 */
-	public final HttpPartSchema getSchema() {
-		return schema;
-	}
-
 	@Override /* ContextSession */
 	public void checkForWarnings() {
 		if (isDebug())
@@ -1596,14 +1767,6 @@ public class BeanSession extends ContextSession {
 
 	@Override /* ContextSession */
 	public OMap toMap() {
-		return super.toMap()
-			.a("Context", ctx.toMap())
-			.a(
-				"BeanSession",
-				OMap
-					.create()
-					.filtered()
-					.a("schema", schema)
-			);
+		return filteredMap().a("BeanSession", filteredMap());
 	}
 }

@@ -55,7 +55,7 @@ public class MsgPackConfigAnnotationTest {
 	@Test
 	public void basicSerializer() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
+		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 	}
 
@@ -76,7 +76,7 @@ public class MsgPackConfigAnnotationTest {
 	@Test
 	public void noValuesSerializer() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
+		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 
@@ -96,7 +96,7 @@ public class MsgPackConfigAnnotationTest {
 	@Test
 	public void noAnnotationSerializer() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().createSession();
+		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 

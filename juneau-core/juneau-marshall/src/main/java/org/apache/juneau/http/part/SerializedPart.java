@@ -135,7 +135,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	 */
 	public SerializedPart serializer(HttpPartSerializer value) {
 		if (value != null)
-			return serializer(value.createPartSession(null));
+			return serializer(value.getPartSession());
 		return this;
 	}
 

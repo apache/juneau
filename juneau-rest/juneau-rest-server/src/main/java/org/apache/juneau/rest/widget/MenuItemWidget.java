@@ -153,15 +153,14 @@ public abstract class MenuItemWidget extends Widget {
 		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);
 		} else {
-			SerializerSessionArgs args =
-				SerializerSessionArgs
-					.create()
-					.properties(req.getAttributes().asMap())
-					.debug(req.isDebug() ? true : null)
-					.uriContext(req.getUriContext())
-					.useWhitespace(req.isPlainText() ? true : null)
-					.resolver(req.getVarResolverSession());
-			WriterSerializerSession session = HtmlSerializer.DEFAULT.createSession(args);
+			WriterSerializerSession session = HtmlSerializer.DEFAULT
+				.createSession()
+				.properties(req.getAttributes().asMap())
+				.debug(req.isDebug() ? true : null)
+				.uriContext(req.getUriContext())
+				.useWhitespace(req.isPlainText() ? true : null)
+				.resolver(req.getVarResolverSession())
+				.build();
 			session.indent = 2;
 			session.serialize(o, sb);
 		}

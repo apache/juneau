@@ -31,7 +31,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class PojoSearcherTest {
 
-	private static BeanSession bs = BeanContext.DEFAULT.createSession();
+	private static BeanSession bs = BeanContext.DEFAULT_SESSION;
 	private static PojoSearcher ps = PojoSearcher.DEFAULT;
 	private static WriterSerializer ws = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 

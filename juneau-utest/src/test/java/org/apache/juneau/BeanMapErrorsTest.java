@@ -34,7 +34,7 @@ public class BeanMapErrorsTest {
 	public void beanPropertyMethodNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		BeanMap<A1> bm = bc.createBeanSession().newBeanMap(A1.class);
+		BeanMap<A1> bm = bc.newBeanMap(A1.class);
 		assertTrue(bm.containsKey("f2"));
 		assertEquals(-1, bm.get("f2"));
 		bm.put("f2", -2);
@@ -62,7 +62,7 @@ public class BeanMapErrorsTest {
 	public void beanPropertyMethodNotInBeanProperties_usingConfig() {
 		BeanContext bc = BeanContext.create().applyAnnotations(B1Config.class).build();
 
-		BeanMap<B1> bm = bc.createBeanSession().newBeanMap(B1.class);
+		BeanMap<B1> bm = bc.newBeanMap(B1.class);
 		assertTrue(bm.containsKey("f2"));
 		assertEquals(-1, bm.get("f2"));
 		bm.put("f2", -2);
@@ -98,7 +98,7 @@ public class BeanMapErrorsTest {
 	public void beanPropertyFieldNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		BeanMap<A2> bm = bc.createBeanSession().newBeanMap(A2.class);
+		BeanMap<A2> bm = bc.newBeanMap(A2.class);
 		assertTrue(bm.containsKey("f2"));
 		assertEquals(-1, bm.get("f2"));
 		bm.put("f2", -2);
@@ -119,7 +119,7 @@ public class BeanMapErrorsTest {
 	public void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
 		BeanContext bc = BeanContext.create().applyAnnotations(B2Config.class).build();
 
-		BeanMap<B2> bm = bc.createBeanSession().newBeanMap(B2.class);
+		BeanMap<B2> bm = bc.newBeanMap(B2.class);
 		assertTrue(bm.containsKey("f2"));
 		assertEquals(-1, bm.get("f2"));
 		bm.put("f2", -2);

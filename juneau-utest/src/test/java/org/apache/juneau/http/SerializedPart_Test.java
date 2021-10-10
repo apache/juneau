@@ -33,7 +33,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class SerializedPart_Test {
 
-	private static final OpenApiSerializerSession OAPI_SESSION = OpenApiSerializer.DEFAULT.createSession();
+	private static final OpenApiSerializerSession OAPI_SESSION = OpenApiSerializer.DEFAULT.getSession();
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test
@@ -58,7 +58,7 @@ public class SerializedPart_Test {
 		assertString(x3.getValue()).is("[bar, baz]");
 		SerializedPart x4 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertString(x4.getValue()).is("bar,baz");
-		SerializedPart x5 = serializedPart("Foo",list("bar","baz")).copyWith(OAPI_SERIALIZER.createPartSession(null),null);
+		SerializedPart x5 = serializedPart("Foo",list("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
 		assertString(x5.getValue()).is("bar,baz");
 	}
 

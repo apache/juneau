@@ -51,6 +51,6 @@ public class CharMarshall extends Marshall {
 	 */
 	@Override /* Serializer */
 	public final String write(Object o) throws SerializeException {
-		return s.createSession().serializeToString(o);
+		return s.serializeToString(o);
 	}
 }

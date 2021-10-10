@@ -24,7 +24,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -668,23 +667,19 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		return new Builder(this);
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-------------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public OpenApiParserSession createSession() {
-		return new OpenApiParserSession(this, ParserSessionArgs.DEFAULT);
+	@Override /* Context */
+	public OpenApiParserSession.Builder createSession() {
+		return OpenApiParserSession.create(this);
 	}
 
-	@Override
-	public OpenApiParserSession createSession(ParserSessionArgs args) {
-		return new OpenApiParserSession(this, args);
+	@Override /* Context */
+	public OpenApiParserSession getSession() {
+		return createSession().build();
 	}
 
-	@Override
-	public OpenApiParserSession createPartSession(ParserSessionArgs args) {
-		return new OpenApiParserSession(this, args);
+	@Override /* HttpPartParser */
+	public OpenApiParserSession getPartSession() {
+		return OpenApiParserSession.create(this).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

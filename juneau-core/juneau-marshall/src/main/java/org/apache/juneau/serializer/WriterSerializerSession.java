@@ -12,12 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.util.*;
+import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
@@ -37,28 +45,198 @@ import org.apache.juneau.collections.*;
  */
 public abstract class WriterSerializerSession extends SerializerSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static abstract class Builder extends SerializerSession.Builder {
+
+		WriterSerializer ctx;
+		boolean useWhitespace;
+		Charset fileCharset, streamCharset;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(WriterSerializer ctx) {
+			super(ctx);
+			this.ctx = ctx;
+			useWhitespace = ctx.useWhitespace;
+			fileCharset = ctx.fileCharset;
+			streamCharset = ctx.streamCharset;
+		}
+
+		@Override
+		public abstract WriterSerializerSession build();
+
+		/**
+		 * File charset.
+		 *
+		 * <p>
+		 * The character set to use for writing Files to the file system.
+		 *
+		 * <p>
+		 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+		 *
+		 * <p>
+		 * If not specified, defaults to the JVM system default charset.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder fileCharset(Charset value) {
+			if (value != null)
+				fileCharset = value;
+			return this;
+		}
+
+		/**
+		 * Output stream charset.
+		 *
+		 * <p>
+		 * The character set to use when writing to OutputStreams.
+		 *
+		 * <p>
+		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+		 *
+		 * <p>
+		 * If not specified, defaults to UTF-8.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder streamCharset(Charset value) {
+			if (value != null)
+				streamCharset = value;
+			return this;
+		}
+
+		/**
+		 * Use whitespace.
+		 *
+		 * <p>
+		 * If true, whitespace is added to the output to improve readability.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder useWhitespace(Boolean value) {
+			if (value != null)
+				useWhitespace = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder resolver(VarResolverSession value) {
+			super.resolver(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final WriterSerializer ctx;
 	private final boolean useWhitespace;
 	private final Charset streamCharset, fileCharset;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param builder The builder for this object.
 	 */
-	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
-		streamCharset = ofNullable(args == null ? null : args.streamCharset).orElse(ctx.streamCharset);
-		fileCharset = ofNullable(args == null ? null : args.fileCharset).orElse(ctx.fileCharset);
-		useWhitespace = ofNullable(args == null ? null : args.useWhitespace).orElse(ctx.useWhitespace);
+	protected WriterSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		streamCharset = builder.streamCharset;
+		fileCharset = builder.fileCharset;
+		useWhitespace = builder.useWhitespace;
 	}
 
 	@Override /* SerializerSession */
@@ -155,12 +333,6 @@ public abstract class WriterSerializerSession extends SerializerSession {
 
 	@Override /* ContextSession */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"WriterSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
+		return super.toMap().a("WriterSerializerSession", filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace));
 	}
 }

@@ -39,7 +39,7 @@ public class PojoQueryTest {
 
 		List<A> in = AList.of(new A("foo"),new A("bar"),new A("baz"));
 
-		PojoQuery q = new PojoQuery(in, BeanContext.DEFAULT.createSession());
+		PojoQuery q = new PojoQuery(in, BeanContext.DEFAULT_SESSION);
 
 		sa = SearchArgs.create().search("f=foo").build();
 		results = q.filter(sa);
@@ -73,7 +73,7 @@ public class PojoQueryTest {
 	//====================================================================================================
 	@Test
 	public void testFilterCollectionDateSearchOneLevel() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanSession session = BeanContext.DEFAULT_SESSION;
 		WriterSerializer s = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 		B[] in;
 		PojoQuery q;
@@ -257,7 +257,7 @@ public class PojoQueryTest {
 	//====================================================================================================
 	@Test
 	public void testFilterCollectionIntSearchOneLevel() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanSession session = BeanContext.DEFAULT_SESSION;
 		SearchArgs sa;
 		List results;
 
@@ -305,7 +305,7 @@ public class PojoQueryTest {
 	//====================================================================================================
 	@Test
 	public void testFilterCollectionViewOneLevel() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanSession session = BeanContext.DEFAULT_SESSION;
 		SearchArgs sa;
 		List results;
 
@@ -350,7 +350,7 @@ public class PojoQueryTest {
 	//====================================================================================================
 	@Test
 	public void testSorting() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanSession session = BeanContext.DEFAULT_SESSION;
 		WriterSerializer s = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 		SearchArgs sa;
 		List results;

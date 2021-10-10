@@ -95,12 +95,12 @@ import org.apache.juneau.utils.*;
  * This class is not thread safe.
  */
 public class OMap extends LinkedHashMap<String,Object> {
-	private static final long serialVersionUID = 1L;
 
-	private transient BeanSession session;
-	private Map<String,Object> inner;
-	private transient PojoRest pojoRest;
-	private transient Predicate<Object> valueFilter = x -> true;
+	//------------------------------------------------------------------------------------------------------------------
+	// Static
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * An empty read-only OMap.
@@ -134,119 +134,6 @@ public class OMap extends LinkedHashMap<String,Object> {
 			return Collections.emptyMap().values();
 		}
 	};
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Construct an empty map.
-	 */
-	public OMap() {}
-
-	/**
-	 * Construct an empty map with the specified bean context.
-	 *
-	 * @param session The bean session to use for creating beans.
-	 */
-	public OMap(BeanSession session) {
-		this.session = session;
-	}
-
-	/**
-	 * Construct a map initialized with the specified map.
-	 *
-	 * @param in
-	 * 	The map to copy.
-	 * 	<br>Can be <jk>null</jk>.
-	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
-	 */
-	public OMap(Map<?,?> in) {
-		this();
-		if (in != null)
-			for (Map.Entry<?,?> e : in.entrySet())
-				put(e.getKey().toString(), e.getValue());
-	}
-
-	/**
-	 * Construct a map initialized with the specified JSON.
-	 *
-	 * @param json
-	 * 	The JSON text to parse.
-	 * 	<br>Can be normal or simplified JSON.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap(CharSequence json) throws ParseException {
-		this(json, JsonParser.DEFAULT);
-	}
-
-	/**
-	 * Construct a map initialized with the specified string.
-	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use to parse the input.
-	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().createBeanSession());
-		if (p == null)
-			p = JsonParser.DEFAULT;
-		if (! StringUtils.isEmpty(in))
-			p.parseIntoMap(in, this, bs().string(), bs().object());
-	}
-
-	/**
-	 * Construct a map initialized with the specified reader containing JSON.
-	 *
-	 * @param json
-	 * 	The reader containing JSON text to parse.
-	 * 	<br>Can contain normal or simplified JSON.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap(Reader json) throws ParseException {
-		parse(json, JsonParser.DEFAULT);
-	}
-
-	/**
-	 * Construct a map initialized with the specified string.
-	 *
-	 * @param in
-	 * 	The reader containing the input being parsed.
-	 * 	<br>Can contain normal or simplified JSON.
-	 * @param p
-	 * 	The parser to use to parse the input.
-	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap(Reader in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().createBeanSession());
-		parse(in, p);
-	}
-
-	/**
-	 * Construct a map initialized with the specified key/value pairs.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	OMap m = <jk>new</jk> OMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
-	 * </p>
-	 *
-	 * @param keyValuePairs A list of key/value pairs to add to this map.
-	 */
-	public OMap(Object... keyValuePairs) {
-		if (keyValuePairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into OMap(Object...)");
-		for (int i = 0; i < keyValuePairs.length; i+=2)
-			put(stringify(keyValuePairs[i]), keyValuePairs[i+1]);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Creators
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Construct an empty map.
@@ -341,6 +228,138 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 */
 	public static OMap of(Object... keyValuePairs) {
 		return new OMap(keyValuePairs);
+	}
+
+	/**
+	 * Construct a map initialized with the specified key/value pairs.
+	 *
+	 * <p>
+	 * Same as {@link #of(Object...)} but calls {@link #filtered()} on the created map.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	OMap m = <jk>new</jk> OMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
+	 * </p>
+	 *
+	 * @param keyValuePairs A list of key/value pairs to add to this map.
+	 * @return A new map, never <jk>null</jk>.
+	 */
+	public static OMap filteredMap(Object... keyValuePairs) {
+		return new OMap(keyValuePairs).filtered();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//------------------------------------------------------------------------------------------------------------------
+
+	private transient BeanSession session;
+	private Map<String,Object> inner;
+	private transient PojoRest pojoRest;
+	private transient Predicate<Object> valueFilter = x -> true;
+
+	/**
+	 * Construct an empty map.
+	 */
+	public OMap() {}
+
+	/**
+	 * Construct an empty map with the specified bean context.
+	 *
+	 * @param session The bean session to use for creating beans.
+	 */
+	public OMap(BeanSession session) {
+		this.session = session;
+	}
+
+	/**
+	 * Construct a map initialized with the specified map.
+	 *
+	 * @param in
+	 * 	The map to copy.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
+	 */
+	public OMap(Map<?,?> in) {
+		this();
+		if (in != null)
+			for (Map.Entry<?,?> e : in.entrySet())
+				put(e.getKey().toString(), e.getValue());
+	}
+
+	/**
+	 * Construct a map initialized with the specified JSON.
+	 *
+	 * @param json
+	 * 	The JSON text to parse.
+	 * 	<br>Can be normal or simplified JSON.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OMap(CharSequence json) throws ParseException {
+		this(json, JsonParser.DEFAULT);
+	}
+
+	/**
+	 * Construct a map initialized with the specified string.
+	 *
+	 * @param in
+	 * 	The input being parsed.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param p
+	 * 	The parser to use to parse the input.
+	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OMap(CharSequence in, Parser p) throws ParseException {
+		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
+		if (p == null)
+			p = JsonParser.DEFAULT;
+		if (! StringUtils.isEmpty(in))
+			p.parseIntoMap(in, this, bs().string(), bs().object());
+	}
+
+	/**
+	 * Construct a map initialized with the specified reader containing JSON.
+	 *
+	 * @param json
+	 * 	The reader containing JSON text to parse.
+	 * 	<br>Can contain normal or simplified JSON.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OMap(Reader json) throws ParseException {
+		parse(json, JsonParser.DEFAULT);
+	}
+
+	/**
+	 * Construct a map initialized with the specified string.
+	 *
+	 * @param in
+	 * 	The reader containing the input being parsed.
+	 * 	<br>Can contain normal or simplified JSON.
+	 * @param p
+	 * 	The parser to use to parse the input.
+	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OMap(Reader in, Parser p) throws ParseException {
+		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
+		parse(in, p);
+	}
+
+	/**
+	 * Construct a map initialized with the specified key/value pairs.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	OMap m = <jk>new</jk> OMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
+	 * </p>
+	 *
+	 * @param keyValuePairs A list of key/value pairs to add to this map.
+	 */
+	public OMap(Object... keyValuePairs) {
+		if (keyValuePairs.length % 2 != 0)
+			throw runtimeException("Odd number of parameters passed into OMap(Object...)");
+		for (int i = 0; i < keyValuePairs.length; i+=2)
+			put(stringify(keyValuePairs[i]), keyValuePairs[i+1]);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -12,18 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.*;
@@ -52,8 +56,184 @@ import org.apache.juneau.transform.*;
  */
 public abstract class SerializerSession extends BeanTraverseSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static abstract class Builder extends BeanTraverseSession.Builder {
+
+		Serializer ctx;
+		Method javaMethod;
+		VarResolverSession resolver;
+		UriContext uriContext;
+		HttpPartSchema schema;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(Serializer ctx) {
+			super(ctx);
+			this.ctx = ctx;
+			uriContext = ctx.uriContext;
+			mediaTypeDefault(ctx.getResponseContentType());
+		}
+
+		@Override
+		public abstract SerializerSession build();
+
+		/**
+		 * The java method that called this serializer, usually the method in a REST servlet.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder javaMethod(Method value) {
+			if (value != null)
+				javaMethod = value;
+			return this;
+		}
+
+		/**
+		 * String variable resolver.
+		 *
+		 * <p>
+		 * If not specified, defaults to session created by {@link VarResolver#DEFAULT}.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder resolver(VarResolverSession value) {
+			if (value != null)
+				resolver = value;
+			return this;
+		}
+
+		/**
+		 * URI context bean.
+		 *
+		 * <p>
+		 * Bean used for resolution of URIs to absolute or root-relative form.
+		 *
+		 * <p>
+		 * If not specified, defaults to {@link Serializer.Builder#uriContext(UriContext)}.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder uriContext(UriContext value) {
+			if (value != null)
+				uriContext = value;
+			return this;
+		}
+
+		/**
+		 * HTTP-part schema.
+		 *
+		 * <p>
+		 * Used for schema-based serializers and parsers to define additional formatting.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder schema(HttpPartSchema value) {
+			if (value != null)
+				this.schema = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #schema(HttpPartSchema)} but doesn't overwrite the value if it is already set.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder schemaDefault(HttpPartSchema value) {
+			if (value != null && schema == null)
+				this.schema = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final Serializer ctx;
 	private final UriResolver uriResolver;
+	private final HttpPartSchema schema;
 	private VarResolverSession vrs;
 
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
@@ -62,27 +242,19 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	private final SerializerListener listener;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * 	Can be <jk>null</jk>.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param builder The builder for this object.
 	 */
-	protected SerializerSession(Serializer ctx, SerializerSessionArgs args) {
-		super(ctx, args == null ? SerializerSessionArgs.DEFAULT : args);
-		this.ctx = ctx;
-		args = args == null ? SerializerSessionArgs.DEFAULT : args;
-		this.javaMethod = args.javaMethod;
-		UriContext uriContext = ofNullable(args.uriContext).orElse(ctx.getUriContext());
-		this.uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
-		this.listener = castOrCreate(SerializerListener.class, ctx.getListener());
-		this.vrs = args.resolver;
+	protected SerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		javaMethod = builder.javaMethod;
+		UriContext uriContext = builder.uriContext;
+		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
+		listener = castOrCreate(SerializerListener.class, ctx.getListener());
+		vrs = builder.resolver;
+		schema = builder.schema;
 	}
 
 	/**
@@ -118,16 +290,12 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Default constructor.
+	 * HTTP part schema of object being serialized.
 	 *
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @return HTTP part schema of object being serialized, or <jk>null</jk> if not specified.
 	 */
-	protected SerializerSession(SerializerSessionArgs args) {
-		this(null, args);
+	public final HttpPartSchema getSchema() {
+		return schema;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -841,13 +1009,6 @@ public abstract class SerializerSession extends BeanTraverseSession {
 
 	@Override /* ContextSession */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"SerializerSession",
-				OMap
-					.create()
-					.filtered()
-					.a("uriResolver", uriResolver)
-			);
+		return super.toMap().a("SerializerSession", filteredMap("uriResolver", uriResolver));
 	}
 }

@@ -153,7 +153,7 @@ public final class ConverterUtils {
 
 	// Session objects are usually not thread safe, but we're not using any feature
 	// of bean sessions that would cause thread safety issues.
-	private static final BeanSession session = BeanContext.DEFAULT.createSession();
+	private static final BeanSession session = BeanContext.DEFAULT_SESSION;
 
 	/**
 	 * Converts the specified object to the specified type.

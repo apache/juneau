@@ -650,13 +650,13 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	}
 
 	@Override /* Context */
-	public  PlainTextSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public  PlainTextSerializerSession.Builder createSession() {
+		return PlainTextSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public PlainTextSerializerSession createSession(SerializerSessionArgs args) {
-		return new PlainTextSerializerSession(this, args);
+	@Override /* Context */
+	public PlainTextSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

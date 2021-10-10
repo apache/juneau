@@ -866,24 +866,14 @@ public abstract class WriterSerializer extends Serializer {
 		quoteCharValue = ofNullable(quoteCharOverride).orElse(ofNullable(quoteChar).orElse('"'));
 	}
 
-	@Override
+	@Override /* Context */
 	public abstract Builder copy();
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Abstract methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* SerializerSession */
-	public abstract WriterSerializerSession createSession(SerializerSessionArgs args);
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Context */
+	public abstract WriterSerializerSession.Builder createSession();
 
 	@Override /* Context */
-	public WriterSerializerSession createSession() {
-		return createSession(defaultArgs());
-	}
+	public abstract WriterSerializerSession getSession();
 
 	@Override /* Serializer */
 	public final boolean isWriterSerializer() {
@@ -899,7 +889,7 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	@Override /* Serializer */
 	public final String serialize(Object o) throws SerializeException {
-		return createSession(defaultArgs()).serialize(o);
+		return getSession().serialize(o);
 	}
 
 	/**

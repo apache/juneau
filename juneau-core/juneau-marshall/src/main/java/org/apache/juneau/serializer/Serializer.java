@@ -1233,8 +1233,14 @@ public abstract class Serializer extends BeanTraverseContext {
 		this.acceptMediaTypes = ofNullable(builder.accept).map(x -> StringUtils.split(x, ',')).map(MediaType::ofAll).orElseGet(()->new MediaType[] {this.producesMediaType});
 	}
 
-	@Override
+	@Override /* Context */
 	public abstract Builder copy();
+
+	@Override /* Context */
+	public abstract SerializerSession.Builder createSession();
+
+	@Override /* Context */
+	public abstract SerializerSession getSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
@@ -1249,33 +1255,9 @@ public abstract class Serializer extends BeanTraverseContext {
 		return true;
 	}
 
-	/**
-	 * Create the session object used for actual serialization of objects.
-	 *
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and serializer
-	 * 	contexts.
-	 * @return
-	 * 	The new session object.
-	 */
-	public abstract SerializerSession createSession(SerializerSessionArgs args);
-
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public SerializerSession createSession() {
-		return createSession(defaultArgs());
-	}
-
-	@Override /* Context */
-	public final SerializerSessionArgs defaultArgs() {
-		return new SerializerSessionArgs().mediaType(getResponseContentType());
-	}
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
@@ -1302,7 +1284,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final void serialize(Object o, Object output) throws SerializeException, IOException {
-		createSession().serialize(o, output);
+		getSession().serialize(o, output);
 	}
 
 	/**
@@ -1317,7 +1299,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Object serialize(Object o) throws SerializeException {
-		return createSession().serialize(o);
+		return getSession().serialize(o);
 	}
 
 	/**
@@ -1333,7 +1315,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final String serializeToString(Object o) throws SerializeException {
-		return createSession().serializeToString(o);
+		return getSession().serializeToString(o);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

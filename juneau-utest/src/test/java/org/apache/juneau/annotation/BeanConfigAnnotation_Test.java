@@ -146,37 +146,37 @@ public class BeanConfigAnnotation_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		BeanSession bc = JsonSerializer.create().apply(al).build().createSession();
+		BeanSession bs = JsonSerializer.create().apply(al).build().getSession();
 
-		check("PRIVATE", bc.getBeanClassVisibility());
-		check("PRIVATE", bc.getBeanConstructorVisibility());
-		check("A1,A2,A3", bc.getBeanDictionary());
-		check("PRIVATE", bc.getBeanFieldVisibility());
-		check("true", bc.isBeanMapPutReturnsOldValue());
-		check("PRIVATE", bc.getBeanMethodVisibility());
-		check("true", bc.isBeansRequireDefaultConstructor());
-		check("true", bc.isBeansRequireSerializable());
-		check("true", bc.isBeansRequireSettersForGetters());
-		check("false", bc.isBeansRequireSomeProperties());
-		check("foo", bc.getBeanTypePropertyName());
-		check("true", bc.isDebug());
-		check("true", bc.isFindFluentSetters());
-		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
-		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("false", bc.isIgnoreMissingSetters());
-		check("true", bc.isIgnoreUnknownBeanProperties());
-		check("false", bc.isIgnoreUnknownNullBeanProperties());
-		check("en_US", bc.getLocale());
-		check("application/json", bc.getMediaType());
-		check("A1,A2,A3,Map,Collection,Reader,Writer,InputStream,OutputStream,Throwable", bc.getNotBeanClasses());
-		check("foo1,foo2,foo3,java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
-		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bc.getSwaps());
-		check("PropertyNamerULC", bc.getPropertyNamer());
-		check("true", bc.isSortProperties());
-		check("GMT", bc.getTimeZone());
-		check("true", bc.isUseEnumNames());
-		check("false", bc.isUseInterfaceProxies());
-		check("true", bc.isUseJavaBeanIntrospector());
+		check("PRIVATE", bs.getBeanClassVisibility());
+		check("PRIVATE", bs.getBeanConstructorVisibility());
+		check("A1,A2,A3", bs.getBeanDictionary());
+		check("PRIVATE", bs.getBeanFieldVisibility());
+		check("true", bs.isBeanMapPutReturnsOldValue());
+		check("PRIVATE", bs.getBeanMethodVisibility());
+		check("true", bs.isBeansRequireDefaultConstructor());
+		check("true", bs.isBeansRequireSerializable());
+		check("true", bs.isBeansRequireSettersForGetters());
+		check("false", bs.isBeansRequireSomeProperties());
+		check("foo", bs.getBeanTypePropertyName());
+		check("true", bs.isDebug());
+		check("true", bs.isFindFluentSetters());
+		check("true", bs.isIgnoreInvocationExceptionsOnGetters());
+		check("true", bs.isIgnoreInvocationExceptionsOnSetters());
+		check("false", bs.isIgnoreMissingSetters());
+		check("true", bs.isIgnoreUnknownBeanProperties());
+		check("false", bs.isIgnoreUnknownNullBeanProperties());
+		check("en_US", bs.getLocale());
+		check("text/foo", bs.getMediaType());
+		check("A1,A2,A3,Map,Collection,Reader,Writer,InputStream,OutputStream,Throwable", bs.getNotBeanClasses());
+		check("foo1,foo2,foo3,java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bs.getNotBeanPackagesNames());
+		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bs.getSwaps());
+		check("PropertyNamerULC", bs.getPropertyNamer());
+		check("true", bs.isSortProperties());
+		check("GMT", bs.getTimeZone());
+		check("true", bs.isUseEnumNames());
+		check("false", bs.isUseInterfaceProxies());
+		check("true", bs.isUseJavaBeanIntrospector());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

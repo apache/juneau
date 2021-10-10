@@ -539,6 +539,6 @@ public class HeaderList_Test {
 	}
 
 	private static HttpPartSerializerSession openApiSession() {
-		return OpenApiSerializer.DEFAULT.createPartSession(null);
+		return OpenApiSerializer.DEFAULT.getPartSession();
 	}
 }

@@ -30,7 +30,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class OpenApiPartSerializer_Test {
 
-	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.createSession();
+	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.getSession();
 
 	private static String serialize(HttpPartSchema schema, Object o) throws SchemaValidationException, SerializeException {
 		return s.serialize(null, schema, o);
@@ -201,7 +201,7 @@ public class OpenApiPartSerializer_Test {
 	public void c08_stringType_uonFormat() throws Exception {
 		HttpPartSchema ps = T_UON;
 		assertEquals("foo", serialize(ps, "foo"));
-		assertEquals("'foo'", serialize(ps, "'foo'"));
+		assertEquals("~'foo~'", serialize(ps, "'foo'"));
 		assertEquals("foo", serialize(ps, new C2("foo")));
 		assertEquals("null", serialize(ps, new C2(null)));
 		assertEquals("'null'", serialize(ps, new C2("null")));

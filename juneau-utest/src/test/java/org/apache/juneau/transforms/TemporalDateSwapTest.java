@@ -42,7 +42,7 @@ public class TemporalDateSwapTest extends RoundTripStringSwapTest<Date> {
 
 	private static BeanSession
 		BS_DEFAULT = BeanContext.DEFAULT_SESSION,
-		BS_PST = BeanContext.DEFAULT.createBeanSession(BeanSessionArgs.create().timeZone(TimeZone.getTimeZone("PST")));
+		BS_PST = BeanContext.DEFAULT.createSession().timeZone(TimeZone.getTimeZone("PST")).build();
 
 	private static Date T_Date = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
 

@@ -12,11 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.
@@ -31,23 +39,122 @@ import org.apache.juneau.internal.*;
  */
 public abstract class OutputStreamSerializerSession extends SerializerSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static abstract class Builder extends SerializerSession.Builder {
+
+		OutputStreamSerializer ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(OutputStreamSerializer ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public abstract OutputStreamSerializerSession build();
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			this.javaMethod = value;
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder resolver(VarResolverSession value) {
+			this.resolver = value;
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder uriContext(UriContext value) {
+			uriContext = value;
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final OutputStreamSerializer ctx;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param builder The builder for this object.
 	 */
-	protected OutputStreamSerializerSession(OutputStreamSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
+	protected OutputStreamSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
 	}
 
 	@Override /* SerializerSession */
@@ -111,12 +218,6 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 
 	@Override /* ContextSession */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"OutputStreamSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
+		return super.toMap().a("OutputStreamSerializerSession", filteredMap());
 	}
 }

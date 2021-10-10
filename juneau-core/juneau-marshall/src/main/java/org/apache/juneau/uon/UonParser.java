@@ -651,32 +651,19 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		return new Builder(this);
 	}
 
-	/**
-	 * Create a UON parser session for parsing parameter values.
-	 *
-	 * @return A new parser session.
-	 */
-	protected final UonParserSession createParameterSession() {
-		return new UonParserSession(this, defaultArgs(), false);
+	@Override /* Context */
+	public UonParserSession.Builder createSession() {
+		return UonParserSession.create(this);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Parser */
-	public UonParserSession createSession(ParserSessionArgs args) {
-		return new UonParserSession(this, args);
+	@Override /* Context */
+	public UonParserSession getSession() {
+		return createSession().build();
 	}
 
 	@Override /* HttpPartParser */
-	public UonParserSession createSession() {
-		return createSession(null);
-	}
-
-	@Override /* HttpPartParser */
-	public UonParserSession createPartSession(ParserSessionArgs args) {
-		return new UonParserSession(this, args);
+	public UonParserSession getPartSession() {
+		return UonParserSession.create(this).build();
 	}
 
 	/**
@@ -694,7 +681,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return createPartSession(null).parse(partType, schema, in, toType);
+		return getPartSession().parse(partType, schema, in, toType);
 	}
 
 	/**
@@ -712,7 +699,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return createPartSession(null).parse(partType, schema, in, getClassMeta(toType));
+		return getPartSession().parse(partType, schema, in, getClassMeta(toType));
 	}
 
 	/**
@@ -731,7 +718,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return createPartSession(null).parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
+		return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

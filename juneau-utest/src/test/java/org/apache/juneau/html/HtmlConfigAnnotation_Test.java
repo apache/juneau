@@ -62,7 +62,7 @@ public class HtmlConfigAnnotation_Test {
 	@Test
 	public void basicSerializer() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().createSession();
+		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
 		check("false", x.isDetectLabelParameters());
@@ -88,7 +88,7 @@ public class HtmlConfigAnnotation_Test {
 	@Test
 	public void defaultsSerializer() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().createSession();
+		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
 		check("true", x.isDetectLabelParameters());
@@ -113,7 +113,7 @@ public class HtmlConfigAnnotation_Test {
 	@Test
 	public void noAnnotationSerializer() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().createSession();
+		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
 		check("true", x.isDetectLabelParameters());

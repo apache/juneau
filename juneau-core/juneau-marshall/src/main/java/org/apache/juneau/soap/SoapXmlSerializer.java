@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -693,14 +692,14 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		return new Builder(this);
 	}
 
-	@Override /* Serializer */
-	public SoapXmlSerializerSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public SoapXmlSerializerSession.Builder createSession() {
+		return SoapXmlSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public SoapXmlSerializerSession createSession(SerializerSessionArgs args) {
-		return new SoapXmlSerializerSession(this, args);
+	@Override /* Context */
+	public SoapXmlSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -93,8 +93,7 @@ public final class RestResponse {
 		try {
 			String passThroughHeaders = request.getHeader("x-response-headers").orElse(null);
 			if (passThroughHeaders != null) {
-				HttpPartParser p = context.getPartParser();
-				OMap m = p.createPartSession(request.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(OMap.class));
+				OMap m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(OMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					addHeader(e.getKey(), resolveUris(e.getValue()));
 			}

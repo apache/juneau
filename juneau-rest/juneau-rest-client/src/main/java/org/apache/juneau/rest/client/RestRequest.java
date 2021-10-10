@@ -115,7 +115,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
-		super(client.getBeanContext(), BeanSessionArgs.DEFAULT);
+		super(client.getBeanContext().createSession());
 		this.client = client;
 		this.request = createInnerRequest(method, uri, hasBody);
 		this.errorCodes = client.errorCodes;
@@ -3135,7 +3135,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			serializer = client.getPartSerializer();
 		HttpPartSerializerSession s = partSerializerSessions.get(serializer);
 		if (s == null) {
-			s = serializer.createPartSession(null);
+			s = serializer.getPartSession();
 			partSerializerSessions.put(serializer, s);
 		}
 		return s;

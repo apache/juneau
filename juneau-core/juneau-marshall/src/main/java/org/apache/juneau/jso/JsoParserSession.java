@@ -13,9 +13,15 @@
 package org.apache.juneau.jso;
 
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -28,20 +34,129 @@ import org.apache.juneau.parser.*;
 @SuppressWarnings("unchecked")
 public class JsoParserSession extends InputStreamParserSession {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Creates a new builder for this object.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
 	 */
-	protected JsoParserSession(JsoParser ctx, ParserSessionArgs args) {
-		super(ctx, args);
+	public static Builder create(JsoParser ctx) {
+		return new Builder(ctx);
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends InputStreamParserSession.Builder {
+
+		JsoParser ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(JsoParser ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public JsoParserSession build() {
+			return new JsoParserSession(this);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected JsoParserSession(Builder builder) {
+		super(builder);
 	}
 
 	@Override /* ParserSession */

@@ -543,7 +543,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		configMap.register(this);
 		serializer = builder.serializer;
 		parser = builder.parser;
-		beanSession = parser.getBeanContext().createBeanSession();
+		beanSession = parser.getBeanContext().getSession();
 		encoder = builder.encoder;
 		varResolver = builder.varResolver;
 		varSession = varResolver
@@ -1920,22 +1920,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	// Interface methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Unused.
-	 */
-	@Override /* Context */
-	public ContextSession createSession(Context.Args args) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Unused.
-	 */
-	@Override /* Context */
-	public Context.Args defaultArgs() {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override /* ConfigEventListener */
 	public synchronized void onConfigChange(ConfigEvents events) {
 		for (ConfigEventListener l : listeners)
@@ -1946,7 +1930,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public String getMediaType() {
 		return "text/plain";
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private methods

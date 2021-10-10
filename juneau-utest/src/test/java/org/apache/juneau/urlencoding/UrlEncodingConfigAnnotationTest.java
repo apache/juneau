@@ -55,14 +55,14 @@ public class UrlEncodingConfigAnnotationTest {
 	@Test
 	public void basicSerializer() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().createSession();
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().createSession();
+		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
@@ -77,14 +77,14 @@ public class UrlEncodingConfigAnnotationTest {
 	@Test
 	public void noValuesSerializer() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().createSession();
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().createSession();
+		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
@@ -98,14 +98,14 @@ public class UrlEncodingConfigAnnotationTest {
 	@Test
 	public void noAnnotationSerializer() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().createSession();
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().createSession();
+		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 }

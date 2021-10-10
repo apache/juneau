@@ -74,22 +74,32 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 		return new Builder();
 	}
 
-	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new WriterSerializerSession(this, args) {
-			@Override /* SerializerSession */
-			protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-				out.getWriter().write(function.apply(this,o));
-			}
-			@Override /* SerializerSession */
-			public Map<String,String> getResponseHeaders() {
-				return headers.apply(this);
+	@Override /* Context */
+	public WriterSerializerSession.Builder createSession() {
+		return new WriterSerializerSession.Builder(this) {
+			@Override
+			public WriterSerializerSession build() {
+				return new WriterSerializerSession(this) {
+					@Override /* SerializerSession */
+					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+						out.getWriter().write(function.apply(this,o));
+					}
+					@Override /* SerializerSession */
+					public Map<String,String> getResponseHeaders() {
+						return headers.apply(this);
+					}
+				};
 			}
 		};
 	}
 
+	@Override /* Context */
+	public WriterSerializerSession getSession() {
+		return createSession().build();
+	}
+
 	@Override
-	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+	public HttpPartSerializerSession getPartSession() {
 		return new HttpPartSerializerSession() {
 			@Override
 			public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {

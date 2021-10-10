@@ -17,14 +17,20 @@ import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.*;
+import java.util.function.Consumer;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.MediaType;
+import org.apache.juneau.httppart.HttpPartSchema;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.VarResolverSession;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
@@ -44,6 +50,146 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	static final Map<String,String> LANG_PROP_MAP = AMap.of("RDF/XML","rdfXml.","RDF/XML-ABBREV","rdfXml.","N3","n3.","N3-PP","n3.","N3-PLAIN","n3.","N3-TRIPLES","n3.","TURTLE","n3.","N-TRIPLE","ntriple.");
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(RdfSerializer ctx) {
+		return new Builder(ctx);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends WriterSerializerSession.Builder {
+
+		RdfSerializer ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(RdfSerializer ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public RdfSerializerSession build() {
+			return new RdfSerializerSession(this);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder useWhitespace(Boolean value) {
+			super.useWhitespace(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder resolver(VarResolverSession value) {
+			super.resolver(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final RdfSerializer ctx;
 	private final Property pRoot, pValue;
 	private final Model model;
@@ -51,20 +197,13 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	private final Namespace[] namespaces;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param builder The builder for this object.
 	 */
-	protected RdfSerializerSession(RdfSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
+	protected RdfSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
 
 		namespaces = ctx.namespaces;
 		model = ModelFactory.createDefaultModel();

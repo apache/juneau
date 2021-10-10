@@ -708,14 +708,14 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public XmlParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public XmlParserSession.Builder createSession() {
+		return XmlParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public XmlParserSession createSession(ParserSessionArgs args) {
-		return new XmlParserSession(this, args);
+	@Override /* Context */
+	public XmlParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

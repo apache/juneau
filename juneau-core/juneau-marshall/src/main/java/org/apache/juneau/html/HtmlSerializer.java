@@ -1281,14 +1281,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Serializer */
-	public HtmlSerializerSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public HtmlSerializerSession.Builder createSession() {
+		return HtmlSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public HtmlSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSerializerSession(this, args);
+	@Override /* Context */
+	public HtmlSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	/**

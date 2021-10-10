@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -605,25 +606,14 @@ public abstract class OutputStreamSerializer extends Serializer {
 		binaryFormat = builder.binaryFormat;
 	}
 
-	@Override
+	@Override /* Context */
 	public abstract Builder copy();
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Abstract methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* SerializerSession */
-	public abstract OutputStreamSerializerSession createSession(SerializerSessionArgs args);
-
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Context */
+	public abstract OutputStreamSerializerSession.Builder createSession();
 
 	@Override /* Context */
-	public OutputStreamSerializerSession createSession() {
-		return createSession(defaultArgs());
-	}
+	public abstract OutputStreamSerializerSession getSession();
 
 	@Override /* Serializer */
 	public final boolean isWriterSerializer() {
@@ -639,7 +629,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
-		return createSession(defaultArgs()).serialize(o);
+		return getSession().serialize(o);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -663,13 +653,6 @@ public abstract class OutputStreamSerializer extends Serializer {
 
 	@Override /* Context */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"OutputStreamSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("binaryFormat", binaryFormat)
-			);
+		return super.toMap().a("OutputStreamSerializer", filteredMap("binaryFormat", binaryFormat));
 	}
 }

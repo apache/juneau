@@ -16,12 +16,17 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.*;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.iterator.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.MediaType;
+import org.apache.juneau.httppart.HttpPartSchema;
+import org.apache.juneau.internal.FluentSetters;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -36,6 +41,128 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RdfParserSession extends ReaderParserSession {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(RdfParser ctx) {
+		return new Builder(ctx);
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends ReaderParserSession.Builder {
+
+		RdfParser ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(RdfParser ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public RdfParserSession build() {
+			return new RdfParserSession(this);
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private final RdfParser ctx;
 	private final Property pRoot, pValue, pType, pRdfType;
 	private final Model model;
@@ -43,17 +170,13 @@ public class RdfParserSession extends ReaderParserSession {
 	private final Set<Resource> urisVisited = new HashSet<>();
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected RdfParserSession(RdfParser ctx, ParserSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
+	protected RdfParserSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
 		model = ModelFactory.createDefaultModel();
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());

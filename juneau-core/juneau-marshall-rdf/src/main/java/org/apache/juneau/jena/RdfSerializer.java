@@ -1601,13 +1601,13 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	}
 
 	@Override /* Context */
-	public  RdfSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public  RdfSerializerSession.Builder createSession() {
+		return RdfSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public RdfSerializerSession createSession(SerializerSessionArgs args) {
-		return new RdfSerializerSession(this, args);
+	@Override /* Context */
+	public RdfSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

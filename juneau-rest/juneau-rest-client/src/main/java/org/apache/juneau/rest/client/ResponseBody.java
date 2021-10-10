@@ -699,15 +699,14 @@ public class ResponseBody implements HttpEntity {
 			if (parser != null) {
 				try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
 
-					ParserSessionArgs pArgs =
-						ParserSessionArgs
-							.create()
-							.properties(OMap.create().inner(request.getSessionProperties()))
-							.locale(response.getLocale())
-							.mediaType(mt)
-							.schema(schema);
-
-					T t = parser.createSession(pArgs).parse(in, type);
+					T t = parser
+						.createSession()
+						.properties(OMap.create().inner(request.getSessionProperties()))
+						.locale(response.getLocale())
+						.mediaType(mt)
+						.schema(schema)
+						.build()
+						.parse(in, type);
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {

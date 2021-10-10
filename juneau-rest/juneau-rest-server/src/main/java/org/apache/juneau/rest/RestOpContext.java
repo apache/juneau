@@ -2702,16 +2702,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		throw unsupportedOperationException("Method not implemented.");
 	}
 
-	@Override /* Context */
-	public ContextSession createSession(Context.Args args) {
-		throw unsupportedOperationException("Method not implemented.");
-	}
-
-	@Override /* Context */
-	public Context.Args defaultArgs() {
-		throw unsupportedOperationException("Method not implemented.");
-	}
-
 	/*
 	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.

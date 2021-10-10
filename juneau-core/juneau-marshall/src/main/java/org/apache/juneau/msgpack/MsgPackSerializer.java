@@ -678,13 +678,13 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	}
 
 	@Override /* Context */
-	public MsgPackSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public MsgPackSerializerSession.Builder createSession() {
+		return MsgPackSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public MsgPackSerializerSession createSession(SerializerSessionArgs args) {
-		return new MsgPackSerializerSession(this, args);
+	@Override /* Context */
+	public MsgPackSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

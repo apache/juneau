@@ -947,6 +947,16 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		return new Builder(this);
 	}
 
+	@Override /* Context */
+	public JsonSerializerSession.Builder createSession() {
+		return JsonSerializerSession.create(this);
+	}
+
+	@Override /* Context */
+	public JsonSerializerSession getSession() {
+		return createSession().build();
+	}
+
 	/**
 	 * Returns the schema serializer based on the settings of this serializer.
 	 *
@@ -960,20 +970,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		if (schemaSerializer == null)
 			schemaSerializer = (JsonSchemaSerializer) JsonSchemaSerializer.create().beanContext(getBeanContext()).build();
 		return schemaSerializer;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public JsonSerializerSession createSession() {
-		return createSession(defaultArgs());
-	}
-
-	@Override /* Serializer */
-	public JsonSerializerSession createSession(SerializerSessionArgs args) {
-		return new JsonSerializerSession(this, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

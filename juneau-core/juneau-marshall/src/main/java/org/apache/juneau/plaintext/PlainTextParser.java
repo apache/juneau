@@ -554,14 +554,14 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public PlainTextParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public PlainTextParserSession.Builder createSession() {
+		return PlainTextParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public PlainTextParserSession createSession(ParserSessionArgs args) {
-		return new PlainTextParserSession(this, args);
+	@Override /* Context */
+	public PlainTextParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

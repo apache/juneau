@@ -261,22 +261,6 @@ public abstract class ConfigStore extends Context implements Closeable {
 		return name;
 	}
 
-	/**
-	 * Unused.
-	 */
-	@Override /* Context */
-	public final ContextSession createSession(Context.Args args) {
-		throw new NoSuchMethodError();
-	}
-
-	/**
-	 * Unused.
-	 */
-	@Override /* Context */
-	public final Context.Args defaultArgs() {
-		throw new NoSuchMethodError();
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------

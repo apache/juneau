@@ -63,7 +63,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create().cp(c,null,false).build();
 		Messages mb = messages != null ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
 		VarResolverSession vrs = vr.createSession().bean(Messages.class, mb);
-		BasicSwaggerProviderSession session = new BasicSwaggerProviderSession(context, locale, ff, messages, vrs, js.createSession());
+		BasicSwaggerProviderSession session = new BasicSwaggerProviderSession(context, locale, ff, messages, vrs, js.getSession());
 
 		return session.getSwagger();
 	}

@@ -195,9 +195,8 @@ public class BeanDiff {
 	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
 		if (first == null && second == null)
 			return;
-		BeanSession bs = bc.createBeanSession();
-		BeanMap<?> bm1 = first == null ? null : bs.toBeanMap(first);
-		BeanMap<?> bm2 = second == null ? null : bs.toBeanMap(second);
+		BeanMap<?> bm1 = first == null ? null : bc.toBeanMap(first);
+		BeanMap<?> bm2 = second == null ? null : bc.toBeanMap(second);
 		Set<String> keys = bm1 != null ? bm1.keySet() : bm2.keySet();
 		for (String k : keys) {
 			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {

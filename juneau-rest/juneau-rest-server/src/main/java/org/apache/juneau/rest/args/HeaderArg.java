@@ -98,7 +98,7 @@ public class HeaderArg implements RestOpArg {
 	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		RequestHeaders rh = call.getRestRequest().getHeaders();
 		BeanSession bs = call.getRestRequest().getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());

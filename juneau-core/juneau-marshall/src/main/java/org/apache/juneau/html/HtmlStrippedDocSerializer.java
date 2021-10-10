@@ -21,7 +21,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -690,14 +689,14 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		return new Builder(this);
 	}
 
-	@Override /* Serializer */
-	public HtmlSerializerSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public HtmlStrippedDocSerializerSession.Builder createSession() {
+		return HtmlStrippedDocSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public HtmlSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlStrippedDocSerializerSession(this, args);
+	@Override /* Context */
+	public HtmlStrippedDocSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

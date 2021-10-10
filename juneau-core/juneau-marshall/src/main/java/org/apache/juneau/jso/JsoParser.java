@@ -528,14 +528,14 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public JsoParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public JsoParserSession.Builder createSession() {
+		return JsoParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public JsoParserSession createSession(ParserSessionArgs args) {
-		return new JsoParserSession(this, args);
+	@Override /* Context */
+	public JsoParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

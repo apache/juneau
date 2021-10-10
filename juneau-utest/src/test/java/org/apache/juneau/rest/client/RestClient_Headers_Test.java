@@ -167,7 +167,7 @@ public class RestClient_Headers_Test {
 
 	public static class A12 implements HttpPartSerializer {
 		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+		public HttpPartSerializerSession getPartSession() {
 			return new HttpPartSerializerSession() {
 				@Override
 				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {

@@ -1,4 +1,4 @@
-// ***************************************************************************************************************************
+ // ***************************************************************************************************************************
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
@@ -11,6 +11,8 @@
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
+
+import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -633,13 +635,13 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	}
 
 	@Override /* Context */
-	public CsvSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public CsvSerializerSession.Builder createSession() {
+		return CsvSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public CsvSerializerSession createSession(SerializerSessionArgs args) {
-		return new CsvSerializerSession(this, args);
+	@Override /* Context */
+	public CsvSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -674,12 +676,6 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 
 	@Override /* Context */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"CsvSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
+		return super.toMap().a("CsvSerializer",filteredMap());
 	}
 }

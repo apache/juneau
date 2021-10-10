@@ -530,14 +530,14 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public CsvParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public CsvParserSession.Builder createSession() {
+		return CsvParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public CsvParserSession createSession(ParserSessionArgs args) {
-		return new CsvParserSession(this, args);
+	@Override /* Context */
+	public CsvParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

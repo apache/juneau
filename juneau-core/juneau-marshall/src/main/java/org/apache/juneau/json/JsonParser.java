@@ -686,14 +686,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public JsonParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public JsonParserSession.Builder createSession() {
+		return JsonParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public JsonParserSession createSession(ParserSessionArgs args) {
-		return new JsonParserSession(this, args);
+	@Override /* Context */
+	public JsonParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -16,10 +16,13 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -35,48 +38,165 @@ import org.apache.juneau.transform.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
 	// Characters that need to be preceded with an escape character.
 	private static final AsciiSet escapedChars = AsciiSet.create("~'\u0001\u0002");
 
 	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(UonParser ctx) {
+		return new Builder(ctx);
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static class Builder extends ReaderParserSession.Builder {
+
+		UonParser ctx;
+		boolean decoding;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(UonParser ctx) {
+			super(ctx);
+			this.ctx = ctx;
+			decoding = ctx.decoding;
+		}
+
+		@Override
+		public UonParserSession build() {
+			return new UonParserSession(this);
+		}
+
+		/**
+		 * Overrides the decoding flag on the context for this session.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder decoding(boolean value) {
+			decoding = value;
+			return this;
+		}
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private final UonParser ctx;
 	private final boolean decoding;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
-		decoding = ctx.decoding;
-	}
-
-	/**
-	 * Create a specialized parser session for parsing URL parameters.
-	 *
-	 * <p>
-	 * The main difference is that characters are never decoded, and the {@link UonParser.Builder#decoding()}
-	 * property is always ignored.
-	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
-	 * @param decoding
-	 * 	Whether to decode characters.
-	 */
-	protected UonParserSession(UonParser ctx, ParserSessionArgs args, boolean decoding) {
-		super(ctx, args);
-		this.ctx = ctx;
-		this.decoding = decoding;
+	protected UonParserSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		decoding = builder.decoding;
 	}
 
 	@Override /* ParserSession */

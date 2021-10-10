@@ -96,7 +96,7 @@ public abstract class Marshall {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Object write(Object o) throws SerializeException {
-		return s.createSession().serialize(o);
+		return s.serialize(o);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public abstract class Marshall {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final void write(Object o, Object output) throws SerializeException, IOException {
-		s.createSession().serialize(o, output);
+		s.serialize(o, output);
 	}
 
 	/**
@@ -304,7 +304,7 @@ public abstract class Marshall {
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
-		return p.createSession().parse(input, type, args);
+		return p.parse(input, type, args);
 	}
 
 	/**
@@ -345,7 +345,7 @@ public abstract class Marshall {
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T read(String input, Type type, Type...args) throws ParseException {
-		return p.createSession().parse(input, type, args);
+		return p.parse(input, type, args);
 	}
 
 	/**
@@ -384,7 +384,7 @@ public abstract class Marshall {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
-		return p.createSession().parse(input, type);
+		return p.parse(input, type);
 	}
 
 	/**
@@ -422,6 +422,6 @@ public abstract class Marshall {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T read(String input, Class<T> type) throws ParseException {
-		return p.createSession().parse(input, type);
+		return p.parse(input, type);
 	}
 }

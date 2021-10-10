@@ -88,14 +88,12 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
 
-			SerializerSession session = s.createSession(
-				SerializerSessionArgs
-					.create()
-					.properties(mp)
-					.locale(locale)
-					.timeZone(timeZone)
-					.mediaType(sm.getMediaType())
-			);
+			SerializerSession session = s.createSession()
+				.properties(mp)
+				.locale(locale)
+				.timeZone(timeZone)
+				.mediaType(sm.getMediaType())
+				.build();
 
 			// Leave this open in case an error occurs.
 			Closeable c = s.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os;
@@ -123,14 +121,12 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			mp.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
-			ParserSession session = p.createSession(
-				ParserSessionArgs
-					.create()
-					.properties(mp)
-					.locale(locale)
-					.timeZone(timeZone)
-					.mediaType(pm.getMediaType())
-			);
+			ParserSession session = p.createSession()
+				.properties(mp)
+				.locale(locale)
+				.timeZone(timeZone)
+				.mediaType(pm.getMediaType())
+				.build();
 			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
 			return session.parse(in2, p.getBeanContext().getClassMeta(gType));
 		} catch (ParseException e) {

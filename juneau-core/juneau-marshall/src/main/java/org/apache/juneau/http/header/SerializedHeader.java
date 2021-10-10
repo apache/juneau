@@ -209,7 +209,7 @@ public class SerializedHeader extends BasicHeader {
 	 */
 	public SerializedHeader serializer(HttpPartSerializer value) {
 		if (value != null)
-			return serializer(value.createPartSession(null));
+			return serializer(value.getPartSession());
 		return this;
 	}
 

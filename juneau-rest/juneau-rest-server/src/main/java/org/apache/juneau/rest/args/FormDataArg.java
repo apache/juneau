@@ -95,7 +95,7 @@ public class FormDataArg implements RestOpArg {
 	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		RequestFormParams rh = call.getRestRequest().getFormParams();
 		BeanSession bs = call.getRestRequest().getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());

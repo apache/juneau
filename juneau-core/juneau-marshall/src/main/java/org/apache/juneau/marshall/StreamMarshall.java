@@ -51,6 +51,6 @@ public class StreamMarshall extends Marshall {
 	 */
 	@Override /* Serializer */
 	public final byte[] write(Object o) throws SerializeException {
-		return s.createSession(null).serialize(o);
+		return s.serialize(o);
 	}
 }

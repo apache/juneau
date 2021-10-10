@@ -2071,7 +2071,7 @@ public abstract class BeanContextable extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Locale.
 		 *
 		 * <p>
-		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSessionArgs#locale(Locale)}.
+		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSession.Builder#locale(Locale)}.
 		 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
 		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
 		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
@@ -2106,8 +2106,8 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link BeanConfig#locale()}
-		 * 	<li class='jm'>{@link BeanSessionArgs#locale(Locale)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
+		 * 	<li class='jm'>{@link BeanSession.Builder#locale(Locale)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2123,7 +2123,7 @@ public abstract class BeanContextable extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Media type.
 		 *
 		 * <p>
-		 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSessionArgs#mediaType(MediaType)}.
+		 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSession.Builder#mediaType(MediaType)}.
 		 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
 		 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
 		 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
@@ -2158,8 +2158,8 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link BeanConfig#mediaType()}
-		 * 	<li class='jm'>{@link BeanSessionArgs#mediaType(MediaType)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link BeanSession.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2594,7 +2594,7 @@ public abstract class BeanContextable extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>
-		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSessionArgs#timeZone(TimeZone)}.
+		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSession.Builder#timeZone(TimeZone)}.
 		 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
 		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
 		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
@@ -2628,8 +2628,8 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link BeanConfig#timeZone()}
-		 * 	<li class='jm'>{@link BeanSessionArgs#timeZone(TimeZone)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link BeanSession.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2929,9 +2929,6 @@ public abstract class BeanContextable extends Context {
 		beanContext = ofNullable(b.bc).orElse(b.bcBuilder.build());
 	}
 
-	@Override
-	public abstract Builder copy();
-
 	/**
 	 * Returns the bean context for this object.
 	 *
@@ -2939,37 +2936,6 @@ public abstract class BeanContextable extends Context {
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
-	}
-
-	@Override
-	public BeanSession createSession() {
-		return beanContext.createBeanSession(beanContext.defaultArgs());
-	}
-
-	/**
-	 * Create a new bean session based on the properties defined on this context combined with the specified
-	 * runtime args.
-	 *
-	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
-	 *
-	 * @param args
-	 * 	The session arguments.
-	 * @return A new session object.
-	 */
-	public BeanSession createSession(BeanSessionArgs args) {
-		return beanContext.createBeanSession(args);
-	}
-
-	@Override /* Context */
-	public final ContextSession createSession(Context.Args args) {
-		throw new NoSuchMethodError();
-	}
-
-	@Override /* Context */
-	public BeanSessionArgs defaultArgs() {
- 		return beanContext.defaultArgs();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

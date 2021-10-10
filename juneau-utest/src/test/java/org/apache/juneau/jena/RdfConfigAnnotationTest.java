@@ -100,7 +100,7 @@ public class RdfConfigAnnotationTest {
 	@Test
 	public void basicSerializer() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		RdfSerializerSession x = RdfSerializer.create().apply(al).build().createSession();
+		RdfSerializerSession x = RdfSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddLiteralTypes());
 		check("true", x.isAddRootProp());
@@ -141,7 +141,7 @@ public class RdfConfigAnnotationTest {
 	@Test
 	public void basicParser() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		RdfParserSession x = RdfParser.create().apply(al).build().createSession();
+		RdfParserSession x = RdfParser.create().apply(al).build().getSession();
 		check("SEQ", x.getCollectionFormat());
 		check("foo:http://foo", x.getJuneauBpNs());
 		check("foo:http://foo", x.getJuneauNs());
@@ -185,7 +185,7 @@ public class RdfConfigAnnotationTest {
 	@Test
 	public void noValuesSerializer() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		RdfSerializerSession x = RdfSerializer.create().apply(al).build().createSession();
+		RdfSerializerSession x = RdfSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddLiteralTypes());
 		check("false", x.isAddRootProp());
@@ -226,7 +226,7 @@ public class RdfConfigAnnotationTest {
 	@Test
 	public void noValuesParser() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		RdfParserSession x = RdfParser.create().apply(al).build().createSession();
+		RdfParserSession x = RdfParser.create().apply(al).build().getSession();
 		check("DEFAULT", x.getCollectionFormat());
 		check("jp:http://www.apache.org/juneaubp/", x.getJuneauBpNs());
 		check("j:http://www.apache.org/juneau/", x.getJuneauNs());
@@ -269,7 +269,7 @@ public class RdfConfigAnnotationTest {
 	@Test
 	public void noAnnotationSerializer() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		RdfSerializerSession x = RdfSerializer.create().apply(al).build().createSession();
+		RdfSerializerSession x = RdfSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddLiteralTypes());
 		check("false", x.isAddRootProp());
@@ -310,7 +310,7 @@ public class RdfConfigAnnotationTest {
 	@Test
 	public void noAnnotationParser() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		RdfParserSession x = RdfParser.create().apply(al).build().createSession();
+		RdfParserSession x = RdfParser.create().apply(al).build().getSession();
 		check("DEFAULT", x.getCollectionFormat());
 		check("jp:http://www.apache.org/juneaubp/", x.getJuneauBpNs());
 		check("j:http://www.apache.org/juneau/", x.getJuneauNs());

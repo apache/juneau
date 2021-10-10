@@ -840,13 +840,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	@Override /* Context */
-	public JsonSchemaGeneratorSession createSession() {
-		return createSession(defaultArgs());
+	public JsonSchemaGeneratorSession.Builder createSession() {
+		return JsonSchemaGeneratorSession.create(this);
 	}
 
-	@Override
-	public JsonSchemaGeneratorSession createSession(BeanSessionArgs args) {
-		return new JsonSchemaGeneratorSession(this, args);
+	@Override /* Context */
+	public JsonSchemaGeneratorSession getSession() {
+		return createSession().build();
 	}
 
 	JsonSerializer getJsonSerializer() {

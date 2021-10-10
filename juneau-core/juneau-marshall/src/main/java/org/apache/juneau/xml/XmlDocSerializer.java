@@ -13,7 +13,6 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJOs to HTTP responses as XML.
@@ -75,14 +74,19 @@ public class XmlDocSerializer extends XmlSerializer {
 		super(builder);
 	}
 
-	@Override /* Serializer */
-	public XmlDocSerializerSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
-	@Override /* Serializer */
-	public XmlDocSerializerSession createSession(SerializerSessionArgs args) {
-		return new XmlDocSerializerSession(this, args);
+	@Override /* Context */
+	public XmlDocSerializerSession.Builder createSession() {
+		return XmlDocSerializerSession.create(this);
+	}
+
+	@Override /* Context */
+	public XmlDocSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -123,12 +123,12 @@ public class DataConversionTest {
 	@Test
 	public void testObjectSwaps() throws Exception {
 		String s = "2001-12-21T12:34:56Z";
-		BeanSession session = BeanContext.create().build().createSession();
-		Calendar c = session.convertToType(s, GregorianCalendar.class);
+		BeanContext bc = BeanContext.DEFAULT;
+		Calendar c = bc.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
-		c = session.convertToType(s, Calendar.class);
+		c = bc.convertToType(s, Calendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
-		s = session.convertToType(c, String.class);
+		s = bc.convertToType(c, String.class);
 		assertEquals("2001-12-21T12:34:56Z", s);
 	}
 }

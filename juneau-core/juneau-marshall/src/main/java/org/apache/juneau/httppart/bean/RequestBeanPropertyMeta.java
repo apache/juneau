@@ -125,7 +125,7 @@ public class RequestBeanPropertyMeta {
 	 * @return The parsing to use for serializing the bean property value.
 	 */
 	public HttpPartParserSession getParser(HttpPartParserSession _default) {
-		return parser == null ? _default : parser.createPartSession(null);
+		return parser == null ? _default : parser.getPartSession();
 	}
 
 	/**

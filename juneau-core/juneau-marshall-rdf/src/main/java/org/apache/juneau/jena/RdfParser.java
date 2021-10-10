@@ -1362,14 +1362,14 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public RdfParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public RdfParserSession.Builder createSession() {
+		return RdfParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public RdfParserSession createSession(ParserSessionArgs args) {
-		return new RdfParserSession(this, args);
+	@Override /* Context */
+	public RdfParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

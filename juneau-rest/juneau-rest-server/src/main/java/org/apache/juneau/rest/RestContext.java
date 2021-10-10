@@ -7506,16 +7506,6 @@ public class RestContext extends Context {
 	}
 
 	@Override /* Context */
-	public ContextSession createSession(Context.Args args) {
-		throw unsupportedOperationException("Method not implemented.");
-	}
-
-	@Override /* Context */
-	public Context.Args defaultArgs() {
-		throw unsupportedOperationException("Method not implemented.");
-	}
-
-	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
 			.a(

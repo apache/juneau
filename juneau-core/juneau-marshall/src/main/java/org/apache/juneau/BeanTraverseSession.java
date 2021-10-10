@@ -12,13 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * ContextSession that lives for the duration of a single use of {@link BeanTraverseContext}.
@@ -40,6 +43,41 @@ import org.apache.juneau.collections.*;
  */
 public class BeanTraverseSession extends BeanSession {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static abstract class Builder extends BeanSession.Builder {
+
+		BeanTraverseContext ctx;
+		int initialDepth;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(BeanTraverseContext ctx) {
+			super(ctx.getBeanContext());
+			this.ctx = ctx;
+			initialDepth = ctx.initialDepth;
+		}
+
+		@Override /* GENERATED - ContextSession.Builder */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final BeanTraverseContext ctx;
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
 	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
@@ -54,25 +92,15 @@ public class BeanTraverseSession extends BeanSession {
 
 	private int depth;
 
-
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * 	Can be <jk>null</jk>.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param builder The builder for this object.
 	 */
-	protected BeanTraverseSession(BeanTraverseContext ctx, BeanSessionArgs args) {
-		super(ctx.getBeanContext(), args == null ? BeanSessionArgs.DEFAULT : args);
-		args = args == null ? BeanSessionArgs.DEFAULT : args;
-		this.ctx = ctx;
-		this.indent = getInitialDepth();
+	protected BeanTraverseSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		indent =  builder.initialDepth;
 		if (isDetectRecursions() || isDebug()) {
 			set = new IdentityHashMap<>();
 		} else {
@@ -351,12 +379,6 @@ public class BeanTraverseSession extends BeanSession {
 
 	@Override /* ContextSession */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"BeanTraverseSession",
-				OMap
-					.create()
-					.filtered()
-			);
+		return super.toMap().a("BeanTraverseSession", filteredMap("indent", indent, "depth", depth));
 	}
 }

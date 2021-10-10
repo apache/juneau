@@ -92,7 +92,7 @@ public class ResponseHeaderArg implements RestOpArg {
 					ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
 					if (rpm == null)
 						rpm = ResponseHeaderArg.this.meta;
-					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().createPartSession(req.getSerializerSessionArgs());
+					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
 					res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), pss, o));
 				} catch (SerializeException | SchemaValidationException e) {
 					throw runtimeException(e);

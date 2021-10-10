@@ -12,10 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Subclass of parser session objects for byte-based parsers.
@@ -25,20 +33,116 @@ import org.apache.juneau.collections.*;
  */
 public abstract class InputStreamParserSession extends ParserSession {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public abstract static class Builder extends ParserSession.Builder {
+
+		InputStreamParser ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(InputStreamParser ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		@Override
+		public abstract InputStreamParserSession build();
+
+		// <FluentSetters>
+
+		@Override /* GENERATED */
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			super.ifType(type, apply);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder javaMethod(Method value) {
+			this.javaMethod = value;
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder outer(Object value) {
+			this.outer = value;
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* GENERATED */
+		public Builder schema(HttpPartSchema value) {
+			super.schema(value);
+			return this;
+		}
+
+		// </FluentSetters>
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private final InputStreamParser ctx;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param builder The builder for this object.
 	 */
-	protected InputStreamParserSession(InputStreamParser ctx, ParserSessionArgs args) {
-		super(ctx, args);
-		this.ctx = ctx;
+	protected InputStreamParserSession(Builder builder) {
+		super(builder);
+		this.ctx = builder.ctx;
 	}
 
 	@Override /* ParserSession */
@@ -90,12 +194,6 @@ public abstract class InputStreamParserSession extends ParserSession {
 
 	@Override /* ContextSession */
 	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"InputStreamParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
+		return super.toMap().a("InputStreamParserSession", filteredMap());
 	}
 }

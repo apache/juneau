@@ -76,6 +76,6 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession(null).serialize(partType, schema, value);
+		return getPartSession().serialize(partType, schema, value);
 	}
 }

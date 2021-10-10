@@ -70,7 +70,7 @@ public class JsonSchemaConfigAnnotationTest {
 	@Test
 	public void basic() throws Exception {
 		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().createSession();
+		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("BEAN", x.getAddDescriptionsTo());
 		check("BEAN", x.getAddExamplesTo());
 		check("true", x.isAllowNestedDescriptions());
@@ -91,7 +91,7 @@ public class JsonSchemaConfigAnnotationTest {
 	@Test
 	public void noValues() throws Exception {
 		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().createSession();
+		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
 		check("false", x.isAllowNestedDescriptions());
@@ -111,7 +111,7 @@ public class JsonSchemaConfigAnnotationTest {
 	@Test
 	public void noAnnotation() throws Exception {
 		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().createSession();
+		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
 		check("false", x.isAllowNestedDescriptions());

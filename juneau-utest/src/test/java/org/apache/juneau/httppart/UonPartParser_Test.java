@@ -28,7 +28,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class UonPartParser_Test {
 
-	private static UonParserSession p = UonParser.DEFAULT.createSession();
+	private static UonParserSession p = UonParser.DEFAULT.getSession();
 	private static BeanSession bs = p;
 
 	private static <T> T parse(String input, ClassMeta<T> type) throws SchemaValidationException, ParseException {
@@ -280,7 +280,7 @@ public class UonPartParser_Test {
 	public void testParseParameterOMap() throws Exception {
 		String in = "(name='foo bar')";
 
-		OMap r =  parse(in, BeanContext.DEFAULT.createSession().getClassMeta(OMap.class));
+		OMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(OMap.class));
 
 		assertEquals("{name:'foo bar'}", SimpleJsonSerializer.DEFAULT.toString(r));
 	}

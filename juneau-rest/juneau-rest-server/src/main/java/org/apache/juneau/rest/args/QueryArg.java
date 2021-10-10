@@ -95,7 +95,7 @@ public class QueryArg implements RestOpArg {
 	@Override /* RestOpArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		RequestQueryParams rh = call.getRestRequest().getQueryParams();
 		BeanSession bs = call.getRestRequest().getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());

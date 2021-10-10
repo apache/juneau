@@ -964,20 +964,6 @@ public abstract class Parser extends BeanContextable {
 		return true;
 	}
 
-	/**
-	 * Create the session object that will be passed in to the parse method.
-	 *
-	 * <p>
-	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
-	 * subclass of {@link ParserSession}.
-	 *
-	 * @param args
-	 * 	Runtime arguments.
-	 * @return The new session.
-	 */
-	public abstract ParserSession createSession(ParserSessionArgs args);
-
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1058,7 +1044,7 @@ public abstract class Parser extends BeanContextable {
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
-		return createSession().parse(input, type, args);
+		return getSession().parse(input, type, args);
 	}
 
 	/**
@@ -1079,7 +1065,7 @@ public abstract class Parser extends BeanContextable {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
-		return createSession().parse(input, type, args);
+		return getSession().parse(input, type, args);
 	}
 
 	/**
@@ -1118,7 +1104,7 @@ public abstract class Parser extends BeanContextable {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
-		return createSession().parse(input, type);
+		return getSession().parse(input, type);
 	}
 
 	/**
@@ -1133,7 +1119,7 @@ public abstract class Parser extends BeanContextable {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, Class<T> type) throws ParseException {
-		return createSession().parse(input, type);
+		return getSession().parse(input, type);
 	}
 
 	/**
@@ -1153,7 +1139,7 @@ public abstract class Parser extends BeanContextable {
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
-		return createSession().parse(input, type);
+		return getSession().parse(input, type);
 	}
 
 	/**
@@ -1168,18 +1154,14 @@ public abstract class Parser extends BeanContextable {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
-		return createSession().parse(input, type);
+		return getSession().parse(input, type);
 	}
 
 	@Override /* Context */
-	public ParserSession createSession() {
-		return createSession(defaultArgs());
-	}
+	public abstract ParserSession.Builder createSession();
 
 	@Override /* Context */
-	public final ParserSessionArgs defaultArgs() {
-		return new ParserSessionArgs().mediaType(getPrimaryMediaType());
-	}
+	public abstract ParserSession getSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Optional methods
@@ -1210,7 +1192,7 @@ public abstract class Parser extends BeanContextable {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		return createSession().parseIntoMap(input, m, keyType, valueType);
+		return getSession().parseIntoMap(input, m, keyType, valueType);
 	}
 
 	/**
@@ -1233,7 +1215,7 @@ public abstract class Parser extends BeanContextable {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		return createSession().parseIntoCollection(input, c, elementType);
+		return getSession().parseIntoCollection(input, c, elementType);
 	}
 
 	/**
@@ -1259,7 +1241,7 @@ public abstract class Parser extends BeanContextable {
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
 			return new Object[0];
-		return createSession().parseArgs(input, argTypes);
+		return getSession().parseArgs(input, argTypes);
 	}
 
 

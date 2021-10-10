@@ -891,7 +891,7 @@ public class RestResponse implements HttpResponse {
 	protected HttpPartParserSession getPartParserSession(HttpPartParser parser) {
 		HttpPartParserSession s = partParserSessions.get(parser);
 		if (s == null) {
-			s = parser.createPartSession(null);
+			s = parser.getPartSession();
 			partParserSessions.put(parser, s);
 		}
 		return s;
@@ -904,7 +904,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	protected HttpPartParserSession getPartParserSession() {
 		if (partParserSession == null)
-			partParserSession = client.getPartParser().createPartSession(null);
+			partParserSession = client.getPartParser().getPartSession();
 		return partParserSession;
 	}
 

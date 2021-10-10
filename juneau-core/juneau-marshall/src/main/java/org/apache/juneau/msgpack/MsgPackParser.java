@@ -567,14 +567,14 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public MsgPackParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public MsgPackParserSession.Builder createSession() {
+		return MsgPackParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public MsgPackParserSession createSession(ParserSessionArgs args) {
-		return new MsgPackParserSession(this, args);
+	@Override /* Context */
+	public MsgPackParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

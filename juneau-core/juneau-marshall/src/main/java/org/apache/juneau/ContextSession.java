@@ -12,20 +12,151 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
 
-import org.apache.juneau.Context.Args;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
  */
 public abstract class ContextSession {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	@FluentSetters
+	public static abstract class Builder {
+		Context ctx;
+		OMap properties = OMap.create();
+		boolean unmodifiable;
+		Boolean debug;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(Context ctx) {
+			this.ctx = ctx;
+			debug = ctx.debug;
+		}
+
+		/**
+		 * Build the object.
+		 *
+		 * @return The built object.
+		 */
+		public abstract ContextSession build();
+
+		/**
+		 * Debug mode.
+		 *
+		 * <p>
+		 * Enables the following additional information during parsing:
+		 * <ul>
+		 * 	<li> When bean setters throws exceptions, the exception includes the object stack information in order to determine how that method was invoked.
+		 * </ul>
+		 *
+		 * <p>
+		 * If not specified, defaults to {@link Context.Builder#debug()}.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
+		 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.  Value will be ignored.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder debug(Boolean value) {
+			if (value != null)
+				debug = value;
+			return this;
+		}
+
+		/**
+		 * Create an unmodifiable session.
+		 *
+		 * <p>
+		 * The created ContextSession object will be unmodifiable which makes it suitable for caching and reuse.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder unmodifiable() {
+			this.unmodifiable = true;
+			return this;
+		}
+
+		/**
+		 * Session-level properties.
+		 *
+		 * <p>
+		 * Overrides context-level properties.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder properties(Map<String,Object> value) {
+			this.properties = OMap.of(value);
+			return this;
+		}
+
+		/**
+		 * Adds a property to this session.
+		 *
+		 * @param key The property key.
+		 * @param value The property value.
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder property(String key, Object value) {
+			if (value == null) {
+				properties.remove(key);
+			} else {
+				properties.put(key, value);
+			}
+			return this;
+		}
+
+		/**
+		 * Applies a consumer to this builder if it's the specified type.
+		 *
+		 * @param type The expected type.
+		 * @param apply	The consumer to apply.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+			if (type.isInstance(this))
+				apply.accept(type.cast(this));
+			return this;
+		}
+
+		// <FluentSetters>
+
+		// </FluentSetters>
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final OMap properties;
 	private Map<String,Object> cache;
@@ -35,22 +166,19 @@ public abstract class ContextSession {
 	private final boolean debug;
 	private final boolean unmodifiable;
 
-
 	/**
 	 * Default constructor.
 	 *
-	 * @param ctx The context object.
-	 * @param args
-	 * 	Runtime arguments.
+	 * @param builder The builder for this object
 	 */
-	protected ContextSession(Context ctx, Args args) {
-		this.ctx = ctx;
-		this.unmodifiable = args.unmodifiable;
-		OMap sp = args.properties;
-		if (args.unmodifiable)
+	protected ContextSession(Builder builder) {
+		ctx = builder.ctx;
+		unmodifiable = builder.unmodifiable;
+		OMap sp = builder.properties;
+		if (unmodifiable)
 			sp = sp.unmodifiable();
 		properties = sp;
-		debug = ofNullable(args.debug).orElse(ctx.isDebug());
+		debug = builder.debug;
 	}
 
 	/**
@@ -188,7 +316,7 @@ public abstract class ContextSession {
 	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
-		return OMap.create().filtered();
+		return filteredMap().a("ContextSession", filteredMap("debug", debug));
 	}
 
 	@Override /* Object */

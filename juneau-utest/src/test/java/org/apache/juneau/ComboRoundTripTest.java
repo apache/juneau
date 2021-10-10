@@ -39,7 +39,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public abstract class ComboRoundTripTest {
 
-	private static final BeanSession BEANSESSION = BeanContext.DEFAULT.createSession();
+	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;
 
 	private final ComboInput comboInput;
 

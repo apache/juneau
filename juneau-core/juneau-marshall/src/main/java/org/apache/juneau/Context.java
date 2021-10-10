@@ -164,6 +164,31 @@ public abstract class Context implements MetaProvider {
 		public abstract Builder copy();
 
 		/**
+		 * Build the object.
+		 *
+		 * @return The built object.
+		 */
+		public Context build() {
+			if (impl != null)
+				return impl;
+			if (type == null)
+				throw runtimeException("Context class not specified.");
+			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+			if (cci == null) {
+				ClassInfo ci = ClassInfo.of(type);
+				cci = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
+				if (cci == null)
+					throw runtimeException("Constructor not found for class {0}", type);
+				CONTEXT_CONSTRUCTORS.put(type, cci);
+			}
+			try {
+				return cci.invoke(this);
+			} catch (ExecutableException e) {
+				throw runtimeException(e, "Error occurred trying to create context.");
+			}
+		}
+
+		/**
 		 * Returns the hashkey of this builder.
 		 *
 		 * <p>
@@ -190,33 +215,6 @@ public abstract class Context implements MetaProvider {
 		}
 
 		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
-
-		/**
-		 * Build the object.
-		 *
-		 * @return
-		 * 	The built object.
-		 * 	<br>Subsequent calls to this method will create new instances (unless context object is cacheable).
-		 */
-		public Context build() {
-			if (impl != null)
-				return impl;
-			if (type == null)
-				throw runtimeException("Context class not specified.");
-			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
-			if (cci == null) {
-				ClassInfo ci = ClassInfo.of(type);
-				cci = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
-				if (cci == null)
-					throw runtimeException("Constructor not found for class {0}", type);
-				CONTEXT_CONSTRUCTORS.put(type, cci);
-			}
-			try {
-				return cci.invoke(this);
-			} catch (ExecutableException e) {
-				throw runtimeException(e, "Error occurred trying to create context.");
-			}
-		}
 
 		/**
 		 * Apply a consumer to this builder.
@@ -703,7 +701,7 @@ public abstract class Context implements MetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
-		 * 	<li class='jm'>{@link org.apache.juneau.Context.Args#debug(Boolean)}
+		 * 	<li class='jm'>{@link org.apache.juneau.ContextSession.Builder#debug(Boolean)}
 		 * </ul>
 		 *
 		 * @return This object (for method chaining).
@@ -732,133 +730,6 @@ public abstract class Context implements MetaProvider {
 		 */
 		public boolean isDebug() {
 			return debug;
-		}
-
-		// <FluentSetters>
-
-		// </FluentSetters>
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Args
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Runtime arguments bean.
-	 *
-	 * <p>
-	 * These are passed to {@link ContextSession} beans to modify select settings defined on the {@link Context} bean.
-	 */
-	@FluentSetters
-	public static class Args {
-
-		OMap properties = OMap.create();
-		boolean unmodifiable;
-		Boolean debug;
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Debug mode.
-		 *
-		 * <p>
-		 * Enables the following additional information during parsing:
-		 * <ul>
-		 * 	<li> When bean setters throws exceptions, the exception includes the object stack information in order to determine how that method was invoked.
-		 * </ul>
-		 *
-		 * <p>
-		 * If not specified, defaults to {@link Context.Builder#debug()}.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
-		 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
-		 */
-		@FluentSetter
-		public Args debug(Boolean value) {
-			debug = value;
-			return this;
-		}
-
-		/**
-		 * Create an unmodifiable session.
-		 *
-		 * <p>
-		 * The created ContextSession object will be unmodifiable which makes it suitable for caching and reuse.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		@FluentSetter
-		public Args unmodifiable() {
-			this.unmodifiable = true;
-			return this;
-		}
-
-		/**
-		 * Session-level properties.
-		 *
-		 * <p>
-		 * Overrides context-level properties.
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
-		 */
-		@FluentSetter
-		public Args properties(Map<String,Object> value) {
-			this.properties = OMap.of(value);
-			return this;
-		}
-
-		/**
-		 * Adds a property to this session.
-		 *
-		 * @param key The property key.
-		 * @param value The property value.
-		 * @return This object (for method chaining).
-		 */
-		@FluentSetter
-		public Args property(String key, Object value) {
-			if (value == null) {
-				properties.remove(key);
-			} else {
-				properties.put(key, value);
-			}
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Other methods
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the properties defined on this bean as a simple map for debugging purposes.
-		 *
-		 * <p>
-		 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-		 *
-		 * @return A new map containing this bean's properties.
-		 */
-		public OMap toMap() {
-			return OMap
-				.create()
-				.filtered()
-				.append("Args", OMap.create().filtered()
-					.append("properties", properties)
-				);
-		}
-
-		@Override /* Object */
-		public String toString() {
-			return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
 		}
 
 		// <FluentSetters>
@@ -932,53 +803,34 @@ public abstract class Context implements MetaProvider {
 	 *
 	 * @return A new ContextBuilder object.
 	 */
-	public abstract Builder copy();
-
-	/**
-	 * Creates an {@link Args} bean to pass to the {@link #createSession(Args)} method.
-	 *
-	 * <p>
-	 * The {@link Args} bean can be used to override select settings defined on this context when creating session beans.
-	 *
-	 * @return A new Args bean.
-	 */
-	public Args createArgs() {
-		return new Args();
+	public Builder copy() {
+		throw unsupportedOperationException("Not implemented.");
 	}
 
 	/**
-	 * Create a new bean session based on the properties defined on this context.
+	 * Create a session builder based on the properties defined on this context.
 	 *
 	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
+	 * Use this method for creating sessions where you want to override basic settings.
+	 * Otherwise, use {@link #getSession()} directly.
 	 *
-	 * @return A new session object.
+	 * @return A new session builder.
 	 */
-	public ContextSession createSession() {
-		return createSession(defaultArgs());
+	public ContextSession.Builder createSession() {
+		throw unsupportedOperationException("Not implemented.");
 	}
 
 	/**
-	 * Create a new session based on the properties defined on this context combined with the specified
-	 * runtime args.
+	 * Returns a session to use for this context.
 	 *
 	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
+	 * Note that subclasses may opt to return a reusable non-modifiable session.
 	 *
-	 * @param args
-	 * 	The session arguments.
 	 * @return A new session object.
 	 */
-	public abstract ContextSession createSession(Args args);
-
-	/**
-	 * Defines default session arguments used when calling the {@link #createSession()} method.
-	 *
-	 * @return A SessionArgs object, possibly a read-only reusable instance.
-	 */
-	public abstract Args defaultArgs();
+	public ContextSession getSession() {
+		return createSession().build();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties

@@ -119,7 +119,7 @@ public class ClassMetaTest {
 		BeanSession bs;
 
 		bc = BeanContext.DEFAULT;
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -142,7 +142,7 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), HC2.class);
 
 		bc = BeanContext.create().swaps(HI1Swap.class).build();
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -165,7 +165,7 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
 		bc = BeanContext.create().swaps(HC1Swap.class).build();
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -188,7 +188,7 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
 		bc = BeanContext.create().swaps(HI2Swap.class).build();
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -211,7 +211,7 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
 		bc = BeanContext.create().swaps(HC2Swap.class).build();
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -234,7 +234,7 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
 		bc = BeanContext.create().swaps(HI1Swap.class,HC1Swap.class,HI2Swap.class, HC2Swap.class).build();
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -257,7 +257,7 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
 		bc = BeanContext.create().swaps(HC2Swap.class,HI2Swap.class,HC1Swap.class, HI1Swap.class).build();
-		bs = bc.createSession();
+		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);

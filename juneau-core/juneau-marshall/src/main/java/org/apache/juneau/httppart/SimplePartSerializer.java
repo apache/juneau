@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
-
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
@@ -91,12 +88,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	}
 
 	@Override
-	public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
+	public SimplePartSerializerSession getPartSession() {
 		return new SimplePartSerializerSession();
-	}
-
-	@Override
-	public Builder copy() {
-		throw unsupportedOperationException("Not implemented.");
 	}
 }

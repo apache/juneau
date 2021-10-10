@@ -3933,7 +3933,7 @@ public class HttpPartSchema {
 			}
 			case OBJECT: {
 				if (cm.isMapOrBean()) {
-					Map<?,?> m = cm.isMap() ? (Map<?,?>)o : bc.createSession().toBeanMap(o);
+					Map<?,?> m = cm.isMap() ? (Map<?,?>)o : bc.toBeanMap(o);
 					if (! isValidMinProperties(m))
 						throw new SchemaValidationException("Minimum number of properties not met.");
 					if (! isValidMaxProperties(m))

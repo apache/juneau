@@ -667,19 +667,8 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		actualDetectRecursions = detectRecursions || ignoreRecursions || super.isDebug();
 	}
 
-	@Override
+	@Override /* Context */
 	public abstract Builder copy();
-
-	@Override /* Context */
-	public BeanTraverseSession createSession() {
-		return new BeanTraverseSession(this, defaultArgs());
-	}
-
-	@Override /* Context */
-	public BeanTraverseSession createSession(BeanSessionArgs args) {
-		return new BeanTraverseSession(this, args);
-	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties

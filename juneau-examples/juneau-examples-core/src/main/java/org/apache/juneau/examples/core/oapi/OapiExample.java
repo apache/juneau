@@ -70,12 +70,12 @@ public class OapiExample {
 		HttpPartSchema schemab = HttpPartSchema.create().type("string").build();
 		// Convert POJO to BASE64-encoded string.
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		String httpPart = s.createPartSession(null).serialize(HEADER, schemab, pojo);
+		String httpPart = s.getPartSession().serialize(HEADER, schemab, pojo);
 		System.out.println(httpPart);
 
 		// Convert BASE64-encoded string back into a POJO.
 		HttpPartParser p = OpenApiParser.DEFAULT;
-		pojo = p.createPartSession(null).parse(HEADER, schemab, httpPart, oapiParser.getClassMeta(Pojo.class));
+		pojo = p.getPartSession().parse(HEADER, schemab, httpPart, oapiParser.getClassMeta(Pojo.class));
 
 		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.

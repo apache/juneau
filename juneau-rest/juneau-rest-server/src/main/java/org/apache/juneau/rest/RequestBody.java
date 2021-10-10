@@ -444,18 +444,19 @@ public class RequestBody {
 		if (pm != null) {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
-			ParserSessionArgs pArgs = ParserSessionArgs
-				.create()
+			ParserSession session = p
+				.createSession()
 				.properties(req.getAttributes().asMap())
 				.javaMethod(req.getOpContext().getJavaMethod())
 				.locale(locale)
 				.timeZone(timeZone.orElse(null))
 				.mediaType(mediaType)
-				.streamCharset(req.getCharset())
+				.ifType(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
 				.schema(schema)
 				.debug(req.isDebug() ? true : null)
-				.outer(req.getContext().getResource());
-			ParserSession session = p.createSession(pArgs);
+				.outer(req.getContext().getResource())
+				.build();
+			;
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
 				if (schema != null)

@@ -1048,14 +1048,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Serializer */
-	public XmlSerializerSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public XmlSerializerSession.Builder createSession() {
+		return XmlSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public XmlSerializerSession createSession(SerializerSessionArgs args) {
-		return new XmlSerializerSession(this, args);
+	@Override /* Context */
+	public XmlSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -571,14 +570,14 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		return new Builder(this);
 	}
 
-	@Override /* Parser */
-	public HtmlParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public HtmlParserSession.Builder createSession() {
+		return HtmlParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public HtmlParserSession createSession(ParserSessionArgs args) {
-		return new HtmlParserSession(this, args);
+	@Override /* Context */
+	public HtmlParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

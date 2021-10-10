@@ -20,7 +20,6 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -36,7 +35,6 @@ public class XmlContentTest {
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
 		XmlParser p = XmlParser.DEFAULT;
-		WriterSerializerSession session;
 		String r;
 		StringWriter sw;
 
@@ -46,16 +44,14 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(SerializerSessionArgs.create());
-		session.serialize(t, sw);
+		s1.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
 		t2 = p.parse(r, A.class);
 		assertObject(t).isSameJsonAs(t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(SerializerSessionArgs.create());
-		session.serialize(t, sw);
+		s2.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>\n", r);
 		t2 = p.parse(r, A.class);
@@ -144,7 +140,6 @@ public class XmlContentTest {
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
 		XmlParser p = XmlParser.DEFAULT;
-		WriterSerializerSession session;
 		String r;
 		StringWriter sw;
 
@@ -154,16 +149,14 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(SerializerSessionArgs.create());
-		session.serialize(t, sw);
+		s1.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
 		t2 = p.parse(r, B.class);
 		assertObject(t).isSameJsonAs(t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(SerializerSessionArgs.create());
-		session.serialize(t, sw);
+		s2.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>\n", r);
 		t2 = p.parse(r, B.class);

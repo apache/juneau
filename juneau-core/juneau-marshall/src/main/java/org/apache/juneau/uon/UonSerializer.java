@@ -202,7 +202,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession(null).serialize(partType, schema, value);
+		return getPartSession().serialize(partType, schema, value);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1000,23 +1000,19 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		return new Builder(this);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Context */
-	public  UonSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public  UonSerializerSession.Builder createSession() {
+		return UonSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public UonSerializerSession createSession(SerializerSessionArgs args) {
-		return new UonSerializerSession(this, null, args);
+	@Override /* Context */
+	public UonSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	@Override /* HttpPartSerializer */
-	public UonSerializerSession createPartSession(SerializerSessionArgs args) {
-		return new UonSerializerSession(this, null, args);
+	public UonSerializerSession getPartSession() {
+		return UonSerializerSession.create(this).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

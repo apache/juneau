@@ -75,7 +75,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 							@SuppressWarnings("rawtypes")
 							Map.Entry x = (Map.Entry)o2;
 							String k = stringify(x.getKey());
-							h = new SerializedHeader(k, x.getValue(), req.getPartSerializerSession(hm.getSerializer().orElse(defaultPartSerializer)), ps.getProperty(k), true);
+							h = new SerializedHeader(k, x.getValue(), hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps.getProperty(k), true);
 						} else if (o2 instanceof Header) {
 							h = (Header)o2;
 						} else if (o2 instanceof NameValuePair) {
@@ -92,7 +92,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 					else if (o instanceof NameValuePair)
 						h = BasicHeader.of((NameValuePair)o);
 					else
-						h = new SerializedHeader(n, o, req.getPartSerializerSession(hm.getSerializer().orElse(defaultPartSerializer)), ps, true);
+						h = new SerializedHeader(n, o, hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps, true);
 					res.addHeader(h);
 				}
 			} catch (Exception e) {

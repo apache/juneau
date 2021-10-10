@@ -16,6 +16,7 @@ import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -34,17 +35,27 @@ public class MockStreamParser extends InputStreamParser {
 		return new Builder();
 	}
 
-	@Override /* Parser */
-	public InputStreamParserSession createSession(ParserSessionArgs args) {
-		return new InputStreamParserSession(this, args) {
-			@SuppressWarnings("unchecked")
+	@Override /* Context */
+	public InputStreamParserSession.Builder createSession() {
+		return new InputStreamParserSession.Builder(MsgPackParser.DEFAULT) {
 			@Override
-			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-				if (function != null)
-					return (T)function.apply(this, IOUtils.readBytes(pipe.getInputStream()), type);
-				return null;
+			public InputStreamParserSession build() {
+				return new InputStreamParserSession(this) {
+					@SuppressWarnings("unchecked")
+					@Override
+					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+						if (function != null)
+							return (T)function.apply(this, IOUtils.readBytes(pipe.getInputStream()), type);
+						return null;
+					}
+				};
 			}
 		};
+	}
+
+	@Override /* Context */
+	public InputStreamParserSession getSession() {
+		return createSession().build();
 	}
 
 	public static class Builder extends InputStreamParser.Builder {

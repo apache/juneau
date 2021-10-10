@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -38,21 +39,31 @@ public class MockReaderParser extends ReaderParser implements HttpPartParser {
 		return new Builder();
 	}
 
-	@Override /* Parser */
-	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new ReaderParserSession(this, args) {
+	@Override /* Context */
+	public ReaderParserSession.Builder createSession() {
+		return new ReaderParserSession.Builder(JsonParser.DEFAULT) {
 			@Override
-			@SuppressWarnings("unchecked")
-			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-				if (function != null)
-					return (T)function.apply(this, pipe.asString(), type);
-				return null;
+			public ReaderParserSession build() {
+				return new ReaderParserSession(this) {
+					@Override
+					@SuppressWarnings("unchecked")
+					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+						if (function != null)
+							return (T)function.apply(this, pipe.asString(), type);
+						return null;
+					}
+				};
 			}
 		};
 	}
 
+	@Override /* Context */
+	public ReaderParserSession getSession() {
+		return createSession().build();
+	}
+
 	@Override
-	public HttpPartParserSession createPartSession(ParserSessionArgs args) {
+	public HttpPartParserSession getPartSession() {
 		return new HttpPartParserSession() {
 			@Override
 			@SuppressWarnings("unchecked")

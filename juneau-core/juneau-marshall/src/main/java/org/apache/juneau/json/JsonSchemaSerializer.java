@@ -25,7 +25,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO metadata to HTTP responses as JSON-Schema.
@@ -869,13 +868,13 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	@Override /* Context */
-	public JsonSchemaSerializerSession createSession() {
-		return createSession(defaultArgs());
+	public JsonSchemaSerializerSession.Builder createSession() {
+		return JsonSchemaSerializerSession.create(this);
 	}
 
-	@Override /* Serializer */
-	public JsonSchemaSerializerSession createSession(SerializerSessionArgs args) {
-		return new JsonSchemaSerializerSession(this, args);
+	@Override /* Context */
+	public JsonSchemaSerializerSession getSession() {
+		return createSession().build();
 	}
 
 	JsonSchemaGenerator getGenerator() {

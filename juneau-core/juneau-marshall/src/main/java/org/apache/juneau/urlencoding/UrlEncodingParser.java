@@ -24,7 +24,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -623,18 +622,14 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		return new Builder(this);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Parser */
-	public UrlEncodingParserSession createSession() {
-		return createSession(defaultArgs());
+	@Override /* Context */
+	public UrlEncodingParserSession.Builder createSession() {
+		return UrlEncodingParserSession.create(this);
 	}
 
-	@Override /* Parser */
-	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
-		return new UrlEncodingParserSession(this, args);
+	@Override /* Context */
+	public UrlEncodingParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

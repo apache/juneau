@@ -14,8 +14,6 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
-import org.apache.juneau.parser.*;
-
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
  *
@@ -50,7 +48,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	public static final SimplePartParser DEFAULT = create().build();
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
-	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.createPartSession(null);
+	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.getPartSession();
 
 	/**
 	 * Creates a new builder for this object.
@@ -111,7 +109,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	}
 
 	@Override
-	public SimplePartParserSession createPartSession(ParserSessionArgs args) {
+	public SimplePartParserSession getPartSession() {
 		return new SimplePartParserSession();
 	}
 
