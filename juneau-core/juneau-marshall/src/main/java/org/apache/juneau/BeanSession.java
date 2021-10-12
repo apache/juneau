@@ -228,8 +228,8 @@ public class BeanSession extends ContextSession {
 		// <FluentSetters>
 
 		@Override /* GENERATED - ContextSession.Builder */
-		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
-			super.ifType(type, apply);
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
 			return this;
 		}
 
@@ -1752,15 +1752,5 @@ public class BeanSession extends ContextSession {
 	 */
 	public final boolean isUseJavaBeanIntrospector() {
 		return ctx.isUseJavaBeanIntrospector();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public void checkForWarnings() {
-		if (isDebug())
-			super.checkForWarnings();
 	}
 }

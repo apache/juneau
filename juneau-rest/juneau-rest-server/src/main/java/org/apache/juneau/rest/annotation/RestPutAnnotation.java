@@ -634,7 +634,7 @@ public class RestPutAnnotation {
 			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
 			stream(a.path()).forEach(x -> b.path(x));
 			string(a.value()).ifPresent(x -> b.path(x));
-			strings_cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
 			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}

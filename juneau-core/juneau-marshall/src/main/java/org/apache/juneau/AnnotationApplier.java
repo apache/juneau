@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -23,9 +26,9 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Class used to add properties to a context builder from an annotation (e.g. {@link BeanConfig}).
+ * Class used to add properties to a context builder (e.g. {@link BeanContext.Builder}) from an annotation (e.g. {@link BeanConfig}).
  *
- * @param <A> The annotation that this <c>ConfigApply</c> reads from.
+ * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */
 public abstract class AnnotationApplier<A extends Annotation, B> {
@@ -114,17 +117,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return Optional.ofNullable(in.length == 0 ? null : Arrays.asList(in).stream().map(x -> vr.resolve(x)).filter(x -> !StringUtils.isEmpty(x)).toArray(String[]::new));
-	}
-
-	/**
-	 * Resolves the specified strings in the string array.
-	 *
-	 * @param in The string array containing variables to resolve.
-	 * @return An array with resolved strings.
-	 */
-	protected List<String> stringList(String[] in) {
-		return stream(in).collect(Collectors.toList());
+		return ofNullable(in.length == 0 ? null : Arrays.stream(in).map(x -> vr.resolve(x)).filter(x -> isNotEmpty(x)).toArray(String[]::new));
 	}
 
 	/**
@@ -134,7 +127,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> stream(String[] in) {
-		return Arrays.asList(in).stream().map(x -> vr.resolve(x)).filter(x -> !StringUtils.isEmpty(x));
+		return Arrays.stream(in).map(x -> vr.resolve(x)).filter(x -> isNotEmpty(x));
 	}
 
 	/**
@@ -143,8 +136,8 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @param in The CDL string containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
-	protected Stream<String> strings_cdl(String in) {
-		return Arrays.asList(StringUtils.split(vr.resolve(in))).stream().filter(x -> !StringUtils.isEmpty(x));
+	protected Stream<String> cdl(String in) {
+		return Arrays.stream(split(vr.resolve(in))).filter(x -> isNotEmpty(x));
 	}
 
 	/**
@@ -169,21 +162,6 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 			return string(in).map(Integer::parseInt);
 		} catch (NumberFormatException e) {
 			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
-		}
-	}
-
-	/**
-	 * Resolves the specified string and converts it to a Visibility.
-	 *
-	 * @param in The string containing variables to resolve.
-	 * @param loc The annotation field name.
-	 * @return The resolved Visibility.
-	 */
-	protected Optional<Visibility> visibility(String in, String loc) {
-		try {
-			return string(in).map(Visibility::valueOf);
-		} catch (IllegalArgumentException e) {
-			throw new ConfigException("Invalid syntax for visibility on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
 	}
 

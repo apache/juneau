@@ -62,7 +62,7 @@ public final class SerializedPojoProcessor implements ResponseProcessor {
 					.locale(req.getLocale())
 					.timeZone(req.getTimeZone().orElse(null))
 					.mediaType(mediaType)
-					.ifType(WriterSerializerSession.Builder.class, x -> x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? true : null))
+					.apply(WriterSerializerSession.Builder.class, x -> x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? true : null))
 					.schema(schema)
 					.debug(req.isDebug() ? true : null)
 					.uriContext(req.getUriContext())

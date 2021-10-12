@@ -835,7 +835,7 @@ public class BasicSwaggerProviderSession {
 							.createSession()
 							.locale(locale)
 							.mediaType(mt)
-							.ifType(WriterSerializerSession.Builder.class, x -> x.useWhitespace(true))
+							.apply(WriterSerializerSession.Builder.class, x -> x.useWhitespace(true))
 							.build()
 							.serializeToString(example);
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);

@@ -44,10 +44,10 @@ public class BeanConfigAnnotation {
 		public void apply(AnnotationInfo<BeanConfig> ai, BeanContext.Builder b) {
 			BeanConfig a = ai.getAnnotation();
 
-			visibility(a.beanClassVisibility(), "beanClassVisibility").ifPresent(x -> b.beanClassVisibility(x));
-			visibility(a.beanConstructorVisibility(), "beanConstructorVisibility").ifPresent(x -> b.beanConstructorVisibility(x));
-			visibility(a.beanFieldVisibility(), "beanFieldVisibility").ifPresent(x -> b.beanFieldVisibility(x));
-			visibility(a.beanMethodVisibility(), "beanMethodVisibility").ifPresent(x -> b.beanMethodVisibility(x));
+			string(a.beanClassVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanClassVisibility(x));
+			string(a.beanConstructorVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanConstructorVisibility(x));
+			string(a.beanFieldVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanFieldVisibility(x));
+			string(a.beanMethodVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanMethodVisibility(x));
 			bool(a.beanMapPutReturnsOldValue()).ifPresent(x -> b.beanMapPutReturnsOldValue(x));
 			bool(a.beansRequireDefaultConstructor()).ifPresent(x -> b.beansRequireDefaultConstructor(x));
 			bool(a.beansRequireSerializable()).ifPresent(x -> b.beansRequireSerializable(x));

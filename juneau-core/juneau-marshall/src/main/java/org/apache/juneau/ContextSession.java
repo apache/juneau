@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.collections.OMap.*;
+import static java.util.Collections.*;
 
 import java.text.*;
 import java.util.*;
@@ -37,7 +38,7 @@ public abstract class ContextSession {
 	@FluentSetters
 	public static abstract class Builder {
 		Context ctx;
-		OMap properties = OMap.create();
+		OMap properties;
 		boolean unmodifiable;
 		Boolean debug;
 
@@ -96,15 +97,16 @@ public abstract class ContextSession {
 		 */
 		@FluentSetter
 		public Builder unmodifiable() {
-			this.unmodifiable = true;
+			unmodifiable = true;
 			return this;
 		}
 
 		/**
-		 * Session-level properties.
+		 * Session properties.
 		 *
 		 * <p>
-		 * Overrides context-level properties.
+		 * Session properties are generic key-value pairs that can be passed through the session and made
+		 * available to any customized serializers/parsers or swaps.
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -113,7 +115,7 @@ public abstract class ContextSession {
 		 */
 		@FluentSetter
 		public Builder properties(Map<String,Object> value) {
-			this.properties = OMap.of(value);
+			properties = OMap.of(value);
 			return this;
 		}
 
@@ -126,6 +128,8 @@ public abstract class ContextSession {
 		 */
 		@FluentSetter
 		public Builder property(String key, Object value) {
+			if (properties == null)
+				properties = OMap.create();
 			if (value == null) {
 				properties.remove(key);
 			} else {
@@ -142,7 +146,7 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		@FluentSetter
-		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			if (type.isInstance(this))
 				apply.accept(type.cast(this));
 			return this;
@@ -158,7 +162,6 @@ public abstract class ContextSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final OMap properties;
-	private Map<String,Object> cache;
 	private List<String> warnings;	// Any warnings encountered.
 
 	private final Context ctx;
@@ -173,7 +176,7 @@ public abstract class ContextSession {
 	protected ContextSession(Builder builder) {
 		ctx = builder.ctx;
 		unmodifiable = builder.unmodifiable;
-		OMap sp = builder.properties;
+		OMap sp = builder.properties == null ? OMap.EMPTY_MAP : builder.properties;
 		if (unmodifiable)
 			sp = sp.unmodifiable();
 		properties = sp;
@@ -199,55 +202,6 @@ public abstract class ContextSession {
 	}
 
 	/**
-	 * Adds an arbitrary object to this session's cache.
-	 *
-	 * <p>
-	 * Can be used to store objects for reuse during a session.
-	 *
-	 * @param key The key.  Can be any string.
-	 * @param val The cached object.
-	 */
-	public final void addToCache(String key, Object val) {
-		if (unmodifiable)
-			return;
-		if (cache == null)
-			cache = new TreeMap<>();
-		cache.put(key, val);
-	}
-
-	/**
-	 * Adds arbitrary objects to this session's cache.
-	 *
-	 * <p>
-	 * Can be used to store objects for reuse during a session.
-	 *
-	 * @param cacheObjects
-	 * 	The objects to add to this session's cache.
-	 * 	No-op if <jk>null</jk>.
-	 */
-	public final void addToCache(Map<String,Object> cacheObjects) {
-		if (unmodifiable)
-			return;
-		if (cacheObjects != null) {
-			if (cache == null)
-				cache = new TreeMap<>();
-			cache.putAll(cacheObjects);
-		}
-	}
-
-	/**
-	 * Returns an object stored in the session cache.
-	 *
-	 * @param c The class type of the object.
-	 * @param key The session object key.
-	 * @return The cached object, or <jk>null</jk> if it doesn't exist.
-	 */
-	@SuppressWarnings("unchecked")
-	public final <T> T getFromCache(Class<T> c, String key) {
-		return cache == null ? null : (T)cache.get(key);
-	}
-
-	/**
 	 * Logs a warning message.
 	 *
 	 * @param msg The warning message.
@@ -262,28 +216,19 @@ public abstract class ContextSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if warnings occurred in this session.
-	 *
-	 * @return <jk>true</jk> if warnings occurred in this session.
-	 */
-	public final boolean hasWarnings() {
-		return warnings != null && warnings.size() > 0;
-	}
-
-	/**
 	 * Returns the warnings that occurred in this session.
 	 *
 	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
 	 */
 	public final List<String> getWarnings() {
-		return warnings;
+		return warnings == null ? emptyList() : warnings;
 	}
 
 	/**
-	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
+	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session and debug is enabled.
 	 */
 	public void checkForWarnings() {
-		if (warnings != null && ! warnings.isEmpty())
+		if (debug && ! getWarnings().isEmpty())
 			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
 	}
 
@@ -292,7 +237,7 @@ public abstract class ContextSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Debug mode.
+	 * Debug mode enabled.
 	 *
 	 * @see Context.Builder#debug()
 	 * @return

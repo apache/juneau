@@ -134,8 +134,8 @@ public abstract class ParserSession extends BeanSession {
 		// <FluentSetters>
 
 		@Override /* GENERATED */
-		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
-			super.ifType(type, apply);
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
 			return this;
 		}
 

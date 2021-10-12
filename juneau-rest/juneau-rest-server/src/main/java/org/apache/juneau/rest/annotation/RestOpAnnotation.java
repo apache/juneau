@@ -649,7 +649,7 @@ public class RestOpAnnotation {
 			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
 			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
 			stream(a.path()).forEach(x -> b.path(x));
-			strings_cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
 			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
 
 			string(a.method()).ifPresent(x -> b.httpMethod(x));

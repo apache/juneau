@@ -68,8 +68,8 @@ public class BeanTraverseSession extends BeanSession {
 		}
 
 		@Override /* GENERATED - ContextSession.Builder */
-		public <T> Builder ifType(Class<T> type, Consumer<T> apply) {
-			super.ifType(type, apply);
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
 			return this;
 		}
 	}

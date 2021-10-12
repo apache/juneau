@@ -451,7 +451,7 @@ public class RequestBody {
 				.locale(locale)
 				.timeZone(timeZone.orElse(null))
 				.mediaType(mediaType)
-				.ifType(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
+				.apply(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
 				.schema(schema)
 				.debug(req.isDebug() ? true : null)
 				.outer(req.getContext().getResource())
