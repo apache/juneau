@@ -948,19 +948,4 @@ public final class JsonParserSession extends ReaderParserSession {
 	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		return ctx.getJsonClassMeta(cm);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

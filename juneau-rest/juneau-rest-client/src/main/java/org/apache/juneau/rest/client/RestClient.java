@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 import static java.util.logging.Level.*;
@@ -8589,23 +8590,17 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"RestClient",
-				OMap
-					.create()
-					.filtered()
-					.a("errorCodes", errorCodes)
-					.a("executorService", executorService)
-					.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-					.a("headerData", headerData)
-					.a("interceptors", interceptors)
-					.a("keepHttpClientOpen", keepHttpClientOpen)
-					.a("partParser", partParser)
-					.a("partSerializer", partSerializer)
-					.a("queryData", queryData)
-					.a("rootUri", rootUri)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("errorCodes", errorCodes)
+			.a("executorService", executorService)
+			.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+			.a("headerData", headerData)
+			.a("interceptors", interceptors)
+			.a("keepHttpClientOpen", keepHttpClientOpen)
+			.a("partParser", partParser)
+			.a("partSerializer", partSerializer)
+			.a("queryData", queryData)
+			.a("rootUri", rootUri);
 	}
 }

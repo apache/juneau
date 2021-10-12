@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -790,15 +791,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"UonParser",
-				OMap
-					.create()
-					.filtered()
-					.a("decoding", decoding)
-					.a("validateEnd", validateEnd)
-			);
+	protected OMap properties() {
+		return filteredMap("decoding", decoding, "validateEnd", validateEnd);
 	}
 }

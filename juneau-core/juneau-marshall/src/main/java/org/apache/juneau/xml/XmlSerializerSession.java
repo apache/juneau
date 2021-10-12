@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -984,20 +983,5 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"XmlSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

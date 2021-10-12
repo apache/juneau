@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
-import static org.apache.juneau.collections.OMap.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -21,7 +19,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -243,14 +240,5 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 			else
 				w.append(s);
 		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("CsvSerializerSession", filteredMap());
 	}
 }

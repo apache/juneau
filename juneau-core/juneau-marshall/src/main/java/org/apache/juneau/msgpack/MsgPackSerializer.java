@@ -13,6 +13,7 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.internal.SystemEnv.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -727,14 +728,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"MsgPackSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("addBeanTypesMsgPack", addBeanTypesMsgPack)
-			);
+	protected OMap properties() {
+		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}
 }

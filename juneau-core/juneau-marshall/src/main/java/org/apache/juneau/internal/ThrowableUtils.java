@@ -34,4 +34,30 @@ public class ThrowableUtils {
 		}
 		return null;
 	}
+
+	/**
+	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
+	 *
+	 * @param supplier The supplier throwing an exception.
+	 * @return The supplied result.
+	 * @throws RuntimeException if supplier threw an exception.
+	 */
+	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw new RuntimeException(t);
+		}
+	}
+
+	/**
+	 * Interface used with {@link #safeSupplier(SupplierWithThrowable)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@FunctionalInterface
+	public interface SupplierWithThrowable<T> {
+	    public T get() throws Throwable;
+	}
 }

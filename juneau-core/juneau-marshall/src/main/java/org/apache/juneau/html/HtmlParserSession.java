@@ -909,19 +909,4 @@ public final class HtmlParserSession extends XmlParserSession {
 	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getHtmlBeanPropertyMeta(bpm);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

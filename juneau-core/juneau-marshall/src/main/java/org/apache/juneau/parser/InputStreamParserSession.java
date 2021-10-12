@@ -12,15 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.collections.OMap.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -186,14 +183,5 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 */
 	protected final BinaryFormat getBinaryFormat() {
 		return ctx.getBinaryFormat();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("InputStreamParserSession", filteredMap());
 	}
 }

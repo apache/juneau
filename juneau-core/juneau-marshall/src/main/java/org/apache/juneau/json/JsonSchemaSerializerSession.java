@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -221,20 +220,5 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 */
 	protected JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getJsonSchemaBeanPropertyMeta(bpm);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonSchemaSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

@@ -13,9 +13,11 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.AnnotationUtils.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -77,26 +79,23 @@ public class AnnotationImpl implements Annotation {
 	}
 
 	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
+	 * Returns this annotation as a map of key/value pairs.
 	 *
 	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 * Useful for debugging.
 	 *
-	 * @return A new map containing this bean's properties.
+	 * @return This annotation as a map of key/value pairs.
 	 */
 	public OMap toMap() {
-		OMap om = OMap.create();
-		try {
-			for (Method m : AnnotationUtils.getSortedAnnotationMethods(annotationType()))
-				om.a(m.getName(), m.invoke(this));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		OMap om = create();
+		getSortedAnnotationMethods(annotationType())
+			.stream()
+			.forEach(x -> om.a(x.getName(), safeSupplier(()->x.invoke(this))));
 		return om;
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return toMap().toString();
+		return toMap().asString();
 	}
 }

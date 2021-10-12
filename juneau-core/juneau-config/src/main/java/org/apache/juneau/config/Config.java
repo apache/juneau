@@ -1890,18 +1890,13 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
+	 * Returns the contents of this config as a simple map.
 	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
+	 * @return The contents of this config as a simple map.
 	 */
-	@Override /* Context */
 	public OMap toMap() {
 		return configMap.asMap();
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods

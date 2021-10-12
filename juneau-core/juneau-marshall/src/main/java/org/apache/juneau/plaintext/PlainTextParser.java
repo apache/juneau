@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -588,20 +587,5 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 			plainTextBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"PlainTextParser",
-				OMap
-					.create()
-					.filtered()
-		);
 	}
 }

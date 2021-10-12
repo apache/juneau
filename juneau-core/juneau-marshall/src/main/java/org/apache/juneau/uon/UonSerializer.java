@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -1097,16 +1098,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"UonSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("encoding", encoding)
-					.a("addBeanTypes", addBeanTypes)
-					.a("paramFormat", paramFormat)
-			);
+	protected OMap properties() {
+		return filteredMap("encoding", encoding, "addBeanTypes", addBeanTypes, "paramFormat", paramFormat);
 	}
 }

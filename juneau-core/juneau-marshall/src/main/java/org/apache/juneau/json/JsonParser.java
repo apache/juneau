@@ -737,19 +737,4 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	protected final boolean isValidateEnd() {
 		return validateEnd;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonParser",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

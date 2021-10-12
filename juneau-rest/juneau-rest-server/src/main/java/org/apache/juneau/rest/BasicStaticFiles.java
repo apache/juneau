@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.internal.FileUtils.*;
@@ -23,7 +24,6 @@ import java.util.*;
 import javax.activation.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
@@ -105,17 +105,6 @@ public class BasicStaticFiles implements StaticFiles {
 		}
 	}
 
-	/**
-	 * Returns a map representation of this bean.
-	 *
-	 * @return A map representation of this bean.
-	 */
-	public OMap toMap() {
-		return OMap.create()
-			.a("headers", headers)
-		;
-	}
-
 	@Override
 	public int hashCode() {
 		return hashCode;
@@ -144,5 +133,12 @@ public class BasicStaticFiles implements StaticFiles {
 	@Override /* FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
 		return fileFinder.getString(name, locale);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return filteredMap()
+			.a("headers", headers)
+			.asReadableString();
 	}
 }

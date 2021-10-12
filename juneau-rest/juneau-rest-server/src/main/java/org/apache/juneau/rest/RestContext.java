@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
@@ -7501,40 +7502,29 @@ public class RestContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public Context.Builder copy() {
-		throw unsupportedOperationException("Method not implemented.");
-	}
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"RestContext",
-				OMap
-					.create()
-					.filtered()
-					.a("allowBodyParam", allowBodyParam)
-					.a("allowedMethodHeader", allowedMethodHeaders)
-					.a("allowedMethodParams", allowedMethodParams)
-					.a("allowedHeaderParams", allowedHeaderParams)
-					.a("beanStore", beanStore)
-					.a("clientVersionHeader", clientVersionHeader)
-					.a("consumes", consumes)
-					.a("defaultRequestHeaders", defaultRequestHeaders)
-					.a("defaultResponseHeaders", defaultResponseHeaders)
-					.a("fileFinder", fileFinder)
-					.a("restOpArgs", restOpArgs)
-					.a("partParser", partParser)
-					.a("partSerializer", partSerializer)
-					.a("produces", produces)
-					.a("renderResponseStackTraces", renderResponseStackTraces)
-					.a("responseProcessors", responseProcessors)
-					.a("staticFiles", staticFiles)
-					.a("swaggerProvider", swaggerProvider)
-					.a("uriAuthority", uriAuthority)
-					.a("uriContext", uriContext)
-					.a("uriRelativity", uriRelativity)
-					.a("uriResolution", uriResolution)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("allowBodyParam", allowBodyParam)
+			.a("allowedMethodHeader", allowedMethodHeaders)
+			.a("allowedMethodParams", allowedMethodParams)
+			.a("allowedHeaderParams", allowedHeaderParams)
+			.a("beanStore", beanStore)
+			.a("clientVersionHeader", clientVersionHeader)
+			.a("consumes", consumes)
+			.a("defaultRequestHeaders", defaultRequestHeaders)
+			.a("defaultResponseHeaders", defaultResponseHeaders)
+			.a("fileFinder", fileFinder)
+			.a("restOpArgs", restOpArgs)
+			.a("partParser", partParser)
+			.a("partSerializer", partSerializer)
+			.a("produces", produces)
+			.a("renderResponseStackTraces", renderResponseStackTraces)
+			.a("responseProcessors", responseProcessors)
+			.a("staticFiles", staticFiles)
+			.a("swaggerProvider", swaggerProvider)
+			.a("uriAuthority", uriAuthority)
+			.a("uriContext", uriContext)
+			.a("uriRelativity", uriRelativity)
+			.a("uriResolution", uriResolution);
 	}
 }

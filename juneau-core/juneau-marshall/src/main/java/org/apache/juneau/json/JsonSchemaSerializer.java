@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -910,14 +912,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonSchemaSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("generator", generator)
-			);
+	protected OMap properties() {
+		return filteredMap("generator", generator);
 	}
 }

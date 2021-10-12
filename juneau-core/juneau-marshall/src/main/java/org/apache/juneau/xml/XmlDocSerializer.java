@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import org.apache.juneau.collections.*;
-
 /**
  * Serializes POJOs to HTTP responses as XML.
  *
@@ -87,20 +85,5 @@ public class XmlDocSerializer extends XmlSerializer {
 	@Override /* Context */
 	public XmlDocSerializerSession getSession() {
 		return createSession().build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"XmlDocSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

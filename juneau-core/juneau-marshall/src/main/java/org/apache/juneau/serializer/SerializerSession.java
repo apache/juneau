@@ -1008,7 +1008,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("SerializerSession", filteredMap("uriResolver", uriResolver));
+	protected OMap properties() {
+		return filteredMap("uriResolver", uriResolver);
 	}
 }

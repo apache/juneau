@@ -256,7 +256,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("ReaderParserSession", filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset));
+	protected OMap properties() {
+		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
 	}
 }

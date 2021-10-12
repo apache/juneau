@@ -21,6 +21,7 @@ import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -34,7 +35,6 @@ import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jso.annotation.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.annotation.*;
@@ -1109,32 +1109,17 @@ public abstract class Context implements MetaProvider {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Object */
-	public String toString() {
-		if (SimpleJsonSerializer.DEFAULT_READABLE == null)
-			return super.toString();
-		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
+	/**
+	 * Returns the properties on this bean as a map for debugging.
+	 *
+	 * @return The properties on this bean as a map for debugging.
+	 */
+	protected OMap properties() {
+		return filteredMap("annotations", annotations, "debug", debug);
 	}
 
-	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
-	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a(
-				"Context",
-				OMap
-					.create()
-					.filtered()
-					.a("annotations", annotations)
-					.a("debug", debug)
-			);
+	@Override /* Object */
+	public String toString() {
+		return ObjectUtils.toPropertyMap(this).asReadableString();
 	}
 }

@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logging;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.util.function.*;
 import java.util.logging.*;
 
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.json.*;
 
 /**
  * Represents a logging rule used by {@link RestLogger}.
@@ -464,8 +464,9 @@ public class RestLoggerRule {
 		return logStackTrace;
 	}
 
-	private OMap toMap() {
-		return OMap.create()
+	@Override /* Object */
+	public String toString() {
+		return filteredMap()
 			.a("codeFilter", statusFilter)
 			.a("exceptionFilter", exceptionFilter)
 			.a("requestFilter", requestFilter)
@@ -474,11 +475,7 @@ public class RestLoggerRule {
 			.a("requestDetail", requestDetail)
 			.a("responseDetail", responseDetail)
 			.a("enabled", enabled)
-			.a("enabledTest", enabledTest);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return SimpleJsonSerializer.DEFAULT.toString(toMap());
+			.a("enabledTest", enabledTest)
+			.asReadableString();
 	}
 }

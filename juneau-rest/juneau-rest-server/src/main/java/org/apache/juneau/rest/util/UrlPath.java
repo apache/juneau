@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
-
-import org.apache.juneau.collections.*;
 
 /**
  * Represents a parsed URL path-info string.
@@ -96,21 +95,11 @@ public class UrlPath {
 		return path != null && path.endsWith("/");
 	}
 
-	/**
-	 * Converts this object to a map.
-	 *
-	 * @return This object converted to a map.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a("raw", path)
-			.a("parts", parts);
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return json(toMap());
+		return filteredMap()
+			.a("raw", path)
+			.a("parts", parts)
+			.asReadableString();
 	}
 }

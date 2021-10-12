@@ -36,12 +36,6 @@ public class RestClient_Config_Parser_Test {
 		}
 	}
 
-	@Test
-	public void a01_debugOutputLines() throws Exception {
-		RestClient rc = client().debugOutputLines(10).build();
-		assertEquals(10,rc.parsers.getParser("application/json").toMap().getMap("Parser").getInt("debugOutputLines").intValue());
-	}
-
 	public static class A2 {
 		public int f;
 	}

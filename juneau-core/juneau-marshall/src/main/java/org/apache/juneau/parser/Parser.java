@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.io.*;
@@ -1358,19 +1359,13 @@ public abstract class Parser extends BeanContextable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"Parser",
-				OMap
-					.create()
-					.filtered()
-					.a("autoCloseStreams", autoCloseStreams)
-					.a("debugOutputLines", debugOutputLines)
-					.a("listener", listener)
-					.a("strict", strict)
-					.a("trimStrings", trimStrings)
-					.a("unbuffered", unbuffered)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("autoCloseStreams", autoCloseStreams)
+			.a("debugOutputLines", debugOutputLines)
+			.a("listener", listener)
+			.a("strict", strict)
+			.a("trimStrings", trimStrings)
+			.a("unbuffered", unbuffered);
 	}
 }

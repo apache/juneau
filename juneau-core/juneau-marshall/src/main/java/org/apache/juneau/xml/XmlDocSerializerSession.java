@@ -17,7 +17,6 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -186,20 +185,5 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 			w.flush();
 			super.doSerialize(out, o);
 		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"XmlDocSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

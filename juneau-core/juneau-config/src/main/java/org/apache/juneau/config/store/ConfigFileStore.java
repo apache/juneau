@@ -14,6 +14,7 @@ package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.StandardOpenOption.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
@@ -610,16 +611,7 @@ public class ConfigFileStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"ConfigFileStore",
-				OMap
-					.create()
-					.filtered()
-					.a("charset", charset)
-					.a("extensions", extensions)
-					.a("updateOnWrite", updateOnWrite)
-			);
+	protected OMap properties() {
+		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
 	}
 }

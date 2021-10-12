@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -187,20 +186,5 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getWriter().write(o == null ? "null" : convertToType(o, String.class));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"PlainTextSerializerSession",
-				OMap
-					.create()
-					.filtered()
-		);
 	}
 }

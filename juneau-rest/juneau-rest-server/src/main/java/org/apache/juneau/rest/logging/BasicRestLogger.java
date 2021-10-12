@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logging;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
@@ -22,9 +23,7 @@ import java.util.logging.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -346,13 +345,9 @@ public class BasicRestLogger implements RestLogger {
 		return thrownStore.getStats(e).orElse(null);
 	}
 
-	/**
-	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 *
-	 * @return A new map containing the properties defined on this context.
-	 */
-	public OMap toMap() {
-		return OMap.create()
+	@Override /* Object */
+	public String toString() {
+		return filteredMap()
 			.a("logger", logger)
 			.a("thrownStore", thrownStore)
 			.a("enabled", enabled)
@@ -361,11 +356,6 @@ public class BasicRestLogger implements RestLogger {
 			.a("responseDetail", responseDetail)
 			.a("normalRules", normalRules.length == 0 ? null : normalRules)
 			.a("debugRules", debugRules.length == 0 ? null : debugRules)
-		;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
+			.asReadableString();
 	}
 }

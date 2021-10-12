@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -848,20 +847,5 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	 */
 	protected final HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"OpenApiSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

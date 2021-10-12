@@ -13,6 +13,7 @@
 package org.apache.juneau.jena;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.filteredMap;
 import static org.apache.juneau.internal.SystemEnv.env;
 
 import java.lang.annotation.Annotation;
@@ -1859,24 +1860,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	}
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"RdfSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("addLiteralTypes", addLiteralTypes)
-					.a("addRootProperty", addRootProperty)
-					.a("useXmlNamespaces", useXmlNamespaces)
-					.a("looseCollections", looseCollections)
-					.a("autoDetectNamespaces", autoDetectNamespaces)
-					.a("language", language)
-					.a("juneauNs", juneauNs)
-					.a("juneauBpNs", juneauBpNs)
-					.a("collectionFormat", collectionFormat)
-					.a("namespaces", namespaces)
-					.a("addBeanTypes", addBeanTypes)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("addLiteralTypes", addLiteralTypes)
+			.a("addRootProperty", addRootProperty)
+			.a("useXmlNamespaces", useXmlNamespaces)
+			.a("looseCollections", looseCollections)
+			.a("autoDetectNamespaces", autoDetectNamespaces)
+			.a("language", language)
+			.a("juneauNs", juneauNs)
+			.a("juneauBpNs", juneauBpNs)
+			.a("collectionFormat", collectionFormat)
+			.a("namespaces", namespaces)
+			.a("addBeanTypes", addBeanTypes);
 	}
 }

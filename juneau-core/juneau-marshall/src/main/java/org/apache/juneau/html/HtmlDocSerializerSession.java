@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -390,15 +392,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlDocSerializerSession",
-				OMap
-					.create()
-					.filtered()
-					.a("ctx", ctx)
-					.a("varResolver", getVarResolver())
-			);
+	protected OMap properties() {
+		return filteredMap("ctx", ctx, "varResolver", getVarResolver());
 	}
 }

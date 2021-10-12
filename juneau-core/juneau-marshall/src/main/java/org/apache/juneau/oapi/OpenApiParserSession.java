@@ -469,19 +469,4 @@ public class OpenApiParserSession extends UonParserSession {
 			throw new ParseException(e.getMessage());
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"OpenApiParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

@@ -14,8 +14,10 @@ package org.apache.juneau.internal;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
@@ -338,5 +340,35 @@ public class ObjectUtils {
 		if (o == null)
 			return null;
 		return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);
+	}
+
+	private static final ConcurrentHashMap<Class<?>,Map<String,MethodInfo>> PROPERTIES_METHODS = new ConcurrentHashMap<>();
+
+	/**
+	 * Searches for all <c>properties()</c> methods on the specified object and creates a combine map of them.
+	 *
+	 * @param o The object to return a property map of.
+	 * @return A new property map.
+	 */
+	public static OMap toPropertyMap(Object o) {
+		if (o == null)
+			return null;
+		Map<String,MethodInfo> methods = PROPERTIES_METHODS.get(o.getClass());
+		if (methods == null) {
+			ClassInfo ci = ClassInfo.of(o);
+			Map<String,MethodInfo> methods2 = new LinkedHashMap<>();
+			do {
+				String cname = ci.getShortName();
+				ci.getDeclaredMethods().stream().filter(x -> x.getName().equals("properties")).findFirst().ifPresent(x -> methods2.put(cname, x.accessible()));
+				ci = ci.getParent();
+			} while (ci != null);
+			methods = methods2;
+			PROPERTIES_METHODS.put(o.getClass(), methods);
+		}
+		OMap m = OMap.create().a("id", identity(o));
+		for (Map.Entry<String,MethodInfo> e : methods.entrySet()) {
+			m.put(e.getKey(), e.getValue().invoke(o));
+		}
+		return m;
 	}
 }

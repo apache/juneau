@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
@@ -25,7 +26,6 @@ import java.util.ResourceBundle.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -273,27 +273,6 @@ public class BasicFileFinder implements FileFinder {
 		return asList(include).stream().map(x->x.pattern()).collect(toList());
 	}
 
-	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
-	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a("class", getClass().getSimpleName())
-			.a("roots", roots)
-			.a("cachingLimit", cachingLimit)
-			.a("include", getIncludePatterns())
-			.a("exclude", getExcludePatterns())
-			.a("hashCode", hashCode)
-		;
-	}
-
 	@Override
 	public int hashCode() {
 		return hashCode;
@@ -304,8 +283,15 @@ public class BasicFileFinder implements FileFinder {
 		return o instanceof BasicFileFinder && eq(this, (BasicFileFinder)o, (x,y)->eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots) && eq(x.cachingLimit, y.cachingLimit) && eq(x.getIncludePatterns(), y.getIncludePatterns()) && eq(x.getExcludePatterns(), y.getExcludePatterns()));
 	}
 
-	@Override
+	@Override /* Object */
 	public String toString() {
-		return toMap().toString();
+		return filteredMap()
+			.a("class", getClass().getSimpleName())
+			.a("roots", roots)
+			.a("cachingLimit", cachingLimit)
+			.a("include", getIncludePatterns())
+			.a("exclude", getExcludePatterns())
+			.a("hashCode", hashCode)
+			.asReadableString();
 	}
 }

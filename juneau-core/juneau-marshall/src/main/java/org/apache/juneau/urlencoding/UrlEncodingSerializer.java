@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -913,14 +914,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"UrlEncodingSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("expandedParams", expandedParams)
-			);
+	protected OMap properties() {
+		return filteredMap("expandedParams", expandedParams);
 	}
 }

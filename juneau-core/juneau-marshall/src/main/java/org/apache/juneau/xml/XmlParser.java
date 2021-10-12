@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
@@ -826,18 +827,12 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	}
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"XmlParser",
-				OMap
-					.create()
-					.filtered()
-					.a("validating", validating)
-					.a("preserveRootElement", preserveRootElement)
-					.a("reporter", reporter)
-					.a("resolver", resolver)
-					.a("eventAllocator", eventAllocator)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("validating", validating)
+			.a("preserveRootElement", preserveRootElement)
+			.a("reporter", reporter)
+			.a("resolver", resolver)
+			.a("eventAllocator", eventAllocator);
 	}
 }

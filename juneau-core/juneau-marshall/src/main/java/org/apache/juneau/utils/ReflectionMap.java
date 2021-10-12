@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -570,18 +571,13 @@ public class ReflectionMap<V> {
 			return classMatches(simpleName, fullName, c);
 		}
 
-		public OMap toMap() {
-			return OMap
-				.create()
-				.filtered()
-				.a("simpleName", simpleName)
-				.a("fullName", fullName)
-				.a("value", value);
-		}
-
 		@Override
 		public String toString() {
-			return toMap().toString();
+			return filteredMap()
+				.a("simpleName", simpleName)
+				.a("fullName", fullName)
+				.a("value", value)
+				.asString();
 		}
 	}
 
@@ -634,20 +630,15 @@ public class ReflectionMap<V> {
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
-		public OMap toMap() {
-			return OMap
-				.create()
-				.filtered()
+		@Override
+		public String toString() {
+			return filteredMap()
 				.a("simpleClassName", simpleClassName)
 				.a("fullClassName", fullClassName)
 				.a("methodName", methodName)
 				.a("args", args)
-				.a("value", value);
-		}
-
-		@Override
-		public String toString() {
-			return toMap().toString();
+				.a("value", value)
+				.asString();
 		}
 	}
 
@@ -673,19 +664,14 @@ public class ReflectionMap<V> {
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
-		public OMap toMap() {
-			return OMap
-				.create()
-				.filtered()
+		@Override
+		public String toString() {
+			return filteredMap()
 				.a("simpleClassName", simpleClassName)
 				.a("fullClassName", fullClassName)
 				.a("args", args)
-				.a("value", value);
-		}
-
-		@Override
-		public String toString() {
-			return toMap().toString();
+				.a("value", value)
+				.asString();
 		}
 	}
 
@@ -711,19 +697,14 @@ public class ReflectionMap<V> {
 				&& (eq(f.getName(), fieldName));
 		}
 
-		public OMap toMap() {
-			return OMap
-				.create()
-				.filtered()
+		@Override
+		public String toString() {
+			return filteredMap()
 				.a("simpleClassName", simpleClassName)
 				.a("fullClassName", fullClassName)
 				.a("fieldName", fieldName)
-				.a("value", value);
-		}
-
-		@Override
-		public String toString() {
-			return toMap().toString();
+				.a("value", value)
+				.asString();
 		}
 	}
 
@@ -775,26 +756,13 @@ public class ReflectionMap<V> {
 		return false;
 	}
 
-	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
-	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
+	@Override /* Object */
+	public String toString() {
+		return filteredMap()
 			.a("classEntries", classEntries)
 			.a("methodEntries", methodEntries)
 			.a("fieldEntries", fieldEntries)
-			.a("constructorEntries", constructorEntries);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return toMap().toString();
+			.a("constructorEntries", constructorEntries)
+			.asString();
 	}
 }

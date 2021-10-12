@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
@@ -4552,36 +4553,30 @@ public class BeanContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"BeanContext",
-				OMap
-					.create()
-					.filtered()
-					.a("id", System.identityHashCode(this))
-					.a("beanClassVisibility", beanClassVisibility)
-					.a("beanConstructorVisibility", beanConstructorVisibility)
-					.a("beanDictionary", beanDictionary)
-					.a("beanFieldVisibility", beanFieldVisibility)
-					.a("beanMethodVisibility", beanMethodVisibility)
-					.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
-					.a("beansRequireSerializable", beansRequireSerializable)
-					.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
-					.a("beansRequireSomeProperties", beansRequireSomeProperties)
-					.a("ignoreTransientFields", ignoreTransientFields)
-					.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
-					.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-					.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-					.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-					.a("notBeanClasses", notBeanClasses)
-					.a("notBeanPackageNames", notBeanPackageNames)
-					.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
-					.a("pojoSwaps", swaps)
-					.a("sortProperties", sortProperties)
-					.a("useEnumNames", useEnumNames)
-					.a("useInterfaceProxies", useInterfaceProxies)
-					.a("useJavaBeanIntrospector", useJavaBeanIntrospector)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("id", System.identityHashCode(this))
+			.a("beanClassVisibility", beanClassVisibility)
+			.a("beanConstructorVisibility", beanConstructorVisibility)
+			.a("beanDictionary", beanDictionary)
+			.a("beanFieldVisibility", beanFieldVisibility)
+			.a("beanMethodVisibility", beanMethodVisibility)
+			.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
+			.a("beansRequireSerializable", beansRequireSerializable)
+			.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
+			.a("beansRequireSomeProperties", beansRequireSomeProperties)
+			.a("ignoreTransientFields", ignoreTransientFields)
+			.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
+			.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+			.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
+			.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+			.a("notBeanClasses", notBeanClasses)
+			.a("notBeanPackageNames", notBeanPackageNames)
+			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
+			.a("pojoSwaps", swaps)
+			.a("sortProperties", sortProperties)
+			.a("useEnumNames", useEnumNames)
+			.a("useInterfaceProxies", useInterfaceProxies)
+			.a("useJavaBeanIntrospector", useJavaBeanIntrospector);
 	}
 }

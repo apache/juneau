@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -370,20 +369,5 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	@Override
 	protected final boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"MsgPackSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

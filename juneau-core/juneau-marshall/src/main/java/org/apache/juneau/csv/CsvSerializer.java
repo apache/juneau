@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
-import static org.apache.juneau.collections.OMap.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -21,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -668,14 +665,5 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 			csvBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap().a("CsvSerializer",filteredMap());
 	}
 }

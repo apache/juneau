@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -939,14 +941,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlSchemaSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("generator", generator)
-			);
+	protected OMap properties() {
+		return filteredMap("generator", generator);
 	}
 }

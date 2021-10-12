@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -611,15 +612,7 @@ public abstract class ReaderParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"ReaderParser",
-				OMap
-					.create()
-					.filtered()
-					.a("fileCharset", fileCharset)
-					.a("streamCharset", streamCharset)
-			);
+	protected OMap properties() {
+		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
 	}
 }

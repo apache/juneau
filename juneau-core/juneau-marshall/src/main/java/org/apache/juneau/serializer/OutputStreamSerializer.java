@@ -652,7 +652,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap().a("OutputStreamSerializer", filteredMap("binaryFormat", binaryFormat));
+	protected OMap properties() {
+		return filteredMap("binaryFormat", binaryFormat);
 	}
 }

@@ -224,19 +224,4 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	public String getSoapAction() {
 		return ctx.getSoapAction();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"SoapXmlSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

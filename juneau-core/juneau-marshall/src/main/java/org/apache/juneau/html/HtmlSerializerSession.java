@@ -25,7 +25,6 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
@@ -1020,20 +1019,5 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getHtmlBeanPropertyMeta(bpm);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

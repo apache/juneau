@@ -13,6 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.io.*;
@@ -1520,25 +1521,19 @@ public abstract class Serializer extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"Serializer",
-				OMap
-					.create()
-					.filtered()
-					.a("addBeanTypes", addBeanTypes)
-					.a("keepNullProperties", keepNullProperties)
-					.a("trimEmptyCollections", trimEmptyCollections)
-					.a("trimEmptyMaps", trimEmptyMaps)
-					.a("trimStrings", trimStrings)
-					.a("sortCollections", sortCollections)
-					.a("sortMaps", sortMaps)
-					.a("addRootType", addRootType)
-					.a("uriContext", uriContext)
-					.a("uriResolution", uriResolution)
-					.a("uriRelativity", uriRelativity)
-					.a("listener", listener)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("addBeanTypes", addBeanTypes)
+			.a("keepNullProperties", keepNullProperties)
+			.a("trimEmptyCollections", trimEmptyCollections)
+			.a("trimEmptyMaps", trimEmptyMaps)
+			.a("trimStrings", trimStrings)
+			.a("sortCollections", sortCollections)
+			.a("sortMaps", sortMaps)
+			.a("addRootType", addRootType)
+			.a("uriContext", uriContext)
+			.a("uriResolution", uriResolution)
+			.a("uriRelativity", uriRelativity)
+			.a("listener", listener);
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -562,14 +563,7 @@ public abstract class InputStreamParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"InputStreamParser",
-				OMap
-					.create()
-					.filtered()
-					.a("binaryFormat", binaryFormat)
-			);
+	protected OMap properties() {
+		return filteredMap("binaryFormat", binaryFormat);
 	}
 }

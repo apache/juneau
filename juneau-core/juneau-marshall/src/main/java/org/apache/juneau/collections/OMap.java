@@ -145,6 +145,15 @@ public class OMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Construct an empty map.
+	 *
+	 * @return An empty map.
+	 */
+	public static OMap filteredMap() {
+		return create().filtered();
+	}
+
+	/**
 	 * Construct a map initialized with the specified map.
 	 *
 	 * @param values
@@ -1667,12 +1676,25 @@ public class OMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON.
+	 * Serialize this object to Simplified JSON using {@link SimpleJsonSerializer#DEFAULT}.
 	 *
 	 * @return This object serialized as a string.
 	 */
 	public String asString() {
+		if (SimpleJsonSerializer.DEFAULT == null)
+			return stringify(this);
 		return SimpleJsonSerializer.DEFAULT.toString(this);
+	}
+
+	/**
+	 * Serialize this object to Simplified JSON using {@link SimpleJsonSerializer#DEFAULT_READABLE}.
+	 *
+	 * @return This object serialized as a string.
+	 */
+	public String asReadableString() {
+		if (SimpleJsonSerializer.DEFAULT_READABLE == null)
+			return stringify(this);
+		return SimpleJsonSerializer.DEFAULT_READABLE.toString(this);
 	}
 
 	/**

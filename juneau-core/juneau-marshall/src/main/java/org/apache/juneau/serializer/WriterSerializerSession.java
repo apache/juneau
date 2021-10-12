@@ -332,7 +332,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("WriterSerializerSession", filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace));
+	protected OMap properties() {
+		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}
 }

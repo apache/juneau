@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -1169,19 +1170,13 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"XmlSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("autoDetectNamespaces", autoDetectNamespaces)
-					.a("enableNamespaces", enableNamespaces)
-					.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-					.a("defaultNamespace", defaultNamespace)
-					.a("namespaces", namespaces)
-					.a("addBeanTypes", addBeanTypes)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("autoDetectNamespaces", autoDetectNamespaces)
+			.a("enableNamespaces", enableNamespaces)
+			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+			.a("defaultNamespace", defaultNamespace)
+			.a("namespaces", namespaces)
+			.a("addBeanTypes", addBeanTypes);
 	}
 }

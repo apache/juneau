@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -636,20 +635,5 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 			jsoBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsoSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

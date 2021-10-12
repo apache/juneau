@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -429,20 +428,5 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
 		return ctx.getUrlEncodingClassMeta(cm);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"UrlEncodingSerializerSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

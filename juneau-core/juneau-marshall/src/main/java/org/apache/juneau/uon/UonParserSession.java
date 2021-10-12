@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -976,14 +977,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"UonParserSession",
-				OMap
-					.create()
-					.filtered()
-					.a("decoding", decoding)
-			);
+	protected OMap properties() {
+		return filteredMap("decoding", decoding);
 	}
 }

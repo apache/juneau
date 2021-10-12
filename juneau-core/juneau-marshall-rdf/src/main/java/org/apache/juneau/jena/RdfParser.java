@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.collections.OMap.filteredMap;
 import static org.apache.juneau.internal.SystemEnv.env;
 
 import java.lang.annotation.Annotation;
@@ -1530,19 +1531,13 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"RdfParser",
-				OMap
-					.create()
-					.filtered()
-					.a("trimWhitespace", trimWhitespace)
-					.a("looseCollections", looseCollections)
-					.a("language", language)
-					.a("juneauNs", juneauNs)
-					.a("juneauBpNs", juneauBpNs)
-					.a("collectionFormat", collectionFormat)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("trimWhitespace", trimWhitespace)
+			.a("looseCollections", looseCollections)
+			.a("language", language)
+			.a("juneauNs", juneauNs)
+			.a("juneauBpNs", juneauBpNs)
+			.a("collectionFormat", collectionFormat);
 	}
 }

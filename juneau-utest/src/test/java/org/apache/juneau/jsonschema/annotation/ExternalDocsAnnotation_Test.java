@@ -40,7 +40,7 @@ public class ExternalDocsAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertObject(a1).asString().is(""
 			+ "{"
 				+ "description:['description'],"
 				+ "url:'url',"

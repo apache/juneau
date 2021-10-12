@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
-
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
  *
@@ -111,10 +109,5 @@ public class SimplePartParser extends BaseHttpPartParser {
 	@Override
 	public SimplePartParserSession getPartSession() {
 		return new SimplePartParserSession();
-	}
-
-	@Override
-	public Builder copy() {
-		throw unsupportedOperationException("Not implemented.");
 	}
 }

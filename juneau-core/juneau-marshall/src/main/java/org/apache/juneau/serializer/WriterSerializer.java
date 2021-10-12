@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
+import static org.apache.juneau.collections.OMap.*;
 import static java.util.Optional.*;
 
 import java.lang.annotation.*;
@@ -995,18 +996,7 @@ public abstract class WriterSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"WriterSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("fileCharset", fileCharset)
-					.a("maxIndent", maxIndent)
-					.a("quoteChar", quoteChar)
-					.a("streamCharset", streamCharset)
-					.a("useWhitespace", useWhitespace)
-			);
+	protected OMap properties() {
+		return filteredMap("fileCharset", fileCharset, "maxIndent", maxIndent, "quoteChar", quoteChar, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}
 }

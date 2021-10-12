@@ -19,7 +19,6 @@ import java.lang.reflect.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -188,20 +187,5 @@ public class ConfigMemoryStore extends ConfigStore {
 	@Override /* Closeable */
 	public void close() throws IOException {
 		// No-op
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"ConfigMemoryStore",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

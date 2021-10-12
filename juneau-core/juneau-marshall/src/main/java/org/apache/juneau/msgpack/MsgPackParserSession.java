@@ -329,19 +329,4 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 
 		return (T)o;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"MsgPackParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

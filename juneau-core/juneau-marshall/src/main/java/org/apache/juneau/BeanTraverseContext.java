@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -725,17 +726,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"BeanTraverseContext",
-				OMap
-					.create()
-					.filtered()
-					.a("detectRecursions", detectRecursions)
-					.a("maxDepth", maxDepth)
-					.a("ignoreRecursions", ignoreRecursions)
-					.a("initialDepth", initialDepth)
-			);
+	protected OMap properties() {
+		return filteredMap("detectRecursions", detectRecursions, "maxDepth", maxDepth, "ignoreRecursions", ignoreRecursions, "initialDepth", initialDepth);
 	}
 }

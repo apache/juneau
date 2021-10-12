@@ -523,19 +523,4 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
 		return ctx.getUrlEncodingClassMeta(cm);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"UrlEncodingParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

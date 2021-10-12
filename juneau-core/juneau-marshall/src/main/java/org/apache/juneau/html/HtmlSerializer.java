@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -1406,19 +1407,13 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("uriAnchorText", uriAnchorText)
-					.a("detectLabelParameters", detectLabelParameters)
-					.a("detectLinksInStrings", detectLinksInStrings)
-					.a("labelParameter", labelParameter)
-					.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
-					.a("addBeanTypesHtml", addBeanTypesHtml)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("uriAnchorText", uriAnchorText)
+			.a("detectLabelParameters", detectLabelParameters)
+			.a("detectLinksInStrings", detectLinksInStrings)
+			.a("labelParameter", labelParameter)
+			.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
+			.a("addBeanTypesHtml", addBeanTypesHtml);
 	}
 }

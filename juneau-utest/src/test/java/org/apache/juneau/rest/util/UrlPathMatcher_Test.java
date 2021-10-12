@@ -26,7 +26,7 @@ import org.junit.*;
 public class UrlPathMatcher_Test {
 
 	private void check(UrlPathMatcher p, String path, String expected) {
-		assertObject(p.match(UrlPath.of(path))).asJson().is(expected);
+		assertObject(p.match(UrlPath.of(path))).asString().is(expected);
 	}
 
 	private void shouldNotMatch(UrlPathMatcher p, String...paths) {

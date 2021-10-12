@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
+import static org.apache.juneau.collections.OMap.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -748,14 +750,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"SoapXmlSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("soapAction", soapAction)
-			);
+	protected OMap properties() {
+		return filteredMap("soapAction", soapAction);
 	}
 }

@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -129,22 +129,12 @@ public class UrlPathMatch {
 		return nullIfEmpty(path.substring(0, c));
 	}
 
-	/**
-	 * Converts this object to a map.
-	 *
-	 * @return This object converted to a map.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a("v", getVars())
-			.a("r", getRemainder());
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return json(toMap());
+		return filteredMap()
+			.a("v", getVars())
+			.a("r", getRemainder())
+			.asString();
 	}
 }
 

@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -167,20 +166,5 @@ public class JsoParserSession extends InputStreamParserSession {
 		} catch (ClassNotFoundException e) {
 			throw new ParseException(e);
 		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsoParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

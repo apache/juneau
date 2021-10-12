@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -3237,19 +3238,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"RestCall",
-				OMap
-					.create()
-					.filtered()
-					.a("client", client)
-					.a("ignoreErrors", ignoreErrors)
-					.a("interceptors", interceptors)
-					.a("requestBodySchema", requestBodySchema)
-					.a("response", response)
-					.a("serializer", serializer)
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("client", client.properties())
+			.a("ignoreErrors", ignoreErrors)
+			.a("interceptors", interceptors)
+			.a("requestBodySchema", requestBodySchema)
+			.a("response", response)
+			.a("serializer", serializer);
 	}
 }

@@ -12,15 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
-import static org.apache.juneau.collections.OMap.*;
-
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -177,14 +174,5 @@ public final class CsvParserSession extends ReaderParserSession {
 
 	private <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		throw new ParseException("Not implemented.");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("CsvParserSession", filteredMap());
 	}
 }

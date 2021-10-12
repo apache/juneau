@@ -18,7 +18,6 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
@@ -697,20 +696,5 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	@Override /* Context */
 	public HtmlStrippedDocSerializerSession getSession() {
 		return createSession().build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlStrippedDocSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
 	}
 }

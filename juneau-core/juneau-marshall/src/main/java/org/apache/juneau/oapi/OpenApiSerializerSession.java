@@ -545,19 +545,4 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			throw new SerializeException(e);
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"OpenApiSerializerSession",
-				OMap
-					.create()
-					.filtered()
-		);
-	}
 }

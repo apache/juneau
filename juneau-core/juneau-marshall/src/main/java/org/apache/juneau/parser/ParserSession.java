@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -1190,16 +1191,7 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"ParserSession",
-				OMap
-					.create()
-					.filtered()
-					.a("javaMethod", javaMethod)
-					.a("listener", listener)
-					.a("outer", outer)
-			);
+	protected OMap properties() {
+		return filteredMap("javaMethod", javaMethod, "listener", listener, "outer", outer);
 	}
 }

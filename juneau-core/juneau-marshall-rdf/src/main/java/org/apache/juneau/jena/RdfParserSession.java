@@ -696,19 +696,4 @@ public class RdfParserSession extends ReaderParserSession {
 	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"RdfParserSession",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }

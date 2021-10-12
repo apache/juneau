@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import java.util.*;
+import static org.apache.juneau.collections.OMap.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.marshall.*;
+import java.util.*;
 
 /**
  * Represents a list of objects used to compare objects for equality.
@@ -64,24 +63,11 @@ public class HashKey {
 		return true;
 	}
 
-	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
-	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a("hashCode", hashCode())
-			.a("array", array);
-	}
-	
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+		return filteredMap()
+			.a("hashCode", hashCode())
+			.a("array", array)
+			.asString();
 	}
 }

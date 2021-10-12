@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.internal.SystemEnv.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1043,16 +1044,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonSerializer",
-				OMap
-					.create()
-					.filtered()
-					.a("simpleMode", simpleMode)
-					.a("escapeSolidus", escapeSolidus)
-					.a("addBeanTypesJson", addBeanTypesJson)
-			);
+	protected OMap properties() {
+		return filteredMap("simpleMode", simpleMode, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);
 	}
 }

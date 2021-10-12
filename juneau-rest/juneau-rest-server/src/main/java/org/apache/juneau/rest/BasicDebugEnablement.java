@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -21,7 +22,6 @@ import java.util.function.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -78,25 +78,12 @@ public class BasicDebugEnablement implements DebugEnablement {
 		return conditionalPredicate.test(req);
 	}
 
-	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
-	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a("defaultEnablement", defaultEnablement)
-			.a("enablementMap", enablementMap)
-			.a("conditionalPredicate", conditionalPredicate);
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return toMap().toString();
+		return filteredMap()
+			.a("defaultEnablement", defaultEnablement)
+			.a("enablementMap", enablementMap)
+			.a("conditionalPredicate", conditionalPredicate)
+			.asString();
 	}
 }

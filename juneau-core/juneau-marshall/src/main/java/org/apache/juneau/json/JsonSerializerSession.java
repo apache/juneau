@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -463,20 +462,5 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		return ctx.getJsonClassMeta(cm);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonSerializerSession",
-				OMap
-					.create()
-					.filtered()
-		);
 	}
 }

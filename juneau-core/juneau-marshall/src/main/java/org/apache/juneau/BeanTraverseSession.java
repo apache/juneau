@@ -378,7 +378,7 @@ public class BeanTraverseSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("BeanTraverseSession", filteredMap("indent", indent, "depth", depth));
+	protected OMap properties() {
+		return filteredMap("indent", indent, "depth", depth);
 	}
 }

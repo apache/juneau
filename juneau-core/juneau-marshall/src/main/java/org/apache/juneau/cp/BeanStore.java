@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Optional.*;
 import java.lang.annotation.*;
@@ -534,30 +535,20 @@ public class BeanStore {
 		return null;
 	}
 
-	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
-	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
-	 */
-	public OMap toMap() {
-		return OMap
-			.create()
-			.filtered()
-			.a("beanMap", beanMap.keySet())
-			.a("outer", ObjectUtils.identity(outer))
-			.a("parent", parent.orElse(null));
-	}
-
 	private void assertCanWrite() {
 		if (readOnly)
 			throw runtimeException("Method cannot be used because BeanStore is read-only.");
 	}
 
+	OMap properties() {
+		return filteredMap()
+			.a("beanMap", beanMap.keySet())
+			.a("outer", ObjectUtils.identity(outer))
+			.a("parent", parent.map(x->x.properties()).orElse(null));
+	}
+
 	@Override /* Object */
 	public String toString() {
-		return toMap().toString();
+		return properties().asString();
 	}
 }

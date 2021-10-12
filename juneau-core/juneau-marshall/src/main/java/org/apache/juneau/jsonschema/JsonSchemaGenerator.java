@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
@@ -988,22 +989,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"JsonSchemaGenerator",
-				OMap
-					.create()
-					.filtered()
-					.a("useBeanDefs", useBeanDefs)
-					.a("allowNestedExamples", allowNestedExamples)
-					.a("allowNestedDescriptions", allowNestedDescriptions)
-					.a("beanDefMapper", beanDefMapper)
-					.a("addExamplesTo", addExamplesTo)
-					.a("addDescriptionsTo", addDescriptionsTo)
-					.a("ignoreTypes", ignoreTypes)
-				)
-				.a("JsonSerializer", jsonSerializer.toMap()
-			);
+	protected OMap properties() {
+		return filteredMap()
+			.a("useBeanDefs", useBeanDefs)
+			.a("allowNestedExamples", allowNestedExamples)
+			.a("allowNestedDescriptions", allowNestedDescriptions)
+			.a("beanDefMapper", beanDefMapper)
+			.a("addExamplesTo", addExamplesTo)
+			.a("addDescriptionsTo", addDescriptionsTo)
+			.a("ignoreTypes", ignoreTypes);
 	}
 }

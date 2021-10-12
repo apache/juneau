@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
@@ -1763,10 +1762,5 @@ public class BeanSession extends ContextSession {
 	public void checkForWarnings() {
 		if (isDebug())
 			super.checkForWarnings();
-	}
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return filteredMap().a("BeanSession", filteredMap());
 	}
 }

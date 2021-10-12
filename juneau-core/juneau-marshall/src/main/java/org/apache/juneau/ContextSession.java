@@ -21,7 +21,6 @@ import java.util.function.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -308,19 +307,16 @@ public abstract class ContextSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the properties defined on this bean as a simple map for debugging purposes.
+	 * Returns the properties on this bean as a map for debugging.
 	 *
-	 * <p>
-	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
-	 *
-	 * @return A new map containing this bean's properties.
+	 * @return The properties on this bean as a map for debugging.
 	 */
-	public OMap toMap() {
-		return filteredMap().a("ContextSession", filteredMap("debug", debug));
+	protected OMap properties() {
+		return filteredMap("debug", debug);
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
+		return ObjectUtils.toPropertyMap(this).asReadableString();
 	}
 }

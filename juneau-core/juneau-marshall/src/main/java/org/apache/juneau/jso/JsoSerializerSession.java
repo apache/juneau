@@ -12,15 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso;
 
-import static org.apache.juneau.collections.OMap.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -172,14 +169,5 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 		try (ObjectOutputStream oos = new ObjectOutputStream(out.getOutputStream())) {
 			oos.writeObject(o);
 		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ContextSession */
-	public OMap toMap() {
-		return super.toMap().a("JsoSerializerSession", filteredMap());
 	}
 }

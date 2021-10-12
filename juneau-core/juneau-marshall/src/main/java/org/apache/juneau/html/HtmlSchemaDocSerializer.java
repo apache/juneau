@@ -879,19 +879,4 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	JsonSchemaGenerator getGenerator() {
 		return generator;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Context */
-	public OMap toMap() {
-		return super.toMap()
-			.a(
-				"HtmlSchemaDocSerializer",
-				OMap
-					.create()
-					.filtered()
-			);
-	}
 }
