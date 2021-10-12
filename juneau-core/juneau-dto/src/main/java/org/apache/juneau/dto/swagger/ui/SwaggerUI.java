@@ -32,44 +32,6 @@ import org.apache.juneau.transform.*;
  */
 public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "SwaggerUI.";
-
-	/**
-	 * Configuration property:  Resolve <c>$ref</c> references in schema up to the specified depth.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.dto.swagger.ui.SwaggerUI#SWAGGERUI_resolveRefsMaxDepth SWAGGERUI_resolveRefsMaxDepth}
-	 * 	<li><b>Name:</b>  <js>"SwaggerUI.resolveRefsMaxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <jk>int</jk>
-	 * 	<li><b>System property:</b>  <c>SwaggerUI.resolveRefsMaxDepth</c>
-	 * 	<li><b>Environment variable:</b>  <c>SWAGGERUI_RESOLVEREFSMAXDEPTH</c>
-	 * 	<li><b>Default:</b>  <c>1</c>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines the maximum recursive depth to resolve <c>$ref</c> variables in schema infos.
-	 * <br>The default <c>1</c> means only resolve the first reference encountered.
-	 * <br>A value of <c>0</c> disables reference resolution altogether.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Resolve schema references up to 5 levels deep.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 			properties={
-	 * 				<ja>@Property</ja>(name=<jsf>SWAGGERUI_resolveRefsMaxDepth</jsf>, value=<js>"5"</js>)
-	 * 			}
-	 * 	<jk>public class</jk> MyResource {...}
-	 * </p>
-	 */
-	public static final String SWAGGERUI_resolveRefsMaxDepth = PREFIX + "resolveRefsMaxDepth.i";
-
 	static final FileFinder RESOURCES = FileFinder
 		.create()
 		.cp(SwaggerUI.class, null, true)
@@ -93,7 +55,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 		Session(BeanSession bs, Swagger swagger) {
 			this.swagger = swagger.copy();
-			this.resolveRefsMaxDepth = bs.getSessionProperties().getInt(SWAGGERUI_resolveRefsMaxDepth, 1);
+			this.resolveRefsMaxDepth = 1;
 		}
 	}
 
