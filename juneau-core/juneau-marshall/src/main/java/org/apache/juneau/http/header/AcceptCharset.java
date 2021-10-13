@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -75,10 +73,14 @@ import org.apache.juneau.internal.*;
 @Header("Accept-Charset")
 public class AcceptCharset extends BasicStringRangeArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept-Charset";
 
-	private static final Cache<String,AcceptCharset> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,AcceptCharset> CACHE = Cache.of(String.class, AcceptCharset.class).build();
 
 	/**
 	 * Static creator.
@@ -90,12 +92,7 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptCharset of(String value) {
-		if (value == null)
-			return null;
-		AcceptCharset x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new AcceptCharset(value));
-		return new AcceptCharset(value);
+		return value == null ? null : CACHE.get(value, ()->new AcceptCharset(value));
 	}
 
 	/**
@@ -107,9 +104,7 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptCharset of(StringRanges value) {
-		if (value == null)
-			return null;
-		return new AcceptCharset(value);
+		return value == null ? null : new AcceptCharset(value);
 	}
 
 	/**
@@ -124,11 +119,12 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptCharset of(Supplier<StringRanges> value) {
-		if (value == null)
-			return null;
-		return new AcceptCharset(value);
+		return value == null ? null : new AcceptCharset(value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -54,13 +53,14 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public class StringRanges {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Represents an empty string ranges object. */
 	public static final StringRanges EMPTY = new StringRanges("");
 
-	private static final Cache<String,StringRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
-
-	private final StringRange[] ranges;
-	private final String string;
+	private static final Cache<String,StringRanges> CACHE = Cache.of(String.class, StringRanges.class).build();
 
 	/**
 	 * Returns a parsed string range header value.
@@ -69,14 +69,15 @@ public class StringRanges {
 	 * @return A parsed string range header value.
 	 */
 	public static StringRanges of(String value) {
-		if (value == null || value.length() == 0)
-			return EMPTY;
-
-		StringRanges mr = CACHE.get(value);
-		if (mr == null)
-			mr = CACHE.put(value, new StringRanges(value));
-		return mr;
+		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new StringRanges(value));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final StringRange[] ranges;
+	private final String string;
 
 	/**
 	 * Constructor.

@@ -74,6 +74,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Authorization")
 public class Authorization extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Authorization";
 
@@ -86,9 +90,7 @@ public class Authorization extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Authorization of(String value) {
-		if (value == null)
-			return null;
-		return new Authorization(value);
+		return value == null ? null : new Authorization(value);
 	}
 
 	/**
@@ -103,10 +105,12 @@ public class Authorization extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Authorization of(Supplier<String> value) {
-		if (value == null)
-			return null;
-		return new Authorization(value);
+		return value == null ? null : new Authorization(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

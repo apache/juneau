@@ -34,6 +34,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Debug")
 public class Debug extends BasicBooleanHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Debug";
 
@@ -50,9 +54,7 @@ public class Debug extends BasicBooleanHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Debug of(String value) {
-		if (value == null)
-			return null;
-		return new Debug(value);
+		return value == null ? null : new Debug(value);
 	}
 
 	/**
@@ -64,9 +66,7 @@ public class Debug extends BasicBooleanHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Debug of(Boolean value) {
-		if (value == null)
-			return null;
-		return new Debug(value);
+		return value == null ? null : new Debug(value);
 	}
 
 	/**
@@ -81,10 +81,12 @@ public class Debug extends BasicBooleanHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static Debug of(Supplier<Boolean> value) {
-		if (value == null)
-			return null;
-		return new Debug(value);
+		return value == null ? null : new Debug(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

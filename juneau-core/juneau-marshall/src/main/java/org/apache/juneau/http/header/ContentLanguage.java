@@ -76,6 +76,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Content-Language")
 public class ContentLanguage extends BasicCsvArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Language";
 
@@ -88,9 +92,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLanguage of(String value) {
-		if (value == null)
-			return null;
-		return new ContentLanguage(value);
+		return value == null ? null : new ContentLanguage(value);
 	}
 
 	/**
@@ -102,9 +104,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLanguage of(List<String> value) {
-		if (value == null)
-			return null;
-		return new ContentLanguage(value);
+		return value == null ? null : new ContentLanguage(value);
 	}
 
 	/**
@@ -119,10 +119,12 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLanguage of(Supplier<List<String>> value) {
-		if (value == null)
-			return null;
-		return new ContentLanguage(value);
+		return value == null ? null : new ContentLanguage(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

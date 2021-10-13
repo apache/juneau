@@ -71,6 +71,10 @@ import org.apache.juneau.http.annotation.*;
 @Header(name="Content-Encoding",_enum={"gzip","compress","deflate","identity","other"})
 public class ContentEncoding extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Encoding";
 
@@ -83,9 +87,7 @@ public class ContentEncoding extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentEncoding of(String value) {
-		if (value == null)
-			return null;
-		return new ContentEncoding(value);
+		return value == null ? null : new ContentEncoding(value);
 	}
 
 	/**
@@ -100,10 +102,12 @@ public class ContentEncoding extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentEncoding of(Supplier<String> value) {
-		if (value == null)
-			return null;
-		return new ContentEncoding(value);
+		return value == null ? null : new ContentEncoding(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

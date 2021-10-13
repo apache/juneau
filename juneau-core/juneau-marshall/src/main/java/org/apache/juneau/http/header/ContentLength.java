@@ -63,6 +63,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Content-Length")
 public class ContentLength extends BasicLongHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Length";
 
@@ -76,9 +80,7 @@ public class ContentLength extends BasicLongHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLength of(String value) {
-		if (value == null)
-			return null;
-		return new ContentLength(value);
+		return value == null ? null : new ContentLength(value);
 	}
 
 	/**
@@ -90,9 +92,7 @@ public class ContentLength extends BasicLongHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLength of(Long value) {
-		if (value == null)
-			return null;
-		return new ContentLength(value);
+		return value == null ? null : new ContentLength(value);
 	}
 
 	/**
@@ -107,10 +107,12 @@ public class ContentLength extends BasicLongHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLength of(Supplier<Long> value) {
-		if (value == null)
-			return null;
-		return new ContentLength(value);
+		return value == null ? null : new ContentLength(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

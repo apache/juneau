@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -107,10 +105,14 @@ import org.apache.juneau.internal.*;
 @Header("Accept-Language")
 public class AcceptLanguage extends BasicStringRangeArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept-Language";
 
-	private static final Cache<String,AcceptLanguage> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,AcceptLanguage> CACHE = Cache.of(String.class, AcceptLanguage.class).build();
 
 	/**
 	 * Static creator.
@@ -122,12 +124,7 @@ public class AcceptLanguage extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptLanguage of(String value) {
-		if (value == null)
-			return null;
-		AcceptLanguage x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new AcceptLanguage(value));
-		return new AcceptLanguage(value);
+		return value == null ? null : CACHE.get(value, ()->new AcceptLanguage(value));
 	}
 
 	/**
@@ -139,9 +136,7 @@ public class AcceptLanguage extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptLanguage of(StringRanges value) {
-		if (value == null)
-			return null;
-		return new AcceptLanguage(value);
+		return value == null ? null : new AcceptLanguage(value);
 	}
 
 	/**
@@ -156,11 +151,12 @@ public class AcceptLanguage extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptLanguage of(Supplier<StringRanges> value) {
-		if (value == null)
-			return null;
-		return new AcceptLanguage(value);
+		return value == null ? null : new AcceptLanguage(value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

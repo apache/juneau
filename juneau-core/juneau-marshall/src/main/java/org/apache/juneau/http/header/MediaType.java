@@ -14,7 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.http.header.Constants.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
@@ -37,10 +36,14 @@ import org.apache.juneau.json.*;
 @BeanIgnore
 public class MediaType implements Comparable<MediaType>  {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Represents an empty media type object. */
 	public static final MediaType EMPTY = new MediaType("/*");
 
-	private static final Cache<String,MediaType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,MediaType> CACHE = Cache.of(String.class, MediaType.class).build();
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
@@ -61,16 +64,6 @@ public class MediaType implements Comparable<MediaType>  {
 		TURTLE = of("text/turtle"),
 		N3 = of("text/n3")
 	;
-
-	private final String string;                          // The entire unparsed value.
-	private final String mediaType;                      // The "type/subtype" portion of the media type..
-	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
-	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
-	private final String[] subTypes;                     // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
-	private final String[] subTypesSorted;               // Same as subTypes, but sorted so that it can be used for comparison.
-	private final boolean hasSubtypeMeta;                // The media subtype contains meta-character '*'.
-
-	private final NameValuePair[] parameters;            // The media type parameters (e.g. "text/html;level=1").  Does not include q!
 
 	/**
 	 * Returns the media type for the specified string.
@@ -94,12 +87,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return A cached media type object.
 	 */
 	public static MediaType of(String value) {
-		if (isEmpty(value))
-			return null;
-		MediaType x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new MediaType(value));
-		return x;
+		return isEmpty(value) ? null : CACHE.get(value, ()->new MediaType(value));
 	}
 
 	/**
@@ -116,9 +104,7 @@ public class MediaType implements Comparable<MediaType>  {
 	public static MediaType of(String value, NameValuePair...parameters) {
 		if (parameters.length == 0)
 			return of(value);
-		if (isEmpty(value))
-			return null;
-		return new MediaType(value, parameters);
+		return isEmpty(value) ? null : new MediaType(value, parameters);
 	}
 
 	/**
@@ -137,6 +123,20 @@ public class MediaType implements Comparable<MediaType>  {
 			mt[i] = of(values[i]);
 		return mt;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final String string;                          // The entire unparsed value.
+	private final String mediaType;                      // The "type/subtype" portion of the media type..
+	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
+	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
+	private final String[] subTypes;                     // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
+	private final String[] subTypesSorted;               // Same as subTypes, but sorted so that it can be used for comparison.
+	private final boolean hasSubtypeMeta;                // The media subtype contains meta-character '*'.
+
+	private final NameValuePair[] parameters;            // The media type parameters (e.g. "text/html;level=1").  Does not include q!
 
 	/**
 	 * Constructor.

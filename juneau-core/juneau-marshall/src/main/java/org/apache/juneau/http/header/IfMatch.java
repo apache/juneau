@@ -94,6 +94,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("If-Match")
 public class IfMatch extends BasicEntityTagArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Match";
 
@@ -107,9 +111,7 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static IfMatch of(String value) {
-		if (value == null)
-			return null;
-		return new IfMatch(value);
+		return value == null ? null : new IfMatch(value);
 	}
 
 	/**
@@ -121,9 +123,7 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static IfMatch of(List<EntityTag> value) {
-		if (value == null)
-			return null;
-		return new IfMatch(value);
+		return value == null ? null : new IfMatch(value);
 	}
 
 	/**
@@ -138,10 +138,12 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static IfMatch of(Supplier<List<EntityTag>> value) {
-		if (value == null)
-			return null;
-		return new IfMatch(value);
+		return value == null ? null : new IfMatch(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

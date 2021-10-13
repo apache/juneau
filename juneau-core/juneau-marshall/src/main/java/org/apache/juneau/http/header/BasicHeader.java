@@ -45,8 +45,12 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 @BeanIgnore
 public class BasicHeader implements Header, Cloneable, Serializable {
-	private static final long serialVersionUID = 1L;
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final long serialVersionUID = 1L;
 	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = new HeaderElement[] {};
 
 	/**
@@ -59,9 +63,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicHeader of(String name, Object value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicHeader(name, value);
 	}
 
 	/**
@@ -75,6 +77,10 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	public static BasicHeader of(NameValuePair o) {
 		return new BasicHeader(o.getName(), o.getValue());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final String name;
 	private final String stringValue;

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -48,10 +47,14 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public class MediaRanges {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Represents an empty media ranges object. */
 	public static final MediaRanges EMPTY = new MediaRanges("");
 
-	private static final Cache<String,MediaRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,MediaRanges> CACHE = Cache.of(String.class, MediaRanges.class).build();
 
 	private final MediaRange[] ranges;
 	private final String string;
@@ -63,14 +66,12 @@ public class MediaRanges {
 	 * @return A parsed <c>Accept</c> header value.
 	 */
 	public static MediaRanges of(String value) {
-		if (value == null || value.length() == 0)
-			return EMPTY;
-
-		MediaRanges mr = CACHE.get(value);
-		if (mr == null)
-			mr = CACHE.put(value, new MediaRanges(value));
-		return mr;
+		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new MediaRanges(value));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

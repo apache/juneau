@@ -36,6 +36,11 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  */
 public class SerializedHeader extends BasicHeader {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -48,9 +53,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value) {
-		if (isEmpty(name))
-			return null;
-		return new SerializedHeader(name, value, null, null, false);
+		return isEmpty(name) ? null : new SerializedHeader(name, value, null, null, false);
 	}
 
 	/**
@@ -66,9 +69,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Supplier<?> value) {
-		if (isEmpty(name))
-			return null;
-		return new SerializedHeader(name, value, null, null, false);
+		return isEmpty(name) ? null : new SerializedHeader(name, value, null, null, false);
 	}
 
 	/**
@@ -89,9 +90,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		if (isEmpty(name))
-			return null;
-		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+		return isEmpty(name) ? null : new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
 
 	/**
@@ -115,10 +114,12 @@ public class SerializedHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		if (isEmpty(name))
-			return null;
-		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+		return isEmpty(name) ? null : new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Object value;
 	private final Supplier<Object> supplier;

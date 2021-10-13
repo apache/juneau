@@ -71,6 +71,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Allow")
 public class Allow extends BasicCsvArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Allow";
 
@@ -83,9 +87,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Allow of(String value) {
-		if (value == null)
-			return null;
-		return new Allow(value);
+		return value == null ? null : new Allow(value);
 	}
 
 	/**
@@ -97,9 +99,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Allow of(List<String> value) {
-		if (value == null)
-			return null;
-		return new Allow(value);
+		return value == null ? null : new Allow(value);
 	}
 
 	/**
@@ -114,10 +114,12 @@ public class Allow extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Allow of(Supplier<List<String>> value) {
-		if (value == null)
-			return null;
-		return new Allow(value);
+		return value == null ? null : new Allow(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

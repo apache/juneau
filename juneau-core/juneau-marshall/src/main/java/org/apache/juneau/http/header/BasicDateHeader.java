@@ -39,6 +39,10 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicDateHeader extends BasicHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -52,9 +56,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicDateHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicDateHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicDateHeader(name, value);
 	}
 
 	/**
@@ -67,9 +69,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicDateHeader of(String name, ZonedDateTime value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicDateHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicDateHeader(name, value);
 	}
 
 	/**
@@ -85,10 +85,12 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicDateHeader of(String name, Supplier<ZonedDateTime> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicDateHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicDateHeader(name, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final ZonedDateTime value;
 	private final Supplier<ZonedDateTime> supplier;

@@ -71,6 +71,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Host")
 public class Host extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Host";
 
@@ -83,9 +87,7 @@ public class Host extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Host of(String value) {
-		if (value == null)
-			return null;
-		return new Host(value);
+		return value == null ? null : new Host(value);
 	}
 
 	/**
@@ -100,10 +102,12 @@ public class Host extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Host of(Supplier<String> value) {
-		if (value == null)
-			return null;
-		return new Host(value);
+		return value == null ? null : new Host(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

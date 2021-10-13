@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -92,10 +90,14 @@ import org.apache.juneau.internal.*;
 @Header("TE")
 public class TE extends BasicStringRangeArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "TE";
 
-	private static final Cache<String,TE> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,TE> CACHE = Cache.of(String.class, TE.class).build();
 
 	/**
 	 * Static creator.
@@ -107,12 +109,7 @@ public class TE extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static TE of(String value) {
-		if (value == null)
-			return null;
-		TE x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new TE(value));
-		return new TE(value);
+		return value == null ? null : CACHE.get(value, ()->new TE(value));
 	}
 
 	/**
@@ -124,9 +121,7 @@ public class TE extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static TE of(StringRanges value) {
-		if (value == null)
-			return null;
-		return new TE(value);
+		return value == null ? null : new TE(value);
 	}
 
 	/**
@@ -141,11 +136,12 @@ public class TE extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static TE of(Supplier<StringRanges> value) {
-		if (value == null)
-			return null;
-		return new TE(value);
+		return value == null ? null : new TE(value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -59,6 +59,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Location")
 public class Location extends BasicUriHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Location";
 
@@ -72,9 +76,7 @@ public class Location extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Location of(String value) {
-		if (value == null)
-			return null;
-		return new Location(value);
+		return value == null ? null : new Location(value);
 	}
 
 	/**
@@ -86,9 +88,7 @@ public class Location extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Location of(URI value) {
-		if (value == null)
-			return null;
-		return new Location(value);
+		return value == null ? null : new Location(value);
 	}
 
 	/**
@@ -103,10 +103,12 @@ public class Location extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Location of(Supplier<URI> value) {
-		if (value == null)
-			return null;
-		return new Location(value);
+		return value == null ? null : new Location(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

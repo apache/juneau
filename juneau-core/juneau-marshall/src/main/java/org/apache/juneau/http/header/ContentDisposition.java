@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -52,10 +50,14 @@ import org.apache.juneau.internal.*;
 @Header("Content-Disposition")
 public class ContentDisposition extends BasicStringRangeArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Disposition";
 
-	private static final Cache<String,ContentDisposition> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,ContentDisposition> CACHE = Cache.of(String.class, ContentDisposition.class).build();
 
 	/**
 	 * Static creator.
@@ -67,12 +69,7 @@ public class ContentDisposition extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentDisposition of(String value) {
-		if (value == null)
-			return null;
-		ContentDisposition x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new ContentDisposition(value));
-		return new ContentDisposition(value);
+		return value == null ? null : CACHE.get(value, ()->new ContentDisposition(value));
 	}
 
 	/**
@@ -84,9 +81,7 @@ public class ContentDisposition extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentDisposition of(StringRanges value) {
-		if (value == null)
-			return null;
-		return new ContentDisposition(value);
+		return value == null ? null : new ContentDisposition(value);
 	}
 
 	/**
@@ -101,11 +96,12 @@ public class ContentDisposition extends BasicStringRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentDisposition of(Supplier<StringRanges> value) {
-		if (value == null)
-			return null;
-		return new ContentDisposition(value);
+		return value == null ? null : new ContentDisposition(value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

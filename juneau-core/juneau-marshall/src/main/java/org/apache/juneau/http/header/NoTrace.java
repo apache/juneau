@@ -22,12 +22,15 @@ import org.apache.juneau.http.annotation.*;
 @Header("No-Trace")
 public class NoTrace extends BasicBooleanHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "No-Trace";
 
 	@SuppressWarnings("javadoc")
 	public static final NoTrace TRUE = of(true), FALSE = of(false);
-
 
 	/**
 	 * Static creator.
@@ -39,9 +42,7 @@ public class NoTrace extends BasicBooleanHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static NoTrace of(String value) {
-		if (value == null)
-			return null;
-		return new NoTrace(value);
+		return value == null ? null : new NoTrace(value);
 	}
 
 	/**
@@ -53,9 +54,7 @@ public class NoTrace extends BasicBooleanHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static NoTrace of(Boolean value) {
-		if (value == null)
-			return null;
-		return new NoTrace(value);
+		return value == null ? null : new NoTrace(value);
 	}
 
 	/**
@@ -70,10 +69,12 @@ public class NoTrace extends BasicBooleanHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static NoTrace of(Supplier<Boolean> value) {
-		if (value == null)
-			return null;
-		return new NoTrace(value);
+		return value == null ? null : new NoTrace(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

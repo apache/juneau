@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.SystemEnv.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 /**
  * Simple in-memory cache of objects.
@@ -24,60 +27,126 @@ import java.util.concurrent.*;
  * @param <V> The value type.
  */
 public class Cache<K,V> {
-	private final boolean nocache;
-	private final int maxSize;
-	private final ConcurrentHashMap<K,V> cache;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
+	 * Static creator.
 	 *
-	 * @param disabled If <jk>true</jk> then the cache is disabled.
-	 * @param maxSize The maximum size of the cache.  If this threshold is reached, the cache is flushed.
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param key The key type.
+	 * @param type The value type.
+	 * @return A new builder for this object.
 	 */
-	public Cache(boolean disabled, int maxSize) {
-		this.nocache = disabled;
-		this.maxSize = maxSize;
-		if (! nocache)
-			cache = new ConcurrentHashMap<>();
-		else
-			cache = null;
+	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
+		return new Builder<>(type);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 */
+	public static class Builder<K,V> {
+		boolean disabled, logOnExit;
+		int maxSize;
+		Class<V> type;
+
+		Builder(Class<V> type) {
+			this.type = type;
+			disabled = env("juneau.cache.disable", false);
+			maxSize = env("juneau.cache.maxSize", 1000);
+			logOnExit = env("juneau.cache.logOnExit", true);
+		}
+
+		/**
+		 * Disables this cache.
+		 *
+		 * @return This object.
+		 */
+		public Builder<K,V> disabled() {
+			disabled = true;
+			return this;
+		}
+
+		/**
+		 * When enabled, logs cache hit statistics on this cache.
+		 *
+		 * @return This object.
+		 */
+		public Builder<K,V> logOnExit() {
+			logOnExit = true;
+			return this;
+		}
+
+		/**
+		 * Specifies the maximum size of this cache.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder<K,V> maxSize(int value) {
+			maxSize = value;
+			return this;
+		}
+
+		/**
+		 * Builds this object.
+		 *
+		 * @return A new cache.
+		 */
+		public Cache<K,V> build() {
+			return new Cache<>(this);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final int maxSize;
+	private final ConcurrentHashMap<K,V> cache;
+	private final AtomicInteger cacheHits = new AtomicInteger();
+
+	/**
+	 * Constructor
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected Cache(Builder<K,V> builder) {
+		cache = builder.disabled ? null : new ConcurrentHashMap<>();
+		maxSize = builder.maxSize;
+		if (builder.logOnExit) {
+			SystemUtils.shutdownMessage(()->builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + cache.size());
+		}
+	}
 	/**
 	 * Retrieves the value with the specified key from this cache.
 	 *
 	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the value is not in the cache, or the cache is disabled.
+	 * @param supplier The supplier for creating this object if it's not found in the cache.
+	 * @return The value.
 	 */
-	public V get(K key) {
-		if (nocache || key == null)
-			return null;
-		return cache.get(key);
-	}
-
-	/**
-	 * Adds the value with the specified key to this cache.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return
-	 * 	Either the value already in the cache if it already exists, or the same value passed in.
-	 * 	Always returns the same value if the cache is disabled.
-	 */
-	public V put(K key, V value) {
-		if (nocache || key == null)
-			return value;
-
-		// Prevent OOM in case of DDOS
-		if (cache.size() > maxSize)
-			cache.clear();
-
-		while (true) {
-			V v = cache.get(key);
-			if (v != null)
-				return v;
-			cache.putIfAbsent(key, value);
-			return value;
+	public V get(K key, Supplier<V> supplier) {
+		if (cache == null || key == null)
+			return supplier.get();
+		V v = cache.get(key);
+		if (v == null) {
+			if (cache.size() > maxSize)
+				cache.clear();
+			v = supplier.get();
+			cache.putIfAbsent(key, v);
+		} else {
+			cacheHits.incrementAndGet();
 		}
+		return v;
 	}
 }

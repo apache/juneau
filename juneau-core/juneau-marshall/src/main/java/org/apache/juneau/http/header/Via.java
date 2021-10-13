@@ -121,6 +121,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Via")
 public class Via extends BasicCsvArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Via";
 
@@ -133,9 +137,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Via of(String value) {
-		if (value == null)
-			return null;
-		return new Via(value);
+		return value == null ? null : new Via(value);
 	}
 
 	/**
@@ -147,9 +149,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Via of(List<String> value) {
-		if (value == null)
-			return null;
-		return new Via(value);
+		return value == null ? null : new Via(value);
 	}
 
 	/**
@@ -164,10 +164,12 @@ public class Via extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Via of(Supplier<List<String>> value) {
-		if (value == null)
-			return null;
-		return new Via(value);
+		return value == null ? null : new Via(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

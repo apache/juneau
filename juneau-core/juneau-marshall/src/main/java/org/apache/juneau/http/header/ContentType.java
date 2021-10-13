@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.Header;
@@ -52,10 +50,14 @@ import org.apache.juneau.internal.*;
 @Header("Content-Type")
 public class ContentType extends BasicMediaTypeHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Type";
 
-	private static Cache<String,ContentType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static Cache<String,ContentType> CACHE = Cache.of(String.class, ContentType.class).build();
 
 	// Constants
 	@SuppressWarnings("javadoc")
@@ -92,12 +94,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentType of(String value) {
-		if (value == null)
-			return null;
-		ContentType x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new ContentType(value));
-		return new ContentType(value);
+		return value == null ? null : CACHE.get(value, ()->new ContentType(value));
 	}
 
 	/**
@@ -109,9 +106,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentType of(MediaType value) {
-		if (value == null)
-			return null;
-		return new ContentType(value);
+		return value == null ? null : new ContentType(value);
 	}
 
 	/**
@@ -126,10 +121,12 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentType of(Supplier<MediaType> value) {
-		if (value == null)
-			return null;
-		return new ContentType(value);
+		return value == null ? null : new ContentType(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

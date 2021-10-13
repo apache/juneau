@@ -83,6 +83,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Expires")
 public class Expires extends BasicDateHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Expires";
 
@@ -96,9 +100,7 @@ public class Expires extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Expires of(String value) {
-		if (value == null)
-			return null;
-		return new Expires(value);
+		return value == null ? null : new Expires(value);
 	}
 
 	/**
@@ -110,9 +112,7 @@ public class Expires extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Expires of(ZonedDateTime value) {
-		if (value == null)
-			return null;
-		return new Expires(value);
+		return value == null ? null : new Expires(value);
 	}
 
 	/**
@@ -127,10 +127,12 @@ public class Expires extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Expires of(Supplier<ZonedDateTime> value) {
-		if (value == null)
-			return null;
-		return new Expires(value);
+		return value == null ? null : new Expires(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

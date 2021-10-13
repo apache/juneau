@@ -82,6 +82,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Date")
 public class Date extends BasicDateHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Date";
 
@@ -95,9 +99,7 @@ public class Date extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Date of(String value) {
-		if (value == null)
-			return null;
-		return new Date(value);
+		return value == null ? null : new Date(value);
 	}
 
 	/**
@@ -109,9 +111,7 @@ public class Date extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Date of(ZonedDateTime value) {
-		if (value == null)
-			return null;
-		return new Date(value);
+		return value == null ? null : new Date(value);
 	}
 
 	/**
@@ -126,10 +126,12 @@ public class Date extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Date of(Supplier<ZonedDateTime> value) {
-		if (value == null)
-			return null;
-		return new Date(value);
+		return value == null ? null : new Date(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

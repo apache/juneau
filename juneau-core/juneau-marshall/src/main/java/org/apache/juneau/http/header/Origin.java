@@ -22,6 +22,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Origin")
 public class Origin extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Origin";
 
@@ -34,9 +38,7 @@ public class Origin extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Origin of(String value) {
-		if (value == null)
-			return null;
-		return new Origin(value);
+		return value == null ? null : new Origin(value);
 	}
 
 	/**
@@ -51,10 +53,12 @@ public class Origin extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Origin of(Supplier<String> value) {
-		if (value == null)
-			return null;
-		return new Origin(value);
+		return value == null ? null : new Origin(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

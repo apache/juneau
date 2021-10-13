@@ -71,6 +71,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("If-Range")
 public class IfRange extends BasicDateHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Range";
 
@@ -84,9 +88,7 @@ public class IfRange extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfRange of(String value) {
-		if (value == null)
-			return null;
-		return new IfRange(value);
+		return value == null ? null : new IfRange(value);
 	}
 
 	/**
@@ -98,9 +100,7 @@ public class IfRange extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfRange of(ZonedDateTime value) {
-		if (value == null)
-			return null;
-		return new IfRange(value);
+		return value == null ? null : new IfRange(value);
 	}
 
 	/**
@@ -112,9 +112,7 @@ public class IfRange extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfRange of(EntityTag value) {
-		if (value == null)
-			return null;
-		return new IfRange(value);
+		return value == null ? null : new IfRange(value);
 	}
 
 	/**
@@ -130,10 +128,12 @@ public class IfRange extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfRange of(Supplier<?> value) {
-		if (value == null)
-			return null;
-		return new IfRange(value);
+		return value == null ? null : new IfRange(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final EntityTag value;
 	private final Supplier<?> supplier;

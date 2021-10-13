@@ -94,6 +94,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("If-Modified-Since")
 public class IfModifiedSince extends BasicDateHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Modified-Since";
 
@@ -107,9 +111,7 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfModifiedSince of(String value) {
-		if (value == null)
-			return null;
-		return new IfModifiedSince(value);
+		return value == null ? null : new IfModifiedSince(value);
 	}
 
 	/**
@@ -121,9 +123,7 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfModifiedSince of(ZonedDateTime value) {
-		if (value == null)
-			return null;
-		return new IfModifiedSince(value);
+		return value == null ? null : new IfModifiedSince(value);
 	}
 
 	/**
@@ -138,10 +138,12 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfModifiedSince of(Supplier<ZonedDateTime> value) {
-		if (value == null)
-			return null;
-		return new IfModifiedSince(value);
+		return value == null ? null : new IfModifiedSince(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

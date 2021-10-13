@@ -36,6 +36,10 @@ import org.apache.juneau.assertions.*;
 */
 public class BasicStringHeader extends BasicHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -48,9 +52,7 @@ public class BasicStringHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicStringHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicStringHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicStringHeader(name, value);
 	}
 
 	/**
@@ -66,9 +68,7 @@ public class BasicStringHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicStringHeader of(String name, Supplier<String> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicStringHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicStringHeader(name, value);
 	}
 
 	/**
@@ -87,6 +87,10 @@ public class BasicStringHeader extends BasicHeader {
 			return of(pair, "");
 		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Supplier<String> supplier;
 

@@ -73,6 +73,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Last-Modified")
 public class LastModified extends BasicDateHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Last-Modified";
 
@@ -86,9 +90,7 @@ public class LastModified extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static LastModified of(String value) {
-		if (value == null)
-			return null;
-		return new LastModified(value);
+		return value == null ? null : new LastModified(value);
 	}
 
 	/**
@@ -100,9 +102,7 @@ public class LastModified extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static LastModified of(ZonedDateTime value) {
-		if (value == null)
-			return null;
-		return new LastModified(value);
+		return value == null ? null : new LastModified(value);
 	}
 
 	/**
@@ -117,10 +117,12 @@ public class LastModified extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static LastModified of(Supplier<ZonedDateTime> value) {
-		if (value == null)
-			return null;
-		return new LastModified(value);
+		return value == null ? null : new LastModified(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -37,6 +37,10 @@ import java.util.function.*;
  */
 public class BasicEntityTagArrayHeader extends BasicHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -50,9 +54,7 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicEntityTagArrayHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicEntityTagArrayHeader(name, value);
+		return value == null ? null : new BasicEntityTagArrayHeader(name, value);
 	}
 
 	/**
@@ -65,9 +67,7 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicEntityTagArrayHeader of(String name, List<EntityTag> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicEntityTagArrayHeader(name, value);
+		return value == null ? null : new BasicEntityTagArrayHeader(name, value);
 	}
 
 	/**
@@ -83,10 +83,12 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicEntityTagArrayHeader of(String name, Supplier<List<EntityTag>> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicEntityTagArrayHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicEntityTagArrayHeader(name, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final List<EntityTag> value;
 	private final Supplier<List<EntityTag>> supplier;

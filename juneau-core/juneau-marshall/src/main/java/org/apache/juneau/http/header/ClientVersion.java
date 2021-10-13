@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.http.header.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -42,10 +41,14 @@ import org.apache.juneau.internal.*;
 @Header("Client-Version")
 public class ClientVersion extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Client-Version";
 
-	private static final Cache<String,ClientVersion> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,ClientVersion> CACHE = Cache.of(String.class, ClientVersion.class).build();
 
 	/**
 	 * Static creator.
@@ -57,12 +60,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ClientVersion of(String value) {
-		if (value == null)
-			return null;
-		ClientVersion x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new ClientVersion(value));
-		return new ClientVersion(value);
+		return value == null ? null : CACHE.get(value, ()->new ClientVersion(value));
 	}
 
 	/**
@@ -74,9 +72,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ClientVersion of(Version value) {
-		if (value == null)
-			return null;
-		return new ClientVersion(value);
+		return value == null ? null : new ClientVersion(value);
 	}
 
 	/**
@@ -91,10 +87,12 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ClientVersion of(Supplier<Version> value) {
-		if (value == null)
-			return null;
-		return new ClientVersion(value);
+		return value == null ? null : new ClientVersion(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Version value;
 	private final Supplier<Version> supplier;

@@ -61,6 +61,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Referer")
 public class Referer extends BasicUriHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Referer";
 
@@ -74,9 +78,7 @@ public class Referer extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Referer of(String value) {
-		if (value == null)
-			return null;
-		return new Referer(value);
+		return value == null ? null : new Referer(value);
 	}
 
 	/**
@@ -88,9 +90,7 @@ public class Referer extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Referer of(URI value) {
-		if (value == null)
-			return null;
-		return new Referer(value);
+		return value == null ? null : new Referer(value);
 	}
 
 	/**
@@ -105,10 +105,12 @@ public class Referer extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Referer of(Supplier<URI> value) {
-		if (value == null)
-			return null;
-		return new Referer(value);
+		return value == null ? null : new Referer(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

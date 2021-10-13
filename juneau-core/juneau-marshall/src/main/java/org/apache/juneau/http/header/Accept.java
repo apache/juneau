@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -144,10 +142,14 @@ import org.apache.juneau.internal.*;
 @Header("Accept")
 public class Accept extends BasicMediaRangeArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept";
 
-	private static final Cache<String,Accept> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,Accept> CACHE = Cache.of(String.class, Accept.class).build();
 
 	// Constants
 	@SuppressWarnings("javadoc")
@@ -183,12 +185,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Accept of(String value) {
-		if (value == null)
-			return null;
-		Accept x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new Accept(value));
-		return new Accept(value);
+		return value == null ? null : CACHE.get(value, ()->new Accept(value));
 	}
 
 	/**
@@ -200,9 +197,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Accept of(MediaRanges value) {
-		if (value == null)
-			return null;
-		return new Accept(value);
+		return value == null ? null : new Accept(value);
 	}
 
 	/**
@@ -214,9 +209,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Accept of(MediaType value) {
-		if (value == null)
-			return null;
-		return new Accept(value.toString());
+		return value == null ? null : new Accept(value.toString());
 	}
 
 	/**
@@ -231,10 +224,12 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Accept of(Supplier<MediaRanges> value) {
-		if (value == null)
-			return null;
-		return new Accept(value);
+		return value == null ? null : new Accept(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -28,7 +28,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
@@ -221,11 +220,7 @@ public class BeanContext extends Context {
 	@FluentSetters
 	public static class Builder extends Context.Builder {
 
-		private static final ConcurrentHashMap<HashKey,BeanContext> CACHE = new ConcurrentHashMap<>();
-		private static final AtomicInteger CACHE_HITS = new AtomicInteger();
-		static {
-			SystemUtils.shutdownMessage(()->"Bean context cache:  hits=" + CACHE_HITS.get() + ", misses: " + CACHE.size());
-		}
+		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
 
 		Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
 		boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
@@ -362,20 +357,10 @@ public class BeanContext extends Context {
 
 		@Override /* Context.Builder */
 		public BeanContext build() {
-
 			BeanContext impl = impl(BeanContext.class);
 			if (impl != null)
 				return impl;
-
-			HashKey key = hashKey();
-			BeanContext bc = CACHE.get(key);
-			if (bc == null) {
-				bc = new BeanContext(this);
-				CACHE.putIfAbsent(key, bc);
-			} else {
-				CACHE_HITS.incrementAndGet();
-			}
-			return bc;
+			return CACHE.get(hashKey(), ()->new BeanContext(this));
 		}
 
 		@Override

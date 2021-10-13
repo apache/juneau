@@ -128,6 +128,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Warning")
 public class Warning extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Warning";
 
@@ -140,9 +144,7 @@ public class Warning extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Warning of(String value) {
-		if (value == null)
-			return null;
-		return new Warning(value);
+		return value == null ? null : new Warning(value);
 	}
 
 	/**
@@ -157,10 +159,12 @@ public class Warning extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Warning of(Supplier<String> value) {
-		if (value == null)
-			return null;
-		return new Warning(value);
+		return value == null ? null : new Warning(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

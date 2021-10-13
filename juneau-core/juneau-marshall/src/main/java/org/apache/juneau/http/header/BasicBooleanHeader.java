@@ -37,6 +37,10 @@ import org.apache.juneau.http.annotation.*;
 @Header(type="boolean")
 public class BasicBooleanHeader extends BasicHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -50,9 +54,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicBooleanHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicBooleanHeader(name, value);
+		return value == null ? null : new BasicBooleanHeader(name, value);
 	}
 
 	/**
@@ -65,9 +67,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicBooleanHeader of(String name, Boolean value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicBooleanHeader(name, value);
+		return value == null ? null : new BasicBooleanHeader(name, value);
 	}
 
 	/**
@@ -83,11 +83,12 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicBooleanHeader of(String name, Supplier<Boolean> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicBooleanHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicBooleanHeader(name, value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Boolean value;
 	private final Supplier<Boolean> supplier;

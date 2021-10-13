@@ -70,6 +70,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Content-Location")
 public class ContentLocation extends BasicUriHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Location";
 
@@ -83,9 +87,7 @@ public class ContentLocation extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLocation of(String value) {
-		if (value == null)
-			return null;
-		return new ContentLocation(value);
+		return value == null ? null : new ContentLocation(value);
 	}
 
 	/**
@@ -97,9 +99,7 @@ public class ContentLocation extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLocation of(URI value) {
-		if (value == null)
-			return null;
-		return new ContentLocation(value);
+		return value == null ? null : new ContentLocation(value);
 	}
 
 	/**
@@ -114,10 +114,12 @@ public class ContentLocation extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLocation of(Supplier<URI> value) {
-		if (value == null)
-			return null;
-		return new ContentLocation(value);
+		return value == null ? null : new ContentLocation(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

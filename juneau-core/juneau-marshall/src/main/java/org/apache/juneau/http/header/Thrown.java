@@ -53,6 +53,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Thrown")
 public class Thrown extends BasicCsvArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Thrown";
 
@@ -70,9 +74,7 @@ public class Thrown extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Thrown of(String value) {
-		if (value == null)
-			return null;
-		return new Thrown(value);
+		return value == null ? null : new Thrown(value);
 	}
 
 	/**
@@ -86,6 +88,10 @@ public class Thrown extends BasicCsvArrayHeader {
 	public static Thrown of(Throwable...values) {
 		return new Thrown(Arrays.asList(values).stream().map(Part::new).collect(toList()));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final List<Part> value;
 

@@ -85,6 +85,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Upgrade")
 public class Upgrade extends BasicCsvArrayHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Upgrade";
 
@@ -97,9 +101,7 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Upgrade of(String value) {
-		if (value == null)
-			return null;
-		return new Upgrade(value);
+		return value == null ? null : new Upgrade(value);
 	}
 
 	/**
@@ -111,9 +113,7 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Upgrade of(List<String> value) {
-		if (value == null)
-			return null;
-		return new Upgrade(value);
+		return value == null ? null : new Upgrade(value);
 	}
 
 	/**
@@ -128,10 +128,12 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Upgrade of(Supplier<List<String>> value) {
-		if (value == null)
-			return null;
-		return new Upgrade(value);
+		return value == null ? null : new Upgrade(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

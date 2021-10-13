@@ -60,6 +60,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Age")
 public class Age extends BasicIntegerHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Age";
 
@@ -73,9 +77,7 @@ public class Age extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Age of(String value) {
-		if (value == null)
-			return null;
-		return new Age(value);
+		return value == null ? null : new Age(value);
 	}
 
 	/**
@@ -87,9 +89,7 @@ public class Age extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Age of(Integer value) {
-		if (value == null)
-			return null;
-		return new Age(value);
+		return value == null ? null : new Age(value);
 	}
 
 	/**
@@ -104,10 +104,12 @@ public class Age extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Age of(Supplier<Integer> value) {
-		if (value == null)
-			return null;
-		return new Age(value);
+		return value == null ? null : new Age(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -33,6 +33,10 @@ import java.util.function.*;
 */
 public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -46,9 +50,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicMediaRangeArrayHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicMediaRangeArrayHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicMediaRangeArrayHeader(name, value);
 	}
 
 	/**
@@ -61,10 +63,12 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicMediaRangeArrayHeader of(String name, MediaRanges value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicMediaRangeArrayHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicMediaRangeArrayHeader(name, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final MediaRanges value;
 	private final Supplier<MediaRanges> supplier;

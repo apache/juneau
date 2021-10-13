@@ -22,6 +22,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Forwarded")
 public class Forwarded extends BasicStringHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Forwarded";
 
@@ -34,9 +38,7 @@ public class Forwarded extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Forwarded of(String value) {
-		if (value == null)
-			return null;
-		return new Forwarded(value);
+		return value == null ? null : new Forwarded(value);
 	}
 
 	/**
@@ -51,10 +53,12 @@ public class Forwarded extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Forwarded of(Supplier<String> value) {
-		if (value == null)
-			return null;
-		return new Forwarded(value);
+		return value == null ? null : new Forwarded(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

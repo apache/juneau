@@ -38,6 +38,10 @@ import org.apache.juneau.http.annotation.*;
 @Header(type="integer",format="int32")
 public class BasicIntegerHeader extends BasicHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -51,9 +55,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicIntegerHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicIntegerHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicIntegerHeader(name, value);
 	}
 
 	/**
@@ -66,9 +68,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicIntegerHeader of(String name, Integer value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicIntegerHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicIntegerHeader(name, value);
 	}
 
 	/**
@@ -84,10 +84,12 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicIntegerHeader of(String name, Supplier<Integer> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicIntegerHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicIntegerHeader(name, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Integer value;
 	private final Supplier<Integer> supplier;

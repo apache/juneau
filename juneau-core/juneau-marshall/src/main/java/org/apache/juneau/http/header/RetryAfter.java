@@ -66,6 +66,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Retry-After")
 public class RetryAfter extends BasicDateHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Retry-After";
 
@@ -79,9 +83,7 @@ public class RetryAfter extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static RetryAfter of(String value) {
-		if (value == null)
-			return null;
-		return new RetryAfter(value);
+		return value == null ? null : new RetryAfter(value);
 	}
 
 	/**
@@ -93,9 +95,7 @@ public class RetryAfter extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static RetryAfter of(ZonedDateTime value) {
-		if (value == null)
-			return null;
-		return new RetryAfter(value);
+		return value == null ? null : new RetryAfter(value);
 	}
 
 	/**
@@ -107,9 +107,7 @@ public class RetryAfter extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static RetryAfter of(Integer value) {
-		if (value == null)
-			return null;
-		return new RetryAfter(value);
+		return value == null ? null : new RetryAfter(value);
 	}
 
 	/**
@@ -125,10 +123,12 @@ public class RetryAfter extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static RetryAfter of(Supplier<?> value) {
-		if (value == null)
-			return null;
-		return new RetryAfter(value);
+		return value == null ? null : new RetryAfter(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Integer value;
 	private final Supplier<?> supplier;

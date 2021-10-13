@@ -38,6 +38,10 @@ import org.apache.juneau.http.annotation.*;
 @Header(type="integer",format="int64")
 public class BasicLongHeader extends BasicHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -51,9 +55,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicLongHeader of(String name, String value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicLongHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicLongHeader(name, value);
 	}
 
 	/**
@@ -67,9 +69,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicLongHeader of(String name, Long value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicLongHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicLongHeader(name, value);
 	}
 
 	/**
@@ -85,10 +85,12 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicLongHeader of(String name, Supplier<Long> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicLongHeader(name, value);
+		return value == null || isEmpty(name) ? null : new BasicLongHeader(name, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Long value;
 	private final Supplier<Long> supplier;

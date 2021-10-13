@@ -61,6 +61,10 @@ import org.apache.juneau.http.annotation.*;
 @Header("Max-Forwards")
 public class MaxForwards extends BasicIntegerHeader {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Max-Forwards";
 
@@ -74,9 +78,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static MaxForwards of(String value) {
-		if (value == null)
-			return null;
-		return new MaxForwards(value);
+		return value == null ? null : new MaxForwards(value);
 	}
 
 	/**
@@ -88,9 +90,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static MaxForwards of(Integer value) {
-		if (value == null)
-			return null;
-		return new MaxForwards(value);
+		return value == null ? null : new MaxForwards(value);
 	}
 
 	/**
@@ -105,10 +105,12 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static MaxForwards of(Supplier<Integer> value) {
-		if (value == null)
-			return null;
-		return new MaxForwards(value);
+		return value == null ? null : new MaxForwards(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

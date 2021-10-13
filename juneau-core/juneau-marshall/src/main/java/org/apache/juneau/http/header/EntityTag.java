@@ -33,6 +33,10 @@ import static org.apache.juneau.internal.ObjectUtils.*;
  */
 public class EntityTag {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final String value;
 	private final boolean isWeak, isAny;
 
@@ -45,8 +49,12 @@ public class EntityTag {
 	 */
 	public static EntityTag of(Object value) {
 		Object o = unwrap(value);
-		return (o == null ? null : new EntityTag(o.toString()));
+		return o == null ? null : new EntityTag(o.toString());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
