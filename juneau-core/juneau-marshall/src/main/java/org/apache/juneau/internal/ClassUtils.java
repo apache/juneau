@@ -26,19 +26,6 @@ import org.apache.juneau.reflect.*;
 public final class ClassUtils {
 
 	/**
-	 * Given the specified list of objects, return readable names for the class types of the objects.
-	 *
-	 * @param o The objects.
-	 * @return An array of readable class type strings.
-	 */
-	public static OList getFullClassNames(Object[] o) {
-		OList l = new OList();
-		for (int i = 0; i < o.length; i++)
-			l.add(o[i] == null ? "null" : ClassInfo.of((o[i].getClass())).getFullName());
-		return l;
-	}
-
-	/**
 	 * Returns the class types for the specified arguments.
 	 *
 	 * @param args The objects we're getting the classes of.
@@ -198,19 +185,7 @@ public final class ClassUtils {
 		return params;
 	}
 
-	/**
-	 * Matches arguments to a list of parameter types.
-	 *
-	 * <p>
-	 * Extra parameters are ignored.
-	 * <br>Missing parameters are left null.
-	 *
-	 * @param paramTypes The parameter types.
-	 * @param args The arguments to match to the parameter types.
-	 * @return
-	 * 	An array of parameters.
-	 */
-	public static Object[] getMatchingArgs(List<ClassInfo> paramTypes, Object... args) {
+	private static Object[] getMatchingArgs(List<ClassInfo> paramTypes, Object... args) {
 		Object[] params = new Object[paramTypes.size()];
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i).getWrapperInfoIfPrimitive();
@@ -222,45 +197,6 @@ public final class ClassUtils {
 			}
 		}
 		return params;
-	}
-
-	/**
-	 * Constructs a new instance of the specified class from the specified string.
-	 *
-	 * <p>
-	 * Class must be one of the following:
-	 * <ul>
-	 * 	<li>Have a public constructor that takes in a single <c>String</c> argument.
-	 * 	<li>Have a static <c>fromString(String)</c> (or related) method.
-	 * 	<li>Be an <c>enum</c>.
-	 * </ul>
-	 *
-	 * @param c The class.
-	 * @param s The string to create the instance from.
-	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
-	 */
-	public static <T> T fromString(Class<T> c, String s) {
-		Mutater<String,T> t = Mutaters.get(String.class, c);
-		return t == null ? null : t.mutate(s);
-	}
-
-	/**
-	 * Converts an object to a string.
-	 *
-	 * <p>
-	 * Normally, this is just going to call <c>toString()</c> on the object.
-	 * However, the {@link Locale} and {@link TimeZone} objects are treated special so that the returned value
-	 * works with the {@link #fromString(Class, String)} method.
-	 *
-	 * @param o The object to convert to a string.
-	 * @return The stringified object, or <jk>null</jk> if the object was <jk>null</jk>.
-	 */
-	@SuppressWarnings({ "unchecked" })
-	public static String toString(Object o) {
-		if (o == null)
-			return null;
-		Mutater<Object,String> t = (Mutater<Object,String>)Mutaters.get(o.getClass(), String.class);
-		return t == null ? o.toString() : t.mutate(o);
 	}
 
 	/**
@@ -330,21 +266,6 @@ public final class ClassUtils {
 			return (Class<?>)pt.getRawType();
 		}
 		return null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is not <jk>null</jk> and isn't abstract or an interface.
-	 *
-	 * @param c The class to check.
-	 * @return <jk>true</jk> if this class is not <jk>null</jk> and isn't abstract or an interface.
-	 */
-	public static boolean isConcrete(Class<?> c) {
-		if (c == null)
-			return false;
-		ClassInfo ci = ClassInfo.of(c);
-		if (ci.isAbstract())
-			return false;
-		return true;
 	}
 
 	/**

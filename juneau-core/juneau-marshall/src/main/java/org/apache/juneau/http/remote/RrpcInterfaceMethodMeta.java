@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Contains the meta-data about a Java method on a remote class.
@@ -41,8 +41,31 @@ public class RrpcInterfaceMethodMeta {
 	 */
 	public RrpcInterfaceMethodMeta(final String restUrl, Method m) {
 		this.method = m;
-		this.path =  m.getName() + '/' + HttpUtils.getMethodArgsSignature(m, true);
+		this.path =  m.getName() + '/' + getMethodArgsSignature(m);
 		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
+	}
+
+	/**
+	 * Given a Java method, returns the arguments signature.
+	 *
+	 * @param m The Java method.
+	 * @param full Whether fully-qualified names should be used for arguments.
+	 * @return The arguments signature for the specified method.
+	 */
+	private static String getMethodArgsSignature(Method m) {
+		StringBuilder sb = new StringBuilder(128);
+		Class<?>[] pt = m.getParameterTypes();
+		if (pt.length == 0)
+			return "";
+		sb.append('(');
+		for (int i = 0; i < pt.length; i++) {
+			ClassInfo pti = ClassInfo.of(pt[i]);
+			if (i > 0)
+				sb.append(',');
+			pti.appendFullName(sb);
+		}
+		sb.append(')');
+		return sb.toString();
 	}
 
 	/**

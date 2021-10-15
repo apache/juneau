@@ -46,7 +46,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public final class Config extends Context implements ConfigEventListener, Writable {
+public final class Config extends Context implements ConfigEventListener {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -1806,7 +1806,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to send contents to the writer.
 	 */
-	@Override /* Writable */
 	public Writer writeTo(Writer w) throws IOException {
 		return configMap.writeTo(w);
 	}
@@ -1919,11 +1918,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public synchronized void onConfigChange(ConfigEvents events) {
 		for (ConfigEventListener l : listeners)
 			l.onConfigChange(events);
-	}
-
-	@Override /* Writable */
-	public String getMediaType() {
-		return "text/plain";
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

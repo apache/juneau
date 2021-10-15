@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import java.util.*;
-
 /**
  * Identifies how to add elements to a list.
  * {@reviewed}
@@ -38,34 +36,5 @@ public enum ListOperation {
 	/**
 	 * Elements should be added as default values that are added to the list if they're not already set.
 	 */
-	DEFAULT,
-
-	/**
-	 * Don't add the value if it's <jk>null</jk> or an empty string.
-	 */
-	@Deprecated
-	SKIP_IF_EMPTY;
-
-	/**
-	 * Default flags.
-	 */
-	@Deprecated
-	public static final EnumSet<ListOperation> DEFAULT_FLAGS = EnumSet.of(APPEND);
-
-	/**
-	 * Default skip-if-empty flags.
-	 */
-	@Deprecated
-	public static final EnumSet<ListOperation> SKIP_IF_EMPTY_FLAGS = EnumSet.of(APPEND, SKIP_IF_EMPTY);
-
-	/**
-	 * Returns {@link #DEFAULT_FLAGS} if the enum set is <jk>null</jk> or empty.
-	 *
-	 * @param s The set to check.
-	 * @return Either the same set or {@link #DEFAULT_FLAGS}.  Never <jk>null</jk>.
-	 */
-	@Deprecated
-	public static EnumSet<ListOperation> orDefault(EnumSet<ListOperation> s) {
-		return s == null || s.isEmpty() ? DEFAULT_FLAGS : s;
-	}
+	DEFAULT;
 }

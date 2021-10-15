@@ -13,8 +13,8 @@
 package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link SimplePartParser}.
@@ -27,6 +27,6 @@ public class SimplePartParserSession extends BaseHttpPartParserSession {
 
 	@Override /* HttpPartParserSession */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return ClassUtils.fromString(toType.getInnerClass(), in);
+		return Mutaters.fromString(toType.getInnerClass(), in);
 	}
 }

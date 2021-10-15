@@ -27,17 +27,6 @@ import org.apache.juneau.utils.*;
 public class ObjectUtils {
 
 	/**
-	 * Returns the enum names for the specified enum class.
-	 *
-	 * @param c The enum class.
-	 * @return A modifiable list of all names for that class.
-	 */
-	@SuppressWarnings("unchecked")
-	public static Enum<?>[] getEnumConstants(Class<?> c) {
-		return ((Class<Enum<?>>)c).getEnumConstants();
-	}
-
-	/**
 	 * If the specified object is an instance of the specified class, casts it to that type.
 	 *
 	 * @param o The object to cast.
@@ -48,33 +37,6 @@ public class ObjectUtils {
 	public static <T> T castOrNull(Object o, Class<T> c) {
 		if (c.isInstance(o))
 			return (T)o;
-		return null;
-	}
-
-	/**
-	 * Returns the first non-zero value in the list of ints.
-	 *
-	 * @param ints The ints to check.
-	 * @return The first non-zero value, or <c>0</c> if they were all zero.
-	 */
-	public static int firstNonZero(int...ints) {
-		for (int i : ints)
-			if (i != 0)
-				return i;
-		return 0;
-	}
-
-	/**
-	 * Returns the first non-empty value in the list of objects.
-	 *
-	 * @param o The objects to check.
-	 * @return The first object whose call to {@link ObjectUtils#isEmpty(Object)} returns <jk>false</jk>, otherwise <jk>null</jk>.
-	 */
-	@SafeVarargs
-	public static <T> T firstNonEmpty(T...o) {
-		for (T oo : o)
-			if (! ObjectUtils.isEmpty(oo))
-				return oo;
 		return null;
 	}
 
@@ -191,50 +153,8 @@ public class ObjectUtils {
 		return ! eq(o1, o2);
 	}
 
-	/**
-	 * Calculates the hashcode for the specified object.
-	 *
-	 * <p>
-	 * Unlike just calling {@link Object#hashCode()}, this method calculates hashsums of arrays by using the contents
-	 * of the array instead of the hashsum of the array itself.
-	 *
-	 * @param o The object to calculate a hashsum on.
-	 * @return The hashsum.
-	 */
-	public static int hashCode(Object o) {
-		if (o == null)
-			return 0;
-		if (isArray(o)) {
-			int x = 1;
-			for (int i = 0; i < Array.getLength(o); i++)
-				x = 31 * x + hashCode(Array.get(o, i));
-			return x;
-		}
-		if (isCollection(o)) {
-			int x = 1;
-			for (Object o2 : (Collection<?>)o)
-				x = 31 * x + hashCode(o2);
-			return x;
-		}
-		if (isMap(o)) {
-			int x = 1;
-			for (Map.Entry<?,?> o2 : ((Map<?,?>)o).entrySet())
-				x = 31 * x + (hashCode(o2.getKey()) ^ hashCode(o2.getValue()));
-			return x;
-		}
-		return o.hashCode();
-	}
-
 	private static boolean isArray(Object o) {
 		return o != null && o.getClass().isArray();
-	}
-
-	private static boolean isCollection(Object o) {
-		return o != null && o.getClass().isAssignableFrom(Collection.class);
-	}
-
-	private static boolean isMap(Object o) {
-		return o != null && o.getClass().isAssignableFrom(Map.class);
 	}
 
 	/**
@@ -279,27 +199,6 @@ public class ObjectUtils {
 		if (o.getClass().isArray())
 			return (Array.getLength(o) == 0);
 		return o.toString().isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is not empty.
-	 *
-	 * <p>
-	 * Return <jk>false</jk> if the value is any of the following:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>An empty Collection
-	 * 	<li>An empty Map
-	 * 	<li>An empty array
-	 * 	<li>An empty CharSequence
-	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
-	 * </ul>
-	 *
-	 * @param o The object to test.
-	 * @return <jk>true</jk> if the specified object is empty.
-	 */
-	public static boolean isNotEmpty(Object o) {
-		return ! isEmpty(o);
 	}
 
 	/**

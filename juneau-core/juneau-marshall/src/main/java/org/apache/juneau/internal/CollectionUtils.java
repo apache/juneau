@@ -21,72 +21,6 @@ import java.util.*;
 public final class CollectionUtils {
 
 	/**
-	 * Returns an iterable over the specified enumeration.
-	 *
-	 * @param e The collection to iterate over.
-	 * @return An iterable over the enumeration.
-	 */
-	public static <E> Iterable<E> iterable(final Enumeration<E> e) {
-		if (e == null)
-			return null;
-		return new Iterable<E>() {
-			@Override
-			public Iterator<E> iterator() {
-				return new Iterator<E>() {
-					@Override
-					public boolean hasNext() {
-						return e.hasMoreElements();
-					}
-					@Override
-					public E next() {
-						return e.nextElement();
-					}
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
-	}
-
-	/**
-	 * Creates an iterator over a list of iterable objects.
-	 *
-	 * @param <E> The element type.
-	 * @param l The iterables to iterate over.
-	 * @return A new iterator.
-	 */
-	public static <E> Iterator<E> iterator(final List<Iterable<E>> l) {
-		return new Iterator<E>() {
-			Iterator<Iterable<E>> i1 = l.iterator();
-			Iterator<E> i2 = i1.hasNext() ? i1.next().iterator() : null;
-
-			@Override /* Iterator */
-			public boolean hasNext() {
-				while (i2 != null && ! i2.hasNext())
-					i2 = (i1.hasNext() ? i1.next().iterator() : null);
-				return (i2 != null);
-			}
-
-			@Override /* Iterator */
-			public E next() {
-				hasNext();
-				if (i2 == null)
-					throw new NoSuchElementException();
-				return i2.next();
-			}
-
-			@Override /* Iterator */
-			public void remove() {
-				if (i2 == null)
-					throw new NoSuchElementException();
-				i2.remove();
-			}
-		};
-	}
-
-	/**
 	 * Creates a new list from the specified collection.
 	 *
 	 * @param val The value to copy from.
@@ -200,16 +134,6 @@ public final class CollectionUtils {
 		return new SetBuilder<>(elementType, elementTypeArgs);
 	}
 
-
-	/**
-	 * Simple passthrough to {@link Collections#emptySet()}
-	 *
-	 * @return A new unmodifiable empty set.
-	 */
-	public static <T> Set<T> emptySet() {
-		return Collections.emptySet();
-	}
-
 	/**
 	 * Simple passthrough to {@link Collections#emptyList()}
 	 *
@@ -217,15 +141,6 @@ public final class CollectionUtils {
 	 */
 	public static <T> List<T> emptyList() {
 		return Collections.emptyList();
-	}
-
-	/**
-	 * Simple passthrough to {@link Collections#emptyMap()}
-	 *
-	 * @return A new unmodifiable empty set.
-	 */
-	public static <K,V> Map<K,V> emptyMap() {
-		return Collections.emptyMap();
 	}
 
 	/**

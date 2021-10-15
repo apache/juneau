@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
-
-import org.apache.juneau.reflect.*;
 
 /**
  * Annotation utilities.
@@ -45,18 +43,11 @@ public class AnnotationUtils {
 		if (! t1.equals(t2))
 			return false;
 
-		try {
-			for (Method m : getAnnotationMethods(t1)) {
-				Object v1 = m.invoke(a1);
-				Object v2 = m.invoke(a2);
-				if (! memberEquals(m.getReturnType(), v1, v2))
-					return false;
-			}
-		} catch (IllegalAccessException ex) {
+		boolean b= getAnnotationMethods(t1)
+			.anyMatch(x -> ! memberEquals(x.getReturnType(), safeSupplier(()->x.invoke(a1)), safeSupplier(()->x.invoke(a2))));
+		if (b)
 			return false;
-		} catch (InvocationTargetException ex) {
-			return false;
-		}
+
 		return true;
 	}
 
@@ -69,49 +60,16 @@ public class AnnotationUtils {
 	 * @throws IllegalStateException if an annotation method invocation returns {@code null}
 	 */
 	public static int hashCode(Annotation a) {
-		int result = 0;
-		Class<? extends Annotation> t = a.annotationType();
-
-		for (Method m : getAnnotationMethods(t)) {
-			try {
-				Object value = m.invoke(a);
-				if (value == null)
-					throw new IllegalStateException(String.format("Annotation method %s returned null", m));
-				result += hashMember(m.getName(), value);
-			} catch (Exception ex) {
-				throw runtimeException(ex);
-			}
-		}
-
-		return result;
+		return getAnnotationMethods(a.annotationType())
+			.mapToInt(x -> hashMember(x.getName(), safeSupplier(()->x.invoke(a))))
+			.sum();
 	}
 
-	/**
-	 * Returns the methods on the specified annotation type.
-	 *
-	 * @param type The annotation type.
-	 * @return The methods on the specified annotation type.
-	 */
-	public static List<Method> getAnnotationMethods(Class<? extends Annotation> type) {
+	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
 		return Arrays.asList(type.getDeclaredMethods())
 			.stream()
 			.filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
-			.collect(Collectors.toList())
 		;
-	}
-
-	/**
-	 * Returns the methods on the specified annotation type ordered by method name.
-	 *
-	 * @param type The annotation type.
-	 * @return The methods on the specified annotation typev.
-	 */
-	public static List<Method> getSortedAnnotationMethods(Class<? extends Annotation> type) {
-		return Arrays.asList(type.getDeclaredMethods())
-			.stream()
-			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
-			.sorted(Comparator.comparing(Method::getName))
-			.collect(Collectors.toList());
 	}
 
 	private static int hashMember(String name, Object value) {
@@ -184,23 +142,5 @@ public class AnnotationUtils {
 		if (componentType.equals(Boolean.TYPE))
 			return Arrays.hashCode((boolean[]) o);
 		return Arrays.hashCode((Object[]) o);
-	}
-
-	/**
-	 * If the annotation is an array of other annotations, returns the inner annotations.
-	 *
-	 * @param a The annotation to split if repeated.
-	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
-	 */
-	public static Annotation[] splitRepeated(Annotation a) {
-		try {
-			ClassInfo ci = ClassInfo.ofc(a.annotationType());
-			MethodInfo mi = ci.getRepeatedAnnotationMethod();
-			if (mi != null)
-				return mi.invoke(a);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new Annotation[]{a};
 	}
 }

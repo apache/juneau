@@ -27,8 +27,8 @@ import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -132,7 +132,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		} else {
 			t.child(tr(th("Index"),th("Type"),th("Value")));
 			for (int i = 0; i < types.length; i++) {
-				String type = ClassUtils.toString(types[i]);
+				String type = Mutaters.toString(types[i]);
 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));
 			}
 		}

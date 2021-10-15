@@ -713,7 +713,10 @@ public class BasicSwaggerProviderSession {
 
 	@SafeVarargs
 	private final <T> T firstNonEmpty(T...t) {
-		return ObjectUtils.firstNonEmpty(t);
+		for (T oo : t)
+			if (! ObjectUtils.isEmpty(oo))
+				return oo;
+		return null;
 	}
 
 	private OMap toMap(ExternalDocs a, String location, Object...locationArgs) throws ParseException {

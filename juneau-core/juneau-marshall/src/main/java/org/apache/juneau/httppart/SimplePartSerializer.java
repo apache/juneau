@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
  *
  * <p>
- * More precisely, uses the {@link ClassUtils#toString(Object)} method to stringify objects.
+ * More precisely, uses the {@link Mutaters#toString(Object)} method to stringify objects.
  */
 public class SimplePartSerializer extends BaseHttpPartSerializer {
 

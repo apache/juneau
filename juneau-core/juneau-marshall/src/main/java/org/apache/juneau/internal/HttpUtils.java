@@ -15,8 +15,6 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.reflect.*;
-
 /**
  * Utilities.
  */
@@ -73,31 +71,5 @@ public class HttpUtils {
 			}
 		}
 		return '/' + n;
-	}
-
-	/**
-	 * Given a Java method, returns the arguments signature.
-	 *
-	 * @param m The Java method.
-	 * @param full Whether fully-qualified names should be used for arguments.
-	 * @return The arguments signature for the specified method.
-	 */
-	public static String getMethodArgsSignature(Method m, boolean full) {
-		StringBuilder sb = new StringBuilder(128);
-		Class<?>[] pt = m.getParameterTypes();
-		if (pt.length == 0)
-			return "";
-		sb.append('(');
-		for (int i = 0; i < pt.length; i++) {
-			ClassInfo pti = ClassInfo.of(pt[i]);
-			if (i > 0)
-				sb.append(',');
-			if (full)
-				pti.appendFullName(sb);
-			else
-				pti.appendShortName(sb);
-		}
-		sb.append(')');
-		return sb.toString();
 	}
 }

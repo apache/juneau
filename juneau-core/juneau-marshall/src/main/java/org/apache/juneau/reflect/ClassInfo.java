@@ -1425,19 +1425,36 @@ public final class ClassInfo {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
-				for (Annotation a2 : AnnotationUtils.splitRepeated(a))
+				for (Annotation a2 : splitRepeated(a))
 					m.add(AnnotationInfo.of(p, a2));
 		for (ClassInfo ci : getInterfacesParentFirst())
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				for (Annotation a2 : AnnotationUtils.splitRepeated(a))
+				for (Annotation a2 : splitRepeated(a))
 					m.add(AnnotationInfo.of(ci, a2));
 		for (ClassInfo ci : getParentsParentFirst())
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				for (Annotation a2 : AnnotationUtils.splitRepeated(a))
+				for (Annotation a2 : splitRepeated(a))
 					m.add(AnnotationInfo.of(ci, a2));
 		return m;
 	}
 
+	/**
+	 * If the annotation is an array of other annotations, returns the inner annotations.
+	 *
+	 * @param a The annotation to split if repeated.
+	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
+	 */
+	private static Annotation[] splitRepeated(Annotation a) {
+		try {
+			ClassInfo ci = ClassInfo.ofc(a.annotationType());
+			MethodInfo mi = ci.getRepeatedAnnotationMethod();
+			if (mi != null)
+				return mi.invoke(a);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Annotation[]{a};
+	}
 
 	<T extends Annotation> T findAnnotation(Class<T> a, MetaProvider mp) {
 		if (a == null)

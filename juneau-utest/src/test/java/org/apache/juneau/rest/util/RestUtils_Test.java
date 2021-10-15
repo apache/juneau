@@ -171,22 +171,6 @@ public class RestUtils_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// trimTrailingSlashes(StringBuffer)
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void f01_testTrimTrailingSlashes2() throws Exception {
-		assertNull(trimTrailingSlashes((StringBuffer)null));
-		assertEquals("", trimTrailingSlashes(new StringBuffer("")).toString());
-		assertEquals("", trimTrailingSlashes(new StringBuffer("/")).toString());
-		assertEquals("", trimTrailingSlashes(new StringBuffer("//")).toString());
-		assertEquals("foo/bar", trimTrailingSlashes(new StringBuffer("foo/bar")).toString());
-		assertEquals("foo/bar", trimTrailingSlashes(new StringBuffer("foo/bar//")).toString());
-		assertEquals("/foo/bar", trimTrailingSlashes(new StringBuffer("/foo/bar//")).toString());
-		assertEquals("//foo/bar", trimTrailingSlashes(new StringBuffer("//foo/bar//")).toString());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Test URL-encoded strings parsed into plain-text values using UrlEncodingParser.parseIntoSimpleMap().
 	//------------------------------------------------------------------------------------------------------------------
 

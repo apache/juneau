@@ -76,32 +76,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Parses a number from the specified reader stream.
-	 *
-	 * @param r The reader to parse the string from.
-	 * @param type
-	 * 	The number type to created.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li> Integer
-	 * 		<li> Double
-	 * 		<li> Float
-	 * 		<li> Long
-	 * 		<li> Short
-	 * 		<li> Byte
-	 * 		<li> BigInteger
-	 * 		<li> BigDecimal
-	 * 	</ul>
-	 * 	If <jk>null</jk>, uses the best guess.
-	 * @return The parsed number.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static Number parseNumber(ParserReader r, Class<? extends Number> type) throws ParseException, IOException {
-		return parseNumber(parseNumberString(r), type);
-	}
-
-	/**
 	 * Reads a numeric string from the specified reader.
 	 *
 	 * @param r The reader to read form.
@@ -344,20 +318,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Convenience method for getting a stack trace as a string.
-	 *
-	 * @param t The throwable to get the stack trace from.
-	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
-	 */
-	public static String getStackTrace(Throwable t) {
-		StringWriter sw = new StringWriter();
-		try (PrintWriter pw = new PrintWriter(sw)) {
-			t.printStackTrace(pw);
-		}
-		return sw.toString();
-	}
-
-	/**
 	 * Join the specified tokens into a delimited string.
 	 *
 	 * @param tokens The tokens to join.
@@ -371,25 +331,6 @@ public final class StringUtils {
 		for (int i = 0; i < tokens.length; i++) {
 			if (i > 0)
 				sb.append(separator);
-			sb.append(tokens[i]);
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(int[] tokens, String d) {
-		if (tokens == null)
-			return null;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < tokens.length; i++) {
-			if (i > 0)
-				sb.append(d);
 			sb.append(tokens[i]);
 		}
 		return sb.toString();
@@ -474,19 +415,6 @@ public final class StringUtils {
 		return join(tokens, d, new StringBuilder()).toString();
 	}
 
-	/**
-	 * Same as {@link #join(Object[], char)} except escapes the delimiter character if found in the tokens.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String joine(Object[] tokens, char d) {
-		if (tokens == null)
-			return null;
-		return joine(tokens, d, new StringBuilder()).toString();
-	}
-
 	private static AsciiSet getEscapeSet(char c) {
 		AsciiSet s = ESCAPE_SETS.get(c);
 		if (s == null) {
@@ -512,26 +440,6 @@ public final class StringUtils {
 			if (i > 0)
 				sb.append(d);
 			sb.append(tokens[i]);
-		}
-		return sb;
-	}
-
-	/**
-	 * Same as {@link #join(Object[], char, StringBuilder)} but escapes the delimiter character if found in the tokens.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <c>sb</c>.
-	 */
-	public static StringBuilder joine(Object[] tokens, char d, StringBuilder sb) {
-		if (tokens == null)
-			return sb;
-		AsciiSet as = getEscapeSet(d);
-		for (int i = 0; i < tokens.length; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(escapeChars(stringify(tokens[i]), as));
 		}
 		return sb;
 	}
@@ -620,16 +528,6 @@ public final class StringUtils {
 	 * @return A string with the specified tokens contatenated with newlines.
 	 */
 	public static String joinnl(Object[] tokens) {
-		return join(tokens, '\n');
-	}
-
-	/**
-	 * Joins tokens with newlines.
-	 *
-	 * @param tokens The tokens to concatenate.
-	 * @return A string with the specified tokens contatenated with newlines.
-	 */
-	public static String joinnl(List<?> tokens) {
 		return join(tokens, '\n');
 	}
 
@@ -1475,7 +1373,7 @@ public final class StringUtils {
 	 * @param numchars The number of characters in the generated UUID.
 	 * @return A new random UUID.
 	 */
-	public static String generateUUID(int numchars) {
+	public static String random(int numchars) {
 		Random r = new Random();
 		StringBuilder sb = new StringBuilder(numchars);
 		for (int i = 0; i < numchars; i++) {
@@ -1485,16 +1383,6 @@ public final class StringUtils {
 			sb.append((char)c);
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * Shortcut for calling generateUUID(int).
-	 *
-	 * @param numchars The number of characters in the generated UUID.
-	 * @return A new random UUID.
-	 */
-	public static String random(int numchars) {
-		return generateUUID(numchars);
 	}
 
 	/**
@@ -1579,36 +1467,12 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Converts the specified object to an ISO8601 date string.
-	 *
-	 * @param d The object to convert.
-	 * @return The converted object.
-	 */
-	public static String toIsoDate(Date d) {
-		Calendar c = new GregorianCalendar();
-		c.setTime(d);
-		return DatatypeConverter.printDate(c);
-	}
-
-	/**
 	 * Converts the specified object to an ISO8601 date-time string.
 	 *
 	 * @param c The object to convert.
 	 * @return The converted object.
 	 */
 	public static String toIsoDateTime(Calendar c) {
-		return DatatypeConverter.printDateTime(c);
-	}
-
-	/**
-	 * Converts the specified object to an ISO8601 date-time string.
-	 *
-	 * @param d The object to convert.
-	 * @return The converted object.
-	 */
-	public static String toIsoDateTime(Date d) {
-		Calendar c = new GregorianCalendar();
-		c.setTime(d);
 		return DatatypeConverter.printDateTime(c);
 	}
 
@@ -1686,43 +1550,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified path string is prefixed with the specified prefix.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	pathStartsWith(<js>"foo"</js>, <js>"foo"</js>);  <jc>// true</jc>
-	 * 	pathStartsWith(<js>"foo/bar"</js>, <js>"foo"</js>);  <jc>// true</jc>
-	 * 	pathStartsWith(<js>"foo2"</js>, <js>"foo"</js>);  <jc>// false</jc>
-	 * 	pathStartsWith(<js>"foo2"</js>, <js>""</js>);  <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param path The path to check.
-	 * @param pathPrefix The prefix.
-	 * @return <jk>true</jk> if the specified path string is prefixed with the specified prefix.
-	 */
-	public static boolean pathStartsWith(String path, String pathPrefix) {
-		if (path == null || pathPrefix == null)
-			return false;
-		if (path.startsWith(pathPrefix))
-			return path.length() == pathPrefix.length() || path.charAt(pathPrefix.length()) == '/';
-		return false;
-	}
-
-	/**
-	 * Same as {@link #pathStartsWith(String, String)} but returns <jk>true</jk> if at least one prefix matches.
-	 *
-	 * @param path The path to check.
-	 * @param pathPrefixes The prefixes.
-	 * @return <jk>true</jk> if the specified path string is prefixed with any of the specified prefixes.
-	 */
-	public static boolean pathStartsWith(String path, String[] pathPrefixes) {
-		for (String p : pathPrefixes)
-			if (pathStartsWith(path, p))
-				return true;
-		return false;
-	}
-
-	/**
 	 * Replaces <js>"\\uXXXX"</js> character sequences with their unicode characters.
 	 *
 	 * @param s The string to replace unicode sequences in.
@@ -1754,54 +1581,6 @@ public final class StringUtils {
 		for (char cc : toHex4(c))
 			sb.append(cc);
 		return sb.toString();
-	}
-
-	/**
-	 * Returns the specified field in a delimited string without splitting the string.
-	 *
-	 * <p>
-	 * Equivalent to the following:
-	 * <p class='bcode w800'>
-	 * 	String in = <js>"0,1,2"</js>;
-	 * 	String[] parts = in.split(<js>","</js>);
-	 * 	String p1 = (parts.<jk>length</jk> > 1 ? parts[1] : <js>""</js>);
-	 * </p>
-	 *
-	 * @param fieldNum The field number.  Zero-indexed.
-	 * @param s The input string.
-	 * @param delim The delimiter character.
-	 * @return The field entry in the string, or a blank string if it doesn't exist or the string is null.
-	 */
-	public static String getField(int fieldNum, String s, char delim) {
-		return getField(fieldNum, s, delim, "");
-	}
-
-	/**
-	 * Same as {@link #getField(int, String, char)} except allows you to specify the default value.
-	 *
-	 * @param fieldNum The field number.  Zero-indexed.
-	 * @param s The input string.
-	 * @param delim The delimiter character.
-	 * @param def The default value if the field does not exist.
-	 * @return The field entry in the string, or the default value if it doesn't exist or the string is null.
-	 */
-	public static String getField(int fieldNum, String s, char delim, String def) {
-		if (s == null || fieldNum < 0)
-			return def;
-		int start = 0;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == delim) {
-				fieldNum--;
-				if (fieldNum == 0)
-					start = i+1;
-			}
-			if (fieldNum < 0)
-				return s.substring(start, i);
-		}
-		if (start == 0)
-			return def;
-		return s.substring(start);
 	}
 
 	/**
@@ -1840,23 +1619,6 @@ public final class StringUtils {
 		PRIMITIVE_ARRAY_STRINGIFIERS.put(int[].class, x -> Arrays.toString((int[])x));
 		PRIMITIVE_ARRAY_STRINGIFIERS.put(long[].class, x -> Arrays.toString((long[])x));
 		PRIMITIVE_ARRAY_STRINGIFIERS.put(short[].class, x -> Arrays.toString((short[])x));
-	}
-
-	/**
-	 * Converts an array of objects to an array of strings.
-	 *
-	 * @param o The array of objects to convert to strings.
-	 * @return A new array of objects converted to strings.
-	 */
-	public static String[] stringifyAll(Object...o) {
-		if (o == null)
-			return null;
-		if (o instanceof String[])
-			return (String[])o;
-		String[] s = new String[o.length];
-		for (int i = 0; i < o.length; i++)
-			s[i] = stringify(o[i]);
-		return s;
 	}
 
 	/**
@@ -2069,39 +1831,11 @@ public final class StringUtils {
 		return s;
 	}
 
-	/**
-	 * Trims <js>'/'</js> characters from the end of the specified string.
-	 *
-	 * @param s The string to trim.
-	 * @return The same string buffer.
-	 */
-	public static StringBuffer trimTrailingSlashes(StringBuffer s) {
-		if (s == null)
-			return null;
-		while (s.length() > 0 && s.charAt(s.length()-1) == '/')
-			s.setLength(s.length()-1);
-		return s;
-	}
-
-	/**
-	 * Shortcut for calling <code>URLEncoder.<jsm>encode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
-	 *
-	 * @param o The object to encode.
-	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
-	 */
-	public static String urlEncode(Object o) {
-		try {
-			if (o != null)
-				return URLEncoder.encode(o.toString(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {}
-		return null;
-	}
-
 	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS =
 		AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.*/()").build();
 
 	/**
-	 * Similar to {@link #urlEncode(Object)} but doesn't encode <js>"/"</js> characters.
+	 * Similar to {@link URLEncoder#encode(String, String)} but doesn't encode <js>"/"</js> characters.
 	 *
 	 * @param o The object to encode.
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
@@ -2243,27 +1977,6 @@ public final class StringUtils {
 			s = sb.toString();
 		}
 		return s;
-	}
-
-	/**
-	 * Splits a string into equally-sized parts.
-	 *
-	 * @param s The string to split.
-	 * @param size The token sizes.
-	 * @return The tokens, or <jk>null</jk> if the input was <jk>null</jk>.
-	 */
-	public static List<String> splitEqually(String s, int size) {
-		if (s == null)
-			return null;
-		if (size <= 0)
-			return Collections.singletonList(s);
-
-		List<String> l = new ArrayList<>((s.length() + size - 1) / size);
-
-		for (int i = 0; i < s.length(); i += size)
-			l.add(s.substring(i, Math.min(s.length(), i + size)));
-
-		return l;
 	}
 
 	/**
@@ -2853,16 +2566,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Null-safe {@link String#toLowerCase()}.
-	 *
-	 * @param s The string to convert to lower case.
-	 * @return The string converted to lower case, or <jk>null</jk> if the string was null.
-	 */
-	public static String toLowerCase(String s) {
-		return s == null ? null : s.toLowerCase();
-	}
-
-	/**
 	 * Parses a duration string.
 	 *
 	 * <p>
@@ -2924,48 +2627,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Replaces tokens in a string with a different token.
-	 *
-	 * <p>
-	 * replace("A and B and C", "and", "or") -> "A or B or C"
-	 * replace("andandand", "and", "or") -> "ororor"
-	 * replace(null, "and", "or") -> null
-	 * replace("andandand", null, "or") -> "andandand"
-	 * replace("andandand", "", "or") -> "andandand"
-	 * replace("A and B and C", "and", null) -> "A  B  C"
-	 *
-	 * @param s The string to replace characters in.
-	 * @param from The character to replace.
-	 * @param to The character to replace with.
-	 * @param ignoreEscapedChars Specify 'true' if escaped 'from' characters should be ignored.
-	 * @return The string with characters replaced.
-	 */
-	public static String replaceChars(String s, char from, char to, boolean ignoreEscapedChars) {
-		if (s == null)
-			return null;
-
-		if (s.indexOf(from) == -1)
-			return s;
-
-		char[] sArray = s.toCharArray();
-
-		int escapeCount = 0;
-		int singleQuoteCount = 0;
-		int doubleQuoteCount = 0;
-		for (int i = 0; i < sArray.length; i++) {
-			char c = sArray[i];
-			if (c == '\\' && ignoreEscapedChars)
-				escapeCount++;
-			else if (escapeCount % 2 == 0) {
-				if (c == from && singleQuoteCount % 2 == 0 && doubleQuoteCount % 2 == 0)
-				sArray[i] = to;
-			}
-			if (sArray[i] != '\\') escapeCount = 0;
-		}
-		return new String(sArray);
-	}
-
-	/**
 	 * Strips invalid characters such as CTRL characters from a string meant to be encoded
 	 * as an HTTP header value.
 	 *
@@ -3004,19 +2665,6 @@ public final class StringUtils {
 		if (in == null || in.length() <= length || in.length() <= 3)
 			return in;
 		return in.substring(0, length-3) + "...";
-	}
-
-	/**
-	 * Truncates a string.
-	 *
-	 * @param in The input string.
-	 * @param length The max length of the resulting string.
-	 * @return The truncated string.
-	 */
-	public static String truncate(String in, int length) {
-		if (in == null || in.length() <= length)
-			return in;
-		return in.substring(0, length);
 	}
 
 	/**

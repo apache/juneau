@@ -49,71 +49,12 @@ public final class DateUtils {
 	 * Date format pattern used to parse HTTP date headers in ANSI C <c>asctime()</c> format.
 	 */
 	public static final String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
-	private static final String[] DEFAULT_PATTERNS = new String[] { PATTERN_RFC1123, PATTERN_RFC1036, PATTERN_ASCTIME };
-	private static final Date DEFAULT_TWO_DIGIT_YEAR_START;
 	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 	static {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTimeZone(GMT);
 		calendar.set(2000, Calendar.JANUARY, 1, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-		DEFAULT_TWO_DIGIT_YEAR_START = calendar.getTime();
-	}
-
-	/**
-	 * Parses a date value.
-	 *
-	 * <p>
-	 * The formats used for parsing the date value are retrieved from the default http params.
-	 *
-	 * @param dateValue the date value to parse
-	 * @return the parsed date or null if input could not be parsed
-	 */
-	public static Date parseDate(final String dateValue) {
-		return parseDate(dateValue, null, null);
-	}
-
-	/**
-	 * Parses the date value using the given date formats.
-	 *
-	 * @param dateValue the date value to parse
-	 * @param dateFormats the date formats to use
-	 * @return the parsed date or null if input could not be parsed
-	 */
-	public static Date parseDate(final String dateValue, final String[] dateFormats) {
-		return parseDate(dateValue, dateFormats, null);
-	}
-
-	/**
-	 * Parses the date value using the given date formats.
-	 *
-	 * @param dateValue the date value to parse
-	 * @param dateFormats the date formats to use
-	 * @param startDate
-	 * 	During parsing, two digit years will be placed in the range <c>startDate</c> to
-	 * 	<c>startDate + 100 years</c>. This value may be <c>null</c>. When
-	 * 	<c>null</c> is given as a parameter, year <c>2000</c> will be used.
-	 * @return the parsed date or null if input could not be parsed
-	 */
-	public static Date parseDate(final String dateValue, final String[] dateFormats, final Date startDate) {
-		final String[] localDateFormats = dateFormats != null ? dateFormats : DEFAULT_PATTERNS;
-		final Date localStartDate = startDate != null ? startDate : DEFAULT_TWO_DIGIT_YEAR_START;
-		String v = dateValue;
-		// trim single quotes around date if present
-		// see issue #5279
-		if (v.length() > 1 && v.startsWith("'") && v.endsWith("'")) {
-			v = v.substring(1, v.length() - 1);
-		}
-		for (final String dateFormat : localDateFormats) {
-			final SimpleDateFormat dateParser = DateFormatHolder.formatFor(dateFormat);
-			dateParser.set2DigitYearStart(localStartDate);
-			final ParsePosition pos = new ParsePosition(0);
-			final Date result = dateParser.parse(v, pos);
-			if (pos.getIndex() != 0) {
-				return result;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -126,29 +67,6 @@ public final class DateUtils {
 		if (isEmpty(s))
 			return null;
 		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
-	}
-
-	/**
-	 * Parses an ISO8601 string and converts it to a {@link Date}.
-	 *
-	 * @param s The string to parse.
-	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
-	 */
-	public static Date parseISO8601(String s) {
-		if (isEmpty(s))
-			return null;
-		return DatatypeConverter.parseDateTime(toValidISO8601DT(s)).getTime();
-	}
-
-	/**
-	 * Formats the given date according to the RFC 1123 pattern.
-	 *
-	 * @param date The date to format.
-	 * @return An RFC 1123 formatted date string.
-	 * @see #PATTERN_RFC1123
-	 */
-	public static String formatDate(final Date date) {
-		return formatDate(date, PATTERN_RFC1123);
 	}
 
 	/**

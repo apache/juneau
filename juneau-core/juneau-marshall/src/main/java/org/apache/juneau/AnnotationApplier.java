@@ -28,6 +28,54 @@ import org.apache.juneau.svl.*;
 /**
  * Class used to add properties to a context builder (e.g. {@link BeanContext.Builder}) from an annotation (e.g. {@link BeanConfig}).
  *
+ * <p>
+ * Used by {@link Context.Builder#applyAnnotations(Class...)} and {@link Context.Builder#applyAnnotations(java.lang.reflect.Method...)} to apply
+ * annotations to context beans.
+ *
+ * <p>
+ * The following code shows the general design pattern.
+ *
+ * <p class 'bcode w800'>
+ * 	<jc>// The annotation applied to classes and methods.</jc>
+ * 	<ja>@Target</ja>({METHOD,TYPE})
+ * 	<ja>@Retention</ja>(<jsf>RUNTIME</jsf>)
+ * 	<ja>@ContextApply</ja>(BeanConfigAnnotationApplier.<jk>class</jk>)
+ * 	<jk>public</jk> <jk>@interface </jk>BeanConfig {
+ *
+ * 		String sortProperties() <jk>default</jk> <js>""</js>;
+ *
+ * 	}
+ *
+ * 	<jc>// The applier that applies the annotation to the bean context builder.</jc>
+ * 	<jk>public class</jk> BeanConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>BeanConfig</ja>,BeanContext.Builder&gt; {
+ *
+ *		<jc>// Required constructor. </jc>
+ * 		<jk>public</jk> Applier(VarResolverSession <jv>vr</jv>) {
+ * 			<jk>super</jk>(BeanConfig.<jk>class</jk>, BeanContext.Builder.<jk>class</jk>, <jv>vr</jv>);
+ * 		}
+ *
+ * 		<ja>@Override</ja>
+ * 		<jk>public void</jk> apply(AnnotationInfo&lt;BeanConfig&gt; <jv>annotationInfo</jv>, BeanContext.Builder <jv>builder</jv>) {
+ * 			<ja>BeanConfig</ja> <jv>beanConfig</jv> = <jv>annotationInfo</jv>.getAnnotation();
+ *
+ * 			String <jv>sortProperties</jv> = <jv>beanConfig</jv>.sortProperties();
+ * 			<jk>if</jk> (! <jv>sortProperties</jv>.isEmpty())
+ * 				<jv>builder</jv>.sortProperties(Boolean.<jsm>parseBoolean</jsm>(<jv>sortProperties</jv>));
+ * 		}
+ * 	}
+ *
+ *	<jc>// An annotated class.</jc>
+ * 	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
+ * 	<jk>public class</jk> AnnotatedClass {}
+ *
+ *	<jc>// Putting it together.</jc>
+ * 	<jk>public static void</jk> main(String[] <jv>args</jv>) {
+ *
+ *		<jc>// Create a JSON serializer with sorted properties.</jc>
+ * 		Serializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().applyAnnotations(AnnotatedClass.<jk>class</jk>).build();
+ * 	}
+ * </p>
+ *
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */

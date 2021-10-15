@@ -41,8 +41,7 @@ import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Core class of the Juneau architecture.
- * {@review}
+ * Bean context.
  *
  * <p class='w800'>
  * This class servers multiple purposes:
@@ -55,7 +54,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <p class='w800'>
- * All serializers and parsers extend from this context so that they can handle POJOs using a common framework.
+ * All serializers and parsers use this context so that they can handle POJOs using a common framework.
  *
  * <h5 class='topic'>Bean Contexts</h5>
  *

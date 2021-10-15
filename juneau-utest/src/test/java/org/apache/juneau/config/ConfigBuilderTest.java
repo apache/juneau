@@ -31,7 +31,7 @@ public class ConfigBuilderTest {
 
 	@BeforeClass
 	public static void setup() {
-		tempDir = new File(System.getProperty("java.io.tmpdir"), generateUUID(12));
+		tempDir = new File(System.getProperty("java.io.tmpdir"), random(12));
 		TEMP_DIR = tempDir.getAbsolutePath();
 	}
 

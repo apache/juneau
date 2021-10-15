@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import java.io.*;
+
 /**
  * Various utility methods for creating and working with throwables.
  */
@@ -58,6 +60,20 @@ public class ThrowableUtils {
 	@SuppressWarnings("javadoc")
 	@FunctionalInterface
 	public interface SupplierWithThrowable<T> {
-	    public T get() throws Throwable;
+		public T get() throws Throwable;
+	}
+
+	/**
+	 * Convenience method for getting a stack trace as a string.
+	 *
+	 * @param t The throwable to get the stack trace from.
+	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
+	 */
+	public static String getStackTrace(Throwable t) {
+		StringWriter sw = new StringWriter();
+		try (PrintWriter pw = new PrintWriter(sw)) {
+			t.printStackTrace(pw);
+		}
+		return sw.toString();
 	}
 }

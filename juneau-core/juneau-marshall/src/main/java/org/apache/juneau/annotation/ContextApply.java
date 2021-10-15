@@ -21,6 +21,8 @@ import org.apache.juneau.*;
 
 /**
  * Applied to Config annotations to identify the class used to push the values into a property store.
+ *
+ * @see AnnotationApplier
  */
 @Documented
 @Target({ANNOTATION_TYPE})

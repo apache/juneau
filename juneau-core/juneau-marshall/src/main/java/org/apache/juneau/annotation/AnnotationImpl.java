@@ -14,10 +14,12 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.AnnotationUtils.*;
 import static org.apache.juneau.collections.OMap.*;
+import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -88,8 +90,9 @@ public class AnnotationImpl implements Annotation {
 	 */
 	public OMap toMap() {
 		OMap om = create();
-		getSortedAnnotationMethods(annotationType())
-			.stream()
+		stream(annotationType().getDeclaredMethods())
+			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
+			.sorted(Comparator.comparing(Method::getName))
 			.forEach(x -> om.a(x.getName(), safeSupplier(()->x.invoke(this))));
 		return om;
 	}

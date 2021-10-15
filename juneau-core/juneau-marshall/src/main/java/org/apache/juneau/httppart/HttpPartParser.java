@@ -15,6 +15,7 @@ package org.apache.juneau.httppart;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs

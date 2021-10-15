@@ -10,78 +10,65 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.internal;
 
-import static java.util.Optional.*;
+import java.lang.reflect.*;
 
-import java.util.*;
+import org.apache.juneau.*;
 
 /**
- * Represents a holder for a bean or bean type.
- *
- * @param <T> The bean type.
+ * Encapsulate a bean setter method that may be a method or field.
  */
-public class BeanRef<T> {
-
-	private T value;
-	private Class<? extends T> type;
+public interface Setter {
 
 	/**
-	 * Creator.
+	 * Call the setter on the specified object.
 	 *
-	 * @param type The bean type.
-	 * @return A new object.
+	 * @param object The object to call the setter on
+	 * @param value The value to set.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public static <T> BeanRef<T> of(Class<T> type) {
-		return new BeanRef<>();
+	void set(Object object, Object value) throws ExecutableException;
+
+	/**
+	 * Field setter
+	 */
+	static class FieldSetter implements Setter {
+
+		private final Field f;
+
+		public FieldSetter(Field f) {
+			this.f = f;
+		}
+
+		@Override /* Setter */
+		public void set(Object object, Object value) throws ExecutableException {
+			try {
+				f.set(object, value);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ExecutableException(e);
+			}
+		}
 	}
 
 	/**
-	 * Sets the bean on this reference.
-	 *
-	 * @param value The bean.
-	 * @return This object (for method chaining).
+	 * Method setter
 	 */
-	public BeanRef<T> value(T value) {
-		this.value = value;
-		return this;
-	}
+	static class MethodSetter implements Setter {
 
-	/**
-	 * Sets the bean type on this reference.
-	 *
-	 * @param value The bean type.
-	 * @return This object (for method chaining).
-	 */
-	public BeanRef<T> type(Class<? extends T> value) {
-		this.type = value;
-		return this;
-	}
+		private final Method m;
 
-	/**
-	 * Returns the bean on this reference if the reference contains an instantiated bean.
-	 *
-	 * @return The bean on this reference if the reference contains an instantiated bean.
-	 */
-	public Optional<T> value() {
-		return ofNullable(value);
-	}
+		public MethodSetter(Method m) {
+			this.m = m;
+		}
 
-	/**
-	 * Returns the bean type on this reference if the reference contains a bean type.
-	 *
-	 * @return The bean type on this reference if the reference contains a bean type.
-	 */
-	public Optional<Class<? extends T>> type() {
-		return ofNullable(type);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if neither the value or type is specified on this reference.
-	 *
-	 * @return <jk>true</jk> if neither the value or type is specified on this reference.
-	 */
-	public boolean isEmpty() {
-		return type == null && value == null;
+		@Override /* Setter */
+		public void set(Object object, Object value) throws ExecutableException {
+			try {
+				m.invoke(object, value);
+			} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+				throw new ExecutableException(e);
+			}
+		}
 	}
 }

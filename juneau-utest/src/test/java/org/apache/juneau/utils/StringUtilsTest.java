@@ -17,10 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.math.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
-
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -149,23 +146,6 @@ public class StringUtilsTest {
 
 	@SuppressWarnings("serial")
 	private abstract static class BadNumber extends Number {}
-
-	//====================================================================================================
-	// parseNumber(ParserReader,Class)
-	//====================================================================================================
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-	public void testParseNumberFromReader() throws Exception {
-		ParserReader in;
-		Number n;
-
-		for (Class c : new Class[]{ Integer.class, Double.class, Float.class, Long.class, Short.class, Byte.class, BigInteger.class, BigDecimal.class, Number.class, AtomicInteger.class, AtomicLong.class}) {
-			in = new ParserReader(new ParserPipe("123'"));
-			n = parseNumber(in, c);
-			assertTrue(c.isInstance(n));
-			assertEquals(123, n.intValue());
-		}
-	}
 
 	//====================================================================================================
 	// test - Basic tests
@@ -434,19 +414,12 @@ public class StringUtilsTest {
 		assertEquals("1", join(new Object[]{1}, ","));
 		assertEquals("1,2", join(new Object[]{1,2}, ","));
 
-		assertNull(join((int[])null, ","));
-		assertEquals("1", join(new int[]{1}, ","));
-		assertEquals("1,2", join(new int[]{1,2}, ","));
-
 		assertNull(join((Collection<?>)null, ","));
 		assertEquals("1", join(Arrays.asList(new Integer[]{1}), ","));
 		assertEquals("1,2", join(Arrays.asList(new Integer[]{1,2}), ","));
 
 		assertNull(join((Object[])null, ','));
 		assertEquals("x,y,z", join(new Object[]{"x,y","z"}, ','));
-
-		assertNull(joine((Object[])null, ','));
-		assertEquals("x\\,y,z", joine(new Object[]{"x,y","z"}, ','));
 
 		assertNull(join((int[])null, ','));
 		assertEquals("1", join(new int[]{1}, ','));
@@ -615,7 +588,7 @@ public class StringUtilsTest {
 	@Test
 	public void testGenerateUUID() throws Exception {
 		for (int i = 0; i < 10; i++) {
-			String s = generateUUID(i);
+			String s = random(i);
 			assertEquals(i, s.length());
 			for (char c : s.toCharArray())
 				assertTrue(Character.isLowerCase(c) || Character.isDigit(c));
@@ -659,44 +632,6 @@ public class StringUtilsTest {
 		} finally {
 			TestUtils.unsetTimeZone();
 		}
-	}
-
-	//====================================================================================================
-	// pathStartsWith(String, String)
-	//====================================================================================================
-	@Test
-	public void testPathStartsWith() throws Exception {
-		assertTrue(pathStartsWith("foo", "foo"));
-		assertTrue(pathStartsWith("foo/bar", "foo"));
-		assertFalse(pathStartsWith("foo2/bar", "foo"));
-		assertFalse(pathStartsWith("foo2", "foo"));
-		assertFalse(pathStartsWith("foo2", ""));
-	}
-
-	//====================================================================================================
-	// getField(int, String, char)
-	//====================================================================================================
-	@Test
-	public void testGetField() {
-		String in = "0,1,2";
-		assertEquals("0", getField(0, in, ','));
-		assertEquals("1", getField(1, in, ','));
-		assertEquals("2", getField(2, in, ','));
-		assertEquals("", getField(3, in, ','));
-
-		in = ",1,,3,";
-		assertEquals("", getField(0, in, ','));
-		assertEquals("1", getField(1, in, ','));
-		assertEquals("", getField(2, in, ','));
-		assertEquals("3", getField(3, in, ','));
-		assertEquals("", getField(4, in, ','));
-		assertEquals("", getField(5, in, ','));
-
-		in = "";
-		assertEquals("", getField(0, in, ','));
-
-		in = null;
-		assertEquals("", getField(0, in, ','));
 	}
 
 	//====================================================================================================
@@ -796,19 +731,6 @@ public class StringUtilsTest {
 		assertEquals(0, lastNonWhitespaceChar(" "));
 		assertEquals(0, lastNonWhitespaceChar("\t"));
 		assertEquals(0, lastNonWhitespaceChar(null));
-	}
-
-	//====================================================================================================
-	// testSplitEqually(String,int)
-	//====================================================================================================
-	@Test
-	public void testSplitEqually() {
-		assertNull(null, splitEqually(null, 3));
-		assertEquals("", join(splitEqually("", 3), '|'));
-		assertEquals("a", join(splitEqually("a", 3), '|'));
-		assertEquals("ab", join(splitEqually("ab", 3), '|'));
-		assertEquals("abc", join(splitEqually("abc", 3), '|'));
-		assertEquals("abc|d", join(splitEqually("abcd", 3), '|'));
 	}
 
 	//====================================================================================================
