@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
@@ -86,8 +87,15 @@ public abstract class ReaderParser extends Parser {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public ReaderParser build() {
-			return (ReaderParser)super.build();
+		public abstract ReaderParser build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				fileCharset,
+				streamCharset
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

@@ -307,7 +307,7 @@ public class RestContext extends Context {
 			try {
 				return BeanCreator.of(RestContext.class).outer(resource.get()).store(beanStore()).builder(this).type(getType().orElse(RestContext.class)).run();
 			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				throw new InternalServerError(e, "Could not instantiate RestContext.");
 			}
 		}
 

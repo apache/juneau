@@ -105,6 +105,11 @@ public class MockReaderParser extends ReaderParser implements HttpPartParser {
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override
+		public MockReaderParser build() {
+			return build(MockReaderParser.class, null);
+		}
 	}
 
 	@Override

@@ -1100,7 +1100,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		@Override /* Context.Builder */
 		public RestClient build() {
-			return (RestClient)super.build();
+			return build(RestClient.class, null);
 		}
 
 		/**
@@ -1109,10 +1109,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param c The subtype to create.
 		 * @return A new client.
 		 */
-		@SuppressWarnings("unchecked")
 		public <T extends RestClient> T build(Class<T> c) {
 			type(c);
-			return (T)super.build();
+			return build(c, null);
 		}
 
 		//------------------------------------------------------------------------------------------------------------------

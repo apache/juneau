@@ -27,6 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
@@ -96,8 +97,19 @@ public abstract class WriterSerializer extends Serializer {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public WriterSerializer build() {
-			return (WriterSerializer)super.build();
+		public abstract WriterSerializer build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				fileCharset,
+				streamCharset,
+				maxIndent,
+				quoteChar,
+				quoteCharOverride,
+				useWhitespace
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

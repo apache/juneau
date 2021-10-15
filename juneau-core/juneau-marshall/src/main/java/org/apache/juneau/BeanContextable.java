@@ -27,6 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Context class for classes that use {@link BeanContext} objects.
@@ -84,8 +85,15 @@ public abstract class BeanContextable extends Context {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public BeanContextable build() {
-			return (BeanContextable)super.build();
+		public abstract BeanContextable build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				bcBuilder.hashKey(),
+				bc == null ? 0 : bc.hashKey
+			);
 		}
 
 		/**

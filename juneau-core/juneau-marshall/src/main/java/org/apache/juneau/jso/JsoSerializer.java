@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJOs to HTTP responses as Java Serialized Object {@link ObjectOutputStream ObjectOutputStreams}.
@@ -60,6 +61,8 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	@FluentSetters
 	public static class Builder extends OutputStreamSerializer.Builder {
 
+		private static final Cache<HashKey,JsoSerializer> CACHE = Cache.of(HashKey.class, JsoSerializer.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -94,7 +97,12 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 
 		@Override /* Context.Builder */
 		public JsoSerializer build() {
-			return (JsoSerializer)super.build();
+			return build(JsoSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

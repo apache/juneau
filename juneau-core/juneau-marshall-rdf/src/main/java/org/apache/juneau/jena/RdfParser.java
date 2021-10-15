@@ -24,10 +24,12 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.MediaType;
+import org.apache.juneau.internal.Cache;
 import org.apache.juneau.internal.FluentSetter;
 import org.apache.juneau.internal.FluentSetters;
 import org.apache.juneau.jena.annotation.Rdf;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.HashKey;
 import org.apache.juneau.xml.*;
 
 /**
@@ -76,6 +78,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 */
 	@FluentSetters
 	public static class Builder extends ReaderParser.Builder {
+
+		private static final Cache<HashKey,RdfParser> CACHE = Cache.of(HashKey.class, RdfParser.class).build();
 
 		private static final Namespace
 			DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
@@ -141,7 +145,21 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		@Override /* Context.Builder */
 		public RdfParser build() {
-			return (RdfParser)super.build();
+			return build(RdfParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				trimWhitespace,
+				looseCollections,
+				language,
+				collectionFormat,
+				juneauNs,
+				juneauBpNs,
+				jenaSettings
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

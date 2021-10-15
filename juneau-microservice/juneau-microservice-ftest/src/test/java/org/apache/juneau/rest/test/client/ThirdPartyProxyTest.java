@@ -2558,6 +2558,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			public Builder copy() {
 				return new Builder(this);
 			}
+
+			@Override
+			public DummyPartSerializer build() {
+				return new DummyPartSerializer(this);
+			}
 		}
 
 		@Override

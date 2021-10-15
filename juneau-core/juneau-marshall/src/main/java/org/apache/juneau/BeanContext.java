@@ -243,6 +243,7 @@ public class BeanContext extends Context {
 		 */
 		protected Builder() {
 			super();
+			type(BeanContext.class);
 			beanClassVisibility = env("BeanContext.beanClassVisibility", PUBLIC);
 			beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
 			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
@@ -357,13 +358,10 @@ public class BeanContext extends Context {
 
 		@Override /* Context.Builder */
 		public BeanContext build() {
-			BeanContext impl = impl(BeanContext.class);
-			if (impl != null)
-				return impl;
-			return CACHE.get(hashKey(), ()->new BeanContext(this));
+			return build(BeanContext.class, CACHE);
 		}
 
-		@Override
+		@Override /* Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -3467,6 +3465,7 @@ public class BeanContext extends Context {
 	final Class<? extends PropertyNamer> propertyNamer;
 	final List<Class<?>> beanDictionary, swaps, notBeanClasses;
 	final List<String> notBeanPackages;
+	final HashKey hashKey;
 
 	final Map<Class,ClassMeta> cmCache;
 
@@ -3489,6 +3488,8 @@ public class BeanContext extends Context {
 	 */
 	protected BeanContext(Builder builder) {
 		super(builder);
+
+		hashKey = builder.hashKey();
 
 		beanConstructorVisibility = builder.beanConstructorVisibility;
 		beanClassVisibility = builder.beanClassVisibility;

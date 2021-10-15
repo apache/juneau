@@ -126,15 +126,28 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 
 	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.
+	 * 
+	 * @param args the arguments used for the method call.
+	 * 	<br>Extra parameters are ignored.
+	 * 	<br>Missing parameters are set to null.
+	 * @return The object returned from the constructor.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public <T> T invokeFuzzy(Object...args) throws ExecutableException {
+		return invoke(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+	}
+
+	/**
+	 * Shortcut for calling the new-instance method on the underlying constructor.
 	 *
-	 * @param args the arguments used for the method call
+	 * @param args the arguments used for the method call.
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T invoke(Object...args) throws ExecutableException {
 		try {
-			return (T)c.newInstance(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+			return (T)c.newInstance(args);
 		} catch (InvocationTargetException e) {
 			throw new ExecutableException(e.getTargetException());
 		} catch (Exception e) {
@@ -153,7 +166,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
 	 */
-	public ConstructorInfo makeAccessible(Visibility v) {
+	public ConstructorInfo accessible(Visibility v) {
 		if (v.transform(c) == null)
 			return null;
 		return this;

@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
@@ -88,8 +89,17 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public BeanTraverseContext build() {
-			return (BeanTraverseContext)super.build();
+		public abstract BeanTraverseContext build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				detectRecursions,
+				ignoreRecursions,
+				initialDepth,
+				maxDepth
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

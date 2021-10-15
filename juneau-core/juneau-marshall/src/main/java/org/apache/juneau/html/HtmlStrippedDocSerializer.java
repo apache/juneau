@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -65,6 +66,8 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	@FluentSetters
 	public static class Builder extends HtmlSerializer.Builder {
 
+		private static final Cache<HashKey,HtmlStrippedDocSerializer> CACHE = Cache.of(HashKey.class, HtmlStrippedDocSerializer.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -100,7 +103,12 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlStrippedDocSerializer build() {
-			return (HtmlStrippedDocSerializer)super.build();
+			return build(HtmlStrippedDocSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

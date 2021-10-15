@@ -85,6 +85,11 @@ public class MockStreamSerializer extends OutputStreamSerializer {
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
+
+		@Override
+		public MockStreamSerializer build() {
+			return build(MockStreamSerializer.class, null);
+		}
 	}
 
 	@Override

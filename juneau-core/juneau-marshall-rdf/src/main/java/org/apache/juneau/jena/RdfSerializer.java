@@ -25,10 +25,12 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.MediaType;
+import org.apache.juneau.internal.Cache;
 import org.apache.juneau.internal.FluentSetter;
 import org.apache.juneau.internal.FluentSetters;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.HashKey;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -75,6 +77,8 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 */
 	@FluentSetters
 	public static class Builder extends WriterSerializer.Builder {
+
+		private static final Cache<HashKey,RdfSerializer> CACHE = Cache.of(HashKey.class, RdfSerializer.class).build();
 
 		private static final Namespace
 			DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
@@ -156,7 +160,26 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 		@Override /* Context.Builder */
 		public RdfSerializer build() {
-			return (RdfSerializer)super.build();
+			return build(RdfSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesRdf,
+				addLiteralTypes,
+				addRootProperty,
+				disableAutoDetectNamespaces,
+				disableUseXmlNamespaces,
+				looseCollections,
+				language,
+				collectionFormat,
+				juneauNs,
+				juneauBpNs,
+				namespaces,
+				jenaSettings
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

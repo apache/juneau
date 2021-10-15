@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parses URL-encoded text into POJO models.
@@ -73,6 +74,8 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	@FluentSetters
 	public static class Builder extends UonParser.Builder {
 
+		private static final Cache<HashKey,UrlEncodingParser> CACHE = Cache.of(HashKey.class, UrlEncodingParser.class).build();
+
 		boolean expandedParams;
 
 		/**
@@ -113,7 +116,15 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 
 		@Override /* Context.Builder */
 		public UrlEncodingParser build() {
-			return (UrlEncodingParser)super.build();
+			return build(UrlEncodingParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				expandedParams
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

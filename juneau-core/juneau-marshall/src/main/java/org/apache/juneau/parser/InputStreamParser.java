@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Parser} for byte-based parsers.
@@ -82,8 +83,14 @@ public abstract class InputStreamParser extends Parser {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public InputStreamParser build() {
-			return (InputStreamParser)super.build();
+		public abstract InputStreamParser build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				binaryFormat
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

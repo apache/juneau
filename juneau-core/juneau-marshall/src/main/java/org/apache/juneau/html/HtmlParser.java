@@ -21,6 +21,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -64,6 +65,8 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 	@FluentSetters
 	public static class Builder extends XmlParser.Builder {
 
+		private static final Cache<HashKey,HtmlParser> CACHE = Cache.of(HashKey.class, HtmlParser.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -98,7 +101,12 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public HtmlParser build() {
-			return (HtmlParser)super.build();
+			return build(HtmlParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

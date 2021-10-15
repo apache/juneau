@@ -28,6 +28,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
@@ -216,6 +217,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@FluentSetters
 	public static class Builder extends WriterSerializer.Builder {
 
+		private static final Cache<HashKey,UonSerializer> CACHE = Cache.of(HashKey.class, UonSerializer.class).build();
+
 		boolean addBeanTypesUon, encoding;
 		ParamFormat paramFormat;
 		Character quoteCharUon;
@@ -266,7 +269,18 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 
 		@Override /* Context.Builder */
 		public UonSerializer build() {
-			return (UonSerializer)super.build();
+			return build(UonSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesUon,
+				encoding,
+				paramFormat,
+				quoteCharUon
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

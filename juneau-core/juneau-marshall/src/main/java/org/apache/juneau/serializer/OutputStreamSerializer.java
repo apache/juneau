@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
@@ -74,8 +75,14 @@ public abstract class OutputStreamSerializer extends Serializer {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public OutputStreamSerializer build() {
-			return (OutputStreamSerializer)super.build();
+		public abstract OutputStreamSerializer build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				binaryFormat
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

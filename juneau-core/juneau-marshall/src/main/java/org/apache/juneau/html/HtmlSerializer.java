@@ -27,6 +27,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -198,6 +199,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	@FluentSetters
 	public static class Builder extends XmlSerializer.Builder {
 
+		private static final Cache<HashKey,HtmlSerializer> CACHE = Cache.of(HashKey.class, HtmlSerializer.class).build();
+
 		boolean addBeanTypesHtml, addKeyValueTableHeaders, disableDetectLabelParameters, disableDetectLinksInStrings;
 		String labelParameter;
 		AnchorText uriAnchorText;
@@ -254,7 +257,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public HtmlSerializer build() {
-			return (HtmlSerializer)super.build();
+			return build(HtmlSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesHtml,
+				addKeyValueTableHeaders,
+				disableDetectLabelParameters,
+				disableDetectLinksInStrings,
+				labelParameter,
+				uriAnchorText
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

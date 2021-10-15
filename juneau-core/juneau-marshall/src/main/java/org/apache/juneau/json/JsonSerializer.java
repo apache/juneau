@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to JSON.
@@ -161,6 +162,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	@FluentSetters
 	public static class Builder extends WriterSerializer.Builder {
 
+		private static final Cache<HashKey,JsonSerializer> CACHE = Cache.of(HashKey.class, JsonSerializer.class).build();
+
 		boolean addBeanTypesJson, escapeSolidus, simpleMode;
 
 		/**
@@ -207,7 +210,17 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 		@Override /* Context.Builder */
 		public JsonSerializer build() {
-			return (JsonSerializer)super.build();
+			return build(JsonSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesJson,
+				escapeSolidus,
+				simpleMode
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

@@ -31,6 +31,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Generates JSON-schema metadata about POJOs.
@@ -63,6 +64,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 */
 	@FluentSetters
 	public static class Builder extends BeanTraverseContext.Builder {
+
+		private static final Cache<HashKey,JsonSchemaGenerator> CACHE = Cache.of(HashKey.class, JsonSchemaGenerator.class).build();
 
 		final JsonSerializer.Builder jsonSerializerBuilder;
 		final JsonParser.Builder jsonParserBuilder;
@@ -138,7 +141,23 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 		@Override /* Context.Builder */
 		public JsonSchemaGenerator build() {
-			return (JsonSchemaGenerator)super.build();
+			return build(JsonSchemaGenerator.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				jsonSerializerBuilder.hashKey(),
+				jsonParserBuilder.hashKey(),
+				addDescriptionsTo,
+				addExamplesTo,
+				allowNestedDescriptions,
+				allowNestedExamples,
+				useBeanDefs,
+				beanDefMapper,
+				ignoreTypes
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

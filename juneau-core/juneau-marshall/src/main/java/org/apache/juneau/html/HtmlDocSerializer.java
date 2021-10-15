@@ -28,6 +28,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -97,6 +98,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	@FluentSetters
 	public static class Builder extends HtmlStrippedDocSerializer.Builder {
+
+		private static final Cache<HashKey,HtmlDocSerializer> CACHE = Cache.of(HashKey.class, HtmlDocSerializer.class).build();
 
 		List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;
 		AsideFloat asideFloat;
@@ -171,7 +174,28 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlDocSerializer build() {
-			return (HtmlDocSerializer)super.build();
+			return build(HtmlDocSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				aside,
+				footer,
+				head,
+				header,
+				nav,
+				navlinks,
+				script,
+				style,
+				stylesheet,
+				asideFloat,
+				noResultsMessage,
+				nowrap,
+				template,
+				widgets
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

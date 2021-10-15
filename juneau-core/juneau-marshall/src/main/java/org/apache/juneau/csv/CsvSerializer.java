@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * TODO - Work in progress.  CSV serializer.
@@ -53,6 +54,8 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	 */
 	@FluentSetters
 	public static class Builder extends WriterSerializer.Builder {
+
+		private static final Cache<HashKey,CsvSerializer> CACHE = Cache.of(HashKey.class, CsvSerializer.class).build();
 
 		/**
 		 * Constructor, default settings.
@@ -88,7 +91,12 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 
 		@Override /* Context.Builder */
 		public CsvSerializer build() {
-			return (CsvSerializer)super.build();
+			return build(CsvSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

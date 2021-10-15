@@ -152,6 +152,11 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override
+		public MockWriterSerializer build() {
+			return build(MockWriterSerializer.class, null);
+		}
 	}
 
 	@Override

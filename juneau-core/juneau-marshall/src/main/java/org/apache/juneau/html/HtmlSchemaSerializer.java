@@ -27,6 +27,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -129,6 +130,8 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	@FluentSetters
 	public static class Builder extends HtmlSerializer.Builder {
 
+		private static final Cache<HashKey,HtmlSchemaSerializer> CACHE = Cache.of(HashKey.class, HtmlSchemaSerializer.class).build();
+
 		JsonSchemaGenerator.Builder generatorBuilder;
 
 		/**
@@ -169,7 +172,15 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlSchemaSerializer build() {
-			return (HtmlSchemaSerializer)super.build();
+			return build(HtmlSchemaSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				generatorBuilder.hashKey()
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

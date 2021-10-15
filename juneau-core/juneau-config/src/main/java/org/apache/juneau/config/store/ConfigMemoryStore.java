@@ -61,6 +61,7 @@ public class ConfigMemoryStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
+			type(ConfigMemoryStore.class);
 		}
 
 		/**
@@ -70,6 +71,7 @@ public class ConfigMemoryStore extends ConfigStore {
 		 */
 		protected Builder(ConfigMemoryStore copyFrom) {
 			super(copyFrom);
+			type(copyFrom.getClass());
 		}
 
 		/**
@@ -88,7 +90,7 @@ public class ConfigMemoryStore extends ConfigStore {
 
 		@Override /* Context.Builder */
 		public ConfigMemoryStore build() {
-			return new ConfigMemoryStore(this);
+			return build(ConfigMemoryStore.class, null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

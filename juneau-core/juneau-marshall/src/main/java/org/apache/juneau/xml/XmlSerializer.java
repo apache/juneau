@@ -28,6 +28,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to XML.
@@ -240,6 +241,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	@FluentSetters
 	public static class Builder extends WriterSerializer.Builder {
 
+		private static final Cache<HashKey,XmlSerializer> CACHE = Cache.of(HashKey.class, XmlSerializer.class).build();
+
 		boolean addBeanTypesXml, addNamespaceUrisToRoot, disableAutoDetectNamespaces, enableNamespaces;
 		Namespace defaultNamespace;
 		List<Namespace> namespaces;
@@ -297,7 +300,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public XmlSerializer build() {
-			return (XmlSerializer)super.build();
+			return build(XmlSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesXml,
+				addNamespaceUrisToRoot,
+				disableAutoDetectNamespaces,
+				enableNamespaces,
+				defaultNamespace,
+				namespaces
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

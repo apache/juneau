@@ -117,14 +117,14 @@ public class ConstructorInfoTest {
 
 	@Test
 	public void invoke() throws Exception {
-		assertEquals(null, b_c1.invoke().toString());
-		assertEquals("foo", b_c2.invoke("foo").toString());
+		assertEquals(null, b_c1.invokeFuzzy().toString());
+		assertEquals("foo", b_c2.invokeFuzzy("foo").toString());
 	}
 
 	@Test
-	public void makeAccessible() throws Exception {
-		b_c3.makeAccessible(Visibility.PROTECTED);
-		assertEquals(null, b_c3.invoke(123).toString());
+	public void accessible() throws Exception {
+		b_c3.accessible(Visibility.PROTECTED);
+		assertEquals(null, b_c3.invokeFuzzy(123).toString());
 	}
 
 	@Test

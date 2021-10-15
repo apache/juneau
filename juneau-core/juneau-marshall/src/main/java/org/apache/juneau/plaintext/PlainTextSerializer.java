@@ -23,6 +23,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJOs to plain text using just the <c>toString()</c> method on the serialized object.
@@ -69,6 +70,8 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	@FluentSetters
 	public static class Builder extends WriterSerializer.Builder {
 
+		private static final Cache<HashKey,PlainTextSerializer> CACHE = Cache.of(HashKey.class, PlainTextSerializer.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -103,7 +106,12 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 
 		@Override /* Context.Builder */
 		public PlainTextSerializer build() {
-			return (PlainTextSerializer)super.build();
+			return build(PlainTextSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

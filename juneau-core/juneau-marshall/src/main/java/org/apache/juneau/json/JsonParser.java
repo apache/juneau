@@ -25,6 +25,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parses any valid JSON text into a POJO model.
@@ -158,6 +159,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	@FluentSetters
 	public static class Builder extends ReaderParser.Builder {
 
+		private static final Cache<HashKey,JsonParser> CACHE = Cache.of(HashKey.class, JsonParser.class).build();
+
 		boolean validateEnd;
 
 		/**
@@ -197,7 +200,15 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 		@Override /* Context.Builder */
 		public JsonParser build() {
-			return (JsonParser)super.build();
+			return build(JsonParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				validateEnd
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

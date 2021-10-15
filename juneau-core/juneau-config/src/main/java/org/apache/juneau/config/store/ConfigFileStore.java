@@ -76,6 +76,7 @@ public class ConfigFileStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
+			type(ConfigFileStore.class);
 			directory = env("ConfigFileStore.directory", ".");
 			charset = env("ConfigFileStore.charset", Charset.defaultCharset());
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
@@ -91,6 +92,7 @@ public class ConfigFileStore extends ConfigStore {
 		 */
 		protected Builder(ConfigFileStore copyFrom) {
 			super(copyFrom);
+			type(copyFrom.getClass());
 			directory = copyFrom.directory;
 			charset = copyFrom.charset;
 			enableWatcher = copyFrom.enableWatcher;
@@ -121,7 +123,7 @@ public class ConfigFileStore extends ConfigStore {
 
 		@Override /* Context.Builder */
 		public ConfigFileStore build() {
-			return new ConfigFileStore(this);
+			return build(ConfigFileStore.class, null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

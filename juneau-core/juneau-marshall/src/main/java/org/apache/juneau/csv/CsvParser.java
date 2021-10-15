@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * TODO - Work in progress.  CSV parser.
@@ -53,6 +54,8 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 	 */
 	@FluentSetters
 	public static class Builder extends ReaderParser.Builder {
+
+		private static final Cache<HashKey,CsvParser> CACHE = Cache.of(HashKey.class, CsvParser.class).build();
 
 		/**
 		 * Constructor, default settings.
@@ -88,7 +91,12 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 		@Override /* Context.Builder */
 		public CsvParser build() {
-			return (CsvParser)super.build();
+			return build(CsvParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

@@ -149,7 +149,7 @@ public final class ClassUtils {
 
 					con = c3.getPublicConstructorFuzzy(args);
 					if (con != null)
-						return con.<T>invoke(getMatchingArgs(con.getParamTypes(), args));
+						return con.<T>invokeFuzzy(args);
 				}
 
 				throw runtimeException("Could not instantiate class {0}/{1}.  Constructor not found.", className(c), c2);

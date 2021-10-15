@@ -24,6 +24,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
@@ -59,6 +60,8 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	 */
 	@FluentSetters
 	public static class Builder extends UonSerializer.Builder {
+
+		private static final Cache<HashKey,OpenApiSerializer> CACHE = Cache.of(HashKey.class, OpenApiSerializer.class).build();
 
 		HttpPartFormat format;
 		HttpPartCollectionFormat collectionFormat;
@@ -103,7 +106,16 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 
 		@Override /* Context.Builder */
 		public OpenApiSerializer build() {
-			return (OpenApiSerializer)super.build();
+			return build(OpenApiSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				format,
+				collectionFormat
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

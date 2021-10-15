@@ -168,25 +168,7 @@ public abstract class Context implements MetaProvider {
 		 *
 		 * @return The built object.
 		 */
-		public Context build() {
-			if (impl != null)
-				return impl;
-			if (type == null)
-				throw runtimeException("Context class not specified.");
-			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
-			if (cci == null) {
-				ClassInfo ci = ClassInfo.of(type);
-				cci = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
-				if (cci == null)
-					throw runtimeException("Constructor not found for class {0}", type);
-				CONTEXT_CONSTRUCTORS.put(type, cci);
-			}
-			try {
-				return cci.invoke(this);
-			} catch (ExecutableException e) {
-				throw runtimeException(e, "Error occurred trying to create context.");
-			}
-		}
+		public abstract Context build();
 
 		/**
 		 * Returns the hashkey of this builder.
@@ -203,15 +185,34 @@ public abstract class Context implements MetaProvider {
 		}
 
 		/**
-		 * Returns the {@link #impl(Context)} bean if it's the specified type.
+		 * Builds the context from this builder.
 		 *
-		 * @param c The expected bean type.
-		 * @return The impl bean, or <jk>null</jk> if an impl bean wasn't specified.
+		 * <p>
+		 * Looks for a public/protected constructor that takes in this builder bean.
+		 * If <c>cache</c> is specified, then the created bean will be cached using {@link #hashKey()} as the key.
+		 *
+		 * @param c The context class being created.
+		 * @param cache Optional cache to use for caching and retrieving existing instances.
+		 * @return A new context object.
 		 */
-		protected <T extends Context> T impl(Class<T> c) {
+		protected <T extends Context> T build(Class<T> c, Cache<HashKey,T> cache) {
 			if (impl != null && c.isInstance(impl))
 				return c.cast(impl);
-			return null;
+			if (cache != null)
+				return cache.get(hashKey(), ()->getContextConstructor().invoke(this));
+			return getContextConstructor().invoke(this);
+		}
+
+		private ConstructorInfo getContextConstructor() {
+			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+			if (cci == null) {
+				ClassInfo ci = ClassInfo.of(type);
+				cci = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
+				if (cci == null)
+					throw runtimeException("Constructor not found for class {0}", type);
+				CONTEXT_CONSTRUCTORS.put(type, cci);
+			}
+			return cci;
 		}
 
 		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();

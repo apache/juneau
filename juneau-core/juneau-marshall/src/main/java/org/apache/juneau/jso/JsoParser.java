@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parses POJOs from HTTP responses as Java {@link ObjectInputStream ObjectInputStreams}.
@@ -58,6 +59,8 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	@FluentSetters
 	public static class Builder extends InputStreamParser.Builder {
 
+		private static final Cache<HashKey,JsoParser> CACHE = Cache.of(HashKey.class, JsoParser.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -92,7 +95,12 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 
 		@Override /* Context.Builder */
 		public JsoParser build() {
-			return (JsoParser)super.build();
+			return build(JsoParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

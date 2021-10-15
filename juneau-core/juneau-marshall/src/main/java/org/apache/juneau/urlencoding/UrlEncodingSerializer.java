@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
@@ -208,6 +209,8 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	@FluentSetters
 	public static class Builder extends UonSerializer.Builder {
 
+		private static final Cache<HashKey,UrlEncodingSerializer> CACHE = Cache.of(HashKey.class, UrlEncodingSerializer.class).build();
+
 		boolean expandedParams;
 
 		/**
@@ -247,7 +250,15 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 
 		@Override /* Context.Builder */
 		public UrlEncodingSerializer build() {
-			return (UrlEncodingSerializer)super.build();
+			return build(UrlEncodingSerializer.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				expandedParams
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

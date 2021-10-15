@@ -24,6 +24,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * OpenAPI part parser.
@@ -59,6 +60,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 	 */
 	@FluentSetters
 	public static class Builder extends UonParser.Builder {
+
+		private static final Cache<HashKey,OpenApiParser> CACHE = Cache.of(HashKey.class, OpenApiParser.class).build();
 
 		HttpPartFormat format;
 		HttpPartCollectionFormat collectionFormat;
@@ -103,7 +106,16 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 
 		@Override /* Context.Builder */
 		public OpenApiParser build() {
-			return (OpenApiParser)super.build();
+			return build(OpenApiParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				format,
+				collectionFormat
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

@@ -944,7 +944,7 @@ public final class ClassInfo {
 		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo cc : _getDeclaredConstructors())
 			if (cc.hasNumParams(isMemberClass ? 1 : 0) && cc.isVisible(v))
-				return cc.makeAccessible(v);
+				return cc.accessible(v);
 		return null;
 	}
 

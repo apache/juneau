@@ -27,6 +27,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
@@ -88,6 +89,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	@FluentSetters
 	public static class Builder extends ReaderParser.Builder {
 
+		private static final Cache<HashKey,UonParser> CACHE = Cache.of(HashKey.class, UonParser.class).build();
+
 		boolean decoding, validateEnd;
 
 		/**
@@ -130,7 +133,16 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 
 		@Override /* Context.Builder */
 		public UonParser build() {
-			return (UonParser)super.build();
+			return build(UonParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				decoding,
+				validateEnd
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

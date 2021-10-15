@@ -23,6 +23,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parsers HTTP plain text request bodies into Group 5 POJOs.
@@ -73,6 +74,8 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	@FluentSetters
 	public static class Builder extends ReaderParser.Builder {
 
+		private static final Cache<HashKey,PlainTextParser> CACHE = Cache.of(HashKey.class, PlainTextParser.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -107,7 +110,12 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 
 		@Override /* Context.Builder */
 		public PlainTextParser build() {
-			return (PlainTextParser)super.build();
+			return build(PlainTextParser.class, CACHE);
+		}
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

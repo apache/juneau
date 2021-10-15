@@ -218,8 +218,20 @@ public abstract class Parser extends BeanContextable {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public Parser build() {
-			return (Parser)super.build();
+		public abstract Parser build();
+
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				autoCloseStreams,
+				strict,
+				trimStrings,
+				unbuffered,
+				debugOutputLines,
+				listener,
+				consumes
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------

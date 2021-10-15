@@ -76,6 +76,11 @@ public class MockStreamParser extends InputStreamParser {
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
+
+		@Override
+		public MockStreamParser build() {
+			return build(MockStreamParser.class, null);
+		}
 	}
 
 	@Override

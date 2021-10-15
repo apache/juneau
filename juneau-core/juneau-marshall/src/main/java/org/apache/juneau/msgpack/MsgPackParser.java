@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Parses a MessagePack stream into a POJO model.
@@ -97,6 +98,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	@FluentSetters
 	public static class Builder extends InputStreamParser.Builder {
 
+		private static final Cache<HashKey,MsgPackParser> CACHE = Cache.of(HashKey.class, MsgPackParser.class).build();
+
 		/**
 		 * Constructor, default settings.
 		 */
@@ -131,9 +134,13 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 		@Override /* Context.Builder */
 		public MsgPackParser build() {
-			return (MsgPackParser)super.build();
+			return build(MsgPackParser.class, CACHE);
 		}
 
+		@Override /* Context.Builder */
+		public HashKey hashKey() {
+			return super.hashKey();
+		}
 		//-----------------------------------------------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------------------------------------------

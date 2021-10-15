@@ -64,6 +64,7 @@ public class ConfigClasspathStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
+			type(ConfigClasspathStore.class);
 		}
 
 		/**
@@ -73,6 +74,7 @@ public class ConfigClasspathStore extends ConfigStore {
 		 */
 		protected Builder(ConfigClasspathStore copyFrom) {
 			super(copyFrom);
+			type(copyFrom.getClass());
 		}
 
 		/**
@@ -91,7 +93,7 @@ public class ConfigClasspathStore extends ConfigStore {
 
 		@Override /* Context.Builder */
 		public ConfigClasspathStore build() {
-			return new ConfigClasspathStore(this);
+			return build(ConfigClasspathStore.class, null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
