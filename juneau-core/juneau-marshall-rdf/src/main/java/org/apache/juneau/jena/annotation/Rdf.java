@@ -77,7 +77,7 @@ public @interface Rdf {
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

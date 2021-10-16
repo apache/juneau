@@ -643,7 +643,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanTraverseContext.Builder#maxDepth}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
 	 */
 	String maxDepth() default "";

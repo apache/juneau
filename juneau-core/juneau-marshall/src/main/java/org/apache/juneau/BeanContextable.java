@@ -1419,7 +1419,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<li class='ja'>{@link Beanp#dictionary()}
 		 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 		 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
-		 * 	<li class='jm'>{@link Builder#beanDictionary(Class...)}
 		 * </ul>
 		 *
 		 * @param values

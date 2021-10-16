@@ -1448,7 +1448,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see Builder#addBeanTypes()
+	 * @see Serializer.Builder#addBeanTypes()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -1460,7 +1460,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Add type attribute to root nodes.
 	 *
-	 * @see Builder#addRootType()
+	 * @see Serializer.Builder#addRootType()
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
@@ -1471,7 +1471,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Serializer listener.
 	 *
-	 * @see Builder#listener(Class)
+	 * @see Serializer.Builder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during serialization.
 	 */
@@ -1482,7 +1482,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Sort arrays and collections alphabetically.
 	 *
-	 * @see Builder#sortCollections()
+	 * @see Serializer.Builder#sortCollections()
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
@@ -1493,7 +1493,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Sort maps alphabetically.
 	 *
-	 * @see Builder#sortMaps()
+	 * @see Serializer.Builder#sortMaps()
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
@@ -1504,7 +1504,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Trim empty lists and arrays.
 	 *
-	 * @see Builder#trimEmptyCollections()
+	 * @see Serializer.Builder#trimEmptyCollections()
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
@@ -1515,7 +1515,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Trim empty maps.
 	 *
-	 * @see Builder#trimEmptyMaps()
+	 * @see Serializer.Builder#trimEmptyMaps()
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
@@ -1526,7 +1526,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Don't trim null bean property values.
 	 *
-	 * @see Builder#keepNullProperties()
+	 * @see Serializer.Builder#keepNullProperties()
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
@@ -1537,7 +1537,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Trim strings.
 	 *
-	 * @see Builder#trimStrings()
+	 * @see Serializer.Builder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
@@ -1548,7 +1548,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * URI context bean.
 	 *
-	 * @see Builder#uriContext(UriContext)
+	 * @see Serializer.Builder#uriContext(UriContext)
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
@@ -1559,7 +1559,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * URI relativity.
 	 *
-	 * @see Builder#uriRelativity(UriRelativity)
+	 * @see Serializer.Builder#uriRelativity(UriRelativity)
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
@@ -1570,7 +1570,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * URI resolution.
 	 *
-	 * @see Builder#uriResolution(UriResolution)
+	 * @see Serializer.Builder#uriResolution(UriResolution)
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */

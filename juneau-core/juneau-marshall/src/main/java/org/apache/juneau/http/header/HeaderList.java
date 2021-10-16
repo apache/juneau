@@ -111,7 +111,7 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <p>
- * By default, header names are treated as case-insensitive.  This can be changed using the {@link Builder#caseSensitive()}
+ * By default, header names are treated as case-insensitive.  This can be changed using the {@link HeaderList.Builder#caseSensitive()}
  * method.
  *
  * <p>

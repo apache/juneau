@@ -1788,7 +1788,7 @@ public class HttpPartSchema {
 		}
 
 		/**
-		 * Synonym for {@link #items(Builder)}.
+		 * Synonym for {@link #items(HttpPartSchema.Builder)}.
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -3539,7 +3539,7 @@ public class HttpPartSchema {
 	 * Returns the name of the object described by this schema, for example the query or form parameter name.
 	 *
 	 * @return The name, or <jk>null</jk> if not specified.
-	 * @see Builder#name(String)
+	 * @see HttpPartSchema.Builder#name(String)
 	 */
 	public String getName() {
 		return name;
@@ -3549,7 +3549,7 @@ public class HttpPartSchema {
 	 * Returns the <c>type</c> field of this schema.
 	 *
 	 * @return The <c>type</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#type(String)
+	 * @see HttpPartSchema.Builder#type(String)
 	 */
 	public HttpPartDataType getType() {
 		return type;
@@ -3562,7 +3562,7 @@ public class HttpPartSchema {
 	 * 	The class meta of the object.
 	 * 	<br>Used to auto-detect the type if the type was not specified.
 	 * @return The format field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#format(String)
+	 * @see HttpPartSchema.Builder#format(String)
 	 */
 	public HttpPartDataType getType(ClassMeta<?> cm) {
 		if (type != HttpPartDataType.NO_TYPE)
@@ -3587,7 +3587,7 @@ public class HttpPartSchema {
 	 * Returns the <c>default</c> field of this schema.
 	 *
 	 * @return The default value for this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#_default(String)
+	 * @see HttpPartSchema.Builder#_default(String)
 	 */
 	public String getDefault() {
 		return _default;
@@ -3597,7 +3597,7 @@ public class HttpPartSchema {
 	 * Returns the <c>collectionFormat</c> field of this schema.
 	 *
 	 * @return The <c>collectionFormat</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#collectionFormat(String)
+	 * @see HttpPartSchema.Builder#collectionFormat(String)
 	 */
 	public HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
@@ -3606,7 +3606,7 @@ public class HttpPartSchema {
 	/**
 	 * Returns the <c>format</c> field of this schema.
 	 *
-	 * @see Builder#format(String)
+	 * @see HttpPartSchema.Builder#format(String)
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
 	 */
 	public HttpPartFormat getFormat() {
@@ -3620,7 +3620,7 @@ public class HttpPartSchema {
 	 * 	The class meta of the object.
 	 * 	<br>Used to auto-detect the format if the format was not specified.
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#format(String)
+	 * @see HttpPartSchema.Builder#format(String)
 	 */
 	public HttpPartFormat getFormat(ClassMeta<?> cm) {
 		if (format != HttpPartFormat.NO_FORMAT)
@@ -3642,7 +3642,7 @@ public class HttpPartSchema {
 	 * Returns the <c>maximum</c> field of this schema.
 	 *
 	 * @return The schema for child items of the object represented by this schema, or <jk>null</jk> if not defined.
-	 * @see Builder#items(Builder)
+	 * @see HttpPartSchema.Builder#items(HttpPartSchema.Builder)
 	 */
 	public HttpPartSchema getItems() {
 		return items;
@@ -3652,7 +3652,7 @@ public class HttpPartSchema {
 	 * Returns the <c>maximum</c> field of this schema.
 	 *
 	 * @return The <c>maximum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#maximum(Number)
+	 * @see HttpPartSchema.Builder#maximum(Number)
 	 */
 	public Number getMaximum() {
 		return maximum;
@@ -3662,7 +3662,7 @@ public class HttpPartSchema {
 	 * Returns the <c>minimum</c> field of this schema.
 	 *
 	 * @return The <c>minimum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#minimum(Number)
+	 * @see HttpPartSchema.Builder#minimum(Number)
 	 */
 	public Number getMinimum() {
 		return minimum;
@@ -3672,7 +3672,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#multipleOf(Number)
+	 * @see HttpPartSchema.Builder#multipleOf(Number)
 	 */
 	public Number getMultipleOf() {
 		return multipleOf;
@@ -3682,7 +3682,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#pattern(String)
+	 * @see HttpPartSchema.Builder#pattern(String)
 	 */
 	public Pattern getPattern() {
 		return pattern;
@@ -3692,7 +3692,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#maxLength(Long)
+	 * @see HttpPartSchema.Builder#maxLength(Long)
 	 */
 	public Long getMaxLength() {
 		return maxLength;
@@ -3702,7 +3702,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#minLength(Long)
+	 * @see HttpPartSchema.Builder#minLength(Long)
 	 */
 	public Long getMinLength() {
 		return minLength;
@@ -3712,7 +3712,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#maxItems(Long)
+	 * @see HttpPartSchema.Builder#maxItems(Long)
 	 */
 	public Long getMaxItems() {
 		return maxItems;
@@ -3722,7 +3722,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#minItems(Long)
+	 * @see HttpPartSchema.Builder#minItems(Long)
 	 */
 	public Long getMinItems() {
 		return minItems;
@@ -3732,7 +3732,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#maxProperties(Long)
+	 * @see HttpPartSchema.Builder#maxProperties(Long)
 	 */
 	public Long getMaxProperties() {
 		return maxProperties;
@@ -3742,7 +3742,7 @@ public class HttpPartSchema {
 	 * Returns the <c>xxx</c> field of this schema.
 	 *
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#minProperties(Long)
+	 * @see HttpPartSchema.Builder#minProperties(Long)
 	 */
 	public Long getMinProperties() {
 		return minProperties;
@@ -3752,7 +3752,7 @@ public class HttpPartSchema {
 	 * Returns the <c>exclusiveMaximum</c> field of this schema.
 	 *
 	 * @return The <c>exclusiveMaximum</c> field of this schema.
-	 * @see Builder#exclusiveMaximum(Boolean)
+	 * @see HttpPartSchema.Builder#exclusiveMaximum(Boolean)
 	 */
 	public boolean isExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -3762,7 +3762,7 @@ public class HttpPartSchema {
 	 * Returns the <c>exclusiveMinimum</c> field of this schema.
 	 *
 	 * @return The <c>exclusiveMinimum</c> field of this schema.
-	 * @see Builder#exclusiveMinimum(Boolean)
+	 * @see HttpPartSchema.Builder#exclusiveMinimum(Boolean)
 	 */
 	public boolean isExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -3772,7 +3772,7 @@ public class HttpPartSchema {
 	 * Returns the <c>uniqueItems</c> field of this schema.
 	 *
 	 * @return The <c>uniqueItems</c> field of this schema.
-	 * @see Builder#uniqueItems(Boolean)
+	 * @see HttpPartSchema.Builder#uniqueItems(Boolean)
 	 */
 	public boolean isUniqueItems() {
 		return uniqueItems;
@@ -3782,7 +3782,7 @@ public class HttpPartSchema {
 	 * Returns the <c>required</c> field of this schema.
 	 *
 	 * @return The <c>required</c> field of this schema.
-	 * @see Builder#required(Boolean)
+	 * @see HttpPartSchema.Builder#required(Boolean)
 	 */
 	public boolean isRequired() {
 		return required;
@@ -3792,7 +3792,7 @@ public class HttpPartSchema {
 	 * Returns the <c>skipIfEmpty</c> field of this schema.
 	 *
 	 * @return The <c>skipIfEmpty</c> field of this schema.
-	 * @see Builder#skipIfEmpty(Boolean)
+	 * @see HttpPartSchema.Builder#skipIfEmpty(Boolean)
 	 */
 	public boolean isSkipIfEmpty() {
 		return skipIfEmpty;
@@ -3802,7 +3802,7 @@ public class HttpPartSchema {
 	 * Returns the <c>allowEmptyValue</c> field of this schema.
 	 *
 	 * @return The <c>skipIfEmpty</c> field of this schema.
-	 * @see Builder#skipIfEmpty(Boolean)
+	 * @see HttpPartSchema.Builder#skipIfEmpty(Boolean)
 	 */
 	public boolean isAllowEmptyValue() {
 		return allowEmptyValue;
@@ -3812,7 +3812,7 @@ public class HttpPartSchema {
 	 * Returns the <c>enum</c> field of this schema.
 	 *
 	 * @return The <c>enum</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#_enum(Set)
+	 * @see HttpPartSchema.Builder#_enum(Set)
 	 */
 	public Set<String> getEnum() {
 		return _enum;
@@ -3822,7 +3822,7 @@ public class HttpPartSchema {
 	 * Returns the <c>parser</c> field of this schema.
 	 *
 	 * @return The <c>parser</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#parser(Class)
+	 * @see HttpPartSchema.Builder#parser(Class)
 	 */
 	public Class<? extends HttpPartParser> getParser() {
 		return parser;
@@ -3832,7 +3832,7 @@ public class HttpPartSchema {
 	 * Returns the <c>serializer</c> field of this schema.
 	 *
 	 * @return The <c>serializer</c> field of this schema, or <jk>null</jk> if not specified.
-	 * @see Builder#serializer(Class)
+	 * @see HttpPartSchema.Builder#serializer(Class)
 	 */
 	public Class<? extends HttpPartSerializer> getSerializer() {
 		return serializer;

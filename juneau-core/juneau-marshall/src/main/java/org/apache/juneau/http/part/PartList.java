@@ -112,7 +112,7 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <p>
- * By default, part names are treated as case-sensitive.  This can be changed using the {@link Builder#caseInsensitive()}
+ * By default, part names are treated as case-sensitive.  This can be changed using the {@link PartList.Builder#caseInsensitive()}
  * method.
  *
  * <p>

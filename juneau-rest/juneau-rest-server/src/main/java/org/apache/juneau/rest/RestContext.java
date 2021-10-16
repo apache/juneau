@@ -145,7 +145,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * The builder class can be subclassed by using the {@link Rest#builder()} annotation.
 	 * This can be useful when you want to perform any customizations on the builder class, typically by overriding protected methods that create
-	 * 	the various builders used in the created {@link RestContext} object (which itself can be overridden via {@link Builder#type(Class)}).
+	 * 	the various builders used in the created {@link RestContext} object (which itself can be overridden via {@link RestContext.Builder#type(Class)}).
 	 * The subclass must contain a public constructor that takes in the same arguments passed in to this method.
 	 *
 	 * @param resourceClass
@@ -424,7 +424,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * Default classes are inherited from the parent REST object.
-		 * Typically used on the top-level {@link Builder} to affect class types for that REST object and all children.
+		 * Typically used on the top-level {@link RestContext.Builder} to affect class types for that REST object and all children.
 		 *
 		 * <p>
 		 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
@@ -464,7 +464,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * Default settings are inherited from the parent REST object.
-		 * Typically used on the top-level {@link Builder} to affect settings for that REST object and all children.
+		 * Typically used on the top-level {@link RestContext.Builder} to affect settings for that REST object and all children.
 		 *
 		 * <p>
 		 * Modifying the default settings map on this builder does not affect the default settings on the parent builder, but changes made
@@ -509,7 +509,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * The bean store is created by the constructor using the {@link #createBeanStore(Class,Supplier)} method and is initialized with the following beans:
 		 * <ul>
-		 * 	<li>{@link Builder}
+		 * 	<li>{@link RestContext.Builder}
 		 * 	<li>{@link ServletConfig}
 		 * 	<li>{@link ServletContext}
 		 * 	<li>{@link VarResolver}
@@ -986,7 +986,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean class that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link Builder#beanStore()}.
+		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new logger.
 		 */
 		protected Logger createLogger(BeanStore beanStore, Class<?> resourceClass) {
@@ -1072,7 +1072,7 @@ public class RestContext extends Context {
 		 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link Builder#beanStore()}.
+		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new thrown-store sub-builder.
 		 */
 		protected ThrownStore.Builder createThrownStore(BeanStore beanStore, Supplier<?> resource, RestContext parent) {
@@ -1183,7 +1183,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link Builder#beanStore()}.
+		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new encoder group sub-builder.
 		 */
 		protected EncoderGroup.Builder createEncoders(BeanStore beanStore, Supplier<?> resource) {
@@ -1273,7 +1273,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link Builder#beanStore()}.
+		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new serializer group sub-builder.
 		 */
 		protected SerializerGroup.Builder createSerializers(BeanStore beanStore, Supplier<?> resource) {
@@ -1362,7 +1362,7 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link Builder#beanStore()}.
+		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new parser group sub-builder.
 		 */
 		protected ParserGroup.Builder createParsers(BeanStore beanStore, Supplier<?> resource) {
@@ -1775,7 +1775,7 @@ public class RestContext extends Context {
 		 * <ul>
 		 * 	<li>Looks for response processors set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#responseProcessors()}
+		 * 			<li>{@link RestContext.Builder#responseProcessors()}
 		 * 			<li>{@link Rest#responseProcessors()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</> method that returns <c>{@link ResponseProcessor}[]</c> on the
@@ -1946,7 +1946,7 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of RestLogger.
 		 * 	<li>Looks for REST call logger set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#callLogger()}
+		 * 			<li>{@link RestContext.Builder#callLogger()}
 		 * 			<li>{@link Rest#callLogger()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createCallLogger()</> method that returns {@link RestLogger} on the
@@ -1962,7 +1962,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Builder#callLogger()}
+		 * 	<li class='jm'>{@link RestContext.Builder#callLogger()}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2084,7 +2084,7 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
 		 * 	<li>Looks for part serializer set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#partSerializer()}
+		 * 			<li>{@link RestContext.Builder#partSerializer()}
 		 * 			<li>{@link Rest#partSerializer()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
@@ -2185,7 +2185,7 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
 		 * 	<li>Looks for part serializer set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#partSerializer()}
+		 * 			<li>{@link RestContext.Builder#partSerializer()}
 		 * 			<li>{@link Rest#partSerializer()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
@@ -2297,7 +2297,7 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
 		 * 	<li>Looks for part parser set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#partParser()}
+		 * 			<li>{@link RestContext.Builder#partParser()}
 		 * 			<li>{@link Rest#partParser()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
@@ -2515,7 +2515,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <p>
-		 * The file finder is instantiated via the {@link Builder#createFileFinder(BeanStore,Supplier)} method which in turn instantiates
+		 * The file finder is instantiated via the {@link RestContext.Builder#createFileFinder(BeanStore,Supplier)} method which in turn instantiates
 		 * based on the following logic:
 		 * <ul>
 		 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
@@ -2585,10 +2585,10 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of {@link FileFinder}.
 		 * 	<li>Looks for file finder value set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#fileFinder()}
+		 * 			<li>{@link RestContext.Builder#fileFinder()}
 		 * 			<li>{@link Rest#fileFinder()}.
 		 * 		</ul>
-		 * 	<li>Resolves it via the {@link Builder#beanStore() bean store} registered in this context (including Spring beans if using SpringRestServlet).
+		 * 	<li>Resolves it via the {@link RestContext.Builder#beanStore() bean store} registered in this context (including Spring beans if using SpringRestServlet).
 		 * 	<li>Looks for file finder default setting.
 		 * </ul>
 		 *
@@ -2730,7 +2730,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <p>
-		 * The static file finder is instantiated via the {@link Builder#createStaticFiles(BeanStore,Supplier)} method which in turn instantiates
+		 * The static file finder is instantiated via the {@link RestContext.Builder#createStaticFiles(BeanStore,Supplier)} method which in turn instantiates
 		 * based on the following logic:
 		 * <ul>
 		 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
@@ -2806,7 +2806,7 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of FileFinder.
 		 * 	<li>Looks for static files set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#staticFiles()}
+		 * 			<li>{@link RestContext.Builder#staticFiles()}
 		 * 			<li>{@link Rest#staticFiles()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createStaticFiles()</> method that returns {@link StaticFiles} on the
@@ -3445,7 +3445,7 @@ public class RestContext extends Context {
 		 * <ul>
 		 * 	<li>Looks for REST op args set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#restOpArgs(Class...)}/{@link Builder#restOpArgs(Class...)}
+		 * 			<li>{@link RestContext.Builder#restOpArgs(Class...)}/{@link RestContext.Builder#restOpArgs(Class...)}
 		 * 			<li>{@link Rest#restOpArgs()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createRestParams()</> method that returns <c>{@link Class}[]</c>.
@@ -4507,7 +4507,7 @@ public class RestContext extends Context {
 		 * 	<li>Returns the resource class itself is an instance of {@link SwaggerProvider}.
 		 * 	<li>Looks for swagger provider set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#swaggerProvider(Class)}/{@link Builder#swaggerProvider(SwaggerProvider)}
+		 * 			<li>{@link RestContext.Builder#swaggerProvider(Class)}/{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 		 * 			<li>{@link Rest#swaggerProvider()}.
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createSwaggerProvider()</> method that returns {@link SwaggerProvider} on the
@@ -4522,8 +4522,8 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Builder#swaggerProvider(Class)}
-		 * 	<li class='jm'>{@link Builder#swaggerProvider(SwaggerProvider)}
+		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
+		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -5389,7 +5389,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
-		 * relative to the ascendant path UNLESS you use the {@link Builder#child(String, Object)} method to register it.
+		 * relative to the ascendant path UNLESS you use the {@link RestContext.Builder#child(String, Object)} method to register it.
 		 *
 		 * <p>
 		 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
@@ -5468,7 +5468,7 @@ public class RestContext extends Context {
 		 * 	<ul>
 		 * 		<li>A class that has a constructor described above.
 		 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
-		 * 		<li>An instance of {@link RestChild} containing an instantied resource object and a subpath.
+		 * 		<li>An instance of {@link RestChild} containing an instantiated resource object and a subpath.
 		 * 	</ul>
 		 * @return This object (for method chaining).
 		 */
@@ -6376,7 +6376,7 @@ public class RestContext extends Context {
 	 * The config file is identified via one of the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Rest#config()}
-	 * 	<li class='jm'>{@link Builder#config(Config)}
+	 * 	<li class='jm'>{@link RestContext.Builder#config(Config)}
 	 * </ul>
 	 *
 	 * @return
@@ -6390,13 +6390,13 @@ public class RestContext extends Context {
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
-	 * {@link Builder#path(String)} method.
+	 * {@link RestContext.Builder#path(String)} method.
 	 *
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Builder#path(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#path(String)}
 	 * </ul>
 	 *
 	 * @return The servlet path.
@@ -6407,13 +6407,13 @@ public class RestContext extends Context {
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
-	 * {@link Builder#path(String)} method concatenated with those on all parent classes.
+	 * {@link RestContext.Builder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#path(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#path(String)}
 	 * </ul>
 	 *
 	 * @return The full path.
@@ -6426,7 +6426,7 @@ public class RestContext extends Context {
 	 * Returns the call logger to use for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#callLogger()}
+	 * 	<li class='jm'>{@link RestContext.Builder#callLogger()}
 	 * </ul>
 	 *
 	 * @return
@@ -6452,8 +6452,8 @@ public class RestContext extends Context {
 	 * Returns the Swagger provider used by this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#swaggerProvider(Class)}
-	 * 	<li class='jm'>{@link Builder#swaggerProvider(SwaggerProvider)}
+	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
+	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 	 * </ul>
 	 *
 	 * @return
@@ -6513,7 +6513,7 @@ public class RestContext extends Context {
 	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Builder#disableBodyParam()}
+	 * 	<li class='jm'>{@link RestContext.Builder#disableBodyParam()}
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
@@ -6527,7 +6527,7 @@ public class RestContext extends Context {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
-	 * 	<li class='jm'>{@link Builder#allowedHeaderParams(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#allowedHeaderParams(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -6543,7 +6543,7 @@ public class RestContext extends Context {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
-	 * 	<li class='jm'>{@link Builder#allowedMethodHeaders(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#allowedMethodHeaders(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -6559,7 +6559,7 @@ public class RestContext extends Context {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Rest#allowedMethodParams}
-	 * 	<li class='jm'>{@link Builder#allowedMethodParams(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#allowedMethodParams(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -6575,7 +6575,7 @@ public class RestContext extends Context {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Rest#clientVersionHeader}
-	 * 	<li class='jm'>{@link Builder#clientVersionHeader(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -6670,7 +6670,7 @@ public class RestContext extends Context {
 	 * Consists of the media types for production common to all operations on this class.
 	 *
 	 * <p>
-	 * Can be overridden by {@link Builder#produces(MediaType...)}.
+	 * Can be overridden by {@link RestContext.Builder#produces(MediaType...)}.
 	 *
 	 * @return
 	 * 	An unmodifiable list of supported <c>Accept</c> header values for this resource.
@@ -6687,7 +6687,7 @@ public class RestContext extends Context {
 	 * Consists of the media types for consumption common to all operations on this class.
 	 *
 	 * <p>
-	 * Can be overridden by {@link Builder#consumes(MediaType...)}.
+	 * Can be overridden by {@link RestContext.Builder#consumes(MediaType...)}.
 	 *
 	 * @return
 	 * 	An unmodifiable list of supported <c>Content-Type</c> header values for this resource.
@@ -6701,7 +6701,7 @@ public class RestContext extends Context {
 	 * Returns the default request headers for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#defaultRequestHeaders(org.apache.http.Header...)}
+	 * 	<li class='jm'>{@link RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
 	 * @return
@@ -6716,7 +6716,7 @@ public class RestContext extends Context {
 	 * Returns the default request attributes for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#defaultRequestAttributes(NamedAttribute...)}
+	 * 	<li class='jm'>{@link RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * </ul>
 	 *
 	 * @return
@@ -6731,7 +6731,7 @@ public class RestContext extends Context {
 	 * Returns the default response headers for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#defaultResponseHeaders(org.apache.http.Header...)}
+	 * 	<li class='jm'>{@link RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
 	 * @return
@@ -6746,7 +6746,7 @@ public class RestContext extends Context {
 	 * Returns the authority path of the resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#uriAuthority(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#uriAuthority(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -6765,7 +6765,7 @@ public class RestContext extends Context {
 	 * Returns the context path of the resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#uriContext(String)}
+	 * 	<li class='jm'>{@link RestContext.Builder#uriContext(String)}
 	 * </ul>
 	 *
 	 * @return
@@ -6784,7 +6784,7 @@ public class RestContext extends Context {
 	 * Returns the setting on how relative URIs should be interpreted as relative to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#uriRelativity(UriRelativity)}
+	 * 	<li class='jm'>{@link RestContext.Builder#uriRelativity(UriRelativity)}
 	 * </ul>
 	 *
 	 * @return
@@ -6799,7 +6799,7 @@ public class RestContext extends Context {
 	 * Returns the setting on how relative URIs should be resolved.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link Builder#uriResolution(UriResolution)}
+	 * 	<li class='jm'>{@link RestContext.Builder#uriResolution(UriResolution)}
 	 * </ul>
 	 *
 	 * @return
@@ -6922,7 +6922,7 @@ public class RestContext extends Context {
 	 * @param m The Java method being called.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link Builder#beanStore()}.
+	 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 	 * @return The array of resolvers.
 	 */
 	protected RestOpArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
@@ -6958,7 +6958,7 @@ public class RestContext extends Context {
 	 * @param m The Java method being called.
 	 * @param beanStore
 	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link Builder#beanStore()}.
+	 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 	 * @return The array of resolvers.
 	 */
 	protected RestOpArg[] findHookMethodArgs(Method m, BeanStore beanStore) {

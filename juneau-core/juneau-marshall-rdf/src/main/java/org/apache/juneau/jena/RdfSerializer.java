@@ -199,7 +199,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 		 *
 		 * @return This object.
@@ -300,8 +300,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
-		 * @param value
-		 * 	The new value for this setting.
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -309,6 +307,21 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return rdfxml_embedding(true);
 		}
 
+		/**
+		 * RDF/XML ARP property: <c>error-mode</c>.
+		 *
+		 * <p>
+		 * Sets ARP to look for RDF embedded within an enclosing XML document.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>
+		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_embedding(boolean value) {
 			return jena("rdfXml.embedding", value);
@@ -343,6 +356,17 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return rdfxml_longId(true);
 		}
 
+		/**
+		 * RDF/XML property: <c>longId</c>.
+		 *
+		 * <p>
+		 * Whether to use long ID's for anon resources.
+		 * Short ID's are easier to read, but can run out of memory on very large models.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_longId(boolean value) {
 			return jena("rdfXml.longId", value);
@@ -361,6 +385,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return rdfxml_allowBadUris(true);
 		}
 
+		/**
+		 * RDF/XML property: <c>allowBadURIs</c>.
+		 *
+		 * <p>
+		 * URIs in the graph are, by default, checked prior to serialization.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_allowBadUris(boolean value) {
 			return jena("rdfXml.allowBadURIs", value);
@@ -444,6 +478,19 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return rdfxml_disableShowDoctypeDeclaration(true);
 		}
 
+		/**
+		 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+		 *
+		 * <p>
+		 * If disabled, an XML doctype declaration isn't included in the output.
+		 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
+		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
+		 * invocation.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_disableShowDoctypeDeclaration(boolean value) {
 			return jena("rdfXml.disableShowDoctypeDeclaration", value);
@@ -524,6 +571,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return n3_disableObjectLists(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableObjectLists</c>.
+		 *
+		 * <p>
+		 * Don't print object lists as comma separated lists.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableObjectLists(boolean value) {
 			return jena("n3.disableObjectLists", value);
@@ -603,6 +660,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return n3_disableAbbrevBaseUri(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+		 *
+		 * <p>
+		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableAbbrevBaseUri(boolean value) {
 			return jena("n3.disableAbbrevBaseUri", value);
@@ -621,6 +688,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return n3_disableUsePropertySymbols(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
+		 *
+		 * <p>
+		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableUsePropertySymbols(boolean value) {
 			return jena("n3.disableUsePropertySymbols", value);
@@ -639,6 +716,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return n3_disableUseTripleQuotedStrings(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+		 *
+		 * <p>
+		 * Disallow the use of <c>"""</c> to delimit long strings.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableUseTripleQuotedStrings(boolean value) {
 			return jena("n3.disableUseTripleQuotedStrings", value);
@@ -657,6 +744,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return n3_disableUseDoubles(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableUseDoubles</c>.
+		 *
+		 * <p>
+		 * Disallow the use of doubles as <c>123.456</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableUseDoubles(boolean value) {
 			return jena("n3.disableUseDoubles", value);
@@ -675,6 +772,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return addLiteralTypes(true);
 		}
 
+		/**
+		 * Add XSI data types to non-<c>String</c> literals.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>addLiteralTypes(<jk>true</jk>)</code>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder addLiteralTypes(boolean value) {
 			addLiteralTypes = value;
@@ -693,10 +800,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 		 * identify root notes, which can introduce a considerable performance degradation.
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -704,6 +807,22 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return addRootProperty(true);
 		}
 
+		/**
+		 * Add RDF root identifier property to root node.
+		 *
+		 * <p>
+		 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
+		 * to identify the root node in the graph.
+		 * <br>This helps locate the root node during parsing.
+		 *
+		 * <p>
+		 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
+		 * identify root notes, which can introduce a considerable performance degradation.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder addRootProperty(boolean value) {
 			addRootProperty = value;
@@ -720,10 +839,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 		 * the root element is serialized.
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_disableAutoDetectNamespaces}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -731,6 +846,20 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return disableAutoDetectNamespaces(true);
 		}
 
+		/**
+		 * Disable auto-detect namespace usage.
+		 *
+		 * <p>
+		 * Don't detect namespace usage before serialization.
+		 *
+		 * <p>
+		 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+		 * the root element is serialized.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder disableAutoDetectNamespaces(boolean value) {
 			disableAutoDetectNamespaces = value;
@@ -746,10 +875,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<li>
 		 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 		 * 		lost.
-		 * </ul>
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_collectionFormat}
 		 * </ul>
 		 *
 		 * @param value
@@ -773,10 +898,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		/**
 		 * Default XML namespace for bean properties.
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauBpNs}
-		 * </ul>
-		 *
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
@@ -790,10 +911,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 		/**
 		 * XML namespace for Juneau properties.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauNs}
-		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this setting.
@@ -840,7 +957,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 		 * 	<li class='jm'>{@link #n3()}
 		 * 	<li class='jm'>{@link #ntriple()}
 		 * 	<li class='jm'>{@link #turtle()}
@@ -905,10 +1021,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -916,6 +1028,57 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return looseCollections(true);
 		}
 
+		/**
+		 * Collections should be serialized and parsed as loose collections.
+		 *
+		 * <p>
+		 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
+		 * resources that are children of an RDF collection (e.g. Sequence, Bag).
+		 *
+		 * <p>
+		 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
+		 * losslessly representing POJO models, since the tree structure of these POJO models are lost
+		 * when serialized as loose collections.
+		 *
+		 * <p>
+		 * This setting is typically only useful if the beans being parsed into do not have a bean property
+		 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	WriterSerializer <jv>serializer</jv> = RdfSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.xmlabbrev()
+		 * 		.looseCollections()
+		 * 		.build();
+		 *
+		 * 	ReaderParser <jv>parser</jv> = RdfParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.xml()
+		 * 		.looseCollections()
+		 * 		.build();
+		 *
+		 * 	List&lt;MyBean&gt; <jv>myList</jv> = createListOfMyBeans();
+		 *
+		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
+		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+		 *
+		 * 	<jc>// Parse back into a Java collection</jc>
+		 * 	<jv>myList</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+		 *
+		 * 	MyBean[] <jv>myBeans</jv> = createArrayOfMyBeans();
+		 *
+		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
+		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myBeans</jv>);
+		 *
+		 * 	<jc>// Parse back into a bean array</jc>
+		 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder looseCollections(boolean value) {
 			looseCollections = value;
@@ -927,10 +1090,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -944,10 +1103,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * The default list of namespaces associated with this serializer.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
-		 * </ul>
 		 *
 		 * @param values The new value for this setting.
 		 * @return This object (for method chaining).
@@ -966,10 +1121,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -982,10 +1133,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -1002,10 +1149,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * inherited by the RDF serializers.
 		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_disableUseXmlNamespaces}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -1013,6 +1156,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return disableUseXmlNamespaces(true);
 		}
 
+		/**
+		 * Disable reuse of XML namespaces when RDF namespaces not specified.
+		 *
+		 * <p>
+		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
+		 * inherited by the RDF serializers.
+		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder disableUseXmlNamespaces(boolean value) {
 			disableUseXmlNamespaces = value;
@@ -1024,10 +1179,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -1041,10 +1192,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -1807,7 +1954,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
-	 * @see #RDF_collectionFormat
+	 * @see RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
@@ -1818,7 +1965,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Default XML namespace for bean properties.
 	 *
-	 * @see #RDF_juneauBpNs
+	 * @see RdfSerializer.Builder#juneauBpNs(Namespace)
 	 * @return
 	 * 	The XML namespace to use for bean properties.
 	 */
@@ -1829,7 +1976,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * XML namespace for Juneau properties.
 	 *
-	 * @see #RDF_juneauNs
+	 * @see RdfSerializer.Builder#juneauNs(Namespace)
 	 * @return
 	 * 	The XML namespace to use for Juneau properties.
 	 */
@@ -1840,7 +1987,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * RDF language.
 	 *
-	 * @see #RDF_language
+	 * @see RdfSerializer.Builder#language(String)
 	 * @return
 	 * 	The RDF language to use.
 	 */
@@ -1851,7 +1998,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see #RDF_looseCollections
+	 * @see RdfSerializer.Builder#looseCollections()
 	 * @return
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -1881,7 +2028,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #RDF_addBeanTypes
+	 * @see RdfSerializer.Builder#addBeanTypes()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -1894,7 +2041,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Add XSI data types to non-<c>String</c> literals.
 	 *
-	 * @see #RDF_addLiteralTypes
+	 * @see RdfSerializer.Builder#addLiteralTypes()
 	 * @return
 	 * 	<jk>true</jk> if XSI data types should be added to string literals.
 	 */
@@ -1905,7 +2052,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Add RDF root identifier property to root node.
 	 *
-	 * @see RdfSerializer#RDF_addRootProperty
+	 * @see RdfSerializer.Builder#addRootProperty()
 	 * @return
 	 * 	<jk>true</jk> if RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
@@ -1917,7 +2064,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Auto-detect namespace usage.
 	 *
-	 * @see #RDF_disableAutoDetectNamespaces
+	 * @see RdfSerializer.Builder#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
 	 */
@@ -1928,7 +2075,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Default namespaces.
 	 *
-	 * @see #RDF_namespaces
+	 * @see RdfSerializer.Builder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */
@@ -1939,7 +2086,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	/**
 	 * Reuse XML namespaces when RDF namespaces not specified.
 	 *
-	 * @see #RDF_disableUseXmlNamespaces
+	 * @see RdfSerializer.Builder#disableUseXmlNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.

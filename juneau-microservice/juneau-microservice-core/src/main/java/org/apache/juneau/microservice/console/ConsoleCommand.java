@@ -29,7 +29,7 @@ import org.apache.juneau.collections.*;
  * 	<li>The <js>"Console/commands"</js> configuration value.
  * 		<br>This is a comma-delimited list of fully-qualified names of classes implementing this interface.
  * 		<br>When associated this way, the implementation class must have a no-arg constructor.
- * 	<li>Specifying commands via the {@link MicroserviceBuilder#consoleCommands(Class...)} method.
+ * 	<li>Specifying commands via the {@link org.apache.juneau.microservice.Microservice.Builder#consoleCommands(Class...)} method.
  * 		<br>This allows you to override the default implementation above and augment or replace the list
  * 			with your own implementation objects.
  * </ul>

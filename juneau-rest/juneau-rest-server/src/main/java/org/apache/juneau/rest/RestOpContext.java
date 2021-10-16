@@ -975,7 +975,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <ul>
 		 * 	<li>Looks for guards set via any of the following:
 		 * 		<ul>
-		 * 			<li>{@link Builder#guards()}}
+		 * 			<li>{@link RestOpContext.Builder#guards()}}
 		 * 			<li>{@link RestOp#guards()}.
 		 * 			<li>{@link Rest#guards()}.
 		 * 		</ul>
@@ -1923,7 +1923,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link Rest#maxInput}
 		 * 	<li class='ja'>{@link RestOp#maxInput}
-		 * 	<li class='jm'>{@link Builder#maxInput(String)}
+		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
 		 * </ul>
 		 *
 		 * @param value
@@ -2012,7 +2012,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * A comma-delimited list of all possible user roles.
 		 *
 		 * <p>
-		 * Used in conjunction with {@link Builder#roleGuard(String)} is used with patterns.
+		 * Used in conjunction with {@link RestOpContext.Builder#roleGuard(String)} is used with patterns.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
@@ -2078,7 +2078,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li>
 		 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 		 * 	<li>
-		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link Builder#rolesDeclared(String...)}.
+		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
 		 * 	<li>
 		 * 		Supports {@doc RestSvlVariables}
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

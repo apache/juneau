@@ -456,7 +456,7 @@ public class Microservice implements ConfigEventListener {
 		 * Augments the set of variables defined in the configuration and var resolver.
 		 *
 		 * <p>
-		 * This calls {@link VarResolverBuilder#vars(Class[])} on the var resolver used to construct the configuration
+		 * This calls {@link org.apache.juneau.svl.VarResolver.Builder#vars(Class[])} on the var resolver used to construct the configuration
 		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
 		 *
 		 * @param vars The set of variables to append to the var resolver builder.
@@ -472,7 +472,7 @@ public class Microservice implements ConfigEventListener {
 		 * Adds a bean for vars defined in the var resolver.
 		 *
 		 * <p>
-		 * This calls {@link VarResolverBuilder#bean(Class,Object)} on the var resolver used to construct the configuration
+		 * This calls {@link org.apache.juneau.svl.VarResolver.Builder#bean(Class,Object)} on the var resolver used to construct the configuration
 		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
 		 *
 		 * @param c The bean type.

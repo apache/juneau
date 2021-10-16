@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import org.apache.juneau.serializer.*;
-
 /**
  * Constants used by the {@link RdfSerializer} and {@link RdfParser} classes.
  */
@@ -59,7 +57,7 @@ public final class Constants {
 	 * Property added to root nodes to help identify them as root elements during parsing.
 	 *
 	 * <p>
-	 * Added if {@link RdfSerializer#RDF_addRootProperty} setting is enabled.
+	 * Added if {@link RdfSerializer.Builder#addRootProperty()} setting is enabled.
 	 */
 	public static final String RDF_juneauNs_ROOT = "root";
 
@@ -70,7 +68,7 @@ public final class Constants {
 	 * Property added to bean resources to identify the class type.
 	 *
 	 * <p>
-	 * Added if {@link Serializer#SERIALIZER_addBeanTypes} setting is enabled.
+	 * Added if {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting is enabled.
 	 */
 	public static final String RDF_juneauNs_TYPE = "_type";
 

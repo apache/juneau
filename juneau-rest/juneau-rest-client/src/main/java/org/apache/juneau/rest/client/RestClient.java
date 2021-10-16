@@ -4611,7 +4611,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link BeanTraverseContext.Builder#maxDepth}
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
 		 * </ul>
 		 *
 		 * @param value

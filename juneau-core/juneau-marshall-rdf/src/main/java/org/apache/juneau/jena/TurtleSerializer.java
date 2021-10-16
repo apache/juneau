@@ -40,7 +40,7 @@ public class TurtleSerializer extends RdfSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 */
 	protected TurtleSerializer(RdfSerializer.Builder builder) {
 		super(builder.turtle());

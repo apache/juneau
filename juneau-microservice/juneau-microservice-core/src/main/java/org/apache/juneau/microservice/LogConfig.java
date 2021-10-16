@@ -23,7 +23,7 @@ import org.apache.juneau.microservice.resources.*;
  *
  * <p>
  * Instances of this class can be created using {@link #create()} and passing the result to
- * {@link MicroserviceBuilder#logConfig(LogConfig)}.
+ * {@link Microservice.Builder#logConfig(LogConfig)}.
  *
  * <p>
  * These values override values specified in the <js>"Logging"</js> configuration section.

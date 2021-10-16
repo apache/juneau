@@ -602,7 +602,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 *
-	 * @see RdfParser#RDF_collectionFormat
+	 * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
@@ -613,7 +613,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 *
-	 * @see RdfParser#RDF_juneauBpNs
+	 * @see RdfParser.Builder#juneauBpNs(Namespace)
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
@@ -624,7 +624,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 *
-	 * @see RdfParser#RDF_juneauNs
+	 * @see RdfParser.Builder#juneauNs(Namespace)
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
@@ -635,7 +635,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  RDF language.
 	 *
-	 * @see RdfParser#RDF_language
+	 * @see RdfParser.Builder#language(String)
 	 * @return
 	 * 	The RDF language to use.
 	 */
@@ -646,7 +646,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see RdfParser#RDF_looseCollections
+	 * @see RdfParser.Builder#looseCollections()
 	 * @return
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -676,7 +676,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Trim whitespace from text elements.
 	 *
-	 * @see RdfParser#RDF_trimWhitespace
+	 * @see RdfParser.Builder#trimWhitespace()
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */

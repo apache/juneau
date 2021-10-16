@@ -151,7 +151,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BeanContext}
+ * 	<li class='link'>{@doc BeanContexts}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -1787,7 +1787,7 @@ public class BeanContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link Bean#dictionary()}
-		 * 	<li class='jm'>{@link Builder#beanDictionary(Class...)}
+		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
 		 *
 		 * @param on The class that the dictionary values apply to.
@@ -2794,7 +2794,7 @@ public class BeanContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
-		 * 	<li class='jm'>{@link Builder#propertyNamer(Class)}
+		 * 	<li class='jm'>{@link #propertyNamer(Class)}
 		 * </ul>
 		 *
 		 * @param on The class that the namer applies to.

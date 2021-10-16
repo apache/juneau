@@ -230,7 +230,7 @@ public @interface Rest {
 	 * Defines children of this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext.Builder#children}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#children(Object...)}
 	 * </ul>
 	 */
 	Class<?>[] children() default {};

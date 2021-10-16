@@ -562,7 +562,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 *
-	 * @see RdfSerializer#RDF_collectionFormat
+	 * @see RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
@@ -573,7 +573,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 *
-	 * @see RdfSerializer#RDF_juneauBpNs
+	 * @see RdfSerializer.Builder#juneauBpNs(Namespace)
 	 * @return
 	 * 	The XML namespace to use for bean properties.
 	 */
@@ -584,7 +584,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 *
-	 * @see RdfSerializer#RDF_juneauNs
+	 * @see RdfSerializer.Builder#juneauNs(Namespace)
 	 * @return
 	 * 	The XML namespace to use for Juneau properties.
 	 */
@@ -595,7 +595,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  RDF language.
 	 *
-	 * @see RdfSerializer#RDF_language
+	 * @see RdfSerializer.Builder#language(String)
 	 * @return
 	 * 	The RDF language to use.
 	 */
@@ -606,7 +606,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see RdfSerializer#RDF_looseCollections
+	 * @see RdfSerializer.Builder#looseCollections()
 	 * @return
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -636,7 +636,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see RdfSerializer#RDF_addBeanTypes
+	 * @see RdfSerializer.Builder#addBeanTypes()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -649,7 +649,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
-	 * @see RdfSerializer#RDF_addLiteralTypes
+	 * @see RdfSerializer.Builder#addLiteralTypes()
 	 * @return
 	 * 	<jk>true</jk> if XSI data types should be added to string literals.
 	 */
@@ -660,7 +660,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
 	 *
-	 * @see RdfSerializer#RDF_addRootProperty
+	 * @see RdfSerializer.Builder#addRootProperty()
 	 * @return
 	 * 	<jk>true</jk> if RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
@@ -672,7 +672,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * @see RdfSerializer#RDF_disableAutoDetectNamespaces
+	 * @see RdfSerializer.Builder#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
 	 */
@@ -683,7 +683,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default namespaces.
 	 *
-	 * @see RdfSerializer#RDF_namespaces
+	 * @see RdfSerializer.Builder#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */
@@ -694,7 +694,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 *
-	 * @see RdfSerializer#RDF_disableUseXmlNamespaces
+	 * @see RdfSerializer.Builder#disableUseXmlNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
 	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.

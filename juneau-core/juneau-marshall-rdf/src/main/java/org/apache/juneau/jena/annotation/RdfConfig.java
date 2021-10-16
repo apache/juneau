@@ -89,7 +89,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_language}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#language(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#language(String)}
 	 * </ul>
 	 */
 	String language() default "";
@@ -103,7 +104,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_juneauNs}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauNs(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauNs(Namespace)}
 	 * </ul>
 	 */
 	String juneauNs() default "";
@@ -117,7 +119,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_juneauBpNs}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauBpNs(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauBpNs(Namespace)}
 	 * </ul>
 	 */
 	String juneauBpNs() default "";
@@ -146,10 +149,6 @@ public @interface RdfConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_iriRules}
-	 * </ul>
 	 */
 	String rdfxml_iriRules() default "";
 
@@ -176,7 +175,6 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_errorMode}
 	 * 	<li>
 	 * 		{@doc ExtARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 	 * 	<li>
@@ -201,7 +199,6 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_embedding}
 	 * 	<li>
 	 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
@@ -220,7 +217,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_xmlBase}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_xmlbase(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_xmlbase(String)}
 	 * </ul>
 	 */
 	String rdfxml_xmlBase() default "";
@@ -238,7 +236,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_longId}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_longId()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_longId()}
 	 * </ul>
 	 */
 	String rdfxml_longId() default "";
@@ -255,7 +254,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_allowBadUris}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_allowBadUris()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_allowBadUris()}
 	 * </ul>
 	 */
 	String rdfxml_allowBadUris() default "";
@@ -294,7 +294,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_relativeUris}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_relativeUris(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_relativeUris(String)}
 	 * </ul>
 	 */
 	String rdfxml_relativeUris() default "";
@@ -320,7 +321,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_showXmlDeclaration}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_showXmlDeclaration(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_showXmlDeclaration(String)}
 	 * </ul>
 	 */
 	String rdfxml_showXmlDeclaration() default "";
@@ -340,7 +342,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_disableShowDoctypeDeclaration}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_disableShowDoctypeDeclaration()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_disableShowDoctypeDeclaration()}
 	 * </ul>
 	 */
 	String rdfxml_disableShowDoctypeDeclaration() default "";
@@ -357,7 +360,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_tab}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_tab(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_tab(int)}
 	 * </ul>
 	 */
 	String rdfxml_tab() default "";
@@ -374,7 +378,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_attributeQuoteChar}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_attributeQuoteChar(char)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_attributeQuoteChar(char)}
 	 * </ul>
 	 */
 	String rdfxml_attributeQuoteChar() default "";
@@ -393,7 +398,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_blockRules}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_blockRules(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_blockRules(String)}
 	 * </ul>
 	 */
 	String rdfxml_blockRules() default "";
@@ -410,7 +416,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_minGap}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_minGap(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_minGap(int)}
 	 * </ul>
 	 */
 	String n3_minGap() default "";
@@ -427,7 +434,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableObjectLists}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableObjectLists()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableObjectLists()}
 	 * </ul>
 	 */
 	String n3_disableObjectLists() default "";
@@ -444,7 +452,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_subjectColumn}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_subjectColumn(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_subjectColumn(int)}
 	 * </ul>
 	 */
 	String n3_subjectColumn() default "";
@@ -461,7 +470,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_propertyColumn}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_propertyColumn(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_propertyColumn(int)}
 	 * </ul>
 	 */
 	String n3_propertyColumn() default "";
@@ -478,7 +488,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_indentProperty}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_indentProperty(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_indentProperty(int)}
 	 * </ul>
 	 */
 	String n3_indentProperty() default "";
@@ -496,7 +507,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_widePropertyLen}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_widePropertyLen(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_widePropertyLen(int)}
 	 * </ul>
 	 */
 	String n3_widePropertyLen() default "";
@@ -513,7 +525,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableAbbrevBaseUri}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableAbbrevBaseUri()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableAbbrevBaseUri()}
 	 * </ul>
 	 */
 	String n3_disableAbbrevBaseUri() default "";
@@ -530,7 +543,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableUsePropertySymbols}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUsePropertySymbols()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUsePropertySymbols()}
 	 * </ul>
 	 */
 	String n3_disableUsePropertySymbols() default "";
@@ -547,7 +561,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableUseTripleQuotedStrings}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseTripleQuotedStrings()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseTripleQuotedStrings()}
 	 * </ul>
 	 */
 	String n3_disableUseTripleQuotedStrings() default "";
@@ -564,7 +579,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableUseDoubles}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseDoubles()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseDoubles()}
 	 * </ul>
 	 */
 	String n3_disableUseDoubles() default "";
@@ -595,7 +611,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_collectionFormat}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#collectionFormat(RdfCollectionFormat)}
 	 * </ul>
 	 */
 	String collectionFormat() default "";
@@ -622,7 +639,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_looseCollections}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#looseCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#looseCollections()}
 	 * </ul>
 	 */
 	String looseCollections() default "";
@@ -643,7 +661,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#trimWhitespace()}
 	 * </ul>
 	 */
 	String trimWhitespace() default "";
@@ -659,7 +677,7 @@ public @interface RdfConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <ul class='notes'>
@@ -668,7 +686,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_addBeanTypes}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addBeanTypes()}
 	 * </ul>
 	 */
 	String addBeanTypes() default "";
@@ -682,7 +700,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addLiteralTypes()}
 	 * </ul>
 	 */
 	String addLiteralTypes() default "";
@@ -705,7 +723,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addRootProperty()}
 	 * </ul>
 	 */
 	String addRootProperty() default "";
@@ -726,7 +744,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableAutoDetectNamespaces}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableAutoDetectNamespaces()}
 	 * </ul>
 	 */
 	String disableAutoDetectNamespaces() default "";
@@ -743,7 +761,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#namespaces(Namespace...)}
 	 * </ul>
 	 */
 	String[] namespaces() default {};
@@ -767,7 +785,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableUseXmlNamespaces}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableUseXmlNamespaces()}
 	 * </ul>
 	 */
 	String disableUseXmlNamespaces() default "";

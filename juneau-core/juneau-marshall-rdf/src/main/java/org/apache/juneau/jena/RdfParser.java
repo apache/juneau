@@ -251,8 +251,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
-		 * @param value
-		 * 	The new value for this property.
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -260,6 +258,21 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return rdfxml_embedding(true);
 		}
 
+		/**
+		 * RDF/XML ARP property: <c>embedding</c>.
+		 *
+		 * <p>
+		 * Sets ARP to look for RDF embedded within an enclosing XML document.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>
+		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_embedding(boolean value) {
 			return jena("rdfXml.embedding", value);
@@ -294,9 +307,33 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return rdfxml_longId(true);
 		}
 
+		/**
+		 * RDF/XML property: <c>longId</c>.
+		 *
+		 * <p>
+		 * Whether to use long ID's for anon resources.
+		 * Short ID's are easier to read, but can run out of memory on very large models.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_longId(boolean value) {
 			return jena("rdfXml.longId", value);
+		}
+
+		/**
+		 * RDF/XML property: <c>allowBadURIs</c>.
+		 *
+		 * <p>
+		 * URIs in the graph are, by default, checked prior to serialization.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		@FluentSetter
+		public Builder rdfxml_allowBadUris() {
+			return rdfxml_allowBadUris(true);
 		}
 
 		/**
@@ -309,11 +346,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		@FluentSetter
-		public Builder rdfxml_allowBadUris() {
-			return rdfxml_allowBadUris(true);
-		}
-
 		@FluentSetter
 		public Builder rdfxml_allowBadUris(boolean value) {
 			return jena("rdfXml.allowBadURIs", value);
@@ -397,6 +429,19 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return rdfxml_disableShowDoctypeDeclaration(true);
 		}
 
+		/**
+		 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+		 *
+		 * <p>
+		 * If disabled, an XML doctype declaration isn't included in the output.
+		 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
+		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
+		 * invocation.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder rdfxml_disableShowDoctypeDeclaration(boolean value) {
 			return jena("rdfXml.disableShowDoctypeDeclaration", value);
@@ -477,6 +522,16 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return n3_disableObjectLists(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableObjectLists</c>.
+		 *
+		 * <p>
+		 * Don't print object lists as comma separated lists.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableObjectLists(boolean value) {
 			return jena("n3.disableObjectLists", value);
@@ -556,6 +611,16 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return n3_disableAbbrevBaseUri(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+		 *
+		 * <p>
+		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableAbbrevBaseUri(boolean value) {
 			return jena("n3.disableAbbrevBaseUri", value);
@@ -574,6 +639,16 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return n3_disableUsePropertySymbols(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
+		 *
+		 * <p>
+		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableUsePropertySymbols(boolean value) {
 			return jena("n3.disableUsePropertySymbols", value);
@@ -592,6 +667,16 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return n3_disableUseTripleQuotedStrings(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+		 *
+		 * <p>
+		 * Disallow the use of <c>"""</c> to delimit long strings.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableUseTripleQuotedStrings(boolean value) {
 			return jena("n3.disableUseTripleQuotedStrings", value);
@@ -610,6 +695,16 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return n3_disableUseDoubles(true);
 		}
 
+		/**
+		 * N3/Turtle property: <c>disableUseDoubles</c>.
+		 *
+		 * <p>
+		 * Disallow the use of doubles as <c>123.456</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object (for method chaining).
+		 */
 		@FluentSetter
 		public Builder n3_disableUseDoubles(boolean value) {
 			return jena("n3.disableUseDoubles", value);
@@ -633,10 +728,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_collectionFormat}
-		 * </ul>
-		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
@@ -648,10 +739,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		/**
 		 * Default XML namespace for bean properties.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
-		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -666,10 +753,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		/**
 		 * XML namespace for Juneau properties.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
-		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -716,11 +799,10 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_language}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.Builder#n3()}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.Builder#ntriple()}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.Builder#turtle()}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.Builder#xml()}
+		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3()}
+		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#ntriple()}
+		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#turtle()}
+		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#xml()}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -779,10 +861,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -790,6 +868,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return looseCollections(true);
 		}
 
+		/**
+		 * Same as {@link #looseCollections()} but explicitly specifies the setting value.
+		 *
+		 * @param value
+		 * @return This object.
+		 */
 		@FluentSetter
 		public Builder looseCollections(boolean value) {
 			looseCollections = value;
@@ -801,10 +885,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -818,10 +898,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -846,10 +922,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -857,6 +929,13 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return trimWhitespace(true);
 		}
 
+		/**
+		 * Same as {@link #trimWhitespace()} but allows you to explicitly specify the value.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
 		@FluentSetter
 		public Builder trimWhitespace(boolean value) {
 			trimWhitespace = value;
@@ -865,10 +944,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		/**
 		 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -880,10 +955,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		/**
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>.
 		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_language}
-		 * </ul>
-		 *
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
@@ -893,10 +964,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		/**
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link RdfParser#RDF_language}
-		 * </ul>
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -1399,8 +1466,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The property store containing all the settings for this object.
-	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
+	 * @param builder The builder for this object.
 	 */
 	protected RdfParser(Builder builder) {
 		super((Builder) builder.consumes(getConsumes(builder)));
@@ -1516,7 +1582,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
-	 * @see #RDF_collectionFormat
+	 * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
@@ -1527,7 +1593,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Default XML namespace for bean properties.
 	 *
-	 * @see #RDF_juneauBpNs
+	 * @see RdfParser.Builder#juneauBpNs(Namespace)
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
@@ -1538,7 +1604,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * XML namespace for Juneau properties.
 	 *
-	 * @see #RDF_juneauNs
+	 * @see RdfParser.Builder#juneauNs(Namespace)
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
@@ -1549,7 +1615,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * RDF language.
 	 *
-	 * @see #RDF_language
+	 * @see RdfParser.Builder#language(String)
 	 * @return
 	 * 	The RDF language to use.
 	 */
@@ -1560,7 +1626,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see #RDF_looseCollections
+	 * @see RdfParser.Builder#looseCollections()
 	 * @return
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -1590,7 +1656,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Trim whitespace from text elements.
 	 *
-	 * @see #RDF_trimWhitespace
+	 * @see RdfParser.Builder#trimWhitespace()
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */

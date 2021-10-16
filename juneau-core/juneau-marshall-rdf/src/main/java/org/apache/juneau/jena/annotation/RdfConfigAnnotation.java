@@ -26,14 +26,13 @@ import org.apache.juneau.xml.Namespace;
 public class RdfConfigAnnotation {
 
 	/**
-	 * Applies {@link RdfConfig} annotations to a {@link RdfSerializer.Builder}.
+	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.jena.RdfSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<RdfConfig,RdfSerializer.Builder> {
 
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
@@ -81,14 +80,13 @@ public class RdfConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link RdfConfig} annotations to a {@link RdfParser.Builder}.
+	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.jena.RdfParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<RdfConfig,RdfParser.Builder> {
 
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {

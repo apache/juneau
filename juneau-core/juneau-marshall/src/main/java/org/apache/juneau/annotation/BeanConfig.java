@@ -788,7 +788,7 @@ public @interface BeanConfig {
 	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContext.Builder#swaps}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
 	 * 	<li class='link'>{@doc PojoSwaps}
 	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
 	 * 	<li class='link'>{@doc OneWayPojoSwaps}

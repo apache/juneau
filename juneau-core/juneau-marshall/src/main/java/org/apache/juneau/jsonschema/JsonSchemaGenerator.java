@@ -296,7 +296,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * <p>
 		 * Used primarily for defining common definition sections for beans in Swagger JSON.
 		 * <p>
-		 * This setting is ignored if {@link Builder#useBeanDefs()} is not enabled.
+		 * This setting is ignored if {@link JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
 		 * @param value
 		 * 	The new value for this setting.

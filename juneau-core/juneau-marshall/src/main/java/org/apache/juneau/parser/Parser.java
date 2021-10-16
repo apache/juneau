@@ -1331,7 +1331,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Auto-close streams.
 	 *
-	 * @see Builder#autoCloseStreams()
+	 * @see Parser.Builder#autoCloseStreams()
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -1343,7 +1343,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Debug output lines.
 	 *
-	 * @see Builder#debugOutputLines(int)
+	 * @see Parser.Builder#debugOutputLines(int)
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -1354,7 +1354,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Parser listener.
 	 *
-	 * @see Builder#listener(Class)
+	 * @see Parser.Builder#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
@@ -1365,7 +1365,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Strict mode.
 	 *
-	 * @see Builder#strict()
+	 * @see Parser.Builder#strict()
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
@@ -1376,7 +1376,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Trim parsed strings.
 	 *
-	 * @see Builder#trimStrings()
+	 * @see Parser.Builder#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -1388,7 +1388,7 @@ public abstract class Parser extends BeanContextable {
 	/**
 	 * Unbuffered.
 	 *
-	 * @see Builder#unbuffered()
+	 * @see Parser.Builder#unbuffered()
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */

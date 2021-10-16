@@ -92,7 +92,7 @@ public class RdfAnnotation {
 	 * Builder class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
@@ -241,14 +241,13 @@ public class RdfAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link RdfSerializer.Builder}.
+	 * Applies targeted {@link Rdf} annotations to a {@link org.apache.juneau.jena.RdfSerializer.Builder}.
 	 */
 	public static class SerializerApplier extends AnnotationApplier<Rdf,RdfSerializer.Builder> {
 
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApplier(VarResolverSession vr) {
@@ -267,14 +266,13 @@ public class RdfAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link RdfParser.Builder}.
+	 * Applies targeted {@link Rdf} annotations to a {@link org.apache.juneau.jena.RdfParser.Builder}.
 	 */
 	public static class ParserApplier extends AnnotationApplier<Rdf,RdfParser.Builder> {
 
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApplier(VarResolverSession vr) {
