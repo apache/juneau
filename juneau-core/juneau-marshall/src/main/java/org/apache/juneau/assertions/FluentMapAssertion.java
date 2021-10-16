@@ -277,31 +277,31 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentMapAssertion<K,V,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentMapAssertion<K,V,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentMapAssertion<K,V,R> silent() {
 		super.silent();
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentMapAssertion<K,V,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentMapAssertion<K,V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;

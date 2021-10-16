@@ -121,31 +121,31 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public CollectionAssertion<E> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public CollectionAssertion<E> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public CollectionAssertion<E> silent() {
 		super.silent();
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public CollectionAssertion<E> stdout() {
 		super.stdout();
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public CollectionAssertion<E> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;

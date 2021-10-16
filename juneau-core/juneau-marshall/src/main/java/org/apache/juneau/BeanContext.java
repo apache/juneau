@@ -3384,33 +3384,51 @@ public class BeanContext extends Context {
 
 		// <FluentSetters>
 
-		@Override /* Context.Builder */
-		public Builder annotations(Annotation...value) {
-			super.annotations(value);
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
 			return this;
 		}
 
-		@Override /* Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
-			return this;
-		}
-
-		@Override /* Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
-			return this;
-		}
-
-		@Override /* Context.Builder */
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

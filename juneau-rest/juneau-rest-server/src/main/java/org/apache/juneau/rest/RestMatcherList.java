@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link RestMatcher} objects.
@@ -45,6 +46,7 @@ public class RestMatcherList {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder extends BeanBuilder<RestMatcherList> {
 
 		AList<BeanCreator<RestMatcher>> entries;
@@ -108,27 +110,27 @@ public class RestMatcherList {
 
 		// <FluentSetters>
 
-		@Override /* BeanBuilder */
-		public Builder type(Class<? extends RestMatcherList> value) {
-			super.type(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder impl(RestMatcherList value) {
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder outer(Object value) {
 			super.outer(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

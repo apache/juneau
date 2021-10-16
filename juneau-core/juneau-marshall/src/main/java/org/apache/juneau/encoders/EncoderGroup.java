@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
@@ -103,6 +104,7 @@ public final class EncoderGroup {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder extends BeanBuilder<EncoderGroup> {
 		List<Object> entries;
 		Builder inheritFrom;
@@ -245,27 +247,27 @@ public final class EncoderGroup {
 
 		// <FluentSetters>
 
-		@Override /* BeanBuilder */
-		public Builder type(Class<? extends EncoderGroup> value) {
-			super.type(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder impl(EncoderGroup value) {
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder outer(Object value) {
 			super.outer(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

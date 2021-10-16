@@ -189,7 +189,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - ExecutableInfo */
+	@Override /* GENERATED - org.apache.juneau.reflect.ExecutableInfo */
 	public ConstructorInfo accessible() {
 		super.accessible();
 		return this;

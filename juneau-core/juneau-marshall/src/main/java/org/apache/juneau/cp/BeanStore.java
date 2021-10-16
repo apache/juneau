@@ -84,6 +84,7 @@ public class BeanStore {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder extends BeanBuilder<BeanStore> {
 
 		BeanStore parent;
@@ -163,27 +164,27 @@ public class BeanStore {
 
 		// <FluentSetters>
 
-		@Override /* BeanBuilder */
-		public Builder type(Class<? extends BeanStore> value) {
-			super.type(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder impl(BeanStore value) {
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder outer(Object value) {
 			super.outer(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

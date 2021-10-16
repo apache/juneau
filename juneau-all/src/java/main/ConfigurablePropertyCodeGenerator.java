@@ -102,12 +102,14 @@ public class ConfigurablePropertyCodeGenerator {
 			ClassInfo ci = ClassInfo.of(c);
 			String cName = ci.getSimpleName();
 			Set<String> ignore = ASet.of();
-			for (FluentSetters fs : ci.getAnnotations(FluentSetters.class)) {
-				if (! fs.returns().isEmpty())
-					cName = fs.returns();
-				for (String i : fs.ignore())
-					ignore.add(i);
-			}
+			FluentSetters fs = ci.getLastAnnotation(FluentSetters.class);
+			if (! fs.returns().isEmpty())
+				cName = fs.returns();
+			for (String i : fs.ignore())
+				ignore.add(i);
+
+			String indent = c.getDeclaringClass() != null ? "\t\t" : "\t";
+			Set<String> sigsAdded = new HashSet<String>();
 
 			for (ClassInfo pc : ClassInfo.of(c).getParentsParentFirst()) {
 				Class<?> pcc = pc.inner();
@@ -123,11 +125,13 @@ public class ConfigurablePropertyCodeGenerator {
 							String mSig = new StringBuilder(m.getName()).append("(").append(getArgs(m)).append(")").toString();
 
 							// Don't render ignored methods.
-							if (ignore.contains(m.getName()) || ignore.contains(mSig))
+							if (ignore.contains(m.getName()) || ignore.contains(mSig) || sigsAdded.contains(mSig))
 								continue;
 
+							sigsAdded.add(mSig);
+
 							StringBuilder sigLine = new StringBuilder();
-							sigLine.append("\n\tpublic ");
+							sigLine.append("\n").append(indent).append("public ");
 							if (m.getTypeParameters().length > 0)
 								sigLine.append("<").append(Arrays.asList(m.getTypeParameters()).stream().map(x -> x.getName()).collect(Collectors.joining(", "))).append("> ");
 							sigLine.append(cName).append(" ").append(mSig).append(" ");
@@ -145,15 +149,15 @@ public class ConfigurablePropertyCodeGenerator {
 							}
 
 							// Line 1
-							sb.append("\t")
+							sb.append(indent)
 								.append(m.getAnnotation(Deprecated.class) == null ? "" : "@Deprecated ")
-								.append("@Override /* GENERATED - ").append(pcc.getSimpleName()).append(" */")
+								.append("@Override /* GENERATED - ").append(pcc.getCanonicalName()).append(" */")
 							;
 
 							if (m.isVarArgs()) {
 								Type t = m.getParameters()[m.getParameterCount()-1].getParameterizedType();
 								if (t.toString().contains(" extends ")) {
-									sb.append("\n\t")
+									sb.append("\n").append(indent)
 										.append("@SuppressWarnings(\"unchecked\")");
 									;
 								}
@@ -163,9 +167,9 @@ public class ConfigurablePropertyCodeGenerator {
 							sb.append(sigLine2);
 
 							// Body
-							sb.append("\n\t\tsuper.").append(m.getName()).append("(").append(getArgVals(m)).append(");");
-							sb.append("\n\t\treturn this;");
-							sb.append("\n\t}");
+							sb.append("\n").append(indent).append("\tsuper.").append(m.getName()).append("(").append(getArgVals(m)).append(");");
+							sb.append("\n").append(indent).append("\treturn this;");
+							sb.append("\n").append(indent).append("}");
 
 						}
 					} else if (pc.isAny(Throwable.class, RuntimeException.class, Exception.class)) {
@@ -177,7 +181,7 @@ public class ConfigurablePropertyCodeGenerator {
 				}
 			}
 
-			s = s.substring(0, i1+15) + sb.toString() + "\n\n\t// " + s.substring(i2);
+			s = s.substring(0, i1+15) + sb.toString() + "\n\n"+indent+"// " + s.substring(i2);
 			pipe(new StringReader(s), f);
 		}
 
@@ -199,8 +203,16 @@ public class ConfigurablePropertyCodeGenerator {
 	private static Class<?> toClass(File f) {
 		try {
 			String n = f.getAbsolutePath();
-			return Class.forName(n.substring(n.indexOf("/src/main/java/")+15).replace(".java","").replace('/','.'));
-		} catch (ClassNotFoundException e) {
+			Class<?> c =  Class.forName(n.substring(n.indexOf("/src/main/java/")+15).replace(".java","").replace('/','.'));
+			if (! c.isAnnotationPresent(FluentSetters.class)) {
+				for (Class<?> c2 : c.getClasses()) {
+					if (c2.isAnnotationPresent(FluentSetters.class))
+						return c2;
+				}
+			}
+			return c;
+		} catch (Throwable e) {
+			System.err.println("Couldn't find class for file " + f.getAbsolutePath());
 			e.printStackTrace();
 			return null;
 		}
@@ -213,9 +225,9 @@ public class ConfigurablePropertyCodeGenerator {
 				sb.append(", ");
 			ClassInfo pi = ClassInfo.of(p.getParameterizedType());
 			if (p.isVarArgs())
-				sb.append(pi.getShortName().replace("[]","...") + p.getName());
+				sb.append(pi.getShortName().replace("[]","...").replace('$','.') + p.getName());
 			else
-				sb.append(pi.getShortName() + " " + p.getName());
+				sb.append(pi.getShortName().replace('$','.') + " " + p.getName());
 		}
 		return sb.toString();
 	}

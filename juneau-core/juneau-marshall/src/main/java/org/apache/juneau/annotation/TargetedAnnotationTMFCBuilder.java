@@ -48,31 +48,31 @@ public class TargetedAnnotationTMFCBuilder extends TargetedAnnotationTMFBuilder 
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - TargetedAnnotationBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationBuilder */
 	public TargetedAnnotationTMFCBuilder on(String...values) {
 		super.on(values);
 		return this;
 	}
 
-	@Override /* GENERATED - TargetedAnnotationTBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTBuilder */
 	public TargetedAnnotationTMFCBuilder on(java.lang.Class<?>...value) {
 		super.on(value);
 		return this;
 	}
 
-	@Override /* GENERATED - TargetedAnnotationTBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTBuilder */
 	public TargetedAnnotationTMFCBuilder onClass(java.lang.Class<?>...value) {
 		super.onClass(value);
 		return this;
 	}
 
-	@Override /* GENERATED - TargetedAnnotationTMFBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTMFBuilder */
 	public TargetedAnnotationTMFCBuilder on(Field...value) {
 		super.on(value);
 		return this;
 	}
 
-	@Override /* GENERATED - TargetedAnnotationTMFBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTMFBuilder */
 	public TargetedAnnotationTMFCBuilder on(Method...value) {
 		super.on(value);
 		return this;

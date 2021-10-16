@@ -21,6 +21,7 @@ import static java.util.Arrays.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link ResponseProcessor} objects.
@@ -47,6 +48,7 @@ public class ResponseProcessorList {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder extends BeanBuilder<ResponseProcessorList> {
 
 		List<Object> entries;
@@ -108,27 +110,27 @@ public class ResponseProcessorList {
 
 		// <FluentSetters>
 
-		@Override /* BeanBuilder */
-		public Builder type(Class<? extends ResponseProcessorList> value) {
-			super.type(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder impl(ResponseProcessorList value) {
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder outer(Object value) {
 			super.outer(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

@@ -70,7 +70,7 @@ public interface HttpPartParser {
 		}
 
 		@Override
-		public Creator impl(HttpPartParser value) {
+		public Creator impl(Object value) {
 			super.impl(value);
 			return this;
 		}

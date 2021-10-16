@@ -26,6 +26,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -148,6 +149,7 @@ public interface RestLogger {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder extends BeanBuilder<RestLogger> {
 
 		Logger logger;
@@ -487,27 +489,27 @@ public interface RestLogger {
 
 		// <FluentSetters>
 
-		@Override /* BeanBuilder */
-		public Builder type(Class<? extends RestLogger> value) {
-			super.type(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder beanStore(BeanStore value) {
+			super.beanStore(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder impl(RestLogger value) {
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder outer(Object value) {
 			super.outer(value);
 			return this;
 		}
 
-		@Override /* BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

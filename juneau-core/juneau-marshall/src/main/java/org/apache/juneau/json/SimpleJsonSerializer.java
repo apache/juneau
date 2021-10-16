@@ -51,7 +51,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	 * @return A new builder.
 	 */
 	public static JsonSerializer.Builder create() {
-		return (JsonSerializer.Builder)JsonSerializer.create().simpleMode().quoteChar('\'').produces("application/json").accept("application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9").type(SimpleJsonSerializer.class);
+		return JsonSerializer.create().simpleMode().quoteChar('\'').produces("application/json").accept("application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9").type(SimpleJsonSerializer.class);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

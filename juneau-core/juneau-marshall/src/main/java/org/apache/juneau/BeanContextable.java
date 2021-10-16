@@ -45,7 +45,7 @@ public abstract class BeanContextable extends Context {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
+	@FluentSetters(ignore={"annotations","debug"})
 	public abstract static class Builder extends Context.Builder {
 
 		BeanContext.Builder bcBuilder;
@@ -2901,12 +2901,6 @@ public abstract class BeanContextable extends Context {
 			return this;
 		}
 
-		@Override
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
 		@Override /* Context.Builder */
 		public Builder annotations(Annotation...value) {
 			bcBuilder.annotations(value);
@@ -2922,6 +2916,36 @@ public abstract class BeanContextable extends Context {
 		}
 
 		// <FluentSetters>
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
+			super.applyAnnotations(fromClasses);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder applyAnnotations(Method...fromMethods) {
+			super.applyAnnotations(fromMethods);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder type(Class<?> value) {
+			super.type(value);
+			return this;
+		}
 
 		// </FluentSetters>
 	}

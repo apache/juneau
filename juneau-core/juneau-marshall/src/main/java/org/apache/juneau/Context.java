@@ -238,7 +238,7 @@ public abstract class Context implements MetaProvider {
 		 * @return This object (for method chaining).
 		 */
 		@FluentSetter
-		public Builder type(Class<? extends Context> value) {
+		public Builder type(Class<?> value) {
 			this.type = value;
 			return this;
 		}

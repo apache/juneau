@@ -228,33 +228,39 @@ public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentRequestHeaderAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentRequestHeaderAssertion<R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentRequestHeaderAssertion<R> silent() {
 		super.silent();
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentRequestHeaderAssertion<R> stdout() {
 		super.stdout();
 		return this;
 	}
 
-	@Override /* GENERATED - Assertion */
+	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
 	public FluentRequestHeaderAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.assertions.FluentStringAssertion */
+	public FluentRequestHeaderAssertion<R> javaStrings() {
+		super.javaStrings();
 		return this;
 	}
 

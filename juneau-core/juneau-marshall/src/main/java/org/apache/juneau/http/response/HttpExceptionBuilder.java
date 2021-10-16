@@ -430,19 +430,19 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException.Builder */
 	public HttpExceptionBuilder<T> causedBy(Throwable value) {
 		super.causedBy(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException.Builder */
 	public HttpExceptionBuilder<T> message(String msg, Object...args) {
 		super.message(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException.Builder */
 	public HttpExceptionBuilder<T> unmodifiable() {
 		super.unmodifiable();
 		return this;

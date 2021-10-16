@@ -48,19 +48,19 @@ public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - TargetedAnnotationBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationBuilder */
 	public TargetedAnnotationMFCBuilder on(String...values) {
 		super.on(values);
 		return this;
 	}
 
-	@Override /* GENERATED - TargetedAnnotationMFBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationMFBuilder */
 	public TargetedAnnotationMFCBuilder on(Field...value) {
 		super.on(value);
 		return this;
 	}
 
-	@Override /* GENERATED - TargetedAnnotationMFBuilder */
+	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationMFBuilder */
 	public TargetedAnnotationMFCBuilder on(Method...value) {
 		super.on(value);
 		return this;

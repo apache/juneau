@@ -39,7 +39,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	 * @return A new builder.
 	 */
 	public static Builder create() {
-		return (Builder)new Builder().type(XmlDocSerializer.class);
+		return new Builder().type(XmlDocSerializer.class);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

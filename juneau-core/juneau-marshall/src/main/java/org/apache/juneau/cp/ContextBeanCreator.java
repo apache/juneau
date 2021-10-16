@@ -71,8 +71,9 @@ public class ContextBeanCreator<T> {
 	 * @param value The bean to set.
 	 * @return This object.
 	 */
-	public ContextBeanCreator<T> impl(T value) {
-		this.impl = value;
+	@SuppressWarnings("unchecked")
+	public ContextBeanCreator<T> impl(Object value) {
+		this.impl = (T)value;
 		return this;
 	}
 

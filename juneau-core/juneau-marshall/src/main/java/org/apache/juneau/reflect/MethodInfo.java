@@ -621,7 +621,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - ExecutableInfo */
+	@Override /* GENERATED - org.apache.juneau.reflect.ExecutableInfo */
 	public MethodInfo accessible() {
 		super.accessible();
 		return this;

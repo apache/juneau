@@ -227,31 +227,31 @@ public class BeanSession extends ContextSession {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - ContextSession.Builder */
+		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextSession.Builder */
+		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextSession.Builder */
+		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextSession.Builder */
+		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
 		public Builder property(String key, Object value) {
 			super.property(key, value);
 			return this;
 		}
 
-		@Override /* GENERATED - ContextSession.Builder */
+		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
 		public Builder unmodifiable() {
 			super.unmodifiable();
 			return this;

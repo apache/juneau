@@ -99,8 +99,9 @@ public class BeanCreator<T> {
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	public BeanCreator<T> impl(T value) {
-		impl = value;
+	@SuppressWarnings("unchecked")
+	public BeanCreator<T> impl(Object value) {
+		impl = (T)value;
 		return this;
 	}
 	/**

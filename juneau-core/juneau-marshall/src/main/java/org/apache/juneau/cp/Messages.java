@@ -153,6 +153,7 @@ public class Messages extends ResourceBundle {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder extends BeanBuilder<Messages> {
 
 		Class<?> forClass;
@@ -317,31 +318,31 @@ public class Messages extends ResourceBundle {
 
 		// <FluentSetters>
 
-		@Override /* BeanBuilder */
-		public Builder type(Class<? extends Messages> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* BeanBuilder */
-		public Builder impl(Messages value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
-			return this;
-		}
-
-		@Override /* BeanBuilder */
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder beanStore(BeanStore value) {
 			super.beanStore(value);
 			return this;
 		}
 
-		// <FluentSetters>
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder impl(Object value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder outer(Object value) {
+			super.outer(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
+			return this;
+		}
+
+		// </FluentSetters>
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Other methods

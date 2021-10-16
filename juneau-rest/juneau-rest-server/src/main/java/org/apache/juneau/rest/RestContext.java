@@ -5497,12 +5497,6 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		@Override
-		public Builder type(Class<? extends Context> value) {
-			super.type(value);
-			return this;
-		}
-
 		/**
 		 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parser listener.
 		 *
@@ -5954,35 +5948,53 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		// <FluentSetters>
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		// <FluentSetters>
-
-		@Override /* Context.Builder */
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
 			super.applyAnnotations(fromClasses);
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder applyAnnotations(Method...fromMethods) {
 			super.applyAnnotations(fromMethods);
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
 		}
 
-		@Override /* GENERATED - BeanContext.Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder type(Class<?> value) {
+			super.type(value);
 			return this;
 		}
 

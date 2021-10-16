@@ -83,7 +83,7 @@ public interface HttpPartSerializer {
 		}
 
 		@Override
-		public Creator impl(HttpPartSerializer value) {
+		public Creator impl(Object value) {
 			super.impl(value);
 			return this;
 		}
