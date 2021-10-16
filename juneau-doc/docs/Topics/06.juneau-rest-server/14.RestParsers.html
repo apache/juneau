@@ -34,7 +34,7 @@
 		{@link oajr.annotation.RestOp#parsers() RestOp(parsers)} 
 		- Annotation on resource Java method.
 	<li class='jm'>
-		{@link oajr.RestContextBuilder#parsers(Class[])} 
+		{@del oajr.RestContext.Builder#parsers(Class[])} 
 		- Programmatic.
 </ul>
 <p>
@@ -46,7 +46,7 @@
 	<jk>public class</jk> MyResource {
 		
 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			
 			<jc>// Using method on builder.</jc>
 			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
@@ -60,7 +60,7 @@
 
 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
 		}
 
@@ -72,5 +72,5 @@
 	}
 </p>
 <ul class='seealso'>
-	<li class='jf'>{@link oajr.RestContext#REST_parsers}
+	<li class='jf'>{@del oajr.RestContext#REST_parsers}
 </ul>

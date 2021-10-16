@@ -23,10 +23,10 @@
 <ul class='spaced-list'>
 	<li>Ability to detect and use non-public bean classes, getters/setters, and fields using the following new properties:
 		<ul>
-			<li>{@link oaj.BeanContext#BEAN_beanConstructorVisibility} - Control which bean constructors are visible to Juno.
-			<li>{@link oaj.BeanContext#BEAN_beanClassVisibility} - Control which bean classes are interpreted as beans to Juno.
-			<li>{@link oaj.BeanContext#BEAN_beanFieldVisibility} - Control which fields are visible to Juno as bean properties.
-			<li>{@link oaj.BeanContext#BEAN_beanMethodVisibility} - Control which getters/setters are visible to Juno as bean properties.
+			<li>{@del oaj.BeanContext#BEAN_beanConstructorVisibility} - Control which bean constructors are visible to Juno.
+			<li>{@del oaj.BeanContext#BEAN_beanClassVisibility} - Control which bean classes are interpreted as beans to Juno.
+			<li>{@del oaj.BeanContext#BEAN_beanFieldVisibility} - Control which fields are visible to Juno as bean properties.
+			<li>{@del oaj.BeanContext#BEAN_beanMethodVisibility} - Control which getters/setters are visible to Juno as bean properties.
 		</ul>
 		Removed <c>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></c> and <c>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></c> properties, since ignoring fields and methods
 		can be accomplished by setting the appropriate properties above to {@link oaj.Visibility#NONE NONE}.
@@ -34,7 +34,7 @@
 		the default behavior defined by the <c>VISIBILITY</c> properties identified above.  This is a convenient way of identifying protected or
 		private fields or methods as bean properties.  Previously, you could only identify public fields/getters/setters using this annotation.
 	</li>
-	<li>New {@link oaj.BeanContext#BEAN_useJavaBeanIntrospector} property that lets Juno use the Java bean <c>Introspector</c>
+	<li>New {@del oaj.BeanContext#BEAN_useJavaBeanIntrospector} property that lets Juno use the Java bean <c>Introspector</c>
 		class to determine bean properties.  In the previous release, the method for determining bean properties was a mixture of Juno-based and Introspector-based.
 		Now it's either pure Juno-based or pure Introspector-based.  The result is considerably cleaner code and consistent behavior.
 	<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous {@del @BeanProperty(hidden=true)} annotation

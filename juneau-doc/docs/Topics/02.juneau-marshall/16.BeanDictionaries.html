@@ -90,9 +90,9 @@
 		- On individual bean properties through the annotation.
 	<li class='ja'>{@link oaj.annotation.Bean#dictionary() Bean(dictionary)} 
 		- On all properties on a bean and all subclasses.
-	<li class='jf'>{@link oaj.BeanContext#BEAN_beanDictionary} 
+	<li class='jf'>{@del oaj.BeanContext#BEAN_beanDictionary} 
 		- Configuration property on serializers and parsers.
-	<li class='jm'>{@link oaj.BeanContextBuilder#dictionary(Object...)}
+	<li class='jm'>{@link oaj.BeanContext.Builder#beanDictionary(Class...)}
 		- Builder method on serializers and parsers.
 </ul>
 <p>
@@ -130,9 +130,9 @@
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
 		- On individual beans through the annotation.
-	<li class='jf'>{@link oaj.BeanContext#BEAN_typePropertyName} 
+	<li class='jf'>{@del oaj.BeanContext#BEAN_typePropertyName} 
 		- Configuration property on serializers and parsers.
-	<li class='jm'>{@link oaj.BeanContextBuilder#typePropertyName(String)} 
+	<li class='jm'>{@link oaj.BeanContext.Builder#typePropertyName(String)} 
 		- Builder method on serializers and parsers.
 </ul>
 <p>
@@ -165,6 +165,6 @@
 <div class='info'>
 	Serialized type names are DISABLED by default.
 	They must be enabled on the serializer using the 
-	{@link oaj.serializer.Serializer#SERIALIZER_addBeanTypes} 
+	{@del oaj.serializer.Serializer#SERIALIZER_addBeanTypes} 
 	configuration property.
 </div>

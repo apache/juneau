@@ -41,9 +41,9 @@
 		{@link oajr.RestResponse#getNegotiatedWriter()}.
 		<br>Note that you should call {@link oajr.RestResponse#setContentType(String)} to set 
 		the <l>Content-Type</l> header if you use this object type.
-	<li class='jc'>{@link oaj.Streamable}
+	<li class='jc'>{@del oaj.Streamable}
 		<br>Interface that identifies that an object can be serialized directly to an output stream.
-	<li class='jc'>{@link oaj.Writable}
+	<li class='jc'>{@del oaj.Writable}
 		<br>Interface that identifies that an object can be serialized directly to a writer.
 	<li class='jc'>{@del oaj.utils.ZipFileList}
 		<br>Special interface for sending zip files as responses.
@@ -65,8 +65,8 @@
 <ul class='spaced-list'>
 	<li>
 		By returning a serializable POJO, or any of the following:
-		<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link oaj.Streamable}, 
-		{@link oaj.Writable} 
+		<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@del oaj.Streamable}, 
+		{@del oaj.Writable} 
 	<li>
 		By calling {@link oajr.RestResponse#setOutput(Object)} with any of the types above.
 	<li>

@@ -70,7 +70,7 @@
 		<br>Allows easy user-defined serialization of these objects.
 		<br>The interface can be used in the following locations:
 		<ul>
-			<li>{@del org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
+			<li>{@del org.apache.juneau.rest.client.RestClient.Builder#partSerializer(Class)}
 			<li>{@del org.apache.juneau.remoteable.Path#serializer}
 			<li>{@del org.apache.juneau.remoteable.Query#serializer}
 			<li>{@del org.apache.juneau.remoteable.QueryIfNE#serializer}
@@ -127,14 +127,14 @@
 	<li>Listener APIs added to serializers and parsers:
 		<ul>
 			<li>{@link oaj.serializer.SerializerListener}
-			<li>{@link oaj.serializer.SerializerBuilder#listener(Class)}
+			<li>{@link oaj.serializer.Serializer.Builder#listener(Class)}
 			<li>{@del @RestResource(serializerListener)}
 			<li>{@del RestConfig#serializerListener(Class)}
 			<li>{@link oaj.parser.ParserListener}
-			<li>{@link oaj.parser.ParserBuilder#listener(Class)}
+			<li>{@link oaj.parser.Parser.Builder#listener(Class)}
 			<li>{@del @RestResource(parserListener)}
 			<li>{@del RestConfig#parserListener(Class)}
-			<li>{@del RestClientBuilder#listeners(Class,Class)}
+			<li>{@del RestClient.Builder#listeners(Class,Class)}
 		</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
 	<li>The {@del BEAN_debug} flag will now capture parser input and make it
 		available through the {@del ParserSession#getInputAsString()} method so that it can be used

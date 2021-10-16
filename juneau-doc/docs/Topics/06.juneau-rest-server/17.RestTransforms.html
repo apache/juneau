@@ -25,8 +25,8 @@
 <ul class='javatree'>
 	<li class='ja'>{@del BeanConfig#beanFilters() BeanConfig(beanFilters)} - On class or methods. 
 	<li class='ja'>{@link oaj.annotation.BeanConfig#swaps() BeanConfig(swaps)} - On class or methods. 
-	<li class='jm'>{@del RestContextBuilder#beanFilters(Object...)} 
-	<li class='jm'>{@link oajr.RestContextBuilder#swaps(Object...)} 
+	<li class='jm'>{@del RestContext.Builder#beanFilters(Object...)} 
+	<li class='jm'>{@del oajr.RestContext.Builder#swaps(Class...)} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// Servlet with transforms applied</jc>
@@ -57,7 +57,7 @@
 	<ja>@Rest</ja>(...)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 	
-		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
+		<jk>public</jk> MyRestServlet(RestContext.Builder builder) {
 			
 			builder
 				.swaps(

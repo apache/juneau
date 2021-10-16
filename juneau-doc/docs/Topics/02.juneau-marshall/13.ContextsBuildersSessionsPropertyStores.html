@@ -23,7 +23,7 @@
 		<l>Context</l> - A thread-safe read-only object.
 		<ul>
 			<li>Heavy to construct and designed to be cached and reused.
-			<li>Created by <l>ContextBuilder</l> classes.
+			<li>Created by <l>Context.Builder</l> classes.
 			<li>Examples:  <c>BeanContext</c>, <c>JsonSerializer</c>
 		</ul>
 	<li>
@@ -68,20 +68,20 @@
 	such as <jsf>WSERIALIZER_useWhitespace</jsf> or <jsf>JSON_simpleMode</jsf>.
 </p>
 <p>
-	The class hierarchy for <c>JsonSerializerBuilder</c> is:
+	The class hierarchy for <c>JsonSerializer.Builder</c> is:
 </p>
 <ul class='javatree'>
 	<li class='jc'><c>Object</c>
 	<ul>
-		<li class='jac'>{@link oaj.ContextBuilder}
+		<li class='jac'>{@link oaj.Context.Builder}
 		<ul>
-			<li class='jc'>{@link oaj.BeanContextBuilder}
+			<li class='jc'>{@link oaj.BeanContext.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.serializer.SerializerBuilder}
+				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 				<ul>
-					<li class='jac'>{@link oaj.serializer.WriterSerializerBuilder}
+					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.json.JsonSerializerBuilder}
+						<li class='jc'>{@link oaj.json.JsonSerializer.Builder}
 					</ul>
 				</ul>
 			</ul>
@@ -110,7 +110,7 @@
 	</ul>
 </ul>
 <p>
-	The general idea behind a {@link oaj.ContextProperties} is to serve as a reusable configuration of an artifact 
+	The general idea behind a {@del oaj.ContextProperties} is to serve as a reusable configuration of an artifact 
 	(such as a serializer) such that the artifact can be cached and reused if the property stores are 'equal'.
 </p>
 <p>
@@ -128,7 +128,7 @@
 	serializers and parsers.
 </p>
 <p>
-	The {@link oaj.ContextPropertiesBuilder} class is used to build up and instantiate immutable 
+	The {@del oaj.ContextPropertiesBuilder} class is used to build up and instantiate immutable 
 	<c>ContextProperties</c> objects.
 </p>
 <p>
@@ -146,6 +146,6 @@
 	That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
 </p>
 <p>
-	Refer to the {@link oaj.ContextProperties} javadoc for a detailed explanation on how
+	Refer to the {@del oaj.ContextProperties} javadoc for a detailed explanation on how
 	property stores work.
 </p>

@@ -85,7 +85,7 @@
 	}		
 </p>
 <p>
-	The most-common case for deploying the top-level resource is to use the {@link oaj.microservice.jetty.JettyMicroserviceBuilder#servlet(Class)} method:
+	The most-common case for deploying the top-level resource is to use the {@link oaj.microservice.jetty.JettyMicroservice.Builder#servlet(Class)} method:
 </p>	
 <p class='bpcode w800'>
 	<jk>public class</jk> App {
@@ -105,7 +105,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		{@link oaj.microservice.jetty.JettyMicroserviceBuilder#servlet(Class)} - Using the builder.  Several methods provided.
+		{@link oaj.microservice.jetty.JettyMicroservice.Builder#servlet(Class)} - Using the builder.  Several methods provided.
 	<li>
 		{@link oaj.microservice.jetty.JettyMicroservice#addServlet(Servlet,String)} - After the Jetty container has been started.
 	<li>

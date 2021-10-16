@@ -4198,7 +4198,7 @@ public class BeanContext extends Context {
 	/**
 	 * Minimum bean class visibility.
 	 *
-	 * @see Builder#beanClassVisibility(Visibility)
+	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -4209,7 +4209,7 @@ public class BeanContext extends Context {
 	/**
 	 * Minimum bean constructor visibility.
 	 *
-	 * @see Builder#beanConstructorVisibility(Visibility)
+	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -4220,7 +4220,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see Builder#beanDictionary()
+	 * @see BeanContext.Builder#beanDictionary()
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
@@ -4232,7 +4232,7 @@ public class BeanContext extends Context {
 	 * Minimum bean field visibility.
 	 *
 	 *
-	 * @see Builder#beanFieldVisibility(Visibility)
+	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -4243,7 +4243,7 @@ public class BeanContext extends Context {
 	/**
 	 * BeanMap.put() returns old property value.
 	 *
-	 * @see Builder#beanMapPutReturnsOldValue()
+	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -4255,7 +4255,7 @@ public class BeanContext extends Context {
 	/**
 	 * Minimum bean method visibility.
 	 *
-	 * @see Builder#beanMethodVisibility(Visibility)
+	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
@@ -4266,7 +4266,7 @@ public class BeanContext extends Context {
 	/**
 	 * Beans require no-arg constructors.
 	 *
-	 * @see Builder#beansRequireDefaultConstructor()
+	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -4278,7 +4278,7 @@ public class BeanContext extends Context {
 	/**
 	 * Beans require Serializable interface.
 	 *
-	 * @see Builder#beansRequireSerializable()
+	 * @see BeanContext.Builder#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -4290,7 +4290,7 @@ public class BeanContext extends Context {
 	/**
 	 * Beans require setters for getters.
 	 *
-	 * @see Builder#beansRequireSettersForGetters()
+	 * @see BeanContext.Builder#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -4302,7 +4302,7 @@ public class BeanContext extends Context {
 	/**
 	 * Beans require at least one property.
 	 *
-	 * @see Builder#disableBeansRequireSomeProperties()
+	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -4314,7 +4314,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean type property name.
 	 *
-	 * @see Builder#typePropertyName(String)
+	 * @see BeanContext.Builder#typePropertyName(String)
 	 * @return
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
@@ -4328,7 +4328,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see Builder#findFluentSetters()
+	 * @see BeanContext.Builder#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -4339,7 +4339,7 @@ public class BeanContext extends Context {
 	/**
 	 * Ignore invocation errors on getters.
 	 *
-	 * @see Builder#ignoreInvocationExceptionsOnGetters()
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -4350,7 +4350,7 @@ public class BeanContext extends Context {
 	/**
 	 * Ignore invocation errors on setters.
 	 *
-	 * @see Builder#ignoreInvocationExceptionsOnSetters()
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -4361,7 +4361,7 @@ public class BeanContext extends Context {
 	/**
 	 * Silently ignore missing setters.
 	 *
-	 * @see Builder#disableIgnoreMissingSetters()
+	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -4372,7 +4372,7 @@ public class BeanContext extends Context {
 	/**
 	 * Ignore transient fields.
 	 *
-	 * @see Builder#disableIgnoreTransientFields()
+	 * @see BeanContext.Builder#disableIgnoreTransientFields()
 	 * @return
 	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
 	 */
@@ -4383,7 +4383,7 @@ public class BeanContext extends Context {
 	/**
 	 * Ignore unknown properties.
 	 *
-	 * @see Builder#ignoreUnknownBeanProperties()
+	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -4395,7 +4395,7 @@ public class BeanContext extends Context {
 	/**
 	 * Ignore unknown properties with null values.
 	 *
-	 * @see Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
 	 */
@@ -4406,7 +4406,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see Builder#notBeanClasses(Class...)
+	 * @see BeanContext.Builder#notBeanClasses(Class...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 */
@@ -4417,7 +4417,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see Builder#notBeanPackages(String...)
+	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of fully-qualified package names to exclude from being classified as beans.
 	 */
@@ -4428,7 +4428,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see Builder#notBeanPackages(String...)
+	 * @see BeanContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
 	 */
@@ -4439,7 +4439,7 @@ public class BeanContext extends Context {
 	/**
 	 * Java object swaps.
 	 *
-	 * @see Builder#swaps(Class...)
+	 * @see BeanContext.Builder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
@@ -4450,7 +4450,7 @@ public class BeanContext extends Context {
 	/**
 	 * Bean property namer.
 	 *
-	 * @see Builder#propertyNamer(Class)
+	 * @see BeanContext.Builder#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
@@ -4461,7 +4461,7 @@ public class BeanContext extends Context {
 	/**
 	 * Sort bean properties.
 	 *
-	 * @see Builder#sortProperties()
+	 * @see BeanContext.Builder#sortProperties()
 	 * @return
 	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
@@ -4472,7 +4472,7 @@ public class BeanContext extends Context {
 	/**
 	 * Use enum names.
 	 *
-	 * @see Builder#useEnumNames()
+	 * @see BeanContext.Builder#useEnumNames()
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
@@ -4483,7 +4483,7 @@ public class BeanContext extends Context {
 	/**
 	 * Use interface proxies.
 	 *
-	 * @see Builder#disableInterfaceProxies()
+	 * @see BeanContext.Builder#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -4495,7 +4495,7 @@ public class BeanContext extends Context {
 	/**
 	 * Use Java Introspector.
 	 *
-	 * @see Builder#useJavaBeanIntrospector()
+	 * @see BeanContext.Builder#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
@@ -4506,7 +4506,7 @@ public class BeanContext extends Context {
 	/**
 	 * Locale.
 	 *
-	 * @see Builder#locale(Locale)
+	 * @see BeanContext.Builder#locale(Locale)
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
@@ -4517,7 +4517,7 @@ public class BeanContext extends Context {
 	/**
 	 * Media type.
 	 *
-	 * @see Builder#mediaType(MediaType)
+	 * @see BeanContext.Builder#mediaType(MediaType)
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
@@ -4528,7 +4528,7 @@ public class BeanContext extends Context {
 	/**
 	 * Time zone.
 	 *
-	 * @see Builder#timeZone(TimeZone)
+	 * @see BeanContext.Builder#timeZone(TimeZone)
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */

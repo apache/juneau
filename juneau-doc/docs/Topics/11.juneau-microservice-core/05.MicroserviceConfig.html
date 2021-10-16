@@ -19,11 +19,11 @@
 	The following methods can be used to define the configuration for your microservice using the powerful Config API:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.microservice.MicroserviceBuilder}
+	<li class='jc'>{@link oaj.microservice.Microservice.Builder}
 	<ul>
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#config(Config) config(Config)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#configName(String) configName(String)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#config(Config) config(Config)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#configName(String) configName(String)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#configStore(ConfigStore) configStore(ConfigStore)} 
 	</ul>
 </ul>
 <p>
@@ -57,7 +57,7 @@
 	If no configuration file is found, and empty in-memory configuration is used.
 </p>
 <p>
-	The {@link oaj.microservice.MicroserviceBuilder#configName(String) configName(String)} method allows you to explicitly specify the name
+	The {@link oaj.microservice.Microservice.Builder#configName(String) configName(String)} method allows you to explicitly specify the name
 	of the external configuration file location for your microservice.
 </p>
 <p class='bpcode w800'>
@@ -77,7 +77,7 @@
 </p>
 
 <p>
-	The {@link oaj.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} method can be used to explicitly
+	The {@link oaj.microservice.Microservice.Builder#configStore(ConfigStore) configStore(ConfigStore)} method can be used to explicitly
 	specify a configuration store.
 	This can include your own custom configuration store, such as one that's implemented in a relational database.
 </p>
@@ -91,7 +91,7 @@
 	;
 </p>
 <p>
-	The {@link oaj.microservice.MicroserviceBuilder#config(Config) config(Config)} method can be used to explicitly specify a {@link oaj.config.Config} 
+	The {@link oaj.microservice.Microservice.Builder#config(Config) config(Config)} method can be used to explicitly specify a {@link oaj.config.Config} 
 	file as the microservice configuration.  When this method is used, the above two methods are bypassed entirely.
 </p>
 <p class='bpcode w800'>

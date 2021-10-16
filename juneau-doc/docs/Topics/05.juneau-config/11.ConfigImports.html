@@ -50,7 +50,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Java code</jc>
-	Config <jv>config</jv> = ConfigBuilder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+	Config <jv>config</jv> = Config.Builder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 	String <jv>foo</jv> = <jv>config</jv>.getString(<js>"Foo/bar"</js>);  <jc>// == "baz"</jc>
 </p>
 <p>
@@ -77,7 +77,7 @@
 	<ck>bar</ck> = <cv>quux</cv>
 </p>
 <p class='bpcode w800'>
-	Config <jv>config</jv> = ConfigBuilder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+	Config <jv>config</jv> = Config.Builder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 	String <jv>foo</jv> = <jv>config</jv>.getString(<js>"Foo/bar"</js>);  <jc>// == "baz"</jc>
 </p>
 
@@ -108,7 +108,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Create our configuration.</jc>
-	Config <jv>config</jv> = ConfigBuilder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+	Config <jv>config</jv> = Config.Builder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 	
 	<jc>// Create a listener that sets a flag if "Foo/bar" is set.</jc>	
 	<jk>final boolean</jk>[] <jv>triggered</jv> = <jk>new boolean</jk>[1];

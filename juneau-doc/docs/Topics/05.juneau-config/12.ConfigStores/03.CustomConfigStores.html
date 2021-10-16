@@ -126,7 +126,7 @@
 	}
 </p>
 <p>
-	The purpose of the builder class is to simply set values in the {@link oaj.ContextProperties}
+	The purpose of the builder class is to simply set values in the {@del oaj.ContextProperties}
 	that's passed to the <c>ConfigStore</c>:
 </p>
 <h5 class='figure'>Example Builder Class:</h5>
@@ -166,7 +166,7 @@
 			<jk>return this</jk>;
 		}
 
-		<ja>@Override</ja> <jc>/* ContextBuilder */</jc>
+		<ja>@Override</ja> <jc>/* Context.Builder */</jc>
 		<jk>public</jk> ConfigFileStore build() {
 			<jk>return new</jk> ConfigFileStore(getContextProperties());
 		}

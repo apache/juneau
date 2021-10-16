@@ -71,15 +71,15 @@
 				Session objects are transient objects that live for the duration of a single parse.
 			<li>
 				Builder objects also now have a consistent class hierarchy.
-				<br>For example, the class hierarchy of <c>JsonSerializerBuilder</c> is now:
+				<br>For example, the class hierarchy of <c>JsonSerializer.Builder</c> is now:
 				<ul class='doctree'>
-					<li class='jac'>{@link oaj.ContextBuilder}
+					<li class='jac'>{@link oaj.Context.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.BeanContextBuilder}
+						<li class='jc'>{@link oaj.BeanContext.Builder}
 						<ul>
-							<li class='jac'>{@link oaj.serializer.SerializerBuilder}
+							<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 							<ul>
-								<li class='jc'>{@link oaj.json.JsonSerializerBuilder}
+								<li class='jc'>{@link oaj.json.JsonSerializer.Builder}
 							</ul>
 						</ul>
 					</ul>
@@ -117,7 +117,7 @@
 		</ul>
 		Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
 	<li>	
-		<c>ContextBuilder.property(String,Object)</c> renamed to {@link oaj.ContextBuilder#set(String,Object)}.
+		<c>Context.Builder.property(String,Object)</c> renamed to {@del oaj.Context.Builder#set(String,Object)}.
 	<li>
 		<c>ResourceFinder</c> class has been replaced with the following:
 		<ul>
@@ -140,13 +140,13 @@
 			<li>{@link oaj.parser.ParserSession#getListener(Class) getListener(Class)}
 		</ul>
 	<li>
-		New {@link oaj.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
+		New {@del oaj.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
 		buffering on the JSON and UON parsers so that they can be used to read continous streams of objects.
 	<li>
-		New {@link oaj.json.JsonParser#JSON_validateEnd} and {@link oaj.uon.UonParser#UON_validateEnd} 
+		New {@del oaj.json.JsonParser#JSON_validateEnd} and {@del oaj.uon.UonParser#UON_validateEnd} 
 		settings allow you to control whether we validate that there is no garbage at the end of the parsed input.
 	<li>
-		New {@link oaj.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
+		New {@del oaj.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
 		readers passed into parsers to be automatically closed after parsing.
 	<li>
 		Syntax changed on unswap method on {@link oaj.transform.Surrogate} classes.
@@ -258,33 +258,33 @@
 				</ul>
 		</ul>
 	<li>
-		Refactored the <c>RestConfig</c> class into {@link oajr.RestContextBuilder}.
+		Refactored the <c>RestConfig</c> class into {@link oajr.RestContext.Builder}.
 		<br>Settings on {@link oajr.RestContext} objects can now be set declaratively through the 
 			following new properties:
 		<ul>
 			<li>{@del RestContext#REST_allowHeaderParams}
 			<li>{@del RestContext#REST_allowBodyParam}
-			<li>{@link oajr.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
-			<li>{@link oajr.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
+			<li>{@del oajr.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
+			<li>{@del oajr.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
 			<li>{@del RestContext#REST_useStackTraceHashes}
-			<li>{@link oajr.RestContext#REST_defaultCharset REST_defaultCharset}
-			<li>{@link oajr.RestContext#REST_maxInput REST_maxInput}
+			<li>{@del oajr.RestContext#REST_defaultCharset REST_defaultCharset}
+			<li>{@del oajr.RestContext#REST_maxInput REST_maxInput}
 			<li>{@del RestContext#REST_paramResolvers}
-			<li>{@link oajr.RestContext#REST_converters REST_converters}
-			<li>{@link oajr.RestContext#REST_guards REST_guards}
+			<li>{@del oajr.RestContext#REST_converters REST_converters}
+			<li>{@del oajr.RestContext#REST_guards REST_guards}
 			<li>{@del RestContext#REST_responseHandlers}
 			<li>{@del RestContext#REST_defaultRequestHeaders}
 			<li>{@del RestContext#REST_defaultResponseHeaders}
-			<li>{@link oajr.RestContext#REST_produces REST_produces}
-			<li>{@link oajr.RestContext#REST_consumes REST_consumes}
-			<li>{@link oajr.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
+			<li>{@del oajr.RestContext#REST_produces REST_produces}
+			<li>{@del oajr.RestContext#REST_consumes REST_consumes}
+			<li>{@del oajr.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
 			<li>{@del RestContext#REST_resourceResolver}
 			<li>{@del RestContext#REST_logger}
 			<li>{@del RestContext#REST_callHandler}
 			<li>{@del RestContext#REST_infoProvider}
-			<li>{@link oajr.RestContext#REST_path REST_path}
+			<li>{@del oajr.RestContext#REST_path REST_path}
 			<li>{@del RestContext#REST_contextPath}
-			<li>{@link oajr.RestContext#REST_staticFiles REST_staticFiles}
+			<li>{@del oajr.RestContext#REST_staticFiles REST_staticFiles}
 			<li>{@del RestContext#REST_staticFileResponseHeaders}
 			<li>{@del RestContext#REST_classpathResourceFinder}
 			<li>{@del RestContext#REST_useClasspathResourceCaching}
@@ -430,7 +430,7 @@
 <ul class='spaced-list'>
 	<li>
 		New configuration property {@del oajrc.RestClient#RESTCLIENT_query} and
-		builder method {@del oajrc.RestClientBuilder#query(String,Object)}.
+		builder method {@del oajrc.RestClient.Builder#query(String,Object)}.
 	<li>
 		API changes to replace <c>PartSerializer</c> with {@link oaj.httppart.HttpPartSerializer}.
 		<br>The default value is now {@del SimpleUonPartSerializer} which will

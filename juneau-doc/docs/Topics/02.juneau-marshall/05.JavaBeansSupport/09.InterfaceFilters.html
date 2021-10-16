@@ -71,7 +71,7 @@
 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>object</jv>);  
 </p>	
 <p>
-	The {@del BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
+	The {@del BeanContext.Builder#beanFilters(Object...)} method will automatically interpret any 
 	non-<c>BeanFilter</c> classes passed in as meaning interface classes. 
 	So in the previous example, the <c>BeanFilter</c> class could have been avoided altogether by just 
 	passing in <c>MyInterface.<jk>class</jk></c> to the serializer, like so:

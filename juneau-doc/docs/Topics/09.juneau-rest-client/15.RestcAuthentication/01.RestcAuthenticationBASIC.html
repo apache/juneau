@@ -16,7 +16,7 @@
 {title:'BASIC Authentication', flags:'todo'}
 
 <p>
-	The {@del oajr.client2.RestClientBuilder#basicAuth(String,int,String,String)} method 
+	The {@del oajr.client2.RestClient.Builder#basicAuth(String,int,String,String)} method 
 	can be used to quickly enable BASIC authentication support.
 </p>
 
@@ -31,7 +31,7 @@
 	This is functionally equivalent to the following:
 </p>
 <p class='bpcode w800'>
-	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 	AuthScope <jv>scope</jv> = <jk>new</jk> AuthScope(<jsf>HOST</jsf>, <jsf>PORT</jsf>);
 	Credentials <jv>up</jv> = <jk>new</jk> UsernamePasswordCredentials(<jsf>USER</jsf>, <jsf>PW</jsf>);
 	CredentialsProvider <jv>p</jv> = <jk>new</jk> BasicCredentialsProvider();

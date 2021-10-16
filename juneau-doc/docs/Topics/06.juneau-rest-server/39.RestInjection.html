@@ -36,7 +36,7 @@
 		}
 		
 		<jk>@Override</jk> <jc>/* RestResourceResolverSimple */</jc>
-		<jk>public</jk> Object resolve(Class&lt;?&gt; resourceType, RestContextBuilder builder) <jk>throws</jk> Exception {
+		<jk>public</jk> Object resolve(Class&lt;?&gt; resourceType, RestContext.Builder builder) <jk>throws</jk> Exception {
 			Object resource = <jf>appContext.</jf>getBean(type);
 			
 			<jc>// If Spring can't resolve it, use default resolution (just look for no-arg constructor).</jc>
@@ -91,7 +91,7 @@
 		}
 		
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> initSpring(RestContextBuilder builder) <jk>throws</jk> Exception {
+		<jk>public void</jk> initSpring(RestContext.Builder builder) <jk>throws</jk> Exception {
 			builder.setResourceResolver(<jf>resolver</jf>);
 		}
 	}

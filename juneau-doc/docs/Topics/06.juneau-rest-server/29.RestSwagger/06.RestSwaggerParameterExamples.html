@@ -160,7 +160,7 @@
 </p>
 <p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
-	By default, the generated swagger uses to the {@link oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+	By default, the generated swagger uses to the {@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
 	setting to automatically add examples to beans, collections, arrays, and maps:
 </p>
 <p class='bpcode w800'>
@@ -212,7 +212,7 @@
 	}
 </p>
 <p>
-	Examples can also be specified via generic properties as well using the {@link oaj.BeanContextBuilder#example(Class,Object)} setting or {@del oaj.annotation.BeanConfig#examples() @BeanConfig(examples)} annotation at either the class or method level.
+	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext.Builder#example(Class,Object)} setting or {@del oaj.annotation.BeanConfig#examples() @BeanConfig(examples)} annotation at either the class or method level.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -224,13 +224,13 @@
 </p>
 <ul class='seealso'>
 	<li class='ja'>{@link oaj.annotation.Example}
-	<li class='jc'>{@link oaj.BeanContextBuilder}
+	<li class='jc'>{@link oaj.BeanContext.Builder}
 	<ul>
-		<li class='jf'>{@link oaj.BeanContextBuilder#example(Class,Object) example(Class,Object)}
+		<li class='jf'>{@link oaj.BeanContext.Builder#example(Class,Object) example(Class,Object)}
 	</ul>
 	<li class='jc'>{@link oaj.jsonschema.JsonSchemaGenerator}
 	<ul>
-		<li class='jf'>{@link oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
-		<li class='jf'>{@link oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
+		<li class='jf'>{@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
+		<li class='jf'>{@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
 	</ul>
 </ul>

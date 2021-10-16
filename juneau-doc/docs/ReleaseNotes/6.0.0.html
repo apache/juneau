@@ -53,11 +53,11 @@
 		<ul>
 			<li>{@link oaj.annotation.Bean#typeName() @Bean(typeName)} - Annotation that defines an identifying name for a bean class.
 			<li>{@del oaj.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
-			<li>{@link oaj.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
+			<li>{@del oaj.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 				during parsing. 
 			<li>{@del BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
 			<li>{@del @BeanProperty(beanDictionary)} - Define a type dictionary
-				for a particular bean property value.  This overrides the value specified using {@link oaj.BeanContext#BEAN_beanDictionary}.
+				for a particular bean property value.  This overrides the value specified using {@del oaj.BeanContext#BEAN_beanDictionary}.
 			<li>{@del SerializerContext#SERIALIZER_addBeanTypeProperties} - Controls whether type properties are serialized.
 		</ul>
 		In addition, the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} value replaces the <c>@Xml(name)</c> annotation, and the 

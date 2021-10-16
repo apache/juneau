@@ -19,12 +19,12 @@
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
 	It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
 	If you try to serialize models with loops, you will usually cause a <c>StackOverflowError</c> to 
-	be thrown (if {@link oaj.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
+	be thrown (if {@del oaj.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
 	first).
 </p>
 <p>
 	If you still want to use the Juneau serializers on such models, Juneau provides the 
-	{@link oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
+	{@del oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
 	It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 	serialization when a duplicate is encountered.
 </p>

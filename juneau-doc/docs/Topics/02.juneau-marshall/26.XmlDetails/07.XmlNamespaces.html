@@ -103,7 +103,7 @@
 	<xt>&lt;/per:person&gt;</xt>
 </p>
 <p>
-	Enabling the {@link oaj.xml.XmlSerializer#XML_addNamespaceUrisToRoot} setting results
+	Enabling the {@del oaj.xml.XmlSerializer#XML_addNamespaceUrisToRoot} setting results
 	in the namespace URLs being added to the root node:
 </p>
 <p class='bpcode w800'>
@@ -164,7 +164,7 @@
 	defined on classes and bean properties.
 	In high-performance environments, you may want to consider disabling auto-detection and providing your 
 	own explicit list of namespaces to the serializer to avoid this scanning step using 
-	{@link oaj.xml.XmlSerializerBuilder#disableAutoDetectNamespaces()}.
+	{@link oaj.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
 </p>
 <p>
 	The following code will produce the same output as before, but will perform slightly better since it 

@@ -19,15 +19,15 @@
 	Per-client or per-request headers can be specified using the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClientBuilder}
+	<li class='jc'>{@del oajr.client2.RestClient.Builder}
 	<ul>
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#header(String,Object) header(String,Object)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#header(Header) header(Header)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#headers(Object...) headers(Object...)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#header(Header) header(Header)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#headers(Object...) headers(Object...)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)}
 	</ul>
 	<li class='jc'>{@del oajr.client2.RestRequest}
 	<ul>
@@ -52,8 +52,8 @@
 </p>
 
 <p>
-	{@del oajr.client2.RestClientBuilder#headers(Object...) headers(Object...)} allows you to pass in a variety
-	of header objects, and {@del oajr.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)} allows
+	{@del oajr.client2.RestClient.Builder#headers(Object...) headers(Object...)} allows you to pass in a variety
+	of header objects, and {@del oajr.client2.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)} allows
 	you to specify several headers in a compact fashion.
 </p>
 
@@ -76,7 +76,7 @@
 
 <p>
 	Additionally, methods are provided on the client builder and per request for all standard HTTP headers
-	such as {@del oajr.client2.RestClientBuilder#authorization(Object) authorization(Object)}.
+	such as {@del oajr.client2.RestClient.Builder#authorization(Object) authorization(Object)}.
 </p>
 
 <h5 class='figure'>Example:</h5>

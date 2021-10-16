@@ -73,7 +73,7 @@
 </p>
 <p>
 	Once a config file has been associated with a REST resource, it can be accessed through the 
-	{@link oajr.RestContextBuilder#getConfig()} method.
+	{@link oajr.RestContext.Builder#getConfig()} method.
 </p>
 <p>
 	A common usage is to use this method to initialize fields in your servlet.
@@ -88,7 +88,7 @@
 		<jk>private final</jk> String <jf>path</jf>;
 		<jk>private final</jk> File <jf>javaHome</jf>;
 	
-		<jk>public</jk> MyResource(RestContextBuilder builder) {
+		<jk>public</jk> MyResource(RestContext.Builder builder) {
 			Config c = builder.getConfig();
 			<jf>path</jf> = c.getString(<js>"MyProperties/path"</js>);
 			<jf>javaHome</jf> = c.getObject(File.<jk>class</jk>, <js>"MyProperties/javaHome"</js>);

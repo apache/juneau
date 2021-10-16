@@ -27,14 +27,14 @@
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oajr.annotation.Rest} - Settings copied from the annotation during servlet initialization.
-	<li class='jm'>{@link oajr.RestContextBuilder} - Builder used during servlet initialization.
+	<li class='jm'>{@link oajr.RestContext.Builder} - Builder used during servlet initialization.
 </ul>
 <p>
 	The annotation should be self-explanatory at this point.
 	The builder allows you to perform all of the same configuration as the annotation programmatically.
 </p>
 <p>
-	The {@link oajr.RestContextBuilder} class extends {@link oaj.BeanContextBuilder}
+	The {@link oajr.RestContext.Builder} class extends {@link oaj.BeanContext.Builder}
 	allowing you to programmatically set any properties defined on that builder class.
 	It also implements {@link javax.servlet.ServletConfig}
 </p>
@@ -43,7 +43,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Option #1 - Pass in through constructor.</jc>
-	<jk>public</jk> MyResource(RestContextBuilder builder) {
+	<jk>public</jk> MyResource(RestContext.Builder builder) {
 			builder
 				.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
 				.set(<jsf>PARSER_debug</jsf>);
@@ -51,7 +51,7 @@
 
 	<jc>// Option #2 - Use an INIT hook.</jc>
 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	<jk>public void</jk> init(RestContext.Builder builder) <jk>throws</jk> Exception {
 			builder
 				.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
 				.set(<jsf>PARSER_debug</jsf>);

@@ -46,9 +46,9 @@
 		</p>	
 	<li>Also introduced the following builder classes and related architecture changes to make the built objects unmodifiable:
 		<ul>
-			<li>{@link oaj.serializer.SerializerGroupBuilder}
-			<li>{@link oaj.parser.ParserGroupBuilder}
-			<li>{@link oaj.encoders.EncoderGroupBuilder}
+			<li>{@link oaj.serializer.SerializerGroup.Builder}
+			<li>{@link oaj.parser.ParserGroup.Builder}
+			<li>{@link oaj.encoders.EncoderGroup.Builder}
 		</ul>
 	<li>Revamped the config file API to use a build:  {@del ConfigFileBuilder}.
 	<li>Removed the {@del Lockable} interface.
@@ -104,10 +104,10 @@
 	<li>Updated doc: <dc>6 - Remoteable Services</dc>
 	<li>New doc: <dc>6.1 -  Interface proxies against 3rd-party REST interfaces</dc>
 	<li>New URL-encoding serializer setting: {@del UrlEncodingSerializerContext#URLENC_paramFormat}.
-	<li>New methods on {@link oaj.urlencoding.UrlEncodingSerializerBuilder}:
+	<li>New methods on {@link oaj.urlencoding.UrlEncodingSerializer.Builder}:
 	<ul>
-		<li>{@del UrlEncodingSerializerBuilder#paramFormat(String)}	
-		<li>{@del UrlEncodingSerializerBuilder#plainTextParams()}	
+		<li>{@del UrlEncodingSerializer.Builder#paramFormat(String)}	
+		<li>{@del UrlEncodingSerializer.Builder#plainTextParams()}	
 	</ul> 		
 </ul>
 
@@ -253,15 +253,15 @@
 			<li>{@del oajrc.RestCall#userInfo(String) userInfo(String)}
 			<li>{@del oajrc.RestCall#scheme(String) scheme(String)}
 		</ul>
-	<li>New methods added to {@link oajrc.RestClientBuilder}:
+	<li>New methods added to {@link oajrc.RestClient.Builder}:
 		<ul>
-			<li>{@link oajrc.RestClientBuilder#executorService(ExecutorService,boolean) executorService(ExecutorService,boolean)}
-			<li>{@del RestClientBuilder#paramFormat(String)}
-			<li>{@del RestClientBuilder#plainTextParams()}
-			<li>{@link oajrc.RestClientBuilder#noTrace() noTrace()} - Adds a <c>No-Trace: true</c> header on all requests to prevent
+			<li>{@link oajrc.RestClient.Builder#executorService(ExecutorService,boolean) executorService(ExecutorService,boolean)}
+			<li>{@del RestClient.Builder#paramFormat(String)}
+			<li>{@del RestClient.Builder#plainTextParams()}
+			<li>{@link oajrc.RestClient.Builder#noTrace() noTrace()} - Adds a <c>No-Trace: true</c> header on all requests to prevent
 				the servlet from logging errors.
 				<br>Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.
-			<li>{@link oajrc.RestClientBuilder#debug() debug()} now adds a <c>Debug: true</c> header on all requests.
+			<li>{@link oajrc.RestClient.Builder#debug() debug()} now adds a <c>Debug: true</c> header on all requests.
 		</ul>
 	<li>New methods added/updated to {@del oajrc.RestCall}:
 		<ul>

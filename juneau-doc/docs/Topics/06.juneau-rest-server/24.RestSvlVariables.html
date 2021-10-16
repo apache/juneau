@@ -43,7 +43,7 @@
 	Variables are configured on resources via the following API:
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@link oajr.RestContextBuilder#vars(Class[])}
+	<li class='jm'>{@del oajr.RestContext.Builder#vars(Class[])}
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -65,7 +65,7 @@
 	<ja>@Rest</ja>(...)
 	<jk>public class</jk> MyResource {
 	
-		<jk>public</jk> MyResource(RestContextBuilder builder) {
+		<jk>public</jk> MyResource(RestContext.Builder builder) {
 			builder.vars(BracketVar.<jk>class</jk>);
 		}
 	}

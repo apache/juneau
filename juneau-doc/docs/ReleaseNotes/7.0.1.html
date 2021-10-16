@@ -30,7 +30,7 @@
 		<br>This simplifies the syntax of creation of serializers and parsers by scratch.
 		<p class='bcode w800'>
 	<jc>// Old way</jc>
-	JsonSerializer s1 = <jk>new</jk> JsonSerializerBuilder().ws().build();
+	JsonSerializer s1 = <jk>new</jk> JsonSerializer.Builder().ws().build();
 	
 	<jc>// New way</jc>
 	JsonSerializer s2 = JsonSerializer.<jsm>create</jsm>().ws().build();

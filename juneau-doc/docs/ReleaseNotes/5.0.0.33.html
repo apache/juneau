@@ -32,14 +32,14 @@
 	<li>
 		New settings in BeanContext.  These can be applied to all serializers/parsers.
 		<ul>
-			<li>{@link oaj.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
-			<li>{@link oaj.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
+			<li>{@del BEAN_ignoreInvocationExceptionsOnGetters}
+			<li>{@del BEAN_ignoreInvocationExceptionsOnSetters}
 			<li>{@del BEAN_notBeanPackages_add}
 			<li>{@del BEAN_notBeanPackages_remove}
 		</ul>
 	</li>
 	<li>
-		Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@del BeanContext#BEAN_notBeanPackages_add} / {@del BeanContext#BEAN_notBeanPackages_remove} properties.
+		Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@del BEAN_notBeanPackages_add} / {@del BEAN_notBeanPackages_remove} properties.
 	</li>
 	<li>
 		New settings in <c>RestServletProperties</c>.

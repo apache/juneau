@@ -19,14 +19,14 @@
 	Per-client or per-request query parameters can be specified using the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClientBuilder}
+	<li class='jc'>{@del oajr.client2.RestClient.Builder}
 	<ul>
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#query(String,Object) query(String,Object)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#queries(Object...) queries(Object...)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Object) query(String,Object)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#queries(Object...) queries(Object...)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#queryPairs(Object...) queryPairs(Object...)}
 	</ul>
 	<li class='jc'>{@del oajr.client2.RestRequest}
 	<ul>
@@ -49,8 +49,8 @@
 </p>
 
 <p>
-	{@del oajr.client2.RestClientBuilder#queries(Object...) queries(Object...)} allows you to pass in a variety
-	of query parameter objects, and {@del oajr.client2.RestClientBuilder#queryPairs(Object...) queryPairs(Object...)} allows
+	{@del oajr.client2.RestClient.Builder#queries(Object...) queries(Object...)} allows you to pass in a variety
+	of query parameter objects, and {@del oajr.client2.RestClient.Builder#queryPairs(Object...) queryPairs(Object...)} allows
 	you to specify several query parameters in a compact fashion.
 </p>
 

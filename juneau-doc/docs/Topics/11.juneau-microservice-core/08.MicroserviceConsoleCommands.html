@@ -47,12 +47,12 @@
 	The builder methods for controlling the console are as follows:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.microservice.MicroserviceBuilder}
+	<li class='jc'>{@link oaj.microservice.Microservice.Builder}
 	<ul>
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleEnabled(boolean) consoleEnabled(boolean)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleCommands(Class...) consoleCommands(Class...)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#consoleEnabled(boolean) consoleEnabled(boolean)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#consoleCommands(Class...) consoleCommands(Class...)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} 
 	</ul>
 </ul>
 <p>
@@ -77,7 +77,7 @@
 		org.apache.juneau.microservice.console.HelpCommand</cv>
 </p>
 <p>
-	New commands can be added by adding them to the configuration file, or programmatically using the {@link oaj.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+	New commands can be added by adding them to the configuration file, or programmatically using the {@link oaj.microservice.Microservice.Builder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
 	builder method.
 </p>
 <p>
@@ -96,5 +96,5 @@
 </ul>
 <p>
 	By default, the console input and output are taken from {@link java.lang.System.in} and {@link java.lang.System.out}.
-	These can be overridden using the {@link oaj.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} method.
+	These can be overridden using the {@link oaj.microservice.Microservice.Builder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} method.
 </p>

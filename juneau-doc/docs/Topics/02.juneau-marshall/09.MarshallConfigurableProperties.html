@@ -17,12 +17,12 @@
 
 <p>
 	Serializers and parsers have a wide variety of configurable properties.  They all extend from the 
-	{@link oaj.BeanContextBuilder} class that allows you to easily construct new instances from scratch or build upon existing instances.
+	{@link oaj.BeanContext.Builder} class that allows you to easily construct new instances from scratch or build upon existing instances.
 	For example, the following code shows how to configure a JSON serializer:
 </p>
 <p class='bpcode w800'>
 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
+		.<jsm>create</jsm>()  <jc>// Create a JsonSerializer.Builder</jc>
 		.simpleMode()  <jc>// Simple mode</jc>
 		.ws()  <jc>// Use whitespace</jc>
 		.sq()  <jc>// Use single quotes </jc>

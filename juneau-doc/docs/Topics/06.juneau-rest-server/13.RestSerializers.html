@@ -34,7 +34,7 @@
 		{@link oajr.annotation.RestOp#serializers() RestOp(serializers)} 
 		- Annotation on resource Java method.
 	<li class='jf'>
-		{@link oajr.RestContext#REST_serializers} 
+		{@del oajr.RestContext#REST_serializers} 
 		- Programmatic.
 </ul>
 <p>
@@ -46,7 +46,7 @@
 	<jk>public class</jk> MyResource {
 		
 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-			<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+			<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			
 			<jc>// Using method on builder.</jc>
 			<jv>builder</jv>.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
@@ -60,7 +60,7 @@
 
 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			<jv>builder</jv>.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
 		}
 
@@ -74,5 +74,5 @@
 </p>
 
 <ul class='seealso'>
-	<li class='jf'>{@link oajr.RestContext#REST_serializers}
+	<li class='jf'>{@del oajr.RestContext#REST_serializers}
 </ul>

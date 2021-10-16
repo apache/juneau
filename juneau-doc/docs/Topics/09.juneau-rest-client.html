@@ -57,7 +57,7 @@ specific language governing permissions and limitations under the License.
 </p>
 
 <p class='bpcode w800'>
-	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -108,12 +108,12 @@ specific language governing permissions and limitations under the License.
 </ul>
 
 <p>
-	Instances of this class are built using the {@del oajr.client2.RestClientBuilder} class which can be constructed using
+	Instances of this class are built using the {@del oajr.client2.RestClient.Builder} class which can be constructed using
 	the {@del oajr.client2.RestClient#create() RestClient.create()} method as shown above.
 </p>
 <p>
 	Clients are typically created with a root URI so that relative URIs can be used when making requests.
-	This is done using the {@del oajr.client2.RestClientBuilder#rootUri(Object)} method.
+	This is done using the {@del oajr.client2.RestClient.Builder#rootUri(Object)} method.
 </p>
 
 <h5 class='figure'>Example:</h5>

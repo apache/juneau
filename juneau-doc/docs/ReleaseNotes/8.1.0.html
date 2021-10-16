@@ -56,8 +56,8 @@
 		<ul class='javatree'>
 			<li class='jc'>{@link oaj.serializer.WriterSerializer}
 			<ul>
-				<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
-				<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
+				<li class='jf'>{@del oaj.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
+				<li class='jf'>{@del oaj.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
 			</ul>
 		</ul>
 	<li>
@@ -132,7 +132,7 @@
 		The {@link oaj.config.store.ConfigFileStore} now automatically resolves file extensions.
 		<br>New configuration property for specifying search paths for file extensions:
 		<ul class='javatree'>
-			<li class='jf'>{@link oaj.config.store.ConfigFileStore#FILESTORE_extensions}
+			<li class='jf'>{@del oaj.config.store.ConfigFileStore#FILESTORE_extensions}
 		</ul>
 	<li>
 		Fixed a bug where instances of {@link oaj.config.store.ConfigMemoryStore} ended up resolving to the same object.
@@ -213,7 +213,7 @@
 			<ul>
 				<li class='jf'>{@del REST_attrs}
 			</ul>
-			<li class='jc'>{@link oajr.RestContextBuilder}
+			<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul>
 				<li class='jm'>{@del attrs(String...)}
 				<li class='jm'>{@del attr(String,Object)}

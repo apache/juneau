@@ -24,7 +24,7 @@
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@del Rest#properties()} 
-	<li class='jc'>{@link oajr.RestContextBuilder} - Various methods on the context builder.
+	<li class='jc'>{@link oajr.RestContext.Builder} - Various methods on the context builder.
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -55,10 +55,10 @@
 	<ja>@Rest</ja>(...)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 	
-		<jk>public</jk> MyRestServlet(RestContextBuilder <jv>builder</jv>) {
+		<jk>public</jk> MyRestServlet(RestContext.Builder <jv>builder</jv>) {
 			
 			<jv>builder</jv>
-				.sortProperties();  <jc>// Note: RestContextBuilder extends from BeanContextBuilder</jc>
+				.sortProperties();  <jc>// Note: RestContext.Builder extends from BeanContext.Builder</jc>
 				.set(<jsf>SERIALIZER_trimNulls</jsf>);
 				.set(<jsf>JSON_escapeSolidus</jsf>);
 		}

@@ -57,16 +57,16 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		annotations of the class itself.  For example, the following methods override the {@link oaj.annotation.Bean @Bean} 
 		annotations on classes:
 		<ul class='javatree'>
-			<li class='jc'>{@link oaj.BeanContextBuilder}
+			<li class='jc'>{@link oaj.BeanContext.Builder}
 			<ul>
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpi(Class,String) bpi(Class,String)}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpi(String,String) bpi(String,String)}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpx(Class,String) bpx(Class,String)}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpx(String,String) bpx(String,String)}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpro(Class,String) bpro(Class,String)}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpro(String,String) bpro(String,String)}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpwo(Class,String) bpwo(Class,String}
-				<li class='jm'>{@del oaj.BeanContextBuilder#bpwo(String,String) bpwo(String,String}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpi(Class,String) bpi(Class,String)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpi(String,String) bpi(String,String)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpx(Class,String) bpx(Class,String)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpx(String,String) bpx(String,String)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpro(Class,String) bpro(Class,String)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpro(String,String) bpro(String,String)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpwo(Class,String) bpwo(Class,String}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpwo(String,String) bpwo(String,String}
 			</ul>
 		</ul>
 	<li>
@@ -84,7 +84,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<jk>public</jk> MyClass getMyClass() {...}
 		</p>
 	<li>
-		The following concrete annotation implementation classes are now provided that can be used with the {@link oaj.BeanContextBuilder#annotations(Annotation...)} method:
+		The following concrete annotation implementation classes are now provided that can be used with the {@link oaj.BeanContext.Builder#annotations(Annotation...)} method:
 		<ul class='javatree'>
 			<li class'jc'>{@link oaj.annotation.BeanAnnotation} <jk>implements</jk> {@link oaj.annotation.Bean}
 			<li class'jc'>{@link oaj.annotation.BeancAnnotation} <jk>implements</jk> {@link oaj.annotation.Beanc}
@@ -191,10 +191,10 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 			<li class='jm'>{@link oaj.http.annotation.FormData#multi()}
 		</ul>
 	<li>
-		{@link oaj.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions} setting no longer requires {@link oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} 
+		{@del oaj.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions} setting no longer requires {@del oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} 
 		to be enabled.
 	<li>
-		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@link oaj.BeanTraverseContext#BEANTRAVERSE_initialDepth}
+		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@del oaj.BeanTraverseContext#BEANTRAVERSE_initialDepth}
 		used.
 	<li>
 		Fixed bug in JSON/UON/URL-Encoding serializers where properties past the max depth were being serialized as null instead
@@ -202,12 +202,12 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		Fixed bug in HTML serializer where tables of maps were not sorted if <jsf>SERIALIZER_sortMaps</jsf> was specified.
 	<li>
-		<jsf>SERIALIZER_trimNullProperties</jsf> has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}.
+		<jsf>SERIALIZER_trimNullProperties</jsf> has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}.
 	<li>
 		Improvements to OpenAPI serializer and parser:
 		<ul>
 			<li>Collection format can now be specified on OBJECTs to allow key/value pairs to be delimited with the same support as ARRAYs.
-			<li>New {@link oaj.oapi.OpenApiCommon#OAPI_format OAPI_format} and {@link oaj.oapi.OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat} properties.
+			<li>New {@del oaj.oapi.OpenApiCommon#OAPI_format OAPI_format} and {@del oaj.oapi.OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat} properties.
 		</ul>
 	<li>
 		Convenience methods added to {@link oaj.httppart.HttpPartSchema} and related classes to simplify schema definitions:
@@ -244,13 +244,13 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		.build();
 		</p>
 	<li>
-		<c>BeanContext.REST_pojoSwaps</c> replaced with {@link oaj.BeanContext#BEAN_swaps} (and builder methods as well).
+		<c>BeanContext.REST_pojoSwaps</c> replaced with {@del oaj.BeanContext#BEAN_swaps} (and builder methods as well).
 	<li>
 		New Bean Property Interceptor API for intercepting calls to bean getters/setters.
 		<ul>
 			<li class='jac'>{@link oaj.transform.BeanInterceptor}
 			<li class='ja'>{@link oaj.annotation.Bean#interceptor Bean(interceptor)}
-			<li class='jm'>{@link oaj.BeanContextBuilder#beanInterceptor(Class,Class)}
+			<li class='jm'>{@link oaj.BeanContext.Builder#beanInterceptor(Class,Class)}
 		</ul>
 	<li>
 		Fluent setters that follow the <c>withX</c> convention are now automatically detected by all parsers.
@@ -327,11 +327,11 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@del oajr.RestServlet#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+				<li class='jm'>{@del oajr.RestServlet#resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
 			</ul>
 			<li class='jac'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@del oajr.BasicRest#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+				<li class='jm'>{@del oajr.BasicRest#resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
 			</ul>
 		</ul>
 	<li>
@@ -339,7 +339,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oajr.RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@link oajr.RestServlet#onInit(RestContext.Builder) onInit(RestContext.Builder)}
 				<li class='jm'>{@link oajr.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
 				<li class='jm'>{@link oajr.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
 				<li class='jm'>{@link oajr.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
@@ -350,7 +350,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 			</ul>
 			<li class='jac'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@del oajr.BasicRest#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@del oajr.BasicRest#onInit(RestContext.Builder) onInit(RestContext.Builder)}
 				<li class='jm'>{@del oajr.BasicRest#onPostInit(RestContext) onPostInit(RestContext)}
 				<li class='jm'>{@del oajr.BasicRest#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
 				<li class='jm'>{@del oajr.BasicRest#onDestroy(RestContext) onDestroy(RestContext)}
@@ -433,7 +433,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	}
 		</p>
 	<li>
-		Improved {@link oajr.RestContext#REST_messages REST_messages} support (mostly bug fixes).
+		Improved {@del oajr.RestContext#REST_messages REST_messages} support (mostly bug fixes).
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>

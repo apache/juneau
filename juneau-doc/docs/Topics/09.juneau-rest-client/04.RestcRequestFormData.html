@@ -19,14 +19,14 @@
 	Per-client or per-request form-data parameters can be specified using the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClientBuilder}
+	<li class='jc'>{@del oajr.client2.RestClient.Builder}
 	<ul>
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#formData(String,Object) formData(String,Object)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#formDatas(Object...) formDatas(Object...)}
-		<li class='jm'>{@del oajr.client2.RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Object) formData(String,Object)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#formDatas(Object...) formDatas(Object...)}
+		<li class='jm'>{@del oajr.client2.RestClient.Builder#formDataPairs(Object...) formDataPairs(Object...)}
 	</ul>
 	<li class='jc'>{@del oajr.client2.RestRequest}
 	<ul>
@@ -49,8 +49,8 @@
 </p>
 
 <p>
-	{@del oajr.client2.RestClientBuilder#formDatas(Object...) formDatas(Object...)} allows you to pass in a variety
-	of form-data parameter objects, and {@del oajr.client2.RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)} allows
+	{@del oajr.client2.RestClient.Builder#formDatas(Object...) formDatas(Object...)} allows you to pass in a variety
+	of form-data parameter objects, and {@del oajr.client2.RestClient.Builder#formDataPairs(Object...) formDataPairs(Object...)} allows
 	you to specify several form-data parameters in a compact fashion.
 </p>
 

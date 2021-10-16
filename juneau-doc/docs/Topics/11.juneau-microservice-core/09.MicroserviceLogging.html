@@ -22,10 +22,10 @@
 	The method for configuring logging is as follows:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.microservice.MicroserviceBuilder}
+	<li class='jc'>{@link oaj.microservice.Microservice.Builder}
 	<ul>
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#logConfig(LogConfig) logConfig(LogConfig)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#logger(Logger) logger(Logger)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#logConfig(LogConfig) logConfig(LogConfig)} 
+		<li class='jm'>{@link oaj.microservice.Microservice.Builder#logger(Logger) logger(Logger)} 
 	</ul>
 </ul>
 <p>
@@ -140,7 +140,7 @@
 </p>
 <p>
 	If you wish to bypass the default logging configuration entirely, you can pass in your own logger via
-	the {@link oaj.microservice.MicroserviceBuilder#logger(Logger)} method. 
+	the {@link oaj.microservice.Microservice.Builder#logger(Logger)} method. 
 </p>
 <p>
 	In addition to configuring the built-in Java logging framework, the following convenience methods are also

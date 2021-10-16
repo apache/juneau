@@ -37,7 +37,7 @@
 					<li>{@del ConfigFile#merge(ConfigFile)} - Merge the contents of another config file into this config file.
 					<li>{@del ConfigFile#getResolving()}, {@del ConfigFile#getResolving(StringVarResolver)} - Return an instance of the config file that resolves string variables.
 						Much more efficient than the previous design since the same underlying config file object is shared.
-					<li>{@del ConfigFile#toWritable()} - Wraps the config file in a {@link oaj.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
+					<li>{@del ConfigFile#toWritable()} - Wraps the config file in a {@del oaj.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
 					<li>{@del ConfigFile#getInt(String)} - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
 				</ul>
 			<li>New methods in {@del ConfigMgr}:
@@ -87,11 +87,11 @@
 		that it belongs to.  With these new annotations, config files can be reconstructed using any of the parsers.
 	<li>New classes and interfaces:
 		<ul>
-			<li>{@link oaj.Streamable} interface for identifying objects that can be serialized directly to an output stream.
-			<li>{@link oaj.Writable} interface for identifying objects that can be serialized directly to a writer.
+			<li>{@del oaj.Streamable} interface for identifying objects that can be serialized directly to an output stream.
+			<li>{@del oaj.Writable} interface for identifying objects that can be serialized directly to a writer.
 			<li>{@del StringObject} class that can be used for delayed object serialization.
 			<li>{@del ByteArrayCache}
-			<li>{@link oaj.internal.ByteArrayInOutStream} 
+			<li>{@del oaj.internal.ByteArrayInOutStream} 
 			<li>{@link oaj.internal.FileUtils}
 			<li>{@link oaj.internal.ThrowableUtils}
 			<li>{@del StringVarMultipart}
@@ -111,9 +111,9 @@
 		</ul>
 	<li>New methods in {@link oaj.internal.ArrayUtils}:
 		<ul>
-			<li>{@link oaj.internal.ArrayUtils#contains(Object,Object[])}
-			<li>{@link oaj.internal.ArrayUtils#indexOf(Object,Object[])}
-			<li>{@link oaj.internal.ArrayUtils#toPrimitiveArray(Object)}
+			<li>{@del oaj.internal.ArrayUtils#contains(Object,Object[])}
+			<li>{@del oaj.internal.ArrayUtils#indexOf(Object,Object[])}
+			<li>{@del oaj.internal.ArrayUtils#toPrimitiveArray(Object)}
 		</ul>	
 	<li>New methods in {@link oaj.internal.IOUtils}:
 		<ul>
@@ -159,12 +159,12 @@
 			<li>{@link oaj.internal.StringUtils#base64Encode(byte[])}
 			<li>{@link oaj.internal.StringUtils#base64DecodeToString(String)}
 			<li>{@link oaj.internal.StringUtils#base64Decode(String)}
-			<li>{@link oaj.internal.StringUtils#generateUUID(int)}
+			<li>{@del oaj.internal.StringUtils#generateUUID(int)}
 			<li>{@link oaj.internal.StringUtils#trim(String)}
 			<li>{@del StringUtils#parseISO8601Date(String)}
 			<li>{@link oaj.internal.StringUtils#replaceVars(String,Map)}
-			<li>{@link oaj.internal.StringUtils#pathStartsWith(String,String)}
-			<li>{@link oaj.internal.StringUtils#pathStartsWith(String,String[])}
+			<li>{@del oaj.internal.StringUtils#pathStartsWith(String,String)}
+			<li>{@del oaj.internal.StringUtils#pathStartsWith(String,String[])}
 		</ul>
 	<li>New {@del StringVar#doResolve(String)} method.
 	<li>New {@del StringVarResolver#DEFAULT} field.
@@ -370,8 +370,8 @@
 	<li>New {@del ResourceLink#ResourceLink(String,RestRequest,String,Object[])} constructor.
 	<li>New response handlers:
 		<ul>
-			<li>{@del StreamableHandler} - Allows REST Java methods to return instances of {@link oaj.Streamable}.
-			<li>{@del WritableHandler} - Allows REST Java methods to return instances of {@link oaj.Writable}.
+			<li>{@del StreamableHandler} - Allows REST Java methods to return instances of {@del oaj.Streamable}.
+			<li>{@del WritableHandler} - Allows REST Java methods to return instances of {@del oaj.Writable}.
 		</ul>
 	<li>New DevOps stylesheet.
 	<li>Servlet initialization and HTTP requests are now logged at <JSF>FINE</JSF> level.

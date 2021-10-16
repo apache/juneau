@@ -96,8 +96,8 @@
 	<li>
 		New settings for binary-based serializers and parsers:
 		<ul class='doctree'>
-			<li class='jf'>{@link oaj.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-			<li class='jf'>{@link oaj.parser.InputStreamParser#ISPARSER_binaryFormat}
+			<li class='jf'>{@del oaj.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+			<li class='jf'>{@del oaj.parser.InputStreamParser#ISPARSER_binaryFormat}
 		</ul>
 	<li>
 		Added support for auto-detection of fluent-style setters:
@@ -106,9 +106,9 @@
 			<li class='ja'>{@del oaj.annotation.Bean#fluentSetters()}
 		</ul>
 	<li>
-		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 	<li>
-		The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+		The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
 		and is disabled by default.
 	<li>
 		Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
@@ -133,9 +133,9 @@
 	---end---
 		</p>
 	<li>
-		New property {@link oaj.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
+		New property {@del oaj.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
 	<li>
-		New property {@link oaj.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
+		New property {@del oaj.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
 		using their name or the <c>toString()</c> method.
 	<li>
 		New property {@del BeanContext#BEAN_examples} for defining examples of POJOs.
@@ -159,8 +159,8 @@
 	<li>
 		New formats for the {@link oaj.html.annotation.Html#format() @Html(format)} annotation:
 		<ul class='doctree'>
-			<li class='jf'>{@link oaj.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
-			<li class='jf'>{@link oaj.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
+			<li class='jf'>{@del oaj.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
+			<li class='jf'>{@del oaj.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
 		</ul> 
 	<li>
 		Serializers now allow for q-values on the media types they handle.
@@ -466,10 +466,10 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link oajr.RestContext}
 			<ul>
-				<li class='jf'>{@link oajr.RestContext#REST_uriAuthority REST_uriAuthority}
-				<li class='jf'>{@link oajr.RestContext#REST_uriContext REST_uriContext}
-				<li class='jf'>{@link oajr.RestContext#REST_uriRelativity REST_uriRelativity}
-				<li class='jf'>{@link oajr.RestContext#REST_uriResolution REST_uriResolution}
+				<li class='jf'>{@del oajr.RestContext#REST_uriAuthority REST_uriAuthority}
+				<li class='jf'>{@del oajr.RestContext#REST_uriContext REST_uriContext}
+				<li class='jf'>{@del oajr.RestContext#REST_uriRelativity REST_uriRelativity}
+				<li class='jf'>{@del oajr.RestContext#REST_uriResolution REST_uriResolution}
 			</ul>
 		</ul>
 	<li>
@@ -496,15 +496,15 @@
 		Made improvements to the builder API for defining SSL support.
 		<br>New methods added:
 		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClientBuilder}
+			<li class='jc'>{@link oajrc.RestClient.Builder}
 			<ul>
-				<li class='jf'>{@del oajrc.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
-				<li class='jf'>{@del oajrc.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
-				<li class='jf'>{@del oajrc.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
-				<li class='jf'>{@del oajrc.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-				<li class='jf'>{@del oajrc.RestClientBuilder#trustManagers(TrustManager...)}
-				<li class='jf'>{@del oajrc.RestClientBuilder#secureRandom(SecureRandom)}
-				<li class='jf'>{@del oajrc.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#sslProtocols(String...) sslProtocols(String...)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#cipherSuites(String...) cipherSuites(String...)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#trustManagers(TrustManager...)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#secureRandom(SecureRandom)}
+				<li class='jf'>{@del oajrc.RestClient.Builder#httpClientConnectionManager(HttpClientConnectionManager)}
 			</ul>
 		</ul>
 	<li>
@@ -514,21 +514,21 @@
 	<li>
 		Methods added to client builder to make it easy to define the transport language:
 		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClientBuilder}
+			<li class='jc'>{@link oajrc.RestClient.Builder}
 			<ul>
-				<li class='jf'>{@link oajrc.RestClientBuilder#json() json()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#xml() xml()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#html() html()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#uon() uon()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#urlEnc() urlEnc()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#msgPack() msgPack()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#plainText() plainText()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#json() json()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#xml() xml()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#html() html()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#uon() uon()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#urlEnc() urlEnc()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#msgPack() msgPack()}
+				<li class='jf'>{@link oajrc.RestClient.Builder#plainText() plainText()}
 			</ul>
 		</ul>
 	<li>
 		New method added for allowing serverless client testing against REST interfaces.
 		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClientBuilder}
+			<li class='jc'>{@link oajrc.RestClient.Builder}
 			<ul>
 				<li class='jf'>{@del mockHttpConnection(MockHttpConnection)}
 			</ul>
@@ -539,7 +539,7 @@
 	<li>
 		<c>RestCall.input(Object)</c> method renamed to {@del oajrc.RestCall#body(Object)} to match OpenAPI terminology.
 	<li>
-		Made constructors on <c>RestClient</c> and <c>RestClientBuilder</c> protected so that they can be subclassed.
+		Made constructors on <c>RestClient</c> and <c>RestClient.Builder</c> protected so that they can be subclassed.
 	<li>
 		The <c>RestClient.getRemoteableProxy()</c> methods have been split into separate methods for Remote Interfaces and Remote Resources:
 		<ul class='doctree'>
