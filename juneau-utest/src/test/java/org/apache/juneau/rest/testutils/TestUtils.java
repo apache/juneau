@@ -29,7 +29,8 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 			Object r = c.newInstance();
 			RestContext rc = RestContext.create(r.getClass(),null,null).init(()->r).build();
 			RestOpContext ctx = RestOpContext.create(TestUtils.class.getMethod("getSwagger", Class.class), rc).build();
-			RestRequest req = rc.createRequest(new RestCall(r, rc, new MockServletRequest(), new MockServletResponse()).restOpContext(ctx));
+			RestCall call = RestCall.create(rc).resource(r).req(new MockServletRequest()).res(new MockServletResponse()).build();
+			RestRequest req = rc.createRequest(call.restOpContext(ctx));
 			SwaggerProvider ip = rc.getSwaggerProvider();
 			return ip.getSwagger(rc, req.getLocale());
 		} catch (Exception e) {

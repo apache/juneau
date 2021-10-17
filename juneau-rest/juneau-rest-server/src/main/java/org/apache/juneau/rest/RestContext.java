@@ -6256,6 +6256,11 @@ public class RestContext extends Context {
 		return Collections.unmodifiableSet(s);
 	}
 
+	@Override /* Context */
+	public RestCall.Builder createSession() {
+		return RestCall.create(this);
+	}
+
 	/**
 	 * Returns the bean store associated with this context.
 	 *
@@ -6992,22 +6997,6 @@ public class RestContext extends Context {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Wraps an incoming servlet request/response pair into a single {@link RestCall} object.
-	 *
-	 * <p>
-	 * This is the first method called by {@link #execute(Object, HttpServletRequest, HttpServletResponse)}.
-	 *
-	 * @param resource
-	 * 	The REST servlet or bean that this context defines.
-	 * @param req The rest request.
-	 * @param res The rest response.
-	 * @return The wrapped request/response pair.
-	 */
-	public RestCall createCall(Object resource, HttpServletRequest req, HttpServletResponse res) {
-		return new RestCall(resource, this, req, res).logger(getCallLogger());
-	}
-
-	/**
 	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -7049,7 +7038,7 @@ public class RestContext extends Context {
 	 */
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
-		RestCall call = createCall(resource, r1, r2);
+		RestCall call = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger()).build();
 
 		// Must be careful not to bleed thread-locals.
 		if (this.call.get() != null)

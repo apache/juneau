@@ -19,32 +19,127 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 
 /**
- * A wrapper around a single HttpServletRequest/HttpServletResponse pair.
+ * Represents a single HTTP request.
  */
-public class RestCall {
+public class RestCall extends ContextSession {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Request attribute name for passing path variables from parent to child.
 	 */
 	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
 
-	private Object resource;
+	/**
+	 * Creates a builder of this object.
+	 *
+	 * @param ctx The context creating this builder.
+	 * @return A new builder.
+	 */
+	public static Builder create(RestContext ctx) {
+		return new Builder(ctx);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends ContextSession.Builder {
+
+		RestContext ctx;
+		Object resource;
+		HttpServletRequest req;
+		HttpServletResponse res;
+		RestLogger logger;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(RestContext ctx) {
+			super(ctx);
+			this.ctx = ctx;
+		}
+
+		/**
+		 * Specifies the servlet implementation bean.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder resource(Object value) {
+			resource = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the incoming HTTP servlet request object.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder req(HttpServletRequest value) {
+			req = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the incoming HTTP servlet response object.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder res(HttpServletResponse value) {
+			res = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the logger to use for this session.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder logger(RestLogger value) {
+			logger = value;
+			return this;
+		}
+
+		@Override /* Session.Builder */
+		public RestCall build() {
+			return new RestCall(this);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Object resource;
+	private final RestContext context;
+
+	private RestLogger logger;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
 	private RestRequest rreq;
 	private RestResponse rres;
-	private RestContext context;
 	private RestOpContext opContext;
 	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
-	private RestLogger logger;
 	private BeanStore beanStore;
 	private Map<String,String[]> queryParams;
 	private String method;
@@ -54,33 +149,22 @@ public class RestCall {
 	/**
 	 * Constructor.
 	 *
-	 * @param resource The REST object.
-	 * @param context The REST context object.
-	 * @param req The incoming HTTP servlet request object.
-	 * @param res The incoming HTTP servlet response object.
+	 * @param builder The builder for this object.
 	 */
-	public RestCall(Object resource, RestContext context, HttpServletRequest req, HttpServletResponse res) {
-		this.context = context;
-		this.resource = resource;
+	public RestCall(Builder builder) {
+		super(builder);
+		context = builder.ctx;
+		resource = builder.resource;
+		logger = builder.logger;
 		beanStore = BeanStore.of(context.getRootBeanStore(), resource);
 		beanStore.addBean(RestContext.class, context);
-		request(req).response(res);
+		beanStore.addBean(RestLogger.class, logger);
+		request(builder.req).response(builder.res);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Overrides the request object on the REST call.
-	 *
-	 * @param value The new HTTP servlet request.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall resource(Object value) {
-		resource = value;
-		return this;
-	}
 
 	/**
 	 * Overrides the request object on the REST call.
@@ -139,7 +223,6 @@ public class RestCall {
 		beanStore.addBean(RestLogger.class, value);
 		return this;
 	}
-
 
 	/**
 	 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
@@ -488,6 +571,7 @@ public class RestCall {
 	 *
 	 * @return <jk>true</jk> if debug is enabled for this request.
 	 */
+	@Override
 	public boolean isDebug() {
 		if (rreq != null)
 			return rreq.isDebug();
@@ -499,6 +583,7 @@ public class RestCall {
 	 *
 	 * @return The context that created this call.
 	 */
+	@Override
 	public RestContext getContext() {
 		return context;
 	}
