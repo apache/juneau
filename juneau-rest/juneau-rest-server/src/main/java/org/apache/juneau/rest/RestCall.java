@@ -63,6 +63,8 @@ public class RestCall extends ContextSession {
 		HttpServletRequest req;
 		HttpServletResponse res;
 		RestLogger logger;
+		String pathInfoUndecoded;
+		UrlPath urlPath;
 
 		/**
 		 * Constructor.
@@ -86,7 +88,7 @@ public class RestCall extends ContextSession {
 		}
 
 		/**
-		 * Specifies the incoming HTTP servlet request object.
+		 * Specifies the HTTP servlet request object on this call.
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
@@ -97,7 +99,18 @@ public class RestCall extends ContextSession {
 		}
 
 		/**
-		 * Specifies the incoming HTTP servlet response object.
+		 * Returns the HTTP servlet request object on this call.
+		 *
+		 * @return The HTTP servlet request object on this call.
+		 */
+		public HttpServletRequest req() {
+			urlPath = null;
+			pathInfoUndecoded = null;
+			return req;
+		}
+
+		/**
+		 * Specifies the HTTP servlet response object on this call.
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
@@ -105,6 +118,15 @@ public class RestCall extends ContextSession {
 		public Builder res(HttpServletResponse value) {
 			res = value;
 			return this;
+		}
+
+		/**
+		 * Returns the HTTP servlet response object on this call.
+		 *
+		 * @return The HTTP servlet response object on this call.
+		 */
+		public HttpServletResponse res() {
+			return res;
 		}
 
 		/**
@@ -122,6 +144,47 @@ public class RestCall extends ContextSession {
 		public RestCall build() {
 			return new RestCall(this);
 		}
+
+		/**
+		 * Returns the request path info as a {@link UrlPath} bean.
+		 *
+		 * @return The request path info as a {@link UrlPath} bean.
+		 */
+		public UrlPath getUrlPath() {
+			if (urlPath == null)
+				urlPath = UrlPath.of(getPathInfoUndecoded());
+			return urlPath;
+		}
+
+		/**
+		 * Returns the request path info as a {@link UrlPath} bean.
+		 *
+		 * @return The request path info as a {@link UrlPath} bean.
+		 */
+		public String getPathInfoUndecoded() {
+			if (pathInfoUndecoded == null)
+				pathInfoUndecoded = RestUtils.getPathInfoUndecoded(req);
+			return pathInfoUndecoded;
+		}
+
+		/**
+		 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
+		 *
+		 * @param value The variables to add to this call.
+		 * @return This object (for method chaining).
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder pathVars(Map<String,String> value) {
+			if (value != null && ! value.isEmpty()) {
+				Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+				if (m == null) {
+					m = new TreeMap<>();
+					req.setAttribute(REST_PATHVARS_ATTR, m);
+				}
+				m.putAll(value);
+			}
+			return this;
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -130,10 +193,10 @@ public class RestCall extends ContextSession {
 
 	private final Object resource;
 	private final RestContext context;
-
-	private RestLogger logger;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
+
+	private RestLogger logger;
 	private RestRequest rreq;
 	private RestResponse rres;
 	private RestOpContext opContext;
@@ -155,42 +218,18 @@ public class RestCall extends ContextSession {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
-		logger = builder.logger;
-		beanStore = BeanStore.of(context.getRootBeanStore(), resource);
-		beanStore.addBean(RestContext.class, context);
-		beanStore.addBean(RestLogger.class, logger);
-		request(builder.req).response(builder.res);
+		beanStore = BeanStore.of(context.getRootBeanStore(), resource).addBean(RestContext.class, context);
+
+		req = beanStore.add(HttpServletRequest.class, builder.req);
+		res = beanStore.add(HttpServletResponse.class, builder.res);
+		logger = beanStore.add(RestLogger.class, builder.logger);
+		urlPath = beanStore.add(UrlPath.class, builder.urlPath);
+		pathInfoUndecoded = builder.pathInfoUndecoded;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Overrides the request object on the REST call.
-	 *
-	 * @param value The new HTTP servlet request.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall request(HttpServletRequest value) {
-		req = value;
-		urlPath = null;
-		pathInfoUndecoded = null;
-		beanStore.addBean(HttpServletRequest.class, value);
-		return this;
-	}
-
-	/**
-	 * Overrides the response object on the REST call.
-	 *
-	 * @param value The new HTTP servlet response.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall response(HttpServletResponse value) {
-		res = value;
-		beanStore.addBean(HttpServletResponse.class, value);
-		return this;
-	}
 
 	/**
 	 * Sets the method context on this call.
@@ -203,12 +242,9 @@ public class RestCall extends ContextSession {
 	 * @throws Exception If thrown from the {@link RestRequest} or {@link RestResponse} constructors.
 	 */
 	public RestCall restOpContext(RestOpContext value) throws Exception {
-		opContext = value;
-		beanStore.addBean(RestOpContext.class, value);
-		rreq = context.createRequest(this);
-		beanStore.addBean(RestRequest.class, rreq);
-		rres = context.createResponse(this);
-		beanStore.addBean(RestResponse.class, rres);
+		opContext = beanStore.add(RestOpContext.class, value);
+		rreq = beanStore.add(RestRequest.class, context.createRequest(this));
+		rres = beanStore.add(RestResponse.class, context.createResponse(this));
 		return this;
 	}
 
@@ -219,27 +255,7 @@ public class RestCall extends ContextSession {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall logger(RestLogger value) {
-		logger = value;
-		beanStore.addBean(RestLogger.class, value);
-		return this;
-	}
-
-	/**
-	 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
-	 *
-	 * @param value The variables to add to this call.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	public RestCall pathVars(Map<String,String> value) {
-		if (value != null && ! value.isEmpty()) {
-			Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-			if (m == null) {
-				m = new TreeMap<>();
-				req.setAttribute(REST_PATHVARS_ATTR, m);
-			}
-			m.putAll(value);
-		}
+		logger = beanStore.add(RestLogger.class, value);
 		return this;
 	}
 
@@ -316,8 +332,7 @@ public class RestCall extends ContextSession {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall urlPathMatch(UrlPathMatch value) {
-		urlPathMatch = value;
-		beanStore.addBean(UrlPathMatch.class, value);
+		urlPathMatch = beanStore.add(UrlPathMatch.class, value);
 		return this;
 	}
 

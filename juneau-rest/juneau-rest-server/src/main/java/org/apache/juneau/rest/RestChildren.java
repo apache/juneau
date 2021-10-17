@@ -157,7 +157,7 @@ public class RestChildren {
 	 * @param call The HTTP call.
 	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.
 	 */
-	public Optional<RestChildMatch> findMatch(RestCall call) {
+	public Optional<RestChildMatch> findMatch(RestCall.Builder call) {
 		String pi = call.getPathInfoUndecoded();
 		if ((! children.isEmpty()) && pi != null && ! pi.equals("/")) {
 			for (RestContext rc : children.values()) {

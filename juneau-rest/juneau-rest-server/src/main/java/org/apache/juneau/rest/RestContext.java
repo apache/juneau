@@ -7038,12 +7038,11 @@ public class RestContext extends Context {
 	 */
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
-		RestCall call = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger()).build();
-
 		// Must be careful not to bleed thread-locals.
 		if (this.call.get() != null)
 			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
-		this.call.set(call);
+
+		RestCall.Builder cb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
 
 		try {
 
@@ -7055,69 +7054,80 @@ public class RestContext extends Context {
 			// the remainder after the new servletPath.
 			// Only do this for the top-level resource because the logic for child resources are processed next.
 			if (pathMatcher.hasVars() && parentContext == null) {
-				String sp = call.getServletPath();
-				String pi = call.getPathInfoUndecoded();
+				String sp = cb.req().getServletPath();
+				String pi = cb.getPathInfoUndecoded();
 				UrlPath upi2 = UrlPath.of(pi == null ? sp : sp + pi);
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
-					call.pathVars(uppm.getVars());
-					call.request(
-						new OverrideableHttpServletRequest(call.getRequest())
+					cb.pathVars(uppm.getVars());
+					cb.req(
+						new OverrideableHttpServletRequest(cb.req())
 							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 							.servletPath(uppm.getPrefix())
 					);
 				} else {
+					RestCall call = cb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 					return;
 				}
 			}
 
 			// If this resource has child resources, try to recursively call them.
-			Optional<RestChildMatch> childMatch = restChildren.findMatch(call);
+			Optional<RestChildMatch> childMatch = restChildren.findMatch(cb);
 			if (childMatch.isPresent()) {
 				UrlPathMatch uppm = childMatch.get().getPathMatch();
 				RestContext rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
-					call.pathVars(uppm.getVars());
-					HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
+					cb.pathVars(uppm.getVars());
+					HttpServletRequest childRequest = new OverrideableHttpServletRequest(cb.req())
 						.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
-						.servletPath(call.getServletPath() + uppm.getPrefix());
-					rc.execute(rc.getResource(), childRequest, call.getResponse());
+						.servletPath(cb.req().getServletPath() + uppm.getPrefix());
+					rc.execute(rc.getResource(), childRequest, cb.res());
 				} else {
+					RestCall call = cb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 				}
 				return;
 			}
 
-			call.debug(isDebug(call));
-
-			startCall(call);
-
-			// If the specified method has been defined in a subclass, invoke it.
-			try {
-				restOperations.findOperation(call).invoke(call);
-			} catch (NotFound e) {
-				if (call.getStatus() == 0)
-					call.status(404);
-				call.exception(e);
-				handleNotFound(call);
-			}
-
-			if (call.hasOutput()) {
-				// Now serialize the output if there was any.
-				// Some subclasses may write to the OutputStream or Writer directly.
-				processResponse(call);
-			}
-
-
 		} catch (Throwable e) {
-			handleError(call, convertThrowable(e));
+			handleError(cb.build(), convertThrowable(e));
 		} finally {
 			clearState();
 		}
 
-		call.finish();
-		finishCall(call);
+		RestCall c = cb.build();
+		c.debug(isDebug(c));
+		this.call.set(c);
+
+		try {
+
+			startCall(c);
+
+			// If the specified method has been defined in a subclass, invoke it.
+			try {
+				restOperations.findOperation(c).invoke(c);
+			} catch (NotFound e) {
+				if (c.getStatus() == 0)
+					c.status(404);
+				c.exception(e);
+				handleNotFound(c);
+			}
+
+			if (c.hasOutput()) {
+				// Now serialize the output if there was any.
+				// Some subclasses may write to the OutputStream or Writer directly.
+				processResponse(c);
+			}
+
+		} catch (Throwable e) {
+			handleError(c, convertThrowable(e));
+		} finally {
+			clearState();
+		}
+
+		c.finish();
+		finishCall(c);
 	}
 
 	private boolean isDebug(RestCall call) {
