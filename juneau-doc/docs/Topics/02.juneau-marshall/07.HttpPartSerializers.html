@@ -22,14 +22,12 @@
 <p class='bpcode w800'>
 	<jc>// Schema information about our part.</jc>
 	HttpPartSchema <jv>schema</jv> = HttpPartSchema
-		.<jsm>create</jsm>(<js>"array"</js>)
-		.collectionFormat(<js>"pipes"</js>)
+		.<jsm>tArrayPipes</jsm>()
 		.items(
 			HttpPartSchema
-				.<jsm>create</jsm>(<js>"array"</js>)
-				.collectionFormat(<js>"csv"</js>)
+				.<jsm>tArrayCsv</jsm>()
 				.items(
-					HttpPartSchema.<jsm>create</jsm>(<js>"integer"</js>,<js>"int64"</js>)
+					HttpPartSchema.<jsm>tInt64</jsm>(<js>"integer"</js>,<js>"int64"</js>)
 				)
 		)
 		.build();

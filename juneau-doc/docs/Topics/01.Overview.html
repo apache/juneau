@@ -13,13 +13,19 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Components'} 
+{title:'Overview'}
 
+<!-- =========================================================================================================== -->
+<!-- === ABOUT ================================================================================================= -->
+<!-- =========================================================================================================== -->
+
+<h5 class='toc'>About</h5>
 <p>
-	We've strived to keep prerequisites to an absolute minimum in order to make adoption as easy as possible.
+	Apache Juneau™ is a single cohesive Java ecosystem for marshalling Java objects to a wide variety of 
+	language types and creating annotation-based REST server and client APIs.
 </p>
 <p>
-	The library consists of the following artifacts found in the Maven group <c>"org.apache.juneau"</c>:
+	The Juneau ecosystem consists of the following parts:
 </p>
 <table class='styled w800'>
 	<tr>
@@ -28,40 +34,26 @@
 	<tr class='dark bb'>
 		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
 		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
-		<td>Serializers and parsers for:
-			<ul style='margin:0px 10px;'>
-				<li>JSON
-				<li>XML
-				<li>HTML
-				<li>UON
-				<li>URL-Encoding
-				<li>MessagePack
-				<li>OpenAPI
-				<li>SOAP/XML
-				<li>CSV
-				<li>BSON (coming soon)
-				<li>YAML (coming soon)
-				<li>Protobuf (coming soon)
-				<li>Amazon Ion (coming soon)
+		<td>
+			<ul>
+				<li>Serializers and parsers for various languages.
+				<li>Marshalling support for HTTP headers/parts/requests/responses.
+				<li>Marshall-based assertions for simplified unit testing.
 			</ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
 				<li>Java 8
+				<li>Apache HttpCore 4.4.13
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
 		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
 		<td>
-			Serializers and parsers for:
-			<ul style='margin:0px 10px;'>
-				<li>RDF/XML
-				<li>RDF/XML-Abbrev 
-				<li>N-Triple
-				<li>Turtle
-				<li>N3
-			</ul>				
+			<ul>
+				<li>Serializers and parsers for various RDF languages.
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
@@ -73,29 +65,28 @@
 	<tr class='dark bb'>
 		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
 		<td>
-			Data Transfer Objects for:
-			<ul style='margin:0px 10px;'>
-				<li>HTML5
-				<li>Atom
-				<li>Cognos
-				<li>JSON-Schema
-				<li>Swagger 2.0
-			</ul>				
+			<ul>
+				<li>Data Transfer Objects for HTML5, Atom, Cognos, JSON-Schema, and Swagger
+			</ul>
 		</td>
 		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='dark bb'>
 		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
 		<td>
-			Configuration file API
+			<ul>
+				<li>Configuration File API
+			</ul>
 		</td>
 		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+		<td rowspan="6" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
 		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
 		<td>
-			REST Servlet API
+			<ul>
+				<li>REST Servlet API
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
@@ -107,7 +98,9 @@
 	<tr class='light bb'>
 		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
 		<td>
-			Spring Boot integration support
+			<ul>
+				<li>REST Spring Boot integration
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
@@ -119,7 +112,9 @@
 	<tr class='light bb'>
 		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
 		<td>
-			JAX-RS support
+			<ul>
+				<li>REST JAX-RS integration
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
@@ -131,7 +126,9 @@
 	<tr class='light bb'>
 		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
 		<td>
-			REST Client API
+			<ul>
+				<li>REST Client API
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
@@ -140,46 +137,26 @@
 			</ul>
 		</td>
 	</tr>
-	<tr class='dark bb'>
-		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
-		<td class='code'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></td>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-mock</a></td>
 		<td>
-			Microservice API
+			<ul>
+				<li>REST Testing API
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
 				<li>Java 8+
+				<li>Apache HttpClient 4.5+
 			</ul>
 		</td>
 	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></td>
-		<td>
-			Jetty Microservice API
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Eclipse Jetty 9.4+
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></td>
-		<td>
-			Developer template project for Jetty-based microservices.
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Eclipse Jetty 9.4+
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
+	<tr class='light bb'>
 		<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
 		<td>
-			Developer template project for Spring-Boot-based microservices.
+			<ul>
+				<li>Spring Boot developer template
+			<ul>
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
@@ -188,36 +165,26 @@
 			</ul>
 		</td>
 	</tr>
-	<tr class='light bb'>
-		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
+	<tr class='dark bb'>
+		<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
 		<td class='code'><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></td>
 		<td>
-			Core code examples
-		</td>
-		<td></td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></td>
-		<td>
-			REST code examples
-		</td>
-		<td></td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a></td>
-		<td>
-			REST code examples deployed using Jetty
-		</td>
-		<td></td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></td>
-		<td>
-			REST code examples deployed using Spring Boot
+			<ul>
+				<li>Core code examples
+			<ul>
 		</td>
 		<td></td>
 	</tr>
 	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></td>
+		<td>
+			<ul>
+				<li>REST code examples
+			<ul>
+		</td>
+		<td></td>
+	</tr>
+	<tr class='light bb'>
 		<td rowspan="1" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-all</td>
 		<td class='code'><c>juneau-all</c></td>
 		<td>
@@ -234,6 +201,7 @@
 			<ul style='margin:0px 10px;'>
 				<li>Java 8+
 				<li>Servlet 3.1+
+				<li>Apache HttpCore 4.4.13
 				<li>Apache HttpClient 4.5+
 			</ul>
 		</td>
@@ -270,3 +238,32 @@
 <p>
 	Each of the components are also packaged as stand-alone OSGi modules.
 </p>
+
+<!-- =========================================================================================================== -->
+<!-- === FEATURES ============================================================================================== -->
+<!-- =========================================================================================================== -->
+
+<h5 class='toc'>Features</h5>
+<div class='topic'>
+	<ul class='spaced-list'>
+		<li>
+			Fast memory-efficient serialization.
+		<li>
+			Fast, safe, memory-efficient parsing.  Parsers are not susceptible to deserialization attacks.
+		<li>
+			KISS is our mantra!  No auto-wiring.  No code generation.  No dependency injection.  Just add it to your classpath and use it.  Extremely simple unit testing!
+		<li>
+			Enjoyable to use
+		<li>
+			Tiny - ~1MB
+		<li>
+			Exhaustively tested
+		<li>
+			Lots of up-to-date documentation and examples
+		<li>
+			Minimal library dependencies.
+		<li>
+			Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features
+			such as request/response multiplexing and server push.
+	</ul>
+</div>
