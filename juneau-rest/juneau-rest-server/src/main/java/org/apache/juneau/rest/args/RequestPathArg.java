@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method of type with {@link RequestPathParams} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getPathParams() getPathParams}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getPathParams() getPathParams}()</c>.
  */
 public class RequestPathArg extends SimpleRestOperationArg {
 
@@ -40,6 +40,6 @@ public class RequestPathArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestPathArg() {
-		super((c)->c.getRestRequest().getPathParams());
+		super((opSession)->opSession.getRequest().getPathParams());
 	}
 }

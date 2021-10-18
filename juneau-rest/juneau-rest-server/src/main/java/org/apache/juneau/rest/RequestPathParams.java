@@ -31,7 +31,7 @@ import org.apache.juneau.collections.*;
  */
 public class RequestPathParams {
 
-	private final RestCall call;
+	private final RestSession session;
 	private final RestRequest req;
 	private final boolean caseSensitive;
 	private HttpPartParserSession parser;
@@ -40,8 +40,8 @@ public class RequestPathParams {
 	private List<RequestPathParam> list = new LinkedList<>();
 	private Map<String,List<RequestPathParam>> map = new TreeMap<>();
 
-	RequestPathParams(RestCall call, RestRequest req, boolean caseSensitive) {
-		this.call = call;
+	RequestPathParams(RestSession session, RestRequest req, boolean caseSensitive) {
+		this.session = session;
 		this.req = req;
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
@@ -52,7 +52,7 @@ public class RequestPathParams {
 		for (Map.Entry<String,String> e : parentVars.entrySet())
 			add(e.getKey(), e.getValue());
 
-		UrlPathMatch pm = call.getUrlPathMatch();
+		UrlPathMatch pm = session.getUrlPathMatch();
 		if (pm != null) {
 			for (Map.Entry<String,String> e : pm.getVars().entrySet())
 				add(e.getKey(), e.getValue());
@@ -68,7 +68,7 @@ public class RequestPathParams {
 	 * Copy constructor.
 	 */
 	private RequestPathParams(RequestPathParams copyFrom) {
-		call = copyFrom.call;
+		session = copyFrom.session;
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;

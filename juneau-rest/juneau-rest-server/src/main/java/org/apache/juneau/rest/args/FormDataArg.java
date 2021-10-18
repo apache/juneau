@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link FormData} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getFormParams() getFormParams}().{@link RequestFormParams#get(String) get}(<jv>name</jv>).{@link RequestFormParam#asType(Class) asType}(<jv>type</jv>)</c>
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getFormParams() getFormParams}().{@link RequestFormParams#get(String) get}(<jv>name</jv>).{@link RequestFormParam#asType(Class) asType}(<jv>type</jv>)</c>
  * with a {@link HttpPartSchema schema} derived from the {@link FormData} annotation.
  */
 public class FormDataArg implements RestOpArg {
@@ -93,11 +93,11 @@ public class FormDataArg implements RestOpArg {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		RestRequest req = call.getRestRequest();
+	public Object resolve(RestOpSession opSession) throws Exception {
+		RestRequest req = opSession.getRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		RequestFormParams rh = call.getRestRequest().getFormParams();
-		BeanSession bs = call.getRestRequest().getBeanSession();
+		RequestFormParams rh = req.getFormParams();
+		BeanSession bs = req.getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {

@@ -12,36 +12,37 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters of type {@link AsyncContext} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRestSession() getRestSession}().{@link RestSession#getRequest() getRequest}().{@link HttpServletRequest#getAsyncContext() getAsyncContext}()</c>.
  */
-public class ResourceBundleArg extends SimpleRestOperationArg {
+public class AsyncContextArg extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResourceBundleArg}, or <jk>null</jk> if the parameter type is not {@link ResourceBundle}.
+	 * @return A new {@link AsyncContextArg}, or <jk>null</jk> if the parameter type is not {@link AsyncContext}.
 	 */
-	public static ResourceBundleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ResourceBundle.class))
-			return new ResourceBundleArg();
+	public static AsyncContextArg create(ParamInfo paramInfo) {
+		if (paramInfo.isType(AsyncContext.class))
+			return new AsyncContextArg();
 		return null;
 	}
 
 	/**
 	 * Constructor.
 	 */
-	protected ResourceBundleArg() {
-		super((opSession)->opSession.getRequest().getMessages());
+	protected AsyncContextArg() {
+		super((opSession)->opSession.getRestSession().getRequest().getAsyncContext());
 	}
 }

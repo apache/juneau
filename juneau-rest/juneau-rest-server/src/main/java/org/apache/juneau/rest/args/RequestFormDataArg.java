@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link RequestFormParams} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getFormParams() getFormParams}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getFormParams() getFormParams}()</c>.
  */
 public class RequestFormDataArg extends SimpleRestOperationArg {
 
@@ -40,6 +40,6 @@ public class RequestFormDataArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestFormDataArg() {
-		super((c)->c.getRestRequest().getFormParams());
+		super((opSession)->opSession.getRequest().getFormParams());
 	}
 }

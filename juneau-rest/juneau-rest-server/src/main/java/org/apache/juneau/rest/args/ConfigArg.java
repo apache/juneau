@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link Config} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getContext() getContext}().{@link RestContext#getConfig() getConfig}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRestContext() getRestContext}().{@link RestContext#getConfig() getConfig}()</c>.
  */
 public class ConfigArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class ConfigArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected ConfigArg() {
-		super((c)->c.getContext().getConfig());
+		super((opSession)->opSession.getRestContext().getConfig());
 	}
 }

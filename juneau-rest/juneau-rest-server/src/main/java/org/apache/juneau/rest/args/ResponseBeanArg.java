@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * The parameter value must be of type {@link Value} that accepts a value that is then set via
- * <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>)</c>.
+ * <c><jv>opSession</jv>.{@link RestOpSession#getResponse() getResponse}().{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>)</c>.
  */
 public class ResponseBeanArg implements RestOpArg {
 	final ResponseBeanMeta meta;
@@ -61,13 +61,13 @@ public class ResponseBeanArg implements RestOpArg {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override /* RestOpArg */
-	public Object resolve(final RestCall call) throws Exception {
+	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {
 			@Override
 			public void onSet(Object o) {
-				RestRequest req = call.getRestRequest();
-				RestResponse res = call.getRestResponse();
+				RestRequest req = opSession.getRequest();
+				RestResponse res = opSession.getResponse();
 				ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
 				if (meta == null)
 					meta = ResponseBeanArg.this.meta;

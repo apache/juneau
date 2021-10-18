@@ -54,9 +54,9 @@ import org.apache.juneau.rest.annotation.*;
  *
  * 		<jk>public static class</jk> FooProcessor <jk>implements</jk> ResponseProcessor {
  * 			<ja>@Override</ja>
- * 			<jk>public int</jk> process(RestCall <jv>call</jv>) {
+ * 			<jk>public int</jk> process(RestOpSession <jv>opSession</jv>) {
  *
- * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
+ * 				RestResponse <jv>res</jv> = <jv>opSession</jv>.getRestResponse();
  * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
  *
  * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
@@ -92,7 +92,7 @@ public interface ResponseProcessor {
 	/**
 	 * Process this response if possible.
 	 *
-	 * @param call The HTTP call.
+	 * @param opSession The HTTP call.
 	 * @return One of the following codes:
 	 * 	<ul>
 	 * 		<li><c>0</c> - The processor could not handle the request.
@@ -107,5 +107,5 @@ public interface ResponseProcessor {
 	 * 	If some other exception occurred.
 	 * 	<br>Can be used to provide an appropriate HTTP response code and message.
 	 */
-	int process(RestCall call) throws IOException, BasicHttpException;
+	int process(RestOpSession opSession) throws IOException, BasicHttpException;
 }

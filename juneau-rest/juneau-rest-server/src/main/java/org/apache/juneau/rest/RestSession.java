@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -22,13 +21,14 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 
 /**
  * Represents a single HTTP request.
  */
-public class RestCall extends ContextSession {
+public class RestSession extends ContextSession {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -141,8 +141,8 @@ public class RestCall extends ContextSession {
 		}
 
 		@Override /* Session.Builder */
-		public RestCall build() {
-			return new RestCall(this);
+		public RestSession build() {
+			return new RestSession(this);
 		}
 
 		/**
@@ -197,15 +197,13 @@ public class RestCall extends ContextSession {
 	private HttpServletResponse res;
 
 	private RestLogger logger;
-	private RestRequest rreq;
-	private RestResponse rres;
-	private RestOpContext opContext;
 	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
 	private BeanStore beanStore;
 	private Map<String,String[]> queryParams;
 	private String method;
+	private RestOpSession opSession;
 
 	private UrlPathMatch urlPathMatch;
 
@@ -214,7 +212,7 @@ public class RestCall extends ContextSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RestCall(Builder builder) {
+	public RestSession(Builder builder) {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
@@ -232,29 +230,12 @@ public class RestCall extends ContextSession {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Sets the method context on this call.
-	 *
-	 * <p>
-	 * This triggers the creation of the {@link RestRequest} and {@link RestResponse}.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 * @throws Exception If thrown from the {@link RestRequest} or {@link RestResponse} constructors.
-	 */
-	public RestCall restOpContext(RestOpContext value) throws Exception {
-		opContext = beanStore.add(RestOpContext.class, value);
-		rreq = beanStore.add(RestRequest.class, context.createRequest(this));
-		rres = beanStore.add(RestResponse.class, context.createResponse(this));
-		return this;
-	}
-
-	/**
 	 * Sets the logger to use when logging this call.
 	 *
-	 * @param value The logger to use when logging this call.
+	 * @param value The new value for this setting.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall logger(RestLogger value) {
+	public RestSession logger(RestLogger value) {
 		logger = beanStore.add(RestLogger.class, value);
 		return this;
 	}
@@ -262,11 +243,11 @@ public class RestCall extends ContextSession {
 	/**
 	 * Enables or disabled debug mode on this call.
 	 *
-	 * @param value The debug flag value.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 * @throws IOException Occurs if request body could not be cached into memory.
 	 */
-	public RestCall debug(boolean value) throws IOException {
+	public RestSession debug(boolean value) throws IOException {
 		if (value) {
 			req = CachingHttpServletRequest.wrap(req);
 			res = CachingHttpServletResponse.wrap(res);
@@ -283,7 +264,7 @@ public class RestCall extends ContextSession {
 	 * @param value The status code.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall status(int value) {
+	public RestSession status(int value) {
 		res.setStatus(value);
 		return this;
 	}
@@ -295,7 +276,7 @@ public class RestCall extends ContextSession {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("deprecation")
-	public RestCall status(StatusLine value) {
+	public RestSession status(StatusLine value) {
 		if (value != null)
 			res.setStatus(value.getStatusCode(), value.getReasonPhrase());
 		return this;
@@ -307,21 +288,9 @@ public class RestCall extends ContextSession {
 	 * @param value The thrown exception.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall exception(Throwable value) {
+	public RestSession exception(Throwable value) {
 		req.setAttribute("Exception", value);
 		beanStore.addBean(Throwable.class, value);
-		return this;
-	}
-
-	/**
-	 * Sets the output object to serialize as the response of this call.
-	 *
-	 * @param value The response output POJO.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall output(Object value) {
-		if (rres != null)
-			rres.setOutput(value);
 		return this;
 	}
 
@@ -331,7 +300,7 @@ public class RestCall extends ContextSession {
 	 * @param value The match pattern.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall urlPathMatch(UrlPathMatch value) {
+	public RestSession urlPathMatch(UrlPathMatch value) {
 		urlPathMatch = beanStore.add(UrlPathMatch.class, value);
 		return this;
 	}
@@ -359,49 +328,12 @@ public class RestCall extends ContextSession {
 	}
 
 	/**
-	 * Returns the REST request of this REST call.
-	 *
-	 * @return the REST request of this REST call.
-	 * @throws InternalServerError If the RestRequest object has not yet been created on this call.
-	 */
-	public RestRequest getRestRequest() {
-		return Optional.ofNullable(rreq).orElseThrow(()->new InternalServerError("RestRequest object has not yet been created."));
-	}
-
-	/**
-	 * Returns the REST response of this REST call.
-	 *
-	 * @return the REST response of this REST call.
-	 */
-	public RestResponse getRestResponse() {
-		return Optional.ofNullable(rres).orElseThrow(()->new InternalServerError("RestResponse object has not yet been created."));
-	}
-
-	/**
-	 * Returns the method context of this call.
-	 *
-	 * @return The method context of this call.
-	 */
-	public RestOpContext getRestOpContext() {
-		return opContext;
-	}
-
-	/**
 	 * Returns the bean store of this call.
 	 *
 	 * @return The bean store of this call.
 	 */
 	public BeanStore getBeanStore() {
 		return beanStore;
-	}
-
-	/**
-	 * Returns the Java method of this call.
-	 *
-	 * @return The java method of this call, or <jk>null</jk> if it hasn't been determined yet.
-	 */
-	public Method getJavaMethod() {
-		return opContext == null ? null : opContext.getJavaMethod();
 	}
 
 	/**
@@ -442,15 +374,14 @@ public class RestCall extends ContextSession {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestCall finish() {
+	public RestSession finish() {
 		try {
-			if (rres != null)
-				rres.flushBuffer();
-			else
-				res.flushBuffer();
 			req.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
-			if (rreq != null)
-				rreq.close();
+			if (opSession != null)
+				opSession.finish();
+			else {
+				res.flushBuffer();
+			}
 		} catch (Exception e) {
 			exception(e);
 		}
@@ -458,7 +389,6 @@ public class RestCall extends ContextSession {
 			logger.log(req, res);
 		return this;
 	}
-
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Pass-through convenience methods.
@@ -564,36 +494,6 @@ public class RestCall extends ContextSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the response contains output.
-	 *
-	 * <p>
-	 * This implies {@link RestResponse#setOutput(Object)} has been called on this object.
-	 *
-	 * <p>
-	 * Note that this also returns <jk>true</jk> even if {@link RestResponse#setOutput(Object)} was called with a <jk>null</jk>
-	 * value as this means the response contains an output value of <jk>null</jk> as opposed to no value at all.
-	 *
-	 * @return <jk>true</jk> if the response contains output.
-	 */
-	public boolean hasOutput() {
-		if (rres != null)
-			return rres.hasOutput();
-		return false;
-	}
-
-	/**
-	 * Shortcut for calling <c>getRestRequest().isDebug()</c>.
-	 *
-	 * @return <jk>true</jk> if debug is enabled for this request.
-	 */
-	@Override
-	public boolean isDebug() {
-		if (rreq != null)
-			return rreq.isDebug();
-		return false;
-	}
-
-	/**
 	 * Returns the context that created this call.
 	 *
 	 * @return The context that created this call.
@@ -610,5 +510,55 @@ public class RestCall extends ContextSession {
 	 */
 	public Object getResource() {
 		return resource;
+	}
+
+	/**
+	 * Returns the operation session of this REST session.
+	 *
+	 * <p>
+	 * The operation session is created once the Java method to be invoked has been determined.
+	 *
+	 * @return The operation session of this REST session.
+	 * @throws InternalServerError If operation session has not been created yet.
+	 */
+	public RestOpSession getOpSession() throws InternalServerError {
+		if (opSession == null)
+			throw new InternalServerError("Op Session not created.");
+		return opSession;
+	}
+
+	/**
+	 * Runs this session.
+	 *
+	 * <p>
+	 * Does the following:
+	 * <ol>
+	 * 	<li>Finds the Java method to invoke and creates a {@link RestOpSession} for it.
+	 * 	<li>Invokes {@link HookEvent#PRE_CALL} methods by calling {@link RestContext#preCall(RestOpSession)}.
+	 * 	<li>Invokes Java method by calling {@link RestOpSession#run()}.
+	 * 	<li>Invokes {@link HookEvent#POST_CALL} methods by calling {@link RestContext#postCall(RestOpSession)}.
+	 * 	<li>If the Java method produced output, finds the response processor for it and runs it by calling {@link RestContext#processResponse(RestOpSession)}.
+	 * 	<li>If no Java method matched, generates a 404/405/412 by calling {@link RestContext#handleNotFound(RestSession)}.
+	 * </ol>
+	 *
+	 * @throws Throwable Any throwable can be thrown.
+	 */
+	public void run() throws Throwable {
+		try {
+			opSession = context.getRestOperations().findOperation(this).createSession(this).build();
+			context.preCall(opSession);
+			opSession.run();
+			context.postCall(opSession);
+			if (opSession.getResponse().hasOutput()) {
+				// Now serialize the output if there was any.
+				// Some subclasses may write to the OutputStream or Writer directly.
+				context.processResponse(opSession);
+			}
+		} catch (NotFound e) {
+			if (getStatus() == 0)
+				status(404);
+			exception(e);
+			context.handleNotFound(this);
+		}
 	}
 }

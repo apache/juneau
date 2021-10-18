@@ -154,15 +154,15 @@ public class RestChildren {
 	/**
 	 * Looks through the registered children of this object and returns the best match.
 	 *
-	 * @param call The HTTP call.
+	 * @param builder The HTTP call builder.
 	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.
 	 */
-	public Optional<RestChildMatch> findMatch(RestCall.Builder call) {
-		String pi = call.getPathInfoUndecoded();
+	public Optional<RestChildMatch> findMatch(RestSession.Builder builder) {
+		String pi = builder.getPathInfoUndecoded();
 		if ((! children.isEmpty()) && pi != null && ! pi.equals("/")) {
 			for (RestContext rc : children.values()) {
 				UrlPathMatcher upp = rc.getPathMatcher();
-				UrlPathMatch uppm = upp.match(call.getUrlPath());
+				UrlPathMatch uppm = upp.match(builder.getUrlPath());
 				if (uppm != null) {
 					return Optional.of(RestChildMatch.create(uppm, rc));
 				}

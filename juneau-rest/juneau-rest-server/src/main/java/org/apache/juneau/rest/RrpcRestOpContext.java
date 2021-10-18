@@ -12,18 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
-import java.io.*;
-import java.lang.reflect.*;
-
 import javax.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.parser.*;
 
 /**
  * A specialized {@link RestOpContext} for handling <js>"RRPC"</js> HTTP methods.
@@ -49,43 +42,16 @@ public class RrpcRestOpContext extends RestOpContext {
 	}
 
 	@Override
-	public void invoke(RestCall call) throws Throwable {
+	public RrpcRestOpSession.Builder createSession(RestSession session) {
+		return RrpcRestOpSession.create(this, session);
+	}
 
-		super.invoke(call);
-
-		final Object o = call.hasOutput() ? call.getRestResponse().getOutput(Object.class) : null;
-
-		if ("GET".equals(call.getMethod())) {
-			call.output(meta.getMethodsByPath().keySet());
-			return;
-
-		} else if ("POST".equals(call.getMethod())) {
-			String pip = call.getUrlPath().getPath();
-			if (pip.indexOf('/') != -1)
-				pip = pip.substring(pip.lastIndexOf('/')+1);
-			pip = urlDecode(pip);
-			RrpcInterfaceMethodMeta rmm = meta.getMethodMetaByPath(pip);
-			if (rmm != null) {
-				Method m = rmm.getJavaMethod();
-				try {
-					RestRequest req = call.getRestRequest();
-					// Parse the args and invoke the method.
-					Parser p = req.getBody().getParser();
-					Object[] args = null;
-					if (m.getGenericParameterTypes().length == 0)
-						args = new Object[0];
-					else {
-						try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {
-							args = p.parseArgs(in, m.getGenericParameterTypes());
-						}
-					}
-					call.output(m.invoke(o, args));
-					return;
-				} catch (Exception e) {
-					throw toHttpException(e, InternalServerError.class);
-				}
-			}
-		}
-		throw new NotFound();
+	/**
+	 * Returns the metadata about the RRPC Java method.
+	 *
+	 * @return The metadata about the RRPC Java method.
+	 */
+	protected RrpcInterfaceMeta getMeta() {
+		return meta;
 	}
 }

@@ -12,36 +12,37 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters of type {@link DispatcherType} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRestSession() getRestSession}().{@link RestSession#getRequest() getRequest}().{@link HttpServletRequest#getDispatcherType() getDispatcherType}()</c>.
  */
-public class ResourceBundleArg extends SimpleRestOperationArg {
+public class DispatcherTypeArg extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResourceBundleArg}, or <jk>null</jk> if the parameter type is not {@link ResourceBundle}.
+	 * @return A new {@link DispatcherTypeArg}, or <jk>null</jk> if the parameter type is not {@link DispatcherType}.
 	 */
-	public static ResourceBundleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ResourceBundle.class))
-			return new ResourceBundleArg();
+	public static DispatcherTypeArg create(ParamInfo paramInfo) {
+		if (paramInfo.isType(DispatcherType.class))
+			return new DispatcherTypeArg();
 		return null;
 	}
 
 	/**
 	 * Constructor.
 	 */
-	protected ResourceBundleArg() {
-		super((opSession)->opSession.getRequest().getMessages());
+	protected DispatcherTypeArg() {
+		super((opSession)->opSession.getRestSession().getRequest().getDispatcherType());
 	}
 }

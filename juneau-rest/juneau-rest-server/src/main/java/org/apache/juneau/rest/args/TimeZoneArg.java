@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link TimeZone} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getTimeZone() getTimeZone}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getTimeZone() getTimeZone}()</c>.
  */
 public class TimeZoneArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class TimeZoneArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected TimeZoneArg() {
-		super((c)->c.getRestRequest().getTimeZone().orElse(null));
+		super((opSession)->opSession.getRequest().getTimeZone().orElse(null));
 	}
 }

@@ -121,7 +121,7 @@ public final class RestRequest {
 	private final RequestHeaders headers;
 	private final RequestAttributes attrs;
 	private final HttpPartParserSession partParserSession;
-	private final RestCall call;
+	private final RestSession session;
 
 	// Lazy initialized.
 	private VarResolverSession varSession;
@@ -135,16 +135,16 @@ public final class RestRequest {
 	/**
 	 * Constructor.
 	 */
-	RestRequest(RestCall call) throws Exception {
-		this.call = call;
-		this.opContext = call.getRestOpContext();
+	RestRequest(RestOpContext opContext, RestSession session) throws Exception {
+		this.session = session;
+		this.opContext = opContext;
 
-		inner = call.getRequest();
-		context = call.getContext();
+		inner = session.getRequest();
+		context = session.getContext();
 
 		attrs = new RequestAttributes(this);
 
-		queryParams = new RequestQueryParams(this, call.getQueryParams(), true);
+		queryParams = new RequestQueryParams(this, session.getQueryParams(), true);
 
 		headers = new RequestHeaders(this, queryParams, false);
 
@@ -158,7 +158,7 @@ public final class RestRequest {
 			}
 		}
 
-		pathParams = new RequestPathParams(call, this, true);
+		pathParams = new RequestPathParams(session, this, true);
 
 		beanSession = opContext.getBeanContext().getSession();
 
@@ -1559,7 +1559,7 @@ public final class RestRequest {
 	 * @return The HTTP method of this request.
 	 */
 	public String getMethod() {
-		return call.getMethod();
+		return session.getMethod();
 	}
 
 	/**
@@ -1761,9 +1761,9 @@ public final class RestRequest {
 		if (varSession == null)
 			varSession = context
 				.getVarResolver()
-				.createSession(call.getBeanStore())
+				.createSession(session.getBeanStore())
 				.bean(RestRequest.class, this)
-				.bean(RestCall.class, call);
+				.bean(RestSession.class, session);
 		return varSession;
 	}
 
@@ -1927,7 +1927,7 @@ public final class RestRequest {
 		}
 	}
 
-	/* Called by RestCall.finish() */
+	/* Called by RestSession.finish() */
 	void close() {
 		if (config != null) {
 			try {

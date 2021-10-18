@@ -1680,9 +1680,9 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
+		 * 		<jk>public int</jk> process(RestOpSession <jv>opSession</jv>) <jk>throws</jk> IOException {
 		 *
-		 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
+		 * 				RestResponse <jv>res</jv> = <jv>opSession</jv>.getResponse();
 		 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
 		 *
 		 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
@@ -3465,15 +3465,19 @@ public class RestContext extends Context {
 			Value<RestOpArgList.Builder> v = Value.of(
 				RestOpArgList
 					.of(
+						AsyncContextArg.class,
 						AttributeArg.class,
 						BodyArg.class,
 						ConfigArg.class,
+						CookiesArg.class,
+						DispatcherTypeArg.class,
 						FormDataArg.class,
 						HasFormDataArg.class,
 						HasQueryArg.class,
 						HeaderArg.class,
 						HttpServletRequestArg.class,
 						HttpServletResponseArg.class,
+						HttpSessionArg.class,
 						InputStreamArg.class,
 						InputStreamParserArg.class,
 						LocaleArg.class,
@@ -3482,6 +3486,7 @@ public class RestContext extends Context {
 						OutputStreamArg.class,
 						ParserArg.class,
 						PathArg.class,
+						PrincipalArg.class,
 						QueryArg.class,
 						ReaderArg.class,
 						ReaderParserArg.class,
@@ -3497,7 +3502,11 @@ public class RestContext extends Context {
 						ResponseHeaderArg.class,
 						ResponseStatusArg.class,
 						RestContextArg.class,
+						RestSessionArg.class,
+						RestOpContextArg.class,
+						RestOpSessionArg.class,
 						RestRequestArg.class,
+						RestResponseArg.class,
 						ServetInputStreamArg.class,
 						ServletOutputStreamArg.class,
 						SwaggerArg.class,
@@ -3589,19 +3598,28 @@ public class RestContext extends Context {
 			Value<RestOpArgList.Builder> v = Value.of(
 				RestOpArgList
 					.of(
+						AsyncContextArg.class,
 						ConfigArg.class,
+						CookiesArg.class,
+						DispatcherTypeArg.class,
 						HeaderArg.class,
 						HttpServletRequestArg.class,
 						HttpServletResponseArg.class,
+						HttpSessionArg.class,
 						InputStreamArg.class,
 						LocaleArg.class,
 						MessagesArg.class,
 						MethodArg.class,
 						OutputStreamArg.class,
+						PrincipalArg.class,
 						ReaderArg.class,
 						ResourceBundleArg.class,
 						RestContextArg.class,
+						RestSessionArg.class,
+						RestOpContextArg.class,
+						RestOpSessionArg.class,
 						RestRequestArg.class,
+						RestResponseArg.class,
 						ServetInputStreamArg.class,
 						ServletOutputStreamArg.class,
 						TimeZoneArg.class,
@@ -6115,7 +6133,7 @@ public class RestContext extends Context {
 	private final RestLogger callLogger;
 	private final DebugEnablement debugEnablement;
 
-	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
+	private final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
 
 	// Gets set when postInitChildFirst() gets called.
 	private final AtomicBoolean initialized = new AtomicBoolean(false);
@@ -6257,8 +6275,8 @@ public class RestContext extends Context {
 	}
 
 	@Override /* Context */
-	public RestCall.Builder createSession() {
-		return RestCall.create(this);
+	public RestSession.Builder createSession() {
+		return RestSession.create(this);
 	}
 
 	/**
@@ -6992,36 +7010,6 @@ public class RestContext extends Context {
 		return ra;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Call handling
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
-	 *
-	 * <p>
-	 * This method is called immediately after {@link #startCall(RestCall)} has been called.
-	 *
-	 * @param call The current REST call.
-	 * @return The wrapped request object.
-	 * @throws Exception If any errors occur trying to interpret the request.
-	 */
-	public RestRequest createRequest(RestCall call) throws Exception {
-		return new RestRequest(call);
-	}
-
-	/**
-	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
-	 * and the request returned by {@link #createRequest(RestCall)}.
-	 *
-	 * @param call The current REST call.
-	 * @return The wrapped response object.
-	 * @throws Exception If any errors occur trying to interpret the request or response.
-	 */
-	public RestResponse createResponse(RestCall call) throws Exception {
-		return new RestResponse(call);
-	}
-
 	/**
 	 * The main service method.
 	 *
@@ -7039,10 +7027,10 @@ public class RestContext extends Context {
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
 		// Must be careful not to bleed thread-locals.
-		if (this.call.get() != null)
+		if (localSession.get() != null)
 			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 
-		RestCall.Builder cb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
+		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
 
 		try {
 
@@ -7054,83 +7042,66 @@ public class RestContext extends Context {
 			// the remainder after the new servletPath.
 			// Only do this for the top-level resource because the logic for child resources are processed next.
 			if (pathMatcher.hasVars() && parentContext == null) {
-				String sp = cb.req().getServletPath();
-				String pi = cb.getPathInfoUndecoded();
+				String sp = sb.req().getServletPath();
+				String pi = sb.getPathInfoUndecoded();
 				UrlPath upi2 = UrlPath.of(pi == null ? sp : sp + pi);
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
-					cb.pathVars(uppm.getVars());
-					cb.req(
-						new OverrideableHttpServletRequest(cb.req())
+					sb.pathVars(uppm.getVars());
+					sb.req(
+						new OverrideableHttpServletRequest(sb.req())
 							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 							.servletPath(uppm.getPrefix())
 					);
 				} else {
-					RestCall call = cb.build();
+					RestSession call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 					return;
 				}
 			}
 
 			// If this resource has child resources, try to recursively call them.
-			Optional<RestChildMatch> childMatch = restChildren.findMatch(cb);
+			Optional<RestChildMatch> childMatch = restChildren.findMatch(sb);
 			if (childMatch.isPresent()) {
 				UrlPathMatch uppm = childMatch.get().getPathMatch();
 				RestContext rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
-					cb.pathVars(uppm.getVars());
-					HttpServletRequest childRequest = new OverrideableHttpServletRequest(cb.req())
+					sb.pathVars(uppm.getVars());
+					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req())
 						.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
-						.servletPath(cb.req().getServletPath() + uppm.getPrefix());
-					rc.execute(rc.getResource(), childRequest, cb.res());
+						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
+					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
-					RestCall call = cb.build();
+					RestSession call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 				}
 				return;
 			}
 
 		} catch (Throwable e) {
-			handleError(cb.build(), convertThrowable(e));
-		} finally {
-			clearState();
+			handleError(sb.build(), convertThrowable(e));
 		}
 
-		RestCall c = cb.build();
-		c.debug(isDebug(c));
-		this.call.set(c);
+		RestSession s = sb.build();
 
 		try {
-
-			startCall(c);
-
-			// If the specified method has been defined in a subclass, invoke it.
-			try {
-				restOperations.findOperation(c).invoke(c);
-			} catch (NotFound e) {
-				if (c.getStatus() == 0)
-					c.status(404);
-				c.exception(e);
-				handleNotFound(c);
-			}
-
-			if (c.hasOutput()) {
-				// Now serialize the output if there was any.
-				// Some subclasses may write to the OutputStream or Writer directly.
-				processResponse(c);
-			}
-
+			localSession.set(s);
+			s.debug(isDebug(s));
+			startCall(s);
+			s.run();
 		} catch (Throwable e) {
-			handleError(c, convertThrowable(e));
+			handleError(s, convertThrowable(e));
 		} finally {
-			clearState();
+			try {
+				s.finish();
+				finishCall(s);
+			} finally {
+				localSession.remove();
+			}
 		}
-
-		c.finish();
-		finishCall(c);
 	}
 
-	private boolean isDebug(RestCall call) {
+	private boolean isDebug(RestSession call) {
 		return debugEnablement.isDebug(this, call.getRequest());
 	}
 
@@ -7153,20 +7124,20 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseProcessor#process(RestCall)} method returns
+	 * looking for the first one whose {@link ResponseProcessor#process(RestOpSession)} method returns
 	 * <jk>true</jk>.
 	 *
-	 * @param call The HTTP call.
+	 * @param opSession The HTTP call.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws BasicHttpException Non-200 response.
 	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
-	protected void processResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
+	protected void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.
 		int loops = 5;
 		for (int i = 0; i < responseProcessors.length; i++) {
-			int j = responseProcessors[i].process(call);
+			int j = responseProcessors[i].process(opSession);
 			if (j == FINISHED)
 				return;
 			if (j == RESTART) {
@@ -7176,7 +7147,7 @@ public class RestContext extends Context {
 			}
 		}
 
-		Object output = call.getRestResponse().getOutput().get().orElse(null);
+		Object output = opSession.getResponse().getOutput().get().orElse(null);
 		throw new NotImplemented("No response processors found to process output of type ''{0}''", className(output));
 	}
 
@@ -7231,13 +7202,13 @@ public class RestContext extends Context {
 	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
 	 * The default implementation will simply throw an exception with an appropriate message.
 	 *
-	 * @param call The HTTP call.
+	 * @param session The HTTP call.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void handleNotFound(RestCall call) throws Exception {
-		String pathInfo = call.getPathInfo();
-		String methodUC = call.getMethod();
-		int rc = call.getStatus();
+	protected void handleNotFound(RestSession session) throws Exception {
+		String pathInfo = session.getPathInfo();
+		String methodUC = session.getMethod();
+		int rc = session.getStatus();
 		String onPath = pathInfo == null ? " on no pathInfo"  : String.format(" on path '%s'", pathInfo);
 		if (rc == SC_NOT_FOUND)
 			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
@@ -7246,7 +7217,7 @@ public class RestContext extends Context {
 		else if (rc == SC_METHOD_NOT_ALLOWED)
 			throw new MethodNotAllowed("Method ''{0}'' not found on resource{1}.", methodUC, onPath);
 		else
-			throw new ServletException("Invalid method response: " + rc, call.getException());
+			throw new ServletException("Invalid method response: " + rc, session.getException());
 	}
 
 	/**
@@ -7255,15 +7226,15 @@ public class RestContext extends Context {
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
-	 * @param call The rest call.
+	 * @param session The rest call.
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
-	protected synchronized void handleError(RestCall call, Throwable e) throws IOException {
+	protected synchronized void handleError(RestSession session, Throwable e) throws IOException {
 
-		call.exception(e);
+		session.exception(e);
 
-		if (call.isDebug())
+		if (session.isDebug())
 			e.printStackTrace();
 
 		int code = 500;
@@ -7276,8 +7247,8 @@ public class RestContext extends Context {
 
 		BasicHttpException e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : BasicHttpException.create(BasicHttpException.class).causedBy(e).statusCode(code).build());
 
-		HttpServletRequest req = call.getRequest();
-		HttpServletResponse res = call.getResponse();
+		HttpServletRequest req = session.getRequest();
+		HttpServletResponse res = session.getResponse();
 
 		Throwable t = null;
 		if (e instanceof HttpRuntimeException)
@@ -7320,13 +7291,13 @@ public class RestContext extends Context {
 	/**
 	 * Called at the start of a request to invoke all {@link HookEvent#START_CALL} methods.
 	 *
-	 * @param call The current request.
+	 * @param session The current request.
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
-	protected void startCall(RestCall call) throws BasicHttpException {
+	protected void startCall(RestSession session) throws BasicHttpException {
 		for (MethodInvoker x : startCallMethods) {
 			try {
-				x.invokeUsingFactory(call.getBeanStore(), call.getContext().getResource());
+				x.invokeUsingFactory(session.getBeanStore(),session.getContext().getResource());
 			} catch (ExecutableException e) {
 				throw toHttpException(e.unwrap(), InternalServerError.class);
 			}
@@ -7336,23 +7307,23 @@ public class RestContext extends Context {
 	/**
 	 * Called during a request to invoke all {@link HookEvent#PRE_CALL} methods.
 	 *
-	 * @param call The current request.
+	 * @param session The current request.
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
-	protected void preCall(RestCall call) throws BasicHttpException {
+	protected void preCall(RestOpSession session) throws BasicHttpException {
 		for (RestOpInvoker m : preCallMethods)
-			m.invokeFromCall(call, getResource());
+			m.invokeFromCall(session, getResource());
 	}
 
 	/**
 	 * Called during a request to invoke all {@link HookEvent#POST_CALL} methods.
 	 *
-	 * @param call The current request.
+	 * @param session The current request.
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
-	protected void postCall(RestCall call) throws BasicHttpException {
+	protected void postCall(RestOpSession session) throws BasicHttpException {
 		for (RestOpInvoker m : postCallMethods)
-			m.invokeFromCall(call, getResource());
+			m.invokeFromCall(session, getResource());
 	}
 
 	/**
@@ -7361,12 +7332,12 @@ public class RestContext extends Context {
 	 * <p>
 	 * This is the very last method called in {@link #execute(Object, HttpServletRequest, HttpServletResponse)}.
 	 *
-	 * @param call The current request.
+	 * @param session The current request.
 	 */
-	protected void finishCall(RestCall call) {
+	protected void finishCall(RestSession session) {
 		for (MethodInvoker x : endCallMethods) {
 			try {
-				x.invokeUsingFactory(call.getBeanStore(), call.getResource());
+				x.invokeUsingFactory(session.getBeanStore(), session.getResource());
 			} catch (ExecutableException e) {
 				logger.log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
@@ -7439,31 +7410,13 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Returns the HTTP request object for the current request.
-	 *
-	 * @return The HTTP request object, or <jk>null</jk> if it hasn't been created.
-	 */
-	public RestRequest getRequest() {
-		return getCall().getRestRequest();
-	}
-
-	/**
-	 * Returns the HTTP response object for the current request.
-	 *
-	 * @return The HTTP response object, or <jk>null</jk> if it hasn't been created.
-	 */
-	public RestResponse getResponse() {
-		return getCall().getRestResponse();
-	}
-
-	/**
 	 * Returns the HTTP call for the current request.
 	 *
 	 * @return The HTTP call for the current request, never <jk>null</jk>?
 	 * @throws InternalServerError If no active request exists on the current thread.
 	 */
-	public RestCall getCall() {
-		RestCall rc = call.get();
+	public RestSession getLocalSession() {
+		RestSession rc = localSession.get();
 		if (rc == null)
 			throw new InternalServerError("No active request on current thread.");
 		return rc;
@@ -7500,12 +7453,8 @@ public class RestContext extends Context {
 		return builder.getApplied();
 	}
 
-	/**
-	 * Clear any request state information on this context.
-	 * This should always be called in a finally block in the RestServlet.
-	 */
-	void clearState() {
-		call.remove();
+	RestOperations getRestOperations() {
+		return restOperations;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

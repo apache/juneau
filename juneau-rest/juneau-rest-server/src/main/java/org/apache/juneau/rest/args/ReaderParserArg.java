@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link ReaderParser} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#getReaderParser() getReaderParser}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#getReaderParser() getReaderParser}()</c>.
  */
 public class ReaderParserArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class ReaderParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected ReaderParserArg() {
-		super((c)->c.getRestRequest().getBody().getReaderParser());
+		super((opSession)->opSession.getRequest().getBody().getReaderParser());
 	}
 }

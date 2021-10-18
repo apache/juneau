@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link ServletOutputStream} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#getOutputStream() getOutputStream}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getResponse() getResponse}().{@link RestResponse#getOutputStream() getOutputStream}()</c>.
  */
 public class ServletOutputStreamArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class ServletOutputStreamArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected ServletOutputStreamArg() {
-		super((c)->c.getRestResponse().getOutputStream());
+		super((opSession)->opSession.getResponse().getOutputStream());
 	}
 }

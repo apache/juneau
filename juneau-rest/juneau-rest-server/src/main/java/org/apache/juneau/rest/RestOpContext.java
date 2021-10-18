@@ -38,7 +38,6 @@ import java.util.function.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
@@ -2315,6 +2314,41 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
+	 * Creates a new REST operation session.
+	 *
+	 * @param session The REST session.
+	 * @return A new REST operation session.
+	 * @throws Exception If op session could not be created.
+	 */
+	public RestOpSession.Builder createSession(RestSession session) throws Exception {
+		return RestOpSession.create(this, session).logger(callLogger).debug(debug.isDebug(this, session.getRequest()));
+	}
+
+	/**
+	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
+	 *
+	 * @param session The current REST call.
+	 * @return The wrapped request object.
+	 * @throws Exception If any errors occur trying to interpret the request.
+	 */
+	public RestRequest createRequest(RestSession session) throws Exception {
+		return new RestRequest(this, session);
+	}
+
+	/**
+	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
+	 * and the request returned by {@link #createRequest(RestSession)}.
+	 *
+	 * @param session The current REST call.
+	 * @param req The REST request.
+	 * @return The wrapped response object.
+	 * @throws Exception If any errors occur trying to interpret the request or response.
+	 */
+	public RestResponse createResponse(RestSession session, RestRequest req) throws Exception {
+		return new RestResponse(this, session, req);
+	}
+
+	/**
 	 * Returns the bean context associated with this context.
 	 *
 	 * @return The bean context associated with this context.
@@ -2580,7 +2614,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * 	<li>Matchers (if any) must match.
 	 * </ul>
 	 *
-	 * @param call The call to check.
+	 * @param session The call to check.
 	 * @return
 	 * 	One of the following values:
 	 * 	<ul>
@@ -2589,20 +2623,20 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * 		<li><c>2</c> - Matches.
 	 * 	</ul>
 	 */
-	protected int match(RestCall call) {
+	protected int match(RestSession session) {
 
-		UrlPathMatch pm = matchPattern(call);
+		UrlPathMatch pm = matchPattern(session);
 
 		if (pm == null)
 			return 0;
 
 		if (requiredMatchers.length == 0 && optionalMatchers.length == 0) {
-			call.urlPathMatch(pm);  // Cache so we don't have to recalculate.
+			session.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
 		}
 
 		try {
-			HttpServletRequest req = call.getRequest();
+			HttpServletRequest req = session.getRequest();
 
 			// If the method implements matchers, test them.
 			for (RestMatcher m :  requiredMatchers)
@@ -2616,94 +2650,28 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					return 1;
 			}
 
-			call.urlPathMatch(pm);  // Cache so we don't have to recalculate.
+			session.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
 		}
 	}
 
-	/**
-	 * Workhorse method.
-	 *
-	 * @param call Invokes the specified call against this Java method.
-	 * @throws Throwable Typically an HTTP exception.  Anything else will result in an HTTP 500.
-	 */
-	protected void invoke(RestCall call) throws Throwable {
-
-		call.restOpContext(this);
-
-		RestRequest req = call.getRestRequest();
-		RestResponse res = call.getRestResponse();
-
-		context.preCall(call);
-
-		call.logger(callLogger);
-
-		call.debug(debug.isDebug(this, call.getRequest()));
-
-		Object[] args = new Object[opArgs.length];
-		for (int i = 0; i < opArgs.length; i++) {
-			ParamInfo pi = methodInvoker.inner().getParam(i);
-			try {
-				args[i] = opArgs[i].resolve(call);
-			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not convert resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), mi.getFullName());
-			}
-		}
-
-		try {
-
-			for (RestGuard guard : guards)
-				if (! guard.guard(req, res))
-					return;
-
-			Object output;
-			try {
-				output = methodInvoker.invoke(context.getResource(), args);
-
-				// Handle manual call to req.setDebug().
-				Boolean debug = req.getAttribute("Debug").asType(Boolean.class).orElse(null);
-				if (debug == Boolean.TRUE) {
-					call.debug(true);
-				} else if (debug == Boolean.FALSE) {
-					call.debug(false);
-				}
-
-				if (res.getStatus() == 0)
-					res.setStatus(200);
-				if (! method.getReturnType().equals(Void.TYPE)) {
-					if (output != null || ! res.getOutputStreamCalled())
-						res.setOutput(output);
-				}
-			} catch (ExecutableException e) {
-				Throwable e2 = e.unwrap();  // Get the throwable thrown from the doX() method.
-				res.setStatus(500);  // May be overridden later.
-				Class<?> c = e2.getClass();
-				if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(ResponseBody.class) != null) {
-					res.setOutput(e2);
-				} else {
-					throw e;
-				}
-			}
-
-			context.postCall(call);
-
-			Optional<Optional<Object>> o = res.getOutput();
-			if (o.isPresent())
-				for (RestConverter converter : converters)
-					res.setOutput(converter.convert(req, o.get().orElse(null)));
-
-		} catch (IllegalArgumentException e) {
-			throw new BadRequest(e,
-				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
-				mi.toString(), mi.getFullName()
-			);
-		} catch (ExecutableException e) {
-			throw e.unwrap();
-		}
+	MethodInvoker getMethodInvoker() {
+		return methodInvoker;
 	}
 
+	RestGuard[] getGuards() {
+		return guards;
+	}
+
+	RestConverter[] getConverters() {
+		return converters;
+	}
+
+	RestOpArg[] getOpArgs() {
+		return opArgs;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
@@ -2794,7 +2762,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return hps == null ? _default : hps;
 	}
 
-	private UrlPathMatch matchPattern(RestCall call) {
+	private UrlPathMatch matchPattern(RestSession call) {
 		UrlPathMatch pm = null;
 		for (UrlPathMatcher pp : pathMatchers)
 			if (pm == null)

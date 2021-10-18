@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link RequestBody} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getBody() getBody}()</c>.
  */
 public class RequestBodyArg extends SimpleRestOperationArg {
 
@@ -40,6 +40,6 @@ public class RequestBodyArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestBodyArg() {
-		super((c)->c.getRestRequest().getBody());
+		super((opSession)->opSession.getRequest().getBody());
 	}
 }

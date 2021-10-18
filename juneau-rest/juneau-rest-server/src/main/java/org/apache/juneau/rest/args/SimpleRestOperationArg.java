@@ -22,20 +22,20 @@ import org.apache.juneau.utils.*;
  */
 public class SimpleRestOperationArg implements RestOpArg {
 
-	private final Function<RestCall,Object> function;
+	private final Function<RestOpSession,Object> function;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param function The function to use to retrieve the parameter value from the {@link RestCall}.
+	 * @param function The function to use to retrieve the parameter value from the {@link RestSession}.
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> SimpleRestOperationArg(ThrowingFunction<RestCall,T> function) {
-		this.function = (Function<RestCall,Object>)function;
+	protected <T> SimpleRestOperationArg(ThrowingFunction<RestOpSession,T> function) {
+		this.function = (Function<RestOpSession,Object>)function;
 	}
 
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		return function.apply(call);
+	public Object resolve(RestOpSession opSession) throws Exception {
+		return function.apply(opSession);
 	}
 }

@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link Swagger} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getSwagger() getSwagger}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getSwagger() getSwagger}()</c>.
  */
 public class SwaggerArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class SwaggerArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected SwaggerArg() {
-		super((c)->c.getRestRequest().getSwagger().orElse(null));
+		super((opSession)->opSession.getRequest().getSwagger().orElse(null));
 	}
 }

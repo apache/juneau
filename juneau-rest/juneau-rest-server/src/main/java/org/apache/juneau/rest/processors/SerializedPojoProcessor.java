@@ -31,9 +31,9 @@ import org.apache.juneau.internal.*;
 public final class SerializedPojoProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		RestRequest req = call.getRestRequest();
-		RestResponse res = call.getRestResponse();
+	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
+		RestRequest req = opSession.getRequest();
+		RestResponse res = opSession.getResponse();
 		SerializerMatch sm = res.getSerializerMatch().orElse(null);
 		HttpPartSchema schema = res.getBodySchema().orElse(null);
 

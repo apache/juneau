@@ -27,9 +27,9 @@ import org.apache.juneau.http.response.*;
 public final class PlainTextPojoProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		RestRequest req = call.getRestRequest();
-		RestResponse res = call.getRestResponse();
+	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
+		RestRequest req = opSession.getRequest();
+		RestResponse res = opSession.getResponse();
 		String accept = req.getHeader("Accept").orElse("*/*");
 
 		if (res.getSerializerMatch().isPresent())

@@ -12,36 +12,31 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
-
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
- *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * Resolves method parameters of type {@link RestOpSession} on {@link RestOp}-annotated Java methods.
  */
-public class ResourceBundleArg extends SimpleRestOperationArg {
+public class RestOpSessionArg extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResourceBundleArg}, or <jk>null</jk> if the parameter type is not {@link ResourceBundle}.
+	 * @return A new {@link RestOpSessionArg}, or <jk>null</jk> if the parameter type is not {@link RestOpSession}.
 	 */
-	public static ResourceBundleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ResourceBundle.class))
-			return new ResourceBundleArg();
+	public static RestOpSessionArg create(ParamInfo paramInfo) {
+		if (paramInfo.isType(RestOpSession.class))
+			return new RestOpSessionArg();
 		return null;
 	}
 
 	/**
 	 * Constructor.
 	 */
-	protected ResourceBundleArg() {
-		super((opSession)->opSession.getRequest().getMessages());
+	protected RestOpSessionArg() {
+		super((opSession)->opSession);
 	}
 }

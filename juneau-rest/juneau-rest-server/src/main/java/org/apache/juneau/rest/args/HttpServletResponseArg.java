@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link HttpServletResponse} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getResponse() getResponse}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRestSession() getRestSession}().{@link RestSession#getResponse() getResponse}()</c>.
  */
 public class HttpServletResponseArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class HttpServletResponseArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected HttpServletResponseArg() {
-		super((c)->c.getResponse());
+		super((opSession)->opSession.getRestSession().getResponse());
 	}
 }

@@ -12,36 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
-
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters of type {@link RestResponse} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getResponse() getResponse}()</c>.
  */
-public class ResourceBundleArg extends SimpleRestOperationArg {
+public class RestResponseArg extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResourceBundleArg}, or <jk>null</jk> if the parameter type is not {@link ResourceBundle}.
+	 * @return A new {@link RestResponseArg}, or <jk>null</jk> if the parameter type is not {@link RestResponse}.
 	 */
-	public static ResourceBundleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ResourceBundle.class))
-			return new ResourceBundleArg();
+	public static RestResponseArg create(ParamInfo paramInfo) {
+		if (paramInfo.isType(RestResponse.class))
+			return new RestResponseArg();
 		return null;
 	}
 
 	/**
 	 * Constructor.
 	 */
-	protected ResourceBundleArg() {
-		super((opSession)->opSession.getRequest().getMessages());
+	protected RestResponseArg() {
+		super((opSession)->opSession.getResponse());
 	}
 }

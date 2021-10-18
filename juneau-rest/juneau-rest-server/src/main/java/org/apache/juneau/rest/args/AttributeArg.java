@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link Attr} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String) get}(<jv>name</jv>).{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String) get}(<jv>name</jv>).{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>.
  */
 public class AttributeArg implements RestOpArg {
 
@@ -63,7 +63,7 @@ public class AttributeArg implements RestOpArg {
 	}
 
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		return call.getRestRequest().getAttribute(name).asType(type).orElse(null);
+	public Object resolve(RestOpSession opSession) throws Exception {
+		return opSession.getRequest().getAttribute(name).asType(type).orElse(null);
 	}
 }

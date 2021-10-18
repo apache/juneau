@@ -80,15 +80,15 @@ public final class RestResponse {
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestCall call) throws Exception {
+	RestResponse(RestOpContext opContext, RestSession session, RestRequest req) throws Exception {
 
-		inner = call.getResponse();
-		request = call.getRestRequest();
+		inner = session.getResponse();
+		request = req;
 
-		opContext = call.getRestOpContext();
+		this.opContext = opContext;
 		responseBeanMeta = opContext.getResponseMeta();
 
-		RestContext context = call.getContext();
+		RestContext context = session.getContext();
 
 		try {
 			String passThroughHeaders = request.getHeader("x-response-headers").orElse(null);

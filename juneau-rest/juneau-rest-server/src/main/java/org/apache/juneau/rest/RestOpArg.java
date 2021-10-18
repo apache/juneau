@@ -36,8 +36,8 @@ import org.apache.juneau.rest.annotation.*;
  * 		<jk>protected</jk> TimeZoneArg() {}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
- * 			<jk>return</jk> <jv>call</jv>.getRestRequest().getHeaders().getTimeZone();
+ * 		<jk>public</jk> Object resolve(RestOpSession <jv>opSession</jv>) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> <jv>opSession</jv>.getRequest().getHeaders().getTimeZone();
  * 		}
  * 	}
  * </p>
@@ -52,9 +52,9 @@ public interface RestOpArg {
 	/**
 	 * Resolves the parameter object.
 	 *
-	 * @param call The rest call.
+	 * @param opSession The rest call.
 	 * @return The resolved object.
 	 * @throws Exception Generic error occurred.
 	 */
-	public Object resolve(RestCall call) throws Exception;
+	public Object resolve(RestOpSession opSession) throws Exception;
 }

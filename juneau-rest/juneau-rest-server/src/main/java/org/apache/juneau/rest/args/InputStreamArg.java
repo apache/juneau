@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link InputStream} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getInputStream() getInputStream}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getInputStream() getInputStream}()</c>.
  */
 public class InputStreamArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class InputStreamArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected InputStreamArg() {
-		super((c)->c.getRestRequest().getInputStream());
+		super((opSession)->opSession.getRequest().getInputStream());
 	}
 }

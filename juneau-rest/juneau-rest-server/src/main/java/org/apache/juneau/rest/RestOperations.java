@@ -175,19 +175,19 @@ public class RestOperations {
 	/**
 	 * Finds the method that should handle the specified call.
 	 *
-	 * @param call The HTTP call.
+	 * @param session The HTTP call.
 	 * @return The method that should handle the specified call.
 	 * @throws MethodNotAllowed If no methods implement the requested HTTP method.
 	 * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.
 	 * @throws NotFound HTTP method match was found but matching path was not.
 	 */
-	public RestOpContext findOperation(RestCall call) throws MethodNotAllowed, PreconditionFailed, NotFound {
-		String m = call.getMethod();
+	public RestOpContext findOperation(RestSession session) throws MethodNotAllowed, PreconditionFailed, NotFound {
+		String m = session.getMethod();
 
 		int rc = 0;
 		if (map.containsKey(m)) {
 			for (RestOpContext oc : map.get(m)) {
-				int mrc = oc.match(call);
+				int mrc = oc.match(session);
 				if (mrc == 2)
 					return oc;
 				rc = Math.max(rc, mrc);
@@ -196,7 +196,7 @@ public class RestOperations {
 
 		if (map.containsKey("*")) {
 			for (RestOpContext oc : map.get("*")) {
-				int mrc = oc.match(call);
+				int mrc = oc.match(session);
 				if (mrc == 2)
 					return oc;
 				rc = Math.max(rc, mrc);
@@ -208,7 +208,7 @@ public class RestOperations {
 		if (rc == 0) {
 			for (RestOpContext oc : list) {
 				if (! oc.getPathPattern().endsWith("/*")) {
-					int orc = oc.match(call);
+					int orc = oc.match(session);
 					if (orc == 2)
 						throw new MethodNotAllowed();
 				}
@@ -216,9 +216,9 @@ public class RestOperations {
 		}
 
 		if (rc == 1)
-			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, call.getPathInfo());
+			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, session.getPathInfo());
 
-		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), className(call.getResource()));
+		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", session.getPathInfo(), className(session.getResource()));
 	}
 
 

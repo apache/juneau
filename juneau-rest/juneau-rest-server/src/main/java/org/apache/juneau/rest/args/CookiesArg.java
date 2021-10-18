@@ -12,36 +12,36 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters of type <c>{@link Cookie}[]</c> on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRestSession() getRestSession}().{@link RestSession#getRequest() getRequest}().{@link HttpServletRequest#getCookies() getCookies}()</c>.
  */
-public class ResourceBundleArg extends SimpleRestOperationArg {
+public class CookiesArg extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResourceBundleArg}, or <jk>null</jk> if the parameter type is not {@link ResourceBundle}.
+	 * @return A new {@link CookiesArg}, or <jk>null</jk> if the parameter type is not <c>{@link Cookie}[]</c>.
 	 */
-	public static ResourceBundleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ResourceBundle.class))
-			return new ResourceBundleArg();
+	public static CookiesArg create(ParamInfo paramInfo) {
+		if (paramInfo.isType(Cookie[].class))
+			return new CookiesArg();
 		return null;
 	}
 
 	/**
 	 * Constructor.
 	 */
-	protected ResourceBundleArg() {
-		super((opSession)->opSession.getRequest().getMessages());
+	protected CookiesArg() {
+		super((opSession)->opSession.getRestSession().getRequest().getCookies());
 	}
 }

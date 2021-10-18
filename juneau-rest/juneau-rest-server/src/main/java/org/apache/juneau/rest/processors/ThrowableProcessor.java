@@ -26,9 +26,9 @@ import org.apache.juneau.rest.*;
 public final class ThrowableProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException {
+	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = call.getRestResponse();
+		RestResponse res = opSession.getResponse();
 		Throwable t = res.getOutput(Throwable.class);
 
 		if (t == null)

@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link UriResolver} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getUriResolver() getUriResolver}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getUriResolver() getUriResolver}()</c>.
  */
 public class UriResolverArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class UriResolverArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected UriResolverArg() {
-		super((c)->c.getRestRequest().getUriResolver());
+		super((opSession)->opSession.getRequest().getUriResolver());
 	}
 }

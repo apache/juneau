@@ -42,19 +42,19 @@ public class RestOpInvoker extends MethodInvoker {
 	}
 
 	/**
-	 * Invokes this method from the specified {@link RestCall}.
+	 * Invokes this method from the specified {@link RestSession}.
 	 *
-	 * @param call The REST call.
+	 * @param opSession The REST call.
 	 * @param resource The REST resource object.
 	 * @return The results of the call.
 	 * @throws BasicHttpException If an error occurred during either parameter resolution or method invocation.
 	 */
-	public Object invokeFromCall(RestCall call, Object resource) throws BasicHttpException {
+	public Object invokeFromCall(RestOpSession opSession, Object resource) throws BasicHttpException {
 		Object[] args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
 			ParamInfo pi = inner().getParam(i);
 			try {
-				args[i] = opArgs[i].resolve(call);
+				args[i] = opArgs[i].resolve(opSession);
 			} catch (Exception e) {
 				throw toHttpException(e, BadRequest.class, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
 			}

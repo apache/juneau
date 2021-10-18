@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link Method} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getMethod() getMethod}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMethod() getMethod}()</c>.
  *
  * <p>
  * The parameter type must be {@link String}.
@@ -46,7 +46,7 @@ public class MethodArg implements RestOpArg {
 	}
 
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		return call.getRestRequest().getMethod();
+	public Object resolve(RestOpSession opSession) throws Exception {
+		return opSession.getRequest().getMethod();
 	}
 }

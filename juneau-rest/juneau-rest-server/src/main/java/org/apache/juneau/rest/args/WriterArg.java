@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link Writer} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#getWriter() getWriter}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getResponse() getResponse}().{@link RestResponse#getWriter() getWriter}()</c>.
  */
 public class WriterArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class WriterArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected WriterArg() {
-		super((c)->c.getRestResponse().getWriter());
+		super((opSession)->opSession.getResponse().getWriter());
 	}
 }

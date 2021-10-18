@@ -25,15 +25,15 @@ import org.apache.http.*;
 public final class HttpResponseProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException {
+	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = call.getRestResponse();
+		RestResponse res = opSession.getResponse();
 		HttpResponse r = res.getOutput(HttpResponse.class);
 
 		if (r == null)
 			return NEXT;
 
-		call.status(r.getStatusLine());
+		opSession.status(r.getStatusLine());
 
 		HttpEntity e = r.getEntity();
 

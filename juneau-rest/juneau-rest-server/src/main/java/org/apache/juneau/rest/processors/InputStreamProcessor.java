@@ -31,9 +31,9 @@ import org.apache.juneau.rest.*;
 public final class InputStreamProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException {
+	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = call.getRestResponse();
+		RestResponse res = opSession.getResponse();
 		InputStream is = res.getOutput(InputStream.class);
 
 		if (is == null)

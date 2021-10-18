@@ -47,8 +47,8 @@ public class Swagger_Test {
 	private org.apache.juneau.dto.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource.getClass(),null,null).init(()->resource).defaultClasses(TestClasspathFileFinder.class).build();
 		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
-		RestCall call = RestCall.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
-		RestRequest req = rc.createRequest(call.restOpContext(roc));
+		RestSession call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
+		RestRequest req = roc.createRequest(call);
 		SwaggerProvider ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}
@@ -56,8 +56,8 @@ public class Swagger_Test {
 	private static org.apache.juneau.dto.swagger.Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource.getClass(),null,null).init(()->resource).build();
 		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
-		RestCall call = RestCall.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
-		RestRequest req = rc.createRequest(call.restOpContext(roc));
+		RestSession call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
+		RestRequest req = roc.createRequest(call);
 		SwaggerProvider ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}

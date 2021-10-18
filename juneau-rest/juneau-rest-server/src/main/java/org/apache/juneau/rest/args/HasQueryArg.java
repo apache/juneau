@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link HasQuery} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#contains(String...) contains}(<jv>name</jv>)</c>
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#contains(String...) contains}(<jv>name</jv>)</c>
  *
  * <p>
  * The parameter type can be a <jk>boolean</jk> or anything convertible from a <jk>boolean</jk>.
@@ -68,8 +68,8 @@ public class HasQueryArg implements RestOpArg {
 	}
 
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		RestRequest req = call.getRestRequest();
+	public Object resolve(RestOpSession opSession) throws Exception {
+		RestRequest req = opSession.getRequest();
 		BeanSession bs = req.getBeanSession();
 		return bs.convertToType(req.getQueryParams().contains(name), bs.getClassMeta(type));
 	}

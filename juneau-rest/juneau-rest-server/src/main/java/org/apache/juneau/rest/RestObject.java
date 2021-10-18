@@ -429,7 +429,7 @@ public abstract class RestObject {
 	 * @return The current HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
 	public synchronized RestRequest getRequest() {
-		return getContext().getRequest();
+		return getContext().getLocalSession().getOpSession().getRequest();
 	}
 
 	/**
@@ -438,6 +438,6 @@ public abstract class RestObject {
 	 * @return The current HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
 	public synchronized RestResponse getResponse() {
-		return getContext().getResponse();
+		return getContext().getLocalSession().getOpSession().getResponse();
 	}
 }

@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Query} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#get(String) get}(<jv>name</jv>).{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>)</c>
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#get(String) get}(<jv>name</jv>).{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>)</c>
  * with a {@link HttpPartSchema schema} derived from the {@link Query} annotation.
  */
 public class QueryArg implements RestOpArg {
@@ -93,11 +93,11 @@ public class QueryArg implements RestOpArg {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		RestRequest req = call.getRestRequest();
+	public Object resolve(RestOpSession opSession) throws Exception {
+		RestRequest req = opSession.getRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		RequestQueryParams rh = call.getRestRequest().getQueryParams();
-		BeanSession bs = call.getRestRequest().getBeanSession();
+		RequestQueryParams rh = req.getQueryParams();
+		BeanSession bs = req.getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {

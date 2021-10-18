@@ -53,12 +53,12 @@ public class ResponseStatusArg implements RestOpArg {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override /* RestOpArg */
-	public Object resolve(final RestCall call) throws Exception {
+	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {
 			@Override
 			public void onSet(Object o) {
-				call.getRestResponse().setStatus(Integer.parseInt(o.toString()));
+				opSession.getResponse().setStatus(Integer.parseInt(o.toString()));
 			}
 		});
 		return v;

@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link Reader} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getReader() getReader}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getReader() getReader}()</c>.
  */
 public class ReaderArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class ReaderArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected ReaderArg() {
-		super((c)->c.getRestRequest().getReader());
+		super((opSession)->opSession.getRequest().getReader());
 	}
 }

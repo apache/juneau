@@ -25,9 +25,9 @@ import org.apache.juneau.http.resource.*;
 public final class HttpResourceProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException {
+	public int process(RestOpSession opSession) throws IOException {
 
-		RestResponse res = call.getRestResponse();
+		RestResponse res = opSession.getResponse();
 		HttpResource r = res.getOutput(HttpResource.class);
 
 		if (r == null)

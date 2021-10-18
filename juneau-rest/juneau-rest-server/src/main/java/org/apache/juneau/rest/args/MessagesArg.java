@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link Messages} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
  */
 public class MessagesArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class MessagesArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected MessagesArg() {
-		super((c)->c.getRestRequest().getMessages());
+		super((opSession)->opSession.getRequest().getMessages());
 	}
 }

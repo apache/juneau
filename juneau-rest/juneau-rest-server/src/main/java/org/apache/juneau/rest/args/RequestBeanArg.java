@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link Request} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>requestBeanMeta</jv>)</c>
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>requestBeanMeta</jv>)</c>
  * with a {@link RequestBeanMeta meta} derived from the {@link Request} annotation and context configuration.
  */
 public class RequestBeanArg implements RestOpArg {
@@ -53,7 +53,7 @@ public class RequestBeanArg implements RestOpArg {
 	}
 
 	@Override /* RestOpArg */
-	public Object resolve(RestCall call) throws Exception {
-		return call.getRestRequest().getRequest(meta);
+	public Object resolve(RestOpSession opSession) throws Exception {
+		return opSession.getRequest().getRequest(meta);
 	}
 }

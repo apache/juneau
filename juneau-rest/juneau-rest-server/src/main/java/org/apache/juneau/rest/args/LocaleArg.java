@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link Locale} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getLocale() getLocale}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getLocale() getLocale}()</c>.
  */
 public class LocaleArg extends SimpleRestOperationArg {
 
@@ -42,6 +42,6 @@ public class LocaleArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected LocaleArg() {
-		super((c)->c.getRestRequest().getLocale());
+		super((opSession)->opSession.getRequest().getLocale());
 	}
 }

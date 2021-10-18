@@ -34,10 +34,10 @@ import org.apache.juneau.httppart.bean.*;
 public final class ResponseBeanProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException {
+	public int process(RestOpSession opSession) throws IOException {
 
-		RestRequest req = call.getRestRequest();
-		RestResponse res = call.getRestResponse();
+		RestRequest req = opSession.getRequest();
+		RestResponse res = opSession.getResponse();
 		HttpPartSerializer defaultPartSerializer = req.getOpContext().getPartSerializer();
 
 		Object output = res.getOutput(Object.class);

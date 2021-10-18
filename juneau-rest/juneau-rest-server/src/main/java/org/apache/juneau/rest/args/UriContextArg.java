@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link UriContext} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getUriContext() getUriContext}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getUriContext() getUriContext}()</c>.
  */
 public class UriContextArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class UriContextArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected UriContextArg() {
-		super((c)->c.getRestRequest().getUriContext());
+		super((opSession)->opSession.getRequest().getUriContext());
 	}
 }

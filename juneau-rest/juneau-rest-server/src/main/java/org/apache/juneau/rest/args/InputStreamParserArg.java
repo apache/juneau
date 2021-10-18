@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link InputStreamParser} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#getInputStreamParser() getInputStreamParser}()</c>.
+ * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#getInputStreamParser() getInputStreamParser}()</c>.
  */
 public class InputStreamParserArg extends SimpleRestOperationArg {
 
@@ -41,6 +41,6 @@ public class InputStreamParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected InputStreamParserArg() {
-		super((c)->c.getRestRequest().getBody().getInputStreamParser());
+		super((opSession)->opSession.getRequest().getBody().getInputStreamParser());
 	}
 }
