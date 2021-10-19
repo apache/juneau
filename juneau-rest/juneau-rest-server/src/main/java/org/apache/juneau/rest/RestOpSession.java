@@ -131,6 +131,11 @@ public class RestOpSession extends ContextSession {
 		}
 	}
 
+	@Override /* ContextSession */
+	public RestOpContext getContext() {
+		return ctx;
+	}
+
 	/**
 	 * Runs this session.
 	 *

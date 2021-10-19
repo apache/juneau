@@ -2206,6 +2206,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final RestContext context;
 	private final Method method;
 	private final MethodInvoker methodInvoker;
+	private final RestOpInvoker[]
+		preCallMethods,
+		postCallMethods;
 	private final MethodInfo mi;
 	private final BeanContext beanContext;
 	private final SerializerGroup serializers;
@@ -2306,6 +2309,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 
 			opArgs = context.findRestOperationArgs(mi.inner(), bs);
+			preCallMethods = context.getPreCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
+			postCallMethods = context.getPostCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
 
 			this.callLogger = context.getCallLogger();
 		} catch (Exception e) {
@@ -2671,6 +2676,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	RestOpArg[] getOpArgs() {
 		return opArgs;
+	}
+
+	RestOpInvoker[] getPreCallMethods() {
+		return preCallMethods;
+	}
+
+	RestOpInvoker[] getPostCallMethods() {
+		return postCallMethods;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -237,7 +237,7 @@ public class RestContext extends Context {
 		private StaticFiles.Builder staticFiles;
 		private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 		private NamedAttributeList.Builder defaultRequestAttributes;
-		private RestOpArgList.Builder restOpArgs, hookMethodArgs;
+		private RestOpArgList.Builder restOpArgs;
 		private DebugEnablement.Builder debugEnablement;
 		private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 		private RestOperations.Builder restOperations;
@@ -3547,116 +3547,6 @@ public class RestContext extends Context {
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
-		// hookMethodArgs
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the REST hook-method args sub-builder.
-		 *
-		 * @return The REST hook-method args sub-builder.
-		 */
-		public final RestOpArgList.Builder hookMethodArgs() {
-			if (hookMethodArgs == null)
-				hookMethodArgs = createHookMethodArgs(beanStore(), resource());
-			return hookMethodArgs;
-		}
-
-		/**
-		 * Applies an operation to the REST hook-method args sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.hookMethodArgs(<jv>x</jv> -&gt; <jv>x</jv>.add(MyRestOpArg.<jk>class</jk>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder hookMethodArgs(Consumer<RestOpArgList.Builder> operation) {
-			operation.accept(hookMethodArgs());
-			return this;
-		}
-
-		/**
-		 * Instantiates the REST hook-method args sub-builder.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new REST hook-method args sub-builder.
-		 */
-		protected RestOpArgList.Builder createHookMethodArgs(BeanStore beanStore, Supplier<?> resource) {
-
-			// Default value.
-			Value<RestOpArgList.Builder> v = Value.of(
-				RestOpArgList
-					.of(
-						AsyncContextArg.class,
-						ConfigArg.class,
-						CookiesArg.class,
-						DispatcherTypeArg.class,
-						HeaderArg.class,
-						HttpServletRequestArg.class,
-						HttpServletResponseArg.class,
-						HttpSessionArg.class,
-						InputStreamArg.class,
-						LocaleArg.class,
-						MessagesArg.class,
-						MethodArg.class,
-						OutputStreamArg.class,
-						PrincipalArg.class,
-						ReaderArg.class,
-						ResourceBundleArg.class,
-						RestContextArg.class,
-						RestSessionArg.class,
-						RestOpContextArg.class,
-						RestOpSessionArg.class,
-						RestRequestArg.class,
-						RestResponseArg.class,
-						ServetInputStreamArg.class,
-						ServletOutputStreamArg.class,
-						TimeZoneArg.class,
-						WriterArg.class,
-						DefaultArg.class
-					)
-			);
-
-			// Replace with builder from bean store.
-			beanStore
-				.getBean("RestContext.hookMethodArgs", RestOpArgList.Builder.class)
-				.map(x -> x.copy())
-				.ifPresent(x -> v.set(x));
-
-			// Replace with bean from bean store.
-			beanStore
-				.getBean("RestContext.hookMethodArgs", RestOpArgList.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Replace with builder from:  public [static] RestOpArgList.Builder createHookMethodArgs(<args>)
-			beanStore
-				.beanCreateMethodFinder(RestOpArgList.Builder.class)
-				.addBean(RestOpArgList.Builder.class, v.get())
-				.find("createHookMethodArgs")
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  public [static] RestOpArgList createHookMethodArgs(<args>)
-			beanStore
-				.beanCreateMethodFinder(RestOpArgList.class)
-				.addBean(RestOpArgList.Builder.class, v.get())
-				.find("createHookMethodArgs")
-				.run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
 		// debugEnablement
 		//-----------------------------------------------------------------------------------------------------------------
 
@@ -6080,7 +5970,7 @@ public class RestContext extends Context {
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
-	private final Class<? extends RestOpArg>[] restOpArgs, hookMethodArgs;
+	private final Class<? extends RestOpArg>[] restOpArgs;
 	private final BeanContext beanContext;
 	private final EncoderGroup encoders;
 	private final SerializerGroup serializers;
@@ -6124,7 +6014,7 @@ public class RestContext extends Context {
 		endCallMethods,
 		destroyMethods;
 
-	private final RestOpInvoker[]
+	private final MethodList
 		preCallMethods,
 		postCallMethods;
 
@@ -6212,15 +6102,14 @@ public class RestContext extends Context {
 			defaultResponseHeaders = bs.add("RestContext.defaultResponseHeaders", builder.defaultResponseHeaders().build());
 			defaultRequestAttributes = bs.add("RestContext.defaultRequestAttributes", builder.defaultRequestAttributes().build());
 			restOpArgs = builder.restOpArgs().build().asArray();
-			hookMethodArgs = builder.hookMethodArgs().build().asArray();
 			debugEnablement = builder.debugEnablement().build();
 			startCallMethods = builder.startCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			endCallMethods = builder.endCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			postInitMethods = builder.postInitMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			postInitChildFirstMethods = builder.postInitChildFirstMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			destroyMethods = builder.destroyMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			preCallMethods = builder.preCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
-			postCallMethods = builder.postCallMethods().stream().map(this::toRestOpInvoker).toArray(RestOpInvoker[]:: new);
+			preCallMethods = builder.preCallMethods();
+			postCallMethods = builder.postCallMethods();
 			restOperations = builder.restOperations(this).build();
 			restChildren = builder.restChildren(this).build();
 			swaggerProvider = builder.swaggerProvider().build();
@@ -6255,10 +6144,6 @@ public class RestContext extends Context {
 
 	private MethodInvoker toMethodInvoker(Method m) {
 		return new MethodInvoker(m, getMethodExecStats(m));
-	}
-
-	private MethodInvoker toRestOpInvoker(Method m) {
-		return new RestOpInvoker(m, findHookMethodArgs(m, getBeanStore()), getMethodExecStats(m));
 	}
 
 	private Set<String> newCaseInsensitiveSet(String value) {
@@ -6976,38 +6861,21 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Finds the {@link RestOpArg} instances to handle resolving objects on pre-call and post-call Java methods.
+	 * Returns the list of methods to invoke before the actual REST method is called.
 	 *
-	 * @param m The Java method being called.
-	 * @param beanStore
-	 * 	The factory used for creating beans and retrieving injected beans.
-	 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
-	 * @return The array of resolvers.
+	 * @return The list of methods to invoke before the actual REST method is called.
 	 */
-	protected RestOpArg[] findHookMethodArgs(Method m, BeanStore beanStore) {
-		MethodInfo mi = MethodInfo.of(m);
-		List<ClassInfo> pt = mi.getParamTypes();
-		RestOpArg[] ra = new RestOpArg[pt.size()];
+	protected MethodList getPreCallMethods() {
+		return preCallMethods;
+	}
 
-		beanStore = BeanStore.of(beanStore, getResource());
-
-		for (int i = 0; i < pt.size(); i++) {
-			ParamInfo pi = mi.getParam(i);
-			beanStore.addBean(ParamInfo.class, pi);
-			for (Class<? extends RestOpArg> c : hookMethodArgs) {
-				try {
-					ra[i] = beanStore.creator(RestOpArg.class).type(c).run();
-					if (ra[i] != null)
-						break;
-				} catch (ExecutableException e) {
-					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
-				}
-			}
-			if (ra[i] == null)
-				throw new InternalServerError("Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
-		}
-
-		return ra;
+	/**
+	 * Returns the list of methods to invoke after the actual REST method is called.
+	 *
+	 * @return The list of methods to invoke after the actual REST method is called.
+	 */
+	protected MethodList getPostCallMethods() {
+		return postCallMethods;
 	}
 
 	/**
@@ -7311,8 +7179,8 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
 	protected void preCall(RestOpSession session) throws BasicHttpException {
-		for (RestOpInvoker m : preCallMethods)
-			m.invokeFromCall(session, getResource());
+		for (RestOpInvoker m : session.getContext().getPreCallMethods())
+			m.invoke(session);
 	}
 
 	/**
@@ -7322,8 +7190,8 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
 	protected void postCall(RestOpSession session) throws BasicHttpException {
-		for (RestOpInvoker m : postCallMethods)
-			m.invokeFromCall(session, getResource());
+		for (RestOpInvoker m : session.getContext().getPostCallMethods())
+			m.invoke(session);
 	}
 
 	/**

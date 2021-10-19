@@ -45,11 +45,10 @@ public class RestOpInvoker extends MethodInvoker {
 	 * Invokes this method from the specified {@link RestSession}.
 	 *
 	 * @param opSession The REST call.
-	 * @param resource The REST resource object.
 	 * @return The results of the call.
 	 * @throws BasicHttpException If an error occurred during either parameter resolution or method invocation.
 	 */
-	public Object invokeFromCall(RestOpSession opSession, Object resource) throws BasicHttpException {
+	public Object invoke(RestOpSession opSession) throws BasicHttpException {
 		Object[] args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
 			ParamInfo pi = inner().getParam(i);
@@ -60,7 +59,7 @@ public class RestOpInvoker extends MethodInvoker {
 			}
 		}
 		try {
-			return invoke(resource, args);
+			return invoke(opSession.getRestSession().getResource(), args);
 		} catch (ExecutableException e) {
 			throw toHttpException(e.unwrap(), InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
 		}
