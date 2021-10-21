@@ -7165,9 +7165,11 @@ public class RestContext extends Context {
 	protected void startCall(RestSession session) throws BasicHttpException {
 		for (MethodInvoker x : startCallMethods) {
 			try {
-				x.invokeUsingFactory(session.getBeanStore(),session.getContext().getResource());
-			} catch (ExecutableException e) {
-				throw toHttpException(e.unwrap(), InternalServerError.class);
+				x.invoke(session.getBeanStore(), session.getContext().getResource());
+			} catch (IllegalAccessException|IllegalArgumentException e) {
+				throw InternalServerError.create().message("Error occurred invoking start-call method ''{0}''.", x.getFullName()).causedBy(e).build();
+			} catch (InvocationTargetException e) {
+				throw toHttpException(e.getTargetException(), InternalServerError.class);
 			}
 		}
 	}
@@ -7176,9 +7178,9 @@ public class RestContext extends Context {
 	 * Called during a request to invoke all {@link HookEvent#PRE_CALL} methods.
 	 *
 	 * @param session The current request.
-	 * @throws BasicHttpException If thrown from call methods.
+	 * @throws Throwable If thrown from call methods.
 	 */
-	protected void preCall(RestOpSession session) throws BasicHttpException {
+	protected void preCall(RestOpSession session) throws Throwable {
 		for (RestOpInvoker m : session.getContext().getPreCallMethods())
 			m.invoke(session);
 	}
@@ -7187,9 +7189,9 @@ public class RestContext extends Context {
 	 * Called during a request to invoke all {@link HookEvent#POST_CALL} methods.
 	 *
 	 * @param session The current request.
-	 * @throws BasicHttpException If thrown from call methods.
+	 * @throws Throwable If thrown from call methods.
 	 */
-	protected void postCall(RestOpSession session) throws BasicHttpException {
+	protected void postCall(RestOpSession session) throws Throwable {
 		for (RestOpInvoker m : session.getContext().getPostCallMethods())
 			m.invoke(session);
 	}
@@ -7205,9 +7207,9 @@ public class RestContext extends Context {
 	protected void finishCall(RestSession session) {
 		for (MethodInvoker x : endCallMethods) {
 			try {
-				x.invokeUsingFactory(session.getBeanStore(), session.getResource());
-			} catch (ExecutableException e) {
-				logger.log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				x.invoke(session.getBeanStore(), session.getResource());
+			} catch (Exception e) {
+				logger.log(Level.WARNING, unwrap(e), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}
@@ -7232,9 +7234,9 @@ public class RestContext extends Context {
 		}
 		for (MethodInvoker x : postInitMethods) {
 			try {
-				x.invokeUsingFactory(beanStore, getResource());
-			} catch (ExecutableException e) {
-				throw new ServletException(e.unwrap());
+				x.invoke(beanStore, getResource());
+			} catch (Exception e) {
+				throw new ServletException(unwrap(e));
 			}
 		}
 		restChildren.postInit();
@@ -7253,9 +7255,9 @@ public class RestContext extends Context {
 		restChildren.postInitChildFirst();
 		for (MethodInvoker x : postInitChildFirstMethods) {
 			try {
-				x.invokeUsingFactory(beanStore, getResource());
-			} catch (ExecutableException e) {
-				throw new ServletException(e.unwrap());
+				x.invoke(beanStore, getResource());
+			} catch (Exception e) {
+				throw new ServletException(unwrap(e));
 			}
 		}
 		initialized.set(true);
@@ -7268,9 +7270,9 @@ public class RestContext extends Context {
 	protected void destroy() {
 		for (MethodInvoker x : destroyMethods) {
 			try {
-				x.invokeUsingFactory(beanStore, getResource());
-			} catch (ExecutableException e) {
-				getLogger().log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				x.invoke(beanStore, getResource());
+			} catch (Exception e) {
+				getLogger().log(Level.WARNING, unwrap(e), ()->format("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -7323,6 +7325,17 @@ public class RestContext extends Context {
 
 	RestOperations getRestOperations() {
 		return restOperations;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Throwable unwrap(Throwable t) {
+		if (t instanceof InvocationTargetException) {
+			return ((InvocationTargetException)t).getTargetException();
+		}
+		return t;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

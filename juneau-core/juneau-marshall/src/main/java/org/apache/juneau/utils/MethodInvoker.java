@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.reflect.*;
@@ -54,19 +55,21 @@ public class MethodInvoker {
 	 * @param o  The object the underlying method is invoked from.
 	 * @param args  The arguments used for the method call.
 	 * @return  The result of dispatching the method represented by this object on {@code obj} with parameters {@code args}
-	 * @throws ExecutableException If error occurred trying to invoke the method.
+	 * @throws IllegalAccessException If method cannot be accessed.
+	 * @throws IllegalArgumentException If wrong arguments were passed to method.
+	 * @throws InvocationTargetException If method threw an exception.
 	 */
-	public Object invoke(Object o, Object...args) throws ExecutableException {
+	public Object invoke(Object o, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		long startTime = System.nanoTime();
 		stats.started();
 		try {
 			return m.inner().invoke(o, args);
 		} catch (IllegalAccessException|IllegalArgumentException e) {
 			stats.error(e);
-			throw new ExecutableException(e);
+			throw e;
 		} catch (InvocationTargetException e) {
 			stats.error(e.getTargetException());
-			throw new ExecutableException(e.getTargetException());
+			throw e;
 		} finally {
 			stats.finished(System.nanoTime() - startTime);
 		}
@@ -78,14 +81,16 @@ public class MethodInvoker {
 	 * @param beanStore The bean store to use to resolve parameters.
 	 * @param o The object to invoke the method on.
 	 * @return The result of invoking the method.
-	 * @throws ExecutableException If error occurred trying to invoke the method.
+	 * @throws IllegalAccessException If method cannot be accessed.
+	 * @throws IllegalArgumentException If wrong arguments were passed to method.
+	 * @throws InvocationTargetException If method threw an exception.
 	 */
-	public Object invokeUsingFactory(BeanStore beanStore, Object o) throws ExecutableException {
+	public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		List<ClassInfo> missing;
 		missing = beanStore.getMissingParamTypes(m.getParams());
 		if (missing.isEmpty())
 			return invoke(o, beanStore.getParams(m.getParams()));
-		throw new ExecutableException("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
+		throw illegalArgumentException("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 	}
 
 	/**

@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -188,14 +189,16 @@ public class RestOpSession extends ContextSession {
 				if (output != null || ! res.getOutputStreamCalled())
 					res.setOutput(output);
 			}
-		} catch (ExecutableException e) {
-			Throwable e2 = e.unwrap();  // Get the throwable thrown from the doX() method.
+		} catch (IllegalAccessException e) {
+			throw InternalServerError.create().message("Error occurred invoking method ''{0}''.", methodInvoker.inner().getFullName()).causedBy(e).build();
+		} catch (InvocationTargetException e) {
+			Throwable e2 = e.getTargetException();  // Get the throwable thrown from the doX() method.
 			res.setStatus(500);  // May be overridden later.
 			Class<?> c = e2.getClass();
 			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(ResponseBody.class) != null) {
 				res.setOutput(e2);
 			} else {
-				throw e.unwrap();
+				throw e2;
 			}
 		} catch (IllegalArgumentException e) {
 			MethodInfo mi = MethodInfo.of(m);
