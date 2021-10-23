@@ -12,20 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.logging.*;
-import org.apache.juneau.utils.*;
 
 /**
  * A session for a single HTTP request.
@@ -158,52 +151,11 @@ public class RestOpSession extends ContextSession {
 			if (! guard.guard(req, res))
 				return;
 
-		java.lang.reflect.Method m = ctx.getJavaMethod();
-		RestOpArg[] opArgs = ctx.getOpArgs();
-		MethodInvoker methodInvoker = ctx.getMethodInvoker();
+		ctx.getMethodInvoker().invoke(this);
 
-		Object[] args = new Object[opArgs.length];
-		for (int i = 0; i < opArgs.length; i++) {
-			ParamInfo pi = methodInvoker.inner().getParam(i);
-			try {
-				args[i] = opArgs[i].resolve(this);
-			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not convert resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), m.getName());
-			}
-		}
-
-		try {
-			Object output = methodInvoker.invoke(session.getResource(), args);
-
-			// Handle manual call to req.setDebug().
-			Boolean debug = req.getAttribute("Debug").asType(Boolean.class).orElse(null);
-			if (debug == Boolean.TRUE) {
-				session.debug(true);
-			} else if (debug == Boolean.FALSE) {
-				session.debug(false);
-			}
-
-			if (! m.getReturnType().equals(Void.TYPE))
-				if (output != null || ! res.getOutputStreamCalled())
-					res.setOutput(output);
-
-		} catch (IllegalAccessException|IllegalArgumentException e) {
-			throw InternalServerError.create().message("Error occurred invoking method ''{0}''.", methodInvoker.inner().getFullName()).causedBy(e).build();
-		} catch (InvocationTargetException e) {
-			Throwable e2 = e.getTargetException();  // Get the throwable thrown from the doX() method.
-			res.setStatus(500);  // May be overridden later.
-			Class<?> c = e2.getClass();
-			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(ResponseBody.class) != null) {
-				res.setOutput(e2);
-			} else {
-				throw e2;
-			}
-		}
-
-		Optional<Object> o = res.getOutput();
-		if (o != null)
+		if (res.hasOutput())
 			for (RestConverter converter : ctx.getConverters())
-				res.setOutput(converter.convert(req, o.orElse(null)));
+				res.setOutput(converter.convert(req, res.getOutput().orElse(null)));
 	}
 
 	/**

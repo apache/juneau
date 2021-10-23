@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -72,9 +73,12 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 
 		if (t instanceof InvocationTargetException)
 			t = ((InvocationTargetException)t).getCause();
-		
+
 		if (t instanceof ExecutableException)
 			t = ((ExecutableException)t).getTargetException();
+
+		if (t instanceof ParseException)
+			throw new BadRequest(t);
 
 		ClassInfo ci = ClassInfo.ofc(t);
 

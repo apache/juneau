@@ -63,7 +63,6 @@ import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
@@ -2199,13 +2198,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
-	private final RestOpArg[] opArgs;
 	private final RestGuard[] guards;
 	private final RestMatcher[] requiredMatchers, optionalMatchers;
 	private final RestConverter[] converters;
 	private final RestContext context;
 	private final Method method;
-	private final MethodInvoker methodInvoker;
+	private final RestOpInvoker methodInvoker;
 	private final RestOpInvoker[]
 		preCallMethods,
 		postCallMethods;
@@ -2252,7 +2250,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			else
 				debug = DebugEnablement.create().enable(builder.debug, "*").build();
 
-			methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
 			mi = MethodInfo.of(method).accessible();
 			Object r = context.getResource();
 
@@ -2308,9 +2305,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 
-			opArgs = context.findRestOperationArgs(mi.inner(), bs);
 			preCallMethods = context.getPreCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
 			postCallMethods = context.getPostCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
+			methodInvoker = new RestOpInvoker(method, context.findRestOperationArgs(method, bs), context.getMethodExecStats(method));
 
 			this.callLogger = context.getCallLogger();
 		} catch (Exception e) {
@@ -2662,7 +2659,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 	}
 
-	MethodInvoker getMethodInvoker() {
+	RestOpInvoker getMethodInvoker() {
 		return methodInvoker;
 	}
 
@@ -2672,10 +2669,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	RestConverter[] getConverters() {
 		return converters;
-	}
-
-	RestOpArg[] getOpArgs() {
-		return opArgs;
 	}
 
 	RestOpInvoker[] getPreCallMethods() {
