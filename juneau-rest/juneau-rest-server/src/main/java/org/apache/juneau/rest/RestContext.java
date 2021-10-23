@@ -7015,7 +7015,7 @@ public class RestContext extends Context {
 			}
 		}
 
-		Object output = opSession.getResponse().getOutput().get().orElse(null);
+		Object output = opSession.getResponse().getOutput().orElse(null);
 		throw new NotImplemented("No response processors found to process output of type ''{0}''", className(output));
 	}
 

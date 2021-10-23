@@ -65,7 +65,7 @@ public final class RestResponse {
 	private HttpServletResponse inner;
 	private final RestRequest request;
 
-	private Optional<Optional<Object>> output = empty();  // The POJO being sent to the output.
+	private Optional<Object> output;  // The POJO being sent to the output.
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
@@ -179,7 +179,7 @@ public final class RestResponse {
 	 * @return This object.
 	 */
 	public RestResponse setOutput(Object output) {
-		this.output = of(ofNullable(output));
+		this.output = ofNullable(output);
 		return this;
 	}
 
@@ -208,13 +208,13 @@ public final class RestResponse {
 	 * Returns the output that was set by calling {@link #setOutput(Object)}.
 	 *
 	 * <p>
-	 * If it's empty, then {@link #setOutput(Object)} wasn't called.
-	 * <br>If it's not empty but contains an empty, then <c>setObject(<jk>null</jk>)</c> was called.
+	 * If it's null, then {@link #setOutput(Object)} wasn't called.
+	 * <br>If it contains an empty, then <c>setObject(<jk>null</jk>)</c> was called.
 	 * <br>Otherwise, {@link #setOutput(Object)} was called with a non-null value.
 	 *
-	 * @return The output object.  Never <jk>null</jk>.
+	 * @return The output object, or <jk>null</jk> if {@link #setOutput(Object)} was never called.
 	 */
-	public Optional<Optional<Object>> getOutput() {
+	public Optional<Object> getOutput() {
 		return output;
 	}
 
@@ -231,7 +231,7 @@ public final class RestResponse {
 	 * @return <jk>true</jk> if the response contains output.
 	 */
 	public boolean hasOutput() {
-		return output.isPresent();
+		return output != null;
 	}
 
 	/**
@@ -766,7 +766,7 @@ public final class RestResponse {
 	}
 
 	private Object getRawOutput() {
-		return output.isPresent() ? output.get().orElse(null) : null;
+		return output == null ? null : output.orElse(null);
 	}
 
 	/**

@@ -200,10 +200,10 @@ public class RestOpSession extends ContextSession {
 			}
 		}
 
-		Optional<Optional<Object>> o = res.getOutput();
-		if (o.isPresent())
+		Optional<Object> o = res.getOutput();
+		if (o != null)
 			for (RestConverter converter : ctx.getConverters())
-				res.setOutput(converter.convert(req, o.get().orElse(null)));
+				res.setOutput(converter.convert(req, o.orElse(null)));
 	}
 
 	/**
