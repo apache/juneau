@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.lang.reflect.*;
 import java.text.MessageFormat;
 
 /**
@@ -49,5 +50,16 @@ public class ExecutableException extends BasicRuntimeException {
 	 */
 	public ExecutableException(String message, Object...args) {
 		super(message, args);
+	}
+
+	/**
+	 * If the thrown exception was an {@link InvocationTargetException} returns the target exception.  
+	 * Otherwise returns the inner exception which is typically {@link IllegalArgumentException} or {@link IllegalAccessException}.
+	 *
+	 * @return The inner throwable.
+	 */
+	public Throwable getTargetException() {
+		Throwable c = this.getCause();
+		return c instanceof InvocationTargetException ? ((InvocationTargetException)c).getTargetException() : c;
 	}
 }

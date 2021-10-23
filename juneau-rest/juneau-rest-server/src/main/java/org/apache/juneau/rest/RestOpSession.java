@@ -183,13 +183,11 @@ public class RestOpSession extends ContextSession {
 				session.debug(false);
 			}
 
-			if (res.getStatus() == 0)
-				res.setStatus(200);
-			if (! m.getReturnType().equals(Void.TYPE)) {
+			if (! m.getReturnType().equals(Void.TYPE))
 				if (output != null || ! res.getOutputStreamCalled())
 					res.setOutput(output);
-			}
-		} catch (IllegalAccessException e) {
+
+		} catch (IllegalAccessException|IllegalArgumentException e) {
 			throw InternalServerError.create().message("Error occurred invoking method ''{0}''.", methodInvoker.inner().getFullName()).causedBy(e).build();
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();  // Get the throwable thrown from the doX() method.
@@ -200,12 +198,6 @@ public class RestOpSession extends ContextSession {
 			} else {
 				throw e2;
 			}
-		} catch (IllegalArgumentException e) {
-			MethodInfo mi = MethodInfo.of(m);
-			throw new BadRequest(e,
-				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
-				mi.getShortName(), mi.getFullName()
-			);
 		}
 
 		Optional<Optional<Object>> o = res.getOutput();

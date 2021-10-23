@@ -46,10 +46,9 @@ public class RestOpInvoker extends MethodInvoker {
 	 * Invokes this method from the specified {@link RestSession}.
 	 *
 	 * @param opSession The REST call.
-	 * @return The results of the call.
 	 * @throws Throwable If an error occurred during either parameter resolution or method invocation.
 	 */
-	public Object invoke(RestOpSession opSession) throws Throwable {
+	public void invoke(RestOpSession opSession) throws Throwable {
 		Object[] args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
 			ParamInfo pi = inner().getParam(i);
@@ -60,7 +59,24 @@ public class RestOpInvoker extends MethodInvoker {
 			}
 		}
 		try {
-			return invoke(opSession.getRestSession().getResource(), args);
+			RestSession session = opSession.getRestSession();
+			RestRequest req = opSession.getRequest();
+			RestResponse res = opSession.getResponse();
+
+			Object output = super.invoke(session.getResource(), args);
+
+			// Handle manual call to req.setDebug().
+			Boolean debug = req.getAttribute("Debug").asType(Boolean.class).orElse(null);
+			if (debug == Boolean.TRUE) {
+				session.debug(true);
+			} else if (debug == Boolean.FALSE) {
+				session.debug(false);
+			}
+
+			if (! inner().hasReturnType(Void.TYPE))
+				if (output != null || ! res.getOutputStreamCalled())
+					res.setOutput(output);
+
 		} catch (IllegalAccessException|IllegalArgumentException e) {
 			throw InternalServerError.create().message("Error occurred invoking method ''{0}''.", inner().getFullName()).causedBy(e).build();
 		} catch (InvocationTargetException e) {
@@ -70,9 +86,9 @@ public class RestOpInvoker extends MethodInvoker {
 			Class<?> c = e2.getClass();
 			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(ResponseBody.class) != null) {
 				res.setOutput(e2);
-				return null;
+			} else {
+				throw toHttpException(e2, InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
 			}
-			throw toHttpException(e2, InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
 		}
 	}
 }

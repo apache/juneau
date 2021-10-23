@@ -69,6 +69,13 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 	 * @return RuntimeException The new exception to throw.
 	 */
 	public static RuntimeException toHttpException(Throwable t, Class<?> ec, String msg, Object...args) {
+
+		if (t instanceof InvocationTargetException)
+			t = ((InvocationTargetException)t).getCause();
+		
+		if (t instanceof ExecutableException)
+			t = ((ExecutableException)t).getTargetException();
+
 		ClassInfo ci = ClassInfo.ofc(t);
 
 		// If it's any RuntimeException annotated with @Response, it can be rethrown.
@@ -82,9 +89,6 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 		// If it's a non-RuntimeException but annotated with @Response, it can be wrapped and rethrown.
 		if (ci.hasAnnotation(Response.class))
 			return new HttpRuntimeException(t);
-
-		if (ci.is(InvocationTargetException.class))
-			return new HttpRuntimeException(((InvocationTargetException)t).getCause());
 
 		if (ec == null)
 			ec = InternalServerError.class;
