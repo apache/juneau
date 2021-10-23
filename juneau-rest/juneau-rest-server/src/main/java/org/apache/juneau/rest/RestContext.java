@@ -6947,7 +6947,7 @@ public class RestContext extends Context {
 			}
 
 		} catch (Throwable e) {
-			handleError(sb.build(), convertThrowable(e));
+			handleError(sb.build(), convertThrowable(e, InternalServerError.class, null));
 		}
 
 		RestSession s = sb.build();
@@ -6958,7 +6958,7 @@ public class RestContext extends Context {
 			startCall(s);
 			s.run();
 		} catch (Throwable e) {
-			handleError(s, convertThrowable(e));
+			handleError(s, convertThrowable(e, InternalServerError.class, null));
 		} finally {
 			try {
 				s.finish();
@@ -7031,11 +7031,15 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * @param t The thrown object.
+	 * @param defaultThrowable The default throwable class to create.
+	 * @param msg Optional message to pass to default throwable class.
+	 * @param args Optional message argumetns to pass to default throwable class.
 	 * @return The converted thrown object.
 	 */
-	protected Throwable convertThrowable(Throwable t) {
+	public Throwable convertThrowable(Throwable t, Class<?> defaultThrowable, String msg, Object...args) {
 
 		ClassInfo ci = ClassInfo.ofc(t);
+
 		if (ci.is(InvocationTargetException.class)) {
 			t = ((InvocationTargetException)t).getTargetException();
 			ci = ClassInfo.ofc(t);
@@ -7046,10 +7050,15 @@ public class RestContext extends Context {
 			ci = ClassInfo.ofc(t);
 		}
 
+		if (ci.is(ExecutableException.class)) {
+			t = ((ExecutableException)t).getTargetException();
+			ci = ClassInfo.ofc(t);
+		}
+
 		if (ci.hasAnnotation(Response.class))
 			return t;
 
-		if (t instanceof ParseException || t instanceof InvalidDataConversionException)
+		if (ci.isChildOf(ParseException.class) || ci.is(InvalidDataConversionException.class))
 			return new BadRequest(t);
 
 		String n = className(t);
@@ -7060,7 +7069,25 @@ public class RestContext extends Context {
 		if (n.contains("Empty") || n.contains("NotFound"))
 			return new NotFound(t);
 
-		return t;
+		if (defaultThrowable == null)
+			return new InternalServerError(t, msg, args);
+
+		ClassInfo eci = ClassInfo.ofc(defaultThrowable);
+
+		try {
+			ConstructorInfo cci = eci.getPublicConstructor(Throwable.class, String.class, Object[].class);
+			if (cci != null)
+	 			return toHttpException((Throwable)cci.invoke(t, msg, args), InternalServerError.class);
+
+			cci = eci.getPublicConstructor(Throwable.class);
+			if (cci != null)
+				return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
+
+			System.err.println("WARNING:  Class '"+eci+"' does not have a public constructor that takes in valid arguments.");
+			return new InternalServerError(t);
+		} catch (ExecutableException e) {
+			return new InternalServerError(e.getCause());
+		}
 	}
 
 	/**
