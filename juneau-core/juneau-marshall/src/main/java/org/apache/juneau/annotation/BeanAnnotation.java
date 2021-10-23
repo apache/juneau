@@ -138,7 +138,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#dictionary()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder dictionary(Class<?>...value) {
 			this.dictionary = value;
@@ -149,7 +149,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#example()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String value) {
 			this.example = value;
@@ -160,7 +160,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#excludeProperties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder excludeProperties(String value) {
 			this.excludeProperties = value;
@@ -171,7 +171,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#findFluentSetters()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder findFluentSetters(boolean value) {
 			this.findFluentSetters = value;
@@ -182,7 +182,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#implClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
 			this.implClass = value;
@@ -193,7 +193,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#interceptor()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder interceptor(Class<? extends BeanInterceptor<?>> value) {
 			this.interceptor = value;
@@ -204,7 +204,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#interfaceClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
 			this.interfaceClass = value;
@@ -215,7 +215,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#properties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder properties(String value) {
 			this.properties = value;
@@ -226,7 +226,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#p()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -237,7 +237,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#propertyNamer()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
 			this.propertyNamer = value;
@@ -248,7 +248,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#readOnlyProperties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String value) {
 			this.readOnlyProperties = value;
@@ -259,7 +259,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#ro()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ro(String value) {
 			this.ro = value;
@@ -270,7 +270,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#sort()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sort(boolean value) {
 			this.sort = value;
@@ -281,7 +281,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#stopClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
 			this.stopClass = value;
@@ -292,7 +292,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#typeName()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder typeName(String value) {
 			this.typeName = value;
@@ -303,7 +303,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#typePropertyName()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder typePropertyName(String value) {
 			this.typePropertyName = value;
@@ -314,7 +314,7 @@ public class BeanAnnotation {
 		 * Sets the{@link Bean#wo()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder wo(String value) {
 			this.wo = value;
@@ -325,7 +325,7 @@ public class BeanAnnotation {
 		 * Sets the{@link Bean#writeOnlyProperties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String value) {
 			this.writeOnlyProperties = value;
@@ -336,7 +336,7 @@ public class BeanAnnotation {
 		 * Sets the {@link Bean#xp()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder xp(String value) {
 			this.xp = value;

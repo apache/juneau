@@ -129,7 +129,7 @@ public class Text extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Text type(String value) {
 		setType(value);
@@ -184,7 +184,7 @@ public class Text extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Text text(String value) {
 		setText(value);

@@ -39,7 +39,7 @@ public class Keygen extends HtmlElementVoid {
 	 * @param autofocus
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Keygen autofocus(Object autofocus) {
 		attr("autofocus", autofocus);
@@ -53,7 +53,7 @@ public class Keygen extends HtmlElementVoid {
 	 * String to package with the generated and signed public key.
 	 *
 	 * @param challenge The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Keygen challenge(String challenge) {
 		attr("challenge", challenge);
@@ -69,7 +69,7 @@ public class Keygen extends HtmlElementVoid {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Keygen disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -83,7 +83,7 @@ public class Keygen extends HtmlElementVoid {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Keygen form(String form) {
 		attr("form", form);
@@ -97,7 +97,7 @@ public class Keygen extends HtmlElementVoid {
 	 * The type of cryptographic key to generate.
 	 *
 	 * @param keytype The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Keygen keytype(String keytype) {
 		attr("keytype", keytype);
@@ -111,7 +111,7 @@ public class Keygen extends HtmlElementVoid {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Keygen name(String name) {
 		attr("name", name);

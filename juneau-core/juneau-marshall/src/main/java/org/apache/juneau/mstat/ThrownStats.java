@@ -73,7 +73,7 @@ public class ThrownStats implements Cloneable {
 		 * Can be used to instantiate {@link ThrownStats} implementations with injected constructor argument beans.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanStore(BeanStore value) {
@@ -85,7 +85,7 @@ public class ThrownStats implements Cloneable {
 		 * Specifies a subclass of {@link ThrownStats} to create when the {@link #build()} method is called.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder type(Class<? extends ThrownStats> value) {
@@ -97,7 +97,7 @@ public class ThrownStats implements Cloneable {
 		 * Specifies the thrown exception.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder throwable(Throwable value) {
@@ -109,7 +109,7 @@ public class ThrownStats implements Cloneable {
 		 * Specifies the calculated hash.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder hash(long value) {
@@ -121,7 +121,7 @@ public class ThrownStats implements Cloneable {
 		 * Specifies the normalized stacktrace.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder stackTrace(List<String> value) {
@@ -133,7 +133,7 @@ public class ThrownStats implements Cloneable {
 		 * Specifies the caused-by exception.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder causedBy(ThrownStats value) {
@@ -282,7 +282,7 @@ public class ThrownStats implements Cloneable {
 	/**
 	 * Increments the occurrence count of this exception.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ThrownStats increment() {
 		count.incrementAndGet();

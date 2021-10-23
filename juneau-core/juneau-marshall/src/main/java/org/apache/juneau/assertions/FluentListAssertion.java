@@ -240,7 +240,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * Asserts that the contents of this list contain the specified values.
 	 *
 	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
@@ -255,7 +255,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @param tests
 	 * 	The tests to run.
 	 * <jk>null</jk> predicates are ignored.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SafeVarargs

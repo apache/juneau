@@ -107,7 +107,7 @@ public class RequestQueryParams {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams addDefault(List<? extends NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
@@ -135,7 +135,7 @@ public class RequestQueryParams {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams addDefault(NameValuePair...pairs) {
 		return addDefault(Arrays.asList(pairs));
@@ -208,7 +208,7 @@ public class RequestQueryParams {
 	 *
 	 * @param name The parameter name.  Must not be <jk>null</jk>.
 	 * @param value The parameter value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams add(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -230,7 +230,7 @@ public class RequestQueryParams {
 	 * <br>Existing parameters with the same name are not changed.
 	 *
 	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
@@ -253,7 +253,7 @@ public class RequestQueryParams {
 	 * 	The parameter value.
 	 * 	<br>Converted to a string using {@link Object#toString()}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams set(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -275,7 +275,7 @@ public class RequestQueryParams {
 	 * <br>Any previous parameters with the same name are removed.
 	 *
 	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams set(NameValuePair...parameters) {
 		assertArgNotNull("headers", parameters);
@@ -290,7 +290,7 @@ public class RequestQueryParams {
 	 * Remove parameters.
 	 *
 	 * @param name The parameter names.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams remove(String...name) {
 		assertArgNotNull("name", name);
@@ -307,7 +307,7 @@ public class RequestQueryParams {
 	 * Remove parameters.
 	 *
 	 * @param parameters The parameters to remove.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestQueryParams remove(NameValuePair...parameters) {
 		for (NameValuePair p : parameters)

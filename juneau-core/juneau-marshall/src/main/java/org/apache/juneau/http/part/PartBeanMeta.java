@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -150,7 +150,7 @@ public class PartBeanMeta<T> {
 	public T construct(String name, Object value) {
 
 		if (constructor == null)
-			throw new UnsupportedOperationException("Constructor for type "+type.getName()+" could not be found.");
+			throw unsupportedOperationException("Constructor for type {0} could not be found.", type.getName());
 
 		if (name == null)
 			name = schema.getName();
@@ -161,7 +161,7 @@ public class PartBeanMeta<T> {
 			args[0] = pt[0] == String.class ? stringify(value) : value;
 		} else {
 			if (name == null)
-				throw new UnsupportedOperationException("Constructor for type "+type.getName()+" requires a name as the first argument.");
+				throw unsupportedOperationException("Constructor for type {0} requires a name as the first argument.", type.getName());
 			args[0] = name;
 			args[1] = pt[1] == String.class ? stringify(value) : value;
 		}

@@ -183,7 +183,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#_default} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _default(String...value) {
 			this._default = value;
@@ -195,7 +195,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(String...value) {
 			this._enum = value;
@@ -206,7 +206,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#aev} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder aev(boolean value) {
 			this.aev = value;
@@ -217,7 +217,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#allowEmptyValue} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allowEmptyValue(boolean value) {
 			this.allowEmptyValue = value;
@@ -228,7 +228,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#api} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder api(String...value) {
 			this.api = value;
@@ -239,7 +239,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			this.cf = value;
@@ -250,7 +250,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			this.collectionFormat = value;
@@ -261,7 +261,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder d(String...value) {
 			this.d = value;
@@ -272,7 +272,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -283,7 +283,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#df} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder df(String...value) {
 			this.df = value;
@@ -294,7 +294,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#e} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(String...value) {
 			this.e = value;
@@ -305,7 +305,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#emax} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
 			this.emax = value;
@@ -316,7 +316,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#emin} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
 			this.emin = value;
@@ -327,7 +327,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#ex} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ex(String...value) {
 			this.ex = value;
@@ -338,7 +338,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String...value) {
 			this.example = value;
@@ -349,7 +349,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
 			this.exclusiveMaximum = value;
@@ -360,7 +360,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
@@ -371,7 +371,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#f} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			this.f = value;
@@ -382,7 +382,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#format} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -393,7 +393,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#items} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(Items value) {
 			this.items = value;
@@ -404,7 +404,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#max} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(String value) {
 			this.max = value;
@@ -415,7 +415,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#maxi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(long value) {
 			this.maxi = value;
@@ -426,7 +426,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#maximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(String value) {
 			this.maximum = value;
@@ -437,7 +437,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#maxItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
 			this.maxItems = value;
@@ -448,7 +448,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#maxl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(long value) {
 			this.maxl = value;
@@ -459,7 +459,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#maxLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
 			this.maxLength = value;
@@ -470,7 +470,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#min} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(String value) {
 			this.min = value;
@@ -481,7 +481,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#mini} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(long value) {
 			this.mini = value;
@@ -492,7 +492,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#minimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(String value) {
 			this.minimum = value;
@@ -503,7 +503,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#minItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(long value) {
 			this.minItems = value;
@@ -514,7 +514,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#minl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(long value) {
 			this.minl = value;
@@ -525,7 +525,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#minLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(long value) {
 			this.minLength = value;
@@ -536,7 +536,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#mo} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(String value) {
 			this.mo = value;
@@ -547,7 +547,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#multi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multi(boolean value) {
 			this.multi = value;
@@ -558,7 +558,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#multipleOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
 			this.multipleOf = value;
@@ -569,7 +569,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#n} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder n(String value) {
 			this.n = value;
@@ -580,7 +580,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -591,7 +591,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#p} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -602,7 +602,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#parser} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
 			this.parser = value;
@@ -613,7 +613,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#pattern} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
@@ -624,7 +624,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(boolean value) {
 			this.r = value;
@@ -635,7 +635,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#required} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(boolean value) {
 			this.required = value;
@@ -646,7 +646,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;
@@ -657,7 +657,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#sie} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sie(boolean value) {
 			this.sie = value;
@@ -668,7 +668,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#skipIfEmpty} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder skipIfEmpty(boolean value) {
 			this.skipIfEmpty = value;
@@ -679,7 +679,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			this.t = value;
@@ -690,7 +690,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#type} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			this.type = value;
@@ -701,7 +701,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#ui} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
 			this.ui = value;
@@ -712,7 +712,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
 			this.uniqueItems = value;
@@ -723,7 +723,7 @@ public class HeaderAnnotation {
 		 * Sets the {@link Header#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;

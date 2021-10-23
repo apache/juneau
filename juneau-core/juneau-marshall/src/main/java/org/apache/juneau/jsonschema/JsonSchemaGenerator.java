@@ -13,7 +13,7 @@
 package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static java.util.Collections.*;
@@ -187,7 +187,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @param values
 		 * 	The values to add to this setting.
 		 * 	<br>The default is an empty string.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addDescriptionsTo(TypeCategory...values) {
@@ -228,7 +228,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @param values
 		 * 	The values to add to this setting.
 		 * 	<br>The default is an empty string.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addExamplesTo(TypeCategory...values) {
@@ -244,7 +244,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * <p>
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowNestedDescriptions() {
@@ -269,7 +269,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * <p>
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowNestedExamples() {
@@ -301,7 +301,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
@@ -325,7 +325,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * 	The class to define a default schema for.
 		 * @param schema
 		 * 	The schema.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultSchema(Class<?> c, OMap schema) {
@@ -351,7 +351,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 *
 		 * @param values
 		 * 	The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreTypes(String...values) {
@@ -378,7 +378,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * <p>
 		 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder useBeanDefs() {

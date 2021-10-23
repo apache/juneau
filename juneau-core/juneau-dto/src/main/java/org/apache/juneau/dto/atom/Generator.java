@@ -117,7 +117,7 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Generator uri(Object value) {
 		setUri(value);
@@ -172,7 +172,7 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Generator version(String value) {
 		setVersion(value);
@@ -227,7 +227,7 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Generator text(String value) {
 		setText(value);

@@ -22,7 +22,7 @@ import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
 import static java.util.Optional.*;
@@ -1154,7 +1154,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder json() {
@@ -1201,7 +1201,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder simpleJson() {
@@ -1244,7 +1244,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder xml() {
@@ -1290,7 +1290,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().html().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder html() {
@@ -1336,7 +1336,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlDoc().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder htmlDoc() {
@@ -1382,7 +1382,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder htmlStrippedDoc() {
@@ -1429,7 +1429,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder plainText() {
@@ -1475,7 +1475,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder msgPack() {
@@ -1522,7 +1522,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uon() {
@@ -1567,7 +1567,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder urlEnc() {
@@ -1616,7 +1616,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder openApi() {
@@ -1653,7 +1653,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder universal() {
@@ -1762,7 +1762,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder httpClientBuilder(HttpClientBuilder value) {
@@ -1828,7 +1828,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder httpClient(CloseableHttpClient value) {
@@ -1905,7 +1905,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		@FluentSetter
@@ -1940,7 +1940,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder serializer(Serializer value) {
@@ -1978,7 +1978,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		@FluentSetter
@@ -2018,7 +2018,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder serializers(Serializer...value) {
@@ -2091,7 +2091,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		@FluentSetter
@@ -2126,7 +2126,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder parser(Parser value) {
@@ -2164,7 +2164,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		@FluentSetter
@@ -2204,7 +2204,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder parsers(Parser...value) {
@@ -2271,7 +2271,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiSerializer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -2300,7 +2300,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiSerializer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder partSerializer(HttpPartSerializer value) {
@@ -2367,7 +2367,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiParser}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder partParser(Class<? extends HttpPartParser> value) {
@@ -2396,7 +2396,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link OpenApiParser}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder partParser(HttpPartParser value) {
@@ -2561,7 +2561,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The header to set.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2588,7 +2588,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The header values.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		public Builder headersDefault(Header...parts) {
@@ -2612,7 +2612,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2637,7 +2637,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The header name.
 		 * @param value The header value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2656,7 +2656,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header values.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2675,7 +2675,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header values.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@Override
@@ -2693,7 +2693,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value
 		 * 	The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2708,7 +2708,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(AcceptCharset.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2723,7 +2723,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(AcceptEncoding.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2738,7 +2738,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(AcceptLanguage.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2753,7 +2753,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Authorization.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2768,7 +2768,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(CacheControl.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2783,7 +2783,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(ClientVersion.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The version string (e.g. <js>"1.2.3"</js>)
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2798,7 +2798,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Connection.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2816,7 +2816,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This overrides the media type specified on the serializer.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2831,7 +2831,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(ContentEncoding.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2845,7 +2845,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * This is a shortcut for calling <c>headerData().append(Debug.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@Override
@@ -2863,7 +2863,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(From.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2878,7 +2878,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Host.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2893,7 +2893,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(MaxForwards.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2914,7 +2914,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The <c>BasicTestRestLogger</c> class watches for this header and prevents logging of status 400+ responses to
 		 * prevent needless logging of test scenarios.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2929,7 +2929,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Origin.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2944,7 +2944,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Pragma.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2959,7 +2959,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(ProxyAuthorization.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -2974,7 +2974,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(UserAgent.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @param value The new header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #headerData()
 		 */
 		@FluentSetter
@@ -3080,7 +3080,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The query parameters.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #queryData()
 		 */
 		@FluentSetter
@@ -3107,7 +3107,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>queryData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The parts.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #queryData()
 		 */
 		public Builder queryDataDefault(NameValuePair...parts) {
@@ -3131,7 +3131,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The parameter name.
 		 * @param value The parameter value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #queryData()
 		 */
 		@FluentSetter
@@ -3156,7 +3156,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The parameter name.
 		 * @param value The parameter value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #queryData()
 		 */
 		@FluentSetter
@@ -3263,7 +3263,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The form-data parameters.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #formData()
 		 */
 		@FluentSetter
@@ -3290,7 +3290,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>formData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The parts.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #formData()
 		 */
 		public Builder formDataDefault(NameValuePair...parts) {
@@ -3314,7 +3314,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The parameter name.
 		 * @param value The parameter value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #formData()
 		 */
 		@FluentSetter
@@ -3339,7 +3339,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The parameter name.
 		 * @param value The parameter value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #formData()
 		 */
 		@FluentSetter
@@ -3446,7 +3446,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts
 		 * 	The path parameters.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #pathData()
 		 */
 		@FluentSetter
@@ -3473,7 +3473,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>pathData().setDefault(<jv>parts</jv>)</c>.
 		 *
 		 * @param parts The parts.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #pathData()
 		 */
 		public Builder pathDataDefault(NameValuePair...parts) {
@@ -3497,7 +3497,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The parameter name.
 		 * @param value The parameter value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #pathData()
 		 */
 		@FluentSetter
@@ -3522,7 +3522,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param name The parameter name.
 		 * @param value The parameter value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #pathData()
 		 */
 		@FluentSetter
@@ -3630,7 +3630,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #callHandler()
 		 */
 		@FluentSetter
@@ -3661,7 +3661,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder errorCodes(Predicate<Integer> value) {
@@ -3697,7 +3697,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The logger to use for logging.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder logger(Logger value) {
@@ -3721,7 +3721,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		.build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder logToConsole() {
@@ -3774,7 +3774,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param detail The detail level of logging.
 		 * @param level The log level.
 		 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
@@ -3831,7 +3831,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		.build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder pooled() {
@@ -3843,7 +3843,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpClientConnectionManager} instance.
 		 *
 		 * @param value New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 		 */
 		@FluentSetter
@@ -3861,7 +3861,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param shared New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 		 */
 		@FluentSetter
@@ -3886,7 +3886,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param port The auth scope port.
 		 * @param user The username.
 		 * @param pw The password.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder basicAuth(String host, int port, String user, String pw) {
@@ -3910,7 +3910,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder console(PrintStream value) {
@@ -3966,7 +3966,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param executorService The executor service.
 		 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
@@ -3993,7 +3993,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder keepHttpClientOpen() {
@@ -4022,7 +4022,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		.assertStatus().is(500);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreErrors() {
@@ -4078,7 +4078,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<li class='jic'>{@link HttpRequestInterceptor}
 		 * 		<li class='jic'>{@link HttpResponseInterceptor}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
 		@FluentSetter
@@ -4142,7 +4142,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<li class='jic'>{@link HttpRequestInterceptor}
 		 * 		<li class='jic'>{@link HttpResponseInterceptor}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder interceptors(Object...value) {
@@ -4192,7 +4192,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder detectLeaks() {
@@ -4222,7 +4222,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder marshall(Marshall value) {
@@ -4253,7 +4253,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * @param value The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder marshalls(Marshall...value) {
@@ -4289,7 +4289,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	The root URI to prefix to relative URI strings.
 		 * 	<br>Trailing slashes are trimmed.
 		 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rootUri(Object value) {
@@ -4331,7 +4331,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder skipEmptyFormData(boolean value) {
@@ -4349,7 +4349,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * The {@link FormData#skipIfEmpty()} annotation overrides this setting.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder skipEmptyFormData() {
@@ -4369,7 +4369,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder skipEmptyHeaderData(boolean value) {
@@ -4387,7 +4387,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * The {@link org.apache.juneau.http.annotation.Header#skipIfEmpty()} annotation overrides this setting.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder skipEmptyHeaderData() {
@@ -4407,7 +4407,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder skipEmptyQueryData(boolean value) {
@@ -4425,7 +4425,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * The {@link Query#skipIfEmpty()} annotation overrides this setting.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder skipEmptyQueryData() {
@@ -4482,7 +4482,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder detectRecursions() {
@@ -4535,7 +4535,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreRecursions() {
@@ -4580,7 +4580,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <c>0</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder initialDepth(int value) {
@@ -4617,7 +4617,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <c>100</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder maxDepth(int value) {
@@ -4675,7 +4675,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addBeanTypes() {
@@ -4729,7 +4729,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addRootType() {
@@ -4771,7 +4771,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder keepNullProperties() {
@@ -4810,7 +4810,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortCollections()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sortCollections() {
@@ -4849,7 +4849,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortMaps()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sortMaps() {
@@ -4895,7 +4895,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyCollections()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimEmptyCollections() {
@@ -4940,7 +4940,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyMaps()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimEmptyMaps() {
@@ -4976,7 +4976,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimStrings()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimStringsOnWrite() {
@@ -5025,7 +5025,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriContext(UriContext value) {
@@ -5064,7 +5064,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriRelativity#RESOURCE}
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriRelativity(UriRelativity value) {
@@ -5105,7 +5105,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriResolution#NONE}
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriResolution(UriResolution value) {
@@ -5145,7 +5145,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <c>100</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder maxIndent(int value) {
@@ -5190,7 +5190,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>'"'</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder quoteChar(char value) {
@@ -5232,7 +5232,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sq() {
@@ -5269,7 +5269,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
 		 * </ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder useWhitespace() {
@@ -5307,7 +5307,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ws() {
@@ -5358,7 +5358,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is <c>5</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder debugOutputLines(int value) {
@@ -5424,7 +5424,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#strict()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder strict() {
@@ -5462,7 +5462,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#trimStrings()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimStringsOnRead() {
@@ -5532,7 +5532,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder oapiFormat(HttpPartFormat value) {
@@ -5596,7 +5596,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
@@ -5653,7 +5653,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder paramFormat(ParamFormat value) {
@@ -5694,7 +5694,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormatPlain()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder paramFormatPlain() {
@@ -6067,7 +6067,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		/**
 		 * Disables automatic redirect handling.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#disableRedirectHandling()
 		 */
 		@FluentSetter
@@ -6084,7 +6084,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param redirectStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 		 */
 		@FluentSetter
@@ -6097,7 +6097,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link CookieSpec} registry which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param cookieSpecRegistry New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 		 */
 		@FluentSetter
@@ -6110,7 +6110,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpRequestExecutor} instance.
 		 *
 		 * @param requestExec New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 		 */
 		@FluentSetter
@@ -6128,7 +6128,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param hostnameVerifier New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 		 */
 		@FluentSetter
@@ -6145,7 +6145,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param publicSuffixMatcher New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 		 */
 		@FluentSetter
@@ -6163,7 +6163,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param sslContext New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setSSLContext(SSLContext)
 		 */
 		@FluentSetter
@@ -6180,7 +6180,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param sslSocketFactory New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 		 */
 		@FluentSetter
@@ -6197,7 +6197,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param maxConnTotal New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setMaxConnTotal(int)
 		 */
 		@FluentSetter
@@ -6214,7 +6214,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param maxConnPerRoute New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 		 */
 		@FluentSetter
@@ -6231,7 +6231,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param config New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 		 */
 		@FluentSetter
@@ -6248,7 +6248,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param config New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 		 */
 		@FluentSetter
@@ -6266,7 +6266,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param connTimeToLive New property value.
 		 * @param connTimeToLiveTimeUnit New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 		 */
 		@FluentSetter
@@ -6279,7 +6279,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ConnectionReuseStrategy} instance.
 		 *
 		 * @param reuseStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 		 */
 		@FluentSetter
@@ -6292,7 +6292,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ConnectionKeepAliveStrategy} instance.
 		 *
 		 * @param keepAliveStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 		 */
 		@FluentSetter
@@ -6305,7 +6305,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link AuthenticationStrategy} instance for target host authentication.
 		 *
 		 * @param targetAuthStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 		 */
 		@FluentSetter
@@ -6318,7 +6318,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link AuthenticationStrategy} instance for proxy authentication.
 		 *
 		 * @param proxyAuthStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 		 */
 		@FluentSetter
@@ -6335,7 +6335,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param userTokenHandler New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 		 */
 		@FluentSetter
@@ -6347,7 +6347,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		/**
 		 * Disables connection state tracking.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#disableConnectionState()
 		 */
 		@FluentSetter
@@ -6360,7 +6360,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link SchemePortResolver} instance.
 		 *
 		 * @param schemePortResolver New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 		 */
 		@FluentSetter
@@ -6377,7 +6377,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 		 */
 		@FluentSetter
@@ -6394,7 +6394,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 		 */
 		@FluentSetter
@@ -6411,7 +6411,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 		 */
 		@FluentSetter
@@ -6428,7 +6428,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param itcp New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 		 */
 		@FluentSetter
@@ -6444,7 +6444,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#disableCookieManagement()
 		 */
 		@FluentSetter
@@ -6460,7 +6460,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#disableContentCompression()
 		 */
 		@FluentSetter
@@ -6476,7 +6476,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#disableAuthCaching()
 		 */
 		@FluentSetter
@@ -6489,7 +6489,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpProcessor} instance.
 		 *
 		 * @param httpprocessor New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 		 */
 		@FluentSetter
@@ -6506,7 +6506,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param retryHandler New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 		 */
 		@FluentSetter
@@ -6518,7 +6518,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		/**
 		 * Disables automatic request recovery and re-execution.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#disableAutomaticRetries()
 		 */
 		@FluentSetter
@@ -6535,7 +6535,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * @param proxy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setProxy(HttpHost)
 		 */
 		@FluentSetter
@@ -6548,7 +6548,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpRoutePlanner} instance.
 		 *
 		 * @param routePlanner New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 		 */
 		@FluentSetter
@@ -6561,7 +6561,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ConnectionBackoffStrategy} instance.
 		 *
 		 * @param connectionBackoffStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 		 */
 		@FluentSetter
@@ -6574,7 +6574,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link BackoffManager} instance.
 		 *
 		 * @param backoffManager New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 		 */
 		@FluentSetter
@@ -6587,7 +6587,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link ServiceUnavailableRetryStrategy} instance.
 		 *
 		 * @param serviceUnavailStrategy New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 		 */
 		@FluentSetter
@@ -6600,7 +6600,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link CookieStore} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param cookieStore New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 		 */
 		@FluentSetter
@@ -6613,7 +6613,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link CredentialsProvider} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param credentialsProvider New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 		 */
 		@FluentSetter
@@ -6626,7 +6626,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link org.apache.http.auth.AuthScheme} registry which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param authSchemeRegistry New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 		 */
 		@FluentSetter
@@ -6639,7 +6639,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns a map of {@link org.apache.http.client.entity.InputStreamFactory InputStreamFactories} to be used for automatic content decompression.
 		 *
 		 * @param contentDecoderMap New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 		 */
 		@FluentSetter
@@ -6652,7 +6652,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link RequestConfig} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
 		 * @param config New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 		 */
 		@FluentSetter
@@ -6664,7 +6664,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		/**
 		 * Use system properties when creating and configuring default implementations.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#useSystemProperties()
 		 */
 		@FluentSetter
@@ -6682,7 +6682,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#evictExpiredConnections()
 		 */
 		@FluentSetter
@@ -6702,7 +6702,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param maxIdleTime New property value.
 		 * @param maxIdleTimeUnit New property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 		 */
 		@FluentSetter
@@ -8075,7 +8075,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			try {
 				x = beanStore.creator(c).run();
 			} catch (ExecutableException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 			partSerializers.put(c, x);
 		}
@@ -8094,7 +8094,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			try {
 				x = beanStore.creator(c).run();
 			} catch (ExecutableException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 			partParsers.put(c, x);
 		}

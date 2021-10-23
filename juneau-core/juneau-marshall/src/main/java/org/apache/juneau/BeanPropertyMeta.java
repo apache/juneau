@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -111,7 +111,7 @@ public final class BeanPropertyMeta {
 		 * Sets the raw metadata type for this bean property.
 		 *
 		 * @param rawMetaType The raw metadata type for this bean property.
-		 * @return This object (for method chaining().
+		 * @return This object.
 		 */
 		public Builder rawMetaType(ClassMeta<?> rawMetaType) {
 			this.rawTypeMeta = rawMetaType;
@@ -123,7 +123,7 @@ public final class BeanPropertyMeta {
 		 * Sets the bean registry to use with this bean property.
 		 *
 		 * @param beanRegistry The bean registry to use with this bean property.
-		 * @return This object (for method chaining().
+		 * @return This object.
 		 */
 		public Builder beanRegistry(BeanRegistry beanRegistry) {
 			this.beanRegistry = beanRegistry;
@@ -134,7 +134,7 @@ public final class BeanPropertyMeta {
 		 * Sets the overridden value of this bean property.
 		 *
 		 * @param overrideValue The overridden value of this bean property.
-		 * @return This object (for method chaining().
+		 * @return This object.
 		 */
 		public Builder overrideValue(Object overrideValue) {
 			this.overrideValue = overrideValue;
@@ -145,7 +145,7 @@ public final class BeanPropertyMeta {
 		 * Sets the original bean property that this one is overriding.
 		 *
 		 * @param delegateFor The original bean property that this one is overriding.
-		 * @return This object (for method chaining().
+		 * @return This object.
 		 */
 		public Builder delegateFor(BeanPropertyMeta delegateFor) {
 			this.delegateFor = delegateFor;

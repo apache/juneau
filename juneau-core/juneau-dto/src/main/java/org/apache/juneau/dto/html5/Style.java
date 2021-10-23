@@ -59,7 +59,7 @@ public class Style extends HtmlElementRawText {
 	 * Applicable media.
 	 *
 	 * @param media The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Style media(String media) {
 		attr("media", media);
@@ -73,7 +73,7 @@ public class Style extends HtmlElementRawText {
 	 * Type of embedded resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Style type(String type) {
 		attr("type", type);

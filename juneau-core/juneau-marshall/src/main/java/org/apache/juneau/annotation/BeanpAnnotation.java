@@ -114,7 +114,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#dictionary()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder dictionary(Class<?>...value) {
 			this.dictionary = value;
@@ -125,7 +125,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#format()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -136,7 +136,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#name()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -147,7 +147,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#params()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder params(Class<?>...value) {
 			this.params = value;
@@ -158,7 +158,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#properties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder properties(String value) {
 			this.properties = value;
@@ -169,7 +169,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#ro()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ro(String value) {
 			this.ro = value;
@@ -180,7 +180,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#type()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(Class<?> value) {
 			this.type = value;
@@ -191,7 +191,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;
@@ -202,7 +202,7 @@ public class BeanpAnnotation {
 		 * Sets the {@link Beanp#wo()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder wo(String value) {
 			this.wo = value;

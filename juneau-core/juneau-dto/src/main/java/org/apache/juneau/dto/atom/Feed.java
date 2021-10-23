@@ -138,7 +138,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Feed generator(Generator value) {
 		setGenerator(value);
@@ -192,7 +192,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Feed icon(Icon value) {
 		setIcon(value);
@@ -246,7 +246,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Feed logo(Logo value) {
 		setLogo(value);
@@ -300,7 +300,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Feed subtitle(Text value) {
 		setSubtitle(value);
@@ -316,7 +316,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Feed subtitle(String value) {
 		setSubtitle(new Text(value));
@@ -371,7 +371,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Feed entries(Entry...value) {
 		setEntries(value);

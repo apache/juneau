@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -119,12 +121,12 @@ public class UnmodifiableArray<T> implements List<T> {
 
 	@Override
 	public boolean add(T e) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
@@ -137,27 +139,27 @@ public class UnmodifiableArray<T> implements List<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public void clear() {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
@@ -167,17 +169,17 @@ public class UnmodifiableArray<T> implements List<T> {
 
 	@Override
 	public T set(int index, T element) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public void add(int index, T element) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public T remove(int index) {
-		throw new UnsupportedOperationException("Cannot modify read-only list.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
@@ -204,12 +206,12 @@ public class UnmodifiableArray<T> implements List<T> {
 
 	@Override
 	public ListIterator<T> listIterator() {
-		throw new UnsupportedOperationException("Unsupported method on ReadOnlyArrayList class.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-		throw new UnsupportedOperationException("Unsupported method on ReadOnlyArrayList class.");
+		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override

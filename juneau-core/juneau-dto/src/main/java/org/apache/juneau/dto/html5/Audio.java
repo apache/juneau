@@ -53,7 +53,7 @@ public class Audio extends HtmlElementContainer {
 	 * @param autoplay
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio autoplay(Object autoplay) {
 		attr("autoplay", deminimize(autoplay, "autoplay"));
@@ -70,7 +70,7 @@ public class Audio extends HtmlElementContainer {
 	 * @param controls
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio controls(Object controls) {
 		attr("controls", deminimize(controls, "controls"));
@@ -85,7 +85,7 @@ public class Audio extends HtmlElementContainer {
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio crossorigin(String crossorigin) {
 		attr("crossorigin", crossorigin);
@@ -101,7 +101,7 @@ public class Audio extends HtmlElementContainer {
 	 * @param loop
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio loop(Object loop) {
 		attr("loop", loop);
@@ -116,7 +116,7 @@ public class Audio extends HtmlElementContainer {
 	 * Groups media elements together with an implicit MediaController.
 	 *
 	 * @param mediagroup The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio mediagroup(String mediagroup) {
 		attr("mediagroup", mediagroup);
@@ -133,7 +133,7 @@ public class Audio extends HtmlElementContainer {
 	 * @param muted
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio muted(Object muted) {
 		attr("muted", muted);
@@ -148,7 +148,7 @@ public class Audio extends HtmlElementContainer {
 	 * Hints how much buffering the media resource will likely need.
 	 *
 	 * @param preload The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio preload(Object preload) {
 		attr("preload", preload);
@@ -171,7 +171,7 @@ public class Audio extends HtmlElementContainer {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Audio src(Object src) {
 		attrUri("src", src);

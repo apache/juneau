@@ -14,7 +14,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -83,7 +83,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Copies the contents of the specified HTTP response to this builder.
 	 *
 	 * @param response The response to copy from.  Must not be null.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<?> copyFrom(HttpResponse response) {
 		Header h = response.getLastHeader("Thrown");
@@ -119,7 +119,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> statusLine(BasicStatusLine value) {
@@ -135,7 +135,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> protocolVersion(ProtocolVersion value) {
@@ -150,7 +150,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If not specified, <c>0</c> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> statusCode(int value) {
@@ -166,7 +166,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * using the locale on this builder.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> reasonPhrase(String value) {
@@ -181,7 +181,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
@@ -196,7 +196,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If not specified, uses {@link Locale#getDefault()}.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> locale(Locale value) {
@@ -215,7 +215,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> headers(HeaderList value) {
@@ -227,7 +227,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	/**
 	 * Removes any headers already in this builder.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> clearHeaders() {
 		headersBuilder().clear();
@@ -238,7 +238,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Adds the specified header to the end of the headers in this builder.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> header(Header value) {
 		headersBuilder().append(value);
@@ -250,7 +250,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> header(String name, String value) {
 		headersBuilder().append(name, value);
@@ -261,7 +261,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Adds the specified headers to the end of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> headers(Header...values) {
 		headersBuilder().append(values);
@@ -272,7 +272,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Adds the specified headers to the end of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> headers(List<Header> values) {
 		headersBuilder().append(values);
@@ -283,7 +283,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Removes the specified header from this builder.
 	 *
 	 * @param value The header to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> removeHeader(Header value) {
 		headersBuilder().remove(value);
@@ -294,7 +294,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Removes the specified headers from this builder.
 	 *
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> removeHeaders(Header...values) {
 		headersBuilder().remove(values);
@@ -305,7 +305,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Removes the specified headers from this builder.
 	 *
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> removeHeaders(List<Header> values) {
 		headersBuilder().remove(values);
@@ -319,7 +319,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> updateHeader(Header value) {
 		headersBuilder().set(value);
@@ -333,7 +333,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(Header...values) {
 		headersBuilder().set(values);
@@ -347,7 +347,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(List<Header> values) {
 		headersBuilder().set(values);
@@ -361,7 +361,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * The headers are added in the order in which they appear in the array.
 	 *
 	 * @param values The headers to set
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> setHeaders(Header...values) {
 		headersBuilder().clear().append(values);
@@ -375,7 +375,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * The headers are added in the order in which they appear in the list.
 	 *
 	 * @param values The headers to set
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> setHeaders(List<Header> values) {
 		headersBuilder().clear().append(values);
@@ -390,7 +390,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Sets the body on this response.
 	 *
 	 * @param value The body on this response.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> body(String value) {
 		body(stringEntity(value).build());
@@ -401,7 +401,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * Sets the body on this response.
 	 *
 	 * @param value The body on this response.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> body(HttpEntity value) {
 		this.body = value;

@@ -74,7 +74,7 @@ public abstract class BasicRuntimeException extends RuntimeException {
 		 * @param msg The exception message.  Can be <jk>null</jk>.
 		 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
 		 * @param args The exception message arguments.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder message(String msg, Object...args) {
@@ -86,7 +86,7 @@ public abstract class BasicRuntimeException extends RuntimeException {
 		 * Specifies the caused-by exception.
 		 *
 		 * @param value The caused-by exception.  Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder causedBy(Throwable value) {
@@ -97,7 +97,7 @@ public abstract class BasicRuntimeException extends RuntimeException {
 		/**
 		 * Specifies whether this exception should be unmodifiable after creation.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder unmodifiable() {

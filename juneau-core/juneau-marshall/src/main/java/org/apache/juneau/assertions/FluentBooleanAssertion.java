@@ -133,7 +133,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	/**
 	 * Asserts that the value is true.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isTrue() throws AssertionError {
@@ -145,7 +145,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	/**
 	 * Asserts that the value is false.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isFalse() throws AssertionError {

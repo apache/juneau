@@ -185,7 +185,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 *
 	 * @param value The value to check against.
 	 * @param precision The precision (e.g. {@link ChronoUnit#SECONDS}.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Date value, ChronoUnit precision) throws AssertionError {
@@ -198,7 +198,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * Asserts that the value is after the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
@@ -211,7 +211,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	/**
 	 * Asserts that the value is after the current date.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfterNow() throws AssertionError {
@@ -222,7 +222,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * Asserts that the value is before the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
@@ -235,7 +235,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	/**
 	 * Asserts that the value is before the current date.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBeforeNow() throws AssertionError {
@@ -247,7 +247,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 *
 	 * @param lower The lower value to check against.
 	 * @param upper The upper value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBetween(Date lower, Date upper) throws AssertionError {

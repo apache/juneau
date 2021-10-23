@@ -50,7 +50,7 @@ public class Img extends HtmlElementVoid {
 	 * Replacement text for use when images are not available.
 	 *
 	 * @param alt The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img alt(String alt) {
 		attr("alt", alt);
@@ -65,7 +65,7 @@ public class Img extends HtmlElementVoid {
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img crossorigin(String crossorigin) {
 		attr("crossorigin", crossorigin);
@@ -82,7 +82,7 @@ public class Img extends HtmlElementVoid {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img height(Object height) {
 		attr("height", height);
@@ -98,7 +98,7 @@ public class Img extends HtmlElementVoid {
 	 * @param ismap
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img ismap(Object ismap) {
 		attr("ismap", deminimize(ismap, "ismap"));
@@ -121,7 +121,7 @@ public class Img extends HtmlElementVoid {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img src(Object src) {
 		attrUri("src", src);
@@ -136,7 +136,7 @@ public class Img extends HtmlElementVoid {
 	 * Name of image map to use.
 	 *
 	 * @param usemap The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img usemap(String usemap) {
 		attr("usemap", usemap);
@@ -152,7 +152,7 @@ public class Img extends HtmlElementVoid {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Img width(Object width) {
 		attr("width", width);

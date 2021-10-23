@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -80,6 +82,6 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return null;
 		}
 
-		throw new UnsupportedOperationException("Unsupported bean method.  method=[ " + method + " ]");
+		throw unsupportedOperationException("Unsupported bean method.  method=''{0}''", method);
 	}
 }

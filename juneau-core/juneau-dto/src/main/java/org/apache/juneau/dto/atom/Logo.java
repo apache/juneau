@@ -124,7 +124,7 @@ public class Logo extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Logo uri(Object value) {
 		setUri(value);

@@ -46,7 +46,7 @@ public class Th extends HtmlElementMixed {
 	 * Alternative label to use for the header cell when referencing the cell in other contexts.
 	 *
 	 * @param abbr The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Th abbr(String abbr) {
 		attr("abbr", abbr);
@@ -62,7 +62,7 @@ public class Th extends HtmlElementMixed {
 	 * @param colspan
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Th colspan(Object colspan) {
 		attr("colspan", colspan);
@@ -76,7 +76,7 @@ public class Th extends HtmlElementMixed {
 	 * The headers for this cell.
 	 *
 	 * @param headers The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Th headers(String headers) {
 		attr("headers", headers);
@@ -92,7 +92,7 @@ public class Th extends HtmlElementMixed {
 	 * @param rowspan
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Th rowspan(Object rowspan) {
 		attr("rowspan", rowspan);
@@ -106,7 +106,7 @@ public class Th extends HtmlElementMixed {
 	 * Specifies which cells the header cell applies to.
 	 *
 	 * @param scope The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Th scope(String scope) {
 		attr("scope", scope);
@@ -120,7 +120,7 @@ public class Th extends HtmlElementMixed {
 	 * Column sort direction and ordinality.
 	 *
 	 * @param sorted The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Th sorted(String sorted) {
 		attr("sorted", sorted);

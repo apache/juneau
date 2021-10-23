@@ -146,7 +146,7 @@ public class Xml extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml attribute(Boolean value) {
 		setAttribute(value);
@@ -163,7 +163,7 @@ public class Xml extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml attribute(String value) {
 		setAttribute(toBoolean(value));
@@ -221,7 +221,7 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml name(String value) {
 		setName(value);
@@ -279,7 +279,7 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml namespace(String value) {
 		setNamespace(value);
@@ -337,7 +337,7 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml prefix(String value) {
 		setPrefix(value);
@@ -413,7 +413,7 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml wrapped(Boolean value) {
 		setWrapped(value);
@@ -433,7 +433,7 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Xml wrapped(String value) {
 		setWrapped(toBoolean(value));

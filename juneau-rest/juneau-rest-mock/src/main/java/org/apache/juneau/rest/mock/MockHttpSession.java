@@ -58,7 +58,7 @@ public class MockHttpSession implements HttpSession {
 	 * Affects the results of calling {@link HttpSession#getCreationTime()}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockHttpSession creationTime(long value) {
 		this.creationTime = value;
@@ -72,7 +72,7 @@ public class MockHttpSession implements HttpSession {
 	 * Affects the results of calling {@link HttpSession#getLastAccessedTime()}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockHttpSession lastAccessedTime(long value) {
 		this.lastAccessedTime = value;
@@ -86,7 +86,7 @@ public class MockHttpSession implements HttpSession {
 	 * Affects the results of calling {@link HttpSession#getMaxInactiveInterval()}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockHttpSession maxInactiveInterval(int value) {
 		this.maxInactiveInterval = value;
@@ -100,7 +100,7 @@ public class MockHttpSession implements HttpSession {
 	 * Affects the results of calling {@link HttpSession#getId()}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockHttpSession id(String value) {
 		this.id = value;
@@ -114,7 +114,7 @@ public class MockHttpSession implements HttpSession {
 	 * Affects the results of calling {@link HttpSession#getServletContext()}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockHttpSession servletContext(ServletContext value) {
 		this.servletContext = value;
@@ -128,7 +128,7 @@ public class MockHttpSession implements HttpSession {
 	 * Affects the results of calling {@link HttpSession#isNew()}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockHttpSession isNew(boolean value) {
 		this.isNew = value;

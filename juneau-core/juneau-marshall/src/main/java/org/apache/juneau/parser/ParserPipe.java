@@ -13,7 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 

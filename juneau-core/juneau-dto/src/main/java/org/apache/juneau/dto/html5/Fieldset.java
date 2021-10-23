@@ -48,7 +48,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Fieldset disabled(Boolean disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -62,7 +62,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Fieldset form(String form) {
 		attr("form", form);
@@ -76,7 +76,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Fieldset name(String name) {
 		attr("name", name);

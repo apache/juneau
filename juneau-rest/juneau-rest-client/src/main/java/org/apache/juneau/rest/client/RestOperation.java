@@ -142,7 +142,7 @@ public class RestOperation {
 	 * Overrides the default value for the {@link #hasBody()} method.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestOperation hasBody(boolean value) {
 		this.hasBody = value;

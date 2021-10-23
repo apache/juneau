@@ -116,7 +116,7 @@ public class RequestAnnotation {
 		 * Sets the {@link Request#parser} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
 			this.parser = value;
@@ -127,7 +127,7 @@ public class RequestAnnotation {
 		 * Sets the {@link Request#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;

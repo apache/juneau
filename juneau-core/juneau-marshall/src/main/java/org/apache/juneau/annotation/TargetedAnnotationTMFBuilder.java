@@ -37,7 +37,7 @@ public class TargetedAnnotationTMFBuilder extends TargetedAnnotationTBuilder {
 	 * Appends the methods that this annotation applies to.
 	 *
 	 * @param value The values to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public TargetedAnnotationTMFBuilder on(Method...value) {
@@ -50,7 +50,7 @@ public class TargetedAnnotationTMFBuilder extends TargetedAnnotationTBuilder {
 	 * Appends the fields that this annotation applies to.
 	 *
 	 * @param value The values to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public TargetedAnnotationTMFBuilder on(Field...value) {

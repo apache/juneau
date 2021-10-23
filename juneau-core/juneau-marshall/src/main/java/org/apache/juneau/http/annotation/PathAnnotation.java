@@ -178,7 +178,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum( String...value) {
 			this._enum = value;
@@ -189,7 +189,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#aev} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder aev(boolean value) {
 			this.aev = value;
@@ -200,7 +200,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#allowEmptyValue} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allowEmptyValue(boolean value) {
 			this.allowEmptyValue = value;
@@ -211,7 +211,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#api} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder api(String...value) {
 			this.api = value;
@@ -222,7 +222,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			this.cf = value;
@@ -233,7 +233,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			this.collectionFormat = value;
@@ -244,7 +244,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder d(String...value) {
 			this.d = value;
@@ -255,7 +255,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -266,7 +266,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#e} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e( String...value) {
 			this.e = value;
@@ -277,7 +277,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#emax} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
 			this.emax = value;
@@ -288,7 +288,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#emin} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
 			this.emin = value;
@@ -299,7 +299,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#ex} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ex(String...value) {
 			this.ex = value;
@@ -310,7 +310,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String...value) {
 			this.example = value;
@@ -321,7 +321,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
 			this.exclusiveMaximum = value;
@@ -332,7 +332,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
@@ -343,7 +343,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#f} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			this.f = value;
@@ -354,7 +354,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#format} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -365,7 +365,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#items} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(Items value) {
 			this.items = value;
@@ -376,7 +376,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#max} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(String value) {
 			this.max = value;
@@ -387,7 +387,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#maxi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(long value) {
 			this.maxi = value;
@@ -398,7 +398,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#maximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(String value) {
 			this.maximum = value;
@@ -409,7 +409,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#maxItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
 			this.maxItems = value;
@@ -420,7 +420,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#maxl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(long value) {
 			this.maxl = value;
@@ -431,7 +431,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#maxLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
 			this.maxLength = value;
@@ -442,7 +442,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#min} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(String value) {
 			this.min = value;
@@ -453,7 +453,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#mini} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(long value) {
 			this.mini = value;
@@ -464,7 +464,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#minimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(String value) {
 			this.minimum = value;
@@ -475,7 +475,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#minItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(long value) {
 			this.minItems = value;
@@ -486,7 +486,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#minl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(long value) {
 			this.minl = value;
@@ -497,7 +497,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#minLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(long value) {
 			this.minLength = value;
@@ -508,7 +508,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#mo} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(String value) {
 			this.mo = value;
@@ -519,7 +519,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#multipleOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
 			this.multipleOf = value;
@@ -530,7 +530,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#n} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder n(String value) {
 			this.n = value;
@@ -541,7 +541,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -552,7 +552,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#p} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -563,7 +563,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#parser} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
 			this.parser = value;
@@ -574,7 +574,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#pattern} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
@@ -585,7 +585,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#r} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(boolean value) {
 			this.r = value;
@@ -596,7 +596,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#required} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(boolean value) {
 			this.required = value;
@@ -607,7 +607,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;
@@ -618,7 +618,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			this.t = value;
@@ -629,7 +629,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#type} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			this.type = value;
@@ -640,7 +640,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#ui} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
 			this.ui = value;
@@ -651,7 +651,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
 			this.uniqueItems = value;
@@ -662,7 +662,7 @@ public class PathAnnotation {
 		 * Sets the {@link Path#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;

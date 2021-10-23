@@ -100,7 +100,7 @@ public abstract class Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Common base(Object value) {
 		setBase(value);
@@ -155,7 +155,7 @@ public abstract class Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Common lang(String value) {
 		setLang(value);

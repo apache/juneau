@@ -13,7 +13,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.internal.ClassUtils.className;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.read;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -181,7 +181,7 @@ public class JettyMicroservice extends Microservice {
 		 *
 		 * @param resolveVars
 		 * 	If <jk>true</jk>, SVL variables in the file will automatically be resolved.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IOException Thrown by underlying stream.
 		 */
 		public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
@@ -220,7 +220,7 @@ public class JettyMicroservice extends Microservice {
 		 *
 		 * Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}
 		 * @param ports The ports to use for the web server.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ports(int...ports) {
 			this.ports = ports;
@@ -235,7 +235,7 @@ public class JettyMicroservice extends Microservice {
 		 * <br>The path is pulled from the {@link Rest#path()} annotation.
 		 *
 		 * @param c The servlet to add to the servlet container.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
 		public Builder servlet(Class<? extends RestServlet> c) throws ExecutableException {
@@ -256,7 +256,7 @@ public class JettyMicroservice extends Microservice {
 		 *
 		 * @param c The servlet to add to the servlet container.
 		 * @param path The servlet path spec.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
 		public Builder servlet(Class<? extends Servlet> c, String path) throws ExecutableException {
@@ -272,7 +272,7 @@ public class JettyMicroservice extends Microservice {
 		 *
 		 * @param servlet The servlet to add to the servlet container.
 		 * @param path The servlet path spec.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder servlet(Servlet servlet, String path) {
 			servlets.put(path, servlet);
@@ -285,7 +285,7 @@ public class JettyMicroservice extends Microservice {
 		 * @param servlets
 		 * 	A map of servlets to add to the servlet container.
 		 * 	<br>Keys are path specs for the servlet.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder servlets(Map<String,Servlet> servlets) {
 			if (servlets != null)
@@ -298,7 +298,7 @@ public class JettyMicroservice extends Microservice {
 		 *
 		 * @param name The attribute name.
 		 * @param value The attribute value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder servletAttribute(String name, Object value) {
 			this.servletAttributes.put(name, value);
@@ -309,7 +309,7 @@ public class JettyMicroservice extends Microservice {
 		 * Adds a set of servlet attributes to the servlet container.
 		 *
 		 * @param values The map of attributes.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder servletAttribute(Map<String,Object> values) {
 			if (values != null)
@@ -324,7 +324,7 @@ public class JettyMicroservice extends Microservice {
 		 * If not specified, uses {@link BasicJettyServerFactory}.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder jettyServerFactory(JettyServerFactory value) {
 			this.factory = value;
@@ -435,7 +435,7 @@ public class JettyMicroservice extends Microservice {
 		 * Registers an event listener for this microservice.
 		 *
 		 * @param listener An event listener for this microservice.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder listener(JettyMicroserviceListener listener) {
 			super.listener(listener);
@@ -750,7 +750,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @param servlet The servlet instance.
 	 * @param pathSpec The context path of the servlet.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
 	public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {
@@ -781,7 +781,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @param name The server attribute name.
 	 * @param value The context path of the servlet.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
 	public JettyMicroservice addServletAttribute(String name, Object value) {

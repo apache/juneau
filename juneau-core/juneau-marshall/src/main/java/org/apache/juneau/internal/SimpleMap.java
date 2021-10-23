@@ -14,7 +14,7 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 

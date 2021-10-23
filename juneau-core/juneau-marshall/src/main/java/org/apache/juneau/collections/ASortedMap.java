@@ -145,7 +145,7 @@ public class ASortedMap<K,V> extends TreeMap<K,V> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASortedMap<K,V> append(K key, V value) {
 		put(key, value);
@@ -156,7 +156,7 @@ public class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * Appends all the entries in the specified map to this map.
 	 *
 	 * @param values The map to copy.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASortedMap<K,V> append(Map<K,V> values) {
 		super.putAll(values);
@@ -168,7 +168,7 @@ public class ASortedMap<K,V> extends TreeMap<K,V> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASortedMap<K,V> a(K key, V value) {
 		return append(key, value);
@@ -178,7 +178,7 @@ public class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * Same as {@link #append(Map)}.
 	 *
 	 * @param values The map to copy.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASortedMap<K,V> a(Map<K,V> values) {
 		return append(values);
@@ -190,7 +190,7 @@ public class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * @param flag The flag to check.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASortedMap<K,V> appendIf(boolean flag, K key, V value) {
 		if (flag)
@@ -204,7 +204,7 @@ public class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * @param test The predicate to match against.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASortedMap<K,V> appendIf(Predicate<Object> test, K key, V value) {
 		return appendIf(test.test(value), key, value);

@@ -87,7 +87,7 @@ public class RestMatcherList {
 		 * Appends the specified rest matcher classes to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestMatcher>...values) {
@@ -100,7 +100,7 @@ public class RestMatcherList {
 		 * Appends the specified rest matcher objects to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder append(RestMatcher...values) {
 			for (RestMatcher v : values)

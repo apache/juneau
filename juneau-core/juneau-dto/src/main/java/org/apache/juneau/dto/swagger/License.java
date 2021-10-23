@@ -132,7 +132,7 @@ public class License extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public License name(String value) {
 		setName(value);
@@ -191,7 +191,7 @@ public class License extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public License url(URI value) {
 		setUrl(value);
@@ -207,7 +207,7 @@ public class License extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public License url(URL value) {
 		setUrl(StringUtils.toURI(value));
@@ -223,7 +223,7 @@ public class License extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public License url(String value) {
 		setUrl(StringUtils.toURI(value));

@@ -61,7 +61,7 @@ public class Source extends HtmlElementVoid {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Source src(Object src) {
 		attrUri("src", src);
@@ -75,7 +75,7 @@ public class Source extends HtmlElementVoid {
 	 * Type of embedded resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Source type(String type) {
 		attr("type", type);

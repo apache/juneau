@@ -53,7 +53,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Iframe height(Object height) {
 		attr("height", height);
@@ -67,7 +67,7 @@ public class Iframe extends HtmlElementMixed {
 	 * Name of nested browsing context.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Iframe name(String name) {
 		attr("name", name);
@@ -82,7 +82,7 @@ public class Iframe extends HtmlElementMixed {
 	 * Security rules for nested content.
 	 *
 	 * @param sandbox The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Iframe sandbox(String sandbox) {
 		attr("sandbox", sandbox);
@@ -105,7 +105,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Iframe src(Object src) {
 		attrUri("src", src);
@@ -120,7 +120,7 @@ public class Iframe extends HtmlElementMixed {
 	 * A document to render in the iframe.
 	 *
 	 * @param srcdoc The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Iframe srcdoc(String srcdoc) {
 		attr("srcdoc", srcdoc);
@@ -136,7 +136,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Iframe width(Object width) {
 		attr("width", width);

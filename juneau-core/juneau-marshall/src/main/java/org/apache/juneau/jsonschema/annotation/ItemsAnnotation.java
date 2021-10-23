@@ -137,7 +137,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#_default} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _default(String...value) {
 			this._default = value;
@@ -148,7 +148,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(String...value) {
 			this._enum = value;
@@ -159,7 +159,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#$ref} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder $ref(String value) {
 			this.$ref = value;
@@ -170,7 +170,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			this.cf = value;
@@ -181,7 +181,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			this.collectionFormat = value;
@@ -192,7 +192,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#df} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder df(String...value) {
 			this.df = value;
@@ -203,7 +203,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#e} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(String...value) {
 			this.e = value;
@@ -214,7 +214,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#emax} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
 			this.emax = value;
@@ -225,7 +225,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#emin} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
 			this.emin = value;
@@ -236,7 +236,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
 			this.exclusiveMaximum = value;
@@ -247,7 +247,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
@@ -258,7 +258,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#f} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			this.f = value;
@@ -269,7 +269,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#format} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -280,7 +280,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#items} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(SubItems value) {
 			this.items = value;
@@ -291,7 +291,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#max} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(String value) {
 			this.max = value;
@@ -302,7 +302,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#maxi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(long value) {
 			this.maxi = value;
@@ -313,7 +313,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#maximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(String value) {
 			this.maximum = value;
@@ -324,7 +324,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#maxItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
 			this.maxItems = value;
@@ -335,7 +335,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#maxl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(long value) {
 			this.maxl = value;
@@ -346,7 +346,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#maxLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
 			this.maxLength = value;
@@ -357,7 +357,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#min} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(String value) {
 			this.min = value;
@@ -368,7 +368,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#mini} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(long value) {
 			this.mini = value;
@@ -379,7 +379,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#minimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(String value) {
 			this.minimum = value;
@@ -390,7 +390,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#minItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(long value) {
 			this.minItems = value;
@@ -401,7 +401,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#minl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(long value) {
 			this.minl = value;
@@ -412,7 +412,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#minLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(long value) {
 			this.minLength = value;
@@ -423,7 +423,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#mo} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(String value) {
 			this.mo = value;
@@ -434,7 +434,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#multipleOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
 			this.multipleOf = value;
@@ -445,7 +445,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#p} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -456,7 +456,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#pattern} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
@@ -467,7 +467,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			this.t = value;
@@ -478,7 +478,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#type} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			this.type = value;
@@ -489,7 +489,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#ui} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
 			this.ui = value;
@@ -500,7 +500,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
 			this.uniqueItems = value;
@@ -511,7 +511,7 @@ public class ItemsAnnotation {
 		 * Sets the {@link Items#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

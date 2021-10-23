@@ -76,7 +76,7 @@ public class TagAnnotation {
 		 * Sets the {@link Tag#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -87,7 +87,7 @@ public class TagAnnotation {
 		 * Sets the {@link Tag#externalDocs} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
 			this.externalDocs = value;
@@ -98,7 +98,7 @@ public class TagAnnotation {
 		 * Sets the {@link Tag#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -109,7 +109,7 @@ public class TagAnnotation {
 		 * Sets the {@link Tag#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

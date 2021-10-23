@@ -47,7 +47,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * Sets the children of this element.
 	 *
 	 * @param children The new children of this element.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Beanp("c")
 	public HtmlElement setChildren(LinkedList<Object> children) {
@@ -117,7 +117,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	The children to add as child elements.
 	 * 	Can be a mixture of strings and {@link HtmlElement} objects.
 	 * 	Can also be containers of strings and elements.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HtmlElement children(Object...children) {
 		if (children.length != 0)
@@ -133,7 +133,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	The child to add as a child element.
 	 * 	Can be a string or {@link HtmlElement}.
 	 * 	Can also be a container of strings and elements.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HtmlElement child(Object child) {
 		if (this.children == null)

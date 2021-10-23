@@ -14,7 +14,7 @@ package org.apache.juneau.encoders;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 import static java.util.Collections.*;
 
@@ -148,7 +148,7 @@ public final class EncoderGroup {
 		 * Entries are added in-order to the beginning of the list.
 		 *
 		 * @param values The encoders to add to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder add(Class<?>...values) {
@@ -178,7 +178,7 @@ public final class EncoderGroup {
 		 * and inserted into the position in the values array.
 		 *
 		 * @param values The encoders to add to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder set(Class<?>...values) {
@@ -203,7 +203,7 @@ public final class EncoderGroup {
 		 * Entries are added to the beginning of the list.
 		 *
 		 * @param values The encoders to add to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(Encoder...values) {
 			entries.addAll(0, asList(values));
@@ -213,7 +213,7 @@ public final class EncoderGroup {
 		/**
 		 * Clears out any existing encoders in this group.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder clear() {
 			entries.clear();
@@ -329,7 +329,7 @@ public final class EncoderGroup {
 		try {
 			return bs.creator(Encoder.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

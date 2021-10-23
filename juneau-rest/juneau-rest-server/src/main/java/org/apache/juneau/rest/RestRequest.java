@@ -18,7 +18,7 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -1669,7 +1669,7 @@ public final class RestRequest {
 	 * This exception is used by {@link BasicRestLogger} for logging purposes.
 	 *
 	 * @param t The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestRequest setException(Throwable t) {
 		setAttribute("Exception", t);
@@ -1683,7 +1683,7 @@ public final class RestRequest {
 	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
 	 *
 	 * @param b The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestRequest setNoTrace(Boolean b) {
 		setAttribute("NoTrace", b);
@@ -1693,7 +1693,7 @@ public final class RestRequest {
 	/**
 	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestRequest setNoTrace() {
 		return setNoTrace(true);
@@ -1706,7 +1706,7 @@ public final class RestRequest {
 	 * This flag is used by {@link BasicRestLogger} to help determine how a request should be logged.
 	 *
 	 * @param b The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If body could not be cached.
 	 */
 	public RestRequest setDebug(Boolean b) throws IOException {
@@ -1719,7 +1719,7 @@ public final class RestRequest {
 	/**
 	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If body could not be cached.
 	 */
 	public RestRequest setDebug() throws IOException {
@@ -1785,7 +1785,7 @@ public final class RestRequest {
 	 * <p>
 	 * Used to retrieve localized files to be served up as static files through the REST API.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public StaticFiles getStaticFiles() {
 		return context.getStaticFiles();

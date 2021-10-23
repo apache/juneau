@@ -98,7 +98,7 @@ public class RestOpArgList {
 		 * Prepends the specified rest op arg classes to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 		 */
 		public Builder add(Class<?>...values) {

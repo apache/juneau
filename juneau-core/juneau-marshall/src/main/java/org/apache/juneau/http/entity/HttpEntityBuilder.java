@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -88,7 +88,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Sets the content on this entity bean.
 	 *
 	 * @param value The entity content, can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> content(Object value) {
@@ -104,7 +104,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * serialization time.
 	 *
 	 * @param value The entity content, can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> contentSupplier(Supplier<?> value) {
@@ -116,7 +116,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Sets the content type on this entity bean.
 	 *
 	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> contentType(String value) {
@@ -127,7 +127,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Sets the content type on this entity bean.
 	 *
 	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> contentType(ContentType value) {
@@ -139,7 +139,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Sets the content length on this entity bean.
 	 *
 	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> contentLength(long value) {
@@ -151,7 +151,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Sets the content encoding header on this entity bean.
 	 *
 	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> contentEncoding(String value) {
@@ -162,7 +162,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Sets the content encoding header on this entity bean.
 	 *
 	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> contentEncoding(ContentEncoding value) {
@@ -178,7 +178,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * 		use chunked encoding.
 	 * </ul>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> chunked() {
@@ -194,7 +194,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * </ul>
 	 *
 	 * @param value The new value for this flag.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpEntityBuilder<T> chunked(boolean value) {
@@ -206,7 +206,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
 	 * be read multiple times.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If entity could not be read into memory.
 	 */
 	@FluentSetter

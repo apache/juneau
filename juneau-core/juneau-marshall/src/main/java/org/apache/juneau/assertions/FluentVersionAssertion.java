@@ -139,7 +139,7 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	 * Extracts the specified version part (zero-indexed position).
 	 *
 	 * @param index The index of the version part to extract.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> part(int index) {
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().getPart(index).orElse(null), returns());
@@ -148,7 +148,7 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	/**
 	 * Extracts the major part of the version string (index position 0).
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> major() {
 		return part(0);
@@ -157,7 +157,7 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	/**
 	 * Extracts the minor part of the version string (index position 1).
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> minor() {
 		return part(1);
@@ -166,7 +166,7 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	/**
 	 * Extracts the maintenance part of the version string (index position 2).
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> maintenance() {
 		return part(2);

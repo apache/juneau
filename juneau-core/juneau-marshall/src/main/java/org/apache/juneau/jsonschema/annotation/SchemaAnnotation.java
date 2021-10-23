@@ -269,7 +269,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#_default} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _default(String...value) {
 			this._default = value;
@@ -280,7 +280,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(String...value) {
 			this._enum = value;
@@ -291,7 +291,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#$ref} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder $ref(String value) {
 			this.$ref = value;
@@ -302,7 +302,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#additionalProperties} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder additionalProperties(String...value) {
 			this.additionalProperties = value;
@@ -313,7 +313,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#allOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allOf(String...value) {
 			this.allOf = value;
@@ -324,7 +324,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			this.cf = value;
@@ -335,7 +335,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			this.collectionFormat = value;
@@ -346,7 +346,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder d(String...value) {
 			this.d = value;
@@ -357,7 +357,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -368,7 +368,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#df} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder df(String...value) {
 			this.df = value;
@@ -379,7 +379,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#discriminator} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder discriminator(String value) {
 			this.discriminator = value;
@@ -390,7 +390,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#e} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(String...value) {
 			this.e = value;
@@ -401,7 +401,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#emax} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
 			this.emax = value;
@@ -412,7 +412,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#emin} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
 			this.emin = value;
@@ -423,7 +423,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#ex} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ex(String...value) {
 			this.ex = value;
@@ -434,7 +434,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String...value) {
 			this.example = value;
@@ -445,7 +445,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#examples} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder examples(String...value) {
 			this.examples = value;
@@ -456,7 +456,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
 			this.exclusiveMaximum = value;
@@ -467,7 +467,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
@@ -478,7 +478,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#exs} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exs(String...value) {
 			this.exs = value;
@@ -489,7 +489,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#externalDocs} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
 			this.externalDocs = value;
@@ -500,7 +500,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#f} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			this.f = value;
@@ -511,7 +511,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#format} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -522,7 +522,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#ignore} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ignore(boolean value) {
 			this.ignore = value;
@@ -533,7 +533,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#items} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(Items value) {
 			this.items = value;
@@ -544,7 +544,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#max} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(String value) {
 			this.max = value;
@@ -555,7 +555,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maxi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(long value) {
 			this.maxi = value;
@@ -566,7 +566,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(String value) {
 			this.maximum = value;
@@ -577,7 +577,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maxItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
 			this.maxItems = value;
@@ -588,7 +588,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maxl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(long value) {
 			this.maxl = value;
@@ -599,7 +599,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maxLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
 			this.maxLength = value;
@@ -610,7 +610,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maxp} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxp(long value) {
 			this.maxp = value;
@@ -621,7 +621,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#maxProperties} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxProperties(long value) {
 			this.maxProperties = value;
@@ -632,7 +632,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#min} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(String value) {
 			this.min = value;
@@ -643,7 +643,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#mini} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(long value) {
 			this.mini = value;
@@ -654,7 +654,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#minimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(String value) {
 			this.minimum = value;
@@ -665,7 +665,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#minItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(long value) {
 			this.minItems = value;
@@ -676,7 +676,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#minl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(long value) {
 			this.minl = value;
@@ -687,7 +687,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#minLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(long value) {
 			this.minLength = value;
@@ -698,7 +698,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#minp} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minp(long value) {
 			this.minp = value;
@@ -709,7 +709,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#minProperties} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minProperties(long value) {
 			this.minProperties = value;
@@ -720,7 +720,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#mo} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(String value) {
 			this.mo = value;
@@ -731,7 +731,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#multipleOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
 			this.multipleOf = value;
@@ -742,7 +742,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#p} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -753,7 +753,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#pattern} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
@@ -764,7 +764,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#properties} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder properties(String...value) {
 			this.properties = value;
@@ -775,7 +775,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#r} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(boolean value) {
 			this.r = value;
@@ -786,7 +786,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#readOnly} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder readOnly(boolean value) {
 			this.readOnly = value;
@@ -797,7 +797,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#required} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(boolean value) {
 			this.required = value;
@@ -808,7 +808,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#ro} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ro(boolean value) {
 			this.ro = value;
@@ -819,7 +819,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			this.t = value;
@@ -830,7 +830,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#title} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder title(String value) {
 			this.title = value;
@@ -841,7 +841,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#type} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			this.type = value;
@@ -852,7 +852,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#ui} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
 			this.ui = value;
@@ -863,7 +863,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
 			this.uniqueItems = value;
@@ -874,7 +874,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;
@@ -885,7 +885,7 @@ public class SchemaAnnotation {
 		 * Sets the {@link Schema#xml} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder xml(String...value) {
 			this.xml = value;

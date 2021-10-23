@@ -200,7 +200,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo additionalProperties(SchemaInfo value) {
 		setAdditionalProperties(value);
@@ -213,7 +213,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo additionalProperties(String json) {
 		setAdditionalProperties(toType(json, SchemaInfo.class));
@@ -250,7 +250,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo addAllOf(Collection<Object> values) {
 		allOf = setBuilder(allOf).sparse().addAll(values).build();
@@ -271,7 +271,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to set on this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo allOf(Collection<Object> value) {
 		setAllOf(value);
@@ -285,7 +285,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Strings can contains JSON arrays.
 	 * 	<br>Valid types:
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo allOf(Object...value) {
 		setAllOf(setBuilder(Object.class).sparse().addAny(value).build());
@@ -341,7 +341,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo _default(Object value) {
 		setDefault(value);
@@ -388,7 +388,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo description(String value) {
 		setDescription(value);
@@ -434,7 +434,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo discriminator(String value) {
 		setDiscriminator(value);
@@ -471,7 +471,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo addEnum(Collection<Object> value) {
 		_enum = setBuilder(_enum).sparse().addAll(value).build();
@@ -493,7 +493,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo _enum(Object...value) {
 		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
@@ -505,7 +505,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo _enum(Collection<Object> value) {
 		setEnum(value);
@@ -551,7 +551,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo example(Object value) {
 		setExample(value);
@@ -597,7 +597,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo exclusiveMaximum(Boolean value) {
 		setExclusiveMaximum(value);
@@ -610,7 +610,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo exclusiveMaximum(String value) {
 		setExclusiveMaximum(toBoolean(value));
@@ -656,7 +656,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo exclusiveMinimum(Boolean value) {
 		setExclusiveMinimum(value);
@@ -669,7 +669,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo exclusiveMinimum(String value) {
 		setExclusiveMinimum(toBoolean(value));
@@ -715,7 +715,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo externalDocs(ExternalDocumentation value) {
 		setExternalDocs(value);
@@ -733,7 +733,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo externalDocs(String json) {
 		setExternalDocs(toType(json, ExternalDocumentation.class));
@@ -803,7 +803,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li><js>"date-time"</js>
 	 * 		<li><js>"password"</js>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo format(String value) {
 		setFormat(value);
@@ -849,7 +849,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo items(Items value) {
 		setItems(value);
@@ -867,7 +867,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo items(String value) {
 		setItems(toType(value, Items.class));
@@ -913,7 +913,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maximum(Number value) {
 		setMaximum(value);
@@ -926,7 +926,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maximum(String value) {
 		setMaximum(toNumber(value));
@@ -972,7 +972,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maxItems(Integer value) {
 		setMaxItems(value);
@@ -985,7 +985,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maxItems(String value) {
 		setMaxItems(toInteger(value));
@@ -1031,7 +1031,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maxLength(Integer value) {
 		setMaxLength(value);
@@ -1044,7 +1044,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maxLength(String value) {
 		setMaxLength(toInteger(value));
@@ -1090,7 +1090,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maxProperties(Integer value) {
 		setMaxProperties(value);
@@ -1103,7 +1103,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo maxProperties(String value) {
 		setMaxProperties(toInteger(value));
@@ -1149,7 +1149,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minimum(Number value) {
 		setMinimum(value);
@@ -1162,7 +1162,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minimum(String value) {
 		setMinimum(toNumber(value));
@@ -1208,7 +1208,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minItems(Integer value) {
 		setMinItems(value);
@@ -1221,7 +1221,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minItems(String value) {
 		setMinItems(toInteger(value));
@@ -1267,7 +1267,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minLength(Integer value) {
 		setMinLength(value);
@@ -1280,7 +1280,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minLength(String value) {
 		setMinLength(toInteger(value));
@@ -1326,7 +1326,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minProperties(Integer value) {
 		setMinProperties(value);
@@ -1339,7 +1339,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo minProperties(String value) {
 		setMinProperties(toInteger(value));
@@ -1385,7 +1385,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo multipleOf(Number value) {
 		setMultipleOf(value);
@@ -1398,7 +1398,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo multipleOf(String value) {
 		setMultipleOf(toNumber(value));
@@ -1445,7 +1445,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>This string SHOULD be a valid regular expression.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo pattern(String value) {
 		setPattern(value);
@@ -1482,7 +1482,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo addProperties(Map<String,SchemaInfo> values) {
 		properties = mapBuilder(properties).sparse().addAll(values).build();
@@ -1503,7 +1503,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo properties(Map<String,SchemaInfo> value) {
 		setProperties(value);
@@ -1515,7 +1515,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The value to set on this property as a JSON object.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo properties(String json) {
 		setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addJson(json).build());
@@ -1561,7 +1561,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo readOnly(Boolean value) {
 		setReadOnly(value);
@@ -1574,7 +1574,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo readOnly(String value) {
 		setReadOnly(toBoolean(value));
@@ -1622,7 +1622,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo ref(String value) {
 		setRef(value);
@@ -1675,7 +1675,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo addRequired(Collection<String> value) {
 		required = setBuilder(required).sparse().addAny(value).build();
@@ -1696,7 +1696,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo required(Collection<String> value) {
 		setRequired(value);
@@ -1708,7 +1708,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo required(String...value) {
 		setRequired(setBuilder(String.class).sparse().addJson(value).build());
@@ -1754,7 +1754,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo title(String value) {
 		setTitle(value);
@@ -1820,7 +1820,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 		<li><js>"file"</js>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo type(String value) {
 		setType(value);
@@ -1866,7 +1866,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo uniqueItems(Boolean value) {
 		setUniqueItems(value);
@@ -1879,7 +1879,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo uniqueItems(String value) {
 		setUniqueItems(toBoolean(value));
@@ -1925,7 +1925,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo xml(Xml value) {
 		setXml(value);
@@ -1943,7 +1943,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SchemaInfo xml(String json) {
 		setXml(toType(json, Xml.class));

@@ -75,7 +75,7 @@ public class VarList extends ArrayList<Object> {
 	 * Adds a list of variables to this list.
 	 *
 	 * @param vars The variables to append to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public VarList append(Var...vars) {
 		addAll(asList(vars));
@@ -86,7 +86,7 @@ public class VarList extends ArrayList<Object> {
 	 * Adds a list of variables to this list.
 	 *
 	 * @param vars The variables to append to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public VarList append(VarList vars) {
 		addAll(vars);
@@ -97,7 +97,7 @@ public class VarList extends ArrayList<Object> {
 	 * Adds a list of variables to this list.
 	 *
 	 * @param vars The variables to append to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SafeVarargs
 	public final VarList append(Class<? extends Var>...vars) {
@@ -128,7 +128,7 @@ public class VarList extends ArrayList<Object> {
 	 * 	<li>{@link SubstringVar}
 	 * </ul>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public VarList addDefault() {
 		return append(

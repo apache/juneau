@@ -14,7 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -201,7 +201,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo collectionFormat(String value) {
 		setCollectionFormat(value);
@@ -285,7 +285,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo _default(Object value) {
 		setDefault(value);
@@ -343,7 +343,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo description(String value) {
 		setDescription(value);
@@ -379,7 +379,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo addEnum(Collection<Object> value) {
 		_enum = setBuilder(_enum).sparse().addAll(value).build();
@@ -400,7 +400,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to set on this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo _enum(Collection<Object> value) {
 		setEnum(value);
@@ -418,7 +418,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo _enum(Object...value) {
 		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
@@ -464,7 +464,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo example(Object value) {
 		setExample(value);
@@ -510,7 +510,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo exclusiveMaximum(Boolean value) {
 		setExclusiveMaximum(value);
@@ -523,7 +523,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo exclusiveMaximum(String value) {
 		setExclusiveMaximum(toBoolean(value));
@@ -569,7 +569,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo exclusiveMinimum(Boolean value) {
 		setExclusiveMinimum(value);
@@ -582,7 +582,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo exclusiveMinimum(String value) {
 		setExclusiveMinimum(toBoolean(value));
@@ -640,7 +640,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo format(String value) {
 		setFormat(value);
@@ -700,7 +700,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo items(Items value) {
 		setItems(value);
@@ -722,7 +722,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo items(String json) {
 		setItems(toType(json, Items.class));
@@ -768,7 +768,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo maximum(Number value) {
 		setMaximum(value);
@@ -781,7 +781,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo maximum(String value) {
 		setMaximum(toNumber(value));
@@ -827,7 +827,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo maxItems(Integer value) {
 		setMaxItems(toInteger(value));
@@ -840,7 +840,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo maxItems(String value) {
 		setMaxItems(toInteger(value));
@@ -886,7 +886,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo maxLength(Integer value) {
 		setMaxLength(value);
@@ -899,7 +899,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo maxLength(String value) {
 		setMaxLength(toInteger(value));
@@ -945,7 +945,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo minimum(Number value) {
 		setMinimum(value);
@@ -958,7 +958,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo minimum(String value) {
 		setMinimum(toNumber(value));
@@ -1004,7 +1004,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo minItems(Integer value) {
 		setMinItems(value);
@@ -1017,7 +1017,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo minItems(String value) {
 		setMinItems(toInteger(value));
@@ -1063,7 +1063,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo minLength(Integer value) {
 		setMinLength(value);
@@ -1076,7 +1076,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo minLength(String value) {
 		setMinLength(toInteger(value));
@@ -1122,7 +1122,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo multipleOf(Number value) {
 		setMultipleOf(value);
@@ -1135,7 +1135,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo multipleOf(String value) {
 		setMultipleOf(toNumber(value));
@@ -1183,7 +1183,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>This string SHOULD be a valid regular expression.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo pattern(String value) {
 		setPattern(value);
@@ -1231,7 +1231,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo ref(String value) {
 		setRef(value);
@@ -1310,7 +1310,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 		<li><js>"boolean"</js>
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo type(String value) {
 		setType(value);
@@ -1356,7 +1356,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo uniqueItems(Boolean value) {
 		setUniqueItems(value);
@@ -1369,7 +1369,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderInfo uniqueItems(String value) {
 		setUniqueItems(toBoolean(value));

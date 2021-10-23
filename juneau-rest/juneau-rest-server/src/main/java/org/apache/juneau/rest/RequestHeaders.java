@@ -118,7 +118,7 @@ public class RequestHeaders {
 	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
 	 *
 	 * @param pairs The default entries.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders addDefault(List<Header> pairs) {
 		assertArgNotNull("pairs", pairs);
@@ -145,7 +145,7 @@ public class RequestHeaders {
 	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
 	 *
 	 * @param pairs The default entries.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders addDefault(Header...pairs) {
 		return addDefault(Arrays.asList(pairs));
@@ -218,7 +218,7 @@ public class RequestHeaders {
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
 	 * @param value The header value.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders add(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -240,7 +240,7 @@ public class RequestHeaders {
 	 * <br>Existing headers with the same name are not changed.
 	 *
 	 * @param headers The header objects.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders add(Header...headers) {
 		assertArgNotNull("headers", headers);
@@ -263,7 +263,7 @@ public class RequestHeaders {
 	 * 	The header value.
 	 * 	<br>Converted to a string using {@link Object#toString()}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders set(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -283,7 +283,7 @@ public class RequestHeaders {
 	 * <br>Any previous headers with the same name are removed.
 	 *
 	 * @param headers The header to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders set(Header...headers) {
 		assertArgNotNull("headers", headers);
@@ -298,7 +298,7 @@ public class RequestHeaders {
 	 * Remove headers.
 	 *
 	 * @param name The header names.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders remove(String...name) {
 		assertArgNotNull("name", name);
@@ -315,7 +315,7 @@ public class RequestHeaders {
 	 * Remove headers.
 	 *
 	 * @param headers The headers to remove.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestHeaders remove(Header...headers) {
 		for (Header h : headers)

@@ -244,7 +244,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_iriRules(String value) {
@@ -282,7 +282,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_errorMode(String value) {
@@ -300,7 +300,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_embedding() {
@@ -320,7 +320,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_embedding(boolean value) {
@@ -335,7 +335,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_xmlbase(String value) {
@@ -349,7 +349,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * Whether to use long ID's for anon resources.
 		 * Short ID's are easier to read, but can run out of memory on very large models.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_longId() {
@@ -365,7 +365,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_longId(boolean value) {
@@ -378,7 +378,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * URIs in the graph are, by default, checked prior to serialization.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_allowBadUris() {
@@ -393,7 +393,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_allowBadUris(boolean value) {
@@ -430,7 +430,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_relativeUris(String value) {
@@ -455,7 +455,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_showXmlDeclaration(String value) {
@@ -471,7 +471,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 		 * invocation.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_disableShowDoctypeDeclaration() {
@@ -489,7 +489,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_disableShowDoctypeDeclaration(boolean value) {
@@ -504,7 +504,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_tab(int value) {
@@ -519,7 +519,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_attributeQuoteChar(char value) {
@@ -536,7 +536,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rdfxml_blockRules(String value) {
@@ -551,7 +551,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_minGap(int value) {
@@ -564,7 +564,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Don't print object lists as comma separated lists.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableObjectLists() {
@@ -579,7 +579,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableObjectLists(boolean value) {
@@ -594,7 +594,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_subjectColumn(int value) {
@@ -609,7 +609,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_propertyColumn(int value) {
@@ -624,7 +624,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_indentProperty(int value) {
@@ -640,7 +640,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_widePropertyLen(int value) {
@@ -653,7 +653,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableAbbrevBaseUri() {
@@ -668,7 +668,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableAbbrevBaseUri(boolean value) {
@@ -681,7 +681,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableUsePropertySymbols() {
@@ -696,7 +696,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableUsePropertySymbols(boolean value) {
@@ -709,7 +709,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Disallow the use of <c>"""</c> to delimit long strings.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableUseTripleQuotedStrings() {
@@ -724,7 +724,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableUseTripleQuotedStrings(boolean value) {
@@ -737,7 +737,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Disallow the use of doubles as <c>123.456</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableUseDoubles() {
@@ -752,7 +752,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3_disableUseDoubles(boolean value) {
@@ -765,7 +765,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>addLiteralTypes(<jk>true</jk>)</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addLiteralTypes() {
@@ -780,7 +780,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addLiteralTypes(boolean value) {
@@ -800,7 +800,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 		 * identify root notes, which can introduce a considerable performance degradation.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addRootProperty() {
@@ -821,7 +821,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addRootProperty(boolean value) {
@@ -839,7 +839,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 		 * the root element is serialized.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableAutoDetectNamespaces() {
@@ -858,7 +858,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableAutoDetectNamespaces(boolean value) {
@@ -887,7 +887,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		<li><js>"LIST"</js> - RDF List container.
 		 * 		<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder collectionFormat(RdfCollectionFormat value) {
@@ -901,7 +901,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder juneauBpNs(Namespace value) {
@@ -915,7 +915,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder juneauNs(Namespace value) {
@@ -966,7 +966,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder language(String value) {
@@ -1021,7 +1021,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder looseCollections() {
@@ -1077,7 +1077,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder looseCollections(boolean value) {
@@ -1091,7 +1091,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder n3() {
@@ -1105,7 +1105,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * The default list of namespaces associated with this serializer.
 		 *
 		 * @param values The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder namespaces(Namespace...values) {
@@ -1121,7 +1121,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ntriple() {
@@ -1134,7 +1134,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder turtle() {
@@ -1149,7 +1149,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * inherited by the RDF serializers.
 		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableUseXmlNamespaces() {
@@ -1166,7 +1166,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableUseXmlNamespaces(boolean value) {
@@ -1180,7 +1180,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder xml() {
@@ -1193,7 +1193,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder xmlabbrev() {

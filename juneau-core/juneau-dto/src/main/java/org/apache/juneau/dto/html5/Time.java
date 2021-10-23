@@ -47,7 +47,7 @@ public class Time extends HtmlElementMixed {
 	 * Machine-readable value.
 	 *
 	 * @param datetime The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Time datetime(String datetime) {
 		attr("datetime", datetime);

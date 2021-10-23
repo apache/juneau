@@ -13,7 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;

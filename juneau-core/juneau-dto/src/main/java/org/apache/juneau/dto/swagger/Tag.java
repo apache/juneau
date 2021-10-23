@@ -136,7 +136,7 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Tag description(String value) {
 		setDescription(value);
@@ -194,7 +194,7 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Tag externalDocs(ExternalDocumentation value) {
 		setExternalDocs(value);
@@ -215,7 +215,7 @@ public class Tag extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property as JSON.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Tag externalDocs(String json) {
 		setExternalDocs(toType(json, ExternalDocumentation.class));
@@ -273,7 +273,7 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Tag name(String value) {
 		setName(value);

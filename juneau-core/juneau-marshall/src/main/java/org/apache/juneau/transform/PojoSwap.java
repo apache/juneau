@@ -191,7 +191,7 @@ public abstract class PojoSwap<T,S> {
 	 * </ul>
 	 *
 	 * @param mediaTypes The media types that this swap is associated with.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public PojoSwap<T,?> forMediaTypes(MediaType[] mediaTypes) {
 		this.forMediaTypes = mediaTypes;
@@ -206,7 +206,7 @@ public abstract class PojoSwap<T,S> {
 	 * </ul>
 	 *
 	 * @param template The template string on this swap.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public PojoSwap<T,?> withTemplate(String template) {
 		this.template = template;

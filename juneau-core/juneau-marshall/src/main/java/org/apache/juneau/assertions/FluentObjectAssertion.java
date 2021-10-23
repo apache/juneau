@@ -13,7 +13,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -237,7 +237,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Applies a transform on the inner object and returns a new inner object.
 	 *
 	 * @param function The function to apply.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentObjectAssertion<T,R> apply(Function<T,T> function) {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
@@ -247,7 +247,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Applies a transform on the inner object and returns a new inner object.
 	 *
 	 * @param function The function to apply.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T2> FluentObjectAssertion<T2,R> transform(Function<T,T2> function) {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
@@ -256,7 +256,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Converts this assertion into an {@link FluentAnyAssertion} so that it can be converted to other assertion types.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentAnyAssertion<T,R> asAny() {
 		return new FluentAnyAssertion<>(this, orElse(null), returns());
@@ -272,7 +272,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <p>
 	 * Equivalent to {@link #isNotNull()}.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R exists() throws AssertionError {
@@ -285,7 +285,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <p>
 	 * Equivalent to {@link #isNotNull()}.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNull() throws AssertionError {
@@ -300,7 +300,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <p>
 	 * Equivalent to {@link #isNotNull()}.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotNull() throws AssertionError {
@@ -313,7 +313,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value equals the specified value.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(T value) throws AssertionError {
@@ -328,7 +328,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value converted to a string equals the specified value.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isString(String value) {
@@ -339,7 +339,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value does not equal the specified value.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNot(T value) throws AssertionError {
@@ -352,7 +352,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value is one of the specified values.
 	 *
 	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
@@ -367,7 +367,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value is not one of the specified values.
 	 *
 	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
@@ -382,7 +382,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the specified object is the same object as this object.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSame(T value) throws AssertionError {
@@ -395,7 +395,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Verifies that two objects are equivalent after converting them both to JSON.
 	 *
 	 * @param o The object to compare against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSameJsonAs(Object o) throws AssertionError {
@@ -409,7 +409,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Properties, maps, and collections are all sorted on both objects before comparison.
 	 *
 	 * @param o The object to compare against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSameSortedJsonAs(Object o) {
@@ -421,7 +421,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 *
 	 * @param o The object to compare against.
 	 * @param serializer The serializer to use to serialize this object.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
@@ -442,7 +442,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * </p>
 	 *
 	 * @param parent The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
@@ -462,7 +462,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * </p>
 	 *
 	 * @param type The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isExactType(Class<?> type) throws AssertionError {
@@ -476,7 +476,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value passes the specified predicate test.
 	 *
 	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Predicate<T> test) throws AssertionError {
@@ -495,7 +495,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * </p>
 	 *
 	 * @param value The expected string value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public R isJson(String value) {
 		return asJson().is(value);

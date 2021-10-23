@@ -191,7 +191,7 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 	/**
 	 * Resets the internal message buffer.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public BasicTestCaptureRestLogger reset() {
 		this.lastRecord.set(null);

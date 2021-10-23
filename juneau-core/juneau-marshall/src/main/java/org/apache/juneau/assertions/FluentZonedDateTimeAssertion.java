@@ -152,7 +152,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 *
 	 * @param value The value to check against.
 	 * @param precision The precision (e.g. {@link ChronoUnit#SECONDS}.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
@@ -172,7 +172,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * Asserts that the value is after the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
@@ -185,7 +185,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	/**
 	 * Asserts that the value is after the current date.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfterNow() throws AssertionError {
@@ -196,7 +196,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * Asserts that the value is before the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
@@ -209,7 +209,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	/**
 	 * Asserts that the value is before the current date.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBeforeNow() throws AssertionError {
@@ -221,7 +221,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 *
 	 * @param lower The lower value to check against.
 	 * @param upper The upper value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBetween(ZonedDateTime lower, ZonedDateTime upper) throws AssertionError {

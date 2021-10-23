@@ -226,7 +226,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that the contents of this list contain the specified values.
 	 *
 	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
@@ -240,7 +240,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that the contents of this list pass the specified tests.
 	 *
 	 * @param tests The tests to run.  <jk>null</jk> entries are ignored.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SafeVarargs

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.jsonschema;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.net.*;
@@ -81,7 +81,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * The schemas passed in through this method MUST have their ID properties set.
 	 *
 	 * @param schemas The set of schemas to add to this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
 	 */
 	public JsonSchemaMap add(JsonSchema...schemas) {

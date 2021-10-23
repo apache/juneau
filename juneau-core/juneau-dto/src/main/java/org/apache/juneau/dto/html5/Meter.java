@@ -48,7 +48,7 @@ public class Meter extends HtmlElementMixed {
 	 * @param high
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meter high(Object high) {
 		attr("high", high);
@@ -64,7 +64,7 @@ public class Meter extends HtmlElementMixed {
 	 * @param low
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meter low(Object low) {
 		attr("low", low);
@@ -80,7 +80,7 @@ public class Meter extends HtmlElementMixed {
 	 * @param max
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meter max(Object max) {
 		attr("max", max);
@@ -96,7 +96,7 @@ public class Meter extends HtmlElementMixed {
 	 * @param min
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meter min(Object min) {
 		attr("min", min);
@@ -112,7 +112,7 @@ public class Meter extends HtmlElementMixed {
 	 * @param optimum
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meter optimum(Object optimum) {
 		attr("optimum", optimum);
@@ -128,7 +128,7 @@ public class Meter extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meter value(Object value) {
 		attr("value", value);

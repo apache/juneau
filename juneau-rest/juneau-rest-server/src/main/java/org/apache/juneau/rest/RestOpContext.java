@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
@@ -1254,7 +1254,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		/**
 		 * When enabled, append <js>"/*"</js> to path patterns if not already present.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder dotAll() {
 			dotAll = true;
@@ -1679,7 +1679,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
 		 *
 		 * @param beanStore The bean store to use for resolving constructor arguments.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder beanStore(BeanStore beanStore) {
 			this.beanStore = beanStore;
@@ -1755,7 +1755,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder clientVersion(String value) {
@@ -1777,7 +1777,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * If not sppecified, the debug enablement is inherited from the class context.
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder debug(Enablement value) {
@@ -1808,7 +1808,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
 		 * 		<li><js>"utf-8"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultCharset(Charset value) {
@@ -1869,7 +1869,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder httpMethod(String value) {
@@ -1934,7 +1934,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		<li><js>"100M"</js>
 		 * 	</ul>
 		 * 	<br>The default is <js>"100M"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder maxInput(String value) {
@@ -1958,7 +1958,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The new values for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder path(String...values) {
@@ -1993,7 +1993,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder produces(MediaType...values) {
@@ -2029,7 +2029,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder rolesDeclared(String...values) {
@@ -2084,7 +2084,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param value The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder roleGuard(String value) {
@@ -2117,7 +2117,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder consumes(MediaType...values) {

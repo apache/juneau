@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 
@@ -75,7 +75,7 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The object being serialized.
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Should never happen.
 	 */
 	public final UonWriter appendObject(Object o, boolean isTopAttrName) throws IOException {
@@ -133,7 +133,7 @@ public final class UonWriter extends SerializerWriter {
 	 * Appends a boolean value to the output.
 	 *
 	 * @param o The boolean value to append to the output.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected UonWriter appendBoolean(Object o) throws IOException {
@@ -145,7 +145,7 @@ public final class UonWriter extends SerializerWriter {
 	 * Appends a numeric value to the output.
 	 *
 	 * @param o The numeric value to append to the output.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected UonWriter appendNumber(Object o) throws IOException {
@@ -167,7 +167,7 @@ public final class UonWriter extends SerializerWriter {
 	 * Appends a URI to the output.
 	 *
 	 * @param uri The URI to append to the output.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	@Override

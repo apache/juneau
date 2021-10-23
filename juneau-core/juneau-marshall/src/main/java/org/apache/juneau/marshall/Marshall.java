@@ -12,7 +12,7 @@ package org.apache.juneau.marshall;
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -151,7 +151,7 @@ public abstract class Marshall {
 	 * Convenience method for calling <c>System.out.println(...)</c> on the specified object after calling {@link #toString(Object)}.
 	 *
 	 * @param o The object to serialize and then send to the console.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Marshall println(Object o) {
 		System.out.println(toString(o));
@@ -174,7 +174,7 @@ public abstract class Marshall {
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
 	 * @param args The arguments sent to the the formatter after running them through this marshaller.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Marshall out(String msg, Object...args) {
 		System.out.println(format(msg, args));
@@ -197,7 +197,7 @@ public abstract class Marshall {
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
 	 * @param args The arguments sent to the the formatter after running them through this marshaller.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Marshall err(String msg, Object...args) {
 		System.err.println(format(msg, args));  // NOT DEBUG
@@ -220,7 +220,7 @@ public abstract class Marshall {
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
 	 * @param args The arguments sent to the the formatter after running them through this marshaller.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final String format(String msg, Object...args) {
 		for (int i = 0; i < args.length; i++)

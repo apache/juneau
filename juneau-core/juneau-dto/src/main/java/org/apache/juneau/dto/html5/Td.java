@@ -48,7 +48,7 @@ public class Td extends HtmlElementMixed {
 	 * @param colspan
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Td colspan(Object colspan) {
 		attr("colspan", colspan);
@@ -62,7 +62,7 @@ public class Td extends HtmlElementMixed {
 	 * The header cells for this cell.
 	 *
 	 * @param headers The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Td headers(String headers) {
 		attr("headers", headers);
@@ -78,7 +78,7 @@ public class Td extends HtmlElementMixed {
 	 * @param rowspan
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Td rowspan(Object rowspan) {
 		attr("rowspan", rowspan);

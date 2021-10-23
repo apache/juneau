@@ -14,7 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -76,7 +76,7 @@ public abstract class ParserSession extends BeanSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder javaMethod(Method value) {
@@ -90,7 +90,7 @@ public abstract class ParserSession extends BeanSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder outer(Object value) {
@@ -107,7 +107,7 @@ public abstract class ParserSession extends BeanSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder schema(HttpPartSchema value) {
@@ -122,7 +122,7 @@ public abstract class ParserSession extends BeanSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder schemaDefault(HttpPartSchema value) {

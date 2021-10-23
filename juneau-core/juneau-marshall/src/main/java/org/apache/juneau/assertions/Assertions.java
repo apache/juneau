@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;

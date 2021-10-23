@@ -93,7 +93,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder javaMethod(Method value) {
@@ -111,7 +111,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder resolver(VarResolverSession value) {
@@ -132,7 +132,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriContext(UriContext value) {
@@ -150,7 +150,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder schema(HttpPartSchema value) {
@@ -165,7 +165,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder schemaDefault(HttpPartSchema value) {
@@ -280,7 +280,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 *
 	 * @param c The bean type being added.
 	 * @param value The bean being added.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T> SerializerSession addVarBean(Class<T> c, T value) {
 		getVarResolver().bean(c, value);
@@ -290,7 +290,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Adds a session object to the {@link VarResolverSession} in this session.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected VarResolverSession createDefaultVarResolverSession() {
 		return VarResolver.DEFAULT.createSession();

@@ -77,7 +77,7 @@ public class Value<T> {
 	 * Adds a listener for this value.
 	 *
 	 * @param listener The new listener for this value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Value<T> listener(ValueListener<T> listener) {
 		this.listener = listener;
@@ -88,7 +88,7 @@ public class Value<T> {
 	 * Sets the value.
 	 *
 	 * @param t The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Value<T> set(T t) {
 		this.t = t;

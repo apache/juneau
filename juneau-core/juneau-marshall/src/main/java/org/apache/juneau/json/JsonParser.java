@@ -235,7 +235,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder validateEnd() {

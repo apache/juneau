@@ -51,7 +51,7 @@ public class Select extends HtmlElementContainer {
 	 * @param autofocus
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select autofocus(Object autofocus) {
 		attr("autofocus", autofocus);
@@ -67,7 +67,7 @@ public class Select extends HtmlElementContainer {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -81,7 +81,7 @@ public class Select extends HtmlElementContainer {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select form(String form) {
 		attr("form", form);
@@ -97,7 +97,7 @@ public class Select extends HtmlElementContainer {
 	 * @param multiple
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select multiple(Object multiple) {
 		attr("multiple", deminimize(multiple, "multiple"));
@@ -111,7 +111,7 @@ public class Select extends HtmlElementContainer {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select name(String name) {
 		attr("name", name);
@@ -127,7 +127,7 @@ public class Select extends HtmlElementContainer {
 	 * @param required
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select required(Object required) {
 		attr("required", required);
@@ -143,7 +143,7 @@ public class Select extends HtmlElementContainer {
 	 * @param size
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Select size(Object size) {
 		attr("size", size);
@@ -154,7 +154,7 @@ public class Select extends HtmlElementContainer {
 	 * Convenience method for selecting a child {@link Option} after the options have already been populated.
 	 *
 	 * @param optionValue The option value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Select choose(Object optionValue) {
 		if (optionValue != null) {

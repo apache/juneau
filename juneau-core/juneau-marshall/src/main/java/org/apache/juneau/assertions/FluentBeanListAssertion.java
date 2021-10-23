@@ -142,7 +142,7 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 * a new {@link FluentListAssertion} containing maps.
 	 *
 	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentListAssertion<Map<String,Object>,R> extract(String...names) {
 		String[] n = StringUtils.split(names, ',');
@@ -153,7 +153,7 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 * Extracts the specified property from each entry in this list and returns it as a {@link FluentListAssertion}.
 	 *
 	 * @param name The field to extract.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentListAssertion<Object,R> property(String name) {
 		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).get(name)).collect(toList()), returns());

@@ -48,7 +48,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Hint for form auto-fill feature.
 	 *
 	 * @param autocomplete The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea autocomplete(String autocomplete) {
 		attr("autocomplete", autocomplete);
@@ -64,7 +64,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param autofocus
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea autofocus(Boolean autofocus) {
 		attr("autofocus", autofocus);
@@ -80,7 +80,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param cols
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea cols(Object cols) {
 		attr("cols", cols);
@@ -94,7 +94,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Name of form field to use for sending the element's directionality in form submission.
 	 *
 	 * @param dirname The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea dirname(String dirname) {
 		attr("dirname", dirname);
@@ -110,7 +110,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -124,7 +124,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea form(String form) {
 		attr("form", form);
@@ -138,7 +138,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Hint for selecting an input modality.
 	 *
 	 * @param inputmode The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea inputmode(String inputmode) {
 		attr("inputmode", inputmode);
@@ -154,7 +154,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param maxlength
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea maxlength(Object maxlength) {
 		attr("maxlength", maxlength);
@@ -170,7 +170,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param minlength
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea minlength(Object minlength) {
 		attr("minlength", minlength);
@@ -184,7 +184,7 @@ public class Textarea extends HtmlElementRawText {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea name(String name) {
 		attr("name", name);
@@ -199,7 +199,7 @@ public class Textarea extends HtmlElementRawText {
 	 * User-visible label to be placed within the form control.
 	 *
 	 * @param placeholder The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea placeholder(String placeholder) {
 		attr("placeholder", placeholder);
@@ -215,7 +215,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param readonly
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea readonly(Object readonly) {
 		attr("readonly", readonly);
@@ -231,7 +231,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param required
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea required(Object required) {
 		attr("required", required);
@@ -247,7 +247,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @param rows
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea rows(Number rows) {
 		attr("rows", rows);
@@ -261,7 +261,7 @@ public class Textarea extends HtmlElementRawText {
 	 * How the value of the form control is to be wrapped for form submission.
 	 *
 	 * @param wrap The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Textarea wrap(String wrap) {
 		attr("wrap", wrap);

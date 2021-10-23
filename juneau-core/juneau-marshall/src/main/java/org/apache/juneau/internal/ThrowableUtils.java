@@ -20,6 +20,136 @@ import java.io.*;
 public class ThrowableUtils {
 
 	/**
+	 * Creates a new builder for {@link RuntimeException} objects.
+	 *
+	 * @return A new builder for {@link RuntimeException} objects.
+	 */
+	public static ExceptionBuilder<RuntimeException> runtimeException() {
+		return new ExceptionBuilder<>(RuntimeException.class);
+	}
+
+	/**
+	 * Creates a new {@link RuntimeException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link RuntimeException}.
+	 */
+	public static RuntimeException runtimeException(String msg, Object...args) {
+		return runtimeException().message(msg, args).build();
+	}
+
+	/**
+	 * Creates a new {@link RuntimeException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link RuntimeException}.
+	 */
+	public static RuntimeException runtimeException(Throwable cause, String msg, Object...args) {
+		return runtimeException().message(msg, args).causedBy(cause).build();
+	}
+
+	/**
+	 * Creates a new {@link RuntimeException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
+	 */
+	public static RuntimeException runtimeException(Throwable cause) {
+		return cause instanceof RuntimeException ? (RuntimeException)cause : runtimeException().causedBy(cause).build();
+	}
+
+	/**
+	 * Creates a new builder for {@link IOException} objects.
+	 *
+	 * @return A new builder for {@link IOException} objects.
+	 */
+	public static ExceptionBuilder<IOException> ioException() {
+		return new ExceptionBuilder<>(IOException.class);
+	}
+
+	/**
+	 * Creates a new {@link IOException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link IOException}.
+	 */
+	public static IOException ioException(String msg, Object...args) {
+		return ioException().message(msg, args).build();
+	}
+
+	/**
+	 * Creates a new {@link IOException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link IOException}.
+	 */
+	public static IOException ioException(Throwable cause, String msg, Object...args) {
+		return ioException().message(msg, args).causedBy(cause).build();
+	}
+
+	/**
+	 * Creates a new {@link IOException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @return A new {@link IOException}, or the same exception if it's already of that type.
+	 */
+	public static IOException ioException(Throwable cause) {
+		return cause instanceof IOException ? (IOException)cause : ioException().causedBy(cause).build();
+	}
+
+	/**
+	 * Creates a new builder for {@link IOException} objects.
+	 *
+	 * @return A new builder for {@link IOException} objects.
+	 */
+	public static ExceptionBuilder<UnsupportedOperationException> unsupportedOperationException() {
+		return new ExceptionBuilder<>(UnsupportedOperationException.class);
+	}
+
+	/**
+	 * Creates a new {@link UnsupportedOperationException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link UnsupportedOperationException}.
+	 */
+	public static UnsupportedOperationException unsupportedOperationException(String msg, Object...args) {
+		return unsupportedOperationException().message(msg, args).build();
+	}
+
+	/**
+	 * Creates a new builder for {@link IllegalArgumentException} objects.
+	 *
+	 * @return A new builder for {@link IllegalArgumentException} objects.
+	 */
+	public static ExceptionBuilder<IllegalArgumentException> illegalArgumentException() {
+		return new ExceptionBuilder<>(IllegalArgumentException.class);
+	}
+
+	/**
+	 * Creates a new {@link UnsupportedOperationException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link UnsupportedOperationException}.
+	 */
+	public static IllegalArgumentException illegalArgumentException(String msg, Object...args) {
+		return illegalArgumentException().message(msg, args).build();
+	}
+
+	/**
 	 * Same as {@link Throwable#getCause()} but searches the throwable chain for an exception of the specified type.
 	 *
 	 * @param c The throwable type to search for.
@@ -50,7 +180,7 @@ public class ThrowableUtils {
 		} catch (RuntimeException t) {
 			throw t;
 		} catch (Throwable t) {
-			throw new RuntimeException(t);
+			throw runtimeException(t);
 		}
 	}
 

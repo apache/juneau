@@ -75,7 +75,7 @@ public class Verify {
 	 *
 	 * @param msg The error message.
 	 * @param args Optional message arguments.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Verify msg(String msg, Object args) {
 		this.msg = () -> StringUtils.format(msg, args);

@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;

@@ -90,7 +90,7 @@ public class BeanCreateMethodFinder<T> {
 	 *
 	 * @param methodName The method name.
 	 * @param requiredParams Optional required parameters.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> find(String methodName, Class<?>...requiredParams) {
 		if (method == null) {
@@ -113,7 +113,7 @@ public class BeanCreateMethodFinder<T> {
 	 *
 	 * @param methodName The method name.
 	 * @param requiredParams Optional required parameters.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> thenFind(String methodName, Class<?>...requiredParams) {
 		return find(methodName, requiredParams);
@@ -123,7 +123,7 @@ public class BeanCreateMethodFinder<T> {
 	 * A default value to return if no matching methods were found.
 	 *
 	 * @param def The default value.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> withDefault(T def) {
 		return withDefault(()->def);
@@ -133,7 +133,7 @@ public class BeanCreateMethodFinder<T> {
 	 * A default value to return if no matching methods were found.
 	 *
 	 * @param def The default value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> withDefault(Supplier<T> def) {
 		assertArgNotNull("def", def);

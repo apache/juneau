@@ -14,7 +14,7 @@ package org.apache.juneau.html;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Collections.*;
 
 import java.lang.annotation.*;
@@ -248,7 +248,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder aside(String...value) {
@@ -297,7 +297,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder asideFloat(AsideFloat value) {
@@ -326,7 +326,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder footer(String...value) {
@@ -367,7 +367,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder head(String...value) {
@@ -409,7 +409,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder header(String...value) {
@@ -454,7 +454,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder nav(String...value) {
@@ -516,7 +516,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder navlinks(String...value) {
@@ -558,7 +558,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder noResultsMessage(String value) {
@@ -572,7 +572,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <p>
 		 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder nowrap() {
@@ -607,7 +607,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The value to add to this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder script(String...value) {
@@ -645,7 +645,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The value to add to this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder style(String...value) {
@@ -676,7 +676,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The value to add to this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder stylesheet(String...value) {
@@ -719,7 +719,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder template(Class<? extends HtmlDocTemplate> value) {
@@ -774,7 +774,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		@SuppressWarnings("unchecked")

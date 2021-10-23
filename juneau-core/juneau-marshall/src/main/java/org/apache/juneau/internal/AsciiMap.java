@@ -23,7 +23,7 @@ public final class AsciiMap {
 	 *
 	 * @param c The key.
 	 * @param s The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AsciiMap append(char c, String s) {
 		if (c <= 127)

@@ -181,7 +181,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * 	value.replaceAll(<js>"\\\\"</js>, <js>"\\\\\\\\"</js>).replaceAll(<js>"\n"</js>, <js>"\\\\n"</js>).replaceAll(<js>"\t"</js>, <js>"\\\\t"</js>);
 	 * </p>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public FluentStringAssertion<R> javaStrings() {
@@ -203,7 +203,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 *
 	 * @param regex The regular expression to which this string is to be matched.
 	 * @param replacement The string to be substituted for each match.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentStringAssertion<R> replaceAll(String regex, String replacement) {
 		assertArgNotNull("regex", regex);
@@ -216,7 +216,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 *
 	 * @param target The sequence of char values to be replaced.
 	 * @param replacement The replacement sequence of char values.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentStringAssertion<R> replace(String target, String replacement) {
 		assertArgNotNull("target", target);
@@ -227,7 +227,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * URL-decodes the text in this assertion.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentStringAssertion<R> urlDecode() {
 		return apply(StringUtils::urlDecode);
@@ -236,7 +236,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Converts the text to lowercase.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentStringAssertion<R> lc() {
 		return apply(x->x == null ? null : x.toLowerCase());
@@ -245,7 +245,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Converts the text to uppercase.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentStringAssertion<R> uc() {
 		return apply(x->x == null ? null : x.toUpperCase());
@@ -254,7 +254,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Splits the string into lines.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentListAssertion<String,R> lines() {
 		return split("[\r\n]+");
@@ -264,7 +264,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Splits the string into lines using the specified regular expression.
 	 *
 	 * @param regex The delimiting regular expression
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentListAssertion<String,R> split(String regex) {
 		assertArgNotNull("regex", regex);
@@ -274,7 +274,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Returns the length of this string as an integer assertion.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> length() {
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().length(), returns());
@@ -283,7 +283,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Removes any newlines from the string.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentStringAssertion<R> oneLine() {
 		return apply(x->x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*","  "));
@@ -311,7 +311,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @param value
 	 * 	The value to check against.
 	 * 	<br>If multiple values are specified, they are concatenated with newlines.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@Override
@@ -326,7 +326,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text equals the specified value.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@Override
@@ -356,7 +356,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @param lines
 	 * 	The value to check against.
 	 * 	<br>If multiple values are specified, they are concatenated with newlines.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLines(String...lines) throws AssertionError {
@@ -387,7 +387,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @param lines
 	 * 	The value to check against.
 	 * 	<br>If multiple values are specified, they are concatenated with newlines.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSortedLines(String...lines) {
@@ -413,7 +413,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text equals the specified value ignoring case.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isIc(String value) throws AssertionError {
@@ -427,7 +427,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text does not equal the specified value ignoring case.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotIc(String value) throws AssertionError {
@@ -441,7 +441,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text contains all of the specified substrings.
 	 *
 	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R contains(String...values) throws AssertionError {
@@ -457,7 +457,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text doesn't contain any of the specified substrings.
 	 *
 	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotContain(String...values) throws AssertionError {
@@ -472,7 +472,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Asserts that the text is empty.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
@@ -485,7 +485,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Asserts that the text is not null or empty.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() throws AssertionError {
@@ -504,7 +504,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * The <js>"*"</js> meta character can be used to represent zero or more characters..
 	 *
 	 * @param searchPattern The search pattern.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R matches(String searchPattern) throws AssertionError {
@@ -516,7 +516,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text matches the specified regular expression.
 	 *
 	 * @param regex The pattern to test for.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R regex(String regex) throws AssertionError {
@@ -528,7 +528,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 *
 	 * @param regex The pattern to test for.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R regex(String regex, int flags) throws AssertionError {
@@ -544,7 +544,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text matches the specified regular expression pattern.
 	 *
 	 * @param pattern The pattern to test for.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R regex(Pattern pattern) throws AssertionError {
@@ -559,7 +559,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text starts with the specified string.
 	 *
 	 * @param string The string to test for.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R startsWith(String string) {
@@ -574,7 +574,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text ends with the specified string.
 	 *
 	 * @param string The string to test for.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R endsWith(String string) {

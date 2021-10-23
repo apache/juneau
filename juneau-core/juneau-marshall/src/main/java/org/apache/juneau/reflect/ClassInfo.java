@@ -15,7 +15,7 @@ package org.apache.juneau.reflect;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
 

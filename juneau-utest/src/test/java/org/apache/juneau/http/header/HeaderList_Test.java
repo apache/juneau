@@ -468,7 +468,7 @@ public class HeaderList_Test {
 		HeaderIterator i5 = x2.iterator("accept");
 		assertThrown(()->i5.nextHeader()).message().is("Iteration already finished.");
 
-		assertThrown(()->i5.remove()).message().is("Remove is not supported.");
+		assertThrown(()->i5.remove()).message().is("Not supported.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

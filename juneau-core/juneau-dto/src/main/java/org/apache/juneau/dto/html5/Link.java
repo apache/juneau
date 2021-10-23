@@ -51,7 +51,7 @@ public class Link extends HtmlElementVoid {
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link crossorigin(String crossorigin) {
 		attr("crossorigin", crossorigin);
@@ -74,7 +74,7 @@ public class Link extends HtmlElementVoid {
 	 * @param href
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link href(Object href) {
 		attrUri("href", href);
@@ -89,7 +89,7 @@ public class Link extends HtmlElementVoid {
 	 * Language of the linked resource.
 	 *
 	 * @param hreflang The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link hreflang(String hreflang) {
 		attr("hreflang", hreflang);
@@ -103,7 +103,7 @@ public class Link extends HtmlElementVoid {
 	 * Applicable media.
 	 *
 	 * @param media The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link media(String media) {
 		attr("media", media);
@@ -117,7 +117,7 @@ public class Link extends HtmlElementVoid {
 	 * Relationship between the document containing the hyperlink and the destination resource.
 	 *
 	 * @param rel The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link rel(String rel) {
 		attr("rel", rel);
@@ -131,7 +131,7 @@ public class Link extends HtmlElementVoid {
 	 * Sizes of the icons (for rel="icon").
 	 *
 	 * @param sizes The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link sizes(String sizes) {
 		attr("sizes", sizes);
@@ -145,7 +145,7 @@ public class Link extends HtmlElementVoid {
 	 * Hint for the type of the referenced resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Link type(String type) {
 		attr("type", type);

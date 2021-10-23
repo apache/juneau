@@ -46,7 +46,7 @@ public class Map extends HtmlElementContainer {
 	 * Name of image map to reference from the usemap attribute.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Map name(String name) {
 		attr("name", name);

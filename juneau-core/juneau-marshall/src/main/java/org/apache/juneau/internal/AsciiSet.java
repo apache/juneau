@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -59,7 +59,7 @@ public final class AsciiSet {
 		 *
 		 * @param start The start character.
 		 * @param end The end character.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public AsciiSet.Builder range(char start, char end) {
 			for (char c = start; c <= end; c++)
@@ -72,7 +72,7 @@ public final class AsciiSet {
 		 * Shortcut for calling multiple ranges.
 		 *
 		 * @param s Strings of the form "A-Z" where A and Z represent the first and last characters in the range.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public AsciiSet.Builder ranges(String...s) {
 			for (String ss : s) {
@@ -87,7 +87,7 @@ public final class AsciiSet {
 		 * Adds a set of characters to this set.
 		 *
 		 * @param chars The characters to keep in this store.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public AsciiSet.Builder chars(String chars) {
 			for (int i = 0; i < chars.length(); i++) {
@@ -102,7 +102,7 @@ public final class AsciiSet {
 		 * Adds a set of characters to this set.
 		 *
 		 * @param chars The characters to keep in this store.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder chars(char...chars) {
 			for (int i = 0; i < chars.length; i++)

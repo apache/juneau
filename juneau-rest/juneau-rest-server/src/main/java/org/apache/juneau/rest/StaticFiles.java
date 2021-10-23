@@ -102,7 +102,7 @@ public interface StaticFiles extends FileFinder {
 		 * Can be called multiple times to add multiple headers.
 		 *
 		 * @param headers The headers to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder headers(Header...headers) {
@@ -114,7 +114,7 @@ public interface StaticFiles extends FileFinder {
 		 * Prepend the MIME type values to the MIME types registry.
 		 *
 		 * @param mimeTypes A .mime.types formatted string of entries.  See {@link MimetypesFileTypeMap#addMimeTypes(String)}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addMimeTypes(String mimeTypes) {
@@ -126,7 +126,7 @@ public interface StaticFiles extends FileFinder {
 		 * Replaces the MIME types registry used for determining content types.
 		 *
 		 * @param mimeTypes The new MIME types registry.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder mimeTypes(MimetypesFileTypeMap mimeTypes) {

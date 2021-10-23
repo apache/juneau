@@ -48,7 +48,7 @@ public class Input extends HtmlElementVoid {
 	 * Hint for expected file type in file upload controls.
 	 *
 	 * @param accept The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input accept(String accept) {
 		attr("accept", accept);
@@ -62,7 +62,7 @@ public class Input extends HtmlElementVoid {
 	 * Replacement text for use when images are not available.
 	 *
 	 * @param alt The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input alt(String alt) {
 		attr("alt", alt);
@@ -76,7 +76,7 @@ public class Input extends HtmlElementVoid {
 	 * Hint for form auto-fill feature.
 	 *
 	 * @param autocomplete The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input autocomplete(String autocomplete) {
 		attr("autocomplete", autocomplete);
@@ -90,7 +90,7 @@ public class Input extends HtmlElementVoid {
 	 * Automatically focus the form control when the page is loaded.
 	 *
 	 * @param autofocus The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input autofocus(String autofocus) {
 		attr("autofocus", autofocus);
@@ -106,7 +106,7 @@ public class Input extends HtmlElementVoid {
 	 * @param checked
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input checked(Object checked) {
 		attr("checked", deminimize(checked, "checked"));
@@ -120,7 +120,7 @@ public class Input extends HtmlElementVoid {
 	 * Name of form field to use for sending the element's directionality in form submission.
 	 *
 	 * @param dirname The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input dirname(String dirname) {
 		attr("dirname", dirname);
@@ -136,7 +136,7 @@ public class Input extends HtmlElementVoid {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -150,7 +150,7 @@ public class Input extends HtmlElementVoid {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input form(String form) {
 		attr("form", form);
@@ -164,7 +164,7 @@ public class Input extends HtmlElementVoid {
 	 * URL to use for form submission.
 	 *
 	 * @param formaction The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input formaction(String formaction) {
 		attr("formaction", formaction);
@@ -178,7 +178,7 @@ public class Input extends HtmlElementVoid {
 	 * Form data set encoding type to use for form submission.
 	 *
 	 * @param formenctype The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input formenctype(String formenctype) {
 		attr("formenctype", formenctype);
@@ -192,7 +192,7 @@ public class Input extends HtmlElementVoid {
 	 * HTTP method to use for form submission.
 	 *
 	 * @param formmethod The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input formmethod(String formmethod) {
 		attr("formmethod", formmethod);
@@ -207,7 +207,7 @@ public class Input extends HtmlElementVoid {
 	 * Bypass form control validation for form submission.
 	 *
 	 * @param formnovalidate The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input formnovalidate(String formnovalidate) {
 		attr("formnovalidate", formnovalidate);
@@ -221,7 +221,7 @@ public class Input extends HtmlElementVoid {
 	 * Browsing context for form submission.
 	 *
 	 * @param formtarget The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input formtarget(String formtarget) {
 		attr("formtarget", formtarget);
@@ -238,7 +238,7 @@ public class Input extends HtmlElementVoid {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input height(Object height) {
 		attr("height", height);
@@ -251,7 +251,7 @@ public class Input extends HtmlElementVoid {
 	 * Hint for selecting an input modality.
 	 *
 	 * @param inputmode The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input inputmode(String inputmode) {
 		attr("inputmode", inputmode);
@@ -265,7 +265,7 @@ public class Input extends HtmlElementVoid {
 	 * List of auto-complete options.
 	 *
 	 * @param list The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input list(String list) {
 		attr("list", list);
@@ -281,7 +281,7 @@ public class Input extends HtmlElementVoid {
 	 * @param max
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input max(Object max) {
 		attr("max", max);
@@ -294,7 +294,7 @@ public class Input extends HtmlElementVoid {
 	 *
 	 * @param maxlength The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input maxlength(Object maxlength) {
 		attr("maxlength", maxlength);
@@ -310,7 +310,7 @@ public class Input extends HtmlElementVoid {
 	 * @param min
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input min(Object min) {
 		attr("min", min);
@@ -326,7 +326,7 @@ public class Input extends HtmlElementVoid {
 	 * @param minlength
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input minlength(Object minlength) {
 		attr("minlength", minlength);
@@ -342,7 +342,7 @@ public class Input extends HtmlElementVoid {
 	 * @param multiple
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input multiple(Object multiple) {
 		attr("multiple", deminimize(multiple, "multiple"));
@@ -356,7 +356,7 @@ public class Input extends HtmlElementVoid {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input name(String name) {
 		attr("name", name);
@@ -370,7 +370,7 @@ public class Input extends HtmlElementVoid {
 	 * Pattern to be matched by the form control's value.
 	 *
 	 * @param pattern The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input pattern(String pattern) {
 		attr("pattern", pattern);
@@ -384,7 +384,7 @@ public class Input extends HtmlElementVoid {
 	 * User-visible label to be placed within the form control.
 	 *
 	 * @param placeholder The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input placeholder(String placeholder) {
 		attr("placeholder", placeholder);
@@ -400,7 +400,7 @@ public class Input extends HtmlElementVoid {
 	 * @param readonly
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input readonly(Object readonly) {
 		attr("readonly", readonly);
@@ -415,7 +415,7 @@ public class Input extends HtmlElementVoid {
 	 * Whether to allow the value to be edited by the user.
 	 *
 	 * @param readonly If <jk>true</jk>, adds <c>readonly="readonly"</c>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input readonly(boolean readonly) {
 		if (readonly)
@@ -432,7 +432,7 @@ public class Input extends HtmlElementVoid {
 	 * @param required
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input required(Object required) {
 		attr("required", required);
@@ -448,7 +448,7 @@ public class Input extends HtmlElementVoid {
 	 * @param size
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input size(Object size) {
 		attr("size", size);
@@ -464,7 +464,7 @@ public class Input extends HtmlElementVoid {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input src(Object src) {
 		attr("src", src);
@@ -478,7 +478,7 @@ public class Input extends HtmlElementVoid {
 	 * Granularity to be matched by the form control's value.
 	 *
 	 * @param step The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input step(String step) {
 		attr("step", step);
@@ -492,7 +492,7 @@ public class Input extends HtmlElementVoid {
 	 * Type of form control.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input type(String type) {
 		attr("type", type);
@@ -508,7 +508,7 @@ public class Input extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input value(Object value) {
 		attr("value", value);
@@ -524,7 +524,7 @@ public class Input extends HtmlElementVoid {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Input width(Object width) {
 		attr("width", width);

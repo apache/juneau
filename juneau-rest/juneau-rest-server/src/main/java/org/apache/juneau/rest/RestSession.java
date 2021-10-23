@@ -171,7 +171,7 @@ public class RestSession extends ContextSession {
 		 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
 		 *
 		 * @param value The variables to add to this call.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder pathVars(Map<String,String> value) {
@@ -233,7 +233,7 @@ public class RestSession extends ContextSession {
 	 * Sets the logger to use when logging this call.
 	 *
 	 * @param value The new value for this setting.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestSession logger(RestLogger value) {
 		logger = beanStore.add(RestLogger.class, value);
@@ -244,7 +244,7 @@ public class RestSession extends ContextSession {
 	 * Enables or disabled debug mode on this call.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Occurs if request body could not be cached into memory.
 	 */
 	public RestSession debug(boolean value) throws IOException {
@@ -262,7 +262,7 @@ public class RestSession extends ContextSession {
 	 * Sets the HTTP status on this call.
 	 *
 	 * @param value The status code.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestSession status(int value) {
 		res.setStatus(value);
@@ -273,7 +273,7 @@ public class RestSession extends ContextSession {
 	 * Sets the HTTP status on this call.
 	 *
 	 * @param value The status code.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("deprecation")
 	public RestSession status(StatusLine value) {
@@ -286,7 +286,7 @@ public class RestSession extends ContextSession {
 	 * Identifies that an exception occurred during this call.
 	 *
 	 * @param value The thrown exception.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestSession exception(Throwable value) {
 		req.setAttribute("Exception", value);
@@ -298,7 +298,7 @@ public class RestSession extends ContextSession {
 	 * Sets the URL path pattern match on this call.
 	 *
 	 * @param value The match pattern.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestSession urlPathMatch(UrlPathMatch value) {
 		urlPathMatch = beanStore.add(UrlPathMatch.class, value);
@@ -372,7 +372,7 @@ public class RestSession extends ContextSession {
 	/**
 	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestSession finish() {
 		try {

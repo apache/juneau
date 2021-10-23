@@ -50,7 +50,7 @@ public class RequestAttributes {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes addDefault(List<NamedAttribute> pairs) {
 		for (NamedAttribute p : pairs)
@@ -67,7 +67,7 @@ public class RequestAttributes {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttributeList pairs) {
 		for (NamedAttribute p : pairs.entries)
@@ -84,7 +84,7 @@ public class RequestAttributes {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttribute...pairs) {
 		return addDefault(Arrays.asList(pairs));
@@ -150,7 +150,7 @@ public class RequestAttributes {
 	 * @param value
 	 * 	The attribute value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes set(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -162,7 +162,7 @@ public class RequestAttributes {
 	 * Sets request attributes.
 	 *
 	 * @param attributes The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes set(NamedAttribute...attributes) {
 		assertArgNotNull("attributes", attributes);
@@ -175,7 +175,7 @@ public class RequestAttributes {
 	 * Remove request attributes.
 	 *
 	 * @param name The attribute names.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes remove(String...name) {
 		assertArgNotNull("name", name);
@@ -189,7 +189,7 @@ public class RequestAttributes {
 	 * Remove request attributes.
 	 *
 	 * @param attributes The attributes to remove.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestAttributes remove(NamedAttribute...attributes) {
 		for (NamedAttribute p : attributes)

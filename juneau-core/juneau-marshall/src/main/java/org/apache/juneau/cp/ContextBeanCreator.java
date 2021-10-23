@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;
@@ -139,7 +139,7 @@ public class ContextBeanCreator<T> {
 	 * Applies the specified annotations to all applicable serializer builders in this group.
 	 *
 	 * @param work The annotations to apply.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ContextBeanCreator<T> apply(AnnotationWorkList work) {
 		if (builder != null)

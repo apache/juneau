@@ -102,7 +102,7 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Source generator(Generator value) {
 		setGenerator(value);
@@ -156,7 +156,7 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Source icon(Icon value) {
 		setIcon(value);
@@ -210,7 +210,7 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Source logo(Logo value) {
 		setLogo(value);
@@ -264,7 +264,7 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Source subtitle(Text value) {
 		setSubtitle(value);
@@ -280,7 +280,7 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Source subtitle(String value) {
 		setSubtitle(new Text(value));

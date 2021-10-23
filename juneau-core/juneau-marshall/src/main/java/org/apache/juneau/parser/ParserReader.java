@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 
@@ -255,7 +255,7 @@ public class ParserReader extends Reader implements Positionable {
 	/**
 	 * Pushes the last read character back into the stream.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ParserReader unread() throws IOException {
@@ -330,7 +330,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * <p>
 	 * Useful for removing escape characters from sequences.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final ParserReader delete() {
 		return delete(1);
@@ -341,7 +341,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * Useful for removing escape characters from sequences.
 	 *
 	 * @param count The number of characters to delete.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final ParserReader delete(int count) {
 		for (int i = 0; i < count; i++)
@@ -359,7 +359,7 @@ public class ParserReader extends Reader implements Positionable {
 	 *
 	 * @param c The new character.
 	 * @param offset The offset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final ParserReader replace(int c, int offset) throws IOException {
@@ -386,7 +386,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * Replace the last read character in the buffer with the specified character.
 	 *
 	 * @param c The new character.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final ParserReader replace(char c) throws IOException {

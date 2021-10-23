@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.collections.OMap.*;
 import static java.util.Optional.*;
@@ -140,7 +140,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is the system JVM setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder fileCharset(Charset value) {
@@ -171,7 +171,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <c>100</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder maxIndent(int value) {
@@ -209,7 +209,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>'"'</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder quoteChar(char value) {
@@ -230,7 +230,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder quoteCharOverride(char value) {
@@ -265,7 +265,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sq() {
@@ -296,7 +296,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is the system JVM setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder streamCharset(Charset value) {
@@ -327,7 +327,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder useWhitespace() {
@@ -369,7 +369,7 @@ public abstract class WriterSerializer extends Serializer {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Serializer.Builder ws() {
@@ -1016,7 +1016,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Convenience method for serializing an object and sending it to STDOUT.
 	 *
 	 * @param o The object to serialize.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final WriterSerializer println(Object o) {
 		System.out.println(toString(o));  // NOT DEBUG

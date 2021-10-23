@@ -59,7 +59,7 @@ public class Option extends HtmlElementText {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Option disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -73,7 +73,7 @@ public class Option extends HtmlElementText {
 	 * User-visible label.
 	 *
 	 * @param label The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Option label(String label) {
 		attr("label", label);
@@ -89,7 +89,7 @@ public class Option extends HtmlElementText {
 	 * @param selected
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Option selected(Object selected) {
 		attr("selected", deminimize(selected, "selected"));
@@ -105,7 +105,7 @@ public class Option extends HtmlElementText {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Option value(Object value) {
 		attr("value", value);

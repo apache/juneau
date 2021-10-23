@@ -13,7 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -316,7 +316,7 @@ public class HeaderList {
 		 * <p>
 		 * Uses {@link VarResolver#DEFAULT} to resolve variables.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder resolving() {
 			return resolving(VarResolver.DEFAULT);
@@ -339,7 +339,7 @@ public class HeaderList {
 		 * </ul>
 		 *
 		 * @param varResolver The variable resolver to use for resolving variables.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder resolving(VarResolver varResolver) {
 			this.varResolver = varResolver;
@@ -352,7 +352,7 @@ public class HeaderList {
 		 * <p>
 		 * The default behavior is case-insensitive.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder caseSensitive() {
 			caseSensitive = true;
@@ -362,7 +362,7 @@ public class HeaderList {
 		/**
 		 * Removes any headers already in this builder.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder clear() {
@@ -374,7 +374,7 @@ public class HeaderList {
 		 * Adds the specified headers to the end of the headers in this builder.
 		 *
 		 * @param value The header to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(HeaderList value) {
@@ -388,7 +388,7 @@ public class HeaderList {
 		 * Adds the specified header to the end of the headers in this builder.
 		 *
 		 * @param value The header to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(Header value) {
@@ -405,7 +405,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder append(String name, Object value) {
 			return append(createHeader(name, value));
@@ -422,7 +422,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder append(String name, Supplier<?> value) {
 			return append(createHeader(name, value));
@@ -432,7 +432,7 @@ public class HeaderList {
 		 * Adds the specified headers to the end of the headers in this builder.
 		 *
 		 * @param values The headers to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(Header...values) {
@@ -446,7 +446,7 @@ public class HeaderList {
 		 * Adds the specified headers to the end of the headers in this builder.
 		 *
 		 * @param values The headers to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(List<Header> values) {
@@ -460,7 +460,7 @@ public class HeaderList {
 		 * Adds the specified header to the beginning of the headers in this builder.
 		 *
 		 * @param value The header to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(HeaderList value) {
@@ -473,7 +473,7 @@ public class HeaderList {
 		 * Adds the specified header to the beginning of the headers in this builder.
 		 *
 		 * @param value The header to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(Header value) {
@@ -490,7 +490,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder prepend(String name, Object value) {
 			return prepend(createHeader(name, value));
@@ -507,7 +507,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder prepend(String name, Supplier<?> value) {
 			return prepend(createHeader(name, value));
@@ -517,7 +517,7 @@ public class HeaderList {
 		 * Adds the specified headers to the beginning of the headers in this builder.
 		 *
 		 * @param values The headers to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(Header...values) {
@@ -530,7 +530,7 @@ public class HeaderList {
 		 * Adds the specified headers to the beginning of the headers in this builder.
 		 *
 		 * @param values The headers to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(List<Header> values) {
@@ -543,7 +543,7 @@ public class HeaderList {
 		 * Removes the specified header from this builder.
 		 *
 		 * @param value The header to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(HeaderList value) {
@@ -557,7 +557,7 @@ public class HeaderList {
 		 * Removes the specified header from this builder.
 		 *
 		 * @param value The header to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(Header value) {
@@ -570,7 +570,7 @@ public class HeaderList {
 		 * Removes the specified headers from this builder.
 		 *
 		 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(Header...values) {
@@ -583,7 +583,7 @@ public class HeaderList {
 		 * Removes the specified headers from this builder.
 		 *
 		 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(List<Header> values) {
@@ -596,7 +596,7 @@ public class HeaderList {
 		 * Removes the header with the specified name from this builder.
 		 *
 		 * @param name The header name.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(String name) {
@@ -610,7 +610,7 @@ public class HeaderList {
 		 * Removes the header with the specified name from this builder.
 		 *
 		 * @param names The header name.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(String...names) {
@@ -627,7 +627,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder set(Header value) {
@@ -660,7 +660,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder set(Header...values) {
@@ -674,7 +674,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder set(String name, Object value) {
 			return set(createHeader(name, value));
@@ -685,7 +685,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder set(String name, Supplier<?> value) {
 			return set(createHeader(name, value));
@@ -698,7 +698,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder set(List<Header> values) {
@@ -735,7 +735,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder set(HeaderList values) {
 			if (values != null)
@@ -750,7 +750,7 @@ public class HeaderList {
 		 * If no header with the same name is found, the given header is added to the end of the list.
 		 *
 		 * @param value The default header to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder setDefault(Header value) {
@@ -785,7 +785,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param values The default headers to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder setDefault(Header...values) {
@@ -799,7 +799,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder setDefault(String name, Object value) {
 			return setDefault(createHeader(name, value));
@@ -810,7 +810,7 @@ public class HeaderList {
 		 *
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder setDefault(String name, Supplier<?> value) {
 			return setDefault(createHeader(name, value));
@@ -823,7 +823,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param values The default headers to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder setDefault(List<Header> values) {
@@ -861,7 +861,7 @@ public class HeaderList {
 		 * If no header with the same name is found the given header is added to the end of the list.
 		 *
 		 * @param values The default headers to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder setDefault(HeaderList values) {
 			if (values != null)
@@ -882,7 +882,7 @@ public class HeaderList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(Header)}.
 		 * 	</ul>
 		 * @param value The header to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, Header value) {
@@ -910,7 +910,7 @@ public class HeaderList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(Header[])}.
 		 * 	</ul>
 		 * @param values The headers to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, Header...values) {
@@ -939,7 +939,7 @@ public class HeaderList {
 		 * 	</ul>
 		 * @param name The header name.
 		 * @param value The header value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(ListOperation flag, String name, Object value) {
 			if (flag == ListOperation.APPEND)
@@ -967,7 +967,7 @@ public class HeaderList {
 		 * 	</ul>
 		 * @param name The header name.
 		 * @param value The header value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(ListOperation flag, String name, Supplier<?> value) {
 			if (flag == ListOperation.APPEND)
@@ -994,7 +994,7 @@ public class HeaderList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Supplier)}.
 		 * 	</ul>
 		 * @param values The headers to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, List<Header> values) {
@@ -1022,7 +1022,7 @@ public class HeaderList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(HeaderList)}.
 		 * 	</ul>
 		 * @param values The headers to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(ListOperation flag, HeaderList values) {
 			if (flag == ListOperation.APPEND)
@@ -1044,7 +1044,7 @@ public class HeaderList {
 		 * creation or copy of lists/arrays.
 		 *
 		 * @param c The consumer.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEach(Consumer<Header> c) {
 			for (int i = 0, j = entries.size(); i < j; i++)
@@ -1061,7 +1061,7 @@ public class HeaderList {
 		 *
 		 * @param name The part name.
 		 * @param c The consumer.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEach(String name, Consumer<Header> c) {
 			for (int i = 0, j = entries.size(); i < j; i++) {
@@ -1528,7 +1528,7 @@ public class HeaderList {
 	 * creation or copy of lists/arrays.
 	 *
 	 * @param c The consumer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderList forEach(Consumer<Header> c) {
 		for (int i = 0; i < entries.length; i++)
@@ -1545,7 +1545,7 @@ public class HeaderList {
 	 *
 	 * @param name The header name.
 	 * @param c The consumer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HeaderList forEach(String name, Consumer<Header> c) {
 		for (int i = 0; i < entries.length; i++)
@@ -1560,7 +1560,7 @@ public class HeaderList {
 	 * <p>
 	 * This does not involve a copy of the underlying array of <c>Header</c> objects so should perform well.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Stream<Header> stream() {
 		return Arrays.stream(entries);
@@ -1573,7 +1573,7 @@ public class HeaderList {
 	 * This does not involve a copy of the underlying array of <c>Header</c> objects so should perform well.
 	 *
 	 * @param name The header name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Stream<Header> stream(String name) {
 		return Arrays.stream(entries).filter(x->eq(name, x.getName()));

@@ -168,7 +168,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 	String[] <jv>foo</jv> = <jv>parser</jv>.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder decoding() {
@@ -207,7 +207,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(in, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder validateEnd() {

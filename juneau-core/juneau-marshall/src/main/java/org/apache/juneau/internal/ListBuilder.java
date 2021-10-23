@@ -13,7 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -84,7 +84,7 @@ public class ListBuilder<E> {
 	 * <p>
 	 * Otherwise {@link #build()} will never return <jk>null</jk>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> sparse() {
 		this.sparse = true;
@@ -94,7 +94,7 @@ public class ListBuilder<E> {
 	/**
 	 * When specified, {@link #build()} will return an unmodifiable list.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> unmodifiable() {
 		this.unmodifiable = true;
@@ -104,7 +104,7 @@ public class ListBuilder<E> {
 	/**
 	 * Forces the existing list to be copied instead of appended to.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> copy() {
 		if (list != null)
@@ -115,7 +115,7 @@ public class ListBuilder<E> {
 	/**
 	 * Sorts the contents of the list.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public ListBuilder<E> sorted() {
@@ -126,7 +126,7 @@ public class ListBuilder<E> {
 	 * Sorts the contents of the list using the specified comparator.
 	 *
 	 * @param comparator The comparator to use for sorting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> sorted(Comparator<E> comparator) {
 		this.comparator = comparator;
@@ -140,7 +140,7 @@ public class ListBuilder<E> {
 	 * This is a no-op if the value is <jk>null</jk>.
 	 *
 	 * @param value The collection to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> addAll(Collection<E> value) {
 		if (value != null) {
@@ -156,7 +156,7 @@ public class ListBuilder<E> {
 	 * Adds a single value to this list.
 	 *
 	 * @param value The value to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> add(E value) {
 		if (list == null)
@@ -169,7 +169,7 @@ public class ListBuilder<E> {
 	 * Adds multiple values to this list.
 	 *
 	 * @param values The values to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public ListBuilder<E> add(E...values) {
@@ -182,7 +182,7 @@ public class ListBuilder<E> {
 	 * Adds entries to this list via JSON array strings.
 	 *
 	 * @param values The JSON array strings to parse and add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ListBuilder<E> addJson(String...values) {
 		return addAny((Object[])values);
@@ -200,7 +200,7 @@ public class ListBuilder<E> {
 	 * </ul>
 	 *
 	 * @param values The values to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public ListBuilder<E> addAny(Object...values) {

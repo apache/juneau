@@ -13,7 +13,7 @@
 package org.apache.juneau.dto;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;
@@ -117,7 +117,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LinkString name(String value) {
 		setName(value);
@@ -175,7 +175,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LinkString uri(java.net.URI value) {
 		setUri(value);
@@ -191,7 +191,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LinkString uri(String value) {
 		uri(value, new Object[0]);
@@ -208,7 +208,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @param args {@link MessageFormat}-style arguments in the URL.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LinkString uri(String value, Object...args) {
 		for (int i = 0; i < args.length; i++)

@@ -47,7 +47,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * Sets the children for this container.
 	 *
 	 * @param children The new children for this container.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Beanp("c")
 	public HtmlElementContainer setChildren(LinkedList<Object> children) {
@@ -113,7 +113,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * Adds one or more child elements to this element.
 	 *
 	 * @param children The children to add as child elements.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HtmlElement children(Object...children) {
 		if (children.length > 0) {
@@ -129,7 +129,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * Adds a child element to this element.
 	 *
 	 * @param child The child to add as a child element.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HtmlElement child(Object child) {
 		if (this.children == null)

@@ -46,7 +46,7 @@ public class Output extends HtmlElementMixed {
 	 * Specifies controls from which the output was calculated.
 	 *
 	 * @param _for The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Output _for(String _for) {
 		attr("for", _for);
@@ -60,7 +60,7 @@ public class Output extends HtmlElementMixed {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Output form(String form) {
 		attr("form", form);
@@ -74,7 +74,7 @@ public class Output extends HtmlElementMixed {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Output name(String name) {
 		attr("name", name);

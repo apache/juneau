@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.time.*;
 import java.util.*;

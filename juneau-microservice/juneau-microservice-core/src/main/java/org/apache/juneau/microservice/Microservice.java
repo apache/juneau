@@ -13,7 +13,7 @@
 package org.apache.juneau.microservice;
 
 import static org.apache.juneau.internal.ClassUtils.className;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -202,7 +202,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param args
 		 * 	The command-line arguments passed into the Java command as a pre-parsed {@link Args} object.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder args(Args args) {
 			this.args = args;
@@ -217,7 +217,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param args
 		 * 	The command-line arguments passed into the Java command as the raw command-line arguments.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder args(String...args) {
 			this.args = new Args(args);
@@ -254,7 +254,7 @@ public class Microservice implements ConfigEventListener {
 		 * 		<li>{@link String} - Path to file containing the raw contents of the manifest.
 		 * 		<li>{@link Class} - Finds and loads the manifest file of the jar file that the specified class is contained within.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IOException Thrown by underlying stream.
 		 */
 		public Builder manifest(Object value) throws IOException {
@@ -287,7 +287,7 @@ public class Microservice implements ConfigEventListener {
 		 * Calling this method overrides the default logging mechanism controlled by the {@link #logConfig(LogConfig)} method.
 		 *
 		 * @param logger The logger to use for logging microservice messages.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder logger(Logger logger) {
 			this.logger = logger;
@@ -304,7 +304,7 @@ public class Microservice implements ConfigEventListener {
 		 * This method is ignored if {@link #logger(Logger)} is used to set the microservice logger.
 		 *
 		 * @param logConfig The log configuration.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder logConfig(LogConfig logConfig) {
 			this.logConfig = logConfig;
@@ -318,7 +318,7 @@ public class Microservice implements ConfigEventListener {
 		 * Calling this method overrides the default configuration controlled by the {@link #configName(String)} and {@link #configStore(ConfigStore)} methods.
 		 *
 		 * @param config The configuration.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder config(Config config) {
 			this.config = config;
@@ -352,7 +352,7 @@ public class Microservice implements ConfigEventListener {
 		 * If no configuration file is found, and empty in-memory configuration is used.
 		 *
 		 * @param configName The configuration name.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder configName(String configName) {
 			this.configName = configName;
@@ -366,7 +366,7 @@ public class Microservice implements ConfigEventListener {
 		 * By default, we use a {@link ConfigFileStore} store for configuration files.
 		 *
 		 * @param configStore The configuration name.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder configStore(ConfigStore configStore) {
 			this.configStore = configStore;
@@ -381,7 +381,7 @@ public class Microservice implements ConfigEventListener {
 		 * If not specified in the configuration, defaults to <jk>false</jk>.
 		 *
 		 * @param consoleEnabled <jk>true</jk> if the Java console is enabled for this microservice.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder consoleEnabled(boolean consoleEnabled) {
 			this.consoleEnabled = consoleEnabled;
@@ -401,7 +401,7 @@ public class Microservice implements ConfigEventListener {
 		 * This method can only be used on console commands with no-arg constructors.
 		 *
 		 * @param consoleCommands The list of console commands to append to the list of available commands.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
 		@SuppressWarnings("unchecked")
@@ -425,7 +425,7 @@ public class Microservice implements ConfigEventListener {
 		 * This list augments the commands defined via the <js>"Console/commands"</js> configuration setting.
 		 *
 		 * @param consoleCommands The list of console commands to append to the list of available commands.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
 			Collections.addAll(this.consoleCommands, consoleCommands);
@@ -444,7 +444,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param consoleReader The console input.
 		 * @param consoleWriter The console output.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder console(Scanner consoleReader, PrintWriter consoleWriter) {
 			this.consoleReader = consoleReader;
@@ -460,7 +460,7 @@ public class Microservice implements ConfigEventListener {
 		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
 		 *
 		 * @param vars The set of variables to append to the var resolver builder.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder vars(Class<? extends Var>...vars) {
@@ -478,7 +478,7 @@ public class Microservice implements ConfigEventListener {
 		 * @param c The bean type.
 		 * @param value The bean.
 		 * @param <T> The bean type.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public <T> Builder varBean(Class<T> c, T value) {
 			varResolver.bean(c, value);
@@ -489,7 +489,7 @@ public class Microservice implements ConfigEventListener {
 		 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
 		 *
 		 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder workingDir(File workingDir) {
 			this.workingDir = workingDir;
@@ -500,7 +500,7 @@ public class Microservice implements ConfigEventListener {
 		 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
 		 *
 		 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder workingDir(String workingDir) {
 			this.workingDir = new File(workingDir);
@@ -511,7 +511,7 @@ public class Microservice implements ConfigEventListener {
 		 * Registers an event listener for this microservice.
 		 *
 		 * @param listener An event listener for this microservice.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder listener(MicroserviceListener listener) {
 			this.listener = listener;
@@ -743,7 +743,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * It will initialize (or reinitialize) the console commands, system properties, and logger.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Couldn't read a file.
 	 */
@@ -814,7 +814,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Overridden methods MUST call this method FIRST so that the {@link MicroserviceListener#onStart(Microservice)} method is called.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws Exception Error occurred.
 	 */
 	public synchronized Microservice start() throws Exception {
@@ -846,7 +846,7 @@ public class Microservice implements ConfigEventListener {
 	/**
 	 * Starts the console thread for this microservice.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
 	public synchronized Microservice startConsole() throws Exception {
@@ -858,7 +858,7 @@ public class Microservice implements ConfigEventListener {
 	/**
 	 * Stops the console thread for this microservice.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
 	public synchronized Microservice stopConsole() throws Exception {
@@ -1086,7 +1086,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Default implementation is a no-op.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
 	public Microservice join() throws Exception {
@@ -1099,7 +1099,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Overridden methods MUST call this method LAST so that the {@link MicroserviceListener#onStop(Microservice)} method is called.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws Exception Error occurred
 	 */
 	public Microservice stop() throws Exception {

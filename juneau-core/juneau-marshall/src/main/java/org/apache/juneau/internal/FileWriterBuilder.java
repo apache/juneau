@@ -57,7 +57,7 @@ public final class FileWriterBuilder {
 	 * Sets the file being written to.
 	 *
 	 * @param file The file being written to.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileWriterBuilder file(File file) {
 		this.file = file;
@@ -68,7 +68,7 @@ public final class FileWriterBuilder {
 	 * Sets the path of the file being written to.
 	 *
 	 * @param path The path of the file being written to.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileWriterBuilder file(String path) {
 		this.file = new File(path);
@@ -81,7 +81,7 @@ public final class FileWriterBuilder {
 	 * @param cs
 	 * 	The character encoding.
 	 * 	The default is {@link Charset#defaultCharset()}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileWriterBuilder charset(Charset cs) {
 		this.cs = cs;
@@ -94,7 +94,7 @@ public final class FileWriterBuilder {
 	 * @param cs
 	 * 	The character encoding.
 	 * 	The default is {@link Charset#defaultCharset()}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileWriterBuilder charset(String cs) {
 		this.cs = Charset.forName(cs);
@@ -104,7 +104,7 @@ public final class FileWriterBuilder {
 	/**
 	 * Sets the append mode on the writer to <jk>true</jk>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileWriterBuilder append() {
 		this.append = true;
@@ -114,7 +114,7 @@ public final class FileWriterBuilder {
 	/**
 	 * Sets the buffer mode on the writer to <jk>true</jk>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileWriterBuilder buffered() {
 		this.buffered = true;

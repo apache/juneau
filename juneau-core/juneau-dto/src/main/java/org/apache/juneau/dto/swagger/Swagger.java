@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -220,7 +220,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>The value MUST start with a leading slash (/).
 	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger basePath(String value) {
 		setBasePath(value);
@@ -268,7 +268,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addConsumes(Collection<MediaType> values) {
 		consumes = setBuilder(consumes).sparse().addAll(values).build();
@@ -295,7 +295,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to set on this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger consumes(Collection<MediaType> value) {
 		setConsumes(value);
@@ -310,7 +310,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to set on this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger consumes(MediaType...value) {
 		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
@@ -326,7 +326,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The values to set on this property.
 	 * 	<br>Strings can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger consumes(String...value) {
 		setConsumes(setBuilder(MediaType.class).sparse().addJson(value).build());
@@ -372,7 +372,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addDefinitions(Map<String,OMap> values) {
 		definitions = mapBuilder(definitions).sparse().addAll(values).build();
@@ -387,7 +387,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param name A definition name.
 	 * @param schema The schema that the name defines.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger definition(String name, OMap schema) {
 		definitions = mapBuilder(definitions).sparse().add(name, schema).build();
@@ -414,7 +414,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger definitions(Map<String,OMap> value) {
 		setDefinitions(value);
@@ -429,7 +429,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The value to set on this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger definitions(String json) {
 		setDefinitions(mapBuilder(String.class,OMap.class).sparse().addJson(json).build());
@@ -486,7 +486,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger externalDocs(ExternalDocumentation value) {
 		setExternalDocs(value);
@@ -506,7 +506,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The new value for this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger externalDocs(String json) {
 		setExternalDocs(toType(json, ExternalDocumentation.class));
@@ -572,7 +572,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
 	 * 	<br>The host does not support {@doc ExtSwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger host(String value) {
 		setHost(value);
@@ -630,7 +630,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger info(Info value) {
 		setInfo(value);
@@ -651,7 +651,7 @@ public class Swagger extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger info(String json) {
 		setInfo(toType(json, Info.class));
@@ -697,7 +697,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addParameters(Map<String,ParameterInfo> values) {
 		parameters = mapBuilder(parameters).sparse().addAll(values).build();
@@ -712,7 +712,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param name The parameter name.
 	 * @param parameter The parameter definition.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger parameter(String name, ParameterInfo parameter) {
 		parameters = mapBuilder(parameters).sparse().add(name, parameter).build();
@@ -736,7 +736,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger parameters(Map<String,ParameterInfo> value) {
 		setParameters(value);
@@ -751,7 +751,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The value to set on this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger parameters(String json) {
 		setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addJson(json).build());
@@ -797,7 +797,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addPaths(Map<String,OperationMap> values) {
 		paths = mapBuilder(paths).sparse().sorted(PATH_COMPARATOR).addAll(values).build();
@@ -813,7 +813,7 @@ public class Swagger extends SwaggerElement {
 	 * @param path The path template.
 	 * @param methodName The HTTP method name.
 	 * @param operation The operation that describes the path.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger path(String path, String methodName, Operation operation) {
 		if (paths == null)
@@ -847,7 +847,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger paths(Map<String,OperationMap> value) {
 		setPaths(value);
@@ -862,7 +862,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The values to set on this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger paths(String json) {
 		setPaths(mapBuilder(String.class,OperationMap.class).sparse().sorted(PATH_COMPARATOR).addJson(json).build());
@@ -910,7 +910,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addProduces(Collection<MediaType> values) {
 		produces = setBuilder(produces).sparse().addAll(values).build();
@@ -937,7 +937,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger produces(Collection<MediaType> value) {
 		setProduces(value);
@@ -952,7 +952,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger produces(MediaType...value) {
 		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
@@ -968,7 +968,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger produces(String...value) {
 		setProduces(setBuilder(MediaType.class).sparse().addJson(value).build());
@@ -1014,7 +1014,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addResponses(Map<String,ResponseInfo> values) {
 		responses = mapBuilder(responses).sparse().addAll(values).build();
@@ -1029,7 +1029,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param name The response name.
 	 * @param response The response definition.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger response(String name, ResponseInfo response) {
 		responses = mapBuilder(responses).sparse().add(name, response).build();
@@ -1056,7 +1056,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger responses(Map<String,ResponseInfo> value) {
 		setResponses(value);
@@ -1071,7 +1071,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The values to set on this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger responses(String json) {
 		setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addJson(json).build());
@@ -1131,7 +1131,7 @@ public class Swagger extends SwaggerElement {
 	 * 		<li><js>"wss"</js>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addSchemes(Collection<String> values) {
 		schemes = setBuilder(schemes).sparse().addAll(values).build();
@@ -1158,7 +1158,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to set on this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger schemes(Collection<String> value) {
 		setSchemes(value);
@@ -1174,7 +1174,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger schemes(String...value) {
 		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
@@ -1220,7 +1220,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
 		security = listBuilder(security).sparse().addAll(values).build();
@@ -1236,7 +1236,7 @@ public class Swagger extends SwaggerElement {
 	 * @param scheme The security scheme that applies to this operation
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger security(String scheme, String...alternatives) {
 		Map<String,List<String>> m = new LinkedHashMap<>();
@@ -1264,7 +1264,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger security(Collection<Map<String,List<String>>> value) {
 		setSecurity(value);
@@ -1279,7 +1279,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The value to set on this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger security(String json) {
@@ -1326,7 +1326,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addSecurityDefinitions(Map<String,SecurityScheme> values) {
 		securityDefinitions = mapBuilder(securityDefinitions).sparse().addAll(values).build();
@@ -1341,7 +1341,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param name A security name.
 	 * @param securityScheme A security schema.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger securityDefinition(String name, SecurityScheme securityScheme) {
 		securityDefinitions = mapBuilder(securityDefinitions).sparse().add(name, securityScheme).build();
@@ -1368,7 +1368,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger securityDefinitions(Map<String,SecurityScheme> value) {
 		setSecurityDefinitions(value);
@@ -1383,7 +1383,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The value to set on this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger securityDefinitions(String json) {
 		setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addJson(json).build());
@@ -1441,7 +1441,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger swagger(String value) {
 		setSwagger(value);
@@ -1495,7 +1495,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger addTags(Collection<Tag> values) {
 		tags = setBuilder(tags).sparse().addAll(values).build();
@@ -1522,7 +1522,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger tags(Collection<Tag> value) {
 		setTags(value);
@@ -1537,7 +1537,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The new value for this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Swagger tags(String json) {
 		setTags(setBuilder(Tag.class).sparse().addJson(json).build());

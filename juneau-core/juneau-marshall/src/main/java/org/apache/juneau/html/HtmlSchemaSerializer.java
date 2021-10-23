@@ -202,7 +202,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * @param values
 		 * 	The values to add to this setting.
 		 * 	<br>The default is an empty string.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addDescriptionsTo(TypeCategory...values) {
@@ -230,7 +230,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * @param values
 		 * 	The values to add to this setting.
 		 * 	<br>The default is an empty string.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addExamplesTo(TypeCategory...values) {
@@ -248,7 +248,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowNestedDescriptions() {
@@ -266,7 +266,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowNestedExamples() {
@@ -291,7 +291,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
@@ -315,7 +315,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * 	The class to define a default schema for.
 		 * @param schema
 		 * 	The schema.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultSchema(Class<?> c, OMap schema) {
@@ -334,7 +334,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 * 	}
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder useBeanDefs() {

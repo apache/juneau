@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -78,7 +78,7 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 	 * Sets the serializer on this entity bean.
 	 *
 	 * @param value The entity serializer, can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public SerializedEntityBuilder<T> serializer(Serializer value) {
@@ -93,7 +93,7 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 	 * Used to provide instructions to the serializer on how to serialize this object.
 	 *
 	 * @param value The entity schema, can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public SerializedEntityBuilder<T> schema(HttpPartSchema value) {

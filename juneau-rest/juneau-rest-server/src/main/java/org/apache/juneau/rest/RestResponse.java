@@ -176,7 +176,7 @@ public final class RestResponse {
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setOutput(Object output) {
 		this.output = of(ofNullable(output));
@@ -197,7 +197,7 @@ public final class RestResponse {
 	 *
 	 * @param name The property name.
 	 * @param value The property value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse attr(String name, Object value) {
 		request.setAttribute(name, value);
@@ -238,7 +238,7 @@ public final class RestResponse {
 	 * Sets the output to a plain-text message regardless of the content type.
 	 *
 	 * @param text The output text to send.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public RestResponse sendPlainText(String text) throws IOException {
@@ -259,7 +259,7 @@ public final class RestResponse {
 	 * It does not set the response's character encoding if it is called after getWriter has been called or after the response has been committed.
 	 *
 	 * @param value A string specifying the MIME type of the content.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setContentType(String value) {
 		inner.setContentType(value);
@@ -415,7 +415,7 @@ public final class RestResponse {
 	 * This method has no effect if it is called after <c>getWriter</c> has been called or after the response has been committed.
 	 *
 	 * @param value The character encoding value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setCharacterEncoding(String value) {
 		inner.setCharacterEncoding(value);
@@ -541,7 +541,7 @@ public final class RestResponse {
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws SchemaValidationException Header failed schema validation.
 	 * @throws SerializeException Header could not be serialized.
 	 */
@@ -556,7 +556,7 @@ public final class RestResponse {
 	 * Note that this bypasses the part serializer and set the header value directly.
 	 *
 	 * @param pair The header to set.  Nulls are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse header(NameValuePair pair) {
 		if (pair != null)
@@ -575,7 +575,7 @@ public final class RestResponse {
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws SchemaValidationException Header failed schema validation.
 	 * @throws SerializeException Header could not be serialized.
 	 */
@@ -595,7 +595,7 @@ public final class RestResponse {
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws SchemaValidationException Header failed schema validation.
 	 * @throws SerializeException Header could not be serialized.
 	 */
@@ -613,7 +613,7 @@ public final class RestResponse {
 	 * Used by schema-aware serializers such as {@link OpenApiSerializer}.  Ignored by other serializers.
 	 *
 	 * @param schema The body schema
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse bodySchema(HttpPartSchema schema) {
 		this.bodySchema = ofNullable(schema);
@@ -638,7 +638,7 @@ public final class RestResponse {
 	 * This exception is used by {@link BasicRestLogger} for logging purposes.
 	 *
 	 * @param t The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setException(Throwable t) {
 		request.setException(t);
@@ -652,7 +652,7 @@ public final class RestResponse {
 	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
 	 *
 	 * @param b The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setNoTrace(Boolean b) {
 		request.setNoTrace(b);
@@ -662,7 +662,7 @@ public final class RestResponse {
 	/**
 	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setNoTrace() {
 		return setNoTrace(true);
@@ -675,7 +675,7 @@ public final class RestResponse {
 	 * This flag is used by {@link BasicRestLogger} to help determine how a request should be logged.
 	 *
 	 * @param b The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If bodies could not be cached.
 	 */
 	public RestResponse setDebug(Boolean b) throws IOException {
@@ -688,7 +688,7 @@ public final class RestResponse {
 	/**
 	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If bodies could not be cached.
 	 */
 	public RestResponse setDebug() throws IOException {
@@ -710,7 +710,7 @@ public final class RestResponse {
 	 * Sets metadata about this response.
 	 *
 	 * @param rbm The metadata about this response.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {
 		this.responseBeanMeta = rbm;
@@ -795,7 +795,7 @@ public final class RestResponse {
 	 * Valid status codes are those in the 2XX, 3XX, 4XX, and 5XX ranges. Other status codes are treated as container specific.
 	 *
 	 * @param value The status code for this response.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setStatus(int value) {
 		inner.setStatus(value);
@@ -809,7 +809,7 @@ public final class RestResponse {
 	 * When enabled, invalid characters such as CTRL characters will be stripped from header values
 	 * before they get set.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse safeHeaders() {
 		this.safeHeaders = true;
@@ -823,7 +823,7 @@ public final class RestResponse {
 	 * Header values that exceed this length will get truncated.
 	 *
 	 * @param value The new value for this setting.  The default is <c>8096</c>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse maxHeaderLength(int value) {
 		this.maxHeaderLength = value;
@@ -845,7 +845,7 @@ public final class RestResponse {
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse addHeader(String name, String value) {
 		if (name != null && value != null) {
@@ -871,7 +871,7 @@ public final class RestResponse {
 	 * Value is added at the end of the headers.
 	 *
 	 * @param header The header.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse setHeader(Header header) {
 		if (header == null) {
@@ -908,7 +908,7 @@ public final class RestResponse {
 	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
 	 *
 	 * @param header The header.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse addHeader(Header header) {
 		if (header == null) {

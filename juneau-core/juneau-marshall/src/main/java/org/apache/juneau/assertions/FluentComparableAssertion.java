@@ -146,7 +146,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * Asserts that the value is greater than the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGt(Comparable value) throws AssertionError {
@@ -160,7 +160,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * Asserts that the value is greater than or equal to the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGte(Comparable value) throws AssertionError {
@@ -174,7 +174,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * Asserts that the value is less than the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLt(Comparable value) throws AssertionError {
@@ -188,7 +188,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * Asserts that the value is less than or equals to the specified value.
 	 *
 	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLte(Comparable value) throws AssertionError {
@@ -203,7 +203,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 *
 	 * @param lower The lower value to check against.
 	 * @param upper The upper value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {

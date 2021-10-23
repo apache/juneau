@@ -52,7 +52,7 @@ public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {
 	 * This does not affect the underlying map.
 	 *
 	 * @param keys The remaining keys in the map (in the specified order).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public DelegateMap<T> filterKeys(List<String> keys) {
 		OMap m2 = new OMap();

@@ -15,7 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static java.util.Arrays.*;
@@ -100,7 +100,7 @@ public abstract class Context implements MetaProvider {
 			b.type(type);
 			return b;
 		} catch (ExecutableException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -235,7 +235,7 @@ public abstract class Context implements MetaProvider {
 		 * Associates a context class with this builder.
 		 *
 		 * @param value The context class that this builder should create.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder type(Class<?> value) {
@@ -304,7 +304,7 @@ public abstract class Context implements MetaProvider {
 		 * </p>
 		 *
 		 * @param work The list of annotations and appliers to apply to this builder.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder apply(AnnotationWorkList work) {
@@ -395,7 +395,7 @@ public abstract class Context implements MetaProvider {
 		 * </p>
 		 *
 		 * @param fromClasses The classes on which the annotations are defined.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder applyAnnotations(Class<?>...fromClasses) {
@@ -463,7 +463,7 @@ public abstract class Context implements MetaProvider {
 		 * </p>
 		 *
 		 * @param fromMethods The methods on which the annotations are defined.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder applyAnnotations(Method...fromMethods) {
@@ -650,7 +650,7 @@ public abstract class Context implements MetaProvider {
 		 *
 		 * @param values
 		 * 	The annotations to register with the context.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder annotations(Annotation...values) {
@@ -705,7 +705,7 @@ public abstract class Context implements MetaProvider {
 		 * 	<li class='jm'>{@link org.apache.juneau.ContextSession.Builder#debug(Boolean)}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder debug() {

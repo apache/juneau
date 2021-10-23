@@ -89,7 +89,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#clientVersion()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder clientVersion(String value) {
 			this.clientVersion = value;
@@ -100,7 +100,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#contextClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder contextClass(Class<? extends RestOpContext> value) {
 			this.contextClass = value;
@@ -111,7 +111,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#debug()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder debug(String value) {
 			this.debug = value;
@@ -122,7 +122,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#defaultAccept()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultAccept(String value) {
 			this.defaultAccept = value;
@@ -133,7 +133,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#defaultCharset()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultCharset(String value) {
 			this.defaultCharset = value;
@@ -144,7 +144,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#defaultRequestQueryData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestQueryData(String...value) {
 			this.defaultRequestQueryData = value;
@@ -155,7 +155,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#defaultRequestAttributes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(String...value) {
 			this.defaultRequestAttributes = value;
@@ -166,7 +166,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#defaultRequestHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(String...value) {
 			this.defaultRequestHeaders = value;
@@ -177,7 +177,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#defaultResponseHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(String...value) {
 			this.defaultResponseHeaders = value;
@@ -188,7 +188,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#description()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -199,7 +199,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#encoders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
@@ -210,7 +210,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#guards()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder guards(Class<? extends RestGuard>...value) {
 			this.guards = value;
@@ -221,7 +221,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#matchers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder matchers(Class<? extends RestMatcher>...value) {
 			this.matchers = value;
@@ -232,7 +232,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#path()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder path(String...value) {
 			this.path = value;
@@ -243,7 +243,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder roleGuard(String value) {
 			this.roleGuard = value;
@@ -254,7 +254,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#rolesDeclared()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder rolesDeclared(String value) {
 			this.rolesDeclared = value;
@@ -265,7 +265,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#summary()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder summary(String value) {
 			this.summary = value;
@@ -276,7 +276,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#swagger()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder swagger(OpSwagger value) {
 			this.swagger = value;
@@ -287,7 +287,7 @@ public class RestDeleteAnnotation {
 		 * Sets the {@link RestDelete#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;

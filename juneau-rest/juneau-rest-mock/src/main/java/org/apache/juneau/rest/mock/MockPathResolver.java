@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import java.util.*;
 

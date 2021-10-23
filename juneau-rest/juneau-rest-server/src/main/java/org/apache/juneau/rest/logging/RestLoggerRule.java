@@ -115,7 +115,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on status code.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder statusFilter(Predicate<Integer> value) {
 			this.statusFilter = value;
@@ -140,7 +140,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on exceptions.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exceptionFilter(Predicate<Throwable> value) {
 			this.exceptionFilter = value;
@@ -161,7 +161,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on the request.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder requestFilter(Predicate<HttpServletRequest> value) {
 			this.requestFilter = value;
@@ -186,7 +186,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on the response.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder responseFilter(Predicate<HttpServletResponse> value) {
 			this.responseFilter = value;
@@ -217,7 +217,7 @@ public class RestLoggerRule {
 		 * @param value
 		 * 	The enablement flag value, or <jk>null</jk> to inherit from the call logger whose default value is {@link Enablement#ALWAYS ALWAYS}
 		 * 	unless overridden via a <js>"juneau.restCallLogger.enabled"</js> system property or <js>"JUNEAU_RESTCALLLOGGER_ENABLED"</js> environment variable.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder enabled(Enablement value) {
 			this.enabled = value;
@@ -242,7 +242,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The enablement predicate test, or <jk>null</jk> to inherit from the call logger whose default value is <c><jv>x</jv> -&gt; <jk>false</jk></c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder enabledTest(Predicate<HttpServletRequest> value) {
 			this.enabledTest = value;
@@ -252,7 +252,7 @@ public class RestLoggerRule {
 		/**
 		 * Shortcut for calling <c>enabled(<jsf>NEVER</jsf>)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder disabled() {
 			return this.enabled(Enablement.NEVER);
@@ -271,7 +271,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder requestDetail(RestLoggingDetail value) {
 			this.requestDetail = value;
@@ -291,7 +291,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder responseDetail(RestLoggingDetail value) {
 			this.responseDetail = value;
@@ -306,7 +306,7 @@ public class RestLoggerRule {
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder level(Level value) {
 			this.level = value;
@@ -319,7 +319,7 @@ public class RestLoggerRule {
 		 * <p>
 		 * The default value is <jk>false</jk>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder logStackTrace() {
 			this.logStackTrace = true;

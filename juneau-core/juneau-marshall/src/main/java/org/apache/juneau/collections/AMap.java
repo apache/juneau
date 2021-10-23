@@ -13,7 +13,7 @@
 package org.apache.juneau.collections;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -192,7 +192,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AMap<K,V> append(K key, V value) {
 		put(key, value);
@@ -203,7 +203,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * Appends all the entries in the specified map to this map.
 	 *
 	 * @param values The map to copy.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AMap<K,V> append(Map<K,V> values) {
 		super.putAll(values);
@@ -215,7 +215,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AMap<K,V> a(K key, V value) {
 		return append(key, value);
@@ -225,7 +225,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * Same as {@link #append(Map)}.
 	 *
 	 * @param values The map to copy.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AMap<K,V> a(Map<K,V> values) {
 		return append(values);
@@ -237,7 +237,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @param flag The flag to check.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AMap<K,V> appendIf(boolean flag, K key, V value) {
 		if (flag)
@@ -251,7 +251,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @param test The predicate to match against.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AMap<K,V> appendIf(Predicate<Object> test, K key, V value) {
 		return appendIf(test.test(value), key, value);

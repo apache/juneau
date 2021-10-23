@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 /**
@@ -40,7 +40,7 @@ public class ExceptionBuilder<T extends Throwable> {
 	 * @param msg The exception message.  Can be <jk>null</jk>.
 	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
 	 * @param args The exception message arguments.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public ExceptionBuilder<T> message(String msg, Object...args) {
@@ -52,7 +52,7 @@ public class ExceptionBuilder<T extends Throwable> {
 	 * Specifies the caused-by exception.
 	 *
 	 * @param value The caused-by exception.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public ExceptionBuilder<T> causedBy(Throwable value) {

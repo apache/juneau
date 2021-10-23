@@ -183,7 +183,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#_default} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _default(String...value) {
 			this._default = value;
@@ -194,7 +194,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(String...value) {
 			this._enum = value;
@@ -205,7 +205,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#aev} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder aev(boolean value) {
 			this.aev = value;
@@ -216,7 +216,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#allowEmptyValue} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allowEmptyValue(boolean value) {
 			this.allowEmptyValue = value;
@@ -227,7 +227,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#api} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder api(String...value) {
 			this.api = value;
@@ -238,7 +238,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			this.cf = value;
@@ -249,7 +249,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			this.collectionFormat = value;
@@ -260,7 +260,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder d(String...value) {
 			this.d = value;
@@ -271,7 +271,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -282,7 +282,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#df} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder df(String...value) {
 			this.df = value;
@@ -293,7 +293,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#e} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(String...value) {
 			this.e = value;
@@ -304,7 +304,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#emax} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
 			this.emax = value;
@@ -315,7 +315,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#emin} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
 			this.emin = value;
@@ -326,7 +326,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#ex} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ex(String...value) {
 			this.ex = value;
@@ -337,7 +337,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String...value) {
 			this.example = value;
@@ -348,7 +348,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
 			this.exclusiveMaximum = value;
@@ -359,7 +359,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
@@ -370,7 +370,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#f} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			this.f = value;
@@ -381,7 +381,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#format} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -392,7 +392,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#items} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(Items value) {
 			this.items = value;
@@ -403,7 +403,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#max} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(String value) {
 			this.max = value;
@@ -414,7 +414,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#maxi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(long value) {
 			this.maxi = value;
@@ -425,7 +425,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#maximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(String value) {
 			this.maximum = value;
@@ -436,7 +436,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#maxItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
 			this.maxItems = value;
@@ -447,7 +447,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#maxl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(long value) {
 			this.maxl = value;
@@ -458,7 +458,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#maxLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
 			this.maxLength = value;
@@ -469,7 +469,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#min} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(String value) {
 			this.min = value;
@@ -480,7 +480,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#mini} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(long value) {
 			this.mini = value;
@@ -491,7 +491,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#minimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(String value) {
 			this.minimum = value;
@@ -502,7 +502,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#minItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(long value) {
 			this.minItems = value;
@@ -513,7 +513,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#minl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(long value) {
 			this.minl = value;
@@ -524,7 +524,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#minLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(long value) {
 			this.minLength = value;
@@ -535,7 +535,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#mo} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(String value) {
 			this.mo = value;
@@ -546,7 +546,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#multi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multi(boolean value) {
 			this.multi = value;
@@ -557,7 +557,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#multipleOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
 			this.multipleOf = value;
@@ -568,7 +568,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#n} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder n(String value) {
 			this.n = value;
@@ -579,7 +579,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -590,7 +590,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#p} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -601,7 +601,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#parser} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
 			this.parser = value;
@@ -612,7 +612,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#pattern} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
@@ -623,7 +623,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#r} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(boolean value) {
 			this.r = value;
@@ -634,7 +634,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#required} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(boolean value) {
 			this.required = value;
@@ -645,7 +645,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;
@@ -656,7 +656,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#sie} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sie(boolean value) {
 			this.sie = value;
@@ -667,7 +667,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#skipIfEmpty} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder skipIfEmpty(boolean value) {
 			this.skipIfEmpty = value;
@@ -678,7 +678,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			this.t = value;
@@ -689,7 +689,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#type} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			this.type = value;
@@ -700,7 +700,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#ui} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
 			this.ui = value;
@@ -711,7 +711,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
 			this.uniqueItems = value;
@@ -722,7 +722,7 @@ public class FormDataAnnotation {
 		 * Sets the {@link FormData#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;

@@ -119,7 +119,7 @@ public class BeanSession extends ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder locale(Locale value) {
@@ -134,7 +134,7 @@ public class BeanSession extends ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder localeDefault(Locale value) {
@@ -160,7 +160,7 @@ public class BeanSession extends ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder mediaType(MediaType value) {
@@ -175,7 +175,7 @@ public class BeanSession extends ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder mediaTypeDefault(MediaType value) {
@@ -201,7 +201,7 @@ public class BeanSession extends ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder timeZone(TimeZone value) {
@@ -216,7 +216,7 @@ public class BeanSession extends ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder timeZoneDefault(TimeZone value) {

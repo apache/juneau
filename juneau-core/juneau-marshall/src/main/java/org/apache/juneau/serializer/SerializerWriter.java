@@ -78,7 +78,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param depth The indentation.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter cr(int depth) throws IOException {
 		if (useWhitespace && depth <= maxIndent)
@@ -94,7 +94,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param depth The indentation.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter cre(int depth) throws IOException {
 		if (useWhitespace && depth <= maxIndent-1)
@@ -158,7 +158,7 @@ public class SerializerWriter extends Writer {
 	 * @param newline If <jk>true</jk>, then a newline is written.
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	private SerializerWriter append(int indent, boolean newline, String text) throws IOException {
 
@@ -194,7 +194,7 @@ public class SerializerWriter extends Writer {
 	 * session.
 	 *
 	 * @param uri The URI to serialize.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter appendUri(Object uri) throws IOException {
@@ -206,7 +206,7 @@ public class SerializerWriter extends Writer {
 	 * Appends the specified characters to this writer.
 	 *
 	 * @param characters The characters to append to this writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public SerializerWriter append(char[] characters) throws IOException {
@@ -218,7 +218,7 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Adds a whitespace character to the output if the {@code useWhitespace} setting is enabled.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter s() throws IOException {
@@ -230,7 +230,7 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Adds the quote character specified by the {@code quoteChar} setting to the output.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter q() throws IOException {
@@ -243,7 +243,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter i(int indent) throws IOException {
 		if (useWhitespace && indent <= maxIndent)
@@ -257,7 +257,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter ie(int indent) throws IOException {
 		if (useWhitespace && indent <= maxIndent-1)
@@ -271,7 +271,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param indent The current indentation level.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter nl(int indent) throws IOException {
 		if (useWhitespace && indent <= maxIndent)
@@ -287,7 +287,7 @@ public class SerializerWriter extends Writer {
 	 * This ensures the text is separated by a space if whitespace is disabled.
 	 *
 	 * @param b The boolean flag.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter sIf(boolean b) throws IOException {
@@ -301,7 +301,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param b The boolean flag.
 	 * @param indent The current indentation level.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter nlIf(boolean b, int indent) throws IOException {
@@ -315,7 +315,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter append(Object text) throws IOException {
 		out.append(text == null ? null : text.toString());
@@ -327,7 +327,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter append(String text) throws IOException {
 		if (text != null)
@@ -341,7 +341,7 @@ public class SerializerWriter extends Writer {
 	 * @param b Boolean flag.
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter appendIf(boolean b, String text) throws IOException {
 		if (b)
@@ -355,7 +355,7 @@ public class SerializerWriter extends Writer {
 	 * @param b Boolean flag.
 	 * @param c The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializerWriter appendIf(boolean b, char c) throws IOException {
 		if (b)

@@ -51,7 +51,7 @@ public abstract class SwaggerElement {
 	/**
 	 * Sets strict mode on this bean.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected SwaggerElement strict() {
 		strict = true;
@@ -65,7 +65,7 @@ public abstract class SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
 	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected SwaggerElement strict(Object value) {
 		strict = value == null ? false : toBoolean(value);
@@ -115,7 +115,7 @@ public abstract class SwaggerElement {
 	 *
 	 * @param property The property name to set.
 	 * @param value The new value for the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Beanp("*")
 	public SwaggerElement set(String property, Object value) {

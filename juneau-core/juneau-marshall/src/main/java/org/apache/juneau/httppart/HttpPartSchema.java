@@ -16,7 +16,7 @@ import static java.util.Collections.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -694,7 +694,7 @@ public class HttpPartSchema {
 		 * Apply the specified annotation to this schema.
 		 *
 		 * @param a The annotation to apply.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder apply(Annotation a) {
 			if (a instanceof Body)
@@ -999,7 +999,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			if (isNotEmpty(value))
@@ -1012,7 +1012,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder n(String value) {
 			return name(value);
@@ -1030,7 +1030,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if <jk>null</jk> or an empty array.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder codes(int[] value) {
 			if (value != null && value.length != 0)
@@ -1051,7 +1051,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <c>0</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder code(int value) {
 			if (value != 0) {
@@ -1078,7 +1078,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(Boolean value) {
 			required = resolve(value, required);
@@ -1090,7 +1090,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(Boolean value) {
 			return required(value);
@@ -1108,7 +1108,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(String value) {
 			required = resolve(value, required);
@@ -1120,7 +1120,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(String value) {
 			return required(value);
@@ -1132,7 +1132,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>required(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required() {
 			return required(true);
@@ -1141,7 +1141,7 @@ public class HttpPartSchema {
 		/**
 		 * Synonym for {@link #required()}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r() {
 			return required();
@@ -1204,7 +1204,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			try {
@@ -1221,7 +1221,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			return type(value);
@@ -1230,7 +1230,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.STRING)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tString() {
 			type = HttpPartDataType.STRING;
@@ -1240,7 +1240,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.NUMBER)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tNumber() {
 			type = HttpPartDataType.NUMBER;
@@ -1250,7 +1250,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.INTEGER)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tInteger() {
 			type = HttpPartDataType.INTEGER;
@@ -1260,7 +1260,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.BOOLEAN)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tBoolean() {
 			type = HttpPartDataType.BOOLEAN;
@@ -1270,7 +1270,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.ARRAY)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tArray() {
 			type = HttpPartDataType.ARRAY;
@@ -1280,7 +1280,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.OBJECT)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tObject() {
 			type = HttpPartDataType.OBJECT;
@@ -1290,7 +1290,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.FILE)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tFile() {
 			type = HttpPartDataType.FILE;
@@ -1300,7 +1300,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>type(HttpPartDataType.NO_TYPE)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tNone() {
 			type = HttpPartDataType.NO_TYPE;
@@ -1366,7 +1366,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(HttpPartDataType value) {
 			this.type = value;
@@ -1378,7 +1378,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(HttpPartDataType value) {
 			return type(value);
@@ -1448,7 +1448,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or an empty string.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			try {
@@ -1465,7 +1465,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			return format(value);
@@ -1537,7 +1537,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(HttpPartFormat value) {
 			format = value;
@@ -1549,7 +1549,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(HttpPartFormat value) {
 			return format(value);
@@ -1558,7 +1558,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.INT32)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fInt32() {
 			format = HttpPartFormat.INT32;
@@ -1568,7 +1568,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.INT64)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fInt64() {
 			format = HttpPartFormat.INT64;
@@ -1578,7 +1578,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.FLOAT)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fFloat() {
 			format = HttpPartFormat.FLOAT;
@@ -1588,7 +1588,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.DOUBLE)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fDouble() {
 			format = HttpPartFormat.DOUBLE;
@@ -1598,7 +1598,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.BYTE)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fByte() {
 			format = HttpPartFormat.BYTE;
@@ -1608,7 +1608,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.BINARY)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fBinary() {
 			format = HttpPartFormat.BINARY;
@@ -1618,7 +1618,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.BINARY_SPACED)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fBinarySpaced() {
 			format = HttpPartFormat.BINARY_SPACED;
@@ -1628,7 +1628,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.DATE)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fDate() {
 			format = HttpPartFormat.DATE;
@@ -1638,7 +1638,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.DATE_TIME)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fDateTime() {
 			format = HttpPartFormat.DATE_TIME;
@@ -1648,7 +1648,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.PASSWORD)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fPassword() {
 			format = HttpPartFormat.PASSWORD;
@@ -1658,7 +1658,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.UON)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fUon() {
 			format = HttpPartFormat.UON;
@@ -1668,7 +1668,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>format(HttpPartFormat.NO_FORMAT)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder fNone() {
 			format = HttpPartFormat.NO_FORMAT;
@@ -1692,7 +1692,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allowEmptyValue(Boolean value) {
 			allowEmptyValue = resolve(value, allowEmptyValue);
@@ -1704,7 +1704,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder aev(Boolean value) {
 			return allowEmptyValue(value);
@@ -1719,7 +1719,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allowEmptyValue(String value) {
 			allowEmptyValue = resolve(value, allowEmptyValue);
@@ -1731,7 +1731,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder aev(String value) {
 			return allowEmptyValue(value);
@@ -1743,7 +1743,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>allowEmptyValue(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder allowEmptyValue() {
 			return allowEmptyValue(true);
@@ -1752,7 +1752,7 @@ public class HttpPartSchema {
 		/**
 		 * Synonym for {@link #allowEmptyValue()}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder aev() {
 			return allowEmptyValue(true);
@@ -1779,7 +1779,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(Builder value) {
 			if (value != null)
@@ -1792,7 +1792,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder i(Builder value) {
 			return items(value);
@@ -1819,7 +1819,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(HttpPartSchema value) {
 			if (value != null)
@@ -1832,7 +1832,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder i(HttpPartSchema value) {
 			return items(value);
@@ -1895,7 +1895,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			try {
@@ -1912,7 +1912,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			return collectionFormat(value);
@@ -1957,7 +1957,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(HttpPartCollectionFormat value) {
 			collectionFormat = value;
@@ -1969,7 +1969,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(HttpPartCollectionFormat value) {
 			return collectionFormat(value);
@@ -1978,7 +1978,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.CSV)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfCsv() {
 			return collectionFormat(HttpPartCollectionFormat.CSV);
@@ -1987,7 +1987,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.SSV)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfSsv() {
 			return collectionFormat(HttpPartCollectionFormat.SSV);
@@ -1996,7 +1996,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.TSV)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfTsv() {
 			return collectionFormat(HttpPartCollectionFormat.TSV);
@@ -2005,7 +2005,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.PIPES)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfPipes() {
 			return collectionFormat(HttpPartCollectionFormat.PIPES);
@@ -2014,7 +2014,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.MULTI)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfMulti() {
 			return collectionFormat(HttpPartCollectionFormat.MULTI);
@@ -2023,7 +2023,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.UONC)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfUon() {
 			return collectionFormat(HttpPartCollectionFormat.UONC);
@@ -2032,7 +2032,7 @@ public class HttpPartSchema {
 		/**
 		 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.NO_COLLECTION_FORMAT)</c>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cfNone() {
 			return collectionFormat(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
@@ -2057,7 +2057,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _default(String value) {
 			if (value != null)
@@ -2070,7 +2070,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder df(String value) {
 			return _default(value);
@@ -2097,7 +2097,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(Number value) {
 			if (value != null)
@@ -2110,7 +2110,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(Number value) {
 			return maximum(value);
@@ -2138,7 +2138,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(Boolean value) {
 			exclusiveMaximum = resolve(value, exclusiveMaximum);
@@ -2150,7 +2150,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(Boolean value) {
 			return exclusiveMaximum(value);
@@ -2165,7 +2165,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(String value) {
 			exclusiveMaximum = resolve(value, exclusiveMaximum);
@@ -2177,7 +2177,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(String value) {
 			return exclusiveMaximum(value);
@@ -2189,7 +2189,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>exclusiveMaximum(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum() {
 			return exclusiveMaximum(true);
@@ -2198,7 +2198,7 @@ public class HttpPartSchema {
 		/**
 		 * Synonym for {@link #exclusiveMaximum()}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax() {
 			return exclusiveMaximum();
@@ -2225,7 +2225,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(Number value) {
 			if (value != null)
@@ -2238,7 +2238,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(Number value) {
 			return minimum(value);
@@ -2266,7 +2266,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(Boolean value) {
 			exclusiveMinimum = resolve(value, exclusiveMinimum);
@@ -2278,7 +2278,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(Boolean value) {
 			return exclusiveMinimum(value);
@@ -2293,7 +2293,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(String value) {
 			exclusiveMinimum = resolve(value, exclusiveMinimum);
@@ -2305,7 +2305,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(String value) {
 			return exclusiveMinimum(value);
@@ -2317,7 +2317,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>exclusiveMinimum(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum() {
 			return exclusiveMinimum(true);
@@ -2326,7 +2326,7 @@ public class HttpPartSchema {
 		/**
 		 * Synonym for {@link #exclusiveMinimum()}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin() {
 			return exclusiveMinimum();
@@ -2354,7 +2354,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(Long value) {
 			maxLength = resolve(value, maxLength);
@@ -2366,7 +2366,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(Long value) {
 			return maxLength(value);
@@ -2381,7 +2381,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(String value) {
 			maxLength = resolve(value, maxLength);
@@ -2393,7 +2393,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(String value) {
 			return maxLength(value);
@@ -2421,7 +2421,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(Long value) {
 			minLength = resolve(value, minLength);
@@ -2433,7 +2433,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(Long value) {
 			return minLength(value);
@@ -2448,7 +2448,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(String value) {
 			minLength = resolve(value, minLength);
@@ -2460,7 +2460,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(String value) {
 			return minLength(value);
@@ -2487,7 +2487,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			try {
@@ -2504,7 +2504,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			return pattern(value);
@@ -2531,7 +2531,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(Long value) {
 			maxItems = resolve(value, maxItems);
@@ -2543,7 +2543,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(Long value) {
 			return maxItems(value);
@@ -2558,7 +2558,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(String value) {
 			maxItems = resolve(value, maxItems);
@@ -2570,7 +2570,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(String value) {
 			return maxItems(value);
@@ -2597,7 +2597,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(Long value) {
 			minItems = resolve(value, minItems);
@@ -2609,7 +2609,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(Long value) {
 			return minItems(value);
@@ -2624,7 +2624,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(String value) {
 			minItems = resolve(value, minItems);
@@ -2636,7 +2636,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(String value) {
 			return minItems(value);
@@ -2667,7 +2667,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(Boolean value) {
 			uniqueItems = resolve(value, uniqueItems);
@@ -2679,7 +2679,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(Boolean value) {
 			return uniqueItems(value);
@@ -2694,7 +2694,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty..
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(String value) {
 			uniqueItems = resolve(value, uniqueItems);
@@ -2706,7 +2706,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(String value) {
 			return uniqueItems(value);
@@ -2718,7 +2718,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>uniqueItems(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems() {
 			return uniqueItems(true);
@@ -2727,7 +2727,7 @@ public class HttpPartSchema {
 		/**
 		 * Synonym for {@link #uniqueItems()}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui() {
 			return uniqueItems();
@@ -2742,7 +2742,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder skipIfEmpty(Boolean value) {
 			skipIfEmpty = resolve(value, skipIfEmpty);
@@ -2754,7 +2754,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sie(Boolean value) {
 			return skipIfEmpty(value);
@@ -2769,7 +2769,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder skipIfEmpty(String value) {
 			skipIfEmpty = resolve(value, skipIfEmpty);
@@ -2781,7 +2781,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sie(String value) {
 			return skipIfEmpty(value);
@@ -2793,7 +2793,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>skipIfEmpty(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder skipIfEmpty() {
 			return skipIfEmpty(true);
@@ -2802,7 +2802,7 @@ public class HttpPartSchema {
 		/**
 		 * Synonym for {@link #skipIfEmpty()}.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sie() {
 			return skipIfEmpty();
@@ -2826,7 +2826,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or an empty set.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(Set<String> value) {
 			if (value != null && ! value.isEmpty())
@@ -2839,7 +2839,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(Set<String> value) {
 			return _enum(value);
@@ -2854,7 +2854,7 @@ public class HttpPartSchema {
 		 * @param values
 		 * 	The new values for this property.
 		 * 	<br>Ignored if value is empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(String...values) {
 			return _enum(ASet.of(values));
@@ -2865,7 +2865,7 @@ public class HttpPartSchema {
 		 *
 		 * @param values
 		 * 	The new values for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(String...values) {
 			return _enum(values);
@@ -2892,7 +2892,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(Number value) {
 			if (value != null)
@@ -2905,7 +2905,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(Number value) {
 			return multipleOf(value);
@@ -2923,7 +2923,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or <c>-1</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxProperties(Long value) {
 			maxProperties = resolve(value, maxProperties);
@@ -2935,7 +2935,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxp(Long value) {
 			return maxProperties(value);
@@ -2950,7 +2950,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxProperties(String value) {
 			maxProperties = resolve(value, maxProperties);
@@ -2962,7 +2962,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxp(String value) {
 			return maxProperties(value);
@@ -2980,7 +2980,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minProperties(Long value) {
 			minProperties = resolve(value, minProperties);
@@ -2992,7 +2992,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minp(Long value) {
 			return minProperties(value);
@@ -3007,7 +3007,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minProperties(String value) {
 			minProperties = resolve(value, minProperties);
@@ -3019,7 +3019,7 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minp(String value) {
 			return minProperties(value);
@@ -3039,7 +3039,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder property(String key, Builder value) {
 			if ( key != null && value != null) {
@@ -3064,7 +3064,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder property(String key, HttpPartSchema value) {
 			if ( key != null && value != null) {
@@ -3089,7 +3089,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String key, Builder value) {
 			return property(key, value);
@@ -3109,7 +3109,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String key, HttpPartSchema value) {
 			return property(key, value);
@@ -3134,7 +3134,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder additionalProperties(Builder value) {
 			if (value != null)
@@ -3154,7 +3154,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder additionalProperties(HttpPartSchema value) {
 			if (value != null)
@@ -3174,7 +3174,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ap(Builder value) {
 			return additionalProperties(value);
@@ -3192,7 +3192,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ap(HttpPartSchema value) {
 			return additionalProperties(value);
@@ -3210,7 +3210,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Null}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			if (value != null && value != HttpPartSerializer.Null.class)
@@ -3224,7 +3224,7 @@ public class HttpPartSchema {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Null}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
 			if (value != null && value != HttpPartParser.Null.class)
@@ -3236,7 +3236,7 @@ public class HttpPartSchema {
 		 * Disables Swagger schema usage validation checking.
 		 *
 		 * @param value Specify <jk>true</jk> to prevent {@link ContextRuntimeException} from being thrown if invalid Swagger usage was detected.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder noValidate(Boolean value) {
 			if (value != null)
@@ -3250,7 +3250,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Shortcut for calling <code>noValidate(<jk>true</jk>);</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder noValidate() {
 			return noValidate(true);

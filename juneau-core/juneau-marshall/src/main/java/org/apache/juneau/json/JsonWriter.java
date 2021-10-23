@@ -77,7 +77,7 @@ public final class JsonWriter extends SerializerWriter {
 	 * Serializes the specified object as a JSON string value.
 	 *
 	 * @param s The object being serialized.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Should never happen.
 	 */
 	public JsonWriter stringValue(String s) throws IOException {
@@ -124,7 +124,7 @@ public final class JsonWriter extends SerializerWriter {
 	 * Serializes the specified object as a JSON attribute name.
 	 *
 	 * @param s The object being serialized.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Should never happen.
 	 */
 	public JsonWriter attr(String s) throws IOException {
@@ -176,7 +176,7 @@ public final class JsonWriter extends SerializerWriter {
 	 * Appends a URI to the output.
 	 *
 	 * @param uri The URI to append to the output.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public SerializerWriter uriValue(Object uri) throws IOException {
@@ -203,7 +203,7 @@ public final class JsonWriter extends SerializerWriter {
 	 * Performs an indentation only if we're currently past max indentation.
 	 *
 	 * @param depth The current indentation depth.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public JsonWriter smi(int depth) throws IOException {
@@ -246,7 +246,7 @@ public final class JsonWriter extends SerializerWriter {
 	 * Adds a space only if the current indentation level is below maxIndent.
 	 *
 	 * @param indent The number of spaces to indent.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public JsonWriter s(int indent) throws IOException {

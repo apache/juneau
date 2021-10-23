@@ -460,7 +460,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 *
 	 * @param id The definition ID.
 	 * @param def The definition schema.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public JsonSchemaGeneratorSession addBeanDef(String id, OMap def) {
 		if (defs != null)

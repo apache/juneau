@@ -13,7 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import java.io.*;
 import java.lang.reflect.*;

@@ -92,7 +92,7 @@ public class MethodExecStats {
 		 * Specifies the Java method.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder method(Method value) {
@@ -104,7 +104,7 @@ public class MethodExecStats {
 		 * Specifies the thrown store for tracking exceptions.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder thrownStore(ThrownStore value) {
@@ -174,7 +174,7 @@ public class MethodExecStats {
 	/**
 	 * Call when task is started.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MethodExecStats started() {
 		starts.incrementAndGet();
@@ -185,7 +185,7 @@ public class MethodExecStats {
 	 * Call when task is finished.
 	 *
 	 * @param nanoTime The execution time of the task in nanoseconds.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MethodExecStats finished(long nanoTime) {
 		finishes.incrementAndGet();
@@ -200,7 +200,7 @@ public class MethodExecStats {
 	 * Call when an error occurs.
 	 *
 	 * @param e The exception thrown.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MethodExecStats error(Throwable e) {
 		errors.incrementAndGet();

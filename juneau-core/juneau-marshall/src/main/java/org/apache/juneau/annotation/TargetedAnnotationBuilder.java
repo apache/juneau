@@ -37,7 +37,7 @@ public class TargetedAnnotationBuilder extends AnnotationBuilder {
 	 * The targets this annotation applies to.
 	 *
 	 * @param values The targets this annotation applies to.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public TargetedAnnotationBuilder on(String...values) {

@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 

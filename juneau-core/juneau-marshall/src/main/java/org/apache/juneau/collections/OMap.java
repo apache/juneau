@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -121,12 +121,12 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 		@Override /* Map */
 		public Object put(String key, Object value) {
-			throw new UnsupportedOperationException();
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* Map */
 		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* Map */
@@ -396,7 +396,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param inner
 	 * 	The inner map.
 	 * 	Can be <jk>null</jk> to remove the inner map from an existing map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap inner(Map<String,Object> inner) {
 		this.inner = inner;
@@ -413,7 +413,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * Useful if you're serializing/parsing beans with transforms defined.
 	 *
 	 * @param session The new bean session.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap session(BeanSession session) {
 		this.session = session;
@@ -429,7 +429,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap append(String key, Object value) {
 		put(key, value);
@@ -440,7 +440,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * Appends all the entries in the specified map to this map.
 	 *
 	 * @param values The map to copy.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap append(Map<String,Object> values) {
 		super.putAll(values);
@@ -452,7 +452,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap a(String key, Object value) {
 		return append(key, value);
@@ -462,7 +462,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * Same as {@link #append(Map)}.
 	 *
 	 * @param values The map to copy.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap a(Map<String,Object> values) {
 		return append(values);
@@ -474,7 +474,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param flag The flag to check.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendIf(boolean flag, String key, Object value) {
 		if (flag)
@@ -488,7 +488,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param test The predicate to match against.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendIf(Predicate<Object> test, String key, Object value) {
 		return appendIf(test.test(value), key, value);
@@ -502,7 +502,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param skipEmptyValue Skip adding the value if the value is an empty string.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
 		if (value == null && skipNullValue)
@@ -520,7 +520,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param values The values.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendSkipEmpty(String key, Object...values) {
 		for (Object v : values)
@@ -533,7 +533,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendSkipFalse(String key, boolean value) {
 		if (value)
@@ -546,7 +546,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param values The values.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendSkipMinusOne(String key, Number...values) {
 		for (Number v : values)
@@ -560,7 +560,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendSkipNull(String key, Object value) {
 		if (value != null)
@@ -573,7 +573,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The map key.
 	 * @param value The value to set if the current value does not exist or is <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendIfNull(String key, Object value) {
 		Object o = get(key);
@@ -587,7 +587,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The map key.
 	 * @param value The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendIfEmpty(String key, Object value) {
 		Object o = get(key);
@@ -601,7 +601,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The map key.
 	 * @param value The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap appendIfNotExists(String key, Object value) {
 		if (! containsKey(key))
@@ -620,7 +620,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	<li><c>-1</c> (any Number type)
 	 * 	<li>Empty arrays/collections/maps.
 	 * </ul>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap filtered() {
 		return filtered(x -> ! (
@@ -640,7 +640,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * If the predicate evaluates to <jk>false</jk> on values added to this map, the entry will be skipped.
 	 *
 	 * @param value The value tester predicate.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap filtered(Predicate<Object> value) {
 		valueFilter = value;
@@ -1644,7 +1644,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * Sets the {@link BeanSession} currently associated with this map.
 	 *
 	 * @param value The {@link BeanSession} currently associated with this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OMap setBeanSession(BeanSession value) {
 		this.session = value;
@@ -1702,7 +1702,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * {@link JsonSerializer#DEFAULT} serializer.
 	 *
 	 * @param w The writer to serialize this object to.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -1877,12 +1877,12 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public final Object put(String key, Object val) {
-			throw new UnsupportedOperationException("OMap is read-only.");
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override
 		public final Object remove(Object key) {
-			throw new UnsupportedOperationException("OMap is read-only.");
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override
@@ -1966,7 +1966,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 					@Override /* Iterator */
 					public void remove() {
-						throw new UnsupportedOperationException();
+						throw unsupportedOperationException("Not supported on read-only object.");
 					}
 				};
 			}

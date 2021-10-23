@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;

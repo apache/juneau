@@ -130,7 +130,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#api} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder api(String...value) {
 			this.api = value;
@@ -150,7 +150,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder d(String...value) {
 			this.d = value;
@@ -161,7 +161,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -172,7 +172,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#ex} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ex(String...value) {
 			this.ex = value;
@@ -183,7 +183,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String...value) {
 			this.example = value;
@@ -194,7 +194,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#examples} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder examples(String...value) {
 			this.examples = value;
@@ -205,7 +205,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#exs} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exs(String...value) {
 			this.exs = value;
@@ -216,7 +216,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#r} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder r(boolean value) {
 			this.r = value;
@@ -227,7 +227,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#required} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder required(boolean value) {
 			this.required = value;
@@ -238,7 +238,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#schema} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder schema(Schema value) {
 			this.schema = value;
@@ -249,7 +249,7 @@ public class BodyAnnotation {
 		 * Sets the {@link Body#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

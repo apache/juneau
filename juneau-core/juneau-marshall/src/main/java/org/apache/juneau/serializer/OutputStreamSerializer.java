@@ -114,7 +114,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link BinaryFormat#HEX}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder binaryFormat(BinaryFormat value) {

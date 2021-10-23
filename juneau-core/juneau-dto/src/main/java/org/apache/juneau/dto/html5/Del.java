@@ -46,7 +46,7 @@ public class Del extends HtmlElementMixed {
 	 * Link to the source of the quotation or more information about the edit.
 	 *
 	 * @param cite The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Del cite(String cite) {
 		attr("cite", cite);
@@ -60,7 +60,7 @@ public class Del extends HtmlElementMixed {
 	 * Date and (optionally) time of the change.
 	 *
 	 * @param datetime The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Del datetime(String datetime) {
 		attr("datetime", datetime);

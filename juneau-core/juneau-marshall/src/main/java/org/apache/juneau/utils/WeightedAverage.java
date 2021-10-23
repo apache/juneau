@@ -24,7 +24,7 @@ public class WeightedAverage {
 	 *
 	 * @param w The weight of the new value.
 	 * @param v The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public WeightedAverage add(int w, Number v) {
 		if (v != null) {

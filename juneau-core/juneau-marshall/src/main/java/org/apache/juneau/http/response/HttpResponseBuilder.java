@@ -13,7 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpEntities.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.net.*;
 import java.util.*;
@@ -82,7 +82,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Copies the contents of the specified HTTP response to this builder.
 	 *
 	 * @param response The response to copy from.  Must not be null.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<?> copyFrom(HttpResponse response) {
 		headers(response.getAllHeaders());
@@ -107,7 +107,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	/**
 	 * Specifies whether this exception should be unmodifiable after creation.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> unmodifiable() {
@@ -126,7 +126,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> statusLine(BasicStatusLine value) {
@@ -142,7 +142,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> protocolVersion(ProtocolVersion value) {
@@ -157,7 +157,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If not specified, <c>0</c> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> statusCode(int value) {
@@ -173,7 +173,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * using the locale on this builder.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> reasonPhrase(String value) {
@@ -188,7 +188,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
@@ -203,7 +203,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If not specified, uses {@link Locale#getDefault()}.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> locale(Locale value) {
@@ -222,7 +222,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> headers(HeaderList value) {
@@ -234,7 +234,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	/**
 	 * Removes any headers already in this builder.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> clearHeaders() {
 		headersBuilder().clear();
@@ -245,7 +245,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Adds the specified header to the end of the headers in this builder.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> header(Header value) {
 		headersBuilder().append(value);
@@ -257,7 +257,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> header(String name, String value) {
 		headersBuilder().append(name, value);
@@ -268,7 +268,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Adds the specified headers to the end of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> headers(Header...values) {
 		headersBuilder().append(values);
@@ -279,7 +279,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Adds the specified headers to the end of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> headers(List<Header> values) {
 		headersBuilder().append(values);
@@ -290,7 +290,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Removes the specified header from this builder.
 	 *
 	 * @param value The header to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> removeHeader(Header value) {
 		headersBuilder().remove(value);
@@ -301,7 +301,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Removes the specified headers from this builder.
 	 *
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> removeHeaders(Header...values) {
 		headersBuilder().remove(values);
@@ -312,7 +312,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Removes the specified headers from this builder.
 	 *
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> removeHeaders(List<Header> values) {
 		headersBuilder().remove(values);
@@ -326,7 +326,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> updateHeader(Header value) {
 		headersBuilder().set(value);
@@ -340,7 +340,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> updateHeaders(Header...values) {
 		headersBuilder().set(values);
@@ -354,7 +354,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> updateHeaders(List<Header> values) {
 		headersBuilder().set(values);
@@ -368,7 +368,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * The headers are added in the order in which they appear in the array.
 	 *
 	 * @param values The headers to set
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> setHeaders(Header...values) {
 		headersBuilder().clear().append(values);
@@ -382,7 +382,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * The headers are added in the order in which they appear in the list.
 	 *
 	 * @param values The headers to set
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> setHeaders(List<Header> values) {
 		headersBuilder().clear().append(values);
@@ -393,7 +393,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Specifies the value for the <c>Location</c> header.
 	 *
 	 * @param value The new header location.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> location(URI value) {
@@ -405,7 +405,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Specifies the value for the <c>Location</c> header.
 	 *
 	 * @param value The new header location.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> location(String value) {
@@ -421,7 +421,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Sets the body on this response.
 	 *
 	 * @param value The body on this response.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> body(String value) {
 		return body(stringEntity(value).build());
@@ -431,7 +431,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * Sets the body on this response.
 	 *
 	 * @param value The body on this response.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> body(HttpEntity value) {
 		this.body = value;

@@ -54,7 +54,7 @@ public class A extends HtmlElementMixed {
 	 * @param download
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final A download(Object download) {
 		attr("download", download);
@@ -77,7 +77,7 @@ public class A extends HtmlElementMixed {
 	 * @param href
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final A href(Object href) {
 		attrUri("href", href);
@@ -91,7 +91,7 @@ public class A extends HtmlElementMixed {
 	 * Language of the linked resource.
 	 *
 	 * @param hreflang The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final A hreflang(String hreflang) {
 		attr("hreflang", hreflang);
@@ -105,7 +105,7 @@ public class A extends HtmlElementMixed {
 	 * Relationship between the document containing the hyperlink and the destination resource.
 	 *
 	 * @param rel The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final A rel(String rel) {
 		attr("rel", rel);
@@ -119,7 +119,7 @@ public class A extends HtmlElementMixed {
 	 * Default browsing context for hyperlink navigation and form submission.
 	 *
 	 * @param target The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final A target(String target) {
 		attr("target", target);
@@ -133,7 +133,7 @@ public class A extends HtmlElementMixed {
 	 * Hint for the type of the referenced resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final A type(String type) {
 		attr("type", type);

@@ -76,7 +76,7 @@ public abstract class ReaderParserSession extends ParserSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder fileCharset(Charset value) {
@@ -99,7 +99,7 @@ public abstract class ReaderParserSession extends ParserSession {
 		 * @param value
 		 * 	The new property value.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder streamCharset(Charset value) {

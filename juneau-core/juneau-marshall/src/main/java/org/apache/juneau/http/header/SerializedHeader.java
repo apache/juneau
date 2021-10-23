@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
@@ -206,7 +206,7 @@ public class SerializedHeader extends BasicHeader {
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedHeader serializer(HttpPartSerializer value) {
 		if (value != null)
@@ -218,7 +218,7 @@ public class SerializedHeader extends BasicHeader {
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedHeader serializer(HttpPartSerializerSession value) {
 		serializer = value;
@@ -229,7 +229,7 @@ public class SerializedHeader extends BasicHeader {
 	 * Sets the schema object that defines the format of the output.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedHeader schema(HttpPartSchema value) {
 		this.schema = value;
@@ -259,7 +259,7 @@ public class SerializedHeader extends BasicHeader {
 	/**
 	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedHeader skipIfEmpty() {
 		return skipIfEmpty(true);
@@ -269,7 +269,7 @@ public class SerializedHeader extends BasicHeader {
 	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
 	 *
 	 * @param value The new value of this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedHeader skipIfEmpty(boolean value) {
 		this.skipIfEmpty = value;

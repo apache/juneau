@@ -13,7 +13,7 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -304,7 +304,7 @@ public class PartList {
 		 * <p>
 		 * Uses {@link VarResolver#DEFAULT} to resolve variables.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder resolving() {
 			return resolving(VarResolver.DEFAULT);
@@ -327,7 +327,7 @@ public class PartList {
 		 * </ul>
 		 *
 		 * @param varResolver The variable resolver to use for resolving variables.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder resolving(VarResolver varResolver) {
 			this.varResolver = varResolver;
@@ -340,7 +340,7 @@ public class PartList {
 		 * <p>
 		 * The default behavior is case-sensitive.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder caseInsensitive() {
 			caseInsensitive = true;
@@ -350,7 +350,7 @@ public class PartList {
 		/**
 		 * Removes any parts already in this builder.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder clear() {
@@ -362,7 +362,7 @@ public class PartList {
 		 * Adds the specified parts to the end of the parts in this builder.
 		 *
 		 * @param value The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(PartList value) {
@@ -376,7 +376,7 @@ public class PartList {
 		 * Adds the specified part to the end of the parts in this builder.
 		 *
 		 * @param value The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(NameValuePair value) {
@@ -393,7 +393,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder append(String name, Object value) {
 			return append(createPart(name, value));
@@ -410,7 +410,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder append(String name, Supplier<?> value) {
 			return append(createPart(name, value));
@@ -420,7 +420,7 @@ public class PartList {
 		 * Adds the specified parts to the end of the parts in this builder.
 		 *
 		 * @param values The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(NameValuePair...values) {
@@ -434,7 +434,7 @@ public class PartList {
 		 * Adds the specified parts to the end of the parts in this builder.
 		 *
 		 * @param values The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder append(List<? extends NameValuePair> values) {
@@ -448,7 +448,7 @@ public class PartList {
 		 * Adds the specified part to the beginning of the parts in this builder.
 		 *
 		 * @param value The part to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(PartList value) {
@@ -461,7 +461,7 @@ public class PartList {
 		 * Adds the specified part to the beginning of the parts in this builder.
 		 *
 		 * @param value The part to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(NameValuePair value) {
@@ -478,7 +478,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder prepend(String name, Object value) {
 			return prepend(createPart(name, value));
@@ -495,7 +495,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder prepend(String name, Supplier<?> value) {
 			return prepend(createPart(name, value));
@@ -505,7 +505,7 @@ public class PartList {
 		 * Adds the specified parts to the beginning of the parts in this builder.
 		 *
 		 * @param values The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(NameValuePair...values) {
@@ -518,7 +518,7 @@ public class PartList {
 		 * Adds the specified parts to the beginning of the parts in this builder.
 		 *
 		 * @param values The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder prepend(List<? extends NameValuePair> values) {
@@ -531,7 +531,7 @@ public class PartList {
 		 * Removes the specified part from this builder.
 		 *
 		 * @param value The part to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(PartList value) {
@@ -545,7 +545,7 @@ public class PartList {
 		 * Removes the specified part from this builder.
 		 *
 		 * @param value The part to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(NameValuePair value) {
@@ -558,7 +558,7 @@ public class PartList {
 		 * Removes the specified parts from this builder.
 		 *
 		 * @param values The parts to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(NameValuePair...values) {
@@ -571,7 +571,7 @@ public class PartList {
 		 * Removes the specified parts from this builder.
 		 *
 		 * @param values The parts to remove.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(List<? extends NameValuePair> values) {
@@ -584,7 +584,7 @@ public class PartList {
 		 * Removes the part with the specified name from this builder.
 		 *
 		 * @param name The part name.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(String name) {
@@ -598,7 +598,7 @@ public class PartList {
 		 * Removes the part with the specified name from this builder.
 		 *
 		 * @param names The part name.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder remove(String...names) {
@@ -615,7 +615,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param value The parts to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder set(NameValuePair value) {
@@ -648,7 +648,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param values The parts to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder set(NameValuePair...values) {
@@ -662,7 +662,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder set(String name, Object value) {
 			return set(createPart(name, value));
@@ -673,7 +673,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder set(String name, Supplier<?> value) {
 			return set(createPart(name, value));
@@ -686,7 +686,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param values The parts to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder set(List<? extends NameValuePair> values) {
@@ -723,7 +723,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param values The parts to replace.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder set(PartList values) {
 			if (values != null)
@@ -738,7 +738,7 @@ public class PartList {
 		 * If no part with the same name is found, the given part is added to the end of the list.
 		 *
 		 * @param value The default part to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder setDefault(NameValuePair value) {
@@ -773,7 +773,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param values The default parts to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder setDefault(NameValuePair...values) {
@@ -787,7 +787,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder setDefault(String name, Object value) {
 			return setDefault(createPart(name, value));
@@ -798,7 +798,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder setDefault(String name, Supplier<?> value) {
 			return setDefault(createPart(name, value));
@@ -811,7 +811,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param values The default parts to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder setDefault(List<? extends NameValuePair> values) {
@@ -849,7 +849,7 @@ public class PartList {
 		 * If no part with the same name is found the given part is added to the end of the list.
 		 *
 		 * @param values The default parts to set.  <jk>null</jk> values are ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder setDefault(PartList values) {
 			if (values != null)
@@ -870,7 +870,7 @@ public class PartList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(NameValuePair)}.
 		 * 	</ul>
 		 * @param value The part to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, NameValuePair value) {
@@ -898,7 +898,7 @@ public class PartList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(NameValuePair[])}.
 		 * 	</ul>
 		 * @param values The parts to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, NameValuePair...values) {
@@ -927,7 +927,7 @@ public class PartList {
 		 * 	</ul>
 		 * @param name The part name.
 		 * @param value The part value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(ListOperation flag, String name, Object value) {
 			if (flag == ListOperation.APPEND)
@@ -955,7 +955,7 @@ public class PartList {
 		 * 	</ul>
 		 * @param name The part name.
 		 * @param value The part value supplier.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(ListOperation flag, String name, Supplier<?> value) {
 			if (flag == ListOperation.APPEND)
@@ -982,7 +982,7 @@ public class PartList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Supplier)}.
 		 * 	</ul>
 		 * @param values The parts to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, List<NameValuePair> values) {
@@ -1010,7 +1010,7 @@ public class PartList {
 		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(PartList)}.
 		 * 	</ul>
 		 * @param values The parts to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(ListOperation flag, PartList values) {
 			if (flag == ListOperation.APPEND)
@@ -1032,7 +1032,7 @@ public class PartList {
 		 * creation or copy of lists/arrays.
 		 *
 		 * @param c The consumer.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEach(Consumer<NameValuePair> c) {
 			for (int i = 0, j = entries.size(); i < j; i++)
@@ -1049,7 +1049,7 @@ public class PartList {
 		 *
 		 * @param name The part name.
 		 * @param c The consumer.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEach(String name, Consumer<NameValuePair> c) {
 			for (int i = 0, j = entries.size(); i < j; i++) {
@@ -1509,7 +1509,7 @@ public class PartList {
 	 * creation or copy of lists/arrays.
 	 *
 	 * @param c The consumer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public PartList forEach(Consumer<NameValuePair> c) {
 		for (int i = 0; i < entries.length; i++)
@@ -1526,7 +1526,7 @@ public class PartList {
 	 *
 	 * @param name The part name.
 	 * @param c The consumer.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public PartList forEach(String name, Consumer<NameValuePair> c) {
 		for (int i = 0; i < entries.length; i++)
@@ -1541,7 +1541,7 @@ public class PartList {
 	 * <p>
 	 * This does not involve a copy of the underlying array of <c>NameValuePair</c> objects so should perform well.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Stream<NameValuePair> stream() {
 		return Arrays.stream(entries);
@@ -1554,7 +1554,7 @@ public class PartList {
 	 * This does not involve a copy of the underlying array of <c>NameValuePair</c> objects so should perform well.
 	 *
 	 * @param name The part name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Stream<NameValuePair> stream(String name) {
 		return Arrays.stream(entries).filter(x->eq(name, x.getName()));

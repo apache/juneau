@@ -359,7 +359,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	</tr>
 		 * </table>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addKeyValueTableHeaders() {
@@ -433,7 +433,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	</tr>
 		 * </table>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableDetectLinksInStrings() {
@@ -461,7 +461,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>"label"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder labelParameter(String value) {
@@ -527,7 +527,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	</tr>
 		 * </table>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableDetectLabelParameters() {
@@ -702,7 +702,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link AnchorText#TO_STRING}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriAnchorText(AnchorText value) {

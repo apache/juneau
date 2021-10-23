@@ -14,7 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Optional.*;
 
 import java.lang.reflect.*;
@@ -99,7 +99,7 @@ public class ResponseHeader implements Header {
 	 *
 	 * @param value
 	 * 	The part schema.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseHeader schema(HttpPartSchema value) {
 		this.schema = value;
@@ -115,7 +115,7 @@ public class ResponseHeader implements Header {
 	 * @param value
 	 * 	The new part parser to use for this header.
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseHeader parser(HttpPartParserSession value) {
 		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
@@ -335,7 +335,7 @@ public class ResponseHeader implements Header {
 	 * Same as {@link #asString()} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the header value in.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse asString(Mutable<String> m) {
 		m.set(orElse(null));
@@ -368,7 +368,7 @@ public class ResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	@SuppressWarnings("unchecked")
@@ -395,7 +395,7 @@ public class ResponseHeader implements Header {
 	 * @param m The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	public <T> RestResponse asType(Mutable<T> m, Class<T> type) throws RestCallException {
@@ -425,7 +425,7 @@ public class ResponseHeader implements Header {
 	 * @param m The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	public <T> RestResponse asType(Mutable<T> m, ClassMeta<T> type) throws RestCallException {

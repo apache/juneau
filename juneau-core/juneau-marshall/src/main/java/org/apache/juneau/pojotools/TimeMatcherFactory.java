@@ -13,7 +13,7 @@
 package org.apache.juneau.pojotools;
 
 import static java.util.Calendar.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
 import java.text.*;

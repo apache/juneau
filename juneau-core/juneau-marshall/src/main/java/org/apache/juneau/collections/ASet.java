@@ -174,7 +174,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Adds the value to this set.
 	 *
 	 * @param value The value to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> append(T value) {
 		add(value);
@@ -185,7 +185,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Adds all the values in the specified array to this set.
 	 *
 	 * @param values The values to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> append(T...values) {
 		Collections.addAll(this, values);
@@ -196,7 +196,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Adds all the values in the specified collection to this set.
 	 *
 	 * @param values The values to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> append(Collection<? extends T> values) {
 		addAll(values);
@@ -207,7 +207,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Same as {@link #append(Object)}.
 	 *
 	 * @param value The entry to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> a(T value) {
 		return append(value);
@@ -217,7 +217,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Same as {@link #append(Object[])}.
 	 *
 	 * @param values The entries to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> a(T...values) {
 		return append(values);
@@ -227,7 +227,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Same as {@link #append(Collection)}.
 	 *
 	 * @param values The entries to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> a(Collection<? extends T> values) {
 		return append(values);
@@ -238,7 +238,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 *
 	 * @param flag The boolean value.
 	 * @param value The value to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> appendIf(boolean flag, T value) {
 		if (flag)
@@ -250,7 +250,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 * Adds entries to this set skipping <jk>null</jk> values.
 	 *
 	 * @param values The objects to add to the list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> appendIfNotNull(T...values) {
 		for (T o2 : values)
@@ -264,7 +264,7 @@ public class ASet<T> extends LinkedHashSet<T> {
 	 *
 	 * @param test The predicate to match against.
 	 * @param value The value to add to the list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ASet<T> appendIf(Predicate<Object> test, T value) {
 		return appendIf(test.test(value), value);

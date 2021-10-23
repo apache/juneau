@@ -56,7 +56,7 @@ public class Script extends HtmlElementRawText {
 	 * @param async
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Script async(Object async) {
 		attr("async", deminimize(async, "async"));
@@ -70,7 +70,7 @@ public class Script extends HtmlElementRawText {
 	 * Character encoding of the external script resource.
 	 *
 	 * @param charset The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Script charset(String charset) {
 		attr("charset", charset);
@@ -85,7 +85,7 @@ public class Script extends HtmlElementRawText {
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Script crossorigin(String crossorigin) {
 		attr("crossorigin", crossorigin);
@@ -101,7 +101,7 @@ public class Script extends HtmlElementRawText {
 	 * @param defer
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Script defer(Object defer) {
 		attr("defer", deminimize(defer, "defer"));
@@ -124,7 +124,7 @@ public class Script extends HtmlElementRawText {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Script src(Object src) {
 		attrUri("src", src);
@@ -138,7 +138,7 @@ public class Script extends HtmlElementRawText {
 	 * Type of embedded resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Script type(String type) {
 		attr("type", type);

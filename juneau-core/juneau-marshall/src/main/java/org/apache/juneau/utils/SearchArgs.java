@@ -13,7 +13,7 @@
 package org.apache.juneau.utils;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -85,7 +85,7 @@ public class SearchArgs {
 		 * @param searchTerms
 		 * 	The search terms string.
 		 * 	Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder search(String searchTerms) {
 			if (searchTerms != null) {
@@ -108,7 +108,7 @@ public class SearchArgs {
 		 *
 		 * @param column The column being searched.
 		 * @param searchTerm The search term.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder search(String column, String searchTerm) {
 			this.search.put(column, searchTerm);
@@ -136,7 +136,7 @@ public class SearchArgs {
 		 * @param columns
 		 * 	The columns being viewed.
 		 * 	Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder view(String columns) {
 			if (columns != null)
@@ -151,7 +151,7 @@ public class SearchArgs {
 		 * Empty view columns imply view all columns.
 		 *
 		 * @param columns The columns being viewed.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder view(Collection<String> columns) {
 			this.view.addAll(columns);
@@ -182,7 +182,7 @@ public class SearchArgs {
 		 * @param sortArgs
 		 * 	The columns to sort by.
 		 * 	Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sort(String sortArgs) {
 			if (sortArgs != null)
@@ -203,7 +203,7 @@ public class SearchArgs {
 		 * @param sortArgs
 		 * 	The columns to sort by.
 		 * 	Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sort(Collection<String> sortArgs) {
 			for (String s : sortArgs) {
@@ -221,7 +221,7 @@ public class SearchArgs {
 		 * Specifies the starting line number.
 		 *
 		 * @param position The zero-indexed position.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder position(int position) {
 			this.position = position;
@@ -234,7 +234,7 @@ public class SearchArgs {
 		 * @param limit
 		 * 	The number of rows to return.
 		 * 	If <c>&lt;=0</c>, all rows should be returned.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder limit(int limit) {
 			this.limit = limit;
@@ -248,7 +248,7 @@ public class SearchArgs {
 		 * The default is <jk>false</jk>.
 		 *
 		 * @param value The ignore-case flag value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ignoreCase(boolean value) {
 			this.ignoreCase = value;

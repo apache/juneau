@@ -120,7 +120,7 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Link href(String value) {
 		setHref(value);
@@ -175,7 +175,7 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Link rel(String value) {
 		setRel(value);
@@ -239,7 +239,7 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Link type(String value) {
 		setType(value);
@@ -294,7 +294,7 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Link hreflang(String value) {
 		setHreflang(value);
@@ -349,7 +349,7 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Link title(String value) {
 		setTitle(value);
@@ -404,7 +404,7 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Link length(Integer value) {
 		setLength(value);

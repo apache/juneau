@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.resource;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -107,7 +107,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Copies the contents of the specified HTTP response to this builder.
 	 *
 	 * @param response The response to copy from.  Must not be null.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If content could not be retrieved.
 	 */
 	public HttpResourceBuilder<?> copyFrom(HttpResponse response) throws IOException {
@@ -124,7 +124,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the content on this entity bean.
 	 *
 	 * @param value The entity content, can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> content(Object value) {
@@ -140,7 +140,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * serialization time.
 	 *
 	 * @param value The entity content, can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentSupplier(Supplier<?> value) {
@@ -152,7 +152,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the content type on this entity bean.
 	 *
 	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentType(String value) {
@@ -164,7 +164,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the content type on this entity bean.
 	 *
 	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentType(ContentType value) {
@@ -176,7 +176,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the content length on this entity bean.
 	 *
 	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentLength(long value) {
@@ -188,7 +188,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the content encoding header on this entity bean.
 	 *
 	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentEncoding(String value) {
@@ -200,7 +200,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the content encoding header on this entity bean.
 	 *
 	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentEncoding(ContentEncoding value) {
@@ -216,7 +216,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * 		use chunked encoding.
 	 * </ul>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> chunked() {
@@ -233,7 +233,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * </ul>
 	 *
 	 * @param value The new value for this flag.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> chunked(boolean value) {
@@ -245,7 +245,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
 	 * be read multiple times.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If entity could not be read into memory.
 	 */
 	@FluentSetter
@@ -265,7 +265,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> headers(HeaderList value) {
@@ -277,7 +277,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	/**
 	 * Removes any headers already in this builder.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> clearHeaders() {
 		headersBuilder().clear();
@@ -288,7 +288,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Adds the specified header to the end of the headers in this builder.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> header(Header value) {
 		if (value != null)
@@ -304,7 +304,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> header(String name, String value) {
 		if (name != null && value != null)
@@ -316,7 +316,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Adds the specified headers to the end of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> headers and headers with <jk>null</jk> names or values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> headers(Header...values) {
 		for (Header h : values) {
@@ -342,7 +342,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Adds the specified headers to the end of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> headers(List<Header> values) {
 		headersBuilder().append(values);
@@ -353,7 +353,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Removes the specified header from this builder.
 	 *
 	 * @param value The header to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> removeHeader(Header value) {
 		headersBuilder().remove(value);
@@ -364,7 +364,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Removes the specified headers from this builder.
 	 *
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> removeHeaders(Header...values) {
 		headersBuilder().remove(values);
@@ -375,7 +375,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Removes the specified headers from this builder.
 	 *
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> removeHeaders(List<Header> values) {
 		headersBuilder().remove(values);
@@ -389,7 +389,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> updateHeader(Header value) {
 		headersBuilder().set(value);
@@ -403,7 +403,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> updateHeaders(Header...values) {
 		headersBuilder().set(values);
@@ -417,7 +417,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> updateHeaders(List<Header> values) {
 		headersBuilder().set(values);
@@ -431,7 +431,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * The headers are added in the order in which they appear in the array.
 	 *
 	 * @param values The headers to set
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> setHeaders(Header...values) {
 		headersBuilder().clear().append(values);
@@ -445,7 +445,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * The headers are added in the order in which they appear in the list.
 	 *
 	 * @param values The headers to set
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> setHeaders(List<Header> values) {
 		headersBuilder().clear().append(values);

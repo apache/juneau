@@ -39,7 +39,7 @@ public class MultiIterable<E> implements Iterable<E> {
 	 * Appends the specified iterator to this list of iterators.
 	 *
 	 * @param iterator The iterator to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MultiIterable<E> append(Iterator<E> iterator) {
 		assertArgNotNull("iterator", iterator);

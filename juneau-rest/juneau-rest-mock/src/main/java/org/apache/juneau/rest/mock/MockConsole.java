@@ -96,7 +96,7 @@ public class MockConsole extends PrintStream {
 	/**
 	 * Resets the contents of this buffer.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockConsole reset() {
 		baos.reset();

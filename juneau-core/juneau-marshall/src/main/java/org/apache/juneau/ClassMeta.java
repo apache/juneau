@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
@@ -1829,7 +1829,7 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @param sb The string builder to append this object to.
 	 * @param simple Print simple class names only (no package).
-	 * @return The same string builder passed in (for method chaining).
+	 * @return The passed-in string builder.
 	 */
 	protected StringBuilder toString(StringBuilder sb, boolean simple) {
 		String n = innerClass.getName();

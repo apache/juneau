@@ -14,7 +14,7 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -92,7 +92,7 @@ public class MapBuilder<K,V> {
 	 * <p>
 	 * Otherwise {@link #build()} will never return <jk>null</jk>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> sparse() {
 		this.sparse = true;
@@ -102,7 +102,7 @@ public class MapBuilder<K,V> {
 	/**
 	 * When specified, {@link #build()} will return an unmodifiable map.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> unmodifiable() {
 		this.unmodifiable = true;
@@ -112,7 +112,7 @@ public class MapBuilder<K,V> {
 	/**
 	 * Forces the existing set to be copied instead of appended to.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> copy() {
 		if (map != null)
@@ -123,7 +123,7 @@ public class MapBuilder<K,V> {
 	/**
 	 * Converts the set into a {@link SortedMap}.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> sorted() {
@@ -134,7 +134,7 @@ public class MapBuilder<K,V> {
 	 * Converts the set into a {@link SortedMap} using the specified comparator.
 	 *
 	 * @param comparator The comparator to use for sorting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> sorted(Comparator<K> comparator) {
 		this.comparator = comparator;
@@ -148,7 +148,7 @@ public class MapBuilder<K,V> {
 	 * This is a no-op if the value is <jk>null</jk>.
 	 *
 	 * @param value The map to add to this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> addAll(Map<K,V> value) {
 		if (value != null) {
@@ -165,7 +165,7 @@ public class MapBuilder<K,V> {
 	 *
 	 * @param key The map key.
 	 * @param value The map value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> add(K key, V value) {
 		if (map == null)
@@ -178,7 +178,7 @@ public class MapBuilder<K,V> {
 	 * Adds entries to this list via JSON object strings.
 	 *
 	 * @param values The JSON object strings to parse and add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MapBuilder<K,V> addJson(String...values) {
 		return addAny((Object[])values);
@@ -195,7 +195,7 @@ public class MapBuilder<K,V> {
 	 * </ul>
 	 *
 	 * @param values The values to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addAny(Object...values) {

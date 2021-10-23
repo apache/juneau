@@ -303,7 +303,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A()); <jc>
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder expandedParams() {

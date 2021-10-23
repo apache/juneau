@@ -65,7 +65,7 @@ public class OperationMap extends TreeMap<String,Operation> {
 	 *
 	 * @param httpMethodName The HTTP method name.
 	 * @param operation The operation.
-	 * @return This method (for method chaining).
+	 * @return This object.
 	 */
 	public OperationMap append(String httpMethodName, Operation operation) {
 		put(emptyIfNull(httpMethodName).toLowerCase(), operation);

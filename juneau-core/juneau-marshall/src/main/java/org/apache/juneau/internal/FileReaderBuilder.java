@@ -47,7 +47,7 @@ public final class FileReaderBuilder {
 	 * Sets the file being written from.
 	 *
 	 * @param file The file being written from.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileReaderBuilder file(File file) {
 		this.file = file;
@@ -58,7 +58,7 @@ public final class FileReaderBuilder {
 	 * Sets the path of the file being written from.
 	 *
 	 * @param path The path of the file being written from.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileReaderBuilder file(String path) {
 		this.file = new File(path);
@@ -71,7 +71,7 @@ public final class FileReaderBuilder {
 	 * @param cs
 	 * 	The character encoding.
 	 * 	The default is {@link Charset#defaultCharset()}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileReaderBuilder charset(Charset cs) {
 		this.cs = cs;
@@ -84,7 +84,7 @@ public final class FileReaderBuilder {
 	 * @param cs
 	 * 	The character encoding.
 	 * 	The default is {@link Charset#defaultCharset()}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileReaderBuilder charset(String cs) {
 		this.cs = Charset.forName(cs);
@@ -95,7 +95,7 @@ public final class FileReaderBuilder {
 	 * If called and the file is <jk>null</jk> or non-existent, then the {@link #build()} command will return an empty
 	 * reader instead of a {@link FileNotFoundException}.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FileReaderBuilder allowNoFile() {
 		this.allowNoFile = true;

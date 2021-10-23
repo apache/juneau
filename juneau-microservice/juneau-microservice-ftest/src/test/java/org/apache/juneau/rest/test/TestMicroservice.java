@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.ThrowableUtils.runtimeException;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -128,7 +130,7 @@ public class TestMicroservice {
 				});
 			return rc;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -150,7 +152,7 @@ public class TestMicroservice {
 		try {
 			return HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).build();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

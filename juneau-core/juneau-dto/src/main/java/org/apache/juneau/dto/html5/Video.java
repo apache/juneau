@@ -53,7 +53,7 @@ public class Video extends HtmlElementContainer {
 	 * @param autoplay
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video autoplay(Object autoplay) {
 		attr("autoplay", deminimize(autoplay, "autoplay"));
@@ -70,7 +70,7 @@ public class Video extends HtmlElementContainer {
 	 * @param controls
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video controls(Object controls) {
 		attr("controls", deminimize(controls, "controls"));
@@ -85,7 +85,7 @@ public class Video extends HtmlElementContainer {
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video crossorigin(String crossorigin) {
 		attr("crossorigin", crossorigin);
@@ -102,7 +102,7 @@ public class Video extends HtmlElementContainer {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video height(Object height) {
 		attr("height", height);
@@ -118,7 +118,7 @@ public class Video extends HtmlElementContainer {
 	 * @param loop
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video loop(Object loop) {
 		attr("loop", loop);
@@ -133,7 +133,7 @@ public class Video extends HtmlElementContainer {
 	 * Groups media elements together with an implicit MediaController.
 	 *
 	 * @param mediagroup The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video mediagroup(String mediagroup) {
 		attr("mediagroup", mediagroup);
@@ -150,7 +150,7 @@ public class Video extends HtmlElementContainer {
 	 * @param muted
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video muted(Object muted) {
 		attr("muted", muted);
@@ -165,7 +165,7 @@ public class Video extends HtmlElementContainer {
 	 * Poster frame to show prior to video playback.
 	 *
 	 * @param poster The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video poster(String poster) {
 		attr("poster", poster);
@@ -180,7 +180,7 @@ public class Video extends HtmlElementContainer {
 	 * Hints how much buffering the media resource will likely need.
 	 *
 	 * @param preload The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video preload(String preload) {
 		attr("preload", preload);
@@ -203,7 +203,7 @@ public class Video extends HtmlElementContainer {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video src(Object src) {
 		attrUri("src", src);
@@ -219,7 +219,7 @@ public class Video extends HtmlElementContainer {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Video width(Object width) {
 		attr("width", width);

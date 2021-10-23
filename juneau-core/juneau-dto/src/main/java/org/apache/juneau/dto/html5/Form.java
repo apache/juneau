@@ -61,7 +61,7 @@ public class Form extends HtmlElementMixed {
 	 * Character encodings to use for form submission.
 	 *
 	 * @param acceptcharset The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form acceptcharset(String acceptcharset) {
 		attr("accept-charset", acceptcharset);
@@ -82,7 +82,7 @@ public class Form extends HtmlElementMixed {
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param action The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form action(String action) {
 		attrUri("action", action);
@@ -97,7 +97,7 @@ public class Form extends HtmlElementMixed {
 	 * Default setting for auto-fill feature for controls in the form.
 	 *
 	 * @param autocomplete The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form autocomplete(String autocomplete) {
 		attr("autocomplete", autocomplete);
@@ -111,7 +111,7 @@ public class Form extends HtmlElementMixed {
 	 * Form data set encoding type to use for form submission.
 	 *
 	 * @param enctype The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form enctype(String enctype) {
 		attr("enctype", enctype);
@@ -125,7 +125,7 @@ public class Form extends HtmlElementMixed {
 	 * HTTP method to use for form submission.
 	 *
 	 * @param method The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form method(String method) {
 		attr("method", method);
@@ -139,7 +139,7 @@ public class Form extends HtmlElementMixed {
 	 * Name of form to use in the document.forms API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form name(String name) {
 		attr("name", name);
@@ -154,7 +154,7 @@ public class Form extends HtmlElementMixed {
 	 *
 	 * @param novalidate The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form novalidate(Boolean novalidate) {
 		attr("novalidate", novalidate);
@@ -168,7 +168,7 @@ public class Form extends HtmlElementMixed {
 	 * Browsing context for form submission.
 	 *
 	 * @param target The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Form target(String target) {
 		attr("target", target);

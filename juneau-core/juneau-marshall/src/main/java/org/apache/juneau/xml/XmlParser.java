@@ -14,7 +14,7 @@ package org.apache.juneau.xml;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.lang.annotation.*;
@@ -155,7 +155,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Associates an {@link XMLEventAllocator} with this parser.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder eventAllocator(Class<? extends XMLEventAllocator> value) {
@@ -192,7 +192,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * 	OMap <jv>myMap2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class)</jk>;
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder preserveRootElement() {
@@ -218,7 +218,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Associates an {@link XMLReporter} with this parser.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder reporter(Class<? extends XMLReporter> value) {
@@ -233,7 +233,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Associates an {@link XMLResolver} with this parser.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder resolver(Class<? extends XMLResolver> value) {
@@ -250,7 +250,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * <p>
 		 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder validating() {

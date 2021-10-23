@@ -46,7 +46,7 @@ public class Object_ extends HtmlElementMixed {
 	 * Address of the resource.
 	 *
 	 * @param data The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ data(String data) {
 		attr("data", data);
@@ -60,7 +60,7 @@ public class Object_ extends HtmlElementMixed {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ form(String form) {
 		attr("form", form);
@@ -77,7 +77,7 @@ public class Object_ extends HtmlElementMixed {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ height(Object height) {
 		attr("height", height);
@@ -91,7 +91,7 @@ public class Object_ extends HtmlElementMixed {
 	 * Name of nested browsing context.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ name(String name) {
 		attr("name", name);
@@ -105,7 +105,7 @@ public class Object_ extends HtmlElementMixed {
 	 * Type of embedded resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ type(String type) {
 		attr("type", type);
@@ -122,7 +122,7 @@ public class Object_ extends HtmlElementMixed {
 	 * @param typemustmatch
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ typemustmatch(Object typemustmatch) {
 		attr("typemustmatch", typemustmatch);
@@ -137,7 +137,7 @@ public class Object_ extends HtmlElementMixed {
 	 * Name of image map to use.
 	 *
 	 * @param usemap The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ usemap(String usemap) {
 		attr("usemap", usemap);
@@ -153,7 +153,7 @@ public class Object_ extends HtmlElementMixed {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Object_ width(Object width) {
 		attr("width", width);

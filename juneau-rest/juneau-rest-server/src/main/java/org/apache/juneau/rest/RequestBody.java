@@ -70,7 +70,7 @@ public class RequestBody {
 	 * Sets the schema for this body.
 	 *
 	 * @param schema The new schema for this body.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestBody schema(HttpPartSchema schema) {
 		this.schema = schema;
@@ -518,7 +518,7 @@ public class RequestBody {
 	/**
 	 * Caches the body in memory for reuse.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If error occurs while reading stream.
 	 */
 	public RequestBody cache() throws IOException {

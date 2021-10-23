@@ -279,7 +279,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * Asserts that the body contains the specified value.
 	 *
 	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(String value) throws AssertionError {
@@ -290,7 +290,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * Asserts that the text contains all of the specified substrings.
 	 *
 	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R contains(String...values) throws AssertionError {
@@ -301,7 +301,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * Asserts that the body doesn't contain any of the specified substrings.
 	 *
 	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotContain(String...values) throws AssertionError {
@@ -311,7 +311,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	/**
 	 * Asserts that the body is empty.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() {
@@ -321,7 +321,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	/**
 	 * Asserts that the body is not empty.
 	 *
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() {

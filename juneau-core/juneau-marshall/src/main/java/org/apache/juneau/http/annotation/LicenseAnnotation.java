@@ -103,7 +103,7 @@ public class LicenseAnnotation {
 		 * Sets the {@link License#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -114,7 +114,7 @@ public class LicenseAnnotation {
 		 * Sets the {@link License#url} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder url(String value) {
 			this.url = value;
@@ -125,7 +125,7 @@ public class LicenseAnnotation {
 		 * Sets the {@link License#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

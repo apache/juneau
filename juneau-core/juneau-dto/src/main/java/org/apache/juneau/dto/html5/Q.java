@@ -46,7 +46,7 @@ public class Q extends HtmlElementMixed {
 	 * Link to the source of the quotation or more information about the edit.
 	 *
 	 * @param cite The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Q cite(String cite) {
 		attr("cite", cite);

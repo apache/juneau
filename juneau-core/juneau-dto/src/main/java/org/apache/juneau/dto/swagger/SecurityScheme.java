@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -168,7 +168,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>This SHOULD be in the form of a URL.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme authorizationUrl(String value) {
 		setAuthorizationUrl(value);
@@ -226,7 +226,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme description(String value) {
 		setDescription(value);
@@ -298,7 +298,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 		<li><js>"accessCode"</js>
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme flow(String value) {
 		setFlow(value);
@@ -366,7 +366,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 		<li><js>"header"</js>
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme in(String value) {
 		setIn(value);
@@ -424,7 +424,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme name(String value) {
 		setName(value);
@@ -470,7 +470,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme addScopes(Map<String,String> values) {
 		scopes = mapBuilder(scopes).sparse().addAll(values).build();
@@ -497,7 +497,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to set on this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme scopes(Map<String,String> value) {
 		setScopes(value);
@@ -512,7 +512,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The new value for this property as JSON.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme scopes(String json) {
 		setScopes(mapBuilder(String.class,String.class).sparse().addJson(json).build());
@@ -572,7 +572,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>This SHOULD be in the form of a URL.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme tokenUrl(String value) {
 		setTokenUrl(value);
@@ -648,7 +648,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 		<li><js>"oauth2"</js>
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SecurityScheme type(String value) {
 		setType(value);

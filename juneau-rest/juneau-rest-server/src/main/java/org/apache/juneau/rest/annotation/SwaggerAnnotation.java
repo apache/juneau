@@ -91,7 +91,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#contact()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder contact(Contact value) {
 			this.contact = value;
@@ -102,7 +102,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#description()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -113,7 +113,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#externalDocs()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
 			this.externalDocs = value;
@@ -124,7 +124,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#license()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder license(License value) {
 			this.license = value;
@@ -135,7 +135,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#tags()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tags(Tag...value) {
 			this.tags = value;
@@ -146,7 +146,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#termsOfService()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder termsOfService(String...value) {
 			this.termsOfService = value;
@@ -157,7 +157,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#title()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder title(String...value) {
 			this.title = value;
@@ -168,7 +168,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;
@@ -179,7 +179,7 @@ public class SwaggerAnnotation {
 		 * Sets the {@link Swagger#version()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder version(String value) {
 			this.version = value;

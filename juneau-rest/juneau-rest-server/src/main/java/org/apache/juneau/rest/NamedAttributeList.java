@@ -94,7 +94,7 @@ public class NamedAttributeList {
 		 * Appends the specified rest matcher classes to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(NamedAttribute...values) {
 			for (NamedAttribute v : values)

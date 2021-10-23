@@ -44,7 +44,7 @@ public class Body extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * @param onafterprint The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Body onafterprint(String onafterprint) {
 		attr("onafterprint", onafterprint);
@@ -56,7 +56,7 @@ public class Body extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * @param onbeforeunload The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Body onbeforeunload(String onbeforeunload) {
 		attr("onbeforeunload", onbeforeunload);
@@ -68,7 +68,7 @@ public class Body extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * @param onmessage The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Body onmessage(String onmessage) {
 		attr("onmessage", onmessage);
@@ -80,7 +80,7 @@ public class Body extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * @param ononline The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Body ononline(String ononline) {
 		attr("ononline", ononline);
@@ -92,7 +92,7 @@ public class Body extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * @param onpageshow The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Body onpageshow(String onpageshow) {
 		attr("onpageshow", onpageshow);
@@ -104,7 +104,7 @@ public class Body extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * @param onstorage The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Body onstorage(String onstorage) {
 		attr("onstorage", onstorage);

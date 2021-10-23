@@ -97,7 +97,7 @@ public class Mutable<T> {
 	 * Sets the inner object.
 	 *
 	 * @param t The inner object.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Mutable<T> set(T t) {
 		this.value = t;

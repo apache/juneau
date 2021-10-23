@@ -120,7 +120,7 @@ public class SwapAnnotation {
 		 * Sets the {@link Swap#impl()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder impl(Class<?> value) {
 			this.impl = value;
@@ -131,7 +131,7 @@ public class SwapAnnotation {
 		 * Sets the {@link Swap#mediaTypes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mediaTypes(String...value) {
 			this.mediaTypes = value;
@@ -142,7 +142,7 @@ public class SwapAnnotation {
 		 * Sets the {@link Swap#template()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder template(String value) {
 			this.template = value;
@@ -153,7 +153,7 @@ public class SwapAnnotation {
 		 * Sets the {@link Swap#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(Class<?> value) {
 			this.value = value;

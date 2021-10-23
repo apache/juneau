@@ -114,7 +114,7 @@ public class MarshalledAnnotation {
 		 * Sets the {@link Marshalled#example()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String value) {
 			this.example = value;
@@ -125,7 +125,7 @@ public class MarshalledAnnotation {
 		 * Sets the {@link Marshalled#implClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
 			this.implClass = value;

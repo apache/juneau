@@ -14,7 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -200,7 +200,7 @@ public class Items extends SwaggerElement {
 	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items collectionFormat(String value) {
 		setCollectionFormat(value);
@@ -286,7 +286,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items _default(Object value) {
 		setDefault(value);
@@ -342,7 +342,7 @@ public class Items extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items _enum(Collection<Object> value) {
 		setEnum(value);
@@ -355,7 +355,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>String values can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items _enum(Object...value) {
 		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
@@ -401,7 +401,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items exclusiveMaximum(Boolean value) {
 		setExclusiveMaximum(value);
@@ -414,7 +414,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items exclusiveMaximum(String value) {
 		setExclusiveMaximum(toBoolean(value));
@@ -460,7 +460,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items exclusiveMinimum(Boolean value) {
 		setExclusiveMinimum(value);
@@ -473,7 +473,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items exclusiveMinimum(String value) {
 		setExclusiveMinimum(toBoolean(value));
@@ -531,7 +531,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items format(String value) {
 		setFormat(value);
@@ -591,7 +591,7 @@ public class Items extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items items(Items value) {
 		setItems(value);
@@ -613,7 +613,7 @@ public class Items extends SwaggerElement {
 	 * 	The new value for this property as JSON.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items items(String json) {
 		setItems(toType(json, Items.class));
@@ -659,7 +659,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items maximum(Number value) {
 		setMaximum(value);
@@ -672,7 +672,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items maximum(String value) {
 		setMaximum(toNumber(value));
@@ -718,7 +718,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items maxItems(Integer value) {
 		setMaxItems(value);
@@ -731,7 +731,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items maxItems(String value) {
 		setMaxItems(toInteger(value));
@@ -777,7 +777,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items maxLength(Integer value) {
 		setMaxLength(value);
@@ -790,7 +790,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items maxLength(String value) {
 		setMaxLength(toInteger(value));
@@ -836,7 +836,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items minimum(Number value) {
 		setMinimum(value);
@@ -849,7 +849,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items minimum(String value) {
 		setMinimum(toNumber(value));
@@ -895,7 +895,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items minItems(Integer value) {
 		setMinItems(value);
@@ -908,7 +908,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items minItems(String value) {
 		setMinItems(toInteger(value));
@@ -954,7 +954,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items minLength(Integer value) {
 		setMinLength(value);
@@ -967,7 +967,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items minLength(String value) {
 		setMinLength(toInteger(value));
@@ -1013,7 +1013,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items multipleOf(Number value) {
 		setMultipleOf(value);
@@ -1026,7 +1026,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items multipleOf(String value) {
 		setMultipleOf(toNumber(value));
@@ -1074,7 +1074,7 @@ public class Items extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>This string SHOULD be a valid regular expression.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items pattern(String value) {
 		setPattern(value);
@@ -1122,7 +1122,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items ref(String value) {
 		setRef(value);
@@ -1197,7 +1197,7 @@ public class Items extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items type(String value) {
 		setType(value);
@@ -1243,7 +1243,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items uniqueItems(Boolean value) {
 		setUniqueItems(value);
@@ -1256,7 +1256,7 @@ public class Items extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Items uniqueItems(String value) {
 		setUniqueItems(toBoolean(value));

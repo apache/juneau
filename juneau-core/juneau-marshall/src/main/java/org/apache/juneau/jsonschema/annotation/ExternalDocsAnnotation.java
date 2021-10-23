@@ -124,7 +124,7 @@ public class ExternalDocsAnnotation {
 		 * Sets the {@link ExternalDocs#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -135,7 +135,7 @@ public class ExternalDocsAnnotation {
 		 * Sets the {@link ExternalDocs#url} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder url(String value) {
 			this.url = value;
@@ -146,7 +146,7 @@ public class ExternalDocsAnnotation {
 		 * Sets the {@link ExternalDocs#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

@@ -46,7 +46,7 @@ public class Label extends HtmlElementMixed {
 	 * Associate the label with form control.
 	 *
 	 * @param _for The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Label _for(String _for) {
 		attr("for", _for);
@@ -60,7 +60,7 @@ public class Label extends HtmlElementMixed {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Label form(String form) {
 		attr("form", form);

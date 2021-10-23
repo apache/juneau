@@ -166,7 +166,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * 		is added to it.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder expandedParams() {

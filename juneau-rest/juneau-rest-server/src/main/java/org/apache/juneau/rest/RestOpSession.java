@@ -79,7 +79,7 @@ public class RestOpSession extends ContextSession {
 		 * Sets the logger to use when logging this call.
 		 *
 		 * @param value The new value for this setting.  Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder logger(RestLogger value) {
 			session.logger(value);
@@ -90,7 +90,7 @@ public class RestOpSession extends ContextSession {
 		 * Enables or disabled debug mode on this call.
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IOException Occurs if request body could not be cached into memory.
 		 */
 		public Builder debug(boolean value) throws IOException {
@@ -273,7 +273,7 @@ public class RestOpSession extends ContextSession {
 	/**
 	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestOpSession finish() {
 		try {

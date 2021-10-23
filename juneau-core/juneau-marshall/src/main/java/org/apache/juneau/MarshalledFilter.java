@@ -70,7 +70,7 @@ public final class MarshalledFilter {
 		 * Applies the information in the specified list of {@link Marshalled @Marshalled} annotations to this filter.
 		 *
 		 * @param annotations The annotations to apply.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder applyAnnotations(List<Marshalled> annotations) {
 
@@ -89,7 +89,7 @@ public final class MarshalledFilter {
 		 * Implementation class.
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
 			this.implClass = value;
@@ -100,7 +100,7 @@ public final class MarshalledFilter {
 		 * POJO example in Simplified JSON format.
 		 *
 		 * @param value The new value for this annotation.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String value) {
 			this.example = value;

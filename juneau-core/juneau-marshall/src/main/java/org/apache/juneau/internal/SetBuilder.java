@@ -13,7 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -87,7 +87,7 @@ public class SetBuilder<E> {
 	 * <p>
 	 * Otherwise {@link #build()} will never return <jk>null</jk>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> sparse() {
 		this.sparse = true;
@@ -97,7 +97,7 @@ public class SetBuilder<E> {
 	/**
 	 * When specified, {@link #build()} will return an unmodifiable set.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> unmodifiable() {
 		this.unmodifiable = true;
@@ -107,7 +107,7 @@ public class SetBuilder<E> {
 	/**
 	 * Forces the existing set to be copied instead of appended to.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> copy() {
 		if (set != null)
@@ -118,7 +118,7 @@ public class SetBuilder<E> {
 	/**
 	 * Converts the set into a {@link SortedSet}.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public SetBuilder<E> sorted() {
@@ -129,7 +129,7 @@ public class SetBuilder<E> {
 	 * Converts the set into a {@link SortedSet} using the specified comparator.
 	 *
 	 * @param comparator The comparator to use for sorting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> sorted(Comparator<E> comparator) {
 		this.comparator = comparator;
@@ -143,7 +143,7 @@ public class SetBuilder<E> {
 	 * This is a no-op if the value is <jk>null</jk>.
 	 *
 	 * @param value The collection to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> addAll(Collection<E> value) {
 		if (value != null) {
@@ -159,7 +159,7 @@ public class SetBuilder<E> {
 	 * Adds a single value to this set.
 	 *
 	 * @param value The value to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> add(E value) {
 		if (set == null)
@@ -172,7 +172,7 @@ public class SetBuilder<E> {
 	 * Adds multiple values to this set.
 	 *
 	 * @param values The values to add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public SetBuilder<E> add(E...values) {
@@ -185,7 +185,7 @@ public class SetBuilder<E> {
 	 * Adds entries to this set via JSON array strings.
 	 *
 	 * @param values The JSON array strings to parse and add to this set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SetBuilder<E> addJson(String...values) {
 		return addAny((Object[])values);
@@ -203,7 +203,7 @@ public class SetBuilder<E> {
 	 * </ul>
 	 *
 	 * @param values The values to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public SetBuilder<E> addAny(Object...values) {

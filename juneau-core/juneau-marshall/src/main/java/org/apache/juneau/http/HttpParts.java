@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.time.*;

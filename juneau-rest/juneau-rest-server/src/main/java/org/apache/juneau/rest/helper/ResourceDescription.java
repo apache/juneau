@@ -91,7 +91,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 	 * Sets the name field on this label to a new value.
 	 *
 	 * @param name The new name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResourceDescription name(String name) {
 		this.name = name;
@@ -111,7 +111,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 	 * Sets the description field on this label to a new value.
 	 *
 	 * @param description The new description.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResourceDescription description(String description) {
 		this.description = description;
@@ -122,7 +122,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 	 * Sets the uri field on this label to a new value.
 	 *
 	 * @param uri The new uri.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResourceDescription uri(String uri) {
 		this.uri = uri;

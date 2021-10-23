@@ -37,7 +37,7 @@ public class TargetedAnnotationTBuilder extends TargetedAnnotationBuilder {
 	 * Appends the classes that this annotation applies to.
 	 *
 	 * @param value The values to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public TargetedAnnotationTBuilder on(Class<?>...value) {
@@ -50,7 +50,7 @@ public class TargetedAnnotationTBuilder extends TargetedAnnotationBuilder {
 	 * Appends the classes that this annotation applies to.
 	 *
 	 * @param value The values to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	@FluentSetter

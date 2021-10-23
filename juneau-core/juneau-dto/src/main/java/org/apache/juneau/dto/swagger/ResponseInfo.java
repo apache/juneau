@@ -117,7 +117,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param r
 	 * 	The object to copy fields from.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo copyFrom(ResponseInfo r) {
 		if (r != null) {
@@ -187,7 +187,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo description(String value) {
 		setDescription(value);
@@ -231,7 +231,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * Bean property fluent setter:  <property>example</property>.
 	 *
 	 * @param value The property value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo example(Object value) {
 		setExample(value);
@@ -274,7 +274,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo addExamples(Map<String,Object> values) {
 		examples = mapBuilder(examples).sparse().addAll(values).build();
@@ -289,7 +289,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param mimeType The mime-type string.
 	 * @param example The example.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo example(String mimeType, Object example) {
 		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
@@ -310,7 +310,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo examples(Map<String,Object> value) {
 		setExamples(value);
@@ -327,7 +327,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo examples(String value) {
 		setExamples(mapBuilder(String.class,Object.class).sparse().addJson(value).build());
@@ -370,7 +370,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo addHeaders(Map<String,HeaderInfo> values) {
 		headers = mapBuilder(headers).sparse().addAll(values).build();
@@ -382,7 +382,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param name The header name.
 	 * @param header The header descriptions
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo header(String name, HeaderInfo header) {
 		addHeaders(Collections.singletonMap(name, header));
@@ -409,7 +409,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo headers(Map<String,HeaderInfo> value) {
 		setHeaders(value);
@@ -429,7 +429,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The new value for this property as JSON
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo headers(String json) {
 		setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addJson(json).build());
@@ -508,7 +508,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo schema(SchemaInfo value) {
 		setSchema(value);
@@ -529,7 +529,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property as JSON.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseInfo schema(String json) {
 		setSchema(toType(json, SchemaInfo.class));

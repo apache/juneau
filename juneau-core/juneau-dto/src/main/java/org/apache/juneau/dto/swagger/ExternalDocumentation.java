@@ -134,7 +134,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ExternalDocumentation description(String value) {
 		setDescription(value);
@@ -194,7 +194,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ExternalDocumentation url(URI value) {
 		setUrl(value);
@@ -211,7 +211,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ExternalDocumentation url(URL value) {
 		setUrl(StringUtils.toURI(value));
@@ -228,7 +228,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ExternalDocumentation url(String value) {
 		setUrl(StringUtils.toURI(value));

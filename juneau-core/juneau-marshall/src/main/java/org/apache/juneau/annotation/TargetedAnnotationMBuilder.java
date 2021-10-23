@@ -37,7 +37,7 @@ public class TargetedAnnotationMBuilder extends TargetedAnnotationBuilder {
 	 * Appends the methods that this annotation applies to.
 	 *
 	 * @param value The values to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public TargetedAnnotationMBuilder on(Method...value) {

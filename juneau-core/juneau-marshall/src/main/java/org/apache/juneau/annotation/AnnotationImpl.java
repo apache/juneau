@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.collections.OMap.*;
 import static java.util.Arrays.*;

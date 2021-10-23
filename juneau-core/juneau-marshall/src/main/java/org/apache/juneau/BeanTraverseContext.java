@@ -141,7 +141,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder detectRecursions() {
@@ -198,7 +198,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreRecursions() {
@@ -242,7 +242,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <c>0</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder initialDepth(int value) {
@@ -278,7 +278,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <c>100</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder maxDepth(int value) {

@@ -316,7 +316,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * </p>
 	 *
 	 * @param parent The type.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Override
 	public R isType(Class<?> parent) {
@@ -337,7 +337,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * </p>
 	 *
 	 * @param type The type.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Override
 	public R isExactType(Class<?> type) {
@@ -356,7 +356,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).exists();
 	 * </p>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Override
 	public R exists() {

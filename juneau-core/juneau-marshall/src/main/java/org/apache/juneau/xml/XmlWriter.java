@@ -57,7 +57,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oTag(String ns, String name, boolean needsEncoding) throws IOException {
@@ -76,7 +76,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oTag(String ns, String name) throws IOException {
@@ -87,7 +87,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oTag(String name) throws IOException {
@@ -101,7 +101,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
@@ -114,7 +114,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oTag(int indent, String ns, String name) throws IOException {
@@ -126,7 +126,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oTag(int indent, String name) throws IOException {
@@ -139,7 +139,7 @@ public class XmlWriter extends SerializerWriter {
 	 * <p>
 	 * Shortcut for <code>append(<js>'>'</js>);</code>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter cTag() throws IOException {
@@ -153,7 +153,7 @@ public class XmlWriter extends SerializerWriter {
 	 * <p>
 	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'>'</js>);</code>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter ceTag() throws IOException {
@@ -167,7 +167,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter tag(String ns, String name, boolean needsEncoding) throws IOException {
@@ -186,7 +186,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter tag(String ns, String name) throws IOException {
@@ -197,7 +197,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter tag(String name) throws IOException {
@@ -209,7 +209,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter tag(int indent, String name) throws IOException {
@@ -223,7 +223,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
@@ -236,7 +236,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter tag(int indent, String ns, String name) throws IOException {
@@ -250,7 +250,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter sTag(String ns, String name, boolean needsEncoding) throws IOException {
@@ -262,7 +262,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter sTag(String ns, String name) throws IOException {
@@ -273,7 +273,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter sTag(String name) throws IOException {
@@ -287,7 +287,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
@@ -300,7 +300,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter sTag(int indent, String ns, String name) throws IOException {
@@ -312,7 +312,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter sTag(int indent, String name) throws IOException {
@@ -326,7 +326,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter eTag(String ns, String name, boolean needsEncoding) throws IOException {
@@ -345,7 +345,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter eTag(String ns, String name) throws IOException {
@@ -356,7 +356,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter eTag(String name) throws IOException {
@@ -370,7 +370,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
@@ -383,7 +383,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter eTag(int indent, String ns, String name) throws IOException {
@@ -395,7 +395,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter eTag(int indent, String name) throws IOException {
@@ -409,7 +409,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) throws IOException {
@@ -422,7 +422,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(String name, Object value, boolean valNeedsEncoding) throws IOException {
@@ -435,7 +435,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(String ns, String name, Object value) throws IOException {
@@ -448,7 +448,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(Namespace ns, String name, Object value) throws IOException {
@@ -460,7 +460,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(String name, Object value) throws IOException {
@@ -473,7 +473,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oAttr(String ns, String name) throws IOException {
@@ -489,7 +489,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter oAttr(Namespace ns, String name) throws IOException {
@@ -502,7 +502,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attrUri(Namespace ns, String name, Object value) throws IOException {
@@ -515,7 +515,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attrUri(String ns, String name, Object value) throws IOException {
@@ -527,7 +527,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The attribute name.
 	 * @param value The attribute value.  Can be any object whose <c>toString()</c> method returns a URI.
-	 * @return This object (for method chaining);
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attrUri(String name, Object value) throws IOException {
@@ -538,7 +538,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for calling <code>text(o, <jk>false</jk>);</code>
 	 *
 	 * @param o The object being serialized.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter text(Object o) throws IOException {
@@ -552,7 +552,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param o The object being serialized.
 	 * @param preserveWhitespace
 	 * 	If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter text(Object o, boolean preserveWhitespace) throws IOException {
@@ -564,7 +564,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Same as {@link #text(Object)} but treats the value as a URL to resolved then serialized.
 	 *
 	 * @param o The object being serialized.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter textUri(Object o) throws IOException {

@@ -53,7 +53,7 @@ public class Track extends HtmlElementVoid {
 	 * Enable the track if no other text track is more suitable.
 	 *
 	 * @param _default The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Track _default(String _default) {
 		attr("default", _default);
@@ -67,7 +67,7 @@ public class Track extends HtmlElementVoid {
 	 * The type of text track.
 	 *
 	 * @param kind The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Track kind(String kind) {
 		attr("kind", kind);
@@ -81,7 +81,7 @@ public class Track extends HtmlElementVoid {
 	 * User-visible label.
 	 *
 	 * @param label The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Track label(String label) {
 		attr("label", label);
@@ -104,7 +104,7 @@ public class Track extends HtmlElementVoid {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Track src(Object src) {
 		attrUri("src", src);
@@ -119,7 +119,7 @@ public class Track extends HtmlElementVoid {
 	 * Language of the text track.
 	 *
 	 * @param srclang The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Track srclang(String srclang) {
 		attr("srclang", srclang);

@@ -43,7 +43,7 @@ public class Article extends HtmlElementMixed {
 	 * Adds a header node to this element.
 	 *
 	 * @param children The children inside the header node.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Article header(Object...children) {
 		super.child(HtmlBuilder.header(children));
@@ -54,7 +54,7 @@ public class Article extends HtmlElementMixed {
 	 * Adds a footer node to this element.
 	 *
 	 * @param children The children inside the footer node.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Article footer(Object...children) {
 		super.child(HtmlBuilder.footer(children));
@@ -65,7 +65,7 @@ public class Article extends HtmlElementMixed {
 	 * Adds a link node to this element.
 	 *
 	 * @param link The link node to add to this article.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Article link(Link link) {
 		super.child(link);
@@ -76,7 +76,7 @@ public class Article extends HtmlElementMixed {
 	 * Adds a section node to this element.
 	 *
 	 * @param section The section node to add to this article.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Article section(Section section) {
 		super.child(section);

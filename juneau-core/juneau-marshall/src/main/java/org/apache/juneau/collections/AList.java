@@ -199,7 +199,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Adds the value to this list.
 	 *
 	 * @param value The value to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> append(T value) {
 		add(value);
@@ -210,7 +210,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Adds all the values in the specified array to this list.
 	 *
 	 * @param values The values to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> append(T...values) {
 		Collections.addAll(this, values);
@@ -221,7 +221,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Adds all the values in the specified collection to this list.
 	 *
 	 * @param values The values to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> append(Collection<? extends T> values) {
 		addAll(values);
@@ -232,7 +232,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Same as {@link #append(Object)}.
 	 *
 	 * @param value The entry to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> a(T value) {
 		return append(value);
@@ -242,7 +242,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Same as {@link #append(Collection)}.
 	 *
 	 * @param values The collection to add to this list.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> a(Collection<? extends T> values) {
 		return append(values);
@@ -252,7 +252,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Same as {@link #append(Object...)}.
 	 *
 	 * @param values The array to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> a(T...values) {
 		return append(values);
@@ -263,7 +263,7 @@ public class AList<T> extends ArrayList<T> {
 	 *
 	 * @param flag The boolean flag.
 	 * @param value The value to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> appendIf(boolean flag, T value) {
 		if (flag)
@@ -275,7 +275,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Adds entries to this list skipping <jk>null</jk> values.
 	 *
 	 * @param values The objects to add to the list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> appendIfNotNull(T...values) {
 		for (T o2 : values)
@@ -289,7 +289,7 @@ public class AList<T> extends ArrayList<T> {
 	 *
 	 * @param test The predicate to match against.
 	 * @param value The value to add to the list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> appendIf(Predicate<Object> test, T value) {
 		return appendIf(test.test(value), value);
@@ -302,7 +302,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Adds all the entries in the specified collection to this list in reverse order.
 	 *
 	 * @param values The collection to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> appendReverse(List<? extends T> values) {
 		for (ListIterator<? extends T> i = values.listIterator(values.size()); i.hasPrevious();)
@@ -320,7 +320,7 @@ public class AList<T> extends ArrayList<T> {
 	 * i.e. add values from the array from end-to-start order to the end of the list.
 	 *
 	 * @param values The collection to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> appendReverse(T...values) {
 		for (int i = values.length - 1; i >= 0; i--)
@@ -331,7 +331,7 @@ public class AList<T> extends ArrayList<T> {
 	/**
 	 * Sorts the contents of this list using natural ordering.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> sort() {
 		super.sort(null);
@@ -342,7 +342,7 @@ public class AList<T> extends ArrayList<T> {
 	 * Sorts the contents of this list using the specified comparator.
 	 *
 	 * @param c The comparator to use for sorting.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AList<T> sortWith(Comparator<? super T> c) {
 		super.sort(c);

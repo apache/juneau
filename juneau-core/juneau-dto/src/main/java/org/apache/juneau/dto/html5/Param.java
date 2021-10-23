@@ -48,7 +48,7 @@ public class Param extends HtmlElementVoid {
 	 * Name of parameter.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Param name(String name) {
 		attr("name", name);
@@ -65,7 +65,7 @@ public class Param extends HtmlElementVoid {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Param value(Object value) {
 		attr("value", value);

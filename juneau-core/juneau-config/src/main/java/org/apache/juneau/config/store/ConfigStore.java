@@ -187,7 +187,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 *
 	 * @param name The configuration name to listen for.
 	 * @param l The new listener.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized ConfigStore register(String name, ConfigStoreListener l) {
 		name = resolveName(name);
@@ -205,7 +205,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 *
 	 * @param name The configuration name to listen for.
 	 * @param l The listener to unregister.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized ConfigStore unregister(String name, ConfigStoreListener l) {
 		name = resolveName(name);
@@ -245,7 +245,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 *
 	 * @param name The config name (e.g. the filename without the extension).
 	 * @param contents The new contents.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized ConfigStore update(String name, String contents) {
 		name = resolveName(name);
@@ -261,7 +261,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 *
 	 * @param name The config name (e.g. the filename without the extension).
 	 * @param contentLines The new contents.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized ConfigStore update(String name, String...contentLines) {
 		name = resolveName(name);

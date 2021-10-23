@@ -70,7 +70,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 * 	The list of bean classes to add to this dictionary.
 	 * 	Classes must either specify a {@link Bean#typeName() @Bean(typeName)} value or be another subclass of
 	 * 	<c>BeanDictionaryList</c>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected BeanDictionaryList append(Class<?>...c) {
 		for (Class<?> cc : c)

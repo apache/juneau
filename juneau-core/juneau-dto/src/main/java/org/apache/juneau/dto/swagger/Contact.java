@@ -137,7 +137,7 @@ public class Contact extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Contact email(String value) {
 		setEmail(value);
@@ -195,7 +195,7 @@ public class Contact extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Contact name(String value) {
 		setName(value);
@@ -253,7 +253,7 @@ public class Contact extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Contact url(URI value) {
 		setUrl(value);
@@ -269,7 +269,7 @@ public class Contact extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Contact url(URL value) {
 		setUrl(StringUtils.toURI(value));
@@ -285,7 +285,7 @@ public class Contact extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Contact url(String value) {
 		setUrl(StringUtils.toURI(value));

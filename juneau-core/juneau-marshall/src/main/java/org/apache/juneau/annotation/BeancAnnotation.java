@@ -102,7 +102,7 @@ public class BeancAnnotation {
 		 * Sets the {@link Beanc#properties()}  property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder properties(String value) {
 			this.properties = value;

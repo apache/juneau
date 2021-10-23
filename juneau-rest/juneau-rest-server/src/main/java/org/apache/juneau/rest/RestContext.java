@@ -17,7 +17,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
@@ -854,7 +854,7 @@ public class RestContext extends Context {
 		 * This method allows you to programmatically override it with your own custom config file.
 		 *
 		 * @param config The new config file.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public final Builder config(Config config) {
@@ -2971,7 +2971,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The headers to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultRequestHeaders(Header...values) {
@@ -2985,7 +2985,7 @@ public class RestContext extends Context {
 		 * @param value
 		 * 	The default value of the <c>Accept</c> header.
 		 * 	<br>Ignored if <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultAccept(String value) {
@@ -3000,7 +3000,7 @@ public class RestContext extends Context {
 		 * @param value
 		 * 	The default value of the <c>Content-Type</c> header.
 		 * 	<br>Ignored if <jk>null</jk> or empty.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultContentType(String value) {
@@ -3139,7 +3139,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The headers to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultResponseHeaders(Header...values) {
@@ -3274,7 +3274,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The attributes.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultRequestAttributes(NamedAttribute...values) {
@@ -3428,7 +3428,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 		 */
 		@FluentSetter
@@ -3634,7 +3634,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder debugOn(String value) {
@@ -4525,7 +4525,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDHEADERPARAMS"
 		 * 		<li><js>"Accept,Content-Type"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowedHeaderParams(String value) {
@@ -4588,7 +4588,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODHEADERS"
 		 * 		<li><js>""</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowedMethodHeaders(String value) {
@@ -4661,7 +4661,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODPARAMS"
 		 * 		<li><js>"HEAD,OPTIONS"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder allowedMethodParams(String value) {
@@ -4733,7 +4733,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_CLIENTVERSIONHEADER"
 		 * 		<li><js>"Client-Version"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder clientVersionHeader(String value) {
@@ -4785,7 +4785,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
 		 * 		<li><js>"utf-8"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultCharset(Charset value) {
@@ -4833,7 +4833,7 @@ public class RestContext extends Context {
 		 * 		Useful for debugging PUT and POST methods using only a browser.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableBodyParam() {
@@ -4847,7 +4847,7 @@ public class RestContext extends Context {
 		 * Same as {@link #disableBodyParam()} but allows you to set it as a boolean value.
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableBodyParam(boolean value) {
@@ -4912,7 +4912,7 @@ public class RestContext extends Context {
 		 * 		<li><js>"100M"</js>
 		 * 	</ul>
 		 * 	<br>The default is <js>"100M"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder maxInput(String value) {
@@ -4929,7 +4929,7 @@ public class RestContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder renderResponseStackTraces(boolean value) {
@@ -4943,7 +4943,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder renderResponseStackTraces() {
@@ -5014,7 +5014,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URIAUTHORITY"
 		 * 		<li><jk>null</jk>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriAuthority(String value) {
@@ -5075,7 +5075,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URICONTEXT"
 		 * 		<li><jk>null</jk>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriContext(String value) {
@@ -5134,7 +5134,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URIRELATIVITY"
 		 * 		<li>{@link UriRelativity#RESOURCE}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriRelativity(UriRelativity value) {
@@ -5193,7 +5193,7 @@ public class RestContext extends Context {
 		 * 		<li>Environment variable <js>"RESTCONTEXT_URIRESOLUTION"
 		 * 		<li>{@link UriResolution#ROOT_RELATIVE}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriResolution(UriResolution value) {
@@ -5378,7 +5378,7 @@ public class RestContext extends Context {
 		 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
 		 * 		<li>An instance of {@link RestChild} containing an instantiated resource object and a subpath.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder children(Object...values) {
@@ -5397,7 +5397,7 @@ public class RestContext extends Context {
 		 *
 		 * @param path The child path relative to the parent resource URI.
 		 * @param child The child to add to this resource.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder child(String path, Object child) {
@@ -5416,7 +5416,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder parserListener(Class<? extends ParserListener> value) {
@@ -5479,7 +5479,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder path(String value) {
@@ -5538,7 +5538,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder restChildrenClass(Class<? extends RestChildren> value) {
@@ -5603,7 +5603,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
@@ -5660,7 +5660,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder restOperationsClass(Class<? extends RestOperations> value) {
@@ -5679,7 +5679,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
@@ -5733,7 +5733,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder produces(MediaType...values) {
@@ -5796,7 +5796,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder consumes(MediaType...values) {
@@ -5832,7 +5832,7 @@ public class RestContext extends Context {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
@@ -5848,7 +5848,7 @@ public class RestContext extends Context {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder swaggerProvider(SwaggerProvider value) {
@@ -7217,7 +7217,7 @@ public class RestContext extends Context {
 	/**
 	 * Called during servlet initialization to invoke all {@link HookEvent#POST_INIT} methods.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws ServletException Error occurred.
 	 */
 	public synchronized RestContext postInit() throws ServletException {
@@ -7246,7 +7246,7 @@ public class RestContext extends Context {
 	/**
 	 * Called during servlet initialization to invoke all {@link HookEvent#POST_INIT_CHILD_FIRST} methods.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws ServletException Error occurred.
 	 */
 	public RestContext postInitChildFirst() throws ServletException {

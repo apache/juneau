@@ -50,7 +50,7 @@ public class Data extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Data value(Object value) {
 		attr("value", value);

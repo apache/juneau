@@ -87,7 +87,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#consumes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder consumes(String...value) {
 			this.consumes = value;
@@ -98,7 +98,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#deprecated()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder deprecated(String value) {
 			this.deprecated = value;
@@ -109,7 +109,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#description()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -120,7 +120,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#externalDocs()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder externalDocs(ExternalDocs value) {
 			this.externalDocs = value;
@@ -131,7 +131,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#operationId()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder operationId(String value) {
 			this.operationId = value;
@@ -142,7 +142,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#parameters()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parameters(String...value) {
 			this.parameters = value;
@@ -153,7 +153,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder produces(String...value) {
 			this.produces = value;
@@ -164,7 +164,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#responses()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder responses(String...value) {
 			this.responses = value;
@@ -175,7 +175,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#schemes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder schemes(String...value) {
 			this.schemes = value;
@@ -186,7 +186,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#summary()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder summary(String...value) {
 			this.summary = value;
@@ -197,7 +197,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#tags()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder tags(String...value) {
 			this.tags = value;
@@ -208,7 +208,7 @@ public class OpSwaggerAnnotation {
 		 * Sets the {@link OpSwagger#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

@@ -13,6 +13,7 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.NoSuchElementException;
 
@@ -89,7 +90,7 @@ public class BasicPartIterator implements PartIterator {
 	 */
 	@Override /* Iterator */
 	public void remove() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("Remove is not supported.");
+		throw unsupportedOperationException("Not supported.");
 	}
 
 	private boolean eq(String s1, String s2) {

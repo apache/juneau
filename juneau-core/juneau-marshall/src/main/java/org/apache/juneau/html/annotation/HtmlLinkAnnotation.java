@@ -114,7 +114,7 @@ public class HtmlLinkAnnotation {
 		 * Sets the {@link HtmlLink#nameProperty()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder nameProperty(String value) {
 			this.nameProperty = value;
@@ -125,7 +125,7 @@ public class HtmlLinkAnnotation {
 		 * Sets the {@link HtmlLink#uriProperty()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uriProperty(String value) {
 			this.uriProperty = value;

@@ -48,7 +48,7 @@ public class Optgroup extends HtmlElementContainer {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Optgroup disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -62,7 +62,7 @@ public class Optgroup extends HtmlElementContainer {
 	 * User-visible label.
 	 *
 	 * @param label The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Optgroup label(String label) {
 		attr("label", label);

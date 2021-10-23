@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.jaxrs;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;

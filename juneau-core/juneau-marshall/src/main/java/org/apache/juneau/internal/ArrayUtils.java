@@ -14,6 +14,8 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -106,7 +108,7 @@ public final class ArrayUtils {
 
 					@Override /* Iterator */
 					public void remove() {
-						throw new UnsupportedOperationException();
+						throw unsupportedOperationException("Not supported.");
 					}
 				};
 			}
@@ -147,7 +149,7 @@ public final class ArrayUtils {
 
 			@Override /* Iterator */
 			public void remove() {
-				throw new UnsupportedOperationException();
+				throw unsupportedOperationException("Not supported.");
 			}
 		};
 	}

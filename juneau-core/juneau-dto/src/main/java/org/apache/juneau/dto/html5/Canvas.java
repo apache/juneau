@@ -50,7 +50,7 @@ public class Canvas extends HtmlElementContainer {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Canvas height(Object height) {
 		attr("height", height);
@@ -66,7 +66,7 @@ public class Canvas extends HtmlElementContainer {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Canvas width(Object width) {
 		attr("width", width);

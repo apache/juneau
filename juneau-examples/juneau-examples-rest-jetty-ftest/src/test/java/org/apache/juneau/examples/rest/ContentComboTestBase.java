@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.examples.rest.TestUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;

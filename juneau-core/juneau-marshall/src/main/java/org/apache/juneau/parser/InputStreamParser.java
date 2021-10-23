@@ -120,7 +120,7 @@ public abstract class InputStreamParser extends Parser {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link BinaryFormat#HEX}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder binaryFormat(BinaryFormat value) {

@@ -242,7 +242,7 @@ public abstract class Parser extends BeanContextable {
 		 * Specifies the media type that this parser consumes.
 		 *
 		 * @param value The value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder consumes(String value) {
@@ -280,7 +280,7 @@ public abstract class Parser extends BeanContextable {
 		 * 	<jsm>assertTrue</jsm>(r.isClosed());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder autoCloseStreams() {
@@ -326,7 +326,7 @@ public abstract class Parser extends BeanContextable {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is <c>5</c>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder debugOutputLines(int value) {
@@ -378,7 +378,7 @@ public abstract class Parser extends BeanContextable {
 		 * </p>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder listener(Class<? extends ParserListener> value) {
@@ -437,7 +437,7 @@ public abstract class Parser extends BeanContextable {
 		 * 	}
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder strict() {
@@ -479,7 +479,7 @@ public abstract class Parser extends BeanContextable {
 		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>myMap</jv>.get(<js>"foo"</js>));
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimStrings() {
@@ -542,7 +542,7 @@ public abstract class Parser extends BeanContextable {
 		 * 		</ul>
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder unbuffered() {

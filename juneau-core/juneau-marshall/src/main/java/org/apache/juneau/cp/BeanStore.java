@@ -13,7 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Optional.*;
 import java.lang.annotation.*;
 import java.util.*;

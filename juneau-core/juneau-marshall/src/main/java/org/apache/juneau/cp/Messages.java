@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ResourceBundleUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;

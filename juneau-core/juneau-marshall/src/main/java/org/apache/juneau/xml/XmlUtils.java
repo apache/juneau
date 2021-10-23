@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -248,7 +248,7 @@ public final class XmlUtils {
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being serialized.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
 	public static final Writer encodeAttrName(Writer w, Object o) throws IOException {

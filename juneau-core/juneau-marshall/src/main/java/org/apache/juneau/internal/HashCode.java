@@ -51,7 +51,7 @@ public class HashCode {
 	 * Hashes the hashcode of the specified object into this object.
 	 *
 	 * @param o The object whose hashcode will be hashed with this object.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HashCode add(Object o) {
 		o = unswap(o);
@@ -66,7 +66,7 @@ public class HashCode {
 	 * The formula is simply <c>hashCode = 31*hashCode + i;</c>
 	 *
 	 * @param i The hashcode to hash into this object's hashcode.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HashCode add(int i) {
 		hashCode = 31*hashCode + i;

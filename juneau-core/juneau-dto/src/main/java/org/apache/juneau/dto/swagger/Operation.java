@@ -274,7 +274,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation consumes(MediaType...value) {
 		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
@@ -289,7 +289,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation consumes(Collection<MediaType> value) {
 		setConsumes(value);
@@ -305,7 +305,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * <br>Values can also be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation consumes(String...value) {
 		setConsumes(setBuilder(MediaType.class).sparse().addJson(value).build());
@@ -373,7 +373,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation deprecated(Boolean value) {
 		setDeprecated(value);
@@ -389,7 +389,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation deprecated(String value) {
 		setDeprecated(toBoolean(value));
@@ -449,7 +449,7 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation description(String value) {
 		setDescription(value);
@@ -507,7 +507,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation externalDocs(ExternalDocumentation value) {
 		setExternalDocs(value);
@@ -528,7 +528,7 @@ public class Operation extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation externalDocs(String json) {
 		setExternalDocs(toType(json, ExternalDocumentation.class));
@@ -592,7 +592,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
 	 * 	follow common programming naming conventions.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation operationId(String value) {
 		setOperationId(value);
@@ -705,7 +705,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation parameters(ParameterInfo...value) {
 		setParameters(listBuilder(ParameterInfo.class).sparse().add(value).build());
@@ -720,7 +720,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation parameters(Collection<ParameterInfo> value) {
 		setParameters(value);
@@ -736,7 +736,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<bf>Strings can be JSON arrays of objects.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation parameters(String...value) {
 		setParameters(listBuilder(ParameterInfo.class).sparse().addJson(value).build());
@@ -808,7 +808,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation produces(MediaType...value) {
 		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
@@ -823,7 +823,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation produces(Collection<MediaType> value) {
 		setProduces(value);
@@ -839,7 +839,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can also be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation produces(String...value) {
 		setProduces(setBuilder(MediaType.class).sparse().addJson(value).build());
@@ -927,7 +927,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param statusCode The HTTP status code.
 	 * @param response The response description.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation response(String statusCode, ResponseInfo response) {
 		addResponses(Collections.singletonMap(statusCode, response));
@@ -954,7 +954,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation responses(Map<String,ResponseInfo> value) {
 		setResponses(value);
@@ -974,7 +974,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation responses(String json) {
 		setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addJson(json).build());
@@ -1053,7 +1053,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>String values can also be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation schemes(String...value) {
 		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
@@ -1069,7 +1069,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param values
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation schemes(Collection<String> values) {
 		setSchemes(values);
@@ -1129,7 +1129,7 @@ public class Operation extends SwaggerElement {
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * 	between the security requirements).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation security(String scheme, String...alternatives) {
 		Map<String,List<String>> m = new LinkedHashMap<>();
@@ -1155,7 +1155,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation security(List<Map<String,List<String>>> value) {
 		setSecurity(value);
@@ -1181,7 +1181,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation security(String value) {
@@ -1240,7 +1240,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation summary(String value) {
 		setSummary(value);
@@ -1321,7 +1321,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation tags(Collection<String> value) {
 		setTags(value);
@@ -1338,7 +1338,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 *  <br>Strings can also be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Operation tags(String...value) {
 		setTags(setBuilder(String.class).sparse().addJson(value).build());

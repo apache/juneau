@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -103,7 +103,7 @@ public class Assertion {
 	 *
 	 * @param msg The assertion failure message.
 	 * @param args Optional message arguments.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public Assertion msg(String msg, Object...args) {
@@ -115,7 +115,7 @@ public class Assertion {
 	/**
 	 * If an error occurs, send the error message to STDOUT instead of STDERR.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public Assertion stdout() {
@@ -128,7 +128,7 @@ public class Assertion {
 	 * @param value
 	 * 	The output stream.
 	 * 	Can be <jk>null</jk> to suppress output.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public Assertion out(PrintStream value) {
@@ -142,7 +142,7 @@ public class Assertion {
 	 * <p>
 	 * This is the equivalent to calling <c>out(<jk>null</jk>)</c>.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public Assertion silent() {
@@ -173,7 +173,7 @@ public class Assertion {
 	 * </p>
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public Assertion throwable(Class<? extends RuntimeException> value) {

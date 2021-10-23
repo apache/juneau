@@ -124,7 +124,7 @@ public class HtmlAnnotation {
 		 * Sets the {@link Html#anchorText()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder anchorText(String value) {
 			this.anchorText = value;
@@ -135,7 +135,7 @@ public class HtmlAnnotation {
 		 * Sets the {@link Html#format()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(HtmlFormat value) {
 			this.format = value;
@@ -146,7 +146,7 @@ public class HtmlAnnotation {
 		 * Sets the {@link Html#link()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder link(String value) {
 			this.link = value;
@@ -157,7 +157,7 @@ public class HtmlAnnotation {
 		 * Sets the {@link Html#noTableHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder noTableHeaders(boolean value) {
 			this.noTableHeaders = value;
@@ -168,7 +168,7 @@ public class HtmlAnnotation {
 		 * Sets the {@link Html#noTables()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder noTables(boolean value) {
 			this.noTables = value;
@@ -179,7 +179,7 @@ public class HtmlAnnotation {
 		 * Sets the {@link Html#render()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder render(Class<? extends HtmlRender> value) {
 			this.render = value;

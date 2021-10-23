@@ -363,7 +363,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<li class='link'>{@doc XmlNamespaces}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addNamespaceUrisToRoot() {
@@ -410,7 +410,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<li class='link'>{@doc XmlNamespaces}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableAutoDetectNamespaces() {
@@ -442,7 +442,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>"juneau: http://www.apache.org/2013/Juneau"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder defaultNamespace(Namespace value) {
@@ -460,7 +460,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * 	<li class='link'>{@doc XmlNamespaces}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder enableNamespaces() {
@@ -485,7 +485,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * <p>
 		 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ns() {
@@ -499,7 +499,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * The default list of namespaces associated with this serializer.
 		 *
 		 * @param values The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder namespaces(Namespace...values) {

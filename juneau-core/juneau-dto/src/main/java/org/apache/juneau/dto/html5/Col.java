@@ -48,7 +48,7 @@ public class Col extends HtmlElementVoid {
 	 * @param span
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Col span(Object span) {
 		attr("span", span);

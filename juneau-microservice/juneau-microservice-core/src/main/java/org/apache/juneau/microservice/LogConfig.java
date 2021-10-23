@@ -82,7 +82,7 @@ public class LogConfig {
 	 * If not specified, no file system logging will be used.
 	 *
 	 * @param logFile The log file.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig logFile(String logFile) {
 		this.logFile = logFile;
@@ -97,7 +97,7 @@ public class LogConfig {
 	 * If not specified, uses the JVM working directory.
 	 *
 	 * @param logDir The log directory location as a path relative to the working directory.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig logDir(String logDir) {
 		this.logDir = logDir;
@@ -117,7 +117,7 @@ public class LogConfig {
 	 *
 	 *
 	 * @param formatter The log entry formatter.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @see LogEntryFormatter
 	 */
 	public LogConfig formatter(Formatter formatter) {
@@ -128,7 +128,7 @@ public class LogConfig {
 	/**
 	 * Specified append mode for the log file.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig append() {
 		this.append = true;
@@ -139,7 +139,7 @@ public class LogConfig {
 	 * The maximum number of bytes to write to any one log file.
 	 *
 	 * @param limit The number of bytes.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig limit(int limit) {
 		this.limit = limit;
@@ -150,7 +150,7 @@ public class LogConfig {
 	 * The number of log files to use.
 	 *
 	 * @param count The number of log files.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig count(int count) {
 		this.count = count;
@@ -161,7 +161,7 @@ public class LogConfig {
 	 * The default logging level for the log file.
 	 *
 	 * @param fileLevel The logging level.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig fileLevel(Level fileLevel) {
 		this.fileLevel = fileLevel;
@@ -172,7 +172,7 @@ public class LogConfig {
 	 * The default logging level for the console.
 	 *
 	 * @param consoleLevel The logging level.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig consoleLevel(Level consoleLevel) {
 		this.consoleLevel = consoleLevel;
@@ -183,7 +183,7 @@ public class LogConfig {
 	 * Default logging levels for loggers.
 	 *
 	 * @param levels A map of logger names to logger levels.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig levels(Map<String,Level> levels) {
 		this.levels.putAll(levels);
@@ -195,7 +195,7 @@ public class LogConfig {
 	 *
 	 * @param logger Logger name.
 	 * @param level Logger level.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public LogConfig level(String logger, Level level) {
 		this.levels.put(logger, level);

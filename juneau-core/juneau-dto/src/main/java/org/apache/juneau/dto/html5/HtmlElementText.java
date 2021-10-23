@@ -41,7 +41,7 @@ public class HtmlElementText extends HtmlElement {
 	 * Sets the inner text of this element.
 	 *
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Beanp("c")
 	public HtmlElement setText(Object text) {
@@ -53,7 +53,7 @@ public class HtmlElementText extends HtmlElement {
 	 * Sets the text node on this element.
 	 *
 	 * @param text The text node to add to this element.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HtmlElement text(Object text) {
 		this.text = text;

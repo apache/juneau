@@ -128,7 +128,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <js>"http://www.w3.org/2003/05/soap-envelope"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder soapAction(String value) {

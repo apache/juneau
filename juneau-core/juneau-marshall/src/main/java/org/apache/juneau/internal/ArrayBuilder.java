@@ -59,7 +59,7 @@ public class ArrayBuilder<T> {
 	 * Appends to this array if the specified value is not null.
 	 *
 	 * @param t The element to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws ArrayIndexOutOfBoundsException if size is exceeded.
 	 */
 	public ArrayBuilder<T> add(T t) {

@@ -115,7 +115,7 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Category term(String value) {
 		setTerm(value);
@@ -174,7 +174,7 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Category scheme(Object value) {
 		setScheme(value);
@@ -229,7 +229,7 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Category label(String value) {
 		setLabel(value);

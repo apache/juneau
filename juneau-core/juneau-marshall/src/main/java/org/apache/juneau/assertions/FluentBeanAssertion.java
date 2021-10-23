@@ -135,7 +135,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * a new {@link MapAssertion}.
 	 *
 	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	public FluentMapAssertion<String,Object,R> extract(String...names) {
 		return new FluentMapAssertion<>(this, toBeanMap().getProperties(split(names, ',')), returns());

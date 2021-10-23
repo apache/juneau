@@ -63,7 +63,7 @@ public class Button extends HtmlElementMixed {
 	 * @param autofocus
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button autofocus(Object autofocus) {
 		attr("autofocus", autofocus);
@@ -79,7 +79,7 @@ public class Button extends HtmlElementMixed {
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button disabled(Object disabled) {
 		attr("disabled", deminimize(disabled, "disabled"));
@@ -93,7 +93,7 @@ public class Button extends HtmlElementMixed {
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button form(String form) {
 		attr("form", form);
@@ -114,7 +114,7 @@ public class Button extends HtmlElementMixed {
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param formaction The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button formaction(String formaction) {
 		attrUri("formaction", formaction);
@@ -128,7 +128,7 @@ public class Button extends HtmlElementMixed {
 	 * Form data set encoding type to use for form submission.
 	 *
 	 * @param formenctype The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button formenctype(String formenctype) {
 		attr("formenctype", formenctype);
@@ -142,7 +142,7 @@ public class Button extends HtmlElementMixed {
 	 * HTTP method to use for form submission.
 	 *
 	 * @param formmethod The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button formmethod(String formmethod) {
 		attr("formmethod", formmethod);
@@ -157,7 +157,7 @@ public class Button extends HtmlElementMixed {
 	 * Bypass form control validation for form submission.
 	 *
 	 * @param formnovalidate The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button formnovalidate(String formnovalidate) {
 		attr("formnovalidate", formnovalidate);
@@ -171,7 +171,7 @@ public class Button extends HtmlElementMixed {
 	 * Browsing context for form submission.
 	 *
 	 * @param formtarget The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button formtarget(String formtarget) {
 		attr("formtarget", formtarget);
@@ -185,7 +185,7 @@ public class Button extends HtmlElementMixed {
 	 * Specifies the element's designated pop-up menu.
 	 *
 	 * @param menu The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button menu(String menu) {
 		attr("menu", menu);
@@ -199,7 +199,7 @@ public class Button extends HtmlElementMixed {
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button name(String name) {
 		attr("name", name);
@@ -213,7 +213,7 @@ public class Button extends HtmlElementMixed {
 	 * Type of button.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button type(String type) {
 		attr("type", type);
@@ -229,7 +229,7 @@ public class Button extends HtmlElementMixed {
 	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Button value(Object value) {
 		attr("value", value);

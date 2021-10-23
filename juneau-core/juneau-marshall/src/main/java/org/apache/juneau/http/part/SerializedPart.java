@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
@@ -120,7 +120,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	 * Sets the HTTP part type.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedPart type(HttpPartType value) {
 		type = value;
@@ -131,7 +131,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedPart serializer(HttpPartSerializer value) {
 		if (value != null)
@@ -143,7 +143,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedPart serializer(HttpPartSerializerSession value) {
 		serializer = value;
@@ -154,7 +154,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	 * Sets the schema object that defines the format of the output.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedPart schema(HttpPartSchema value) {
 		this.schema = value;
@@ -184,7 +184,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	/**
 	 * Don't serialize this pair if the value is <jk>null</jk> or an empty string.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedPart skipIfEmpty() {
 		return skipIfEmpty(true);
@@ -194,7 +194,7 @@ public class SerializedPart extends BasicPart implements Headerable {
 	 * Don't serialize this pair if the value is <jk>null</jk> or an empty string.
 	 *
 	 * @param value The new value of this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SerializedPart skipIfEmpty(boolean value) {
 		this.skipIfEmpty = value;

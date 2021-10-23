@@ -83,7 +83,7 @@ public class RestConverterList {
 		 * Appends the specified rest matcher classes to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestConverter>...values) {
@@ -96,7 +96,7 @@ public class RestConverterList {
 		 * Appends the specified rest matcher objects to the list.
 		 *
 		 * @param values The values to add.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder append(RestConverter...values) {
 			for (RestConverter v : values)

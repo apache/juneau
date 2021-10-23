@@ -15,7 +15,7 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -193,7 +193,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param p
 	 * 	The object to copy fields from.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo copyFrom(ParameterInfo p) {
 		if (p != null) {
@@ -308,7 +308,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo allowEmptyValue(Boolean value) {
 		setAllowEmptyValue(value);
@@ -325,7 +325,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo allowEmptyValue(String value) {
 		setAllowEmptyValue(toBoolean(value));
@@ -408,7 +408,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo collectionFormat(String value) {
 		setCollectionFormat(value);
@@ -475,7 +475,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo _default(Object value) {
 		setDefault(value);
@@ -535,7 +535,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo description(String value) {
 		setDescription(value);
@@ -572,7 +572,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo addEnum(Collection<Object> value) {
 		_enum = setBuilder(_enum).sparse().addAll(value).build();
@@ -593,7 +593,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo _enum(Collection<Object> value) {
 		setEnum(value);
@@ -606,7 +606,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can be JSON arrays.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo _enum(Object...value) {
 		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
@@ -650,7 +650,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property fluent setter:  <property>example</property>.
 	 *
 	 * @param value The property value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo example(Object value) {
 		setExample(value);
@@ -687,7 +687,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo addExamples(Map<String,String> values) {
 		examples = mapBuilder(examples).sparse().addAll(values).build();
@@ -702,7 +702,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param name The extra property name.
 	 * @param value The extra property value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo example(String name, String value) {
 		examples = mapBuilder(examples).sparse().add(name, value).build();
@@ -723,7 +723,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo examples(Map<String,String> value) {
 		setExamples(value);
@@ -735,7 +735,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param json
 	 * 	The new value for this property as a JSON object.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo examples(String json) {
 		setExamples(mapBuilder(String.class,String.class).sparse().addJson(json).build());
@@ -779,7 +779,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo exclusiveMaximum(Boolean value) {
 		setExclusiveMaximum(value);
@@ -792,7 +792,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo exclusiveMaximum(String value) {
 		setExclusiveMaximum(toBoolean(value));
@@ -836,7 +836,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo exclusiveMinimum(Boolean value) {
 		setExclusiveMinimum(value);
@@ -849,7 +849,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo exclusiveMinimum(String value) {
 		setExclusiveMinimum(toBoolean(value));
@@ -905,7 +905,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo format(String value) {
 		setFormat(value);
@@ -986,7 +986,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"body"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo in(String value) {
 		setIn(value);
@@ -1046,7 +1046,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo items(Items value) {
 		setItems(value);
@@ -1068,7 +1068,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property as JSON.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo items(String json) {
 		setItems(toType(json, Items.class));
@@ -1112,7 +1112,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo maximum(Number value) {
 		setMaximum(value);
@@ -1125,7 +1125,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo maximum(String value) {
 		setMaximum(toNumber(value));
@@ -1169,7 +1169,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo maxItems(Integer value) {
 		setMaxItems(value);
@@ -1182,7 +1182,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo maxItems(String value) {
 		setMaxItems(toInteger(value));
@@ -1226,7 +1226,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo maxLength(Integer value) {
 		setMaxLength(value);
@@ -1239,7 +1239,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo maxLength(String value) {
 		setMaxLength(toInteger(value));
@@ -1283,7 +1283,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo minimum(Number value) {
 		setMinimum(value);
@@ -1296,7 +1296,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo minimum(String value) {
 		setMinimum(toNumber(value));
@@ -1340,7 +1340,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo minItems(Integer value) {
 		setMinItems(value);
@@ -1353,7 +1353,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo minItems(String value) {
 		setMinItems(toInteger(value));
@@ -1397,7 +1397,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo minLength(Integer value) {
 		setMinLength(value);
@@ -1410,7 +1410,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo minLength(String value) {
 		setMinLength(toInteger(value));
@@ -1456,7 +1456,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo multipleOf(Number value) {
 		setMultipleOf(value);
@@ -1469,7 +1469,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo multipleOf(String value) {
 		setMultipleOf(toNumber(value));
@@ -1538,7 +1538,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo name(String value) {
 		setName(value);
@@ -1585,7 +1585,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>This string SHOULD be a valid regular expression.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo pattern(String value) {
 		setPattern(value);
@@ -1647,7 +1647,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
 	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo required(Boolean value) {
 		setRequired(value);
@@ -1665,7 +1665,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
 	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo required(String value) {
 		setRequired(toBoolean(value));
@@ -1723,7 +1723,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo schema(SchemaInfo value) {
 		setSchema(value);
@@ -1744,7 +1744,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo schema(String json) {
 		setSchema(toType(json, SchemaInfo.class));
@@ -1829,7 +1829,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo type(String value) {
 		setType(value);
@@ -1873,7 +1873,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo uniqueItems(Boolean value) {
 		setUniqueItems(value);
@@ -1886,7 +1886,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ParameterInfo uniqueItems(String value) {
 		setUniqueItems(toBoolean(value));

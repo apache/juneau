@@ -46,7 +46,7 @@ public class Html extends HtmlElementContainer {
 	 * Application cache manifest.
 	 *
 	 * @param manifest The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Html manifest(String manifest) {
 		attr("manifest", manifest);

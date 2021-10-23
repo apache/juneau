@@ -126,7 +126,7 @@ public abstract class ReaderParser extends Parser {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder fileCharset(Charset value) {
@@ -158,7 +158,7 @@ public abstract class ReaderParser extends Parser {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is <js>"UTF-8"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder streamCharset(Charset value) {

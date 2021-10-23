@@ -350,7 +350,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder encoding() {
@@ -409,7 +409,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default value is {@link ParamFormat#UON}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder paramFormat(ParamFormat value) {
@@ -440,7 +440,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	String <jv>uon</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>)
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder paramFormatPlain() {

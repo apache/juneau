@@ -45,7 +45,7 @@ public class Table extends HtmlElementContainer {
 	 * @param border
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Table border(Object border) {
 		attr("border", border);

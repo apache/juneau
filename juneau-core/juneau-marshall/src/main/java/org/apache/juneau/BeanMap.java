@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -377,7 +377,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * </p>
 	 *
 	 * @param input The text that will get parsed into a map and then added to this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public BeanMap<T> load(String input) throws ParseException {
@@ -390,7 +390,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @param r The text that will get parsed into a map and then added to this map.
 	 * @param p The parser to use to parse the text.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by <c>Reader</c>.
 	 */
@@ -406,7 +406,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Identical to {@link #putAll(Map)} except as a fluent-style method.
 	 *
 	 * @param entries The map containing the entries to add to this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
 	public BeanMap<T> load(Map entries) {
@@ -616,7 +616,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Iterator */
 					public void remove() {
-						throw new UnsupportedOperationException("Cannot remove item from iterator.");
+						throw unsupportedOperationException("Cannot remove item from iterator.");
 					}
 				};
 			}

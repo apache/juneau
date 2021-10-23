@@ -53,7 +53,7 @@ public class Embed extends HtmlElementVoid {
 	 * @param height
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Embed height(Object height) {
 		attr("height", height);
@@ -76,7 +76,7 @@ public class Embed extends HtmlElementVoid {
 	 * @param src
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Embed src(Object src) {
 		attrUri("src", src);
@@ -90,7 +90,7 @@ public class Embed extends HtmlElementVoid {
 	 * Type of embedded resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Embed type(String type) {
 		attr("type", type);
@@ -106,7 +106,7 @@ public class Embed extends HtmlElementVoid {
 	 * @param width
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Embed width(Object width) {
 		attr("width", width);

@@ -97,7 +97,7 @@ public class RequestPathParams {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams addDefault(List<NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
@@ -125,7 +125,7 @@ public class RequestPathParams {
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams addDefault(NameValuePair...pairs) {
 		return addDefault(Arrays.asList(pairs));
@@ -198,7 +198,7 @@ public class RequestPathParams {
 	 *
 	 * @param name The parameter name.  Must not be <jk>null</jk>.
 	 * @param value The parameter value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams add(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -220,7 +220,7 @@ public class RequestPathParams {
 	 * <br>Existing parameters with the same name are not changed.
 	 *
 	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
@@ -243,7 +243,7 @@ public class RequestPathParams {
 	 * 	The parameter value.
 	 * 	<br>Converted to a string using {@link Object#toString()}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams set(String name, Object value) {
 		assertArgNotNull("name", name);
@@ -265,7 +265,7 @@ public class RequestPathParams {
 	 * <br>Any previous parameters with the same name are removed.
 	 *
 	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams set(NameValuePair...parameters) {
 		assertArgNotNull("headers", parameters);
@@ -280,7 +280,7 @@ public class RequestPathParams {
 	 * Remove parameters.
 	 *
 	 * @param name The parameter names.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams remove(String...name) {
 		assertArgNotNull("name", name);
@@ -297,7 +297,7 @@ public class RequestPathParams {
 	 * Remove parameters.
 	 *
 	 * @param parameters The parameters to remove.  Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RequestPathParams remove(NameValuePair...parameters) {
 		for (NameValuePair p : parameters)

@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.beans.*;
@@ -282,7 +282,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * 		<li>Environment variable <js>"CONFIG_NAME"
 		 * 		<li><js>"Configuration.cfg"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			name = value;
@@ -298,7 +298,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link ConfigFileStore#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder store(ConfigStore value) {
 			store = value;
@@ -311,7 +311,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * <p>
 		 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder memStore() {
 			store = ConfigMemoryStore.DEFAULT;
@@ -327,7 +327,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(WriterSerializer value) {
 			serializer = value;
@@ -343,7 +343,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link JsonParser#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(ReaderParser value) {
 			parser = value;
@@ -359,7 +359,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder encoder(ConfigEncoder value) {
 			encoder = value;
@@ -375,7 +375,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link VarResolver#DEFAULT}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder varResolver(VarResolver value) {
 			varResolver = value;
@@ -397,7 +397,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * 		<li>Environment variable <js>"CONFIG_BINARYLINELENGTH"
 		 * 		<li><c>-1</c>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder binaryLineLength(int value) {
 			binaryLineLength = value;
@@ -426,7 +426,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"
 		 * 		<li>{@link BinaryFormat#BASE64}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder binaryFormat(BinaryFormat value) {
 			binaryFormat = value;
@@ -447,7 +447,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * 		<li><jk>false</jk>
 		 * 	</ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multiLineValuesOnSeparateLines() {
 			multiLineValuesOnSeparateLines = true;
@@ -468,7 +468,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * 		<li><jk>false</jk>
 		 * 	</ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder readOnly() {
 			readOnly = true;
@@ -664,7 +664,7 @@ public final class Config extends Context implements ConfigEventListener {
 	/**
 	 * Takes the settings defined in this configuration and sets them as system properties.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Config setSystemProperties() {
 		for (String section : getSections()) {
@@ -685,7 +685,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config set(String key, String value) {
@@ -836,7 +836,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * If any entries in the config are marked as encoded but not actually encoded,
 	 * this will encode them.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config encodeEntries() {
@@ -1458,7 +1458,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 		Set<String> keys = configMap.getKeys(section);
 		if (keys == null)
-			throw new IllegalArgumentException("Section '"+section+"' not found in configuration.");
+			throw illegalArgumentException("Section ''{0}'' not found in configuration.", section);
 
 		BeanMap<?> bm = beanSession.toBeanMap(bean);
 		for (String k : keys) {
@@ -1656,7 +1656,7 @@ public final class Config extends Context implements ConfigEventListener {
 		final String section2 = section(section);
 
 		if (! c.isInterface())
-			throw new IllegalArgumentException("Class '"+c.getName()+"' passed to getSectionAsInterface() is not an interface.");
+			throw illegalArgumentException("Class ''{0}'' passed to getSectionAsInterface() is not an interface.", c.getName());
 
 		InvocationHandler h = new InvocationHandler() {
 
@@ -1670,7 +1670,7 @@ public final class Config extends Context implements ConfigEventListener {
 					if (method.equals(wm))
 						return Config.this.set(section2 + '/' + pd.getName(), args[0]);
 				}
-				throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
+				throw unsupportedOperationException("Unsupported interface method.  method=''{0}''", method);
 			}
 		};
 
@@ -1743,7 +1743,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * Removes the section with the specified name.
 	 *
 	 * @param name The name of the section to remove
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config removeSection(String name) {
@@ -1784,7 +1784,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @param importName
 	 * 	The import name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config removeImport(String sectionName, String importName) {
@@ -1797,7 +1797,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * Loads the contents of the specified map of maps into this config.
 	 *
 	 * @param m The maps to load.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws SerializeException Value could not be serialized.
 	 */
 	public Config load(Map<String,Map<String,Object>> m) throws SerializeException {
@@ -1811,7 +1811,7 @@ public final class Config extends Context implements ConfigEventListener {
 	/**
 	 * Commit the changes in this config to the store.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
@@ -1828,7 +1828,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * The writer will automatically be closed.
 	 *
 	 * @param w The writer to send the output to.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to send contents to the writer.
 	 */
 	public Writer writeTo(Writer w) throws IOException {
@@ -1842,7 +1842,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * Listeners should be removed using {@link #removeListener(ConfigEventListener)}.
 	 *
 	 * @param listener The new listener to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized Config addListener(ConfigEventListener listener) {
 		listeners.add(listener);
@@ -1853,7 +1853,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * Removes a listener from this config.
 	 *
 	 * @param listener The listener to remove.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized Config removeListener(ConfigEventListener listener) {
 		listeners.remove(listener);
@@ -1874,7 +1874,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 *
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws InterruptedException Thread was interrupted.
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -1890,7 +1890,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 *
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws InterruptedException Thread was interrupted.
 	 * @throws UnsupportedOperationException If configuration is read only.
@@ -1904,7 +1904,7 @@ public final class Config extends Context implements ConfigEventListener {
 	/**
 	 * Does a rollback of any changes on this config currently in memory.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config rollback() {
@@ -2071,7 +2071,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 	private void checkWrite() {
 		if (readOnly)
-			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
+			throw unsupportedOperationException("Cannot call this method on a read-only configuration.");
 	}
 
 

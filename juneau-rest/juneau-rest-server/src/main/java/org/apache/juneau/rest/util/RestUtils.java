@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;

@@ -86,7 +86,7 @@ public class LocalFile {
 	/**
 	 * Caches the contents of this file into an internal byte array for quick future retrieval.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If file could not be read.
 	 */
 	public LocalFile cache() throws IOException {

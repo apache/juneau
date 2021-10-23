@@ -59,7 +59,7 @@ public class Base extends HtmlElementVoid {
 	 * @param href
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Base href(Object href) {
 		attrUri("href", href);
@@ -74,7 +74,7 @@ public class Base extends HtmlElementVoid {
 	 * Default browsing context for hyperlink navigation and form submission.
 	 *
 	 * @param target The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Base target(String target) {
 		attr("target", target);

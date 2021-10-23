@@ -146,7 +146,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#api} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder api(String...value) {
 			this.api = value;
@@ -157,7 +157,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#code} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder code(int...value) {
 			this.code = value;
@@ -168,7 +168,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder d(String...value) {
 			this.d = value;
@@ -179,7 +179,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#description} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -190,7 +190,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#ex} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ex(String...value) {
 			this.ex = value;
@@ -201,7 +201,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String...value) {
 			this.example = value;
@@ -212,7 +212,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#examples} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder examples(String...value) {
 			this.examples = value;
@@ -223,7 +223,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#exs} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exs(String...value) {
 			this.exs = value;
@@ -234,7 +234,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#headers} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder headers(ResponseHeader...value) {
 			this.headers = value;
@@ -245,7 +245,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#parser} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
 			this.parser = value;
@@ -256,7 +256,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#schema} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder schema(Schema value) {
 			this.schema = value;
@@ -267,7 +267,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;
@@ -278,7 +278,7 @@ public class ResponseAnnotation {
 		 * Sets the {@link Response#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(int...value) {
 			this.value = value;

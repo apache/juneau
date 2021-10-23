@@ -43,7 +43,7 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 	 * Convenience method for adding one or more {@link JsonSchema} objects to this array.
 	 *
 	 * @param schemas The {@link JsonSchema} objects to add to this array.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public JsonSchemaArray addAll(JsonSchema...schemas) {
 		for (JsonSchema s : schemas)

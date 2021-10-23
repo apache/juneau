@@ -24,7 +24,7 @@ public class HtmlWidgetMap extends AMap<String,HtmlWidget> {
 	 * Adds the specified widgets to this map.
 	 *
 	 * @param w The widgets to add to this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public HtmlWidgetMap append(HtmlWidget...w) {
 		for (HtmlWidget ww : w)

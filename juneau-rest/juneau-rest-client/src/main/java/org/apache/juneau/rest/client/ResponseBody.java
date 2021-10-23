@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -134,7 +134,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param value
 	 * 	The new part parser to use for this body.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseBody parser(Parser value) {
 		this.parser = value;
@@ -148,7 +148,7 @@ public class ResponseBody implements HttpEntity {
 	 * Used by schema-based parsers such as {@link OpenApiParser}.
 	 *
 	 * @param value The schema.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseBody schema(HttpPartSchema value) {
 		this.schema = value;
@@ -166,7 +166,7 @@ public class ResponseBody implements HttpEntity {
 	 * 		Multiple calls to this method are ignored.
 	 * </ul>
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResponseBody cache() {
 		this.cached = true;
@@ -347,7 +347,7 @@ public class ResponseBody implements HttpEntity {
 	 * </ul>
 	 *
 	 * @param os The output stream to pipe the output to.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(OutputStream os) throws IOException {
@@ -373,7 +373,7 @@ public class ResponseBody implements HttpEntity {
 	 * </ul>
 	 *
 	 * @param w The writer to pipe the output to.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(Writer w) throws IOException {
@@ -399,7 +399,7 @@ public class ResponseBody implements HttpEntity {
 	 * @param charset
 	 * 	The charset to use for the reader.
 	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(Writer w, Charset charset) throws IOException {
@@ -425,7 +425,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param w The writer to write the output to.
 	 * @param byLines Flush the writers after every line of output.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(Writer w, boolean byLines) throws IOException {
@@ -452,7 +452,7 @@ public class ResponseBody implements HttpEntity {
 	 * @param charset
 	 * 	The charset to use for the reader.
 	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(Writer w, Charset charset, boolean byLines) throws IOException {

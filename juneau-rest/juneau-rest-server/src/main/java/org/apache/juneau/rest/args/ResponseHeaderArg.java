@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.args;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 

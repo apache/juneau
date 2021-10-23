@@ -164,7 +164,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info contact(Contact value) {
 		setContact(value);
@@ -185,7 +185,7 @@ public class Info extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property as JSON.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info contact(String json) {
 		setContact(toType(json, Contact.class));
@@ -245,7 +245,7 @@ public class Info extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info description(String value) {
 		setDescription(value);
@@ -303,7 +303,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info license(License value) {
 		setLicense(value);
@@ -324,7 +324,7 @@ public class Info extends SwaggerElement {
 	 * @param json
 	 * 	The new value for this property as JSON.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info license(String json) {
 		setLicense(toType(json, License.class));
@@ -380,7 +380,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info siteName(String value) {
 		setSiteName(value);
@@ -438,7 +438,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info termsOfService(String value) {
 		setTermsOfService(value);
@@ -495,7 +495,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info title(String value) {
 		setTitle(value);
@@ -553,7 +553,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Info version(String value) {
 		setVersion(value);

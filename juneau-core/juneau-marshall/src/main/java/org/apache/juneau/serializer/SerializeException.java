@@ -114,7 +114,7 @@ public class SerializeException extends BasicException {
 	 * Sets the inner cause for this exception.
 	 *
 	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Override /* Throwable */
 	public synchronized SerializeException initCause(Throwable cause) {

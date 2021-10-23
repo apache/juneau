@@ -70,7 +70,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param typeName The dictionary name of the class.
 	 * @param c The class represented by the dictionary name.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<?> c) {
 		put(typeName, c);
@@ -84,7 +84,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 * @param mapClass The map implementation class.
 	 * @param keyClass The key class.
 	 * @param valueClass The value class.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {
 		assertValidParameter(keyClass);
@@ -99,7 +99,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 * @param typeName The dictionary name of the class.
 	 * @param collectionClass The collection implementation class.
 	 * @param entryClass The entry class.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<? extends Collection> collectionClass, Object entryClass) {
 		assertValidParameter(entryClass);

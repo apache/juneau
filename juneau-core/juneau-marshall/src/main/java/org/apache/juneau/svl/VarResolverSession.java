@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -411,7 +411,7 @@ public class VarResolverSession {
 	 * @param <T> The bean type.
 	 * @param c The bean type.
 	 * @param value The bean.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public <T> VarResolverSession bean(Class<T> c, T value) {
 		beanStore.addBean(c, value);

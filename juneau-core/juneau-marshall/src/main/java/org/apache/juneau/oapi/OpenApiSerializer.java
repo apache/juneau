@@ -171,7 +171,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * </p>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder format(HttpPartFormat value) {
@@ -230,7 +230,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * </p>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder collectionFormat(HttpPartCollectionFormat value) {

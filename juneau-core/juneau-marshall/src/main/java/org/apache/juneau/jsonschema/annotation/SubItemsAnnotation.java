@@ -174,7 +174,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>_default</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _default(String...value) {
 			this._default = value;
@@ -185,7 +185,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>_enum</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder _enum(String...value) {
 			this._enum = value;
@@ -196,7 +196,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>$ref</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder $ref(String value) {
 			this.$ref = value;
@@ -207,7 +207,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>cf</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder cf(String value) {
 			this.cf = value;
@@ -218,7 +218,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>collectionFormat</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(String value) {
 			this.collectionFormat = value;
@@ -229,7 +229,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>df</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder df(String...value) {
 			this.df = value;
@@ -240,7 +240,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>e</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder e(String...value) {
 			this.e = value;
@@ -251,7 +251,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>emax</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emax(boolean value) {
 			this.emax = value;
@@ -262,7 +262,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>emin</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder emin(boolean value) {
 			this.emin = value;
@@ -273,7 +273,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>exclusiveMaximum</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMaximum(boolean value) {
 			this.exclusiveMaximum = value;
@@ -284,7 +284,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>exclusiveMinimum</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
@@ -295,7 +295,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>f</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder f(String value) {
 			this.f = value;
@@ -306,7 +306,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>format</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder format(String value) {
 			this.format = value;
@@ -317,7 +317,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>items</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder items(String...value) {
 			this.items = value;
@@ -328,7 +328,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>max</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder max(String value) {
 			this.max = value;
@@ -339,7 +339,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>maxi</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxi(long value) {
 			this.maxi = value;
@@ -350,7 +350,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>maximum</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maximum(String value) {
 			this.maximum = value;
@@ -361,7 +361,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>maxItems</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxItems(long value) {
 			this.maxItems = value;
@@ -372,7 +372,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>maxl</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxl(long value) {
 			this.maxl = value;
@@ -383,7 +383,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>maxLength</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxLength(long value) {
 			this.maxLength = value;
@@ -394,7 +394,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>min</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder min(String value) {
 			this.min = value;
@@ -405,7 +405,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>mini</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mini(long value) {
 			this.mini = value;
@@ -416,7 +416,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>minimum</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minimum(String value) {
 			this.minimum = value;
@@ -427,7 +427,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>minItems</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minItems(long value) {
 			this.minItems = value;
@@ -438,7 +438,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>minl</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minl(long value) {
 			this.minl = value;
@@ -449,7 +449,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>minLength</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder minLength(long value) {
 			this.minLength = value;
@@ -460,7 +460,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>mo</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder mo(String value) {
 			this.mo = value;
@@ -471,7 +471,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>multipleOf</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder multipleOf(String value) {
 			this.multipleOf = value;
@@ -482,7 +482,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>p</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder p(String value) {
 			this.p = value;
@@ -493,7 +493,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>pattern</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
@@ -504,7 +504,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>t</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder t(String value) {
 			this.t = value;
@@ -515,7 +515,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>type</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder type(String value) {
 			this.type = value;
@@ -526,7 +526,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>ui</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ui(boolean value) {
 			this.ui = value;
@@ -537,7 +537,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>uniqueItems</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder uniqueItems(boolean value) {
 			this.uniqueItems = value;
@@ -548,7 +548,7 @@ public class SubItemsAnnotation {
 		 * Sets the <c>value</c> property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String...value) {
 			this.value = value;

@@ -94,7 +94,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#clientVersion()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder clientVersion(String value) {
 			this.clientVersion = value;
@@ -105,7 +105,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#consumes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder consumes(String...value) {
 			this.consumes = value;
@@ -116,7 +116,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#contextClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder contextClass(Class<? extends RestOpContext> value) {
 			this.contextClass = value;
@@ -127,7 +127,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#converters()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder converters(Class<? extends RestConverter>...value) {
 			this.converters = value;
@@ -138,7 +138,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#debug()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder debug(String value) {
 			this.debug = value;
@@ -149,7 +149,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultAccept()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultAccept(String value) {
 			this.defaultAccept = value;
@@ -160,7 +160,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultCharset()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultCharset(String value) {
 			this.defaultCharset = value;
@@ -171,7 +171,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultContentType()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultContentType(String value) {
 			this.defaultContentType = value;
@@ -182,7 +182,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultRequestFormData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestFormData(String...value) {
 			this.defaultRequestFormData = value;
@@ -193,7 +193,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultRequestQueryData()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestQueryData(String...value) {
 			this.defaultRequestQueryData = value;
@@ -204,7 +204,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultRequestAttributes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestAttributes(String...value) {
 			this.defaultRequestAttributes = value;
@@ -215,7 +215,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultRequestHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultRequestHeaders(String...value) {
 			this.defaultRequestHeaders = value;
@@ -226,7 +226,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#defaultResponseHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder defaultResponseHeaders(String...value) {
 			this.defaultResponseHeaders = value;
@@ -237,7 +237,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#description()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder description(String...value) {
 			this.description = value;
@@ -248,7 +248,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#encoders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
@@ -259,7 +259,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#guards()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder guards(Class<? extends RestGuard>...value) {
 			this.guards = value;
@@ -270,7 +270,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#matchers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder matchers(Class<? extends RestMatcher>...value) {
 			this.matchers = value;
@@ -281,7 +281,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#maxInput()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
 			this.maxInput = value;
@@ -292,7 +292,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#parsers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parsers(Class<?>...value) {
 			this.parsers = value;
@@ -303,7 +303,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#path()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder path(String...value) {
 			this.path = value;
@@ -314,7 +314,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder produces(String...value) {
 			this.produces = value;
@@ -325,7 +325,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder roleGuard(String value) {
 			this.roleGuard = value;
@@ -336,7 +336,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#rolesDeclared()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder rolesDeclared(String value) {
 			this.rolesDeclared = value;
@@ -347,7 +347,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#serializers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder serializers(Class<? extends Serializer>...value) {
 			this.serializers = value;
@@ -358,7 +358,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#summary()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder summary(String value) {
 			this.summary = value;
@@ -369,7 +369,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#swagger()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder swagger(OpSwagger value) {
 			this.swagger = value;
@@ -380,7 +380,7 @@ public class RestPostAnnotation {
 		 * Sets the {@link RestPost#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;

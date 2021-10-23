@@ -79,7 +79,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	 * This does not affect the underlying bean.
 	 *
 	 * @param keys The remaining keys in the bean map (in the specified order).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public DelegateBeanMap<T> filterKeys(List<String> keys) {
 		this.keys.clear();

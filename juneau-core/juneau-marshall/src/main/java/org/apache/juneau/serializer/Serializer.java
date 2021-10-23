@@ -197,7 +197,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * Specifies the media type that this serializer produces.
 		 *
 		 * @param value The value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder produces(String value) {
@@ -235,7 +235,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * The accept value can also contain q-values.
 		 *
 		 * @param value The value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder accept(String value) {
@@ -290,7 +290,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMapp</jv>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addBeanTypes() {
@@ -348,7 +348,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder addRootType() {
@@ -394,7 +394,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder keepNullProperties() {
@@ -457,7 +457,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder listener(Class<? extends SerializerListener> value) {
@@ -489,7 +489,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myArray</jv>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sortCollections() {
@@ -532,7 +532,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sortMaps() {
@@ -583,7 +583,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimEmptyCollections() {
@@ -632,7 +632,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimEmptyMaps() {
@@ -672,7 +672,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myMap</jv>);
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder trimStrings() {
@@ -728,7 +728,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriContext(UriContext value) {
@@ -766,7 +766,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriRelativity#RESOURCE}
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriRelativity(UriRelativity value) {
@@ -806,7 +806,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is {@link UriResolution#NONE}
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder uriResolution(UriResolution value) {

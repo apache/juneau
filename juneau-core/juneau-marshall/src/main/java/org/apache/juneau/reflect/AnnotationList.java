@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -57,7 +57,7 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	/**
 	 * Sort the annotations in this list based on rank.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public AnnotationList sort() {
 		Collections.sort(this, RANK_COMPARATOR);

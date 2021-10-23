@@ -16,7 +16,7 @@ import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static java.util.Optional.*;
@@ -447,7 +447,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanClassVisibility(Visibility value) {
@@ -496,7 +496,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanConstructorVisibility(Visibility value) {
@@ -554,7 +554,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanFieldVisibility(Visibility value) {
@@ -610,7 +610,7 @@ public class BeanContext extends Context {
 		 * @param on The bean that the filter applies to.
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
@@ -644,7 +644,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanMapPutReturnsOldValue() {
@@ -703,7 +703,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link Visibility#PUBLIC}
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanMethodVisibility(Visibility value) {
@@ -756,7 +756,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beansRequireDefaultConstructor() {
@@ -815,7 +815,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beansRequireSerializable() {
@@ -868,7 +868,7 @@ public class BeanContext extends Context {
 		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beansRequireSettersForGetters() {
@@ -922,7 +922,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableBeansRequireSomeProperties() {
@@ -994,7 +994,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param beanClass The bean class.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanProperties(Class<?> beanClass, String properties) {
@@ -1056,7 +1056,7 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanProperties(Map<String,Object> values) {
@@ -1120,7 +1120,7 @@ public class BeanContext extends Context {
 		 * 	The bean class name.
 		 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanProperties(String beanClassName, String properties) {
@@ -1172,7 +1172,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param beanClass The bean class.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
@@ -1226,7 +1226,7 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
@@ -1282,7 +1282,7 @@ public class BeanContext extends Context {
 		 * 	The bean class name.
 		 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
@@ -1337,7 +1337,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param beanClass The bean class.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
@@ -1394,7 +1394,7 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
@@ -1453,7 +1453,7 @@ public class BeanContext extends Context {
 		 * 	The bean class name.
 		 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
@@ -1507,7 +1507,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param beanClass The bean class.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
@@ -1563,7 +1563,7 @@ public class BeanContext extends Context {
 		 * 	The values to add to this builder.
 		 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
@@ -1621,7 +1621,7 @@ public class BeanContext extends Context {
 		 * 	The bean class name.
 		 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
 		 * @param properties Comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
@@ -1716,7 +1716,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder beanDictionary(Class<?>...values) {
@@ -1728,7 +1728,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #beanDictionary(Class...)
 		 */
 		@FluentSetter
@@ -1793,7 +1793,7 @@ public class BeanContext extends Context {
 		 * @param on The class that the dictionary values apply to.
 		 * @param values
 		 * 	The new values for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
@@ -1841,7 +1841,7 @@ public class BeanContext extends Context {
 		 * @param pojoClass The POJO class.
 		 * @param o
 		 * 	An instance of the POJO class used for examples.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public <T> Builder example(Class<T> pojoClass, T o) {
@@ -1890,7 +1890,7 @@ public class BeanContext extends Context {
 		 * @param <T> The POJO class type.
 		 * @param pojoClass The POJO class.
 		 * @param json The simple JSON representation of the example.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public <T> Builder example(Class<T> pojoClass, String json) {
@@ -1939,7 +1939,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder findFluentSetters() {
@@ -1991,7 +1991,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The class that this applies to.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder findFluentSetters(Class<?> on) {
@@ -2028,7 +2028,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreInvocationExceptionsOnGetters() {
@@ -2077,7 +2077,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreInvocationExceptionsOnSetters() {
@@ -2130,7 +2130,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableIgnoreMissingSetters() {
@@ -2180,7 +2180,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableIgnoreTransientFields() {
@@ -2227,7 +2227,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder ignoreUnknownBeanProperties() {
@@ -2274,7 +2274,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableIgnoreUnknownNullBeanProperties() {
@@ -2325,7 +2325,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param interfaceClass The interface class.
 		 * @param implClass The implementation class.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
@@ -2364,7 +2364,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
@@ -2412,7 +2412,7 @@ public class BeanContext extends Context {
 		 * @param on The class that the interface class applies to.
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
@@ -2457,7 +2457,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder interfaces(Class<?>...value) {
@@ -2509,7 +2509,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder locale(Locale value) {
@@ -2560,7 +2560,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder mediaType(MediaType value) {
@@ -2619,7 +2619,7 @@ public class BeanContext extends Context {
 		 * 		<li>Classes.
 		 * 		<li>Arrays and collections of classes.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder notBeanClasses(Class<?>...values) {
@@ -2631,7 +2631,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #notBeanClasses(Class...)
 		 */
 		@FluentSetter
@@ -2689,7 +2689,7 @@ public class BeanContext extends Context {
 		 * 		<li>Strings.
 		 * 		<li>Arrays and collections of anything in this list.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder notBeanPackages(String...values) {
@@ -2701,7 +2701,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #notBeanPackages(String...)
 		 */
 		@FluentSetter
@@ -2760,7 +2760,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link BasicPropertyNamer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
@@ -2801,7 +2801,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link BasicPropertyNamer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
@@ -2845,7 +2845,7 @@ public class BeanContext extends Context {
 		 * 	<li>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sortProperties() {
@@ -2896,7 +2896,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param on The bean classes to sort properties on.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder sortProperties(Class<?>...on) {
@@ -2943,7 +2943,7 @@ public class BeanContext extends Context {
 		 * @param on The class on which the stop class is being applied.
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder stopClass(Class<?> on, Class<?> value) {
@@ -3029,7 +3029,7 @@ public class BeanContext extends Context {
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 		<li>Any array or collection of the objects above.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder swaps(Class<?>...values) {
@@ -3041,7 +3041,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param values
 		 * 	The values to add to this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see #swaps(Class...)
 		 */
 		@FluentSetter
@@ -3107,7 +3107,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder timeZone(TimeZone value) {
@@ -3154,7 +3154,7 @@ public class BeanContext extends Context {
 		 * 	The class the type name is being defined on.
 		 * @param value
 		 * 	The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder typeName(Class<?> on, String value) {
@@ -3210,7 +3210,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <js>"_type"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder typePropertyName(String value) {
@@ -3256,7 +3256,7 @@ public class BeanContext extends Context {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is <js>"_type"</js>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder typePropertyName(Class<?> on, String value) {
@@ -3297,7 +3297,7 @@ public class BeanContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder useEnumNames() {
@@ -3328,7 +3328,7 @@ public class BeanContext extends Context {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder disableInterfaceProxies() {
@@ -3363,7 +3363,7 @@ public class BeanContext extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder useJavaBeanIntrospector() {

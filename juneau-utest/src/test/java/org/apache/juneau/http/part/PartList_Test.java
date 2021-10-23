@@ -495,7 +495,7 @@ public class PartList_Test {
 		assertObject(i5.next()).isString("a=x");
 		assertThrown(()->i5.next()).message().is("Iteration already finished.");
 
-		assertThrown(()->i5.remove()).message().is("Remove is not supported.");
+		assertThrown(()->i5.remove()).message().is("Not supported.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

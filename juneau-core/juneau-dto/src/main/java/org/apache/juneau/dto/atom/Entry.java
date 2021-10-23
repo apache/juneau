@@ -132,7 +132,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Entry content(Content value) {
 		setContent(value);
@@ -186,7 +186,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Entry published(Calendar value) {
 		setPublished(value);
@@ -202,7 +202,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Entry published(String value) {
 		setPublished(parseDateTime(value));
@@ -256,7 +256,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Entry source(Source value) {
 		setSource(value);
@@ -310,7 +310,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Entry summary(Text value) {
 		setSummary(value);
@@ -326,7 +326,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public Entry summary(String value) {
 		setSummary(new Text(value));

@@ -13,7 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;

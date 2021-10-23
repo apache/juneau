@@ -25,7 +25,7 @@ public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 	 *
 	 * @param name The name of the child resource.
 	 * @param description The description of the child resource.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResourceDescriptions append(String name, String description) {
 		super.add(new ResourceDescription(name, description));
@@ -37,7 +37,7 @@ public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 	 * @param name The name of the child resource.
 	 * @param uri The URI of the child resource.
 	 * @param description The description of the child resource.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ResourceDescriptions append(String name, String uri, String description) {
 		super.add(new ResourceDescription(name, uri, description));

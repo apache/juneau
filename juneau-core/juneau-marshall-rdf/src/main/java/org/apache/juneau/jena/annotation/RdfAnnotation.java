@@ -121,7 +121,7 @@ public class RdfAnnotation {
 		 * Sets the {@link Rdf#beanUri} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder beanUri(boolean value) {
 			this.beanUri = value;
@@ -132,7 +132,7 @@ public class RdfAnnotation {
 		 * Sets the {@link Rdf#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder collectionFormat(RdfCollectionFormat value) {
 			this.collectionFormat = value;
@@ -143,7 +143,7 @@ public class RdfAnnotation {
 		 * Sets the {@link Rdf#namespace} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder namespace(String value) {
 			this.namespace = value;
@@ -154,7 +154,7 @@ public class RdfAnnotation {
 		 * Sets the {@link Rdf#prefix} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder prefix(String value) {
 			this.prefix = value;

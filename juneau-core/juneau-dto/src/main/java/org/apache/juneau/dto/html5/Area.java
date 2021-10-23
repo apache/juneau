@@ -53,7 +53,7 @@ public class Area extends HtmlElementVoid {
 	 * Replacement text for use when images are not available.
 	 *
 	 * @param alt The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area alt(String alt) {
 		attr("alt", alt);
@@ -68,7 +68,7 @@ public class Area extends HtmlElementVoid {
 	 * Coordinates for the shape to be created in an image map.
 	 *
 	 * @param coords The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area coords(String coords) {
 		attr("coords", coords);
@@ -84,7 +84,7 @@ public class Area extends HtmlElementVoid {
 	 * @param download
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area download(Object download) {
 		attr("download", download);
@@ -107,7 +107,7 @@ public class Area extends HtmlElementVoid {
 	 * @param href
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area href(Object href) {
 		attrUri("href", href);
@@ -121,7 +121,7 @@ public class Area extends HtmlElementVoid {
 	 * Language of the linked resource.
 	 *
 	 * @param hreflang The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area hreflang(String hreflang) {
 		attr("hreflang", hreflang);
@@ -135,7 +135,7 @@ public class Area extends HtmlElementVoid {
 	 * Relationship between the document containing the hyperlink and the destination resource.
 	 *
 	 * @param rel The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area rel(String rel) {
 		attr("rel", rel);
@@ -149,7 +149,7 @@ public class Area extends HtmlElementVoid {
 	 * The kind of shape to be created in an image map.
 	 *
 	 * @param shape The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area shape(String shape) {
 		attr("shape", shape);
@@ -163,7 +163,7 @@ public class Area extends HtmlElementVoid {
 	 * Browsing context for hyperlink navigation.
 	 *
 	 * @param target The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area target(String target) {
 		attr("target", target);
@@ -177,7 +177,7 @@ public class Area extends HtmlElementVoid {
 	 * Hint for the type of the referenced resource.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Area type(String type) {
 		attr("type", type);

@@ -40,7 +40,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * Appends the specified collection to this set of collections.
 	 *
 	 * @param c The collection to append to this set of collections.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MultiSet<E> append(Collection<E> c) {
 		assertArgNotNull("c", c);

@@ -94,7 +94,7 @@ public class RestResponse implements HttpResponse {
 	 * <p>
 	 * This is equivalent to closing the input stream.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws RestCallException If one of the {@link RestCallInterceptor RestCallInterceptors} threw an exception.
 	 */
 	public RestResponse consume() throws RestCallException {
@@ -110,7 +110,7 @@ public class RestResponse implements HttpResponse {
 	 * Same as {@link #getStatusLine()} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the status line in.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse getStatusLine(Mutable<StatusLine> m) {
 		m.set(getStatusLine());
@@ -132,7 +132,7 @@ public class RestResponse implements HttpResponse {
 	 * Same as {@link #getStatusCode()} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the status code in.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse getStatusCode(Mutable<Integer> m) {
 		m.set(getStatusCode());
@@ -154,7 +154,7 @@ public class RestResponse implements HttpResponse {
 	 * Same as {@link #getReasonPhrase()} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the status line reason phrase in.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse getReasonPhrase(Mutable<String> m) {
 		m.set(getReasonPhrase());
@@ -454,7 +454,7 @@ public class RestResponse implements HttpResponse {
 	 * @param t The throwable cause.
 	 * @param msg The message with {@link MessageFormat}-style arguments.
 	 * @param args The arguments.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse log(Level level, Throwable t, String msg, Object...args) {
 		client.log(level, t, msg, args);
@@ -467,7 +467,7 @@ public class RestResponse implements HttpResponse {
 	 * @param level The log level.
 	 * @param msg The message with {@link MessageFormat}-style arguments.
 	 * @param args The arguments.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public RestResponse log(Level level, String msg, Object...args) {
 		client.log(level, msg, args);

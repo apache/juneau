@@ -101,7 +101,7 @@ public class ThrownStore {
 		 * Specifies a subclass of {@link ThrownStats} to use for individual method statistics.
 		 *
 		 * @param value The new value for this setting.
-		 * @return  This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder statsImplClass(Class<? extends ThrownStats> value) {
 			this.statsImplClass = value;
@@ -116,7 +116,7 @@ public class ThrownStore {
 		 * <br>The {@link ThrownStore#GLOBAL} store can be used for aggregating all thrown exceptions in a single JVM.
 		 *
 		 * @param value The parent store.  Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder parent(ThrownStore value) {
 			this.parent = value;
@@ -130,7 +130,7 @@ public class ThrownStore {
 		 * Stack trace elements that are the specified class will be ignored.
 		 *
 		 * @param value The list of classes to ignore.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder ignoreClasses(Class<?>...value) {
 			this.ignoreClasses = ASet.of(value);
@@ -209,7 +209,7 @@ public class ThrownStore {
 	 * Adds the specified thrown exception to this database.
 	 *
 	 * @param e The exception to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ThrownStats add(Throwable e) {
 		ThrownStats s = find(e);

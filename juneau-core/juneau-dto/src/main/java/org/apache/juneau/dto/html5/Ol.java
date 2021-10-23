@@ -49,7 +49,7 @@ public class Ol extends HtmlElementContainer {
 	 * @param reversed
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Ol reversed(Object reversed) {
 		attr("reversed", deminimize(reversed, "reversed"));
@@ -65,7 +65,7 @@ public class Ol extends HtmlElementContainer {
 	 * @param start
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Ol start(Object start) {
 		attr("start", start);
@@ -79,7 +79,7 @@ public class Ol extends HtmlElementContainer {
 	 * Kind of list marker.
 	 *
 	 * @param type The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Ol type(String type) {
 		attr("type", type);

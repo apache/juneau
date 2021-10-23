@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
@@ -428,7 +428,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * Specifies the {@link Rest}-annotated bean class or instance to test against.
 		 *
 		 * @param value The {@link Rest}-annotated bean class or instance.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder restBean(Object value) {
 			restBean = value;
@@ -439,7 +439,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * Specifies the {@link RestContext} created for the REST bean.
 		 *
 		 * @param value The {@link RestContext} created for the REST bean.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder restContext(RestContext value) {
 			restContext = value;
@@ -465,7 +465,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * </ul>
 		 *
 		 * @param value The context path.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder contextPath(String value) {
 			contextPath = toValidContextPath(value);
@@ -491,7 +491,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * </ul>
 		 *
 		 * @param value The context path.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder servletPath(String value) {
 			servletPath = toValidContextPath(value);
@@ -541,7 +541,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * <review>Needs review</review>
 		 *
 		 * @param value The path variables.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @see MockServletRequest#pathVars(Map)
 		 */
 		public Builder pathVars(Map<String,String> value) {
@@ -556,7 +556,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * Identical to {@link #pathVars(Map)} but allows you to specify as a list of key/value pairs.
 		 *
 		 * @param pairs The key/value pairs.  Must be an even number of parameters.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
 			return pathVars(AMap.<String,String>ofPairs((Object[])pairs));

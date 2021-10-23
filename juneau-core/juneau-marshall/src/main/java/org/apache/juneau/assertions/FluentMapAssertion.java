@@ -178,7 +178,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * Extracts a subset of this map.
 	 *
 	 * @param keys The entries to extract.
-	 * @return The response object (for method chaining).
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
 	public FluentMapAssertion<K,V,R> extract(K...keys) {

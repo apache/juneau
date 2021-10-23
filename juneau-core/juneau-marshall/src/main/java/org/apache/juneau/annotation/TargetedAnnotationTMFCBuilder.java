@@ -37,7 +37,7 @@ public class TargetedAnnotationTMFCBuilder extends TargetedAnnotationTMFBuilder 
 	 * Appends the constructors that this annotation applies to.
 	 *
 	 * @param value The values to append.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public TargetedAnnotationTMFCBuilder on(Constructor<?>...value) {

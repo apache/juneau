@@ -14,7 +14,7 @@ package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -189,7 +189,7 @@ public class ReflectionMap<V> {
 		 * 		<li>A comma-delimited list of anything on this list.
 		 * 	</ul>
 		 * @param value The value for this mapping.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<V> append(String key, V value) {
 			if (isEmpty(key))

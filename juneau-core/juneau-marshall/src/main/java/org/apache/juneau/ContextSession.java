@@ -78,7 +78,7 @@ public abstract class ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.  Value will be ignored.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder debug(Boolean value) {
@@ -93,7 +93,7 @@ public abstract class ContextSession {
 		 * <p>
 		 * The created ContextSession object will be unmodifiable which makes it suitable for caching and reuse.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder unmodifiable() {
@@ -111,7 +111,7 @@ public abstract class ContextSession {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder properties(Map<String,Object> value) {
@@ -124,7 +124,7 @@ public abstract class ContextSession {
 		 *
 		 * @param key The property key.
 		 * @param value The property value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder property(String key, Object value) {

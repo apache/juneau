@@ -72,7 +72,7 @@ public class HasFormDataAnnotation {
 		 * Sets the {@link HasFormData#n} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder n(String value) {
 			this.n = value;
@@ -83,7 +83,7 @@ public class HasFormDataAnnotation {
 		 * Sets the {@link HasFormData#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder name(String value) {
 			this.name = value;
@@ -94,7 +94,7 @@ public class HasFormDataAnnotation {
 		 * Sets the {@link HasFormData#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder value(String value) {
 			this.value = value;

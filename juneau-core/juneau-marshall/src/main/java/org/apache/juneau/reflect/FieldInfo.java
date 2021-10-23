@@ -13,7 +13,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -333,7 +333,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public FieldInfo accessible() {
 		setAccessible();

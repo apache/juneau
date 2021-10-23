@@ -218,7 +218,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 *
 	 * @param name The header name.
 	 * @param value The new header value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockServletResponse header(String name, String value) {
 		setHeader(name, value);
@@ -244,7 +244,7 @@ public class MockServletResponse implements HttpServletResponse {
 	 * Fluent setter for {@link #setStatus(int)}.
 	 *
 	 * @param value The new property value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockServletResponse status(int value) {
 		setStatus(value);

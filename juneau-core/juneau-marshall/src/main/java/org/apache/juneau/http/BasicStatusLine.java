@@ -88,7 +88,7 @@ public class BasicStatusLine implements StatusLine {
 		 * If not specified, <js>"HTTP/1.1"</js> will be used.
 		 *
 		 * @param value The new value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder protocolVersion(ProtocolVersion value) {
@@ -103,7 +103,7 @@ public class BasicStatusLine implements StatusLine {
 		 * If not specified, <c>0</c> will be used.
 		 *
 		 * @param value The new value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder statusCode(int value) {
@@ -119,7 +119,7 @@ public class BasicStatusLine implements StatusLine {
 		 * using the locale on this builder.
 		 *
 		 * @param value The new value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder reasonPhrase(String value) {
@@ -134,7 +134,7 @@ public class BasicStatusLine implements StatusLine {
 		 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
 		 *
 		 * @param value The new value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder reasonPhraseCatalog(ReasonPhraseCatalog value) {
@@ -149,7 +149,7 @@ public class BasicStatusLine implements StatusLine {
 		 * If not specified, uses {@link Locale#getDefault()}.
 		 *
 		 * @param value The new value.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder locale(Locale value) {

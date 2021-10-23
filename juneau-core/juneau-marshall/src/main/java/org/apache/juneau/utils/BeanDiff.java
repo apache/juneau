@@ -79,7 +79,7 @@ public class BeanDiff {
 		 * Specifies the first bean to compare.
 		 *
 		 * @param value The first bean to compare.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> first(T value) {
 			this.first = value;
@@ -90,7 +90,7 @@ public class BeanDiff {
 		 * Specifies the second bean to compare.
 		 *
 		 * @param value The first bean to compare.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> second(T value) {
 			this.second = value;
@@ -104,7 +104,7 @@ public class BeanDiff {
 		 * If not specified, uses {@link BeanContext#DEFAULT}.
 		 *
 		 * @param value The bean context to use for introspecting beans.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> beanContext(BeanContext value) {
 			this.beanContext = value;
@@ -118,7 +118,7 @@ public class BeanDiff {
 		 * If not specified, compares all properties.
 		 *
 		 * @param properties The properties to include in the comparison.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> include(String...properties) {
 			include = ASet.of(properties);
@@ -132,7 +132,7 @@ public class BeanDiff {
 		 * If not specified, compares all properties.
 		 *
 		 * @param properties The properties to include in the comparison.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> include(Set<String> properties) {
 			include = properties;
@@ -143,7 +143,7 @@ public class BeanDiff {
 		 * Specifies the properties to exclude from the comparison.
 		 *
 		 * @param properties The properties to exclude from the comparison.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> exclude(String...properties) {
 			exclude = ASet.of(properties);
@@ -154,7 +154,7 @@ public class BeanDiff {
 		 * Specifies the properties to exclude from the comparison.
 		 *
 		 * @param properties The properties to exclude from the comparison.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder<T> exclude(Set<String> properties) {
 			exclude = properties;

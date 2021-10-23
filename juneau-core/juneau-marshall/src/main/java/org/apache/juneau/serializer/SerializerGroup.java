@@ -13,7 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
@@ -186,7 +186,7 @@ public final class SerializerGroup {
 		 * Associates an existing bean context builder with all serializer builders in this group.
 		 *
 		 * @param value The bean contest builder to associate.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder beanContext(BeanContext.Builder value) {
 			bcBuilder = value;
@@ -227,7 +227,7 @@ public final class SerializerGroup {
 		 * </p>
 		 *
 		 * @param values The serializers to add to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer}.
 		 */
 		public Builder add(Class<?>...values) {
@@ -264,7 +264,7 @@ public final class SerializerGroup {
 		 * </p>
 		 *
 		 * @param values The serializers to set in this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
@@ -301,7 +301,7 @@ public final class SerializerGroup {
 		 * do not affect them.
 		 *
 		 * @param s The serializers to append to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(Serializer...s) {
 			entries.addAll(0, asList(s));
@@ -311,7 +311,7 @@ public final class SerializerGroup {
 		/**
 		 * Clears out any existing serializers in this group.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder clear() {
 			entries.clear();
@@ -336,7 +336,7 @@ public final class SerializerGroup {
 		 * Applies the specified annotations to all applicable serializer builders in this group.
 		 *
 		 * @param work The annotations to apply.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder apply(AnnotationWorkList work) {
 			return forEach(x -> x.apply(work));
@@ -346,7 +346,7 @@ public final class SerializerGroup {
 		 * Performs an action on all serializer builders in this group.
 		 *
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEach(Consumer<Serializer.Builder> action) {
 			builders(Serializer.Builder.class).forEach(action);
@@ -357,7 +357,7 @@ public final class SerializerGroup {
 		 * Performs an action on all writer serializer builders in this group.
 		 *
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEachWS(Consumer<WriterSerializer.Builder> action) {
 			return forEach(WriterSerializer.Builder.class, action);
@@ -367,7 +367,7 @@ public final class SerializerGroup {
 		 * Performs an action on all output stream serializer builders in this group.
 		 *
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEachOSS(Consumer<OutputStreamSerializer.Builder> action) {
 			return forEach(OutputStreamSerializer.Builder.class, action);
@@ -378,7 +378,7 @@ public final class SerializerGroup {
 		 *
 		 * @param type The serializer builder type.
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public <T extends Serializer.Builder> Builder forEach(Class<T> type, Consumer<T> action) {
 			builders(type).forEach(action);

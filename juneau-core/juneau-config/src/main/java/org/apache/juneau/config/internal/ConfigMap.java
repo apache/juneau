@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.internal;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
@@ -340,7 +340,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param preLines
 	 * 	The pre-lines on the section.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap setSection(String section, List<String> preLines) {
 		checkSectionName(section);
@@ -369,7 +369,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param preLines
 	 * 	Optional pre-lines.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List<String> preLines) {
 		checkSectionName(section);
@@ -393,10 +393,10 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param preLines
 	 * 	Optional comment and blank lines to add immediately before the import statement.
 	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
-		throw new UnsupportedOperationException();
+		throw unsupportedOperationException("Not implemented.");
 	}
 
 	/**
@@ -409,7 +409,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Use blank to refer to the default section.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap removeSection(String section) {
 		checkSectionName(section);
@@ -426,7 +426,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param key
 	 * 	The entry key.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap removeEntry(String section, String key) {
 		checkSectionName(section);
@@ -444,10 +444,10 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param importName
 	 * 	The import name.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap removeImport(String section, String importName) {
-		throw new UnsupportedOperationException();
+		throw unsupportedOperationException("Not implemented.");
 	}
 
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
@@ -499,7 +499,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws InterruptedException Thread was interrupted.
 	 */
@@ -541,7 +541,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * We try saving the file up to 10 times.
 	 * <br>If the file keeps changing on the file system, we throw an exception.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ConfigMap commit() throws IOException {
@@ -572,7 +572,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * Registers an event listener on this map.
 	 *
 	 * @param listener The new listener.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap register(ConfigEventListener listener) {
 		listeners.add(listener);
@@ -591,7 +591,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * Unregisters an event listener from this map.
 	 *
 	 * @param listener The listener to remove.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap unregister(ConfigEventListener listener) {
 		listeners.remove(listener);
@@ -691,7 +691,7 @@ public class ConfigMap implements ConfigStoreListener {
 	/**
 	 * Does a rollback of any changes on this map currently in memory.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public ConfigMap rollback() {
 		if (changes.size() > 0) {
@@ -731,12 +731,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw new IllegalArgumentException("Invalid section name: '" + s + "'");
+			throw illegalArgumentException("Invalid section name: ''{0}''", s);
 	}
 
 	private void checkKeyName(String s) {
 		if (! isValidKeyName(s))
-			throw new IllegalArgumentException("Invalid key name: '" + s + "'");
+			throw illegalArgumentException("Invalid key name: ''{0}''", s);
 	}
 
 	private boolean isValidKeyName(String s) {

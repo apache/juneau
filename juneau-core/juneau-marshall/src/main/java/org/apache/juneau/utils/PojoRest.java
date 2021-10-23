@@ -172,7 +172,7 @@ public final class PojoRest {
 	/**
 	 * Call this method to prevent the root object from being overwritten on <c>put("", xxx);</c> calls.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public PojoRest setRootLocked() {
 		this.rootLocked = true;

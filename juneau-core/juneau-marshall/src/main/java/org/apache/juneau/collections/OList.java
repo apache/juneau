@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -112,7 +112,7 @@ public class OList extends LinkedList<Object> {
 
 		@Override /* List */
 		public void add(int location, Object object) {
-			throw new UnsupportedOperationException();
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
@@ -122,12 +122,12 @@ public class OList extends LinkedList<Object> {
 
 		@Override /* List */
 		public Object remove(int location) {
-			throw new UnsupportedOperationException();
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
 		public Object set(int location, Object object) {
-			throw new UnsupportedOperationException();
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
@@ -368,7 +368,7 @@ public class OList extends LinkedList<Object> {
 	 * Useful if you're serializing/parsing beans with transforms defined.
 	 *
 	 * @param session The new bean session.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList session(BeanSession session) {
 		this.session = session;
@@ -383,7 +383,7 @@ public class OList extends LinkedList<Object> {
 	 * Adds the value to this list.
 	 *
 	 * @param value The value to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList append(Object value) {
 		add(value);
@@ -394,7 +394,7 @@ public class OList extends LinkedList<Object> {
 	 * Adds all the values in the specified array to this list.
 	 *
 	 * @param values The values to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList append(Object...values) {
 		Collections.addAll(this, values);
@@ -405,7 +405,7 @@ public class OList extends LinkedList<Object> {
 	 * Adds all the values in the specified collection to this list.
 	 *
 	 * @param values The values to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList append(Collection<?> values) {
 		if (values != null)
@@ -417,7 +417,7 @@ public class OList extends LinkedList<Object> {
 	 * Same as {@link #append(Object)}.
 	 *
 	 * @param value The entry to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList a(Object value) {
 		return append(value);
@@ -427,7 +427,7 @@ public class OList extends LinkedList<Object> {
 	 * Same as {@link #append(Collection)}.
 	 *
 	 * @param values The collection to add to this list.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList a(Collection<?> values) {
 		return append(values);
@@ -437,7 +437,7 @@ public class OList extends LinkedList<Object> {
 	 * Same as {@link #append(Object...)}.
 	 *
 	 * @param values The array to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList a(Object...values) {
 		return append(values);
@@ -448,7 +448,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @param flag The boolean flag.
 	 * @param value The value to add.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList appendIf(boolean flag, Object value) {
 		if (flag)
@@ -460,7 +460,7 @@ public class OList extends LinkedList<Object> {
 	 * Adds entries to this list skipping <jk>null</jk> values.
 	 *
 	 * @param values The objects to add to the list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList appendIfNotNull(Object...values) {
 		for (Object o2 : values)
@@ -473,7 +473,7 @@ public class OList extends LinkedList<Object> {
 	 * Adds all the entries in the specified collection to this list in reverse order.
 	 *
 	 * @param values The collection to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList appendReverse(List<?> values) {
 		for (ListIterator<?> i = values.listIterator(values.size()); i.hasPrevious();)
@@ -488,7 +488,7 @@ public class OList extends LinkedList<Object> {
 	 * i.e. add values from the array from end-to-start order to the end of the list.
 	 *
 	 * @param values The collection to add to this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList appendReverse(Object...values) {
 		for (int i = values.length - 1; i >= 0; i--)
@@ -500,7 +500,7 @@ public class OList extends LinkedList<Object> {
 	 * Add values but skip any strings that are <jk>null</jk> or empty.
 	 *
 	 * @param values The objects to add to the list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList appendIfNotEmpty(String...values) {
 		for (String s : values)
@@ -514,7 +514,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @param test The predicate to match against.
 	 * @param value The value to add if the predicate matches.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList appendIf(Predicate<Object> test, Object value) {
 		return appendIf(test.test(value), value);
@@ -851,7 +851,7 @@ public class OList extends LinkedList<Object> {
 	 * Sets the {@link BeanSession} currently associated with this list.
 	 *
 	 * @param value The {@link BeanSession} currently associated with this list.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public OList setBeanSession(BeanSession value) {
 		this.session = value;
@@ -990,7 +990,7 @@ public class OList extends LinkedList<Object> {
 	 * serializer.
 	 *
 	 * @param w The writer to send the serialized contents of this object.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -1052,17 +1052,17 @@ public class OList extends LinkedList<Object> {
 
 		@Override /* List */
 		public void add(int location, Object object) {
-			throw new UnsupportedOperationException("OList is read-only.");
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
 		public Object remove(int location) {
-			throw new UnsupportedOperationException("OList is read-only.");
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
 		public Object set(int location, Object object) {
-			throw new UnsupportedOperationException("OList is read-only.");
+			throw unsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override

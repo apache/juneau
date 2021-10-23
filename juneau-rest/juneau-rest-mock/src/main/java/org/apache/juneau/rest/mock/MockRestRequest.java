@@ -76,7 +76,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 *
 	 * @param name The servlet request attribute name.
 	 * @param value The servlet request attribute value.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest attribute(String name, Object value) {
 		this.attributeMap.put(name, value);
@@ -91,7 +91,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new servlet attribute values.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest attributes(Map<String,Object> value) {
 		this.attributeMap.clear();
@@ -119,7 +119,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param roles The roles to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest roles(String...roles) {
 		this.roles = roles;
@@ -146,7 +146,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest role(String role) {
 		this.roles = new String[]{role};
@@ -164,7 +164,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest characterEncoding(String value) {
 		this.characterEncoding = value;
@@ -191,7 +191,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest protocol(String value) {
 		this.protocol = value;
@@ -218,7 +218,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@Override
 	public MockRestRequest uriScheme(String value) {
@@ -247,7 +247,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest serverName(String value) {
 		this.serverName = value;
@@ -274,7 +274,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest serverPort(int value) {
 		this.serverPort = value;
@@ -301,7 +301,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest remoteAddr(String value) {
 		this.remoteAddr = value;
@@ -328,7 +328,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest remoteHost(String value) {
 		this.remoteHost = value;
@@ -355,7 +355,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest locale(Locale value) {
 		this.locale = value;
@@ -383,7 +383,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest remotePort(int value) {
 		this.remotePort = value;
@@ -410,7 +410,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest localName(String value) {
 		this.localName = value;
@@ -437,7 +437,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest localAddr(String value) {
 		this.localAddr = value;
@@ -464,7 +464,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest localPort(int value) {
 		this.localPort = value;
@@ -492,7 +492,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 *
 	 * @param path The path to the resource being resolved.
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest requestDispatcher(String path, RequestDispatcher value) {
 		this.requestDispatcherMap.put(path, value);
@@ -519,7 +519,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest servletContext(ServletContext value) {
 		this.servletContext = value;
@@ -546,7 +546,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest dispatcherType(DispatcherType value) {
 		this.dispatcherType = value;
@@ -573,7 +573,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest authType(String value) {
 		this.authType = value;
@@ -600,7 +600,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest cookies(Cookie[] value) {
 		this.cookies = value;
@@ -627,7 +627,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest pathInfo(String value) {
 		this.pathInfo = value;
@@ -654,7 +654,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest pathTranslated(String value) {
 		this.pathTranslated = value;
@@ -681,7 +681,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest contextPath(String value) {
 		this.contextPath = value;
@@ -708,7 +708,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest queryString(String value) {
 		this.queryString = value;
@@ -735,7 +735,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest remoteUser(String value) {
 		this.remoteUser = value;
@@ -762,7 +762,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest userPrincipal(Principal value) {
 		this.userPrincipal = value;
@@ -789,7 +789,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest requestedSessionId(String value) {
 		this.requestedSessionId = value;
@@ -816,7 +816,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest requestURI(String value) {
 		this.requestURI = value;
@@ -843,7 +843,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest servletPath(String value) {
 		this.servletPath = value;
@@ -870,7 +870,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * and right before {@link HttpClientConnection#sendRequestEntity(HttpEntityEnclosingRequest)}.
 	 *
 	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public MockRestRequest httpSession(HttpSession value) {
 		this.httpSession = value;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;

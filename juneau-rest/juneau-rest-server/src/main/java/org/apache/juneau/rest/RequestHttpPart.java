@@ -62,7 +62,7 @@ public abstract class RequestHttpPart {
 	 *
 	 * @param value
 	 * 	The part schema.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public RequestHttpPart schema(HttpPartSchema value) {
@@ -79,7 +79,7 @@ public abstract class RequestHttpPart {
 	 * @param value
 	 * 	The new part parser to use for this part.
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public RequestHttpPart parser(HttpPartParserSession value) {

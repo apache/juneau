@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -116,7 +116,7 @@ public class MockLogger extends Logger {
 	 * Sets the level for this logger.
 	 *
 	 * @param level The new level for this logger.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockLogger level(Level level) {
 		super.setLevel(level);
@@ -130,7 +130,7 @@ public class MockLogger extends Logger {
 	 * See {@link SimpleFormatter#format(LogRecord)} for the syntax of this string.
 	 *
 	 * @param format The format string.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockLogger format(String format) {
 		this.format = format;
@@ -144,7 +144,7 @@ public class MockLogger extends Logger {
 	 * The default uses {@link SimpleFormatter}.
 	 *
 	 * @param formatter The log record formatter.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockLogger formatter(Formatter formatter) {
 		this.formatter = formatter;
@@ -154,7 +154,7 @@ public class MockLogger extends Logger {
 	/**
 	 * Resets this logger.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockLogger reset() {
 		logRecords.clear();
@@ -165,7 +165,7 @@ public class MockLogger extends Logger {
 	/**
 	 * Asserts that this logger was called.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockLogger assertLogged() {
 		if (logRecords.isEmpty())
@@ -177,7 +177,7 @@ public class MockLogger extends Logger {
 	 * Asserts that the last message was logged at the specified level.
 	 *
 	 * @param level The level to match against.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized MockLogger assertLastLevel(Level level) {
 		assertLogged();
@@ -189,7 +189,7 @@ public class MockLogger extends Logger {
 	/**
 	 * Asserts that the last message matched the specified message.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized FluentStringAssertion<MockLogger> assertLastMessage() {
 		assertLogged();
@@ -199,7 +199,7 @@ public class MockLogger extends Logger {
 	/**
 	 * Asserts that the specified number of messages have been logged.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public synchronized FluentIntegerAssertion<MockLogger> assertRecordCount() {
 		return new FluentIntegerAssertion<>(logRecords.size(), this);

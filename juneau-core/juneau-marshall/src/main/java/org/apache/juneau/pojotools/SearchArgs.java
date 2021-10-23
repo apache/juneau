@@ -53,7 +53,7 @@ public class SearchArgs {
 	 *
 	 * @param column The column name to search.
 	 * @param searchTerm The search term.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public SearchArgs append(String column, String searchTerm) {
 		this.search.put(column, searchTerm);

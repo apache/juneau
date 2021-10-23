@@ -13,7 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
@@ -194,7 +194,7 @@ public final class ParserGroup {
 		 * Associates an existing bean context builder with all parser builders in this group.
 		 *
 		 * @param value The bean contest builder to associate.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder beanContext(BeanContext.Builder value) {
 			bcBuilder = value;
@@ -235,7 +235,7 @@ public final class ParserGroup {
 		 * </p>
 		 *
 		 * @param values The parsers to add to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser}.
 		 */
 		public Builder add(Class<?>...values) {
@@ -275,7 +275,7 @@ public final class ParserGroup {
 		 * </p>
 		 *
 		 * @param values The parsers to set in this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
@@ -312,7 +312,7 @@ public final class ParserGroup {
 		 * do not affect them.
 		 *
 		 * @param s The parsers to append to this group.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder add(Parser...s) {
 			entries.addAll(0, asList(s));
@@ -322,7 +322,7 @@ public final class ParserGroup {
 		/**
 		 * Clears out any existing parsers in this group.
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder clear() {
 			entries.clear();
@@ -347,7 +347,7 @@ public final class ParserGroup {
 		 * Applies the specified annotations to all applicable parser builders in this group.
 		 *
 		 * @param work The annotations to apply.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder apply(AnnotationWorkList work) {
 			return forEach(x -> x.apply(work));
@@ -357,7 +357,7 @@ public final class ParserGroup {
 		 * Performs an action on all parser builders in this group.
 		 *
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEach(Consumer<Parser.Builder> action) {
 			builders(Parser.Builder.class).forEach(action);
@@ -368,7 +368,7 @@ public final class ParserGroup {
 		 * Performs an action on all writer parser builders in this group.
 		 *
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEachRP(Consumer<ReaderParser.Builder> action) {
 			return forEach(ReaderParser.Builder.class, action);
@@ -378,7 +378,7 @@ public final class ParserGroup {
 		 * Performs an action on all output stream parser builders in this group.
 		 *
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder forEachISP(Consumer<InputStreamParser.Builder> action) {
 			return forEach(InputStreamParser.Builder.class, action);
@@ -389,7 +389,7 @@ public final class ParserGroup {
 		 *
 		 * @param type The parser builder type.
 		 * @param action The action to perform.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public <T extends Parser.Builder> Builder forEach(Class<T> type, Consumer<T> action) {
 			builders(type).forEach(action);

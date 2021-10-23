@@ -88,7 +88,7 @@ public final class BeanFilter {
 		 * Applies the information in the specified list of {@link Bean @Bean} annotations to this filter.
 		 *
 		 * @param annotations The annotations to apply.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder applyAnnotations(List<Bean> annotations) {
 
@@ -169,7 +169,7 @@ public final class BeanFilter {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder typeName(String value) {
 			this.typeName = value;
@@ -180,7 +180,7 @@ public final class BeanFilter {
 		 * Bean implementation class.
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder implClass(Class<?> value) {
 			this.implClass = value;
@@ -235,7 +235,7 @@ public final class BeanFilter {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder interfaceClass(Class<?> value) {
 			this.interfaceClass = value;
@@ -292,7 +292,7 @@ public final class BeanFilter {
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder stopClass(Class<?> value) {
 			this.stopClass = value;
@@ -333,7 +333,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sortProperties(boolean value) {
 			this.sortProperties = value;
@@ -351,7 +351,7 @@ public final class BeanFilter {
 		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder sortProperties() {
 			this.sortProperties = true;
@@ -388,7 +388,7 @@ public final class BeanFilter {
 		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder findFluentSetters() {
 			this.fluentSetters = true;
@@ -431,7 +431,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default is {@link BasicPropertyNamer}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
 			this.propertyNamer = value;
@@ -473,7 +473,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder properties(String...value) {
 			this.properties = ASet.of();
@@ -518,7 +518,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder excludeProperties(String...value) {
 			this.excludeProperties = ASet.of();
@@ -565,7 +565,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String...value) {
 			this.readOnlyProperties = ASet.of();
@@ -612,7 +612,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String...value) {
 			this.writeOnlyProperties = ASet.of();
@@ -655,7 +655,7 @@ public final class BeanFilter {
 		 *
 		 * @param values
 		 * 	The values to add to this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder dictionary(Class<?>...values) {
 			if (dictionary == null)
@@ -670,7 +670,7 @@ public final class BeanFilter {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder example(String value) {
 			this.example = value;
@@ -708,7 +708,7 @@ public final class BeanFilter {
 		 * @param value
 		 * 	The new value for this setting.
 		 * 	<br>The default value is {@link BeanInterceptor}.
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder interceptor(Class<?> value) {
 			this.interceptor = value;

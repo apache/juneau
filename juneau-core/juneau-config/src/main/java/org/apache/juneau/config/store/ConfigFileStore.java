@@ -15,7 +15,7 @@ package org.apache.juneau.config.store;
 import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.StandardOpenOption.*;
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 
@@ -145,7 +145,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
 		 * 		<li><js>"."</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder directory(String value) {
 			directory = value;
@@ -166,7 +166,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
 		 * 		<li><js>"."</js>.
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder directory(File value) {
 			directory = value.getAbsolutePath();
@@ -187,7 +187,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
 		 * 		<li>{@link Charset#defaultCharset()}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder charset(Charset value) {
 			charset = value;
@@ -212,7 +212,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li><jk>false</jk>.
 		 * 	</ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder enableWatcher() {
 			enableWatcher = true;
@@ -237,7 +237,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
 		 * 		<li>{@link WatcherSensitivity#MEDIUM}
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder watcherSensitivity(WatcherSensitivity value) {
 			watcherSensitivity = value;
@@ -262,7 +262,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li><jk>false</jk>.
 		 * 	</ul>
 		 *
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder updateOnWrite() {
 			updateOnWrite = true;
@@ -283,7 +283,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
 		 * 		<li><js>"cfg"</js>
 		 * 	</ul>
-		 * @return This object (for method chaining).
+		 * @return This object.
 		 */
 		public Builder extensions(String value) {
 			extensions = value;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -742,7 +742,7 @@ public abstract class ExecutableInfo {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	@FluentSetter
 	public ExecutableInfo accessible() {

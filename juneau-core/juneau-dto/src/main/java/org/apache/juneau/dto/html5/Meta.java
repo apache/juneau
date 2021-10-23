@@ -38,7 +38,7 @@ public class Meta extends HtmlElementVoid {
 	 * Character encoding declaration.
 	 *
 	 * @param charset The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meta charset(String charset) {
 		attr("charset", charset);
@@ -53,7 +53,7 @@ public class Meta extends HtmlElementVoid {
 	 * Value of the element.
 	 *
 	 * @param content The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meta content(String content) {
 		attr("content", content);
@@ -68,7 +68,7 @@ public class Meta extends HtmlElementVoid {
 	 * Pragma directive.
 	 *
 	 * @param httpequiv The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meta httpequiv(String httpequiv) {
 		attr("http-equiv", httpequiv);
@@ -82,7 +82,7 @@ public class Meta extends HtmlElementVoid {
 	 * Metadata name.
 	 *
 	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * @return This object.
 	 */
 	public final Meta name(String name) {
 		attr("name", name);
