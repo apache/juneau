@@ -14,7 +14,6 @@ package org.apache.juneau.rest.args;
 
 import java.util.*;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
@@ -36,7 +35,7 @@ public class HttpSessionArg extends SimpleRestOperationArg {
 	 * @return A new {@link HttpSessionArg}, or <jk>null</jk> if the parameter type is not {@link Locale}.
 	 */
 	public static HttpSessionArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(DispatcherType.class))
+		if (paramInfo.isType(HttpSession.class))
 			return new HttpSessionArg();
 		return null;
 	}
