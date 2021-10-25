@@ -20,6 +20,7 @@ java -DjuneauVersion=$JUNEAU_VERSION -cp $cp org.apache.juneau.doc.internal.DocG
 cd .. 
 
 mvn javadoc:aggregate
+tput bel
 
 cd juneau-doc
 java -cp $cp org.apache.juneau.doc.internal.DocLinkTester
@@ -30,7 +31,6 @@ mkdir ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
 cp -r ./target/site/apidocs/* ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
 find ../juneau-website/content/site/apidocs-$JUNEAU_VERSION -type f -name '*.html' -exec sed -i '' s/-SNAPSHOT// {} +
 
-tput bel
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'
 echo '*******************************************************************************'
