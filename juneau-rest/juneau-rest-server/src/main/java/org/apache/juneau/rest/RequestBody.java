@@ -43,9 +43,9 @@ public class RequestBody {
 
 	private byte[] body;
 	private final RestRequest req;
-	private EncoderGroup encoders;
+	private EncoderSet encoders;
 	private Encoder encoder;
-	private ParserGroup parsers;
+	private ParserSet parsers;
 	private long maxInput;
 	private int contentLength = 0;
 	private MediaType mediaType;
@@ -56,12 +56,12 @@ public class RequestBody {
 		this.req = req;
 	}
 
-	RequestBody encoders(EncoderGroup encoders) {
+	RequestBody encoders(EncoderSet encoders) {
 		this.encoders = encoders;
 		return this;
 	}
 
-	RequestBody parsers(ParserGroup parsers) {
+	RequestBody parsers(ParserSet parsers) {
 		this.parsers = parsers;
 		return this;
 	}

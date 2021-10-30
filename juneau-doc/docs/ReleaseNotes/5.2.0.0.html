@@ -180,7 +180,7 @@
 	<li>RDF parser handles case where resources point to themselves (an unfortunate behavior in JFS RDF documents).
 	<li>JSON parser with throw an exception in strict mode if it encounters numbers that are valid in Java but invalid in JSON (e.g. octal, hexadecimal numbers).
 	<li>{@link oaj.parser.Parser} methods now check for <jk>null</jk> input.
-	<li>{@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
+	<li>{@del oaj.serializer.SerializerGroup} and {@del oaj.parser.ParserGroup} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
 	<li>{@link oaj.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
 	<li>New {@del UrlEncodingSerializer#DEFAULT_SIMPLE_EXPANDED} serializer.
 	<li>Changes to {@del Args}:
@@ -201,7 +201,7 @@
 	<li>Several bug fixes and performance improvements in {@del StringVarResolver}.
 	<li>Various enhancements to {@del oaj.internal.TeeWriter} and {@del oaj.internal.TeeOutputStream}.
 	<li>Renamed {@del CharSet} to {@link oaj.internal.AsciiSet}.
-	<li>{@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup} now ignores <c>NoClassDefFoundErrors</c>
+	<li>{@del oaj.serializer.SerializerGroup} and {@del oaj.parser.ParserGroup} now ignores <c>NoClassDefFoundErrors</c>
 		so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 	<li>New {@link oaj.internal.FileUtils#createTempFile(String)} method.
 	<li>New {@link oaj.utils.PojoQuery} modified to handle bean getters that throw exceptions.

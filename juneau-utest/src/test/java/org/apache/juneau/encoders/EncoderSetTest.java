@@ -18,7 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class EncoderGroupTest {
+public class EncoderSetTest {
 
 	//====================================================================================================
 	// Test matching
@@ -26,16 +26,16 @@ public class EncoderGroupTest {
 	@Test
 	public void testEncoderGroupMatching() throws Exception {
 
-		EncoderGroup g = EncoderGroup.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
-		assertObject(g.getEncoder("gzip1")).isType(Encoder1.class);
-		assertObject(g.getEncoder("gzip2")).isType(Encoder2.class);
-		assertObject(g.getEncoder("gzip2a")).isType(Encoder2.class);
-		assertObject(g.getEncoder("gzip3")).isType(Encoder3.class);
-		assertObject(g.getEncoder("gzip3a")).isType(Encoder3.class);
-		assertObject(g.getEncoder("gzip3,gzip2,gzip1")).isType(Encoder3.class);
-		assertObject(g.getEncoder("gzip3;q=0.9,gzip2;q=0.1,gzip1")).isType(Encoder1.class);
-		assertObject(g.getEncoder("gzip2;q=0.9,gzip1;q=0.1,gzip3")).isType(Encoder3.class);
-		assertObject(g.getEncoder("gzip1;q=0.9,gzip3;q=0.1,gzip2")).isType(Encoder2.class);
+		EncoderSet s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
+		assertObject(s.getEncoder("gzip1")).isType(Encoder1.class);
+		assertObject(s.getEncoder("gzip2")).isType(Encoder2.class);
+		assertObject(s.getEncoder("gzip2a")).isType(Encoder2.class);
+		assertObject(s.getEncoder("gzip3")).isType(Encoder3.class);
+		assertObject(s.getEncoder("gzip3a")).isType(Encoder3.class);
+		assertObject(s.getEncoder("gzip3,gzip2,gzip1")).isType(Encoder3.class);
+		assertObject(s.getEncoder("gzip3;q=0.9,gzip2;q=0.1,gzip1")).isType(Encoder1.class);
+		assertObject(s.getEncoder("gzip2;q=0.9,gzip1;q=0.1,gzip3")).isType(Encoder3.class);
+		assertObject(s.getEncoder("gzip1;q=0.9,gzip3;q=0.1,gzip2")).isType(Encoder2.class);
 	}
 
 	public static class Encoder1 extends GzipEncoder {
@@ -64,20 +64,20 @@ public class EncoderGroupTest {
 	//====================================================================================================
 	@Test
 	public void testInheritence() throws Exception {
-		EncoderGroup.Builder gb = null;
-		EncoderGroup g = null;
+		EncoderSet.Builder sb = null;
+		EncoderSet s = null;
 
-		gb = EncoderGroup.create().add(E1.class, E2.class);
-		g = gb.build();
-		assertObject(g.getSupportedEncodings()).asJson().is("['E1','E2','E2a']");
+		sb = EncoderSet.create().add(E1.class, E2.class);
+		s = sb.build();
+		assertObject(s.getSupportedEncodings()).asJson().is("['E1','E2','E2a']");
 
-		gb.add(E3.class, E4.class);
-		g = gb.build();
-		assertObject(g.getSupportedEncodings()).asJson().is("['E3','E4','E4a','E1','E2','E2a']");
+		sb.add(E3.class, E4.class);
+		s = sb.build();
+		assertObject(s.getSupportedEncodings()).asJson().is("['E3','E4','E4a','E1','E2','E2a']");
 
-		gb.add(E5.class);
-		g = gb.build();
-		assertObject(g.getSupportedEncodings()).asJson().is("['E5','E3','E4','E4a','E1','E2','E2a']");
+		sb.add(E5.class);
+		s = sb.build();
+		assertObject(s.getSupportedEncodings()).asJson().is("['E5','E3','E4','E4a','E1','E2','E2a']");
 	}
 
 	public static class E1 extends GzipEncoder {

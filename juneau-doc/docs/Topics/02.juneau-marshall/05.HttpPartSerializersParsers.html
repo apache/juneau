@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'HTTP Part Serializers', updated:'8.2.0'} 
+{title:'HTTP Part Serializers and Parsers', updated:'8.2.0,9.0.0'} 
 
 <p>
-	There is a separate set of serializers for serializing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
-	The distinction is that these are designed to serialize directly to strings based on Open-API schema information.
+	There is a separate set of serializers and parsers for marshalling HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
+	The distinction is that these are designed to marshall directly to-and-from strings based on Open-API schema information.
 </p>
 <p class='bpcode w800'>
 	<jc>// Schema information about our part.</jc>
@@ -37,6 +37,9 @@
 
 	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
 	String <jv>output</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
+	
+	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
+	<jk>long</jk>[][] <jv>value</jv> = OpenApiParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>output</jv>, <jk>long</jk>[][].<jk>class</jk>);
 </p>
 <p>
 	The {@link oaj.httppart.HttpPartSchemaBuilder} class is provided for shortening the creation of schemas.
@@ -49,7 +52,7 @@
 	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(<jsm>tArrayCsv</jsm>(<jsm>tInt64</jsm>())).build();
 </p>
 <p>
-	The class hierarchy for the part serializers are:
+	The class hierarchy for the part marshallers are:
 </p>
 
 <ul class='javatree'>
@@ -59,6 +62,14 @@
 		<li class='jc'>{@link oaj.uon.UonSerializer} - Serializes to UON notation.
 		<ul>
 			<li class='jc'>{@link oaj.oapi.OpenApiSerializer} - Serializes using Open-API schema rules.
+		</ul>
+	</ul>
+	<li class='jic'>{@link oaj.httppart.HttpPartParser}
+	<ul>
+		<li class='jc'>{@link oaj.httppart.SimplePartParser} - Parses directly from strings.
+		<li class='jc'>{@link oaj.uon.UonParser} - Parses from UON notation.
+		<ul>
+			<li class='jc'>{@link oaj.oapi.OpenApiParser} - Parses using Open-API schema rules.
 		</ul>
 	</ul>
 </ul>

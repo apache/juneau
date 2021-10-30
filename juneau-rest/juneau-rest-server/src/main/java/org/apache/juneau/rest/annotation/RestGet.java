@@ -338,7 +338,7 @@ public @interface RestGet {
 	 *
 	 * <p>
 	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
-	 * The {@link org.apache.juneau.encoders.EncoderGroup.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -354,7 +354,7 @@ public @interface RestGet {
 	 * 		<ja>@RestGet</ja>(
 	 * 			method=<jsf>GET</jsf>,
 	 * 			encoders={
-	 * 				EncoderGroup.Inherit.<jk>class</jk>, MyEncoder.<jk>class</jk>
+	 * 				EncoderSet.Inherit.<jk>class</jk>, MyEncoder.<jk>class</jk>
 	 * 			}
 	 * 		)
 	 * 		<jk>public</jk> MyBean doGet() {
@@ -555,7 +555,7 @@ public @interface RestGet {
 	 *
 	 * <p>
 	 * This value overrides serializers specified at the class level using {@link Rest#serializers()}.
-	 * The {@link org.apache.juneau.serializer.SerializerGroup.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -571,7 +571,7 @@ public @interface RestGet {
 	 * 		<jc>// Define a REST method that can also produce XML.</jc>
 	 * 		<ja>@RestGet</ja>(
 	 * 			parsers={
-	 * 				SerializerGroup.Inherit.<jk>class</jk>, XmlParser.<jk>class</jk>
+	 * 				SerializerSet.Inherit.<jk>class</jk>, XmlParser.<jk>class</jk>
 	 * 			}
 	 * 		)
 	 * 		<jk>public</jk> MyBean doGet() {

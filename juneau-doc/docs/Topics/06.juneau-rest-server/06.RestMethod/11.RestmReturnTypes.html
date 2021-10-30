@@ -95,7 +95,7 @@
 	<jk>public void</jk> doGet3(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
 		String <jv>accept</jv> = <jv>req</jv>.getStringHeader(<js>"Accept"</js>).orElse(<js>"text/json"</js>);
-		WriterSerializer <jv>serializer</jv> = <jv>res</jv>.getSerializerGroup().getWriterSerializer(<jv>accept</jv>);
+		WriterSerializer <jv>serializer</jv> = <jv>res</jv>.getSerializers().getWriterSerializer(<jv>accept</jv>);
 		<jv>res</jv>.setContentType(<jv>serializer</jv>.getResponseContentType());
 		<jv>serializer</jv>.serialize(<jv>person</jv>, <jv>res</jv>.getNegotiatedWriter());
 	}

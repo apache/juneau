@@ -59,20 +59,22 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct a new serializer group</jc>
- * 	SerializerGroup g = SerializerGroup.<jsm>create</jsm>();
- * 		.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>); <jc>// Add some serializers to it</jc>
- * 		.ws().swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>) <jc>// Change settings for all serializers in the group.</jc>
+ * 	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>();
+ * 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>) <jc>// Add some serializers to it</jc>
+ * 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ * 		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
  * 		.build();
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
- * 	WriterSerializer s = g.getWriterSerializer(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>);
+ * 	WriterSerializer <jv>serializer</jv> = <jv>serializers</jv>
+ * 		.getWriterSerializer(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>);
  *
  * 	<jc>// Serialize a bean to JSON text </jc>
- * 	AddressBook addressBook = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
- * 	String json = s.serialize(addressBook);
+ * 	AddressBook <jv>addressBook</jv> = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
+ * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(addressBook);
  * </p>
  */
-public final class SerializerGroup {
+public final class SerializerSet {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -119,7 +121,7 @@ public final class SerializerGroup {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends BeanBuilder<SerializerGroup> {
+	public static class Builder extends BeanBuilder<SerializerSet> {
 
 		List<Object> entries;
 		private BeanContext.Builder bcBuilder;
@@ -128,7 +130,7 @@ public final class SerializerGroup {
 		 * Create an empty serializer group builder.
 		 */
 		protected Builder() {
-			super(SerializerGroup.class);
+			super(SerializerSet.class);
 			this.entries = AList.create();
 		}
 
@@ -137,7 +139,7 @@ public final class SerializerGroup {
 		 *
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
-		protected Builder(SerializerGroup copyFrom) {
+		protected Builder(SerializerSet copyFrom) {
 			super(copyFrom.getClass());
 			this.entries = AList.create().append(asList(copyFrom.entries));
 		}
@@ -169,8 +171,8 @@ public final class SerializerGroup {
 		}
 
 		@Override /* BeanBuilder */
-		protected SerializerGroup buildDefault() {
-			return new SerializerGroup(this);
+		protected SerializerSet buildDefault() {
+			return new SerializerSet(this);
 		}
 
 		@Override /* BeanBuilder */
@@ -217,7 +219,7 @@ public final class SerializerGroup {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
-		 * 	SerializerGroup.Builder <jv>builder</jv> = SerializerGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 * 	SerializerSet.Builder <jv>builder</jv> = SerializerSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.add(FooSerializer.<jk>class</jk>);  <jc>// Now contains:  [FooSerializer]</jc>
 		 *
@@ -254,7 +256,7 @@ public final class SerializerGroup {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
-		 * 	SerializerGroup.Builder <jv>builder</jv> = SerializerGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 * 	SerializerSet.Builder <jv>builder</jv> = SerializerSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.set(FooSerializer.<jk>class</jk>);  <jc>// Now contains:  [FooSerializer]</jc>
 		 *
@@ -470,7 +472,7 @@ public final class SerializerGroup {
 	 *
 	 * @param builder The builder for this bean.
 	 */
-	protected SerializerGroup(Builder builder) {
+	protected SerializerSet(Builder builder) {
 
 		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
 

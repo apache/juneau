@@ -13,36 +13,41 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'SerializerGroups and ParserGroups'}
+{title:'SerializerSets and ParserSets', updated:'9.0.0'}
 
 <p>
-	Above the serializers and parsers are the {@link oaj.serializer.SerializerGroup} and 
-	{@link oaj.parser.ParserGroup} classes.
-	These classes allow serializers and parsers to be retrieved by W3C-compliant HTTP <c>Accept</c> 
+	On top of the serializers and parsers are the {@link oaj.serializer.SerializerSet} and 
+	{@link oaj.parser.ParserSet} classes.
+	These classes allow serializers and parsers to be grouped and retrieved by W3C-compliant HTTP <c>Accept</c> 
 	and <c>Content-Type</c> values...
 </p>
 <p class='bpcode w800'>
-	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
-	SerializerGroup <jv>group</jv> = SerializerGroup.<jsm>create</jsm>()
-		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
-		.ws()   <jc>// or .useWhitespace(true)</jc>
-		.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+	<jc>// Construct a new serializer group with configuration parameters that get applied 
+	// to all serializers.</jc>
+	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>()
+		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>)
+		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())   <jc>// or .useWhitespace(true)</jc>
 		.build();
 
-	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
-	<jv>group</jv>.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
+	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the 
+	// specified writer.</jc>
+	<jv>serializers</jv>
+		.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
 		.serialize(<jv>myPerson</jv>, <jv>myWriter</jv>);
 		
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
-	ParserGroup <jv>group</jv> = ParserGroup.<jsm>create</jsm>()
-		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
- 		.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>()
+		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>)
+ 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
  		.build();
 
-	Person <jv>myPerson</jv> = <jv>group</jv>.getParser(<js>"text/json"</js>).parse(<jv>myReader</jv>, Person.<jk>class</jk>);
+	Person <jv>myPerson</jv> = <jv>parsers</jv>
+		.getParser(<js>"text/json"</js>)
+		.parse(<jv>myReader</jv>, Person.<jk>class</jk>);
 </p>
 <p>
-	The REST servlet API builds upon the <c>SerializerGroup</c> and <c>ParserGroup</c> classes 
+	The REST servlet API builds upon the <c>SerializerSet</c> and <c>ParserSet</c> classes 
 	to provide annotated REST servlets that automatically negotiate the HTTP media types and allow the developer
 	to work with requests and responses as POJOs.
 </p>			

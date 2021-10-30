@@ -63,11 +63,11 @@ public class Restx_Serializers_Test {
 		public String b() {
 			return "test2";
 		}
-		@RestGet(serializers={SB.class,SC.class,SerializerGroup.Inherit.class})
+		@RestGet(serializers={SB.class,SC.class,SerializerSet.Inherit.class})
 		public String c() {
 			return "test3";
 		}
-		@RestGet(serializers={SD.class,SerializerGroup.Inherit.class})
+		@RestGet(serializers={SD.class,SerializerSet.Inherit.class})
 		public String d() {
 			return "test4";
 		}
@@ -160,7 +160,7 @@ public class Restx_Serializers_Test {
 			// Should show ['text/s5']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
-		@RestGet(serializers={S5.class,SerializerGroup.Inherit.class})
+		@RestGet(serializers={S5.class,SerializerSet.Inherit.class})
 		public OList c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());

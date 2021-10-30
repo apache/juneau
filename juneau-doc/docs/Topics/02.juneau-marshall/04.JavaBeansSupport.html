@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Java Beans Support', created:'8.2.0', flags:'todo'} 
+{title:'Java Beans Support', created:'8.2.0', updated:'9.0.0'} 
 
 <p>
 	Out-of-the-box, Juneau supports marshalling of Java beans with standard public getters and setters, public
@@ -100,14 +100,13 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Bean should be marshalled with properties in the specified order.</jc>
-	<ja>@Bean</ja>(bpi=<js>"foo,bar,baz"</js>)
+	<ja>@Bean</ja>(properties=<js>"foo,bar,baz"</js>)
 	<jk>public class</jk> MyBean {
 		...
 	}
 </p>
 <p>
-	Another option to force ordering of properties is to use {@del oaj.BeanContext#BEAN_sortProperties} or
-	{@link oaj.annotation.Bean#sort @Bean(sort)}.
+	Another option to force ordering of properties is to use {@link oaj.annotation.Bean#sort @Bean(sort)}.
 </p>
 <p class='bpcode w800'>
 	<ja>@Bean</ja>(sort=<jk>true</jk>)
@@ -119,11 +118,4 @@
 <ul class='seealso'>
 	<li class='doclink'>{@doc PojoCategories POJO Categories} - Marshalling rules for POJOs.
 	<li class='doclink'>{@doc BeanDictionaries Bean Dictionaries} - Handling properties with subclassable types.
-	<li class='doclink'>{@doc BeanAnnotation @Bean Annotation} - Details on the <ja>@Bean</ja> annotation on bean classes.
-	<li class='doclink'>{@doc BeanpAnnotation @Beanp Annotation} - Details on the <ja>@Beanp</ja> annotation on bean methods.
-	<li class='doclink'>{@doc BeancAnnotation @Beanc Annotation} - Details on the <ja>@Beanc</ja> annotation on bean constructors.
-	<li class='doclink'>{@doc BeanIgnoreAnnotation @BeanIgnore Annotation} - Details on the <ja>@BeanIgnore</ja> annotation classes and methods.
-	<li class='doclink'>{@doc PojoBuilders POJO Builders} - Parsing into unmodifiable beans using builders.
-	<li class='doclink'>{@doc BeanFilters Bean filters} - Programmatic filters for controlling bean properties.
-	<li class='doclink'>{@doc InterfaceFilters Interface filters} - Limiting bean properties to those exposed through interfaces.
 </ul>

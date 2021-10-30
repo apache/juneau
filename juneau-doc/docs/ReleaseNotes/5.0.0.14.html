@@ -20,7 +20,7 @@
 </p>
 <p>
 	The biggest change is that the <c>RestSerializer</c>, <c>RestParser</c>, <c>RestSerializerGroup</c>, and <c>RestParserGroup</c> classes have been eliminated entirely.<br>  
-	Instead, the existing {@link oaj.serializer.Serializer}, {@link oaj.parser.Parser}, {@link oaj.serializer.SerializerGroup}, and {@link oaj.parser.ParserGroup} classes of the core API have been augmented to replace them.
+	Instead, the existing {@link oaj.serializer.Serializer}, {@link oaj.parser.Parser}, {@del oaj.serializer.SerializerGroup}, and {@del oaj.parser.ParserGroup} classes of the core API have been augmented to replace them.
 </p>
 <p>
 	Adoptions will be required if you have previously used these classes.
@@ -33,7 +33,7 @@
 			<li>Entirely reworked class hierarchy to make it easier to define new serializers.</li>
 			<li>New {@link oaj.serializer.WriterSerializer} base class for defining character-based serializers.</li>
 			<li>New {@link oaj.serializer.OutputStreamSerializer} base class for defining byte-based serializers.</li>
-			<li>Updated {@link oaj.serializer.SerializerGroup} class with full support for RFC2616 <c>Accept-Content</c> headers.</li>
+			<li>Updated {@del oaj.serializer.SerializerGroup} class with full support for RFC2616 <c>Accept-Content</c> headers.</li>
 			<li>Improved cloning support on serializers and serializer groups.</li>
 		</ul>
        	</li>
@@ -60,7 +60,7 @@
 			<li>Defines API for {@link oaj.encoders.Encoder Encoders} for enabling compression in REST servlets and clients.</li>
 			<li>Previously, gzip compression was enabled by default.  This new API allows you to plug in your own compression algorithms.</li>
 			<li>New {@link oaj.encoders.GzipEncoder} class for enabling gzip compression.</li>
-			<li>New {@link oaj.encoders.EncoderGroup} class for managing multiple encoders and finding them based on RFC2616 <c>Accept-Encoding</c> header values.</li>
+			<li>New {@del oaj.encoders.EncoderGroup} class for managing multiple encoders and finding them based on RFC2616 <c>Accept-Encoding</c> header values.</li>
 		</ul>
 	</li>
 	<li>

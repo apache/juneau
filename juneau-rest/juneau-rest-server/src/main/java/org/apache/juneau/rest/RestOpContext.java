@@ -112,9 +112,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private RestConverterList.Builder converters;
 		private BeanContext.Builder beanContext;
 		private RestGuardList.Builder guards;
-		private EncoderGroup.Builder encoders;
-		private SerializerGroup.Builder serializers;
-		private ParserGroup.Builder parsers;
+		private EncoderSet.Builder encoders;
+		private SerializerSet.Builder serializers;
+		private ParserSet.Builder parsers;
 		private HttpPartSerializer.Creator partSerializer;
 		private HttpPartParser.Creator partParser;
 		private RestMatcherList.Builder matchers;
@@ -325,7 +325,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The encoder group sub-builder.
 		 */
-		public final EncoderGroup.Builder encoders() {
+		public final EncoderSet.Builder encoders() {
 			if (encoders == null)
 				encoders = createEncoders(beanStore(), parent, resource());
 			return encoders;
@@ -348,7 +348,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder encoders(Consumer<EncoderGroup.Builder> operation) {
+		public final Builder encoders(Consumer<EncoderSet.Builder> operation) {
 			operation.accept(encoders());
 			return this;
 		}
@@ -364,31 +364,31 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new encoder group sub-builder.
 		 */
-		protected EncoderGroup.Builder createEncoders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected EncoderSet.Builder createEncoders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<EncoderGroup.Builder> v = Value.of(
+			Value<EncoderSet.Builder> v = Value.of(
 				parent.encoders().copy()
 			);
 
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(EncoderGroup.Builder.class, v.get())
-				.createMethodFinder(EncoderGroup.Builder.class, resource)
+				.addBean(EncoderSet.Builder.class, v.get())
+				.createMethodFinder(EncoderSet.Builder.class, resource)
 				.find("createEncoders", Method.class)
 				.run(x -> v.set(x));
 
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(EncoderGroup.Builder.class, v.get())
-				.createMethodFinder(EncoderGroup.class, resource)
+				.addBean(EncoderSet.Builder.class, v.get())
+				.createMethodFinder(EncoderSet.class, resource)
 				.find("createEncoders", Method.class)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
-		final Optional<EncoderGroup> getEncoders() {
+		final Optional<EncoderSet> getEncoders() {
 			return encoders == null ? empty() : of(encoders.build());
 		}
 
@@ -401,7 +401,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The serializer group sub-builder.
 		 */
-		public final SerializerGroup.Builder serializers() {
+		public final SerializerSet.Builder serializers() {
 			if (serializers == null)
 				serializers = createSerializers(beanStore(), parent, resource());
 			return serializers;
@@ -424,7 +424,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder serializers(Consumer<SerializerGroup.Builder> operation) {
+		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
 			operation.accept(serializers());
 			return this;
 		}
@@ -440,31 +440,31 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new serializer group sub-builder.
 		 */
-		protected SerializerGroup.Builder createSerializers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected SerializerSet.Builder createSerializers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<SerializerGroup.Builder> v = Value.of(
+			Value<SerializerSet.Builder> v = Value.of(
 				parent.serializers().copy()
 			);
 
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(SerializerGroup.Builder.class, v.get())
-				.createMethodFinder(SerializerGroup.Builder.class, resource)
+				.addBean(SerializerSet.Builder.class, v.get())
+				.createMethodFinder(SerializerSet.Builder.class, resource)
 				.find("createSerializers", Method.class)
 				.run(x -> v.set(x));
 
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(SerializerGroup.Builder.class, v.get())
-				.createMethodFinder(SerializerGroup.class, resource)
+				.addBean(SerializerSet.Builder.class, v.get())
+				.createMethodFinder(SerializerSet.class, resource)
 				.find("createSerializers", Method.class)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
-		final Optional<SerializerGroup> getSerializers() {
+		final Optional<SerializerSet> getSerializers() {
 			return serializers == null ? empty() : of(serializers.build());
 		}
 
@@ -477,7 +477,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The parser group sub-builder.
 		 */
-		public final ParserGroup.Builder parsers() {
+		public final ParserSet.Builder parsers() {
 			if (parsers == null)
 				parsers = createParsers(beanStore(), parent, resource());
 			return parsers;
@@ -500,7 +500,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder parsers(Consumer<ParserGroup.Builder> operation) {
+		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
 			operation.accept(parsers());
 			return this;
 		}
@@ -516,31 +516,31 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new parser group sub-builder.
 		 */
-		protected ParserGroup.Builder createParsers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected ParserSet.Builder createParsers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<ParserGroup.Builder> v = Value.of(
+			Value<ParserSet.Builder> v = Value.of(
 				parent.parsers().copy()
 			);
 
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(ParserGroup.Builder.class, v.get())
-				.createMethodFinder(ParserGroup.Builder.class, resource)
+				.addBean(ParserSet.Builder.class, v.get())
+				.createMethodFinder(ParserSet.Builder.class, resource)
 				.find("createParsers", Method.class)
 				.run(x -> v.set(x));
 
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(ParserGroup.Builder.class, v.get())
-				.createMethodFinder(ParserGroup.class, resource)
+				.addBean(ParserSet.Builder.class, v.get())
+				.createMethodFinder(ParserSet.class, resource)
 				.find("createParsers", Method.class)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
-		final Optional<ParserGroup> getParsers() {
+		final Optional<ParserSet> getParsers() {
 			return parsers == null ? empty() : of(parsers.build());
 		}
 
@@ -2209,9 +2209,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		postCallMethods;
 	private final MethodInfo mi;
 	private final BeanContext beanContext;
-	private final SerializerGroup serializers;
-	private final ParserGroup parsers;
-	private final EncoderGroup encoders;
+	private final SerializerSet serializers;
+	private final ParserSet parsers;
+	private final EncoderSet encoders;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -2260,9 +2260,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.addBean(BeanStore.class, bs);
 
 			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
-			encoders = bs.add(EncoderGroup.class, builder.getEncoders().orElse(context.getEncoders()));
-			serializers = bs.add(SerializerGroup.class, builder.getSerializers().orElse(context.getSerializers()));
-			parsers = bs.add(ParserGroup.class, builder.getParsers().orElse(context.getParsers()));
+			encoders = bs.add(EncoderSet.class, builder.getEncoders().orElse(context.getEncoders()));
+			serializers = bs.add(SerializerSet.class, builder.getSerializers().orElse(context.getSerializers()));
+			parsers = bs.add(ParserSet.class, builder.getParsers().orElse(context.getParsers()));
 			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
 			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
@@ -2458,7 +2458,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The serializers to use for this method.
 	 */
-	public SerializerGroup getSerializers() {
+	public SerializerSet getSerializers() {
 		return serializers;
 	}
 
@@ -2467,7 +2467,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The parsers to use for this method.
 	 */
-	public ParserGroup getParsers() {
+	public ParserSet getParsers() {
 		return parsers;
 	}
 
@@ -2476,7 +2476,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The compression encoders to use for this method.
 	 */
-	public EncoderGroup getEncoders() {
+	public EncoderSet getEncoders() {
 		return encoders;
 	}
 

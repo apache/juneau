@@ -142,6 +142,9 @@
 		By default, various instance and static methods and constructors on POJO classes are automatically detected and supported
 		for marshalling a POJO to and from a string.
 	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc TODO} for more information.
+	</ul>
 </div>
 
 <h5 class='toc'>Bean Annotations</h5>
@@ -164,6 +167,9 @@
 		via the builder APIs.  This allows the marshallers to be used equivalently on either your own code
 		that you have access to, or external code where you only have access to binaries.
 	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc TODO} for more information.
+	</ul>
 </div>
 
 <h5 class='toc'>Configuration Annotations</h5>
@@ -205,6 +211,9 @@
 	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
 	<jk>public class</jk> MyAnnotatedClass {...}
 	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc TODO} for more information.
+	</ul>
 </div>
 
 <h5 class='toc'>Simplified JSON Marshalling</h5>
@@ -262,6 +271,9 @@
 	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
 	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
 	</p>			
+	<ul class='seealso'>
+		<li class='link'>{@doc TODO} for more information.
+	</ul>
 </div>
 
 <h5 class='toc'>UON Marshalling</h5>
@@ -320,8 +332,8 @@
 	String <jv>output</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
 	</p>
 	<p>
-		Schema-based serialization is used heavily in both the server and client REST APIs with built-in schema
-		validations support in various HTTP part anntoations.
+		Schema-based serialization and parsing is used heavily in both the server and client REST APIs with built-in schema
+		validations support in various HTTP part annotations.
 	</p>
 	<p class='bcode w800'>
 	<jc>// REST server method with HTTP parts using schema validation.</jc>
@@ -338,7 +350,6 @@
 
 <h5 class='toc'>OMap/OList</h5>
 <div class='topic'>
-	<p>
 	<p>
 		The {@link oaj.collections.OMap} and {@link oaj.collections.OList} collections classes allow you
 		to programmatically build generic JSON data structures.  They are similar in concept to 
@@ -366,15 +377,15 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Serializer and Parser Groups</h5>
+<h5 class='toc'>Serializer and Parser Sets</h5>
 <div class='topic'>
 	<p>
-		<code>SerializerGroup</code> and <code>ParserGroup</code> classes allow serializers and parsers 
+		<code>SerializerSet</code> and <code>ParserSet</code> classes allow serializers and parsers 
 		to be retrieved by W3C-compliant HTTP <code>Accept</code> and <code>Content-Type</code> values:
 	</p>
 	<p class='bcode w800'>
 	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
-	SerializerGroup <jv>serializerGroup</jv> = SerializerGroup
+	SerializerSet <jv>serializerSet</jv> = SerializerSet
 		.<jsm>create</jsm>()
 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
 		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
@@ -383,23 +394,23 @@
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
 	<jc>// Fully RFC2616 compliant.</jc>
-	<jv>serializerGroup</jv>
+	<jv>serializerSet</jv>
 		.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
 		.serialize(<jv>person</jv>, <jv>myWriter</jv>);
 		
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
-	ParserGroup <jv>parserGroup</jv> = ParserGroup
+	ParserSet <jv>parserSet</jv> = ParserSet
 		.<jsm>create</jsm>()
 		.add(JsonParser.<jk>class</jk>, UrlEncodingParser.<jk>class</jk>);
  		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
  		.build();
 
-	Person <jv>person</jv> = <jv>parserGroup</jv>
+	Person <jv>person</jv> = <jv>parserSet</jv>
 		.getParser(<js>"text/json"</js>)
 		.parse(<jv>myReader</jv>, Person.<jk>class</jk>);
 	</p>
 	<ul class='seealso'>
-		<li class='link'>{@doc Groups SerializerGroups and ParserGroups} for more information.
+		<li class='link'>{@doc SerializerSetsParserSets SerializerSets and ParserSets} for more information.
 	</ul>
 </div>
 

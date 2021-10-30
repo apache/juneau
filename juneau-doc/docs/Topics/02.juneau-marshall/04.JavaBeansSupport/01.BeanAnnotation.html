@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Bean Annotation', updated:'8.2.0', flags:'review'} 
+{title:'@Bean Annotation', updated:'8.2.0,9.0.0'} 
 
 <p>
 	The {@link oaj.annotation.Bean @Bean} annotation is used to tailor how beans are 
@@ -21,12 +21,12 @@
 </p>
 <p> 
 	Bean property inclusion and ordering on a bean class can be done using the 
-	{@link oaj.annotation.Bean#properties() @Bean(properties)} annotation.
+	{@link oaj.annotation.Bean#properties() @Bean(properties|p)} annotation.
 </p>
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
-	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	<jk>public class</jk> Address { ... }
 </p>
 <p> 
@@ -36,7 +36,7 @@
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
-	<ja>@Bean</ja>(bpx=<js>"city,state"</js>})
+	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
@@ -145,4 +145,19 @@
 		<jk>public</jk> String getTaxInfo() {...}
 		<jk>public void</jk> setTaxInfo(String s) {...}
 	}
+</p>
+<p>
+	The {@link oaj.annotation.Bean#on() @Bean(on)} and {@link oaj.annotation.Bean#onClass(Class) @Bean(onClass)}
+	annotations can be used to programmatically attach <ja>@Bean</ja> annotations to classes. 
+</p>
+<p class='bcode w800'>
+	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
+	<jk>public class</jk> MyAnnotatedClass {...}
+
+	<jc>// Create a serializer configured using annotations.</jc>
+	JsonSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()
+		.applyAnnotations(MyAnnotatedClass.<jk>class</jk>)
+		.build();
+	</p>
 </p>

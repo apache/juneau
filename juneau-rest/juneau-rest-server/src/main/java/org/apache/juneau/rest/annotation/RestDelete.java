@@ -322,7 +322,7 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
-	 * The {@link org.apache.juneau.encoders.EncoderGroup.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -337,7 +337,7 @@ public @interface RestDelete {
 	 * 		<jc>// Define a REST method that can also use a custom encoder.</jc>
 	 * 		<ja>@RestDelete</ja>(
 	 * 			encoders={
-	 * 				EncoderGroup.Inherit.<jk>class</jk>, MyEncoder.<jk>class</jk>
+	 * 				EncoderSet.Inherit.<jk>class</jk>, MyEncoder.<jk>class</jk>
 	 * 			}
 	 * 		)
 	 * 		<jk>public</jk> String doDelete() {

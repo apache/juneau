@@ -277,7 +277,7 @@ public final class RestResponse {
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
-			EncoderGroup encoders = request.getOpContext().getEncoders();
+			EncoderSet encoders = request.getOpContext().getEncoders();
 
 			String ae = request.getHeader("Accept-Encoding").orElse(null);
 			if (! (ae == null || ae.isEmpty())) {

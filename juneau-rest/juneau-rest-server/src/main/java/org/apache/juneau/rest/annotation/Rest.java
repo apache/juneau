@@ -642,7 +642,7 @@ public @interface Rest {
 	 * <p>
 	 * Encoders are automatically inherited from {@link Rest#encoders()} annotations on parent classes with the encoders on child classes
 	 * prepended to the encoder group.
-	 * The {@link org.apache.juneau.encoders.EncoderGroup.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.encoders.EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -795,7 +795,7 @@ public @interface Rest {
 	 * <p>
 	 * Parsers are automatically inherited from {@link Rest#parsers()} annotations on parent classes with the parsers on child classes
 	 * prepended to the parser group.
-	 * The {@link org.apache.juneau.parser.ParserGroup.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.parser.ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1158,7 +1158,7 @@ public @interface Rest {
 	 * <p>
 	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes
 	 * prepended to the serializer group.
-	 * The {@link org.apache.juneau.serializer.SerializerGroup.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

@@ -1064,8 +1064,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		private HeaderList.Builder headerData;
 		private PartList.Builder queryData, formData, pathData;
 		private BeanCreator<RestCallHandler> callHandler;
-		private SerializerGroup.Builder serializers;
-		private ParserGroup.Builder parsers;
+		private SerializerSet.Builder serializers;
+		private ParserSet.Builder parsers;
 		private HttpPartSerializer.Creator partSerializer;
 		private HttpPartParser.Creator partParser;
 		private UrlEncodingSerializer.Builder urlEncodingSerializer;
@@ -1849,7 +1849,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The serializer group sub-builder.
 		 */
-		public final SerializerGroup.Builder serializers() {
+		public final SerializerSet.Builder serializers() {
 			if (serializers == null)
 				serializers = createSerializers();
 			return serializers;
@@ -1864,7 +1864,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder serializers(Consumer<SerializerGroup.Builder> operation) {
+		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
 			operation.accept(serializers());
 			return this;
 		}
@@ -1874,8 +1874,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return A new serializer group sub-builder.
 		 */
-		protected SerializerGroup.Builder createSerializers() {
-			return SerializerGroup.create().beanContext(beanContext());
+		protected SerializerSet.Builder createSerializers() {
+			return SerializerSet.create().beanContext(beanContext());
 		}
 
 		/**
@@ -2035,7 +2035,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The parser group sub-builder.
 		 */
-		public final ParserGroup.Builder parsers() {
+		public final ParserSet.Builder parsers() {
 			if (parsers == null)
 				parsers = createParsers();
 			return parsers;
@@ -2050,7 +2050,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder parsers(Consumer<ParserGroup.Builder> operation) {
+		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
 			operation.accept(parsers());
 			return this;
 		}
@@ -2060,8 +2060,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return A new parser group sub-builder.
 		 */
-		protected ParserGroup.Builder createParsers() {
-			return ParserGroup.create().beanContext(beanContext());
+		protected ParserSet.Builder createParsers() {
+			return ParserSet.create().beanContext(beanContext());
 		}
 
 		/**
@@ -6741,8 +6741,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
 
 	// These are read directly by RestCall.
-	final SerializerGroup serializers;
-	final ParserGroup parsers;
+	final SerializerSet serializers;
+	final ParserSet parsers;
 	Predicate<Integer> errorCodes;
 
 	final RestCallInterceptor[] interceptors;

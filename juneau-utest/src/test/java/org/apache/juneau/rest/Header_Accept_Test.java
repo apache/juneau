@@ -121,7 +121,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class C {
-		@RestOp(serializers={S3.class,SerializerGroup.Inherit.class})
+		@RestOp(serializers={S3.class,SerializerSet.Inherit.class})
 		public String put(@Body String in) {
 			return in;
 		}
@@ -238,7 +238,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class F {
-		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers={SerializerGroup.Inherit.class, S3.class})
+		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers={SerializerSet.Inherit.class, S3.class})
 		public String put(@Body String in) {
 			return in;
 		}

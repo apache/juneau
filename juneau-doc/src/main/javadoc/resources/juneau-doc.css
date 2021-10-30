@@ -130,6 +130,10 @@ h5.topic { font-size: 11pt; }
 	max-width: 800px;
 }
 
+.topic ul li, .topic ol li {
+	max-width: 750px;
+}
+
 h2.closed,
 h3.closed,
 h4.closed {
@@ -563,4 +567,8 @@ reviewed {
 	margin: 20px 0px;
 	font-weight: bold;
 	width:800px !important;
+}
+
+.nomargin {
+	margin: 0 !important;
 }

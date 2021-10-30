@@ -74,7 +74,7 @@ public class PojoSwapTest {
 	@Test
 	public void doTest() throws Exception {
 
-		SerializerGroup g = SerializerGroup.create()
+		SerializerSet s = SerializerSet.create()
 			.add(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
 			.forEach(WriterSerializer.Builder.class, x -> x.sq())
 			.forEach(Serializer.Builder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))
@@ -82,13 +82,13 @@ public class PojoSwapTest {
 
 		MyPojo myPojo = new MyPojo();
 
-		String json = g.getWriterSerializer("text/json").serialize(myPojo);
+		String json = s.getWriterSerializer("text/json").serialize(myPojo);
 		assertEquals("'It\\'s JSON!'", json);
 
-		String xml = g.getWriterSerializer("text/xml").serialize(myPojo);
+		String xml = s.getWriterSerializer("text/xml").serialize(myPojo);
 		assertEquals("<string>It's XML!</string>", xml);
 
-		String html = g.getWriterSerializer("text/html").serialize(myPojo);
+		String html = s.getWriterSerializer("text/html").serialize(myPojo);
 		assertEquals("<string>It's something else!</string>", html);
 	}
 }

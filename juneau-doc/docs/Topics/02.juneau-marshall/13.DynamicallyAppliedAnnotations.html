@@ -22,7 +22,7 @@
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
-	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
@@ -33,11 +33,7 @@
 	<jc>// Unannotated class.</jc>
 	<jk>public class</jk> Address { ... }
 
-	<ja>@BeanConfig</ja>(
-		applyBean={
-			<ja>@Bean</ja>(on=<js>"Address"</js>, bpi=<js>"AddressBean: street,city,state"</js>)
-		}
-	}
+	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
 	<jk>public static class</jk> DummyClass {}
 
 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
@@ -54,11 +50,7 @@
 </p>
 <p class='bpcode w800'>
 	<ja>@RestGet</ja> 
-	<ja>@BeanConfig</ja>(
-		applyBean={
-			<ja>@Bean</ja>(on=<js>"Address"</js>, bpi=<js>"AddressBean: street,city,state"</js>)
-		}
-	}
+	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
 	<jk>public</jk> List&lt;Address&gt; getAddresses() {}
 </p>
 <p>

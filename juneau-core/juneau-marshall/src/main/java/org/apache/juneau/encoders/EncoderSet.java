@@ -28,7 +28,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents the group of {@link Encoder encoders} keyed by codings.
+ * Represents the set of {@link Encoder encoders} keyed by codings.
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -43,7 +43,7 @@ import org.apache.juneau.internal.*;
  * Encoders are matched against <c>Accept-Encoding</c> strings in the order they exist in this group.
  *
  * <p>
- * Encoders are tried in the order they appear in the group.  The {@link Builder#add(Class...)}/{@link Builder#add(Encoder...)}
+ * Encoders are tried in the order they appear in the set.  The {@link Builder#add(Class...)}/{@link Builder#add(Encoder...)}
  * methods prepend the values to the list to allow them the opportunity to override encoders already in the list.
  *
  * <p>
@@ -53,19 +53,19 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
- * 	EncoderGroup <jv>group</jv> = EncoderGroup
+ * 	EncoderSet <jv>encoders</jv> = EncoderSet
  * 		.<jsm>create</jsm>()
  * 		.add(GzipEncoder.<jk>class</jk>)
  * 		.build();
  *
  * 	<jc>// Should return "gzip"</jc>
- * 	String <jv>matchedCoding</jv> = <jv>group</jv>.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
+ * 	String <jv>matchedCoding</jv> = <jv>encoders</jv>.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
  *
  * 	<jc>// Get the encoder</jc>
- * 	Encoder <jv>encoder</jv> = <jv>group</jv>.getEncoder(<jv>matchedCoding</jv>);
+ * 	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<jv>matchedCoding</jv>);
  * </p>
  */
-public final class EncoderGroup {
+public final class EncoderSet {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -86,12 +86,9 @@ public final class EncoderGroup {
 	public static abstract class NoInherit extends Encoder {}
 
 	/**
-	 * Instantiates a new clean-slate {@link EncoderGroup.Builder} object.
+	 * Instantiates a new clean-slate {@link EncoderSet.Builder} object.
 	 *
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> EncoderGroupBuilder()</code>.
-	 *
-	 * @return A new {@link EncoderGroup.Builder} object.
+	 * @return A new {@link EncoderSet.Builder} object.
 	 */
 	public static Builder create() {
 		return new Builder();
@@ -105,7 +102,7 @@ public final class EncoderGroup {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends BeanBuilder<EncoderGroup> {
+	public static class Builder extends BeanBuilder<EncoderSet> {
 		List<Object> entries;
 		Builder inheritFrom;
 
@@ -113,7 +110,7 @@ public final class EncoderGroup {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(EncoderGroup.class);
+			super(EncoderSet.class);
 			entries = AList.create();
 		}
 
@@ -128,8 +125,8 @@ public final class EncoderGroup {
 		}
 
 		@Override /* BeanBuilder */
-		protected EncoderGroup buildDefault() {
-			return new EncoderGroup(this);
+		protected EncoderSet buildDefault() {
+			return new EncoderSet(this);
 		}
 
 		@Override /* BeanBuilder */
@@ -160,7 +157,7 @@ public final class EncoderGroup {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.add(): " + v.getName());
+					throw illegalArgumentException("Invalid type passed to EncoderSet.Builder.add(): " + v.getName());
 				}
 			}
 			entries.addAll(0, l);
@@ -189,7 +186,7 @@ public final class EncoderGroup {
 				} else if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else {
-					throw illegalArgumentException("Invalid type passed to EncoderGroup.Builder.set(): " + v.getName());
+					throw illegalArgumentException("Invalid type passed to EncoderSet.Builder.set(): " + v.getName());
 				}
 			}
 			entries = l;
@@ -307,7 +304,7 @@ public final class EncoderGroup {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected EncoderGroup(Builder builder) {
+	protected EncoderSet(Builder builder) {
 		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore().orElse(BeanStore.INSTANCE), x)).toArray(Encoder[]::new);
 
 		List<String> lc = AList.create();

@@ -70,21 +70,21 @@
 		<ja>@Test</ja>
 		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
 
-			SerializerGroup <jv>group</jv> = SerializerGroup.<jsm>create</jsm>()
-				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
-				.sq()
-				.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
+			SerializerSet <jv>serializers</jv> = SerializersSet.<jsm>create</jsm>()
+				.add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
+				.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>))
+				.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
 				.build();
 
 			MyPojo <jv>myPojo</jv> = <jk>new</jk> MyPojo();
 
-			String <jv>json</jv> = <jv>group</jv>.getWriterSerializer(<js>"text/json"</js>).serialize(<jv>myPojo</jv>);
+			String <jv>json</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/json"</js>).serialize(<jv>myPojo</jv>);
 			<jsm>assertEquals</jsm>(<js>"'It\\'s JSON!'"</js>, <jv>json</jv>);
 
-			String <jv>xml</jv> = <jv>group</jv>.getWriterSerializer(<js>"text/xml"</js>).serialize(<jv>myPojo</jv>);
+			String <jv>xml</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/xml"</js>).serialize(<jv>myPojo</jv>);
 			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's XML!&lt;/string&gt;"</js>, <jv>xml</jv>);
 
-			String <jv>html</jv> = <jv>group</jv>.getWriterSerializer(<js>"text/html"</js>).serialize(<jv>myPojo</jv>);
+			String <jv>html</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/html"</js>).serialize(<jv>myPojo</jv>);
 			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's something else!&lt;/string&gt;"</js>, <jv>html</jv>);
 		}
 	}

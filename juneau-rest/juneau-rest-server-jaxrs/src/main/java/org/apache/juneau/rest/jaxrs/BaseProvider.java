@@ -40,8 +40,8 @@ import org.apache.juneau.serializer.*;
  */
 public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-	private SerializerGroup serializers;
-	private ParserGroup parsers;
+	private SerializerSet serializers;
+	private ParserSet parsers;
 
 	/**
 	 * Constructor.
@@ -50,12 +50,12 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 		try {
 			JuneauProvider jp = getClass().getAnnotation(JuneauProvider.class);
 
-			serializers = SerializerGroup.create()
+			serializers = SerializerSet.create()
 				.add(jp.serializers())
 				.forEach(x -> x.swaps(jp.swaps()))
 				.build();
 
-			parsers = ParserGroup.create()
+			parsers = ParserSet.create()
 				.add(jp.parsers())
 				.forEach(x -> x.swaps(jp.swaps()))
 				.build();

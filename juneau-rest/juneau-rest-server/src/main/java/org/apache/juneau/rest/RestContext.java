@@ -244,9 +244,9 @@ public class RestContext extends Context {
 		private RestChildren.Builder restChildren;
 		private SwaggerProvider.Builder swaggerProvider;
 		private BeanContext.Builder beanContext;
-		private EncoderGroup.Builder encoders;
-		private SerializerGroup.Builder serializers;
-		private ParserGroup.Builder parsers;
+		private EncoderSet.Builder encoders;
+		private SerializerSet.Builder serializers;
+		private ParserSet.Builder parsers;
 
 		String
 			allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
@@ -1125,9 +1125,9 @@ public class RestContext extends Context {
 		/**
 		 * Returns the encoder group sub-builder.
 		 *
-		 * @return The builder for the {@link EncoderGroup} object in the REST context.
+		 * @return The builder for the {@link EncoderSet} object in the REST context.
 		 */
-		public final EncoderGroup.Builder encoders() {
+		public final EncoderSet.Builder encoders() {
 			if (encoders == null)
 				encoders = createEncoders(beanStore(), resource());
 			return encoders;
@@ -1150,7 +1150,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder encoders(Consumer<EncoderGroup.Builder> operation) {
+		public final Builder encoders(Consumer<EncoderSet.Builder> operation) {
 			operation.accept(encoders());
 			return this;
 		}
@@ -1186,11 +1186,11 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new encoder group sub-builder.
 		 */
-		protected EncoderGroup.Builder createEncoders(BeanStore beanStore, Supplier<?> resource) {
+		protected EncoderSet.Builder createEncoders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<EncoderGroup.Builder> v = Value.of(
-				EncoderGroup
+			Value<EncoderSet.Builder> v = Value.of(
+				EncoderSet
 					.create()
 					.beanStore(beanStore)
 					.add(IdentityEncoder.INSTANCE)
@@ -1198,31 +1198,31 @@ public class RestContext extends Context {
 
 			// Specify the implementation class if its set as a default.
 			defaultClasses()
-				.get(EncoderGroup.class)
+				.get(EncoderSet.class)
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with builder from bean store.
 			beanStore
-				.getBean(EncoderGroup.Builder.class)
+				.getBean(EncoderSet.Builder.class)
 				.map(x -> x.copy())
 				.ifPresent(x->v.set(x));
 
 			// Replace with bean from bean store.
 			beanStore
-				.getBean(EncoderGroup.class)
+				.getBean(EncoderSet.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  public [static] EncoderGroup.Builder createEncoders(<args>)
+			// Replace with builder from:  public [static] EncoderSet.Builder createEncoders(<args>)
 			beanStore
-				.beanCreateMethodFinder(EncoderGroup.Builder.class)
-				.addBean(EncoderGroup.Builder.class, v.get())
+				.beanCreateMethodFinder(EncoderSet.Builder.class)
+				.addBean(EncoderSet.Builder.class, v.get())
 				.find("createEncoders")
 				.run(x -> v.set(x));
 
-			// Replace with bean from:  public [static] EncoderGroup createEncoders(<args>)
+			// Replace with bean from:  public [static] EncoderSet createEncoders(<args>)
 			beanStore
-				.beanCreateMethodFinder(EncoderGroup.class)
-				.addBean(EncoderGroup.Builder.class, v.get())
+				.beanCreateMethodFinder(EncoderSet.class)
+				.addBean(EncoderSet.Builder.class, v.get())
 				.find("createEncoders")
 				.run(x -> v.get().impl(x));
 
@@ -1238,7 +1238,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The serializer group sub-builder.
 		 */
-		public final SerializerGroup.Builder serializers() {
+		public final SerializerSet.Builder serializers() {
 			if (serializers == null)
 				serializers = createSerializers(beanStore(), resource());
 			return serializers;
@@ -1261,7 +1261,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder serializers(Consumer<SerializerGroup.Builder> operation) {
+		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
 			operation.accept(serializers());
 			return this;
 		}
@@ -1276,42 +1276,42 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new serializer group sub-builder.
 		 */
-		protected SerializerGroup.Builder createSerializers(BeanStore beanStore, Supplier<?> resource) {
+		protected SerializerSet.Builder createSerializers(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<SerializerGroup.Builder> v = Value.of(
-				SerializerGroup
+			Value<SerializerSet.Builder> v = Value.of(
+				SerializerSet
 					.create()
 					.beanStore(beanStore)
 			);
 
 			// Specify the implementation class if its set as a default.
 			defaultClasses()
-				.get(SerializerGroup.class)
+				.get(SerializerSet.class)
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with builder from bean store.
 			beanStore
-				.getBean(SerializerGroup.Builder.class)
+				.getBean(SerializerSet.Builder.class)
 				.map(x -> x.copy())
 				.ifPresent(x->v.set(x));
 
 			// Replace with bean from bean store.
 			beanStore
-				.getBean(SerializerGroup.class)
+				.getBean(SerializerSet.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  public [static] SerializerGroup.Builder createSerializers(<args>)
+			// Replace with builder from:  public [static] SerializerSet.Builder createSerializers(<args>)
 			beanStore
-				.beanCreateMethodFinder(SerializerGroup.Builder.class)
-				.addBean(SerializerGroup.Builder.class, v.get())
+				.beanCreateMethodFinder(SerializerSet.Builder.class)
+				.addBean(SerializerSet.Builder.class, v.get())
 				.find("createSerializers")
 				.run(x -> v.set(x));
 
-			// Replace with bean from:  public [static] SerializerGroup createSerializers(<args>)
+			// Replace with bean from:  public [static] SerializerSet createSerializers(<args>)
 			beanStore
-				.beanCreateMethodFinder(SerializerGroup.class)
-				.addBean(SerializerGroup.Builder.class, v.get())
+				.beanCreateMethodFinder(SerializerSet.class)
+				.addBean(SerializerSet.Builder.class, v.get())
 				.find("createSerializers")
 				.run(x -> v.get().impl(x));
 
@@ -1327,7 +1327,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The parser group sub-builder.
 		 */
-		public final ParserGroup.Builder parsers() {
+		public final ParserSet.Builder parsers() {
 			if (parsers == null)
 				parsers = createParsers(beanStore(), resource());
 			return parsers;
@@ -1350,7 +1350,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder parsers(Consumer<ParserGroup.Builder> operation) {
+		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
 			operation.accept(parsers());
 			return this;
 		}
@@ -1365,42 +1365,42 @@ public class RestContext extends Context {
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
 		 * @return A new parser group sub-builder.
 		 */
-		protected ParserGroup.Builder createParsers(BeanStore beanStore, Supplier<?> resource) {
+		protected ParserSet.Builder createParsers(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<ParserGroup.Builder> v = Value.of(
-				ParserGroup
+			Value<ParserSet.Builder> v = Value.of(
+				ParserSet
 					.create()
 					.beanStore(beanStore)
 			);
 
 			// Specify the implementation class if its set as a default.
 			defaultClasses()
-				.get(ParserGroup.class)
+				.get(ParserSet.class)
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with builder from bean store.
 			beanStore
-				.getBean(ParserGroup.Builder.class)
+				.getBean(ParserSet.Builder.class)
 				.map(x -> x.copy())
 				.ifPresent(x->v.set(x));
 
 			// Replace with bean from bean store.
 			beanStore
-				.getBean(ParserGroup.class)
+				.getBean(ParserSet.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  public [static] ParserGroup.Builder createParsers(<args>)
+			// Replace with builder from:  public [static] ParserSet.Builder createParsers(<args>)
 			beanStore
-				.beanCreateMethodFinder(ParserGroup.Builder.class)
-				.addBean(ParserGroup.Builder.class, v.get())
+				.beanCreateMethodFinder(ParserSet.Builder.class)
+				.addBean(ParserSet.Builder.class, v.get())
 				.find("createParsers")
 				.run(x -> v.set(x));
 
-			// Replace with bean from:  public [static] ParserGroup createParsers(<args>)
+			// Replace with bean from:  public [static] ParserSet createParsers(<args>)
 			beanStore
-				.beanCreateMethodFinder(ParserGroup.class)
-				.addBean(ParserGroup.Builder.class, v.get())
+				.beanCreateMethodFinder(ParserSet.class)
+				.addBean(ParserSet.Builder.class, v.get())
 				.find("createParsers")
 				.run(x -> v.get().impl(x));
 
@@ -5227,7 +5227,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The serializer group builder for this context builder.
 		 */
-		public SerializerGroup.Builder getSerializers() {
+		public SerializerSet.Builder getSerializers() {
 			return serializers;
 		}
 
@@ -5253,7 +5253,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The parser group builder for this context builder.
 		 */
-		public ParserGroup.Builder getParsers() {
+		public ParserSet.Builder getParsers() {
 			return parsers;
 		}
 
@@ -5273,7 +5273,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The encoder group builder for this context builder.
 		 */
-		public EncoderGroup.Builder getEncoders() {
+		public EncoderSet.Builder getEncoders() {
 			return encoders;
 		}
 
@@ -5972,9 +5972,9 @@ public class RestContext extends Context {
 
 	private final Class<? extends RestOpArg>[] restOpArgs;
 	private final BeanContext beanContext;
-	private final EncoderGroup encoders;
-	private final SerializerGroup serializers;
-	private final ParserGroup parsers;
+	private final EncoderSet encoders;
+	private final SerializerSet serializers;
+	private final ParserSet parsers;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
@@ -6082,9 +6082,9 @@ public class RestContext extends Context {
 			uriRelativity = builder.uriRelativity;
 
 			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
-			encoders = bs.add(EncoderGroup.class, builder.encoders().build());
-			serializers = bs.add(SerializerGroup.class, builder.serializers().build());
-			parsers = bs.add(ParserGroup.class, builder.parsers().build());
+			encoders = bs.add(EncoderSet.class, builder.encoders().build());
+			serializers = bs.add(SerializerSet.class, builder.serializers().build());
+			parsers = bs.add(ParserSet.class, builder.parsers().build());
 			logger = bs.add(Logger.class, builder.logger());
 			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
 			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
@@ -6190,7 +6190,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The encoders associated with this context.
 	 */
-	public EncoderGroup getEncoders() {
+	public EncoderSet getEncoders() {
 		return encoders;
 	}
 
@@ -6199,7 +6199,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The serializers associated with this context.
 	 */
-	public SerializerGroup getSerializers() {
+	public SerializerSet getSerializers() {
 		return serializers;
 	}
 
@@ -6208,7 +6208,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The parsers associated with this context.
 	 */
-	public ParserGroup getParsers() {
+	public ParserSet getParsers() {
 		return parsers;
 	}
 

@@ -61,26 +61,21 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct a new parser group builder</jc>
- * 	ParserGroupBuilder b = ParserGroup.<jsm>create</jsm>();
- *
- * 	<jc>// Add some parsers to it</jc>
- * 	b.append(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
- *
- * 	<jc>// Change settings on parsers simultaneously</jc>
- * 	b.set(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>)
- * 		.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
- *
- * 	ParserGroup g = b.build();
+ * 	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>();
+ * 		.add(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>); <jc>// Add some parsers to it</jc>
+ *		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ *		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.beansRequireSerializable())
+ * 		.build();
  *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>
- * 	ReaderParser p = (ReaderParser)g.getParser(<js>"text/json"</js>);
+ * 	ReaderParser <jv>parser</jv> = (ReaderParser)<jv>parsers</jv>.getParser(<js>"text/json"</js>);
  *
  * 	<jc>// Parse a bean from JSON</jc>
- * 	String json = <js>"{...}"</js>;
- * 	AddressBook addressBook = p.parse(json, AddressBook.<jk>class</jk>);
+ * 	String <jv>json</jv> = <js>"{...}"</js>;
+ * 	AddressBook <jv>addressBook</jv> = <jv>parser</jv>.parse(<jv>json</jv>, AddressBook.<jk>class</jk>);
  * </p>
  */
-public final class ParserGroup {
+public final class ParserSet {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -127,7 +122,7 @@ public final class ParserGroup {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends BeanBuilder<ParserGroup> {
+	public static class Builder extends BeanBuilder<ParserSet> {
 
 		List<Object> entries;
 		private BeanContext.Builder bcBuilder;
@@ -136,7 +131,7 @@ public final class ParserGroup {
 		 * Create an empty parser group builder.
 		 */
 		protected Builder() {
-			super(ParserGroup.class);
+			super(ParserSet.class);
 			this.entries = AList.create();
 		}
 
@@ -145,7 +140,7 @@ public final class ParserGroup {
 		 *
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
-		protected Builder(ParserGroup copyFrom) {
+		protected Builder(ParserSet copyFrom) {
 			super(copyFrom.getClass());
 			this.entries = AList.create().append(asList(copyFrom.entries));
 		}
@@ -177,8 +172,8 @@ public final class ParserGroup {
 		}
 
 		@Override /* BeanBuilder */
-		protected ParserGroup buildDefault() {
-			return new ParserGroup(this);
+		protected ParserSet buildDefault() {
+			return new ParserSet(this);
 		}
 
 		@Override /* BeanBuilder */
@@ -225,7 +220,7 @@ public final class ParserGroup {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
-		 * 	ParserGroup.Builder <jv>builder</jv> = ParserGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 * 	ParserSet.Builder <jv>builder</jv> = ParserSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.add(FooParser.<jk>class</jk>);  <jc>// Now contains:  [FooParser]</jc>
 		 *
@@ -247,7 +242,7 @@ public final class ParserGroup {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw runtimeException("Invalid type passed to ParserGroup.Builder.add(): " + v.getName());
+					throw runtimeException("Invalid type passed to ParserSet.Builder.add(): " + v.getName());
 				}
 			}
 			entries.addAll(0, l);
@@ -265,7 +260,7 @@ public final class ParserGroup {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
-		 * 	ParserGroup.Builder <jv>builder</jv> = ParserGroup.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
+		 * 	ParserSet.Builder <jv>builder</jv> = ParserSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.set(FooParser.<jk>class</jk>);  <jc>// Now contains:  [FooParser]</jc>
 		 *
@@ -476,7 +471,7 @@ public final class ParserGroup {
 	 *
 	 * @param builder The builder for this bean.
 	 */
-	public ParserGroup(Builder builder) {
+	public ParserSet(Builder builder) {
 
 		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Parser[]::new);
 

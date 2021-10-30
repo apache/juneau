@@ -19,7 +19,7 @@ import org.apache.juneau.json.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ParserGroupTest {
+public class ParserSetTest {
 
 	//====================================================================================================
 	// Test parser group matching
@@ -27,21 +27,21 @@ public class ParserGroupTest {
 	@Test
 	public void testParserGroupMatching() throws Exception {
 
-		ParserGroup g = ParserGroup.create().add(Parser1.class, Parser2.class, Parser3.class).build();
-		assertObject(g.getParser("text/foo")).isType(Parser1.class);
-		assertObject(g.getParser("text/foo_a")).isType(Parser1.class);
-		assertObject(g.getParser("text/foo_a+xxx")).isType(Parser1.class);
-		assertObject(g.getParser("text/xxx+foo_a")).isType(Parser1.class);
-		assertObject(g.getParser("text/foo+bar")).isType(Parser2.class);
-		assertObject(g.getParser("text/foo+bar_a")).isType(Parser2.class);
-		assertObject(g.getParser("text/bar+foo")).isType(Parser2.class);
-		assertObject(g.getParser("text/bar+foo+xxx")).isType(Parser2.class);
-		assertObject(g.getParser("text/baz")).isType(Parser3.class);
-		assertObject(g.getParser("text/baz_a")).isType(Parser3.class);
-		assertObject(g.getParser("text/baz+yyy")).isType(Parser3.class);
-		assertObject(g.getParser("text/baz_a+yyy")).isType(Parser3.class);
-		assertObject(g.getParser("text/yyy+baz")).isType(Parser3.class);
-		assertObject(g.getParser("text/yyy+baz_a")).isType(Parser3.class);
+		ParserSet s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
+		assertObject(s.getParser("text/foo")).isType(Parser1.class);
+		assertObject(s.getParser("text/foo_a")).isType(Parser1.class);
+		assertObject(s.getParser("text/foo_a+xxx")).isType(Parser1.class);
+		assertObject(s.getParser("text/xxx+foo_a")).isType(Parser1.class);
+		assertObject(s.getParser("text/foo+bar")).isType(Parser2.class);
+		assertObject(s.getParser("text/foo+bar_a")).isType(Parser2.class);
+		assertObject(s.getParser("text/bar+foo")).isType(Parser2.class);
+		assertObject(s.getParser("text/bar+foo+xxx")).isType(Parser2.class);
+		assertObject(s.getParser("text/baz")).isType(Parser3.class);
+		assertObject(s.getParser("text/baz_a")).isType(Parser3.class);
+		assertObject(s.getParser("text/baz+yyy")).isType(Parser3.class);
+		assertObject(s.getParser("text/baz_a+yyy")).isType(Parser3.class);
+		assertObject(s.getParser("text/yyy+baz")).isType(Parser3.class);
+		assertObject(s.getParser("text/yyy+baz_a")).isType(Parser3.class);
 	}
 
 
@@ -54,20 +54,20 @@ public class ParserGroupTest {
 	//====================================================================================================
 	@Test
 	public void testInheritence() throws Exception {
-		ParserGroup.Builder gb = null;
-		ParserGroup g = null;
+		ParserSet.Builder sb = null;
+		ParserSet s = null;
 
-		gb = ParserGroup.create().add(P1.class, P2.class);
-		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
+		sb = ParserSet.create().add(P1.class, P2.class);
+		s = sb.build();
+		assertObject(s.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
 
-		gb = ParserGroup.create().add(P1.class, P2.class).add(P3.class, P4.class);
-		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		sb = ParserSet.create().add(P1.class, P2.class).add(P3.class, P4.class);
+		s = sb.build();
+		assertObject(s.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
-		gb = ParserGroup.create().add(P1.class, P2.class).add(P3.class, P4.class).add(P5.class);
-		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		sb = ParserSet.create().add(P1.class, P2.class).add(P3.class, P4.class).add(P5.class);
+		s = sb.build();
+		assertObject(s.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}
 
 	public static class P1 extends JsonParser { protected P1(JsonParser.Builder b) { super(b.consumes("text/1")); }}

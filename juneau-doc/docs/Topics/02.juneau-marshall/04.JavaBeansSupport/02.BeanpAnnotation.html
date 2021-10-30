@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Beanp Annotation', updated:'8.1.0,8.1.2', flags:'todo'} 
+{title:'@Beanp Annotation', updated:'8.1.0,8.1.2,9.0.0'} 
 
 <p>
 	The {@link oaj.annotation.Beanp @Beanp} annotation is used to tailor how 
@@ -39,7 +39,7 @@
 	}
 </p>
 <p>
-	If the {@del oaj.BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field 
+	If the {@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} setting on the bean context excludes this field 
 	(e.g. the visibility is set to the default of PUBLIC, but the field is PROTECTED), this annotation 
 	can be used to force the field to be identified as a property.
 </p>
@@ -121,7 +121,7 @@
 </p>
 <div class='info'>
 	Note that if you're not interested in these additional properties, you can also use the
-	{@del oaj.BeanContext#BEAN_ignoreUnknownBeanProperties} setting to ignore values 
+	{@link oaj.BeanContext.Builder#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties} setting to ignore values 
 	that don't fit into existing properties.
 </div>
 <p>
@@ -185,7 +185,7 @@
 	<jk>public class</jk> MyClass {
 
 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-		<ja>@Beanp</ja>(bpi={<js>"f1"</js>})
+		<ja>@Beanp</ja>(properties={<js>"f1"</js>})
 		<jk>public</jk> MyChildClass <jf>x1</jf> = <jk>new</jk> MyChildClass();
 	}
 
