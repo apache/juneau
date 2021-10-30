@@ -181,23 +181,23 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void a05_swappedPojoHeaders() throws Exception {
-		String r = proxy.swappedPojoHeaders(
-			new SwappedPojo(),
-			new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null},
-			AMap.of(new SwappedPojo(),new SwappedPojo()),
-			AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null})
+	public void a05_swappedObjectHeaders() throws Exception {
+		String r = proxy.swappedObjectHeaders(
+			new SwappedObject(),
+			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
+			AMap.of(new SwappedObject(),new SwappedObject()),
+			AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})
 		);
 		assertEquals("OK", r);
 	}
 
 	@Test
-	public void a06_implicitSwappedPojoHeaders() throws Exception {
-		String r = proxy.implicitSwappedPojoHeaders(
-			new ImplicitSwappedPojo(),
-			new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null},
-			AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo()),
-			AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null})
+	public void a06_implicitSwappedObjectHeaders() throws Exception {
+		String r = proxy.implicitSwappedObjectHeaders(
+			new ImplicitSwappedObject(),
+			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
+			AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject()),
+			AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})
 		);
 		assertEquals("OK", r);
 	}
@@ -310,23 +310,23 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void b05_swappedPojoQueries() throws Exception {
-		String r = proxy.swappedPojoQueries(
-			new SwappedPojo(),
-			new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null},
-			AMap.of(new SwappedPojo(),new SwappedPojo()),
-			AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null})
+	public void b05_swappedObjectQueries() throws Exception {
+		String r = proxy.swappedObjectQueries(
+			new SwappedObject(),
+			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
+			AMap.of(new SwappedObject(),new SwappedObject()),
+			AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})
 		);
 		assertEquals("OK", r);
 	}
 
 	@Test
-	public void b06_implicitSwappedPojoQueries() throws Exception {
-		String r = proxy.implicitSwappedPojoQueries(
-			new ImplicitSwappedPojo(),
-			new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null},
-			AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo()),
-			AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null})
+	public void b06_implicitSwappedObjectQueries() throws Exception {
+		String r = proxy.implicitSwappedObjectQueries(
+			new ImplicitSwappedObject(),
+			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
+			AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject()),
+			AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})
 		);
 		assertEquals("OK", r);
 	}
@@ -451,23 +451,23 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void c05_swappedPojoFormData() throws Exception {
-		String r = proxy.swappedPojoFormData(
-			new SwappedPojo(),
-			new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null},
-			AMap.of(new SwappedPojo(),new SwappedPojo()),
-			AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null})
+	public void c05_swappedObjectFormData() throws Exception {
+		String r = proxy.swappedObjectFormData(
+			new SwappedObject(),
+			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
+			AMap.of(new SwappedObject(),new SwappedObject()),
+			AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})
 		);
 		assertEquals("OK", r);
 	}
 
 	@Test
-	public void c06_implicitSwappedPojoFormData() throws Exception {
-		String r = proxy.implicitSwappedPojoFormData(
-			new ImplicitSwappedPojo(),
-			new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null},
-			AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo()),
-			AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null})
+	public void c06_implicitSwappedObjectFormData() throws Exception {
+		String r = proxy.implicitSwappedObjectFormData(
+			new ImplicitSwappedObject(),
+			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
+			AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject()),
+			AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})
 		);
 		assertEquals("OK", r);
 	}
@@ -726,33 +726,33 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Swapped POJOs
 
 	@Test
-	public void dd01_returnSwappedPojo() {
-		SwappedPojo x = proxy.returnSwappedPojo();
+	public void dd01_returnSwappedObject() {
+		SwappedObject x = proxy.returnSwappedObject();
 		assertObject(x).asJson().is("'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
-	public void dd02_returnSwappedPojo3dArray() {
-		SwappedPojo[][][] x = proxy.returnSwappedPojo3dArray();
+	public void dd02_returnSwappedObject3dArray() {
+		SwappedObject[][][] x = proxy.returnSwappedObject3dArray();
 		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
-	public void dd03_returnSwappedPojoMap() {
-		Map<SwappedPojo,SwappedPojo> x = proxy.returnSwappedPojoMap();
+	public void dd03_returnSwappedObjectMap() {
+		Map<SwappedObject,SwappedObject> x = proxy.returnSwappedObjectMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
+		Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
 	@Test
-	public void dd04_returnSwappedPojo3dMap() {
-		Map<SwappedPojo,SwappedPojo[][][]> x = proxy.returnSwappedPojo3dMap();
+	public void dd04_returnSwappedObject3dMap() {
+		Map<SwappedObject,SwappedObject[][][]> x = proxy.returnSwappedObject3dMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
+		Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
@@ -760,33 +760,33 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Implicit swapped POJOs
 
 	@Test
-	public void de01_returnImplicitSwappedPojo() {
-		ImplicitSwappedPojo x = proxy.returnImplicitSwappedPojo();
+	public void de01_returnImplicitSwappedObject() {
+		ImplicitSwappedObject x = proxy.returnImplicitSwappedObject();
 		assertObject(x).asJson().is("'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
-	public void de02_returnImplicitSwappedPojo3dArray() {
-		ImplicitSwappedPojo[][][] x = proxy.returnImplicitSwappedPojo3dArray();
+	public void de02_returnImplicitSwappedObject3dArray() {
+		ImplicitSwappedObject[][][] x = proxy.returnImplicitSwappedObject3dArray();
 		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
-	public void de03_returnImplicitSwappedPojoMap() {
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = proxy.returnImplicitSwappedPojoMap();
+	public void de03_returnImplicitSwappedObjectMap() {
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> x = proxy.returnImplicitSwappedObjectMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
 	@Test
-	public void de04_returnImplicitSwappedPojo3dMap() {
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = proxy.returnImplicitSwappedPojo3dMap();
+	public void de04_returnImplicitSwappedObject3dMap() {
+		Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x = proxy.returnImplicitSwappedObject3dMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
@@ -1029,44 +1029,44 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Swapped POJOs
 
 	@Test
-	public void ed01_setSwappedPojo() {
-		proxy.setSwappedPojo(new SwappedPojo());
+	public void ed01_setSwappedObject() {
+		proxy.setSwappedObject(new SwappedObject());
 	}
 
 	@Test
-	public void ed02_setSwappedPojo3dArray() {
-		proxy.setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+	public void ed02_setSwappedObject3dArray() {
+		proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
 	}
 
 	@Test
-	public void ed03_setSwappedPojoMap() {
-		proxy.setSwappedPojoMap(AMap.of(new SwappedPojo(),new SwappedPojo()));
+	public void ed03_setSwappedObjectMap() {
+		proxy.setSwappedObjectMap(AMap.of(new SwappedObject(),new SwappedObject()));
 	}
 
 	@Test
-	public void ed04_setSwappedPojo3dMap() {
-		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
+	public void ed04_setSwappedObject3dMap() {
+		proxy.setSwappedObject3dMap(AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
 	// Implicit swapped POJOs
 	@Test
-	public void ee01_setImplicitSwappedPojo() {
-		proxy.setImplicitSwappedPojo(new ImplicitSwappedPojo());
+	public void ee01_setImplicitSwappedObject() {
+		proxy.setImplicitSwappedObject(new ImplicitSwappedObject());
 	}
 
 	@Test
-	public void ee02_setImplicitSwappedPojo3dArray() {
-		proxy.setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+	public void ee02_setImplicitSwappedObject3dArray() {
+		proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
 	}
 
 	@Test
-	public void ee03_setImplicitSwappedPojoMap() {
-		proxy.setImplicitSwappedPojoMap(AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo()));
+	public void ee03_setImplicitSwappedObjectMap() {
+		proxy.setImplicitSwappedObjectMap(AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject()));
 	}
 
 	@Test
-	public void ee04_setImplicitSwappedPojo3dMap() {
-		proxy.setImplicitSwappedPojo3dMap(AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
+	public void ee04_setImplicitSwappedObject3dMap() {
+		proxy.setImplicitSwappedObject3dMap(AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
 	// Enums
@@ -1581,20 +1581,20 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("h") Map<Integer,List<TypedBean>> h
 		);
 
-		@RemoteOp(method="GET", path="/swappedPojoHeaders")
-		String swappedPojoHeaders(
-			@Header("a") SwappedPojo a,
-			@Header("b") SwappedPojo[][][] b,
-			@Header("c") Map<SwappedPojo,SwappedPojo> c,
-			@Header("d") Map<SwappedPojo,SwappedPojo[][][]> d
+		@RemoteOp(method="GET", path="/swappedObjectHeaders")
+		String swappedObjectHeaders(
+			@Header("a") SwappedObject a,
+			@Header("b") SwappedObject[][][] b,
+			@Header("c") Map<SwappedObject,SwappedObject> c,
+			@Header("d") Map<SwappedObject,SwappedObject[][][]> d
 		);
 
-		@RemoteOp(method="GET", path="/implicitSwappedPojoHeaders")
-		String implicitSwappedPojoHeaders(
-			@Header("a") ImplicitSwappedPojo a,
-			@Header("b") ImplicitSwappedPojo[][][] b,
-			@Header("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@Header("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+		@RemoteOp(method="GET", path="/implicitSwappedObjectHeaders")
+		String implicitSwappedObjectHeaders(
+			@Header("a") ImplicitSwappedObject a,
+			@Header("b") ImplicitSwappedObject[][][] b,
+			@Header("c") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@Header("d") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		);
 
 		@RemoteOp(method="GET", path="/enumHeaders")
@@ -1679,20 +1679,20 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("h") Map<Integer,List<TypedBean>> h
 		);
 
-		@RemoteOp(method="GET", path="/swappedPojoQueries")
-		String swappedPojoQueries(
-			@Query("a") SwappedPojo a,
-			@Query("b") SwappedPojo[][][] b,
-			@Query("c") Map<SwappedPojo,SwappedPojo> c,
-			@Query("d") Map<SwappedPojo,SwappedPojo[][][]> d
+		@RemoteOp(method="GET", path="/swappedObjectQueries")
+		String swappedObjectQueries(
+			@Query("a") SwappedObject a,
+			@Query("b") SwappedObject[][][] b,
+			@Query("c") Map<SwappedObject,SwappedObject> c,
+			@Query("d") Map<SwappedObject,SwappedObject[][][]> d
 		);
 
-		@RemoteOp(method="GET", path="/implicitSwappedPojoQueries")
-		String implicitSwappedPojoQueries(
-			@Query("a") ImplicitSwappedPojo a,
-			@Query("b") ImplicitSwappedPojo[][][] b,
-			@Query("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@Query("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+		@RemoteOp(method="GET", path="/implicitSwappedObjectQueries")
+		String implicitSwappedObjectQueries(
+			@Query("a") ImplicitSwappedObject a,
+			@Query("b") ImplicitSwappedObject[][][] b,
+			@Query("c") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@Query("d") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		);
 
 		@RemoteOp(method="GET", path="/enumQueries")
@@ -1787,20 +1787,20 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("h") Map<Integer,List<TypedBean>> h
 		);
 
-		@RemoteOp(method="POST", path="/swappedPojoFormData")
-		String swappedPojoFormData(
-			@FormData("a") SwappedPojo a,
-			@FormData("b") SwappedPojo[][][] b,
-			@FormData("c") Map<SwappedPojo,SwappedPojo> c,
-			@FormData("d") Map<SwappedPojo,SwappedPojo[][][]> d
+		@RemoteOp(method="POST", path="/swappedObjectFormData")
+		String swappedObjectFormData(
+			@FormData("a") SwappedObject a,
+			@FormData("b") SwappedObject[][][] b,
+			@FormData("c") Map<SwappedObject,SwappedObject> c,
+			@FormData("d") Map<SwappedObject,SwappedObject[][][]> d
 		);
 
-		@RemoteOp(method="POST", path="/implicitSwappedPojoFormData")
-		String implicitSwappedPojoFormData(
-			@FormData("a") ImplicitSwappedPojo a,
-			@FormData("b") ImplicitSwappedPojo[][][] b,
-			@FormData("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@FormData("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+		@RemoteOp(method="POST", path="/implicitSwappedObjectFormData")
+		String implicitSwappedObjectFormData(
+			@FormData("a") ImplicitSwappedObject a,
+			@FormData("b") ImplicitSwappedObject[][][] b,
+			@FormData("c") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@FormData("d") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		);
 
 		@RemoteOp(method="POST", path="/enumFormData")
@@ -2287,31 +2287,31 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		// Swapped POJOs
 
-		@RemoteOp(method="GET", path="/returnSwappedPojo")
-		SwappedPojo returnSwappedPojo();
+		@RemoteOp(method="GET", path="/returnSwappedObject")
+		SwappedObject returnSwappedObject();
 
-		@RemoteOp(method="GET", path="/returnSwappedPojo3dArray")
-		SwappedPojo[][][] returnSwappedPojo3dArray();
+		@RemoteOp(method="GET", path="/returnSwappedObject3dArray")
+		SwappedObject[][][] returnSwappedObject3dArray();
 
-		@RemoteOp(method="GET", path="/returnSwappedPojoMap")
-		Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap();
+		@RemoteOp(method="GET", path="/returnSwappedObjectMap")
+		Map<SwappedObject,SwappedObject> returnSwappedObjectMap();
 
-		@RemoteOp(method="GET", path="/returnSwappedPojo3dMap")
-		Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap();
+		@RemoteOp(method="GET", path="/returnSwappedObject3dMap")
+		Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap();
 
 		// Implicit swapped POJOs
 
-		@RemoteOp(method="GET", path="/returnImplicitSwappedPojo")
-		ImplicitSwappedPojo returnImplicitSwappedPojo();
+		@RemoteOp(method="GET", path="/returnImplicitSwappedObject")
+		ImplicitSwappedObject returnImplicitSwappedObject();
 
-		@RemoteOp(method="GET", path="/returnImplicitSwappedPojo3dArray")
-		ImplicitSwappedPojo[][][] returnImplicitSwappedPojo3dArray();
+		@RemoteOp(method="GET", path="/returnImplicitSwappedObject3dArray")
+		ImplicitSwappedObject[][][] returnImplicitSwappedObject3dArray();
 
-		@RemoteOp(method="GET", path="/returnImplicitSwappedPojoMap")
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap();
+		@RemoteOp(method="GET", path="/returnImplicitSwappedObjectMap")
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap();
 
-		@RemoteOp(method="GET", path="/returnImplicitSwappedPojo3dMap")
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap();
+		@RemoteOp(method="GET", path="/returnImplicitSwappedObject3dMap")
+		Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap();
 
 		// Enums
 
@@ -2444,31 +2444,31 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		// Swapped POJOs
 
-		@RemoteOp(method="POST", path="/setSwappedPojo")
-		void setSwappedPojo(@Body SwappedPojo x);
+		@RemoteOp(method="POST", path="/setSwappedObject")
+		void setSwappedObject(@Body SwappedObject x);
 
-		@RemoteOp(method="POST", path="/setSwappedPojo3dArray")
-		void setSwappedPojo3dArray(@Body SwappedPojo[][][] x);
+		@RemoteOp(method="POST", path="/setSwappedObject3dArray")
+		void setSwappedObject3dArray(@Body SwappedObject[][][] x);
 
-		@RemoteOp(method="POST", path="/setSwappedPojoMap")
-		void setSwappedPojoMap(@Body Map<SwappedPojo,SwappedPojo> x);
+		@RemoteOp(method="POST", path="/setSwappedObjectMap")
+		void setSwappedObjectMap(@Body Map<SwappedObject,SwappedObject> x);
 
-		@RemoteOp(method="POST", path="/setSwappedPojo3dMap")
-		void setSwappedPojo3dMap(@Body Map<SwappedPojo,SwappedPojo[][][]> x);
+		@RemoteOp(method="POST", path="/setSwappedObject3dMap")
+		void setSwappedObject3dMap(@Body Map<SwappedObject,SwappedObject[][][]> x);
 
 		// Implicit swapped POJOs
 
-		@RemoteOp(method="POST", path="/setImplicitSwappedPojo")
-		void setImplicitSwappedPojo(@Body ImplicitSwappedPojo x);
+		@RemoteOp(method="POST", path="/setImplicitSwappedObject")
+		void setImplicitSwappedObject(@Body ImplicitSwappedObject x);
 
-		@RemoteOp(method="POST", path="/setImplicitSwappedPojo3dArray")
-		void setImplicitSwappedPojo3dArray(@Body ImplicitSwappedPojo[][][] x);
+		@RemoteOp(method="POST", path="/setImplicitSwappedObject3dArray")
+		void setImplicitSwappedObject3dArray(@Body ImplicitSwappedObject[][][] x);
 
-		@RemoteOp(method="POST", path="/setImplicitSwappedPojoMap")
-		void setImplicitSwappedPojoMap(@Body Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);
+		@RemoteOp(method="POST", path="/setImplicitSwappedObjectMap")
+		void setImplicitSwappedObjectMap(@Body Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
 
-		@RemoteOp(method="POST", path="/setImplicitSwappedPojo3dMap")
-		void setImplicitSwappedPojo3dMap(@Body Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);
+		@RemoteOp(method="POST", path="/setImplicitSwappedObject3dMap")
+		void setImplicitSwappedObject3dMap(@Body Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
 
 		// Enums
 

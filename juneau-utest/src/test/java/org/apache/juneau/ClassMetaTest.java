@@ -17,7 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes","serial"})
@@ -125,11 +125,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertFalse(ooo.hasChildPojoSwaps());
-		assertFalse(hi1.hasChildPojoSwaps());
-		assertFalse(hc1.hasChildPojoSwaps());
-		assertFalse(hi2.hasChildPojoSwaps());
-		assertFalse(hc2.hasChildPojoSwaps());
+		assertFalse(ooo.hasChildSwaps());
+		assertFalse(hi1.hasChildSwaps());
+		assertFalse(hc1.hasChildSwaps());
+		assertFalse(hi2.hasChildSwaps());
+		assertFalse(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertNull(hi1.getSwap(bs));
 		assertNull(hc1.getSwap(bs));
@@ -148,11 +148,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertTrue(ooo.hasChildPojoSwaps());
-		assertTrue(hi1.hasChildPojoSwaps());
-		assertFalse(hc1.hasChildPojoSwaps());
-		assertFalse(hi2.hasChildPojoSwaps());
-		assertFalse(hc2.hasChildPojoSwaps());
+		assertTrue(ooo.hasChildSwaps());
+		assertTrue(hi1.hasChildSwaps());
+		assertFalse(hc1.hasChildSwaps());
+		assertFalse(hi2.hasChildSwaps());
+		assertFalse(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertEquals(hi1.getSwap(bs).getClass(), HI1Swap.class);
 		assertEquals(hc1.getSwap(bs).getClass(), HI1Swap.class);
@@ -171,11 +171,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertTrue(ooo.hasChildPojoSwaps());
-		assertTrue(hi1.hasChildPojoSwaps());
-		assertTrue(hc1.hasChildPojoSwaps());
-		assertFalse(hi2.hasChildPojoSwaps());
-		assertFalse(hc2.hasChildPojoSwaps());
+		assertTrue(ooo.hasChildSwaps());
+		assertTrue(hi1.hasChildSwaps());
+		assertTrue(hc1.hasChildSwaps());
+		assertFalse(hi2.hasChildSwaps());
+		assertFalse(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertNull(hi1.getSwap(bs));
 		assertEquals(hc1.getSwap(bs).getClass(), HC1Swap.class);
@@ -194,11 +194,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertTrue(ooo.hasChildPojoSwaps());
-		assertTrue(hi1.hasChildPojoSwaps());
-		assertFalse(hc1.hasChildPojoSwaps());
-		assertTrue(hi2.hasChildPojoSwaps());
-		assertFalse(hc2.hasChildPojoSwaps());
+		assertTrue(ooo.hasChildSwaps());
+		assertTrue(hi1.hasChildSwaps());
+		assertFalse(hc1.hasChildSwaps());
+		assertTrue(hi2.hasChildSwaps());
+		assertFalse(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertNull(hi1.getSwap(bs));
 		assertNull(hc1.getSwap(bs));
@@ -217,11 +217,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertTrue(ooo.hasChildPojoSwaps());
-		assertTrue(hi1.hasChildPojoSwaps());
-		assertTrue(hc1.hasChildPojoSwaps());
-		assertTrue(hi2.hasChildPojoSwaps());
-		assertTrue(hc2.hasChildPojoSwaps());
+		assertTrue(ooo.hasChildSwaps());
+		assertTrue(hi1.hasChildSwaps());
+		assertTrue(hc1.hasChildSwaps());
+		assertTrue(hi2.hasChildSwaps());
+		assertTrue(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertNull(hi1.getSwap(bs));
 		assertNull(hc1.getSwap(bs));
@@ -240,11 +240,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertTrue(ooo.hasChildPojoSwaps());
-		assertTrue(hi1.hasChildPojoSwaps());
-		assertTrue(hc1.hasChildPojoSwaps());
-		assertTrue(hi2.hasChildPojoSwaps());
-		assertTrue(hc2.hasChildPojoSwaps());
+		assertTrue(ooo.hasChildSwaps());
+		assertTrue(hi1.hasChildSwaps());
+		assertTrue(hc1.hasChildSwaps());
+		assertTrue(hi2.hasChildSwaps());
+		assertTrue(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertEquals(hi1.getSwap(bs).getClass(), HI1Swap.class);
 		assertEquals(hc1.getSwap(bs).getClass(), HI1Swap.class);
@@ -263,11 +263,11 @@ public class ClassMetaTest {
 		hc1 = bc.getClassMeta(HC1.class);
 		hi2 = bc.getClassMeta(HI2.class);
 		hc2 = bc.getClassMeta(HC2.class);
-		assertTrue(ooo.hasChildPojoSwaps());
-		assertTrue(hi1.hasChildPojoSwaps());
-		assertTrue(hc1.hasChildPojoSwaps());
-		assertTrue(hi2.hasChildPojoSwaps());
-		assertTrue(hc2.hasChildPojoSwaps());
+		assertTrue(ooo.hasChildSwaps());
+		assertTrue(hi1.hasChildSwaps());
+		assertTrue(hc1.hasChildSwaps());
+		assertTrue(hi2.hasChildSwaps());
+		assertTrue(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertEquals(hi1.getSwap(bs).getClass(), HI1Swap.class);
 		assertEquals(hc1.getSwap(bs).getClass(), HC1Swap.class);
@@ -284,8 +284,8 @@ public class ClassMetaTest {
 	public class HC1 implements HI1 {}
 	public interface HI2 extends HI1 {}
 	public class HC2 extends HC1 implements HI2 {}
-	public static class HC1Swap extends PojoSwap<HC1,Map> {}
-	public static class HI1Swap extends PojoSwap<HI1,Map> {}
-	public static class HC2Swap extends PojoSwap<HC2,Map> {}
-	public static class HI2Swap extends PojoSwap<HI2,Map> {}
+	public static class HC1Swap extends ObjectSwap<HC1,Map> {}
+	public static class HI1Swap extends ObjectSwap<HI1,Map> {}
+	public static class HC2Swap extends ObjectSwap<HC2,Map> {}
+	public static class HI2Swap extends ObjectSwap<HI2,Map> {}
 }

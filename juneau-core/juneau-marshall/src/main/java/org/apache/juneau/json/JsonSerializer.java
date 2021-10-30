@@ -64,7 +64,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
- * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the
+ * {@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated through the
  * {@link org.apache.juneau.BeanContext.Builder#swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
@@ -490,7 +490,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}

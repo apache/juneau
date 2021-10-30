@@ -221,12 +221,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		return "OK";
 	}
 
-	@RestGet(path="/swappedPojoHeaders")
-	public String swappedPojoHeaders(
-			@Header(n="a",cf="uon") SwappedPojo a,
-			@Header(n="b",cf="uon") SwappedPojo[][][] b,
-			@Header(n="c",cf="uon") Map<SwappedPojo,SwappedPojo> c,
-			@Header(n="d",cf="uon") Map<SwappedPojo,SwappedPojo[][][]> d
+	@RestGet(path="/swappedObjectHeaders")
+	public String swappedObjectHeaders(
+			@Header(n="a",cf="uon") SwappedObject a,
+			@Header(n="b",cf="uon") SwappedObject[][][] b,
+			@Header(n="c",cf="uon") Map<SwappedObject,SwappedObject> c,
+			@Header(n="d",cf="uon") Map<SwappedObject,SwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -234,22 +234,22 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(SwappedPojo.class);
-		assertObject(b[0][0][0]).isType(SwappedPojo.class);
-		assertObject(c.keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(c.values().iterator().next()).isType(SwappedPojo.class);
-		assertObject(d.keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedPojo.class);
+		assertObject(a).isType(SwappedObject.class);
+		assertObject(b[0][0][0]).isType(SwappedObject.class);
+		assertObject(c.keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(c.values().iterator().next()).isType(SwappedObject.class);
+		assertObject(d.keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedObject.class);
 
 		return "OK";
 	}
 
-	@RestGet(path="/implicitSwappedPojoHeaders")
-	public String implicitSwappedPojoHeaders(
-			@Header(n="a",cf="uon") ImplicitSwappedPojo a,
-			@Header(n="b",cf="uon") ImplicitSwappedPojo[][][] b,
-			@Header(n="c",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@Header(n="d",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+	@RestGet(path="/implicitSwappedObjectHeaders")
+	public String implicitSwappedObjectHeaders(
+			@Header(n="a",cf="uon") ImplicitSwappedObject a,
+			@Header(n="b",cf="uon") ImplicitSwappedObject[][][] b,
+			@Header(n="c",cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@Header(n="d",cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -257,12 +257,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(ImplicitSwappedPojo.class);
-		assertObject(b[0][0][0]).isType(ImplicitSwappedPojo.class);
-		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(c.values().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedPojo.class);
+		assertObject(a).isType(ImplicitSwappedObject.class);
+		assertObject(b[0][0][0]).isType(ImplicitSwappedObject.class);
+		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(c.values().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
 
 		return "OK";
 	}
@@ -533,12 +533,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		return "OK";
 	}
 
-	@RestGet(path="/swappedPojoQueries")
-	public String swappedPojoQueries(
-			@Query(n="a",cf="uon") SwappedPojo a,
-			@Query(n="b",cf="uon") SwappedPojo[][][] b,
-			@Query(n="c",cf="uon") Map<SwappedPojo,SwappedPojo> c,
-			@Query(n="d",cf="uon") Map<SwappedPojo,SwappedPojo[][][]> d
+	@RestGet(path="/swappedObjectQueries")
+	public String swappedObjectQueries(
+			@Query(n="a",cf="uon") SwappedObject a,
+			@Query(n="b",cf="uon") SwappedObject[][][] b,
+			@Query(n="c",cf="uon") Map<SwappedObject,SwappedObject> c,
+			@Query(n="d",cf="uon") Map<SwappedObject,SwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -546,22 +546,22 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(SwappedPojo.class);
-		assertObject(b[0][0][0]).isType(SwappedPojo.class);
-		assertObject(c.keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(c.values().iterator().next()).isType(SwappedPojo.class);
-		assertObject(d.keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedPojo.class);
+		assertObject(a).isType(SwappedObject.class);
+		assertObject(b[0][0][0]).isType(SwappedObject.class);
+		assertObject(c.keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(c.values().iterator().next()).isType(SwappedObject.class);
+		assertObject(d.keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedObject.class);
 
 		return "OK";
 	}
 
-	@RestGet(path="/implicitSwappedPojoQueries")
-	public String implicitSwappedPojoQueries(
-			@Query(n="a",cf="uon") ImplicitSwappedPojo a,
-			@Query(n="b",cf="uon") ImplicitSwappedPojo[][][] b,
-			@Query(n="c",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@Query(n="d",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+	@RestGet(path="/implicitSwappedObjectQueries")
+	public String implicitSwappedObjectQueries(
+			@Query(n="a",cf="uon") ImplicitSwappedObject a,
+			@Query(n="b",cf="uon") ImplicitSwappedObject[][][] b,
+			@Query(n="c",cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@Query(n="d",cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -569,12 +569,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(ImplicitSwappedPojo.class);
-		assertObject(b[0][0][0]).isType(ImplicitSwappedPojo.class);
-		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(c.values().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedPojo.class);
+		assertObject(a).isType(ImplicitSwappedObject.class);
+		assertObject(b[0][0][0]).isType(ImplicitSwappedObject.class);
+		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(c.values().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
 
 		return "OK";
 	}
@@ -867,12 +867,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		return "OK";
 	}
 
-	@RestPost(path="/swappedPojoFormData")
-	public String swappedPojoFormData(
-			@FormData(n="a",cf="uon") SwappedPojo a,
-			@FormData(n="b",cf="uon") SwappedPojo[][][] b,
-			@FormData(n="c",cf="uon") Map<SwappedPojo,SwappedPojo> c,
-			@FormData(n="d",cf="uon") Map<SwappedPojo,SwappedPojo[][][]> d
+	@RestPost(path="/swappedObjectFormData")
+	public String swappedObjectFormData(
+			@FormData(n="a",cf="uon") SwappedObject a,
+			@FormData(n="b",cf="uon") SwappedObject[][][] b,
+			@FormData(n="c",cf="uon") Map<SwappedObject,SwappedObject> c,
+			@FormData(n="d",cf="uon") Map<SwappedObject,SwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -880,22 +880,22 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(SwappedPojo.class);
-		assertObject(b[0][0][0]).isType(SwappedPojo.class);
-		assertObject(c.keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(c.values().iterator().next()).isType(SwappedPojo.class);
-		assertObject(d.keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedPojo.class);
+		assertObject(a).isType(SwappedObject.class);
+		assertObject(b[0][0][0]).isType(SwappedObject.class);
+		assertObject(c.keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(c.values().iterator().next()).isType(SwappedObject.class);
+		assertObject(d.keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedObject.class);
 
 		return "OK";
 	}
 
-	@RestPost(path="/implicitSwappedPojoFormData")
-	public String implicitSwappedPojoFormData(
-			@FormData(n="a",cf="uon") ImplicitSwappedPojo a,
-			@FormData(n="b",cf="uon") ImplicitSwappedPojo[][][] b,
-			@FormData(n="c",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@FormData(n="d",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+	@RestPost(path="/implicitSwappedObjectFormData")
+	public String implicitSwappedObjectFormData(
+			@FormData(n="a",cf="uon") ImplicitSwappedObject a,
+			@FormData(n="b",cf="uon") ImplicitSwappedObject[][][] b,
+			@FormData(n="c",cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@FormData(n="d",cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -903,12 +903,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(ImplicitSwappedPojo.class);
-		assertObject(b[0][0][0]).isType(ImplicitSwappedPojo.class);
-		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(c.values().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedPojo.class);
+		assertObject(a).isType(ImplicitSwappedObject.class);
+		assertObject(b[0][0][0]).isType(ImplicitSwappedObject.class);
+		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(c.values().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
 
 		return "OK";
 	}
@@ -1359,46 +1359,46 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	// Swapped POJOs
 
-	@RestGet(path="/returnSwappedPojo")
-	public SwappedPojo returnSwappedPojo() {
-		return new SwappedPojo();
+	@RestGet(path="/returnSwappedObject")
+	public SwappedObject returnSwappedObject() {
+		return new SwappedObject();
 	}
 
-	@RestGet(path="/returnSwappedPojo3dArray")
-	public SwappedPojo[][][] returnSwappedPojo3dArray() {
-		return new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
+	@RestGet(path="/returnSwappedObject3dArray")
+	public SwappedObject[][][] returnSwappedObject3dArray() {
+		return new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
 	}
 
-	@RestGet(path="/returnSwappedPojoMap")
-	public Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap() {
-		return AMap.of(new SwappedPojo(),new SwappedPojo());
+	@RestGet(path="/returnSwappedObjectMap")
+	public Map<SwappedObject,SwappedObject> returnSwappedObjectMap() {
+		return AMap.of(new SwappedObject(),new SwappedObject());
 	}
 
-	@RestGet(path="/returnSwappedPojo3dMap")
-	public Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap() {
-		return AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+	@RestGet(path="/returnSwappedObject3dMap")
+	public Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap() {
+		return AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
 	}
 
 	// Implicit swapped POJOs
 
-	@RestGet(path="/returnImplicitSwappedPojo")
-	public ImplicitSwappedPojo returnImplicitSwappedPojo() {
-		return new ImplicitSwappedPojo();
+	@RestGet(path="/returnImplicitSwappedObject")
+	public ImplicitSwappedObject returnImplicitSwappedObject() {
+		return new ImplicitSwappedObject();
 	}
 
-	@RestGet(path="/returnImplicitSwappedPojo3dArray")
-	public ImplicitSwappedPojo[][][] returnImplicitSwappedPojo3dArray() {
-		return new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null};
+	@RestGet(path="/returnImplicitSwappedObject3dArray")
+	public ImplicitSwappedObject[][][] returnImplicitSwappedObject3dArray() {
+		return new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
 	}
 
-	@RestGet(path="/returnImplicitSwappedPojoMap")
-	public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap() {
-		return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo());
+	@RestGet(path="/returnImplicitSwappedObjectMap")
+	public Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap() {
+		return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 	}
 
-	@RestGet(path="/returnImplicitSwappedPojo3dMap")
-	public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap() {
-		return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+	@RestGet(path="/returnImplicitSwappedObject3dMap")
+	public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap() {
+		return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
 	}
 
 	// Enums
@@ -1624,58 +1624,58 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	// Swapped POJOs
 
-	@RestPost(path="/setSwappedPojo")
-	public void setSwappedPojo(@Body SwappedPojo x) {
+	@RestPost(path="/setSwappedObject")
+	public void setSwappedObject(@Body SwappedObject x) {
 		assertTrue(x.wasUnswapped);
 	}
 
-	@RestPost(path="/setSwappedPojo3dArray")
-	public void setSwappedPojo3dArray(@Body SwappedPojo[][][] x) {
+	@RestPost(path="/setSwappedObject3dArray")
+	public void setSwappedObject3dArray(@Body SwappedObject[][][] x) {
 		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
-	@RestPost(path="/setSwappedPojoMap")
-	public void setSwappedPojoMap(@Body Map<SwappedPojo,SwappedPojo> x) {
+	@RestPost(path="/setSwappedObjectMap")
+	public void setSwappedObjectMap(@Body Map<SwappedObject,SwappedObject> x) {
 		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
+		Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
-	@RestPost(path="/setSwappedPojo3dMap")
-	public void setSwappedPojo3dMap(@Body Map<SwappedPojo,SwappedPojo[][][]> x) {
+	@RestPost(path="/setSwappedObject3dMap")
+	public void setSwappedObject3dMap(@Body Map<SwappedObject,SwappedObject[][][]> x) {
 		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
+		Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
 
 	// Implicit swapped POJOs
 
-	@RestPost(path="/setImplicitSwappedPojo")
-	public void setImplicitSwappedPojo(@Body ImplicitSwappedPojo x) {
+	@RestPost(path="/setImplicitSwappedObject")
+	public void setImplicitSwappedObject(@Body ImplicitSwappedObject x) {
 		assertTrue(x.wasUnswapped);
 	}
 
-	@RestPost(path="/setImplicitSwappedPojo3dArray")
-	public void setImplicitSwappedPojo3dArray(@Body ImplicitSwappedPojo[][][] x) {
+	@RestPost(path="/setImplicitSwappedObject3dArray")
+	public void setImplicitSwappedObject3dArray(@Body ImplicitSwappedObject[][][] x) {
 		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
-	@RestPost(path="/setImplicitSwappedPojoMap")
-	public void setImplicitSwappedPojoMap(@Body Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x) {
+	@RestPost(path="/setImplicitSwappedObjectMap")
+	public void setImplicitSwappedObjectMap(@Body Map<ImplicitSwappedObject,ImplicitSwappedObject> x) {
 		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
-	@RestPost(path="/setImplicitSwappedPojo3dMap")
-	public void setImplicitSwappedPojo3dMap(@Body Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x) {
+	@RestPost(path="/setImplicitSwappedObject3dMap")
+	public void setImplicitSwappedObject3dMap(@Body Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x) {
 		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}

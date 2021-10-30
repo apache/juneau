@@ -27,7 +27,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
@@ -221,7 +221,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
 		ClassMeta<?> sType;			// The serialized type
-		PojoSwap pojoSwap = eType.getSwap(this);
+		ObjectSwap objectSwap = eType.getSwap(this);
 
 		aType = push(attrName, eType, null);
 
@@ -243,9 +243,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		}
 
 		JsonSchemaClassMeta jscm = null;
-		ClassMeta pojoSwapCM = pojoSwap == null ? null : getClassMeta(pojoSwap.getClass());
-		if (pojoSwapCM != null && pojoSwapCM.hasAnnotation(Schema.class))
-			jscm = getJsonSchemaClassMeta(pojoSwapCM);
+		ClassMeta objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
+		if (objectSwapCM != null && objectSwapCM.hasAnnotation(Schema.class))
+			jscm = getJsonSchemaClassMeta(objectSwapCM);
 		if (jscm == null)
 			jscm = getJsonSchemaClassMeta(sType);
 

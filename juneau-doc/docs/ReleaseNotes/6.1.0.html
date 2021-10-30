@@ -124,10 +124,10 @@
 	<jk>new</jk> JsonSerializer().setSimpleMode(<jk>true</jk>).setQuoteChar(<js>'"'</js>);
 			</p>
 	</ul>
-	<li>Simplified {@link oaj.transform.PojoSwap} class.  Now just two methods:
+	<li>Simplified {@del oaj.transform.PojoSwap} class.  Now just two methods:
 	<ul>
-		<li>{@link oaj.transform.PojoSwap#swap(BeanSession,Object)}
-		<li>{@link oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
+		<li>{@del oaj.transform.PojoSwap#swap(BeanSession,Object)}
+		<li>{@del oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
 	</ul>
 	<li>General code improvements made to {@link oaj.ClassMeta} class.
 	<ul>
@@ -182,7 +182,7 @@
 			<li>New setter method names for a better fluent design.
 			<li>Updated {@del org.apache.juneau.dto.atom} documentation.
 		</ul>
-	<li>New {@link oaj.transform.MapSwap} and {@link oaj.transform.StringSwap} classes.
+	<li>New {@del oaj.transform.MapSwap} and {@del oaj.transform.StringSwap} classes.
 	<li>New {@link oaj.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
 	<li>New {@link oaj.BeanContext#getClassMeta(Type,Type...)} and {@link oaj.BeanSession#getClassMeta(Type,Type...)}
 		methods for retrieving Map and Collection class metas.  

@@ -25,12 +25,12 @@ import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Generates a Swagger-UI interface from a Swagger document.
  */
-public class SwaggerUI extends PojoSwap<Swagger,Div> {
+public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	static final FileFinder RESOURCES = FileFinder
 		.create()

@@ -31,8 +31,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 
 /**
  * Contains metadata about a bean property.
@@ -63,7 +63,7 @@ public final class BeanPropertyMeta {
 		typeMeta;                                              // The transformed class type of the bean property.
 
 	private final String[] properties;                        // The value of the @Beanp(properties) annotation.
-	private final PojoSwap swap;                              // PojoSwap defined only via @Beanp annotation.
+	private final ObjectSwap swap;                              // ObjectSwap defined only via @Beanp annotation.
 
 	private final BeanRegistry beanRegistry;
 
@@ -95,7 +95,7 @@ public final class BeanPropertyMeta {
 		boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
 		ClassMeta<?> rawTypeMeta, typeMeta;
 		String[] properties;
-		PojoSwap swap;
+		ObjectSwap swap;
 		BeanRegistry beanRegistry;
 		Object overrideValue;
 		BeanPropertyMeta delegateFor;
@@ -193,7 +193,7 @@ public final class BeanPropertyMeta {
 						writeOnly = Boolean.valueOf(p.wo());
 				}
 				for (Swap s : bc.getAnnotations(Swap.class, innerField))
-					swap = getPropertyPojoSwap(s);
+					swap = getPropertySwap(s);
 				isUri |= last(bc.getAnnotations(Uri.class, innerField)) != null;
 			}
 
@@ -212,7 +212,7 @@ public final class BeanPropertyMeta {
 						writeOnly = Boolean.valueOf(p.wo());
 				}
 				for (Swap s : bc.getAnnotations(Swap.class, getter))
-					swap = getPropertyPojoSwap(s);
+					swap = getPropertySwap(s);
 			}
 
 			if (setter != null) {
@@ -222,7 +222,7 @@ public final class BeanPropertyMeta {
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
 				for (Beanp p : lp) {
 					if (swap == null)
-						swap = getPropertyPojoSwap(p);
+						swap = getPropertySwap(p);
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.a(p.dictionary());
@@ -232,7 +232,7 @@ public final class BeanPropertyMeta {
 						writeOnly = Boolean.valueOf(p.wo());
 				}
 				for (Swap s : bc.getAnnotations(Swap.class, setter))
-					swap = getPropertyPojoSwap(s);
+					swap = getPropertySwap(s);
 			}
 
 			if (rawTypeMeta == null)
@@ -312,21 +312,21 @@ public final class BeanPropertyMeta {
 			return new BeanPropertyMeta(this);
 		}
 
-		private PojoSwap getPropertyPojoSwap(Beanp p) throws Exception {
+		private ObjectSwap getPropertySwap(Beanp p) throws Exception {
 			if (! p.format().isEmpty())
-				return castOrCreate(PojoSwap.class, StringFormatSwap.class, false, p.format());
+				return castOrCreate(ObjectSwap.class, StringFormatSwap.class, false, p.format());
 			return null;
 		}
 
-		private PojoSwap getPropertyPojoSwap(Swap s) throws Exception {
+		private ObjectSwap getPropertySwap(Swap s) throws Exception {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
 			if (c == Null.class)
 				return null;
 			ClassInfo ci = ClassInfo.of(c);
-			if (ci.isChildOf(PojoSwap.class)) {
-				PojoSwap ps = castOrCreate(PojoSwap.class, c);
+			if (ci.isChildOf(ObjectSwap.class)) {
+				ObjectSwap ps = castOrCreate(ObjectSwap.class, c);
 				if (ps.forMediaTypes() != null)
 					throw runtimeException("TODO - Media types on swaps not yet supported on bean properties.");
 				if (ps.withTemplate() != null)
@@ -335,7 +335,7 @@ public final class BeanPropertyMeta {
 			}
 			if (ci.isChildOf(Surrogate.class))
 				throw runtimeException("TODO - Surrogate swaps not yet supported on bean properties.");
-			throw runtimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate. {0}", c);
+			throw runtimeException("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", c);
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
@@ -464,7 +464,7 @@ public final class BeanPropertyMeta {
 	 * Returns the {@link ClassMeta} of the class of this property.
 	 *
 	 * <p>
-	 * If this property or the property type class has a {@link PojoSwap} associated with it, this method returns the
+	 * If this property or the property type class has a {@link ObjectSwap} associated with it, this method returns the
 	 * transformed class meta.
 	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
 	 * {@link #set(BeanMap,String,Object)} methods.
@@ -1155,8 +1155,8 @@ public final class BeanPropertyMeta {
 			if (o == null)
 				return null;
 			// Otherwise, look it up via bean context.
-			if (rawTypeMeta.hasChildPojoSwaps()) {
-				PojoSwap f = rawTypeMeta.getChildPojoSwapForSwap(o.getClass());
+			if (rawTypeMeta.hasChildSwaps()) {
+				ObjectSwap f = rawTypeMeta.getChildObjectSwapForSwap(o.getClass());
 				if (f != null)
 					return f.swap(session, o);
 			}
@@ -1174,8 +1174,8 @@ public final class BeanPropertyMeta {
 				return swap.unswap(session, o, rawTypeMeta);
 			if (o == null)
 				return null;
-			if (rawTypeMeta.hasChildPojoSwaps()) {
-				PojoSwap f = rawTypeMeta.getChildPojoSwapForUnswap(o.getClass());
+			if (rawTypeMeta.hasChildSwaps()) {
+				ObjectSwap f = rawTypeMeta.getChildObjectSwapForUnswap(o.getClass());
 				if (f != null)
 					return f.unswap(session, o, rawTypeMeta);
 			}

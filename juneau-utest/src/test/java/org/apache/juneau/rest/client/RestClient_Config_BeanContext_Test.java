@@ -29,7 +29,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -939,7 +939,7 @@ public class RestClient_Config_BeanContext_Test {
 		}
 	}
 
-	public static class A34b extends PojoSwap<A34a,Integer> {
+	public static class A34b extends ObjectSwap<A34a,Integer> {
 		@Override
 		public Integer swap(BeanSession session,A34a o) { return o.foo; }
 		@Override

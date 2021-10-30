@@ -28,8 +28,8 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.testutils.*;
-import org.apache.juneau.transform.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -77,7 +77,7 @@ public class DefaultSwapsTest {
 	}
 
 	public static class ASwap extends StringSwap<Enumeration<?>> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Enumeration<?> o) throws Exception {
 			return "FOO";
 		}
@@ -111,7 +111,7 @@ public class DefaultSwapsTest {
 	}
 
 	public static class AcSwap extends StringSwap<Enumeration<?>> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Enumeration<?> o) throws Exception {
 			return "FOO";
 		}
@@ -149,7 +149,7 @@ public class DefaultSwapsTest {
 	private static List<String> B = AList.of("foo","bar");
 
 	public static class BSwap extends StringSwap<Iterator<?>> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Iterator<?> o) throws Exception {
 			return "FOO";
 		}
@@ -179,7 +179,7 @@ public class DefaultSwapsTest {
 	private static List<String> Bc = AList.of("foo","bar");
 
 	public static class BcSwap extends StringSwap<Iterator<?>> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Iterator<?> o) throws Exception {
 			return "FOO";
 		}
@@ -216,7 +216,7 @@ public class DefaultSwapsTest {
 	private static Locale C = Locale.JAPAN;
 
 	public static class CSwap extends StringSwap<Locale> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Locale o) throws Exception {
 			return "FOO";
 		}
@@ -249,7 +249,7 @@ public class DefaultSwapsTest {
 	private static GregorianCalendar D = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_ZONED_DATE_TIME.parse("2012-12-21T12:34:56Z")));
 
 	public static class DSwap extends StringSwap<Calendar> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Calendar o) throws Exception {
 			return "FOO";
 		}
@@ -282,7 +282,7 @@ public class DefaultSwapsTest {
 	private static Date E = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
 
 	public static class ESwap extends StringSwap<Date> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Date o) throws Exception {
 			return "FOO";
 		}
@@ -315,7 +315,7 @@ public class DefaultSwapsTest {
 	private static Instant FA = Instant.parse("2012-12-21T12:34:56Z");
 
 	public static class FASwap extends StringSwap<Instant> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Instant o) throws Exception {
 			return "FOO";
 		}
@@ -348,7 +348,7 @@ public class DefaultSwapsTest {
 	private static ZonedDateTime FB = ZonedDateTime.parse("2012-12-21T12:34:56Z");
 
 	public static class FBSwap extends StringSwap<ZonedDateTime> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, ZonedDateTime o) throws Exception {
 			return "FOO";
 		}
@@ -381,7 +381,7 @@ public class DefaultSwapsTest {
 	private static LocalDate FC = LocalDate.parse("2012-12-21");
 
 	public static class FCSwap extends StringSwap<LocalDate> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, LocalDate o) throws Exception {
 			return "FOO";
 		}
@@ -414,7 +414,7 @@ public class DefaultSwapsTest {
 	private static LocalDateTime FD = LocalDateTime.parse("2012-12-21T12:34:56");
 
 	public static class FDSwap extends StringSwap<LocalDateTime> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, LocalDateTime o) throws Exception {
 			return "FOO";
 		}
@@ -447,7 +447,7 @@ public class DefaultSwapsTest {
 	private static LocalTime FE = LocalTime.parse("12:34:56");
 
 	public static class FESwap extends StringSwap<LocalTime> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, LocalTime o) throws Exception {
 			return "FOO";
 		}
@@ -480,7 +480,7 @@ public class DefaultSwapsTest {
 	private static OffsetDateTime FF = OffsetDateTime.parse("2012-12-21T12:34:56-05:00");
 
 	public static class FFSwap extends StringSwap<OffsetDateTime> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, OffsetDateTime o) throws Exception {
 			return "FOO";
 		}
@@ -513,7 +513,7 @@ public class DefaultSwapsTest {
 	private static OffsetTime FG = OffsetTime.parse("12:34:56-05:00");
 
 	public static class FGSwap extends StringSwap<OffsetTime> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, OffsetTime o) throws Exception {
 			return "FOO";
 		}
@@ -546,7 +546,7 @@ public class DefaultSwapsTest {
 	private static Year FH = Year.parse("2012");
 
 	public static class FHSwap extends StringSwap<Year> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Year o) throws Exception {
 			return "FOO";
 		}
@@ -579,7 +579,7 @@ public class DefaultSwapsTest {
 	private static YearMonth FI = YearMonth.parse("2012-12");
 
 	public static class FISwap extends StringSwap<YearMonth> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, YearMonth o) throws Exception {
 			return "FOO";
 		}
@@ -612,7 +612,7 @@ public class DefaultSwapsTest {
 	private static Temporal FJ = HijrahDate.from(FB);
 
 	public static class FJSwap extends StringSwap<Temporal> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Temporal o) throws Exception {
 			return "FOO";
 		}
@@ -645,7 +645,7 @@ public class DefaultSwapsTest {
 	private static TimeZone G = TimeZone.getTimeZone("Z");
 
 	public static class GSwap extends StringSwap<TimeZone> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, TimeZone o) throws Exception {
 			return "FOO";
 		}
@@ -685,7 +685,7 @@ public class DefaultSwapsTest {
 	}
 
 	public static class HSwap extends StringSwap<XMLGregorianCalendar> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, XMLGregorianCalendar o) throws Exception {
 			return "FOO";
 		}
@@ -718,7 +718,7 @@ public class DefaultSwapsTest {
 	private static ZoneId I = ZoneId.of("Z");
 
 	public static class ISwap extends StringSwap<ZoneId> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, ZoneId o) throws Exception {
 			return "FOO";
 		}

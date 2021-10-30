@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -43,7 +43,7 @@ import org.apache.juneau.utils.*;
  * through constructors that take a single string argument.
  *
  * <p>
- * Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform
+ * Also parses objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;} transform
  * defined on it.
  */
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
@@ -209,7 +209,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}

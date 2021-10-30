@@ -21,7 +21,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -62,7 +62,7 @@ public class RestClient_Config_Context_Test {
 		}
 	}
 
-	public static class A3b extends PojoSwap<A3a,Integer> {
+	public static class A3b extends ObjectSwap<A3a,Integer> {
 		@Override
 		public Integer swap(BeanSession session, A3a o) { return o.foo; }
 		@Override

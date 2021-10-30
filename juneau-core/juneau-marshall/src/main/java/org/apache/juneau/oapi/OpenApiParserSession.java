@@ -29,8 +29,8 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -266,7 +266,7 @@ public class OpenApiParserSession extends UonParserSession {
 			in = schema.getDefault();
 		} else {
 
-			PojoSwap<T,Object> swap = (PojoSwap<T,Object>)type.getSwap(this);
+			ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)type.getSwap(this);
 			BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
 			ClassMeta<?> sType = null;
 			if (builder != null)

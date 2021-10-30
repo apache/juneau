@@ -280,7 +280,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 		}
 	}
 
-	public static class BBuilder implements org.apache.juneau.transform.Builder<B> {
+	public static class BBuilder implements org.apache.juneau.swap.Builder<B> {
 		public int a;
 	}
 
@@ -304,7 +304,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 		}
 	}
 
-	public static class CBuilder implements org.apache.juneau.transform.Builder<B> {
+	public static class CBuilder implements org.apache.juneau.swap.Builder<B> {
 		public int a;
 
 		public C build() {

@@ -26,7 +26,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSerializer}.
@@ -281,7 +281,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		String typeName = getBeanTypeName(this, eType, aType, pMeta);
 
 		// Swap if necessary
-		PojoSwap swap = aType.getSwap(this);
+		ObjectSwap swap = aType.getSwap(this);
 		if (swap != null) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);

@@ -18,8 +18,9 @@ import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.apache.juneau.testutils.*;
-import org.apache.juneau.transform.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

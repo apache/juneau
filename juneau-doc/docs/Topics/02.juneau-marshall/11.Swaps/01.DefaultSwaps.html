@@ -1,0 +1,119 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Default Swaps'}
+
+<p>
+	By default, all serializers and parsers have built in <c>ObjectSwaps</c> defined for the following common data types:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link java.util.Enumeration}
+	<li class='jc'>{@link java.util.Iterator}
+	<li class='jc'>{@link java.util.Locale}
+	<li class='jc'>{@link java.util.Class}
+	<li class='jc'>{@link java.util.Calendar} - ISO offset date-time.
+	<li class='jc'>{@link java.util.Date} - Local date-time
+	<li class='jc'>{@link java.time.Instant} - ISO instant.
+	<li class='jc'>{@link java.time.ZonedDateTime} - ISO offset date-time.
+	<li class='jc'>{@link java.time.LocalDate} - ISO local date.
+	<li class='jc'>{@link java.time.LocalDateTime} - ISO local date-time.
+	<li class='jc'>{@link java.time.LocalTime} - ISO local time.
+	<li class='jc'>{@link java.time.OffsetDateTime} - ISO offset date-time.
+	<li class='jc'>{@link java.time.OffsetTime} - ISO offset time.
+	<li class='jc'>{@link java.time.Year} - ISO year.
+	<li class='jc'>{@link java.time.YearMonth} - ISO year-month.
+	<li class='jc'>{@link java.time.Temporal} - ISO instant.
+	<li class='jc'>{@link java.util.TimeZone}
+	<li class='jc'>{@link javax.xml.datatype.XMLGregorianCalendar}
+	<li class='jc'>{@link java.time.ZoneId}
+</ul>
+<p>
+	Various other swaps are provided in the <c>org.apache.juneau.transforms</c> package:
+</p>
+<ul class='javatree'>
+	<li class='jp'><jk>org.apache.juneau.transforms</jk>
+		<ul>
+			<li class='jac'>{@link oaj.swaps.ByteArraySwap}
+			<ul>
+				<li class='jc'>{@link oaj.swaps.ByteArraySwap.Base64}
+				<li class='jc'>{@link oaj.swaps.ByteArraySwap.Hex}
+				<li class='jc'>{@link oaj.swaps.ByteArraySwap.SpacedHex}
+			</ul>
+			<li class='jac'>{@link oaj.swaps.InputStreamSwap}
+			<ul>
+				<li class='jc'>{@link oaj.swaps.InputStreamSwap.Base64}
+				<li class='jc'>{@link oaj.swaps.InputStreamSwap.Hex}
+				<li class='jc'>{@link oaj.swaps.InputStreamSwap.SpacedHex}
+			</ul>
+			<li class='jc'>{@link oaj.swaps.ReaderSwap}
+			<li class='jac'>{@link oaj.swaps.TemporalCalendarSwap}
+			<ul>
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.BasicIsoDate}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoDate}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoInstant}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoLocalDate}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoLocalDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoLocalTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoOffsetDate}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoOffsetDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoOffsetTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoOrdinalDate}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoWeekDate}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.IsoZonedDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalCalendarSwap.Rfc1123DateTime}
+			</ul>
+			<li class='jac'>{@link oaj.swaps.TemporalDateSwap}
+			<ul>
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.BasicIsoDate}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoDate}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoInstant}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoLocalDate}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoLocalDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoLocalTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoOffsetDate}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoOffsetDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoOffsetTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoOrdinalDate}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoWeekDate}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.IsoZonedDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalDateSwap.Rfc1123DateTime}
+			</ul>
+			<li class='jac'>{@link oaj.swaps.TemporalSwap}
+			<ul>
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.BasicIsoDate}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoDate}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoInstant}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoLocalDate}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoLocalDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoLocalTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoOffsetDate}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoOffsetDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoOffsetTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoOrdinalDate}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoWeekDate}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoYear}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoYearMonth}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.IsoZonedDateTime}
+				<li class='jc'>{@link oaj.swaps.TemporalSwap.Rfc1123DateTime}
+			</ul>
+		</ul>
+	</li>
+</ul>

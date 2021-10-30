@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Used to tailor how beans get interpreted by the framework.

@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Annotations applicable to subclasses of {@link BaseProvider}.
@@ -45,7 +45,7 @@ public @interface JuneauProvider {
 	 * These POJO swaps are applied to all serializers and parsers being used by the provider.
 	 *
 	 * <p>
-	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
+	 * If the specified class is an instance of {@link ObjectSwap}, then that swap is added.
 	 * Any other classes are wrapped in a {@link SurrogateSwap}.
 	 */
 	Class<?>[] swaps() default {};

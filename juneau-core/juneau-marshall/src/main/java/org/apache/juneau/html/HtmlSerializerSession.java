@@ -31,7 +31,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -354,7 +354,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			type = object();
 		else if (type.isDelegate())
 			type = ((Delegate)o).getClassMeta();
-		PojoSwap swap = type.getSwap(this);
+		ObjectSwap swap = type.getSwap(this);
 		if (swap != null) {
 			o = swap(swap, o);
 			type = swap.getSwapClassMeta(this);
@@ -435,7 +435,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				typeName = aType.getDictionaryName();
 
 			// Swap if necessary
-			PojoSwap swap = aType.getSwap(this);
+			ObjectSwap swap = aType.getSwap(this);
 			if (swap != null) {
 				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);
@@ -746,7 +746,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				ClassMeta<?> cm = getClassMetaForObject(o);
 
 				if (cm != null && cm.getSwap(this) != null) {
-					PojoSwap swap = cm.getSwap(this);
+					ObjectSwap swap = cm.getSwap(this);
 					o = swap(swap, o);
 					cm = swap.getSwapClassMeta(this);
 				}
@@ -900,7 +900,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		ClassMeta<?> cm1 = getClassMetaForObject(o1);
 
-		PojoSwap swap = cm1.getSwap(this);
+		ObjectSwap swap = cm1.getSwap(this);
 		o1 = swap(swap, o1);
 		if (swap != null)
 			cm1 = swap.getSwapClassMeta(this);

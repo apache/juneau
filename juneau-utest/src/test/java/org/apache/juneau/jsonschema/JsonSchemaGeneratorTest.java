@@ -23,8 +23,8 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.apache.juneau.transform.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -1370,7 +1370,7 @@ public class JsonSchemaGeneratorTest {
 		assertObject(s.getSchema(SimpleBean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{type:'integer',format:'int32'}}}");
 	}
 
-	public static class IntSwap extends PojoSwap<SimpleBean,Integer> {}
+	public static class IntSwap extends ObjectSwap<SimpleBean,Integer> {}
 
 	//====================================================================================================
 	// @JsonSchema on class
@@ -1487,7 +1487,7 @@ public class JsonSchemaGeneratorTest {
 	}
 
 	//====================================================================================================
-	// @JsonSchema on PojoSwap
+	// @JsonSchema on ObjectSwap
 	//====================================================================================================
 
 	@Test
@@ -1501,7 +1501,7 @@ public class JsonSchemaGeneratorTest {
 	}
 
 	@Schema(type="foo",format="bar",description="baz",example="123")
-	public static class SwapWithAnnotation extends PojoSwap<SimpleBean,Integer> {}
+	public static class SwapWithAnnotation extends ObjectSwap<SimpleBean,Integer> {}
 
 	@Test
 	public void jsonschema_onpojoswap_usingConfig() throws Exception {
@@ -1516,10 +1516,10 @@ public class JsonSchemaGeneratorTest {
 	@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz",example="123")
 	private static class SwapWithAnnotation2Config {}
 
-	public static class SwapWithAnnotation2 extends PojoSwap<SimpleBean,Integer> {}
+	public static class SwapWithAnnotation2 extends ObjectSwap<SimpleBean,Integer> {}
 
 	//====================================================================================================
-	// @JsonSchema on PojoSwap
+	// @JsonSchema on ObjectSwap
 	//====================================================================================================
 
 	@Schema(onClass=B.class,value="{foo:'bar'}")

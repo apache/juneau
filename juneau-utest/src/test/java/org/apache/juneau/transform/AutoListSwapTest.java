@@ -23,6 +23,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -32,11 +33,11 @@ public class AutoListSwapTest {
 	private static final List<String> STRINGLIST = AList.of("foo");
 	private static final OList OLIST = OList.of("foo");
 
-	private static PojoSwap find(Class<?> c) {
+	private static ObjectSwap find(Class<?> c) {
 		return AutoListSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
 	}
 
-	private static PojoSwap find(BeanContext bc, Class<?> c) {
+	private static ObjectSwap find(BeanContext bc, Class<?> c) {
 		return AutoListSwap.find(bc, ClassInfo.of(c));
 	}
 

@@ -140,8 +140,8 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New swaps auto-added to all serializers/parsers:
 		<ul>
-			<li class='jc'>{@link oaj.transforms.MatchResultSwap} 
-			<li class='jc'>{@link oaj.transforms.StackTraceElementSwap} 
+			<li class='jc'>{@del oaj.transforms.MatchResultSwap} 
+			<li class='jc'>{@del oaj.transforms.StackTraceElementSwap} 
 		</ul>		
 	<li>
 		{@link oaj.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
@@ -248,7 +248,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New Bean Property Interceptor API for intercepting calls to bean getters/setters.
 		<ul>
-			<li class='jac'>{@link oaj.transform.BeanInterceptor}
+			<li class='jac'>{@del oaj.transform.BeanInterceptor}
 			<li class='ja'>{@link oaj.annotation.Bean#interceptor Bean(interceptor)}
 			<li class='jm'>{@link oaj.BeanContext.Builder#beanInterceptor(Class,Class)}
 		</ul>

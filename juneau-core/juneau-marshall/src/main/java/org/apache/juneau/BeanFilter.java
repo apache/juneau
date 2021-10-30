@@ -20,7 +20,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Parent class for all bean filters.

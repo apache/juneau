@@ -17,7 +17,8 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -84,14 +85,14 @@ public class BeanMapTest {
 	}
 
 	public static class B1Swap extends MapSwap<B1> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public OMap swap(BeanSession session, B1 b1) {
 			return OMap.of("type", "b1", "f1", b1.f1);
 		}
 	}
 
 	public static class B2Swap extends MapSwap<B2> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public OMap swap(BeanSession session, B2 b2) {
 			return OMap.of("type", "b2", "f1", b2.f1);
 		}

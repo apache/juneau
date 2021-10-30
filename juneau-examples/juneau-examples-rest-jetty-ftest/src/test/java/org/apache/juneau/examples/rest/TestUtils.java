@@ -26,7 +26,7 @@ import javax.xml.transform.stream.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swaps.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.w3c.dom.*;

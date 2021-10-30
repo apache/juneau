@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -805,18 +805,18 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * POJO swap.
 	 *
 	 * @param key The key.
-	 * @param pojoSwap The swap class used to convert the raw type to a transformed type.
+	 * @param objectSwap The swap class used to convert the raw type to a transformed type.
 	 * @param <T> The transformed class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> T getSwapped(String key, PojoSwap<T,?> pojoSwap) throws ParseException {
+	public <T> T getSwapped(String key, ObjectSwap<T,?> objectSwap) throws ParseException {
 		try {
 			Object o = super.get(key);
 			if (o == null)
 				return null;
-			PojoSwap swap = pojoSwap;
+			ObjectSwap swap = objectSwap;
 			return (T) swap.unswap(bs(), o, null);
 		} catch (ParseException e) {
 			throw e;

@@ -190,18 +190,16 @@
 		<li><p><a class='doclink' href='#juneau-marshall.ContextAnnotations'>Context Annotations</a><span class='update'>created: 8.1.0, updated: 8.1.3,8.2.0,<b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.OMap'>OMap and OList</a><span class='update'>updated: 8.2.0</span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ComplexDataTypes'>Complex Data Types</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and ContextProperties</a><span class='update'>updated: <b>9.0.0</b>, <b><red>review</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.Transforms'>Transforms</a><span class='update'><b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.SerializerSetsParserSets'>SerializerSets and ParserSets</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.Swaps'>Swaps</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.PojoSwaps'>Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.AutoPojoSwaps'>Auto-detected POJO swaps</a><span class='update'>created: 8.1.0</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps'>Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.OneWayPojoSwaps'>One-way Swaps</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.TemplatedSwaps'>Templated Swaps</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.SurrogateClasses'>Surrogate Classes</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.DefaultPojoSwaps'>Default PojoSwaps</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.AutoPojoSwaps'>Auto-detected POJO swaps</a><span class='update'>created: 8.1.0</span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.PerMediaTypePojoSwaps'>Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.OneWayPojoSwaps'>One-way Swaps</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.TemplatedSwaps'>Templated Swaps</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.SurrogateClasses'>Surrogate Classes</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>created: 8.1.3</span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a></p>
@@ -946,7 +944,7 @@
 	</p>
 	<p> 
 		{@doc PojoSwaps POJO swaps} allow you to replace non-serializable POJOs with serializable equivalents.
-		The {@link org.apache.juneau.transforms} package contains a variety of predefined swaps.
+		The {@link org.apache.juneau.swaps} package contains a variety of predefined swaps.
 	</p>
 	<p class='bcode w800'>
 	<jc>// Create a serializer from scratch programmatically using a builder.</jc>
@@ -1200,15 +1198,15 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Serializer and Parser Groups</h5>
+<h5 class='toc'>Serializer and Parser Sets</h5>
 <div class='topic'>
 	<p>
-		<code>SerializerGroup</code> and <code>ParserGroup</code> classes allow serializers and parsers 
+		<code>SerializerSet</code> and <code>ParserSet</code> classes allow serializers and parsers 
 		to be retrieved by W3C-compliant HTTP <code>Accept</code> and <code>Content-Type</code> values:
 	</p>
 	<p class='bcode w800'>
 	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
-	SerializerGroup <jv>serializerGroup</jv> = SerializerGroup
+	SerializerSet <jv>serializerSet</jv> = SerializerSet
 		.<jsm>create</jsm>()
 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
 		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
@@ -1217,23 +1215,23 @@
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
 	<jc>// Fully RFC2616 compliant.</jc>
-	<jv>serializerGroup</jv>
+	<jv>serializerSet</jv>
 		.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
 		.serialize(<jv>person</jv>, <jv>myWriter</jv>);
 		
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
-	ParserGroup <jv>parserGroup</jv> = ParserGroup
+	ParserSet <jv>parserSet</jv> = ParserSet
 		.<jsm>create</jsm>()
 		.add(JsonParser.<jk>class</jk>, UrlEncodingParser.<jk>class</jk>);
  		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
  		.build();
 
-	Person <jv>person</jv> = <jv>parserGroup</jv>
+	Person <jv>person</jv> = <jv>parserSet</jv>
 		.getParser(<js>"text/json"</js>)
 		.parse(<jv>myReader</jv>, Person.<jk>class</jk>);
 	</p>
 	<ul class='seealso'>
-		<li class='link'>{@doc Groups SerializerGroups and ParserGroups} for more information.
+		<li class='link'>{@doc SerializerSetsParserSets SerializerSets and ParserSets} for more information.
 	</ul>
 </div>
 
@@ -2609,7 +2607,7 @@
 </p>
 <p>
 	The {@link org.apache.juneau.annotation.Bean#interceptor() @Bean(interceptor)} annotation
-	and {@link org.apache.juneau.transform.BeanInterceptor} class can be used to perform interception
+	and {@link org.apache.juneau.swap.BeanInterceptor} class can be used to perform interception
 	and inline handling of bean getter and setter calls.
 </p>
 <p class='bpcode w800'>
@@ -3094,7 +3092,7 @@
 		<p class='bcode w800 nomargin'>
 	<jk>public static</jk> Builder <jsm>create</jsm>() {...}
 		</p>
-	<li>A public constructor on the POJO class that takes in a single parameter that implements the {@link org.apache.juneau.transform.Builder} interface.
+	<li>A public constructor on the POJO class that takes in a single parameter that implements the {@link org.apache.juneau.swap.Builder} interface.
 		<br>The builder class must have a public no-arg constructor.
 		<p class='bcode w800 nomargin'>
 	<jk>public</jk> MyBean(Builder <jv>builder</jv>) {...}
@@ -3121,7 +3119,7 @@
 </ul>
 <ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Builder}
-	<li class='jic'>{@link org.apache.juneau.transform.Builder}
+	<li class='jic'>{@link org.apache.juneau.swap.Builder}
 </ul>
 </div><!-- END: 2.4.7 - juneau-marshall.JavaBeansSupport.PojoBuilders -->
 
@@ -3589,8 +3587,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Groups' id='juneau-marshall.Groups'>2.10 - SerializerGroups and ParserGroups</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 2.10 - juneau-marshall.Groups -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SerializerSetsParserSets' id='juneau-marshall.SerializerSetsParserSets'>2.10 - SerializerSets and ParserSets</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 2.10 - juneau-marshall.SerializerSetsParserSets -->
 <p>
 	On top of the serializers and parsers are the {@link org.apache.juneau.serializer.SerializerSet} and 
 	{@link org.apache.juneau.parser.ParserSet} classes.
@@ -3600,7 +3598,7 @@
 <p class='bpcode w800'>
 	<jc>// Construct a new serializer group with configuration parameters that get applied 
 	// to all serializers.</jc>
-	SerializerGroup <jv>group</jv> = SerializerGroup.<jsm>create</jsm>()
+	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>()
 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>)
 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
 		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())   <jc>// or .useWhitespace(true)</jc>
@@ -3608,231 +3606,33 @@
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the 
 	// specified writer.</jc>
-	<jv>group</jv>.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
+	<jv>serializers</jv>
+		.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
 		.serialize(<jv>myPerson</jv>, <jv>myWriter</jv>);
 		
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
-	ParserGroup <jv>group</jv> = ParserGroup.<jsm>create</jsm>()
+	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>()
 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>)
  		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
  		.build();
 
-	Person <jv>myPerson</jv> = <jv>group</jv>.getParser(<js>"text/json"</js>).parse(<jv>myReader</jv>, Person.<jk>class</jk>);
+	Person <jv>myPerson</jv> = <jv>parsers</jv>
+		.getParser(<js>"text/json"</js>)
+		.parse(<jv>myReader</jv>, Person.<jk>class</jk>);
 </p>
 <p>
-	The REST servlet API builds upon the <c>SerializerGroup</c> and <c>ParserGroup</c> classes 
+	The REST servlet API builds upon the <c>SerializerSet</c> and <c>ParserSet</c> classes 
 	to provide annotated REST servlets that automatically negotiate the HTTP media types and allow the developer
 	to work with requests and responses as POJOs.
 </p>
-</div><!-- END: 2.10 - juneau-marshall.Groups -->
+</div><!-- END: 2.10 - juneau-marshall.SerializerSetsParserSets -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ContextsBuildersSessionsPropertyStores' id='juneau-marshall.ContextsBuildersSessionsPropertyStores'>2.11 - Contexts, Builders, Sessions, and ContextProperties</a><span class='update'>updated: <b>9.0.0</b>, <b><red>review</red></b></span></h3>
-<div class='topic'><!-- START: 2.11 - juneau-marshall.ContextsBuildersSessionsPropertyStores -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps' id='juneau-marshall.Swaps'>2.11 - Swaps</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 2.11 - juneau-marshall.Swaps -->
 <p>
-	All the serializers, parsers, and REST server/client classes use the following design pattern:
-</p>
-<ul class='spaced-list'>
-	<li>
-		<l>Context</l> - A thread-safe read-only object.
-		<ul>
-			<li>Heavy to construct and designed to be cached and reused.
-			<li>Created by <l>Context.Builder</l> classes.
-			<li>Examples:  <c>BeanContext</c>, <c>JsonSerializer</c>
-		</ul>
-	<li>
-		<l>Session</l> - A non-thread-safe single-use object with configuration combined from context and 
-		runtime args such as locale/timezone.
-		<ul>
-			<li>Lightweight objects that take a minimum amount of time to instantiate and are not typically reused.
-			<li>Created by <c>Context</c> objects.
-			<li>Examples:  <c>BeanSession</c>, <c>JsonSerializerSession</c>
-		</ul>
-	<li>
-		<l>ContextProperties</l> - A thread-safe read-only set of configuration properties.
-		<ul>
-			<li>Heavier to create than <c>Sessions</c> but lighter than <c>Contexts</c>.
-			<li>Each <c>Context</c> contains one <c>ContextProperties</c> that defines all the configuration about that object.
-			<li>Created by <l>ContextPropertiesBuilder</l> classes.
-		</ul>
-</ul>	
-<p>
-	For example, the class hierarchy for <c>JsonSerializer</c> is:
-</p>
-<ul class='javatree'>
-	<li class='jc'><c>Object</c>
-	<ul>
-		<li class='jac'>{@link org.apache.juneau.Context}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.BeanContext}
-			<ul>
-				<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
-				<ul>
-					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
-					<ul>
-						<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
-					</ul>
-				</ul>
-			</ul>
-		</ul>
-	</ul>
-</ul>
-<p>
-	Each context object in the hierarchy define properties that can be stored in a <c>ContextProperties</c>
-	such as <jsf>WSERIALIZER_useWhitespace</jsf> or <jsf>JSON_simpleMode</jsf>.
-</p>
-<p>
-	The class hierarchy for <c>JsonSerializer.Builder</c> is:
-</p>
-<ul class='javatree'>
-	<li class='jc'><c>Object</c>
-	<ul>
-		<li class='jac'>{@link org.apache.juneau.Context.Builder}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.BeanContext.Builder}
-			<ul>
-				<li class='jac'>{@link org.apache.juneau.serializer.Serializer.Builder}
-				<ul>
-					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer.Builder}
-					<ul>
-						<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.Builder}
-					</ul>
-				</ul>
-			</ul>
-		</ul>
-	</ul>
-</ul>
-<p>
-	The class hierarchy for <c>JsonSerializerSession</c> is:
-</p>
-<ul class='javatree'>
-	<li class='jc'><c>Object</c>
-	<ul>
-		<li class='jac'>{@link org.apache.juneau.Session}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.BeanSession}
-			<ul>
-				<li class='jac'>{@link org.apache.juneau.serializer.SerializerSession}
-				<ul>
-					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerSession}
-					<ul>
-						<li class='jc'>{@link org.apache.juneau.json.JsonSerializerSession}
-					</ul>
-				</ul>
-			</ul>
-		</ul>
-	</ul>
-</ul>
-<p>
-	The general idea behind a {@del org.apache.juneau.ContextProperties} is to serve as a reusable configuration of an artifact 
-	(such as a serializer) such that the artifact can be cached and reused if the property stores are 'equal'.
-</p>
-<p>
-	For example, two serializers of the same type created with the same configuration will always end up being
-	the same serializer: 
-</p>
-<p class='bpcode w800'>
-	<jc>// Two serializers created with identical configurations will always be the same copy.</jc> 
-	WriterSerializer <jv>s1</jv> = JsonSerializer.<jsm>create</jsm>().swaps(MySwap.<jk>class</jk>).simpleMode().build();
-	WriterSerializer <jv>s2</jv> = JsonSerializer.<jsm>create</jsm>().set(<jsf>JSON_simpleMode</jsf>).swaps(MySwap.<jk>class</jk>).build();
-	<jk>assert</jk>(<jv>s1</jv> == <jv>s2</jv>);
-</p>
-<p>
-	This has the effect of significantly improving performance especially if you're creating many 
-	serializers and parsers.
-</p>
-<p>
-	The {@del org.apache.juneau.ContextPropertiesBuilder} class is used to build up and instantiate immutable 
-	<c>ContextProperties</c> objects.
-</p>
-<p>
-	In the example above, the property store being built looks like the following:
-</p>
-<p class='bpcode w800'>
-	ContextProperties <jv>ps</jv> = ContextProperties
-		.<jsm>create</jsm>()
-		.set(<js>"BeanContext.swaps.lo"</js>, MySwap.<jk>class</jk>)
-		.set(<js>"JsonSerializer.simpleMode.b"</js>)
-		.build();
-</p>
-<p>
-	Property stores are immutable, comparable, and their hashcodes are calculated exactly one time.
-	That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
-</p>
-<p>
-	Refer to the {@del org.apache.juneau.ContextProperties} javadoc for a detailed explanation on how
-	property stores work.
-</p>
-</div><!-- END: 2.11 - juneau-marshall.ContextsBuildersSessionsPropertyStores -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms' id='juneau-marshall.Transforms'>2.12 - Transforms</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 2.12 - juneau-marshall.Transforms -->
-<p>
-	By default, the Juneau framework can serialize and parse a wide variety of POJOs out-of-the-box.  
-	However, two special classes are provided tailor how certain Java objects are handled by the framework.
-	These classes are:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@del org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
-	<li class='jac'>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
-		serializable POJOs during serialization (and optionally vis-versa during parsing).
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert 
-				objects to strings.
-			<li class='jc'>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert 
-				objects to maps.
-		</ul>
-	</li>
-</ul>
-<p>
-	Transforms are added to serializers and parsers (and REST clients) using the following configuration properties:
-</p> 
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.BeanContext}
-	<ul>
-		<li class='jf'>{@del BeanContext#BEAN_beanFilters BEAN_beanFilters}
-		<li class='jf'>{@del org.apache.juneau.BeanContext#BEAN_swaps BEAN_swaps}
-	</ul>
-</ul>
-<p>
-	Annotations are also provided for specifying transforms directly on classes and methods (all described in later sections):
-</p>
-<ul class='javatree'>
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.Swap} 
-		- Used to tailor how non-bean POJOs get interpreted by the framework.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.Bean} 
-		- Used to tailor how beans get interpreted by the framework.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.Beanc} 
-		- Maps constructor arguments to property names on beans with read-only properties.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.Beanp} 
-		- Used to tailor how bean properties get interpreted by the framework.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.BeanIgnore} 
-		- Ignore classes, fields, and methods from being interpreted as bean or bean components.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.NameProperty} 
-		- Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.ParentProperty} 
-		- Identifies a setter as a method for adding a parent reference to a child object.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.Uri} 
-		- Used to identify a class or bean property as a URI.
-</ul>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoSwaps' id='juneau-marshall.Transforms.PojoSwaps'>2.12.1 - Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></h4>
-<div class='topic'><!-- START: 2.12.1 - juneau-marshall.Transforms.PojoSwaps -->
-<p>
-	{@link org.apache.juneau.transform.PojoSwap Swaps} are a critical component of Juneau.
+	{@link org.apache.juneau.swap.ObjectSwap Swaps} are a critical component of Juneau.
 	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
 </p>
 <p>
@@ -3924,12 +3724,11 @@
 	<jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes2d</jv>);		<jc>// Produces "['AQID','BAUG',null]"</jc>
 	<jv>bytes2d</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[][].<jk>class</jk>);		<jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
 </p>
-</div><!-- END: 2.12.1 - juneau-marshall.Transforms.PojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.DefaultPojoSwaps' id='juneau-marshall.Transforms.DefaultPojoSwaps'>2.12.2 - Default PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.12.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.DefaultPojoSwaps' id='juneau-marshall.Swaps.DefaultPojoSwaps'>2.11.1 - Default PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.1 - juneau-marshall.Swaps.DefaultPojoSwaps -->
 <p>
 	By default, all serializers and parsers have built in <c>PojoSwaps</c> defined for the following common data types:
 </p>
@@ -3955,89 +3754,89 @@
 	<li class='jc'>{@link java.time.ZoneId}
 </ul>
 <p>
-	Various other swaps are provided in the <c>org.apache.juneau.transforms</c> package:
+	Various other swaps are provided in the <c>org.apache.juneau.swaps</c> package:
 </p>
 <ul class='javatree'>
-	<li class='jp'><jk>org.apache.juneau.transforms</jk>
+	<li class='jp'><jk>org.apache.juneau.swaps</jk>
 		<ul>
-			<li class='jac'>{@link org.apache.juneau.transforms.ByteArraySwap}
+			<li class='jac'>{@link org.apache.juneau.swaps.ByteArraySwap}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.transforms.ByteArraySwap.Base64}
-				<li class='jc'>{@link org.apache.juneau.transforms.ByteArraySwap.Hex}
-				<li class='jc'>{@link org.apache.juneau.transforms.ByteArraySwap.SpacedHex}
+				<li class='jc'>{@link org.apache.juneau.swaps.ByteArraySwap.Base64}
+				<li class='jc'>{@link org.apache.juneau.swaps.ByteArraySwap.Hex}
+				<li class='jc'>{@link org.apache.juneau.swaps.ByteArraySwap.SpacedHex}
 			</ul>
-			<li class='jac'>{@link org.apache.juneau.transforms.InputStreamSwap}
+			<li class='jac'>{@link org.apache.juneau.swaps.InputStreamSwap}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.transforms.InputStreamSwap.Base64}
-				<li class='jc'>{@link org.apache.juneau.transforms.InputStreamSwap.Hex}
-				<li class='jc'>{@link org.apache.juneau.transforms.InputStreamSwap.SpacedHex}
+				<li class='jc'>{@link org.apache.juneau.swaps.InputStreamSwap.Base64}
+				<li class='jc'>{@link org.apache.juneau.swaps.InputStreamSwap.Hex}
+				<li class='jc'>{@link org.apache.juneau.swaps.InputStreamSwap.SpacedHex}
 			</ul>
-			<li class='jc'>{@link org.apache.juneau.transforms.ReaderSwap}
-			<li class='jac'>{@link org.apache.juneau.transforms.TemporalCalendarSwap}
+			<li class='jc'>{@link org.apache.juneau.swaps.ReaderSwap}
+			<li class='jac'>{@link org.apache.juneau.swaps.TemporalCalendarSwap}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.BasicIsoDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoInstant}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoLocalDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoLocalDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoLocalTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoOffsetDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoOffsetDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoOffsetTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoOrdinalDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoWeekDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.IsoZonedDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap.Rfc1123DateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.BasicIsoDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoInstant}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoLocalDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoLocalDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoLocalTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOffsetDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOffsetDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOffsetTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOrdinalDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoWeekDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoZonedDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.Rfc1123DateTime}
 			</ul>
-			<li class='jac'>{@link org.apache.juneau.transforms.TemporalDateSwap}
+			<li class='jac'>{@link org.apache.juneau.swaps.TemporalDateSwap}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.BasicIsoDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoInstant}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoLocalDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoLocalDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoLocalTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoOffsetDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoOffsetDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoOffsetTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoOrdinalDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoWeekDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.IsoZonedDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap.Rfc1123DateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.BasicIsoDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoInstant}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOffsetDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOffsetDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOffsetTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOrdinalDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoWeekDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoZonedDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.Rfc1123DateTime}
 			</ul>
-			<li class='jac'>{@link org.apache.juneau.transforms.TemporalSwap}
+			<li class='jac'>{@link org.apache.juneau.swaps.TemporalSwap}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.BasicIsoDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoInstant}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoLocalDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoLocalDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoLocalTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoOffsetDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoOffsetDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoOffsetTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoOrdinalDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoWeekDate}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoYear}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoYearMonth}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.IsoZonedDateTime}
-				<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap.Rfc1123DateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.BasicIsoDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoInstant}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoLocalDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoLocalDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoLocalTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOffsetDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOffsetDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOffsetTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOrdinalDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoWeekDate}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoYear}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoYearMonth}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoZonedDateTime}
+				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.Rfc1123DateTime}
 			</ul>
 		</ul>
 	</li>
 </ul>
-</div><!-- END: 2.12.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
+</div><!-- END: 2.11.1 - juneau-marshall.Swaps.DefaultPojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.AutoPojoSwaps' id='juneau-marshall.Transforms.AutoPojoSwaps'>2.12.3 - Auto-detected POJO swaps</a><span class='update'>created: 8.1.0</span></h4>
-<div class='topic'><!-- START: 2.12.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.AutoPojoSwaps' id='juneau-marshall.Swaps.AutoPojoSwaps'>2.11.2 - Auto-detected POJO swaps</a><span class='update'>created: 8.1.0</span></h4>
+<div class='topic'><!-- START: 2.11.2 - juneau-marshall.Swaps.AutoPojoSwaps -->
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
 	This can often be simpler than using <c>PojoSwaps</c>.
@@ -4191,17 +3990,17 @@
 		}
 	}
 </p>
-</div><!-- END: 2.12.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
+</div><!-- END: 2.11.2 - juneau-marshall.Swaps.AutoPojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.12.4 - Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></h4>
-<div class='topic'><!-- START: 2.12.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.PerMediaTypePojoSwaps' id='juneau-marshall.Swaps.PerMediaTypePojoSwaps'>2.11.3 - Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></h4>
+<div class='topic'><!-- START: 2.11.3 - juneau-marshall.Swaps.PerMediaTypePojoSwaps -->
 <p>
 	Swaps can also be defined per-media-type.		
 </p>
 <p>	
-	The {@link org.apache.juneau.transform.PojoSwap#forMediaTypes()} method can be overridden to 
+	The {@link org.apache.juneau.swap.ObjectSwap#forMediaTypes()} method can be overridden to 
 	provide a set of media types that the swap is invoked on.
 	It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
 	by media type.
@@ -4252,21 +4051,21 @@
 		<ja>@Test</ja>
 		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
 
-			SerializerGroup <jv>group</jv> = SerializerGroup.<jsm>create</jsm>()
-				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
-				.sq()
-				.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
+			SerializerSet <jv>serializers</jv> = SerializersSet.<jsm>create</jsm>()
+				.add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
+				.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>))
+				.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
 				.build();
 
 			MyPojo <jv>myPojo</jv> = <jk>new</jk> MyPojo();
 
-			String <jv>json</jv> = <jv>group</jv>.getWriterSerializer(<js>"text/json"</js>).serialize(<jv>myPojo</jv>);
+			String <jv>json</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/json"</js>).serialize(<jv>myPojo</jv>);
 			<jsm>assertEquals</jsm>(<js>"'It\\'s JSON!'"</js>, <jv>json</jv>);
 
-			String <jv>xml</jv> = <jv>group</jv>.getWriterSerializer(<js>"text/xml"</js>).serialize(<jv>myPojo</jv>);
+			String <jv>xml</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/xml"</js>).serialize(<jv>myPojo</jv>);
 			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's XML!&lt;/string&gt;"</js>, <jv>xml</jv>);
 
-			String <jv>html</jv> = <jv>group</jv>.getWriterSerializer(<js>"text/html"</js>).serialize(<jv>myPojo</jv>);
+			String <jv>html</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/html"</js>).serialize(<jv>myPojo</jv>);
 			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's something else!&lt;/string&gt;"</js>, <jv>html</jv>);
 		}
 	}
@@ -4291,12 +4090,12 @@
 	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/*"</js>)
 	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
 </p>
-</div><!-- END: 2.12.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
+</div><!-- END: 2.11.3 - juneau-marshall.Swaps.PerMediaTypePojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.12.5 - One-way Swaps</a></h4>
-<div class='topic'><!-- START: 2.12.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.OneWayPojoSwaps' id='juneau-marshall.Swaps.OneWayPojoSwaps'>2.11.4 - One-way Swaps</a></h4>
+<div class='topic'><!-- START: 2.11.4 - juneau-marshall.Swaps.OneWayPojoSwaps -->
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 	reconstructing during parsing. 
@@ -4343,12 +4142,12 @@
 	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(IteratorSwap.<jk>class</jk>).build();
 	<jv>iterator</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 </p>
-</div><!-- END: 2.12.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
+</div><!-- END: 2.11.4 - juneau-marshall.Swaps.OneWayPojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapAnnotation' id='juneau-marshall.Transforms.SwapAnnotation'>2.12.6 - @Swap Annotation</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 2.12.6 - juneau-marshall.Transforms.SwapAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.SwapAnnotation' id='juneau-marshall.Swaps.SwapAnnotation'>2.11.5 - @Swap Annotation</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.11.5 - juneau-marshall.Swaps.SwapAnnotation -->
 <p>
 	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
 	annotation.
@@ -4436,12 +4235,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.12.6 - juneau-marshall.Transforms.SwapAnnotation -->
+</div><!-- END: 2.11.5 - juneau-marshall.Swaps.SwapAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.TemplatedSwaps' id='juneau-marshall.Transforms.TemplatedSwaps'>2.12.7 - Templated Swaps</a></h4>
-<div class='topic'><!-- START: 2.12.7 - juneau-marshall.Transforms.TemplatedSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.TemplatedSwaps' id='juneau-marshall.Swaps.TemplatedSwaps'>2.11.6 - Templated Swaps</a></h4>
+<div class='topic'><!-- START: 2.11.6 - juneau-marshall.Swaps.TemplatedSwaps -->
 <p>
 	The {@link org.apache.juneau.annotation.Swap#template() @Swap(template)} annotation allows you to associate
 	arbitrary contextual strings with swaps.
@@ -4475,12 +4274,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.12.7 - juneau-marshall.Transforms.TemplatedSwaps -->
+</div><!-- END: 2.11.6 - juneau-marshall.Swaps.TemplatedSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SurrogateClasses' id='juneau-marshall.Transforms.SurrogateClasses'>2.12.8 - Surrogate Classes</a></h4>
-<div class='topic'><!-- START: 2.12.8 - juneau-marshall.Transforms.SurrogateClasses -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.SurrogateClasses' id='juneau-marshall.Swaps.SurrogateClasses'>2.11.7 - Surrogate Classes</a></h4>
+<div class='topic'><!-- START: 2.11.7 - juneau-marshall.Swaps.SurrogateClasses -->
 <p>
 <p>
 	Surrogate classes are very similar in concept to <c>PojoSwaps</c> except they're simpler to define.
@@ -4542,15 +4341,15 @@
 </p>
 
 <ul class='seealso'>
-	<li class='jic'>{@link org.apache.juneau.transform.Surrogate}
+	<li class='jic'>{@link org.apache.juneau.swap.Surrogate}
 </ul>
-</div><!-- END: 2.12.8 - juneau-marshall.Transforms.SurrogateClasses -->
-</div><!-- END: 2.12 - juneau-marshall.Transforms -->
+</div><!-- END: 2.11.7 - juneau-marshall.Swaps.SurrogateClasses -->
+</div><!-- END: 2.11 - juneau-marshall.Swaps -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.DynamicallyAppliedAnnotations' id='juneau-marshall.DynamicallyAppliedAnnotations'>2.13 - Dynamically Applied Annotations</a><span class='update'>created: 8.1.3</span></h3>
-<div class='topic'><!-- START: 2.13 - juneau-marshall.DynamicallyAppliedAnnotations -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.DynamicallyAppliedAnnotations' id='juneau-marshall.DynamicallyAppliedAnnotations'>2.12 - Dynamically Applied Annotations</a><span class='update'>created: 8.1.3</span></h3>
+<div class='topic'><!-- START: 2.12 - juneau-marshall.DynamicallyAppliedAnnotations -->
 <p>
 	In the section {@doc Transforms}, you were introduced to annotations that can be applied to bean
 	classes, methods, fields, and constructors such as {@link org.apache.juneau.annotation.Bean @Bean}:
@@ -4711,12 +4510,12 @@
 		</ul>
 	<li>A comma-delimited list of anything on this list.
 </ul>
-</div><!-- END: 2.13 - juneau-marshall.DynamicallyAppliedAnnotations -->
+</div><!-- END: 2.12 - juneau-marshall.DynamicallyAppliedAnnotations -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BeanDictionaries' id='juneau-marshall.BeanDictionaries'>2.14 - Bean Names and Dictionaries</a></h3>
-<div class='topic'><!-- START: 2.14 - juneau-marshall.BeanDictionaries -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BeanDictionaries' id='juneau-marshall.BeanDictionaries'>2.13 - Bean Names and Dictionaries</a></h3>
+<div class='topic'><!-- START: 2.13 - juneau-marshall.BeanDictionaries -->
 <p>
 	While parsing into beans, Juneau attempts to determine the class types of bean properties through 
 	reflection on the bean property getter or setter.
@@ -4873,8 +4672,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BeanDictionaries.BeanSubTypes' id='juneau-marshall.BeanDictionaries.BeanSubTypes'>2.14.1 - Bean Subtypes</a></h4>
-<div class='topic'><!-- START: 2.14.1 - juneau-marshall.BeanDictionaries.BeanSubTypes -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BeanDictionaries.BeanSubTypes' id='juneau-marshall.BeanDictionaries.BeanSubTypes'>2.13.1 - Bean Subtypes</a></h4>
+<div class='topic'><!-- START: 2.13.1 - juneau-marshall.BeanDictionaries.BeanSubTypes -->
 <p>
 	In addition to the bean type name support described above, simplified support is provided
 	for bean subtypes.
@@ -4929,13 +4728,13 @@
 	A <jv>a</jv> = <jv>parser</jv>.parse(<jv>json</jv>, A.<jk>class</jk>);
 	<jsm>assertTrue</jsm>(<jv>a</jv> <jk>instanceof</jk> A1);
 </p>
-</div><!-- END: 2.14.1 - juneau-marshall.BeanDictionaries.BeanSubTypes -->
-</div><!-- END: 2.14 - juneau-marshall.BeanDictionaries -->
+</div><!-- END: 2.13.1 - juneau-marshall.BeanDictionaries.BeanSubTypes -->
+</div><!-- END: 2.13 - juneau-marshall.BeanDictionaries -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.VirtualBeans' id='juneau-marshall.VirtualBeans'>2.15 - Virtual Beans</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 2.15 - juneau-marshall.VirtualBeans -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.VirtualBeans' id='juneau-marshall.VirtualBeans'>2.14 - Virtual Beans</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 2.14 - juneau-marshall.VirtualBeans -->
 <p>
 	The {@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()} setting (enabled by default) allows
 	the Juneau parsers to parse content into virtual beans (bean interfaces without implementation classes).
@@ -4983,12 +4782,12 @@
 <p class='bpcode w800'>
 	Address <jv>address</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession().newBean(Address.<jk>class</jk>);
 </p>
-</div><!-- END: 2.15 - juneau-marshall.VirtualBeans -->
+</div><!-- END: 2.14 - juneau-marshall.VirtualBeans -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Recursion' id='juneau-marshall.Recursion'>2.16 - Non-Tree Models and Recursion Detection</a></h3>
-<div class='topic'><!-- START: 2.16 - juneau-marshall.Recursion -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Recursion' id='juneau-marshall.Recursion'>2.15 - Non-Tree Models and Recursion Detection</a></h3>
+<div class='topic'><!-- START: 2.15 - juneau-marshall.Recursion -->
 <p>
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
 	It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
@@ -5052,12 +4851,12 @@
 	Recursion detection introduces a performance penalty of around 20%.
 	For this reason the setting is disabled by default.
 </p>
-</div><!-- END: 2.16 - juneau-marshall.Recursion -->
+</div><!-- END: 2.15 - juneau-marshall.Recursion -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ParsingIntoGenericModels' id='juneau-marshall.ParsingIntoGenericModels'>2.17 - Parsing into Generic Models</a><span class='update'>updated: 8.2.0</span></h3>
-<div class='topic'><!-- START: 2.17 - juneau-marshall.ParsingIntoGenericModels -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ParsingIntoGenericModels' id='juneau-marshall.ParsingIntoGenericModels'>2.16 - Parsing into Generic Models</a><span class='update'>updated: 8.2.0</span></h3>
+<div class='topic'><!-- START: 2.16 - juneau-marshall.ParsingIntoGenericModels -->
 <p>
 	The Juneau parsers are not limited to parsing back into the original bean classes.
 	If the bean classes are not available on the parsing side, the parser can also be used to 
@@ -5167,12 +4966,12 @@
 	As a general rule, parsing into beans is often more efficient than parsing into generic models.
 	And working with beans is often less error prone than working with generic models.
 </p>
-</div><!-- END: 2.17 - juneau-marshall.ParsingIntoGenericModels -->
+</div><!-- END: 2.16 - juneau-marshall.ParsingIntoGenericModels -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ReadingContinuousStreams' id='juneau-marshall.ReadingContinuousStreams'>2.18 - Reading Continuous Streams</a></h3>
-<div class='topic'><!-- START: 2.18 - juneau-marshall.ReadingContinuousStreams -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ReadingContinuousStreams' id='juneau-marshall.ReadingContinuousStreams'>2.17 - Reading Continuous Streams</a></h3>
+<div class='topic'><!-- START: 2.17 - juneau-marshall.ReadingContinuousStreams -->
 <p>
 	The following parsers can be configured to read continuous streams of objects from the same input stream:
 </p>
@@ -5219,12 +5018,12 @@
 	The {@link org.apache.juneau.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with
 	continuous streams without any special properties.
 </p>
-</div><!-- END: 2.18 - juneau-marshall.ReadingContinuousStreams -->
+</div><!-- END: 2.17 - juneau-marshall.ReadingContinuousStreams -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MarshallingUris' id='juneau-marshall.MarshallingUris'>2.19 - URIs</a></h3>
-<div class='topic'><!-- START: 2.19 - juneau-marshall.MarshallingUris -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MarshallingUris' id='juneau-marshall.MarshallingUris'>2.18 - URIs</a></h3>
+<div class='topic'><!-- START: 2.18 - juneau-marshall.MarshallingUris -->
 <p>
 	Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
 </p>
@@ -5362,12 +5161,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.19 - juneau-marshall.MarshallingUris -->
+</div><!-- END: 2.18 - juneau-marshall.MarshallingUris -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JacksonComparison' id='juneau-marshall.JacksonComparison'>2.20 - Comparison with Jackson</a><span class='update'><b><red>review</red></b></span></h3>
-<div class='topic'><!-- START: 2.20 - juneau-marshall.JacksonComparison -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JacksonComparison' id='juneau-marshall.JacksonComparison'>2.19 - Comparison with Jackson</a><span class='update'><b><red>review</red></b></span></h3>
+<div class='topic'><!-- START: 2.19 - juneau-marshall.JacksonComparison -->
 <p>
 	Juneau was developed independently from Jackson, but shares many of the same features and capabilities.
 	Whereas Jackson was created to work primarily with JSON, Juneau was created to work for multiple languages.
@@ -5475,12 +5274,12 @@
 		</td>
 	</tr>
 </table>
-</div><!-- END: 2.20 - juneau-marshall.JacksonComparison -->
+</div><!-- END: 2.19 - juneau-marshall.JacksonComparison -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.PojoCategories' id='juneau-marshall.PojoCategories'>2.21 - POJO Categories</a></h3>
-<div class='topic'><!-- START: 2.21 - juneau-marshall.PojoCategories -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.PojoCategories' id='juneau-marshall.PojoCategories'>2.20 - POJO Categories</a></h3>
+<div class='topic'><!-- START: 2.20 - juneau-marshall.PojoCategories -->
 <p>
 	In general, Juneau allows for marshalling for a wide variety of POJO types including:
 </p>
@@ -5606,10 +5405,10 @@
 		<td>
 			<b>Swapped objects</b>
 			<br>These are objects that are not directly serializable, but have 
-			{@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated with them.  
+			{@link org.apache.juneau.swap.ObjectSwap PojoSwaps} associated with them.  
 			The purpose of a POJO swap is to convert an object to another object that is easier to serialize 
 			and parse.  
-			For example, the {@link org.apache.juneau.transforms.TemporalDateSwap.IsoLocalDateTime} class can be used to 
+			For example, the {@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalDateTime} class can be used to 
 			serialize {@link java.util.Date} objects to ISO8601 strings, and parse them back into 
 			{@link java.util.Date} objects.
 		</td>
@@ -5813,12 +5612,12 @@
 <p>
 	POJOs are considered convertible from X if any of the reverse of above are true.
 </p>
-</div><!-- END: 2.21 - juneau-marshall.PojoCategories -->
+</div><!-- END: 2.20 - juneau-marshall.PojoCategories -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.FluentAssertions' id='juneau-marshall.FluentAssertions'>2.22 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 2.22 - juneau-marshall.FluentAssertions -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.FluentAssertions' id='juneau-marshall.FluentAssertions'>2.21 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 2.21 - juneau-marshall.FluentAssertions -->
 <p>
 	The {@link org.apache.juneau.assertions} package in Juneau is a powerful API for performing fluent style assertions.
 	It is used throughout the REST client and server APIs for performing inline assertions on REST requests and responses.
@@ -6000,12 +5799,12 @@
 	For more information about the capabilities of the Assertions API, refer to the methods on the {@link org.apache.juneau.assertions.Assertions} methods
 	above.
 </p>
-</div><!-- END: 2.22 - juneau-marshall.FluentAssertions -->
+</div><!-- END: 2.21 - juneau-marshall.FluentAssertions -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails' id='juneau-marshall.JsonDetails'>2.23 - JSON Details</a></h3>
-<div class='topic'><!-- START: 2.23 - juneau-marshall.JsonDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails' id='juneau-marshall.JsonDetails'>2.22 - JSON Details</a></h3>
+<div class='topic'><!-- START: 2.22 - juneau-marshall.JsonDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from JSON using ultra-efficient serializers and parsers.
 	The JSON serializer converts POJOs directly to JSON without the need for intermediate DOM objects using a 
@@ -6087,8 +5886,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonMethodology' id='juneau-marshall.JsonDetails.JsonMethodology'>2.23.1 - JSON Methodology</a></h4>
-<div class='topic'><!-- START: 2.23.1 - juneau-marshall.JsonDetails.JsonMethodology -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonMethodology' id='juneau-marshall.JsonDetails.JsonMethodology'>2.22.1 - JSON Methodology</a></h4>
+<div class='topic'><!-- START: 2.22.1 - juneau-marshall.JsonDetails.JsonMethodology -->
 <p>
 	The JSON data type produced depends on the Java object type being serialized.
 </p>
@@ -6159,12 +5958,12 @@
 	<c>Calendar</c> object to ISO8601 strings, or <c><jk>byte</jk>[]</c> arrays to Base-64 
 	encoded strings.
 </p>
-</div><!-- END: 2.23.1 - juneau-marshall.JsonDetails.JsonMethodology -->
+</div><!-- END: 2.22.1 - juneau-marshall.JsonDetails.JsonMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSerializers' id='juneau-marshall.JsonDetails.JsonSerializers'>2.23.2 - JSON Serializers</a></h4>
-<div class='topic'><!-- START: 2.23.2 - juneau-marshall.JsonDetails.JsonSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSerializers' id='juneau-marshall.JsonDetails.JsonSerializers'>2.22.2 - JSON Serializers</a></h4>
+<div class='topic'><!-- START: 2.22.2 - juneau-marshall.JsonDetails.JsonSerializers -->
 <p>
 	The {@link org.apache.juneau.json.JsonSerializer} class is used to serialize POJOs into JSON.
 </p>	
@@ -6195,12 +5994,12 @@
 		<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 	</ul>
 </ul>
-</div><!-- END: 2.23.2 - juneau-marshall.JsonDetails.JsonSerializers -->
+</div><!-- END: 2.22.2 - juneau-marshall.JsonDetails.JsonSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.SimplifiedJson' id='juneau-marshall.JsonDetails.SimplifiedJson'>2.23.3 - Simplified JSON</a></h4>
-<div class='topic'><!-- START: 2.23.3 - juneau-marshall.JsonDetails.SimplifiedJson -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.SimplifiedJson' id='juneau-marshall.JsonDetails.SimplifiedJson'>2.22.3 - Simplified JSON</a></h4>
+<div class='topic'><!-- START: 2.22.3 - juneau-marshall.JsonDetails.SimplifiedJson -->
 <p>
 	The {@link org.apache.juneau.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
 </p>
@@ -6257,12 +6056,12 @@
 <ul class='seealso'>
 	<li class='jf'>{@del org.apache.juneau.json.JsonSerializer#JSON_simpleMode}
 </ul>
-</div><!-- END: 2.23.3 - juneau-marshall.JsonDetails.SimplifiedJson -->
+</div><!-- END: 2.22.3 - juneau-marshall.JsonDetails.SimplifiedJson -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonParsers' id='juneau-marshall.JsonDetails.JsonParsers'>2.23.4 - JSON Parsers</a></h4>
-<div class='topic'><!-- START: 2.23.4 - juneau-marshall.JsonDetails.JsonParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonParsers' id='juneau-marshall.JsonDetails.JsonParsers'>2.22.4 - JSON Parsers</a></h4>
+<div class='topic'><!-- START: 2.22.4 - juneau-marshall.JsonDetails.JsonParsers -->
 <p>
 	The {@link org.apache.juneau.json.JsonParser} class is used to parse JSON into POJOs.
 </p>	
@@ -6301,12 +6100,12 @@
 	<li>
 		Concatenated strings. 
 </ul>
-</div><!-- END: 2.23.4 - juneau-marshall.JsonDetails.JsonParsers -->
+</div><!-- END: 2.22.4 - juneau-marshall.JsonDetails.JsonParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonAnnotation' id='juneau-marshall.JsonDetails.JsonAnnotation'>2.23.5 - @Json Annotation</a></h4>
-<div class='topic'><!-- START: 2.23.5 - juneau-marshall.JsonDetails.JsonAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonAnnotation' id='juneau-marshall.JsonDetails.JsonAnnotation'>2.22.5 - @Json Annotation</a></h4>
+<div class='topic'><!-- START: 2.22.5 - juneau-marshall.JsonDetails.JsonAnnotation -->
 <p>
 	The {@link org.apache.juneau.json.annotation.Json @Json} annotation
 	is used to override the behavior of {@link org.apache.juneau.json.JsonSerializer} on individual bean classes or properties.
@@ -6354,12 +6153,12 @@
 		</td>
 	</tr>
 </table>
-</div><!-- END: 2.23.5 - juneau-marshall.JsonDetails.JsonAnnotation -->
+</div><!-- END: 2.22.5 - juneau-marshall.JsonDetails.JsonAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSchema' id='juneau-marshall.JsonDetails.JsonSchema'>2.23.6 - JSON-Schema Support</a></h4>
-<div class='topic'><!-- START: 2.23.6 - juneau-marshall.JsonDetails.JsonSchema -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSchema' id='juneau-marshall.JsonDetails.JsonSchema'>2.22.6 - JSON-Schema Support</a></h4>
+<div class='topic'><!-- START: 2.22.6 - juneau-marshall.JsonDetails.JsonSchema -->
 <p>
 	Juneau provides the {@link org.apache.juneau.json.JsonSchemaSerializer} class for generating JSON-Schema 
 	documents that describe the output generated by the {@link org.apache.juneau.json.JsonSerializer} class.
@@ -6451,13 +6250,13 @@
 		}
 	}
 </p>
-</div><!-- END: 2.23.6 - juneau-marshall.JsonDetails.JsonSchema -->
-</div><!-- END: 2.23 - juneau-marshall.JsonDetails -->
+</div><!-- END: 2.22.6 - juneau-marshall.JsonDetails.JsonSchema -->
+</div><!-- END: 2.22 - juneau-marshall.JsonDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails' id='juneau-marshall.XmlDetails'>2.24 - XML Details</a></h3>
-<div class='topic'><!-- START: 2.24 - juneau-marshall.XmlDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails' id='juneau-marshall.XmlDetails'>2.23 - XML Details</a></h3>
+<div class='topic'><!-- START: 2.23 - juneau-marshall.XmlDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
 	The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
@@ -6534,8 +6333,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlMethodology' id='juneau-marshall.XmlDetails.XmlMethodology'>2.24.1 - XML Methodology</a></h4>
-<div class='topic'><!-- START: 2.24.1 - juneau-marshall.XmlDetails.XmlMethodology -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlMethodology' id='juneau-marshall.XmlDetails.XmlMethodology'>2.23.1 - XML Methodology</a></h4>
+<div class='topic'><!-- START: 2.23.1 - juneau-marshall.XmlDetails.XmlMethodology -->
 <p>
 	The following examples show how different data types are represented in XML.
 	They mirror how the data structures are represented in JSON.
@@ -6936,12 +6735,12 @@
 		</xt></td>
 	</tr>
 </table>
-</div><!-- END: 2.24.1 - juneau-marshall.XmlDetails.XmlMethodology -->
+</div><!-- END: 2.23.1 - juneau-marshall.XmlDetails.XmlMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlSerializers' id='juneau-marshall.XmlDetails.XmlSerializers'>2.24.2 - XML Serializers</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 2.24.2 - juneau-marshall.XmlDetails.XmlSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlSerializers' id='juneau-marshall.XmlDetails.XmlSerializers'>2.23.2 - XML Serializers</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.23.2 - juneau-marshall.XmlDetails.XmlSerializers -->
 <p>
 	The {@link org.apache.juneau.xml.XmlSerializer} class is used to serialize POJOs into XML.
 </p>	
@@ -6980,12 +6779,12 @@
 		<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_XS_NAMESPACE DEFAULT_XS_NAMESPACE}				
 	</ul>
 </ul>
-</div><!-- END: 2.24.2 - juneau-marshall.XmlDetails.XmlSerializers -->
+</div><!-- END: 2.23.2 - juneau-marshall.XmlDetails.XmlSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlParsers' id='juneau-marshall.XmlDetails.XmlParsers'>2.24.3 - XML Parsers</a></h4>
-<div class='topic'><!-- START: 2.24.3 - juneau-marshall.XmlDetails.XmlParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlParsers' id='juneau-marshall.XmlDetails.XmlParsers'>2.23.3 - XML Parsers</a></h4>
+<div class='topic'><!-- START: 2.23.3 - juneau-marshall.XmlDetails.XmlParsers -->
 <p>
 	The {@link org.apache.juneau.xml.XmlParser} class is used to parse XML into POJOs.
 </p>	
@@ -7012,12 +6811,12 @@
 		<li class='jf'>{@link org.apache.juneau.xml.XmlParser#DEFAULT DEFAULT}
 	</ul>
 </ul>
-</div><!-- END: 2.24.3 - juneau-marshall.XmlDetails.XmlParsers -->
+</div><!-- END: 2.23.3 - juneau-marshall.XmlDetails.XmlParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation' id='juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation'>2.24.4 - @Bean(typeName) Annotation</a></h4>
-<div class='topic'><!-- START: 2.24.4 - juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation' id='juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation'>2.23.4 - @Bean(typeName) Annotation</a></h4>
+<div class='topic'><!-- START: 2.23.4 - juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} annotation can be used to 
 	override the Juneau default name on bean elements. 
@@ -7496,12 +7295,12 @@
 	{@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting in Java
 	forced us to make some hard design decisions that may not be the most elegant.
 </p>
-</div><!-- END: 2.24.4 - juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation -->
+</div><!-- END: 2.23.4 - juneau-marshall.XmlDetails.XmlBeanTypeNameAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlChildNameAnnotation' id='juneau-marshall.XmlDetails.XmlChildNameAnnotation'>2.24.5 - @Xml(childName) Annotation</a></h4>
-<div class='topic'><!-- START: 2.24.5 - juneau-marshall.XmlDetails.XmlChildNameAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlChildNameAnnotation' id='juneau-marshall.XmlDetails.XmlChildNameAnnotation'>2.23.5 - @Xml(childName) Annotation</a></h4>
+<div class='topic'><!-- START: 2.23.5 - juneau-marshall.XmlDetails.XmlChildNameAnnotation -->
 <p>
 	The {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml(childName)} annotation can be used to 
 	specify the name of XML child elements for bean properties of type collection or array.
@@ -7585,12 +7384,12 @@
 		</xt></td>
 	</tr>
 </table>
-</div><!-- END: 2.24.5 - juneau-marshall.XmlDetails.XmlChildNameAnnotation -->
+</div><!-- END: 2.23.5 - juneau-marshall.XmlDetails.XmlChildNameAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlFormatAnnotation' id='juneau-marshall.XmlDetails.XmlFormatAnnotation'>2.24.6 - @Xml(format) Annotation</a></h4>
-<div class='topic'><!-- START: 2.24.6 - juneau-marshall.XmlDetails.XmlFormatAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlFormatAnnotation' id='juneau-marshall.XmlDetails.XmlFormatAnnotation'>2.23.6 - @Xml(format) Annotation</a></h4>
+<div class='topic'><!-- START: 2.23.6 - juneau-marshall.XmlDetails.XmlFormatAnnotation -->
 <p>
 	The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml(format)} annotation can be used to tweak 
 	the XML format of a POJO.
@@ -8294,12 +8093,12 @@
 		</xt></td>
 	</tr>
 </table>
-</div><!-- END: 2.24.6 - juneau-marshall.XmlDetails.XmlFormatAnnotation -->
+</div><!-- END: 2.23.6 - juneau-marshall.XmlDetails.XmlFormatAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlNamespaces' id='juneau-marshall.XmlDetails.XmlNamespaces'>2.24.7 - Namespaces</a><span class='update'><b><red>review</red></b></span></h4>
-<div class='topic'><!-- START: 2.24.7 - juneau-marshall.XmlDetails.XmlNamespaces -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlNamespaces' id='juneau-marshall.XmlDetails.XmlNamespaces'>2.23.7 - Namespaces</a><span class='update'><b><red>review</red></b></span></h4>
+<div class='topic'><!-- START: 2.23.7 - juneau-marshall.XmlDetails.XmlNamespaces -->
 <p>
 	Let's go back to the example of our original <c>Person</c> bean class, but add some namespace annotations:
 </p>
@@ -8464,13 +8263,13 @@
 		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
 		.build();
 </p>
-</div><!-- END: 2.24.7 - juneau-marshall.XmlDetails.XmlNamespaces -->
-</div><!-- END: 2.24 - juneau-marshall.XmlDetails -->
+</div><!-- END: 2.23.7 - juneau-marshall.XmlDetails.XmlNamespaces -->
+</div><!-- END: 2.23 - juneau-marshall.XmlDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails' id='juneau-marshall.HtmlDetails'>2.25 - HTML Details</a></h3>
-<div class='topic'><!-- START: 2.25 - juneau-marshall.HtmlDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails' id='juneau-marshall.HtmlDetails'>2.24 - HTML Details</a></h3>
+<div class='topic'><!-- START: 2.24 - juneau-marshall.HtmlDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from HTML.
 	Built on top of the existing XML parser, it also uses a STaX parser and creates POJOs directly without intermediate DOM objects.
@@ -8481,8 +8280,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlMethodology' id='juneau-marshall.HtmlDetails.HtmlMethodology'>2.25.1 - HTML Methodology</a></h4>
-<div class='topic'><!-- START: 2.25.1 - juneau-marshall.HtmlDetails.HtmlMethodology -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlMethodology' id='juneau-marshall.HtmlDetails.HtmlMethodology'>2.24.1 - HTML Methodology</a></h4>
+<div class='topic'><!-- START: 2.24.1 - juneau-marshall.HtmlDetails.HtmlMethodology -->
 <p>
 	The following examples show how different data types are represented in HTML.
 	They mirror how the data structures are represented in JSON.
@@ -8990,12 +8789,12 @@
 		</xt></td>
 	</tr>
 </table>
-</div><!-- END: 2.25.1 - juneau-marshall.HtmlDetails.HtmlMethodology -->
+</div><!-- END: 2.24.1 - juneau-marshall.HtmlDetails.HtmlMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSerializers' id='juneau-marshall.HtmlDetails.HtmlSerializers'>2.25.2 - HTML Serializers</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 2.25.2 - juneau-marshall.HtmlDetails.HtmlSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSerializers' id='juneau-marshall.HtmlDetails.HtmlSerializers'>2.24.2 - HTML Serializers</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.2 - juneau-marshall.HtmlDetails.HtmlSerializers -->
 <p>
 	The {@link org.apache.juneau.html.HtmlSerializer} class is used to serialize POJOs into HTML.
 </p>	
@@ -9050,12 +8849,12 @@
 		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#DEFAULT }
 	</ul>
 </ul>
-</div><!-- END: 2.25.2 - juneau-marshall.HtmlDetails.HtmlSerializers -->
+</div><!-- END: 2.24.2 - juneau-marshall.HtmlDetails.HtmlSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlParsers' id='juneau-marshall.HtmlDetails.HtmlParsers'>2.25.3 - HTML Parsers</a></h4>
-<div class='topic'><!-- START: 2.25.3 - juneau-marshall.HtmlDetails.HtmlParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlParsers' id='juneau-marshall.HtmlDetails.HtmlParsers'>2.24.3 - HTML Parsers</a></h4>
+<div class='topic'><!-- START: 2.24.3 - juneau-marshall.HtmlDetails.HtmlParsers -->
 <p>
 	The {@link org.apache.juneau.html.HtmlParser} class is used to parse HTML into POJOs.
 	They can also parse the contents produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
@@ -9075,12 +8874,12 @@
 		<li class='jf'>{@link org.apache.juneau.html.HtmlParser#DEFAULT DEFAULT}
 	</ul>
 </ul>
-</div><!-- END: 2.25.3 - juneau-marshall.HtmlDetails.HtmlParsers -->
+</div><!-- END: 2.24.3 - juneau-marshall.HtmlDetails.HtmlParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlAnnotation' id='juneau-marshall.HtmlDetails.HtmlAnnotation'>2.25.4 - @Html Annotation</a></h4>
-<div class='topic'><!-- START: 2.25.4 - juneau-marshall.HtmlDetails.HtmlAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlAnnotation' id='juneau-marshall.HtmlDetails.HtmlAnnotation'>2.24.4 - @Html Annotation</a></h4>
+<div class='topic'><!-- START: 2.24.4 - juneau-marshall.HtmlDetails.HtmlAnnotation -->
 <p>
 	The {@link org.apache.juneau.html.annotation.Html @Html} annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
 </p>
@@ -9136,12 +8935,12 @@
 <p>
 	The {@link org.apache.juneau.html.annotation.Html#noTables @Html(noTables)} annotation is used to force beans to be serialized as trees instead of tables
 </p>
-</div><!-- END: 2.25.4 - juneau-marshall.HtmlDetails.HtmlAnnotation -->
+</div><!-- END: 2.24.4 - juneau-marshall.HtmlDetails.HtmlAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlRenderAnnotation' id='juneau-marshall.HtmlDetails.HtmlRenderAnnotation'>2.25.5 - @Html(render) Annotation</a></h4>
-<div class='topic'><!-- START: 2.25.5 - juneau-marshall.HtmlDetails.HtmlRenderAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlRenderAnnotation' id='juneau-marshall.HtmlDetails.HtmlRenderAnnotation'>2.24.5 - @Html(render) Annotation</a></h4>
+<div class='topic'><!-- START: 2.24.5 - juneau-marshall.HtmlDetails.HtmlRenderAnnotation -->
 <p>
 	The {@link org.apache.juneau.html.annotation.Html#render @Html(render)} annotation allows for custom rendering of bean property values when serialized as HTML. 
 	Using this class, you can alter the CSS style and HTML content of the bean property.
@@ -9243,12 +9042,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.25.5 - juneau-marshall.HtmlDetails.HtmlRenderAnnotation -->
+</div><!-- END: 2.24.5 - juneau-marshall.HtmlDetails.HtmlRenderAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlDocSerializer' id='juneau-marshall.HtmlDetails.HtmlDocSerializer'>2.25.6 - HtmlDocSerializer</a></h4>
-<div class='topic'><!-- START: 2.25.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlDocSerializer' id='juneau-marshall.HtmlDetails.HtmlDocSerializer'>2.24.6 - HtmlDocSerializer</a></h4>
+<div class='topic'><!-- START: 2.24.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
 <p>
 	{@link org.apache.juneau.html.HtmlDocSerializer} is an extension of {@link org.apache.juneau.html.HtmlSerializer}
 	that wraps serialized POJOs in a complete HTML document. 
@@ -9298,12 +9097,12 @@
 	a template for the HTML page being generated.
 	The default template is described next.
 </p>
-</div><!-- END: 2.25.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
+</div><!-- END: 2.24.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.BasicHtmlDocTemplate' id='juneau-marshall.HtmlDetails.BasicHtmlDocTemplate'>2.25.7 - BasicHtmlDocTemplate</a></h4>
-<div class='topic'><!-- START: 2.25.7 - juneau-marshall.HtmlDetails.BasicHtmlDocTemplate -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.BasicHtmlDocTemplate' id='juneau-marshall.HtmlDetails.BasicHtmlDocTemplate'>2.24.7 - BasicHtmlDocTemplate</a></h4>
+<div class='topic'><!-- START: 2.24.7 - juneau-marshall.HtmlDetails.BasicHtmlDocTemplate -->
 <p>
 	The {@link org.apache.juneau.html.BasicHtmlDocTemplate} class defines a default template for HTML documents
 	created by {@link org.apache.juneau.html.HtmlDocSerializer}.
@@ -9337,12 +9136,12 @@
 		&lt;/body&gt;
 	&lt;/html&gt;</xt>
 </p>
-</div><!-- END: 2.25.7 - juneau-marshall.HtmlDetails.BasicHtmlDocTemplate -->
+</div><!-- END: 2.24.7 - juneau-marshall.HtmlDetails.BasicHtmlDocTemplate -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlCustomTemplates' id='juneau-marshall.HtmlDetails.HtmlCustomTemplates'>2.25.8 - Custom Templates</a></h4>
-<div class='topic'><!-- START: 2.25.8 - juneau-marshall.HtmlDetails.HtmlCustomTemplates -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlCustomTemplates' id='juneau-marshall.HtmlDetails.HtmlCustomTemplates'>2.24.8 - Custom Templates</a></h4>
+<div class='topic'><!-- START: 2.24.8 - juneau-marshall.HtmlDetails.HtmlCustomTemplates -->
 <p>
 	Custom page templates can be created by implementing the {@link org.apache.juneau.html.HtmlDocTemplate}
 	interface and associating it with your {@link org.apache.juneau.html.HtmlDocSerializer} using the {@del org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
@@ -9357,12 +9156,12 @@
 <p>
 	The interface implementation is open-ended allowing you to define the contents of the page any way you wish.
 </p>
-</div><!-- END: 2.25.8 - juneau-marshall.HtmlDetails.HtmlCustomTemplates -->
+</div><!-- END: 2.24.8 - juneau-marshall.HtmlDetails.HtmlCustomTemplates -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSchema' id='juneau-marshall.HtmlDetails.HtmlSchema'>2.25.9 - HTML-Schema Support</a></h4>
-<div class='topic'><!-- START: 2.25.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSchema' id='juneau-marshall.HtmlDetails.HtmlSchema'>2.24.9 - HTML-Schema Support</a></h4>
+<div class='topic'><!-- START: 2.24.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
 <p>
 	The {@link org.apache.juneau.html.HtmlSchemaSerializer} class is the HTML-equivalent to the
 	{@link org.apache.juneau.json.JsonSchemaSerializer} class.
@@ -9541,13 +9340,13 @@
 		</td>
 	</tr>
 </table>
-</div><!-- END: 2.25.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
-</div><!-- END: 2.25 - juneau-marshall.HtmlDetails -->
+</div><!-- END: 2.24.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
+</div><!-- END: 2.24 - juneau-marshall.HtmlDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails' id='juneau-marshall.UonDetails'>2.26 - UON Details</a></h3>
-<div class='topic'><!-- START: 2.26 - juneau-marshall.UonDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails' id='juneau-marshall.UonDetails'>2.25 - UON Details</a></h3>
+<div class='topic'><!-- START: 2.25 - juneau-marshall.UonDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from UON strings using ultra-efficient serializers 
 	and parsers.
@@ -9619,8 +9418,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonMethodology' id='juneau-marshall.UonDetails.UonMethodology'>2.26.1 - UON Methodology</a></h4>
-<div class='topic'><!-- START: 2.26.1 - juneau-marshall.UonDetails.UonMethodology -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonMethodology' id='juneau-marshall.UonDetails.UonMethodology'>2.25.1 - UON Methodology</a></h4>
+<div class='topic'><!-- START: 2.25.1 - juneau-marshall.UonDetails.UonMethodology -->
 <h5 class='figure'>General methodology:</h5>
 <table class='styled w800' style='border-collapse:collapse'>
 	<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
@@ -9678,12 +9477,12 @@
 <p>
 	Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
 </p>
-</div><!-- END: 2.26.1 - juneau-marshall.UonDetails.UonMethodology -->
+</div><!-- END: 2.25.1 - juneau-marshall.UonDetails.UonMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonSerializers' id='juneau-marshall.UonDetails.UonSerializers'>2.26.2 - UON Serializers</a></h4>
-<div class='topic'><!-- START: 2.26.2 - juneau-marshall.UonDetails.UonSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonSerializers' id='juneau-marshall.UonDetails.UonSerializers'>2.25.2 - UON Serializers</a></h4>
+<div class='topic'><!-- START: 2.25.2 - juneau-marshall.UonDetails.UonSerializers -->
 <p>
 	The {@link org.apache.juneau.uon.UonSerializer} class is used to serialize POJOs into UON.
 </p>	
@@ -9710,12 +9509,12 @@
 		<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 	</ul>
 </ul>
-</div><!-- END: 2.26.2 - juneau-marshall.UonDetails.UonSerializers -->
+</div><!-- END: 2.25.2 - juneau-marshall.UonDetails.UonSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonParsers' id='juneau-marshall.UonDetails.UonParsers'>2.26.3 - UON Parsers</a></h4>
-<div class='topic'><!-- START: 2.26.3 - juneau-marshall.UonDetails.UonParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonParsers' id='juneau-marshall.UonDetails.UonParsers'>2.25.3 - UON Parsers</a></h4>
+<div class='topic'><!-- START: 2.25.3 - juneau-marshall.UonDetails.UonParsers -->
 <p>
 	The {@link org.apache.juneau.uon.UonParser} class is used to parse UON into POJOs.
 </p>	
@@ -9740,13 +9539,13 @@
 		<li class='jf'>{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING DEFAULT_DECODING}			
 	</ul>
 </ul>
-</div><!-- END: 2.26.3 - juneau-marshall.UonDetails.UonParsers -->
-</div><!-- END: 2.26 - juneau-marshall.UonDetails -->
+</div><!-- END: 2.25.3 - juneau-marshall.UonDetails.UonParsers -->
+</div><!-- END: 2.25 - juneau-marshall.UonDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails' id='juneau-marshall.UrlEncodingDetails'>2.27 - URL-Encoding Details</a></h3>
-<div class='topic'><!-- START: 2.27 - juneau-marshall.UrlEncodingDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails' id='juneau-marshall.UrlEncodingDetails'>2.26 - URL-Encoding Details</a></h3>
+<div class='topic'><!-- START: 2.26 - juneau-marshall.UrlEncodingDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
 	and parsers.
@@ -9816,8 +9615,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncMethodology' id='juneau-marshall.UrlEncodingDetails.UrlEncMethodology'>2.27.1 - URL-Encoding Methodology</a></h4>
-<div class='topic'><!-- START: 2.27.1 - juneau-marshall.UrlEncodingDetails.UrlEncMethodology -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncMethodology' id='juneau-marshall.UrlEncodingDetails.UrlEncMethodology'>2.26.1 - URL-Encoding Methodology</a></h4>
+<div class='topic'><!-- START: 2.26.1 - juneau-marshall.UrlEncodingDetails.UrlEncMethodology -->
 <h5 class='figure'>General methodology:</h5>
 <table class='styled w800' style='border-collapse:collapse'>
 	<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
@@ -9875,12 +9674,12 @@
 <p>
 	Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
 </p>
-</div><!-- END: 2.27.1 - juneau-marshall.UrlEncodingDetails.UrlEncMethodology -->
+</div><!-- END: 2.26.1 - juneau-marshall.UrlEncodingDetails.UrlEncMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncSerializers' id='juneau-marshall.UrlEncodingDetails.UrlEncSerializers'>2.27.2 - URL-Encoding Serializers</a></h4>
-<div class='topic'><!-- START: 2.27.2 - juneau-marshall.UrlEncodingDetails.UrlEncSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncSerializers' id='juneau-marshall.UrlEncodingDetails.UrlEncSerializers'>2.26.2 - URL-Encoding Serializers</a></h4>
+<div class='topic'><!-- START: 2.26.2 - juneau-marshall.UrlEncodingDetails.UrlEncSerializers -->
 <p>
 	The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class is used to serialize POJOs into URL-Encoding.
 </p>	
@@ -9907,12 +9706,12 @@
 		
 	</ul>
 </ul>
-</div><!-- END: 2.27.2 - juneau-marshall.UrlEncodingDetails.UrlEncSerializers -->
+</div><!-- END: 2.26.2 - juneau-marshall.UrlEncodingDetails.UrlEncSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncParsers' id='juneau-marshall.UrlEncodingDetails.UrlEncParsers'>2.27.3 - URL-Encoding Parsers</a></h4>
-<div class='topic'><!-- START: 2.27.3 - juneau-marshall.UrlEncodingDetails.UrlEncParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncParsers' id='juneau-marshall.UrlEncodingDetails.UrlEncParsers'>2.26.3 - URL-Encoding Parsers</a></h4>
+<div class='topic'><!-- START: 2.26.3 - juneau-marshall.UrlEncodingDetails.UrlEncParsers -->
 <p>
 	The {@link org.apache.juneau.urlencoding.UrlEncodingParser} class is used to parse URL-Encoding into POJOs.
 </p>	
@@ -9935,12 +9734,12 @@
 		<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT DEFAULT}
 	</ul>
 </ul>
-</div><!-- END: 2.27.3 - juneau-marshall.UrlEncodingDetails.UrlEncParsers -->
+</div><!-- END: 2.26.3 - juneau-marshall.UrlEncodingDetails.UrlEncParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation' id='juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>2.27.4 - @UrlEncoding Annotation</a></h4>
-<div class='topic'><!-- START: 2.27.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation' id='juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>2.26.4 - @UrlEncoding Annotation</a></h4>
+<div class='topic'><!-- START: 2.26.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
 <p>
 	The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding @UrlEncoding} annotation
 	is used to override the behavior of {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} on individual bean classes or properties.
@@ -9957,13 +9756,13 @@
 	It's identical in behavior to using the {@del org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams}
 	and {@del org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams} properties, but applies to only individual bean properties.
 </p>
-</div><!-- END: 2.27.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
-</div><!-- END: 2.27 - juneau-marshall.UrlEncodingDetails -->
+</div><!-- END: 2.26.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
+</div><!-- END: 2.26 - juneau-marshall.UrlEncodingDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails' id='juneau-marshall.MsgPackDetails'>2.28 - MessagePack Details</a></h3>
-<div class='topic'><!-- START: 2.28 - juneau-marshall.MsgPackDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails' id='juneau-marshall.MsgPackDetails'>2.27 - MessagePack Details</a></h3>
+<div class='topic'><!-- START: 2.27 - juneau-marshall.MsgPackDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from MessagePack using ultra-efficient serializers 
 	and parsers.
@@ -9975,8 +9774,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.MsgPackSerializers' id='juneau-marshall.MsgPackDetails.MsgPackSerializers'>2.28.1 - MessagePack Serializers</a></h4>
-<div class='topic'><!-- START: 2.28.1 - juneau-marshall.MsgPackDetails.MsgPackSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.MsgPackSerializers' id='juneau-marshall.MsgPackDetails.MsgPackSerializers'>2.27.1 - MessagePack Serializers</a></h4>
+<div class='topic'><!-- START: 2.27.1 - juneau-marshall.MsgPackDetails.MsgPackSerializers -->
 <p>
 	The {@link org.apache.juneau.msgpack.MsgPackSerializer} class is used to serialize POJOs into MessagePack.
 </p>	
@@ -10000,12 +9799,12 @@
 		
 	</ul>
 </ul>
-</div><!-- END: 2.28.1 - juneau-marshall.MsgPackDetails.MsgPackSerializers -->
+</div><!-- END: 2.27.1 - juneau-marshall.MsgPackDetails.MsgPackSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.MsgPackParsers' id='juneau-marshall.MsgPackDetails.MsgPackParsers'>2.28.2 - MessagePack Parsers</a></h4>
-<div class='topic'><!-- START: 2.28.2 - juneau-marshall.MsgPackDetails.MsgPackParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.MsgPackParsers' id='juneau-marshall.MsgPackDetails.MsgPackParsers'>2.27.2 - MessagePack Parsers</a></h4>
+<div class='topic'><!-- START: 2.27.2 - juneau-marshall.MsgPackDetails.MsgPackParsers -->
 <p>
 	The {@link org.apache.juneau.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
 </p>	
@@ -10024,13 +9823,13 @@
 		<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackParser#DEFAULT DEFAULT}
 	</ul>
 </ul>
-</div><!-- END: 2.28.2 - juneau-marshall.MsgPackDetails.MsgPackParsers -->
-</div><!-- END: 2.28 - juneau-marshall.MsgPackDetails -->
+</div><!-- END: 2.27.2 - juneau-marshall.MsgPackDetails.MsgPackParsers -->
+</div><!-- END: 2.27 - juneau-marshall.MsgPackDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails' id='juneau-marshall.OpenApiDetails'>2.29 - OpenAPI Details</a><span class='update'>updated: 8.2.0</span></h3>
-<div class='topic'><!-- START: 2.29 - juneau-marshall.OpenApiDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails' id='juneau-marshall.OpenApiDetails'>2.28 - OpenAPI Details</a><span class='update'>updated: 8.2.0</span></h3>
+<div class='topic'><!-- START: 2.28 - juneau-marshall.OpenApiDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from strings using OpenAPI-based schema rules. 
 </p>
@@ -10064,8 +9863,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiMethodology' id='juneau-marshall.OpenApiDetails.OpenApiMethodology'>2.29.1 - OpenAPI Methodology</a><span class='update'>updated: 8.2.0</span></h4>
-<div class='topic'><!-- START: 2.29.1 - juneau-marshall.OpenApiDetails.OpenApiMethodology -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiMethodology' id='juneau-marshall.OpenApiDetails.OpenApiMethodology'>2.28.1 - OpenAPI Methodology</a><span class='update'>updated: 8.2.0</span></h4>
+<div class='topic'><!-- START: 2.28.1 - juneau-marshall.OpenApiDetails.OpenApiMethodology -->
 <p>
 	Unlike the other Juneau serializers and parsers that convert input and output directly to-and-from POJOs,
 	the OpenAPI serializers and parsers use intermediate objects based on the <c>type</c> and <c>format</c>
@@ -10206,12 +10005,12 @@
 <p>
 	The next sections go more into depth on serializing and parsing various POJO types.
 </p>
-</div><!-- END: 2.29.1 - juneau-marshall.OpenApiDetails.OpenApiMethodology -->
+</div><!-- END: 2.28.1 - juneau-marshall.OpenApiDetails.OpenApiMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiSerializers' id='juneau-marshall.OpenApiDetails.OpenApiSerializers'>2.29.2 - OpenAPI Serializers</a><span class='update'>updated: 8.2.0</span></h4>
-<div class='topic'><!-- START: 2.29.2 - juneau-marshall.OpenApiDetails.OpenApiSerializers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiSerializers' id='juneau-marshall.OpenApiDetails.OpenApiSerializers'>2.28.2 - OpenAPI Serializers</a><span class='update'>updated: 8.2.0</span></h4>
+<div class='topic'><!-- START: 2.28.2 - juneau-marshall.OpenApiDetails.OpenApiSerializers -->
 <p>
 	The {@link org.apache.juneau.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
 </p>
@@ -10346,7 +10145,7 @@
 						<li><c><jk>public byte</jk>[] toBytes() {...}</c>
 						<li><c><jk>public byte</jk>[]</jk> toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10361,7 +10160,7 @@
 						<li><c><jk>public</jk> Calendar toCalendar() {...}</c>
 						<li><c><jk>public</jk> Calendar toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10382,7 +10181,7 @@
 					<ul>
 						<li><c><jk>public</jk> String toString() {...}</c>
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.String} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.String} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10399,7 +10198,7 @@
 						<li><c><jk>public</jk> Boolean toBoolean() {...}</c>
 						<li><c><jk>public</jk> Boolean toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10416,7 +10215,7 @@
 						<li><c><jk>public</jk> Integer toInteger() {...}</c>
 						<li><c><jk>public</jk> Integer toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10432,7 +10231,7 @@
 						<li><c><jk>public</jk> Long toLong() {...}</c>
 						<li><c><jk>public</jk> Long toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10449,7 +10248,7 @@
 						<li><c><jk>public</jk> Float toFloat() {...}</c>
 						<li><c><jk>public</jk> Float toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10465,7 +10264,7 @@
 						<li><c><jk>public</jk> Double toDouble() {...}</c>
 						<li><c><jk>public</jk> Double toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10480,7 +10279,7 @@
 					<ul>
 						<li><c><jk>public</jk> Boolean[][] toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to arrays of the default types via a {@link org.apache.juneau.transform.PojoSwap}
+				<li>Any POJO transformable to arrays of the default types via a {@link org.apache.juneau.swap.ObjectSwap}
 			</ul>
 		</td>
 	</tr>
@@ -10499,7 +10298,7 @@
 			<ul>
 				<li><c>Map&lt;String,Object&gt;</c> (default)
 				<li>Beans with properties of anything on this list.
-				<li>Any POJO transformable to a map via a {@link org.apache.juneau.transform.PojoSwap}
+				<li>Any POJO transformable to a map via a {@link org.apache.juneau.swap.ObjectSwap}
 			</ul>
 		</td>
 	</tr>
@@ -10687,12 +10486,12 @@
 		However, you will get <c>SerializeExceptions</c> if you attempt an impossible conversion.
 		(e.g. trying to serialize the string "foo" as a boolean). 
 </ul>
-</div><!-- END: 2.29.2 - juneau-marshall.OpenApiDetails.OpenApiSerializers -->
+</div><!-- END: 2.28.2 - juneau-marshall.OpenApiDetails.OpenApiSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiParsers' id='juneau-marshall.OpenApiDetails.OpenApiParsers'>2.29.3 - OpenAPI Parsers</a><span class='update'>updated: 8.2.0</span></h4>
-<div class='topic'><!-- START: 2.29.3 - juneau-marshall.OpenApiDetails.OpenApiParsers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiParsers' id='juneau-marshall.OpenApiDetails.OpenApiParsers'>2.28.3 - OpenAPI Parsers</a><span class='update'>updated: 8.2.0</span></h4>
+<div class='topic'><!-- START: 2.28.3 - juneau-marshall.OpenApiDetails.OpenApiParsers -->
 <p>
 	The {@link org.apache.juneau.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
 </p>
@@ -11013,13 +10812,13 @@
 		However, you will get <c>ParseExceptions</c> if you attempt an impossible conversion.
 		(e.g. trying to parse the string "foo" into a boolean). 
 </ul>
-</div><!-- END: 2.29.3 - juneau-marshall.OpenApiDetails.OpenApiParsers -->
-</div><!-- END: 2.29 - juneau-marshall.OpenApiDetails -->
+</div><!-- END: 2.28.3 - juneau-marshall.OpenApiDetails.OpenApiParsers -->
+</div><!-- END: 2.28 - juneau-marshall.OpenApiDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage' id='juneau-marshall.SimpleVariableLanguage'>2.30 - Simple Variable Language</a></h3>
-<div class='topic'><!-- START: 2.30 - juneau-marshall.SimpleVariableLanguage -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage' id='juneau-marshall.SimpleVariableLanguage'>2.29 - Simple Variable Language</a></h3>
+<div class='topic'><!-- START: 2.29 - juneau-marshall.SimpleVariableLanguage -->
 <p>
 	The <l>org.apache.juneau.svl</l> packages defines an API for a language called <l>Simple Variable Language</l>.
 	In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
@@ -11072,8 +10871,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.SvlVariables' id='juneau-marshall.SimpleVariableLanguage.SvlVariables'>2.30.1 - SVL Variables</a><span class='update'>updated: 8.0.0,8.1.0</span></h4>
-<div class='topic'><!-- START: 2.30.1 - juneau-marshall.SimpleVariableLanguage.SvlVariables -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.SvlVariables' id='juneau-marshall.SimpleVariableLanguage.SvlVariables'>2.29.1 - SVL Variables</a><span class='update'>updated: 8.0.0,8.1.0</span></h4>
+<div class='topic'><!-- START: 2.29.1 - juneau-marshall.SimpleVariableLanguage.SvlVariables -->
 <p>
 	Variables are defined through the {@link org.apache.juneau.svl.Var} API.
 	The API comes with several predefined variables and is easily extensible.
@@ -11259,12 +11058,12 @@
 		<td class='code'>$UE{uriPart}</td>
 	</tr>
 </table>
-</div><!-- END: 2.30.1 - juneau-marshall.SimpleVariableLanguage.SvlVariables -->
+</div><!-- END: 2.29.1 - juneau-marshall.SimpleVariableLanguage.SvlVariables -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.VarResolvers' id='juneau-marshall.SimpleVariableLanguage.VarResolvers'>2.30.2 - VarResolvers and VarResolverSessions</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 2.30.2 - juneau-marshall.SimpleVariableLanguage.VarResolvers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.VarResolvers' id='juneau-marshall.SimpleVariableLanguage.VarResolvers'>2.29.2 - VarResolvers and VarResolverSessions</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.29.2 - juneau-marshall.SimpleVariableLanguage.VarResolvers -->
 <p>
 	The main class for performing variable resolution is {@link org.apache.juneau.svl.VarResolver}.
 	Two methods are provided for resolving variables:
@@ -11321,12 +11120,12 @@
 		.vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
 		.build();
 </p>
-</div><!-- END: 2.30.2 - juneau-marshall.SimpleVariableLanguage.VarResolvers -->
+</div><!-- END: 2.29.2 - juneau-marshall.SimpleVariableLanguage.VarResolvers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.DefaultVarResolver' id='juneau-marshall.SimpleVariableLanguage.DefaultVarResolver'>2.30.3 - VarResolver.DEFAULT</a><span class='update'>created: 8.1.0</span></h4>
-<div class='topic'><!-- START: 2.30.3 - juneau-marshall.SimpleVariableLanguage.DefaultVarResolver -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.DefaultVarResolver' id='juneau-marshall.SimpleVariableLanguage.DefaultVarResolver'>2.29.3 - VarResolver.DEFAULT</a><span class='update'>created: 8.1.0</span></h4>
+<div class='topic'><!-- START: 2.29.3 - juneau-marshall.SimpleVariableLanguage.DefaultVarResolver -->
 <p>
 	{@link org.apache.juneau.svl.VarResolver#DEFAULT} is a reusable variable resolver with default support for the following variables:
 </p>
@@ -11347,12 +11146,12 @@
 	<li><c>$LN{arg[,delimiter]}</c> - {@link org.apache.juneau.svl.vars.LenVar}
 	<li><c>$ST{arg,start[,end]}</c> - {@link org.apache.juneau.svl.vars.SubstringVar}
 </ul>
-</div><!-- END: 2.30.3 - juneau-marshall.SimpleVariableLanguage.DefaultVarResolver -->
+</div><!-- END: 2.29.3 - juneau-marshall.SimpleVariableLanguage.DefaultVarResolver -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.SvlOtherNotes' id='juneau-marshall.SimpleVariableLanguage.SvlOtherNotes'>2.30.4 - Other Notes</a></h4>
-<div class='topic'><!-- START: 2.30.4 - juneau-marshall.SimpleVariableLanguage.SvlOtherNotes -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SimpleVariableLanguage.SvlOtherNotes' id='juneau-marshall.SimpleVariableLanguage.SvlOtherNotes'>2.29.4 - Other Notes</a></h4>
+<div class='topic'><!-- START: 2.29.4 - juneau-marshall.SimpleVariableLanguage.SvlOtherNotes -->
 <ul class='spaced-list'>
 	<li>
 		The escape character <js>'\'</js> can be used when necessary to escape the following characters: 
@@ -11368,13 +11167,13 @@
 		<br>For example, calling the resolve method on a string that doesn't contain variables (e.g. 
 		<c>resolver.resolve(<js>"foobar"</js>)</c>) will simply be a no-op and return the same string.
 </ul>
-</div><!-- END: 2.30.4 - juneau-marshall.SimpleVariableLanguage.SvlOtherNotes -->
-</div><!-- END: 2.30 - juneau-marshall.SimpleVariableLanguage -->
+</div><!-- END: 2.29.4 - juneau-marshall.SimpleVariableLanguage.SvlOtherNotes -->
+</div><!-- END: 2.29 - juneau-marshall.SimpleVariableLanguage -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BestPractices' id='juneau-marshall.BestPractices'>2.31 - Best Practices</a></h3>
-<div class='topic'><!-- START: 2.31 - juneau-marshall.BestPractices -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BestPractices' id='juneau-marshall.BestPractices'>2.30 - Best Practices</a></h3>
+<div class='topic'><!-- START: 2.30 - juneau-marshall.BestPractices -->
 <ol class='spaced-list'>
 	<li>
 		Reuse instances of serializers and parsers whenever possible.
@@ -11398,7 +11197,7 @@
 		take in {@link java.lang.Class} or {@link java.lang.Object} parameters, since the latter methods involve 
 		hash lookups to resolve to {@link org.apache.juneau.ClassMeta} parameters.
 </ol>
-</div><!-- END: 2.31 - juneau-marshall.BestPractices -->
+</div><!-- END: 2.30 - juneau-marshall.BestPractices -->
 </div><!-- END: 2 - juneau-marshall -->
 
 <!-- ==================================================================================================== -->
@@ -16033,7 +15832,7 @@
 	<jk>public void</jk> doGet3(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
 		String <jv>accept</jv> = <jv>req</jv>.getStringHeader(<js>"Accept"</js>).orElse(<js>"text/json"</js>);
-		WriterSerializer <jv>serializer</jv> = <jv>res</jv>.getSerializerGroup().getWriterSerializer(<jv>accept</jv>);
+		WriterSerializer <jv>serializer</jv> = <jv>res</jv>.getSerializers().getWriterSerializer(<jv>accept</jv>);
 		<jv>res</jv>.setContentType(<jv>serializer</jv>.getResponseContentType());
 		<jv>serializer</jv>.serialize(<jv>person</jv>, <jv>res</jv>.getNegotiatedWriter());
 	}
@@ -30749,8 +30548,8 @@ Resource bundles are searched using the following base name patterns:
 		The API for handling non-standard POJOs has been simplified by introducing the concept of a {@del Transform} class, which is associated with the <c>BeanContext</c> class (and thus the Serializer and Parser classes too) through the <c>BeanContext.addTransforms(Class[])</c> method.<br>
 		Two new subclasses of {@del Transform}:
 		<ul>
-			<li>{@del org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
-			<li>{@link org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
+			<li>{@del org.apache.juneau.swap.BeanFilter} - Filter POJO beans.</li>
+			<li>{@link org.apache.juneau.swap.ObjectSwap} - Filter POJOs that aren't beans.</li>
 		</ul>
 		This new API replaces the previous separate <c>Cast</c> and <c>BeanFilter</c> APIs which were considerably more complicated and puts them under a common API. 
 	</li>
@@ -30922,7 +30721,7 @@ Resource bundles are searched using the following base name patterns:
 		Merged separate settings classes back into their base classes (simplifies the API).
 	</li>
 	<li>
-		{@link org.apache.juneau.serializer.SerializerSet SerializerGroups} and {@link org.apache.juneau.parser.ParserSet ParserGroups} now share {@link org.apache.juneau.BeanContext BeanContexts} to reduce memory consumption of class type metadata.	
+		{@del org.apache.juneau.serializer.SerializerGroup SerializerGroups} and {@del org.apache.juneau.parser.ParserGroup ParserGroups} now share {@link org.apache.juneau.BeanContext BeanContexts} to reduce memory consumption of class type metadata.	
 	</li>	
 </ul>
 </div><!-- END: 5.0.0.3 -->
@@ -31332,7 +31131,7 @@ Resource bundles are searched using the following base name patterns:
 </p>
 <p>
 	The biggest change is that the <c>RestSerializer</c>, <c>RestParser</c>, <c>RestSerializerGroup</c>, and <c>RestParserGroup</c> classes have been eliminated entirely.<br>  
-	Instead, the existing {@link org.apache.juneau.serializer.Serializer}, {@link org.apache.juneau.parser.Parser}, {@link org.apache.juneau.serializer.SerializerSet}, and {@link org.apache.juneau.parser.ParserSet} classes of the core API have been augmented to replace them.
+	Instead, the existing {@link org.apache.juneau.serializer.Serializer}, {@link org.apache.juneau.parser.Parser}, {@del org.apache.juneau.serializer.SerializerGroup}, and {@del org.apache.juneau.parser.ParserGroup} classes of the core API have been augmented to replace them.
 </p>
 <p>
 	Adoptions will be required if you have previously used these classes.
@@ -31345,7 +31144,7 @@ Resource bundles are searched using the following base name patterns:
 			<li>Entirely reworked class hierarchy to make it easier to define new serializers.</li>
 			<li>New {@link org.apache.juneau.serializer.WriterSerializer} base class for defining character-based serializers.</li>
 			<li>New {@link org.apache.juneau.serializer.OutputStreamSerializer} base class for defining byte-based serializers.</li>
-			<li>Updated {@link org.apache.juneau.serializer.SerializerSet} class with full support for RFC2616 <c>Accept-Content</c> headers.</li>
+			<li>Updated {@del org.apache.juneau.serializer.SerializerGroup} class with full support for RFC2616 <c>Accept-Content</c> headers.</li>
 			<li>Improved cloning support on serializers and serializer groups.</li>
 		</ul>
        	</li>
@@ -31359,10 +31158,10 @@ Resource bundles are searched using the following base name patterns:
        		</ul>
        	</li>
        	<li>
-		New <c>org.apache.juneau.transform</c> package.
+		New <c>org.apache.juneau.swap</c> package.
 		<ul>
 			<li>Cleaner class structure.</li>
-			<li>Improved {@del org.apache.juneau.transform.BeanFilter} class for defining property filters on beans.</li>
+			<li>Improved {@del org.apache.juneau.swap.BeanFilter} class for defining property filters on beans.</li>
 			<li>Improved {@link org.apache.juneau.utils.PojoQuery} class for defining filters on objects (previously called <c>ObjectFilter</c>).</li>
        		</ul>
        	</li>
@@ -31372,7 +31171,7 @@ Resource bundles are searched using the following base name patterns:
 			<li>Defines API for {@link org.apache.juneau.encoders.Encoder Encoders} for enabling compression in REST servlets and clients.</li>
 			<li>Previously, gzip compression was enabled by default.  This new API allows you to plug in your own compression algorithms.</li>
 			<li>New {@link org.apache.juneau.encoders.GzipEncoder} class for enabling gzip compression.</li>
-			<li>New {@link org.apache.juneau.encoders.EncoderSet} class for managing multiple encoders and finding them based on RFC2616 <c>Accept-Encoding</c> header values.</li>
+			<li>New {@del org.apache.juneau.encoders.EncoderGroup} class for managing multiple encoders and finding them based on RFC2616 <c>Accept-Encoding</c> header values.</li>
 		</ul>
 	</li>
 	<li>
@@ -31707,7 +31506,7 @@ Resource bundles are searched using the following base name patterns:
 		Removed <c><ja>@Xml</ja>.valAttr</c> annotation since it's now redundant with <c><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</c>.
 		</li>
 		<li>
-		Fixed timezone bug in {@del org.apache.juneau.transforms.CalendarSwap}.
+		Fixed timezone bug in {@del org.apache.juneau.swaps.CalendarSwap}.
 	</li>
 		<li>
 		Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
@@ -31839,7 +31638,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>
 		Revamped the API for filter support:
 		<ul>
-			<li>Updated {@del org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
+			<li>Updated {@del org.apache.juneau.swap.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
 			<li>Introduced support for bean {@del Bean#subTypeProperty() subtypes}. </li>
 			<li>Replaced <c><ja>@Bean</ja>(filter=xxx)</c> with new {@del @Transform} annotation.</li>
 		</ul>
@@ -31859,8 +31658,8 @@ Resource bundles are searched using the following base name patterns:
 	<li>
 		New predefined DateFilters with millisecond precision:
 		<ul>
-			<li><c>org.apache.juneau.transforms.DateSwap.ISO8601DTP</c></li>
-			<li><c>org.apache.juneau.transforms.DateSwap.ISO8601DTZP</c></li>
+			<li><c>org.apache.juneau.swaps.DateSwap.ISO8601DTP</c></li>
+			<li><c>org.apache.juneau.swaps.DateSwap.ISO8601DTZP</c></li>
 		</ul>
 	</li>
 </ul>
@@ -31897,7 +31696,7 @@ Resource bundles are searched using the following base name patterns:
 		The new class hierarchy is much simpler to understand.
 	</li>
 	<li>
-		Added {@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
+		Added {@link org.apache.juneau.swaps.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
 	</li>
 	<li>
 		Added a strict mode to {@link org.apache.juneau.json.JsonParser}.
@@ -32271,8 +32070,8 @@ Resource bundles are searched using the following base name patterns:
 	<li>New {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper
 		attribute when serializing to or parsing from JSON.
 	<li>Changed the default ordering of bean properties to be in parent-to-child class order.
-	<li>New {@del org.apache.juneau.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@del org.apache.juneau.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
-		methods added to {@del org.apache.juneau.transform.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
+	<li>New {@del org.apache.juneau.swap.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@del org.apache.juneau.swap.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
+		methods added to {@del org.apache.juneau.swap.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
 	<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the {@del Bean#subTypeProperty()} annotation.
 		The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 		While targeted for JSON, the restriction is also lifted for all other parsers.  	
@@ -32345,11 +32144,11 @@ Resource bundles are searched using the following base name patterns:
 	Juno 5.1.0.6 is a moderate update.
 </p>
 <ul class='spaced-list'>
-	<li>Simplified API for {@link org.apache.juneau.transform.PojoSwap}.  
+	<li>Simplified API for {@link org.apache.juneau.swap.ObjectSwap}.  
 		Since it's rarely used, the <c>beanContext</c> parameter was replaced with a {@del PojoSwap#getBeanContext()} method on
 		the class.
-	<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.transform.PojoSwap}.
-		See {@link org.apache.juneau.transform.SurrogateSwap} for details.
+	<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.swap.ObjectSwap}.
+		See {@link org.apache.juneau.swap.SurrogateSwap} for details.
 	<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
 		Will allow the definition of standard XHTML DTOs in future releases.  
 		For now, {@del Img} is an example of defining an XHTML element using Juno DTOs.
@@ -32643,7 +32442,7 @@ Resource bundles are searched using the following base name patterns:
 <ul class='spaced-list'>
 	<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
 	<li>Arguments passed to {@del Link} are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
-	<li>New date filters:  <c>org.apache.juneau.transforms.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.transforms.Datefilter.SimpleP</c>.
+	<li>New date filters:  <c>org.apache.juneau.swaps.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.swaps.Datefilter.SimpleP</c>.
 	<li>New {@del HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
 		Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 	<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <c>ClassCastException</c>.  
@@ -33251,7 +33050,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>New {@del StringVar#doResolve(String)} method.
 	<li>New {@del StringVarResolver#DEFAULT} field.
 	<li>Eliminated dependency on <c>javax.mail.internet.MimeUtility</c> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
-	<li>{@del org.apache.juneau.transforms.CalendarSwap} and {@del org.apache.juneau.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
+	<li>{@del org.apache.juneau.swaps.CalendarSwap} and {@del org.apache.juneau.swaps.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 	<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <c>/servletPath/style.css</c> instead of <c>/servletPath/htdocs/juneau.css</c>.  
 		This coincides with enhancements made in the server code for specifying styles.
 	<li>{@link org.apache.juneau.html.HtmlDocSerializer} wraps output in two div tags instead of one (e.g. <c>&lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</c>).
@@ -33262,7 +33061,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>RDF parser handles case where resources point to themselves (an unfortunate behavior in JFS RDF documents).
 	<li>JSON parser with throw an exception in strict mode if it encounters numbers that are valid in Java but invalid in JSON (e.g. octal, hexadecimal numbers).
 	<li>{@link org.apache.juneau.parser.Parser} methods now check for <jk>null</jk> input.
-	<li>{@link org.apache.juneau.serializer.SerializerSet} and {@link org.apache.juneau.parser.ParserSet} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
+	<li>{@del org.apache.juneau.serializer.SerializerGroup} and {@del org.apache.juneau.parser.ParserGroup} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
 	<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
 	<li>New {@del UrlEncodingSerializer#DEFAULT_SIMPLE_EXPANDED} serializer.
 	<li>Changes to {@del Args}:
@@ -33283,7 +33082,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>Several bug fixes and performance improvements in {@del StringVarResolver}.
 	<li>Various enhancements to {@del org.apache.juneau.internal.TeeWriter} and {@del org.apache.juneau.internal.TeeOutputStream}.
 	<li>Renamed {@del CharSet} to {@link org.apache.juneau.internal.AsciiSet}.
-	<li>{@link org.apache.juneau.serializer.SerializerSet} and {@link org.apache.juneau.parser.ParserSet} now ignores <c>NoClassDefFoundErrors</c>
+	<li>{@del org.apache.juneau.serializer.SerializerGroup} and {@del org.apache.juneau.parser.ParserGroup} now ignores <c>NoClassDefFoundErrors</c>
 		so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 	<li>New {@link org.apache.juneau.internal.FileUtils#createTempFile(String)} method.
 	<li>New {@link org.apache.juneau.utils.PojoQuery} modified to handle bean getters that throw exceptions.
@@ -33513,7 +33312,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>{@del StringVarResolver} - New documentation.
 	<li>{@del org.apache.juneau.rest.client} - New package-level javadoc.
 	<li><dc>Overview / Samples</dc> - New section.
-	<li><dc>org.apache.juneau.transform / Stop Classes</dc> - New section.
+	<li><dc>org.apache.juneau.swap / Stop Classes</dc> - New section.
 	<li>{@del org.apache.juneau.rest} - Extensive updates.
 </ul>
 </div><!-- END: 5.2.0.0 -->
@@ -33619,7 +33418,7 @@ Resource bundles are searched using the following base name patterns:
 		The following features were added to enable this support:
 		<ul>
 			<li>{@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} - Annotation that defines an identifying name for a bean class.
-			<li>{@del org.apache.juneau.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
+			<li>{@del org.apache.juneau.swap.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
 			<li>{@del org.apache.juneau.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 				during parsing. 
 			<li>{@del BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
@@ -33629,7 +33428,7 @@ Resource bundles are searched using the following base name patterns:
 		</ul>
 		In addition, the {@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} value replaces the <c>@Xml(name)</c> annotation, and the 
 		<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
-	<li>Refactor bean filter support to use {@del org.apache.juneau.transform.BeanFilterBuilder} class.
+	<li>Refactor bean filter support to use {@del org.apache.juneau.swap.BeanFilterBuilder} class.
 		Allows the <c>BeanFilter</c> class to use final fields.
 	<li>{@link org.apache.juneau.msgpack MessagePack} support.
 	<li>Serializers can now serialize directly to {@link java.io.File Files}.
@@ -33658,7 +33457,7 @@ Resource bundles are searched using the following base name patterns:
 		IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
 	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via {@del ClassUtils#getReadableClassName(Class)}.
 	<li>Eliminated the <c>ClassFilter</c> class since it's no longer needed.
-	<li>Code and concurrency improvements to {@link org.apache.juneau.serializer.SerializerSet} and {@link org.apache.juneau.parser.ParserSet}.
+	<li>Code and concurrency improvements to {@del org.apache.juneau.serializer.SerializerGroup} and {@del org.apache.juneau.parser.ParserGroup}.
 	<li>Various enhancements to {@del BeanContext#convertToType(Object,Class)}.
 	<li>New properties on {@link org.apache.juneau.html.HtmlSerializer}:
 		<ul>
@@ -33879,10 +33678,10 @@ Resource bundles are searched using the following base name patterns:
 	<jk>new</jk> JsonSerializer().setSimpleMode(<jk>true</jk>).setQuoteChar(<js>'"'</js>);
 			</p>
 	</ul>
-	<li>Simplified {@link org.apache.juneau.transform.PojoSwap} class.  Now just two methods:
+	<li>Simplified {@link org.apache.juneau.swap.ObjectSwap} class.  Now just two methods:
 	<ul>
-		<li>{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)}
-		<li>{@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
+		<li>{@link org.apache.juneau.swap.ObjectSwap#swap(BeanSession,Object)}
+		<li>{@link org.apache.juneau.swap.ObjectSwap#unswap(BeanSession,Object,ClassMeta)}
 	</ul>
 	<li>General code improvements made to {@link org.apache.juneau.ClassMeta} class.
 	<ul>
@@ -33895,33 +33694,33 @@ Resource bundles are searched using the following base name patterns:
 		Allows for swaps and serializer/parser behavior to be tailored to individual media types.
 	<li>Several new {@link java.util.Calendar} and {@link java.util.Date} swaps:
 	<ul>
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.ToString},{@del org.apache.juneau.transforms.DateSwap.ToString} - To {@link java.lang.String Strings} using the {@code Date.toString()} method.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DT},{@del org.apache.juneau.transforms.DateSwap.ISO8601DT} - To ISO8601 date-time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DTZ},{@del org.apache.juneau.transforms.DateSwap.ISO8601DTZ} - Same as <jsf>ISO8601DT</jsf>, except always serializes in GMT.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DTP},{@del org.apache.juneau.transforms.DateSwap.ISO8601DTP} - Same as <jsf>ISO8601DT</jsf> except with millisecond precision.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DTPZ},{@del org.apache.juneau.transforms.DateSwap.ISO8601DTPZ} - Same as <jsf>ISO8601DTZ</jsf> except with millisecond precision.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.RFC2822DT},{@del org.apache.juneau.transforms.DateSwap.RFC2822DT} - To RFC2822 date-time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.RFC2822DTZ},{@del org.apache.juneau.transforms.DateSwap.RFC2822DTZ} - Same as <jsf>RFC2822DT</jsf>, except always serializes in GMT.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.RFC2822D},{@del org.apache.juneau.transforms.DateSwap.RFC2822D} - To RFC2822 date strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeSimple},{@del org.apache.juneau.transforms.DateSwap.DateTimeSimple} - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateSimple},{@del org.apache.juneau.transforms.DateSwap.DateSimple} - To simple <js>"yyyy/MM/dd"</js> date strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeSimple},{@del org.apache.juneau.transforms.DateSwap.TimeSimple} - To simple <js>"HH:mm:ss"</js> time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateFull},{@del org.apache.juneau.transforms.DateSwap.DateFull} - To {@link java.text.DateFormat#FULL} date strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateLong},{@del org.apache.juneau.transforms.DateSwap.DateLong} - To {@link java.text.DateFormat#LONG} date strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateMedium},{@del org.apache.juneau.transforms.DateSwap.DateMedium} - To {@link java.text.DateFormat#MEDIUM} date strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateShort},{@del org.apache.juneau.transforms.DateSwap.DateShort} - To {@link java.text.DateFormat#SHORT} date strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeFull},{@del org.apache.juneau.transforms.DateSwap.TimeFull} - To {@link java.text.DateFormat#FULL} time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeLong},{@del org.apache.juneau.transforms.DateSwap.TimeLong} - To {@link java.text.DateFormat#LONG} time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeMedium},{@del org.apache.juneau.transforms.DateSwap.TimeMedium} - To {@link java.text.DateFormat#MEDIUM} time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeShort},{@del org.apache.juneau.transforms.DateSwap.TimeShort} - To {@link java.text.DateFormat#SHORT} time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeFull},{@del org.apache.juneau.transforms.DateSwap.DateTimeFull} - To {@link java.text.DateFormat#FULL} date-time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeLong},{@del org.apache.juneau.transforms.DateSwap.DateTimeLong} - To {@link java.text.DateFormat#LONG} date-time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeMedium},{@del org.apache.juneau.transforms.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
-		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeShort},{@del org.apache.juneau.transforms.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.ToString},{@del org.apache.juneau.swaps.DateSwap.ToString} - To {@link java.lang.String Strings} using the {@code Date.toString()} method.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DT},{@del org.apache.juneau.swaps.DateSwap.ISO8601DT} - To ISO8601 date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DTZ},{@del org.apache.juneau.swaps.DateSwap.ISO8601DTZ} - Same as <jsf>ISO8601DT</jsf>, except always serializes in GMT.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DTP},{@del org.apache.juneau.swaps.DateSwap.ISO8601DTP} - Same as <jsf>ISO8601DT</jsf> except with millisecond precision.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DTPZ},{@del org.apache.juneau.swaps.DateSwap.ISO8601DTPZ} - Same as <jsf>ISO8601DTZ</jsf> except with millisecond precision.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.RFC2822DT},{@del org.apache.juneau.swaps.DateSwap.RFC2822DT} - To RFC2822 date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.RFC2822DTZ},{@del org.apache.juneau.swaps.DateSwap.RFC2822DTZ} - Same as <jsf>RFC2822DT</jsf>, except always serializes in GMT.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.RFC2822D},{@del org.apache.juneau.swaps.DateSwap.RFC2822D} - To RFC2822 date strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeSimple},{@del org.apache.juneau.swaps.DateSwap.DateTimeSimple} - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateSimple},{@del org.apache.juneau.swaps.DateSwap.DateSimple} - To simple <js>"yyyy/MM/dd"</js> date strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeSimple},{@del org.apache.juneau.swaps.DateSwap.TimeSimple} - To simple <js>"HH:mm:ss"</js> time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateFull},{@del org.apache.juneau.swaps.DateSwap.DateFull} - To {@link java.text.DateFormat#FULL} date strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateLong},{@del org.apache.juneau.swaps.DateSwap.DateLong} - To {@link java.text.DateFormat#LONG} date strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateMedium},{@del org.apache.juneau.swaps.DateSwap.DateMedium} - To {@link java.text.DateFormat#MEDIUM} date strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateShort},{@del org.apache.juneau.swaps.DateSwap.DateShort} - To {@link java.text.DateFormat#SHORT} date strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeFull},{@del org.apache.juneau.swaps.DateSwap.TimeFull} - To {@link java.text.DateFormat#FULL} time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeLong},{@del org.apache.juneau.swaps.DateSwap.TimeLong} - To {@link java.text.DateFormat#LONG} time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeMedium},{@del org.apache.juneau.swaps.DateSwap.TimeMedium} - To {@link java.text.DateFormat#MEDIUM} time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeShort},{@del org.apache.juneau.swaps.DateSwap.TimeShort} - To {@link java.text.DateFormat#SHORT} time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeFull},{@del org.apache.juneau.swaps.DateSwap.DateTimeFull} - To {@link java.text.DateFormat#FULL} date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeLong},{@del org.apache.juneau.swaps.DateSwap.DateTimeLong} - To {@link java.text.DateFormat#LONG} date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeMedium},{@del org.apache.juneau.swaps.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
+		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeShort},{@del org.apache.juneau.swaps.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
 	</ul>  
-	<li>New method {@link org.apache.juneau.serializer.SerializerSet#getSerializerMatch(String)} that returns the matched serializer and media type.
-	<li>New method {@link org.apache.juneau.parser.ParserSet#getParserMatch(String)} that returns the matched parser and media type.
-	<li>New method {@link org.apache.juneau.encoders.EncoderSet#getEncoderMatch(String)} that returns the matched encoder and encoding.
+	<li>New method {@del org.apache.juneau.serializer.SerializerGroup#getSerializerMatch(String)} that returns the matched serializer and media type.
+	<li>New method {@del org.apache.juneau.parser.ParserGroup#getParserMatch(String)} that returns the matched parser and media type.
+	<li>New method {@del org.apache.juneau.encoders.EncoderGroup#getEncoderMatch(String)} that returns the matched encoder and encoding.
 	<li>General improvements to Bean Dictionary support.
 		<ul>
 			<li>New {@link org.apache.juneau.BeanDictionaryList} class can be used for defining reusable sets of bean dictionaries consisting
@@ -33937,7 +33736,7 @@ Resource bundles are searched using the following base name patterns:
 			<li>New setter method names for a better fluent design.
 			<li>Updated {@del org.apache.juneau.dto.atom} documentation.
 		</ul>
-	<li>New {@link org.apache.juneau.transform.MapSwap} and {@link org.apache.juneau.transform.StringSwap} classes.
+	<li>New {@link org.apache.juneau.swap.MapSwap} and {@link org.apache.juneau.swap.StringSwap} classes.
 	<li>New {@link org.apache.juneau.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
 	<li>New {@link org.apache.juneau.BeanContext#getClassMeta(Type,Type...)} and {@link org.apache.juneau.BeanSession#getClassMeta(Type,Type...)}
 		methods for retrieving Map and Collection class metas.  
@@ -34034,9 +33833,9 @@ Resource bundles are searched using the following base name patterns:
 		</p>	
 	<li>Also introduced the following builder classes and related architecture changes to make the built objects unmodifiable:
 		<ul>
-			<li>{@link org.apache.juneau.serializer.SerializerSet.Builder}
-			<li>{@link org.apache.juneau.parser.ParserSet.Builder}
-			<li>{@link org.apache.juneau.encoders.EncoderSet.Builder}
+			<li>{@del org.apache.juneau.serializer.SerializerGroup.Builder}
+			<li>{@del org.apache.juneau.parser.ParserGroup.Builder}
+			<li>{@del org.apache.juneau.encoders.EncoderGroup.Builder}
 		</ul>
 	<li>Revamped the config file API to use a build:  {@del ConfigFileBuilder}.
 	<li>Removed the {@del Lockable} interface.
@@ -35170,7 +34969,7 @@ Resource bundles are searched using the following base name patterns:
 				</p>
 		</ul>
 	<li>
-		New {@link org.apache.juneau.transform.Surrogate} interface for identifying surrogate classes.
+		New {@link org.apache.juneau.swap.Surrogate} interface for identifying surrogate classes.
 	<li>
 		Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
 	<li>
@@ -35216,11 +35015,11 @@ Resource bundles are searched using the following base name patterns:
 		</p>
 		This is mostly an internal change and doesn't affect the existing APIs.
 	<li>
-		{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)} and {@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
+		{@link org.apache.juneau.swap.ObjectSwap#swap(BeanSession,Object)} and {@link org.apache.juneau.swap.ObjectSwap#unswap(BeanSession,Object,ClassMeta)} 
 		can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
 	<li>
-		New {@del org.apache.juneau.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del org.apache.juneau.transforms.CalendarSwap} and 
-		{@del org.apache.juneau.transforms.DateSwap}.
+		New {@del org.apache.juneau.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del org.apache.juneau.swaps.CalendarSwap} and 
+		{@del org.apache.juneau.swaps.DateSwap}.
 	<li>
 		New annotation {@link org.apache.juneau.html.annotation.Html#anchorText}.
 	<li>
@@ -35479,9 +35278,9 @@ Resource bundles are searched using the following base name patterns:
 		</p>
 		<br>The same static create methods have also been added to the following classes:
 		<ul>
-			<li>{@link org.apache.juneau.serializer.SerializerSet#create()}
-			<li>{@link org.apache.juneau.parser.ParserSet#create()}
-			<li>{@link org.apache.juneau.encoders.EncoderSet#create()}
+			<li>{@del org.apache.juneau.serializer.SerializerGroup#create()}
+			<li>{@del org.apache.juneau.parser.ParserGroup#create()}
+			<li>{@del org.apache.juneau.encoders.EncoderGroup#create()}
 			<li>{@link org.apache.juneau.rest.client.RestClient#create()}
 			<li>{@del ConfigFile#create()}
 		</ul>
@@ -35726,11 +35525,11 @@ Resource bundles are searched using the following base name patterns:
 		New {@del org.apache.juneau.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
 		readers passed into parsers to be automatically closed after parsing.
 	<li>
-		Syntax changed on unswap method on {@link org.apache.juneau.transform.Surrogate} classes.
+		Syntax changed on unswap method on {@link org.apache.juneau.swap.Surrogate} classes.
 		<br>It's now a regular method instead of a static method.
 	<li>
 		{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
-		{@link org.apache.juneau.transform.Surrogate} classes.
+		{@link org.apache.juneau.swap.Surrogate} classes.
 	<li>
 		New support for {@doc PojoBuilders POJO Builders}.	
 </ul>
@@ -36929,9 +36728,9 @@ Resource bundles are searched using the following base name patterns:
 	<li>
 		New Java 8 date-time transforms:
 		<ul class='javatree'>
-			<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
-			<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap} - For {@link java.util.Date}
-			<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
+			<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
+			<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap} - For {@link java.util.Date}
+			<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap} - For {@link java.util.Calendar}
 		</ul>
 	<li>
 		All serializers and parsers now have built-in default swaps for common class types:
@@ -37560,8 +37359,8 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New swaps auto-added to all serializers/parsers:
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.transforms.MatchResultSwap} 
-			<li class='jc'>{@link org.apache.juneau.transforms.StackTraceElementSwap} 
+			<li class='jc'>{@link org.apache.juneau.swaps.MatchResultSwap} 
+			<li class='jc'>{@link org.apache.juneau.swaps.StackTraceElementSwap} 
 		</ul>		
 	<li>
 		{@link org.apache.juneau.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
@@ -37668,7 +37467,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New Bean Property Interceptor API for intercepting calls to bean getters/setters.
 		<ul>
-			<li class='jac'>{@link org.apache.juneau.transform.BeanInterceptor}
+			<li class='jac'>{@link org.apache.juneau.swap.BeanInterceptor}
 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor Bean(interceptor)}
 			<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanInterceptor(Class,Class)}
 		</ul>

@@ -26,7 +26,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 /**
@@ -98,11 +98,11 @@ public class BeanConfigAnnotation_Test {
 	public static class A3 {
 		public int foo;
 	}
-	public static class AB1 extends PojoSwap<String,Integer> {
+	public static class AB1 extends ObjectSwap<String,Integer> {
 	}
-	public static class AB2 extends PojoSwap<String,Integer> {
+	public static class AB2 extends ObjectSwap<String,Integer> {
 	}
-	public static class AB3 extends PojoSwap<String,Integer> {
+	public static class AB3 extends ObjectSwap<String,Integer> {
 	}
 
 	@BeanConfig(

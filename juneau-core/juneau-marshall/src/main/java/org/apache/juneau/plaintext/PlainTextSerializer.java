@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * Essentially converts POJOs to plain text using the <c>toString()</c> method.
  *
  * <p>
- * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;}
+ * Also serializes objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;}
  * transform defined on it.
  */
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {
@@ -205,7 +205,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}

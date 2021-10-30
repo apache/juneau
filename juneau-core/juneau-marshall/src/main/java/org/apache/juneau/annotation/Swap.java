@@ -17,10 +17,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
- * Associates {@link PojoSwap} and {@link Surrogate} classes with POJOs and bean properties.
+ * Associates {@link ObjectSwap} and {@link Surrogate} classes with POJOs and bean properties.
  *
  * <p>
  * Can be used in the following locations:
@@ -43,7 +43,7 @@ import org.apache.juneau.transform.*;
 public @interface Swap {
 
 	/**
-	 * The {@link PojoSwap} and {@link Surrogate} class.
+	 * The {@link ObjectSwap} and {@link Surrogate} class.
 	 *
 	 * <p>
 	 * A synonym for {@link #value()}.
@@ -60,7 +60,7 @@ public @interface Swap {
 	 * 	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
 	 * 	<jk>public class</jk> MyBean { ... }
 	 *
-	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> PojoSwap&lt;Object,String&gt; {
+	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> ObjectSwap&lt;Object,String&gt; {
 	 * 			<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
 	 * 				<jk>return</jk> o.toString();
 	 * 			}
@@ -68,7 +68,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc PerMediaTypeSwaps}
 	 * </ul>
 	 */
 	String[] mediaTypes() default {};
@@ -184,7 +184,7 @@ public @interface Swap {
 	 *
 	 * <p class='bcode w800'>
 	 * 	<jc>// Our templated swap class.</jc>
-	 * 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
+	 * 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> ObjectSwap&lt;Object,Reader&gt; {
 	 *
 	 * 		<jk>public</jk> MediaType[] forMediaTypes() {
 	 * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
@@ -207,7 +207,7 @@ public @interface Swap {
 	String template() default "";
 
 	/**
-	 * The {@link PojoSwap} and {@link Surrogate} class.
+	 * The {@link ObjectSwap} and {@link Surrogate} class.
 	 *
 	 * <p>
 	 * A synonym for {@link #impl()}.

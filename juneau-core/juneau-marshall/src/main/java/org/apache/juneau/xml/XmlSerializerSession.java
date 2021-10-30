@@ -31,7 +31,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -453,7 +453,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			sType = aType;
 
 			// Swap if necessary
-			PojoSwap swap = aType.getSwap(this);
+			ObjectSwap swap = aType.getSwap(this);
 			if (swap != null) {
 				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);

@@ -29,7 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -944,7 +944,7 @@ public abstract class ParserSession extends BeanSession {
 
 		if (type == null)
 			type = (ClassMeta<T>)object();
-		PojoSwap swap = type.getSwap(this);
+		ObjectSwap swap = type.getSwap(this);
 		ClassMeta<?> sType = swap == null ? type : swap.getSwapClassMeta(this);
 
 		Object o = s;
@@ -1080,7 +1080,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws ParseException If swap method threw an exception.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Object unswap(PojoSwap swap, Object o, ClassMeta<?> eType) throws ParseException {
+	protected Object unswap(ObjectSwap swap, Object o, ClassMeta<?> eType) throws ParseException {
 		try {
 			return swap.unswap(this, o, eType);
 		} catch (Exception e) {

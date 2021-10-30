@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 /**

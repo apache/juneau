@@ -1,0 +1,80 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Surrogate Classes'}
+
+<p>
+<p>
+	Surrogate classes are very similar in concept to <c>ObjectSwaps</c> except they're simpler to define.
+</p>
+<p>
+	For example, let's say we want to be able to serialize the following class, but it's not serializable for 
+	some reason (for example, there are no properties exposed):  
+<p class='bpcode w800'>
+	<jc>// Not serializable because it's not a bean because it has no public properties.</jc>
+	<jk>public class</jk> MyNonSerializableClass {
+		<jk>protected</jk> String <jf>foo</jf>;
+	}
+</p>
+<p>
+	This could be solved with the following <c>ObjectSwap</c>.
+</p>
+<p class='bpcode w800'>
+	<jc>// A serializable bean with 1 property.</jc>
+	<jk>public class</jk> MySerializableSurrogate {
+		<jk>public</jk> String <jf>foo</jf>;
+	}
+		
+	<jc>// An ObjectSwap that swaps out our non-serializable object with our serializable object.</jc>
+	<jk>public class</jk> MySwap <jk>extends</jk> ObjectSwap&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
+		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass <jv>pojo</jv>) {
+			
+			<jc>// Create some serializable class and manually copy the data into it.</jc>
+			MySerializableSurrogate <jv>surrogate</jv> = <jk>new</jk> MySerializableSurrogate();
+			<jv>surrogate</jv>.<jf>foo</jf> = <jv>pojo</jv>.<jf>foo</jf>;
+			<jk>return</jk> <jv>surrogate</jv>;
+		}
+	}
+</p>
+<p>
+	However, the same can be accomplished by using a surrogate class that simply contains a constructor with 
+	the non-serializable class as an argument:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MySerializableSurrogate {
+		<jk>public</jk> String <jf>foo</jf>;
+		
+		<jc>// Constructor takes in our non-serializable object!</jc>
+		<jk>public</jk> MySerializableSurrogate(MyNonSerializableClass <jv>pojo</jv>) {
+			<jk>this</jk>.<jf>foo</jf> = <jv>pojo</jv>.<jf>foo</jf>;
+		}
+	}
+</p>
+<p>
+	The surrogate class is registered in the same way as a <c>ObjectSwap</c>:
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
+	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().swaps(MySerializableSurrogate.<jk>class</jk>).build();
+</p>
+<p>
+	When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate 
+	instead.
+</p>
+
+<ul class='seealso'>
+	<li class='jic'>{@link oaj.swap.Surrogate}
+</ul>

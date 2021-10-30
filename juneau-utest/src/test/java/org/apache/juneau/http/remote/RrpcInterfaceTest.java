@@ -107,16 +107,16 @@ public class RrpcInterfaceTest {
 		Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys();
 
 		// Swapped POJOs
-		SwappedPojo returnSwappedPojo();
-		SwappedPojo[][][] returnSwappedPojo3dArray();
-		Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap();
-		Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap();
+		SwappedObject returnSwappedObject();
+		SwappedObject[][][] returnSwappedObject3dArray();
+		Map<SwappedObject,SwappedObject> returnSwappedObjectMap();
+		Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap();
 
 		// Implicit swapped POJOs
-		ImplicitSwappedPojo returnImplicitSwappedPojo();
-		ImplicitSwappedPojo[][][] returnImplicitSwappedPojo3dArray();
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap();
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap();
+		ImplicitSwappedObject returnImplicitSwappedObject();
+		ImplicitSwappedObject[][][] returnImplicitSwappedObject3dArray();
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap();
+		Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap();
 
 		// Enums
 		TestEnum returnEnum();
@@ -178,16 +178,16 @@ public class RrpcInterfaceTest {
 		void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x);
 
 		// Swapped POJOs
-		void setSwappedPojo(SwappedPojo x);
-		void setSwappedPojo3dArray(SwappedPojo[][][] x);
-		void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x);
-		void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x);
+		void setSwappedObject(SwappedObject x);
+		void setSwappedObject3dArray(SwappedObject[][][] x);
+		void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x);
+		void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x);
 
 		// Implicit swapped POJOs
-		void setImplicitSwappedPojo(ImplicitSwappedPojo x);
-		void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x);
-		void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);
-		void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);
+		void setImplicitSwappedObject(ImplicitSwappedObject x);
+		void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] x);
+		void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
+		void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
 
 		// Enums
 		void setEnum(TestEnum x);
@@ -209,8 +209,8 @@ public class RrpcInterfaceTest {
 		void setMultiParamsFloatObject(Float x1,Float x1n,Float[][][] x2,Float[][][] x2n,List<Float[][][]> x3,List<Float[][][]> x3n);
 		void setMultiParamsString(String x1,String[][][] x2,String[][][] x2n,List<String[][][]> x3,List<String[][][]> x3n);
 		void setMultiParamsBean(ABean x1,ABean[][][] x2,ABean[][][] x2n,List<ABean[][][]> x3,List<ABean[][][]> x3n,Map<String,ABean> x4,Map<String,ABean> x4n,Map<String,List<ABean[][][]>> x5,Map<String,List<ABean[][][]>> x5n);
-		void setMultiParamsSwappedPojo(SwappedPojo x1,SwappedPojo[][][] x2,SwappedPojo[][][] x2n,List<SwappedPojo[][][]> x3,List<SwappedPojo[][][]> x3n,Map<SwappedPojo,SwappedPojo> x4,Map<SwappedPojo,SwappedPojo> x4n,Map<SwappedPojo,List<SwappedPojo[][][]>> x5,Map<SwappedPojo,List<SwappedPojo[][][]>> x5n);
-		void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1,ImplicitSwappedPojo[][][] x2,ImplicitSwappedPojo[][][] x2n,List<ImplicitSwappedPojo[][][]> x3,List<ImplicitSwappedPojo[][][]> x3n,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n);
+		void setMultiParamsSwappedObject(SwappedObject x1,SwappedObject[][][] x2,SwappedObject[][][] x2n,List<SwappedObject[][][]> x3,List<SwappedObject[][][]> x3n,Map<SwappedObject,SwappedObject> x4,Map<SwappedObject,SwappedObject> x4n,Map<SwappedObject,List<SwappedObject[][][]>> x5,Map<SwappedObject,List<SwappedObject[][][]>> x5n);
+		void setMultiParamsImplicitSwappedObject(ImplicitSwappedObject x1,ImplicitSwappedObject[][][] x2,ImplicitSwappedObject[][][] x2n,List<ImplicitSwappedObject[][][]> x3,List<ImplicitSwappedObject[][][]> x3n,Map<ImplicitSwappedObject,ImplicitSwappedObject> x4,Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n,Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5,Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n);
 		void setMultiParamsEnum(TestEnum x1,TestEnum[][][] x2,TestEnum[][][] x2n,List<TestEnum[][][]> x3,List<TestEnum[][][]> x3n,Map<TestEnum,TestEnum> x4,Map<TestEnum,TestEnum> x4n,Map<TestEnum,List<TestEnum[][][]>> x5,Map<TestEnum,List<TestEnum[][][]>> x5n);
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -413,45 +413,45 @@ public class RrpcInterfaceTest {
 				// Swapped POJOs
 
 				@Override
-				public SwappedPojo returnSwappedPojo() {
-					return new SwappedPojo();
+				public SwappedObject returnSwappedObject() {
+					return new SwappedObject();
 				}
 
 				@Override
-				public SwappedPojo[][][] returnSwappedPojo3dArray() {
-					return new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
+				public SwappedObject[][][] returnSwappedObject3dArray() {
+					return new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
 				}
 
 				@Override
-				public Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap() {
-					return AMap.of(new SwappedPojo(),new SwappedPojo());
+				public Map<SwappedObject,SwappedObject> returnSwappedObjectMap() {
+					return AMap.of(new SwappedObject(),new SwappedObject());
 				}
 
 				@Override
-				public Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap() {
-					return AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+				public Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap() {
+					return AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
 				}
 
 				// Implicit swapped POJOs
 
 				@Override
-				public ImplicitSwappedPojo returnImplicitSwappedPojo() {
-					return new ImplicitSwappedPojo();
+				public ImplicitSwappedObject returnImplicitSwappedObject() {
+					return new ImplicitSwappedObject();
 				}
 
 				@Override
-				public ImplicitSwappedPojo[][][] returnImplicitSwappedPojo3dArray() {
-					return new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null};
+				public ImplicitSwappedObject[][][] returnImplicitSwappedObject3dArray() {
+					return new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
 				}
 
 				@Override
-				public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap() {
-					return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo());
+				public Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap() {
+					return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 				}
 
 				@Override
-				public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap() {
-					return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+				public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap() {
+					return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
 				}
 
 				// Enums
@@ -696,28 +696,28 @@ public class RrpcInterfaceTest {
 				// Swapped POJOs
 
 				@Override
-				public void setSwappedPojo(SwappedPojo x) {
+				public void setSwappedObject(SwappedObject x) {
 					assertTrue(x.wasUnswapped);
 				}
 
 				@Override
-				public void setSwappedPojo3dArray(SwappedPojo[][][] x) {
+				public void setSwappedObject3dArray(SwappedObject[][][] x) {
 					assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertTrue(x[0][0][0].wasUnswapped);
 				}
 
 				@Override
-				public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x) {
+				public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x) {
 					assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-					Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
+					Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
 				}
 
 				@Override
-				public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x) {
+				public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x) {
 					assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-					Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
+					Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
 				}
@@ -725,28 +725,28 @@ public class RrpcInterfaceTest {
 				// Implicit swapped POJOs
 
 				@Override
-				public void setImplicitSwappedPojo(ImplicitSwappedPojo x) {
+				public void setImplicitSwappedObject(ImplicitSwappedObject x) {
 					assertTrue(x.wasUnswapped);
 				}
 
 				@Override
-				public void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x) {
+				public void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] x) {
 					assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertTrue(x[0][0][0].wasUnswapped);
 				}
 
 				@Override
-				public void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x) {
+				public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x) {
 					assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-					Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
+					Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
 				}
 
 				@Override
-				public void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x) {
+				public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x) {
 					assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-					Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
+					Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
 				}
@@ -874,12 +874,12 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsSwappedPojo(SwappedPojo x1,SwappedPojo[][][] x2,SwappedPojo[][][] x2n,List<SwappedPojo[][][]> x3,List<SwappedPojo[][][]> x3n,Map<SwappedPojo,SwappedPojo> x4,Map<SwappedPojo,SwappedPojo> x4n,Map<SwappedPojo,List<SwappedPojo[][][]>> x5,Map<SwappedPojo,List<SwappedPojo[][][]>> x5n) {
+				public void setMultiParamsSwappedObject(SwappedObject x1,SwappedObject[][][] x2,SwappedObject[][][] x2n,List<SwappedObject[][][]> x3,List<SwappedObject[][][]> x3n,Map<SwappedObject,SwappedObject> x4,Map<SwappedObject,SwappedObject> x4n,Map<SwappedObject,List<SwappedObject[][][]>> x5,Map<SwappedObject,List<SwappedObject[][][]>> x5n) {
 					assertObject(x1).asJson().is("'"+SWAP+"'");
 					assertObject(x2).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertNull(x2n);
 					assertObject(x3).asJson().is("[[[['"+SWAP+"',null],null],null],null]");
-					assertObject(x3.get(0)).isType(SwappedPojo[][][].class);
+					assertObject(x3.get(0)).isType(SwappedObject[][][].class);
 					assertNull(x3n);
 					assertObject(x4).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 					assertNull(x4n);
@@ -888,12 +888,12 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1,ImplicitSwappedPojo[][][] x2,ImplicitSwappedPojo[][][] x2n,List<ImplicitSwappedPojo[][][]> x3,List<ImplicitSwappedPojo[][][]> x3n,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n) {
+				public void setMultiParamsImplicitSwappedObject(ImplicitSwappedObject x1,ImplicitSwappedObject[][][] x2,ImplicitSwappedObject[][][] x2n,List<ImplicitSwappedObject[][][]> x3,List<ImplicitSwappedObject[][][]> x3n,Map<ImplicitSwappedObject,ImplicitSwappedObject> x4,Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n,Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5,Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n) {
 					assertObject(x1).asJson().is("'"+SWAP+"'");
 					assertObject(x2).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertNull(x2n);
 					assertObject(x3).asJson().is("[[[['"+SWAP+"',null],null],null],null]");
-					assertObject(x3.get(0)).isType(ImplicitSwappedPojo[][][].class);
+					assertObject(x3.get(0)).isType(ImplicitSwappedObject[][][].class);
 					assertNull(x3n);
 					assertObject(x4).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 					assertNull(x4n);
@@ -1144,33 +1144,33 @@ public class RrpcInterfaceTest {
 	// Swapped POJOs
 
 	@Test
-	public void d01_returnSwappedPojo() {
-		SwappedPojo x = proxy.returnSwappedPojo();
+	public void d01_returnSwappedObject() {
+		SwappedObject x = proxy.returnSwappedObject();
 		assertObject(x).asJson().is("'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
-	public void d02_returnSwappedPojo3dArray() {
-		SwappedPojo[][][] x = proxy.returnSwappedPojo3dArray();
+	public void d02_returnSwappedObject3dArray() {
+		SwappedObject[][][] x = proxy.returnSwappedObject3dArray();
 		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
-	public void d03_returnSwappedPojoMap() {
-		Map<SwappedPojo,SwappedPojo> x = proxy.returnSwappedPojoMap();
+	public void d03_returnSwappedObjectMap() {
+		Map<SwappedObject,SwappedObject> x = proxy.returnSwappedObjectMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
+		Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
 	@Test
-	public void d04_returnSwappedPojo3dMap() {
-		Map<SwappedPojo,SwappedPojo[][][]> x = proxy.returnSwappedPojo3dMap();
+	public void d04_returnSwappedObject3dMap() {
+		Map<SwappedObject,SwappedObject[][][]> x = proxy.returnSwappedObject3dMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
+		Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
@@ -1178,33 +1178,33 @@ public class RrpcInterfaceTest {
 	// Implicit swapped POJOs
 
 	@Test
-	public void e01_returnImplicitSwappedPojo() {
-		ImplicitSwappedPojo x = proxy.returnImplicitSwappedPojo();
+	public void e01_returnImplicitSwappedObject() {
+		ImplicitSwappedObject x = proxy.returnImplicitSwappedObject();
 		assertObject(x).asJson().is("'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
-	public void e02_returnImplicitSwappedPojo3dArray() {
-		ImplicitSwappedPojo[][][] x = proxy.returnImplicitSwappedPojo3dArray();
+	public void e02_returnImplicitSwappedObject3dArray() {
+		ImplicitSwappedObject[][][] x = proxy.returnImplicitSwappedObject3dArray();
 		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
-	public void e03_returnImplicitSwappedPojoMap() {
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = proxy.returnImplicitSwappedPojoMap();
+	public void e03_returnImplicitSwappedObjectMap() {
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> x = proxy.returnImplicitSwappedObjectMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
 	@Test
-	public void e04_returnImplicitSwappedPojo3dMap() {
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = proxy.returnImplicitSwappedPojo3dMap();
+	public void e04_returnImplicitSwappedObject3dMap() {
+		Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x = proxy.returnImplicitSwappedObject3dMap();
 		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
@@ -1479,44 +1479,44 @@ public class RrpcInterfaceTest {
 	// Swapped POJOs
 
 	@Test
-	public void j01_setSwappedPojo() {
-		proxy.setSwappedPojo(new SwappedPojo());
+	public void j01_setSwappedObject() {
+		proxy.setSwappedObject(new SwappedObject());
 	}
 
 	@Test
-	public void j02_setSwappedPojo3dArray() {
-		proxy.setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+	public void j02_setSwappedObject3dArray() {
+		proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
 	}
 
 	@Test
-	public void j03_setSwappedPojoMap() {
-		proxy.setSwappedPojoMap(AMap.of(new SwappedPojo(),new SwappedPojo()));
+	public void j03_setSwappedObjectMap() {
+		proxy.setSwappedObjectMap(AMap.of(new SwappedObject(),new SwappedObject()));
 	}
 
 	@Test
-	public void j04_setSwappedPojo3dMap() {
-		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
+	public void j04_setSwappedObject3dMap() {
+		proxy.setSwappedObject3dMap(AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
 	// Implicit swapped POJOs
 	@Test
-	public void k01_setImplicitSwappedPojo() {
-		proxy.setImplicitSwappedPojo(new ImplicitSwappedPojo());
+	public void k01_setImplicitSwappedObject() {
+		proxy.setImplicitSwappedObject(new ImplicitSwappedObject());
 	}
 
 	@Test
-	public void k02_setImplicitSwappedPojo3dArray() {
-		proxy.setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+	public void k02_setImplicitSwappedObject3dArray() {
+		proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
 	}
 
 	@Test
-	public void k03_setImplicitSwappedPojoMap() {
-		proxy.setImplicitSwappedPojoMap(AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo()));
+	public void k03_setImplicitSwappedObjectMap() {
+		proxy.setImplicitSwappedObjectMap(AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject()));
 	}
 
 	@Test
-	public void k04_setImplicitSwappedPojo3dMap() {
-		proxy.setImplicitSwappedPojo3dMap(AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
+	public void k04_setImplicitSwappedObject3dMap() {
+		proxy.setImplicitSwappedObject3dMap(AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
 	// Enums
@@ -1632,31 +1632,31 @@ public class RrpcInterfaceTest {
 	}
 
 	@Test
-	public void m07_setMultiParamsSwappedPojo() {
-		SwappedPojo x1 = new SwappedPojo();
-		SwappedPojo[][][] x2 = new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
-		SwappedPojo[][][] x2n = null;
-		List<SwappedPojo[][][]> x3 = AList.of(x2,null);
-		List<SwappedPojo[][][]> x3n = null;
-		Map<SwappedPojo,SwappedPojo> x4 = AMap.of(new SwappedPojo(),new SwappedPojo());
-		Map<SwappedPojo,SwappedPojo> x4n = null;
-		Map<SwappedPojo,List<SwappedPojo[][][]>> x5 = AMap.of(new SwappedPojo(),x3);
-		Map<SwappedPojo,List<SwappedPojo[][][]>> x5n = null;
-		proxy.setMultiParamsSwappedPojo(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
+	public void m07_setMultiParamsSwappedObject() {
+		SwappedObject x1 = new SwappedObject();
+		SwappedObject[][][] x2 = new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
+		SwappedObject[][][] x2n = null;
+		List<SwappedObject[][][]> x3 = AList.of(x2,null);
+		List<SwappedObject[][][]> x3n = null;
+		Map<SwappedObject,SwappedObject> x4 = AMap.of(new SwappedObject(),new SwappedObject());
+		Map<SwappedObject,SwappedObject> x4n = null;
+		Map<SwappedObject,List<SwappedObject[][][]>> x5 = AMap.of(new SwappedObject(),x3);
+		Map<SwappedObject,List<SwappedObject[][][]>> x5n = null;
+		proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
 
 	@Test
-	public void m08_setMultiParamsImplicitSwappedPojo() {
-		ImplicitSwappedPojo x1 = new ImplicitSwappedPojo();
-		ImplicitSwappedPojo[][][] x2 = new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null};
-		ImplicitSwappedPojo[][][] x2n = null;
-		List<ImplicitSwappedPojo[][][]> x3 = AList.of(x2,null);
-		List<ImplicitSwappedPojo[][][]> x3n = null;
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4 = AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo());
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n = null;
-		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5 = AMap.of(new ImplicitSwappedPojo(),x3);
-		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n = null;
-		proxy.setMultiParamsImplicitSwappedPojo(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
+	public void m08_setMultiParamsImplicitSwappedObject() {
+		ImplicitSwappedObject x1 = new ImplicitSwappedObject();
+		ImplicitSwappedObject[][][] x2 = new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
+		ImplicitSwappedObject[][][] x2n = null;
+		List<ImplicitSwappedObject[][][]> x3 = AList.of(x2,null);
+		List<ImplicitSwappedObject[][][]> x3n = null;
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4 = AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
+		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5 = AMap.of(new ImplicitSwappedObject(),x3);
+		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n = null;
+		proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
 
 	@Test

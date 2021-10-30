@@ -18,7 +18,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Utility class for efficiently converting objects between types.
@@ -32,19 +32,19 @@ import org.apache.juneau.transform.*;
  * 	<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
  * 	<tr>
  * 		<td>
- * 			A class that is the normal type of a registered {@link PojoSwap}.
+ * 			A class that is the normal type of a registered {@link ObjectSwap}.
  * 		</td>
  * 		<td>
- * 			A value whose class matches the transformed type of that registered {@link PojoSwap}.
+ * 			A value whose class matches the transformed type of that registered {@link ObjectSwap}.
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			A class that is the transformed type of a registered {@link PojoSwap}.
+ * 			A class that is the transformed type of a registered {@link ObjectSwap}.
  * 		</td>
  * 		<td>
- * 			A value whose class matches the normal type of that registered {@link PojoSwap}.
+ * 			A value whose class matches the normal type of that registered {@link ObjectSwap}.
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>

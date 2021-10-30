@@ -23,17 +23,18 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings({"unchecked","rawtypes"})
 public class AutoNumberSwapTest {
 
-	private static PojoSwap find(Class<?> c) {
+	private static ObjectSwap find(Class<?> c) {
 		return AutoNumberSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
 	}
 
-	private static PojoSwap find(BeanContext bc, Class<?> c) {
+	private static ObjectSwap find(BeanContext bc, Class<?> c) {
 		return AutoNumberSwap.find(bc, ClassInfo.of(c));
 	}
 

@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -2472,8 +2472,8 @@ public class BeanContext extends Context {
 		 * <p>
 		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSession.Builder#locale(Locale)}.
 		 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
+		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
@@ -2491,7 +2491,7 @@ public class BeanContext extends Context {
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.locale(Locale.<jsf>UK</jsf>)
-		 * 		.pojoSwaps(MyBeanSwap.<jk>class</jk>)
+		 * 		.swaps(MyBeanSwap.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Define on session-args instead.</jc>
@@ -2963,13 +2963,13 @@ public class BeanContext extends Context {
 		 * <p>
 		 * Multiple swaps can be associated with a single class.
 		 * When multiple swaps are applicable to the same class, the media type pattern defined by
-		 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
+		 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 		 *
 		 * <p>
 		 * Values can consist of any of the following types:
 		 * <ul>
-		 * 	<li>Any subclass of {@link PojoSwap}.
-		 * 	<li>Any instance of {@link PojoSwap}.
+		 * 	<li>Any subclass of {@link ObjectSwap}.
+		 * 	<li>Any instance of {@link ObjectSwap}.
 		 * 	<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 	<li>Any array or collection of the objects above.
 		 * </ul>
@@ -3025,7 +3025,7 @@ public class BeanContext extends Context {
 		 * 	The values to add to this setting.
 		 * 	<br>Values can consist of any of the following types:
 		 * 	<ul>
-		 * 		<li>Any subclass of {@link PojoSwap}.
+		 * 		<li>Any subclass of {@link ObjectSwap}.
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 		<li>Any array or collection of the objects above.
 		 * 	</ul>
@@ -3071,8 +3071,8 @@ public class BeanContext extends Context {
 		 * <p>
 		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSession.Builder#timeZone(TimeZone)}.
 		 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
+		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
@@ -3489,7 +3489,7 @@ public class BeanContext extends Context {
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamerBean;
-	private final PojoSwap[] swapArray;
+	private final ObjectSwap[] swapArray;
 	private final Class<?>[] notBeanClassesArray;
 	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
 	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
@@ -3550,21 +3550,21 @@ public class BeanContext extends Context {
 			throw runtimeException(e);
 		}
 
-		LinkedList<PojoSwap<?,?>> _swaps = new LinkedList<>();
+		LinkedList<ObjectSwap<?,?>> _swaps = new LinkedList<>();
 		for (Object o : ofNullable(swaps).orElse(emptyList())) {
 			ClassInfo ci = ClassInfo.of((Class<?>)o);
-			if (ci.isChildOf(PojoSwap.class))
-				_swaps.add(castOrCreate(PojoSwap.class, ci.inner()));
+			if (ci.isChildOf(ObjectSwap.class))
+				_swaps.add(castOrCreate(ObjectSwap.class, ci.inner()));
 			else if (ci.isChildOf(Surrogate.class))
-				_swaps.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
+				_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 			else
-				throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
+				throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", ci.inner());
 		}
-		swapArray = _swaps.toArray(new PojoSwap[_swaps.size()]);
+		swapArray = _swaps.toArray(new ObjectSwap[_swaps.size()]);
 
 		cmCache = new ConcurrentHashMap<>();
-		cmCache.put(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
-		cmCache.put(Object.class, new ClassMeta(Object.class, this, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
+		cmCache.put(String.class, new ClassMeta(String.class, this, findObjectSwaps(String.class), findChildObjectSwaps(String.class)));
+		cmCache.put(Object.class, new ClassMeta(Object.class, this, findObjectSwaps(Object.class), findChildObjectSwaps(Object.class)));
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
@@ -3790,7 +3790,7 @@ public class BeanContext extends Context {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<>(type, this, findPojoSwaps(type), findChildPojoSwaps(type));
+					cm = new ClassMeta<>(type, this, findObjectSwaps(type), findChildObjectSwaps(type));
 			}
 		}
 		if (waitForInit)
@@ -3875,7 +3875,7 @@ public class BeanContext extends Context {
 			ClassMeta<?> cm = (ClassMeta)o;
 
 			// This classmeta could have been created by a different context.
-			// Need to re-resolve it to pick up PojoSwaps and stuff on this context.
+			// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
 			if (cm.getBeanContext() == this)
 				return cm;
 			if (cm.isMap())
@@ -4095,43 +4095,43 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no POJO swap
+	 * Returns the {@link ObjectSwap} associated with the specified class, or <jk>null</jk> if there is no POJO swap
 	 * associated with the class.
 	 *
 	 * @param <T> The class associated with the swap.
 	 * @param c The class associated with the swap.
 	 * @return The swap associated with the class, or null if there is no association.
 	 */
-	private final <T> PojoSwap[] findPojoSwaps(Class<T> c) {
+	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
 		// Note:  On first
 		if (c != null) {
-			List<PojoSwap> l = new ArrayList<>();
-			for (PojoSwap f : swapArray)
+			List<ObjectSwap> l = new ArrayList<>();
+			for (ObjectSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
-			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
+			return l.size() == 0 ? null : l.toArray(new ObjectSwap[l.size()]);
 		}
 		return null;
 	}
 
 	/**
-	 * Checks whether a class has a {@link PojoSwap} associated with it in this bean context.
+	 * Checks whether a class has a {@link ObjectSwap} associated with it in this bean context.
 	 *
 	 * @param c The class to check.
-	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
+	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link ObjectSwap} associated with it.
 	 */
-	private final PojoSwap[] findChildPojoSwaps(Class<?> c) {
+	private final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
 		if (c == null || swapArray.length == 0)
 			return null;
-		List<PojoSwap> l = null;
-		for (PojoSwap f : swapArray) {
+		List<ObjectSwap> l = null;
+		for (ObjectSwap f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(f);
 			}
 		}
-		return l == null ? null : l.toArray(new PojoSwap[l.size()]);
+		return l == null ? null : l.toArray(new ObjectSwap[l.size()]);
 	}
 
 	/**
@@ -4443,7 +4443,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
-	public final PojoSwap<?,?>[] getSwaps() {
+	public final ObjectSwap<?,?>[] getSwaps() {
 		return swapArray;
 	}
 
@@ -4576,7 +4576,7 @@ public class BeanContext extends Context {
 			.a("notBeanClasses", notBeanClasses)
 			.a("notBeanPackageNames", notBeanPackageNames)
 			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
-			.a("pojoSwaps", swaps)
+			.a("swaps", swaps)
 			.a("sortProperties", sortProperties)
 			.a("useEnumNames", useEnumNames)
 			.a("useInterfaceProxies", useInterfaceProxies)

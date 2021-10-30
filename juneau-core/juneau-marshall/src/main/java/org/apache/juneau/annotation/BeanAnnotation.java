@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Utility classes and methods for the {@link Bean @Bean} annotation.

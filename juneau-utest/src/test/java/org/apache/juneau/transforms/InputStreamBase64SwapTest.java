@@ -18,7 +18,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

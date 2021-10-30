@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -39,11 +39,11 @@ public class BeanConfig_Swaps_Test {
 	}
 
 	public static class SwapA1 extends StringSwap<A> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, A a) throws SerializeException {
 			return "A1-" + a.f1;
 		}
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A1"))
 				throw new RuntimeException("Invalid input for SwapA1!");
@@ -54,11 +54,11 @@ public class BeanConfig_Swaps_Test {
 	}
 
 	public static class SwapA2 extends StringSwap<A> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, A a) throws SerializeException {
 			return "A2-" + a.f1;
 		}
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A2"))
 				throw new RuntimeException("Invalid input for SwapA2!");
@@ -69,11 +69,11 @@ public class BeanConfig_Swaps_Test {
 	}
 
 	public static class SwapA3 extends StringSwap<A> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, A a) throws SerializeException {
 			return "A3-" + a.f1;
 		}
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A3"))
 				throw new RuntimeException("Invalid input for SwapA3!");

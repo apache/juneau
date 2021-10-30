@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swaps.*;
 
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.

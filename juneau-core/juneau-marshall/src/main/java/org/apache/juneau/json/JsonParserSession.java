@@ -26,7 +26,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonParser}.
@@ -268,7 +268,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = object();
-		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getSwap(this);
+		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (builder != null)

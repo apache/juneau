@@ -288,73 +288,73 @@ public class ConfigInterfaceTest {
 	// Swapped POJOs
 
 	@Test
-	public void testSwappedPojo() throws Exception {
-		proxy.setSwappedPojo(new SwappedPojo());
-		assertObject(proxy.getSwappedPojo()).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
-		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/swappedPojo"));
-		assertObject(proxy.getSwappedPojo()).isType(SwappedPojo.class);
+	public void testSwappedObject() throws Exception {
+		proxy.setSwappedObject(new SwappedObject());
+		assertObject(proxy.getSwappedObject()).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
+		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/swappedObject"));
+		assertObject(proxy.getSwappedObject()).isType(SwappedObject.class);
 	}
 
 	@Test
-	public void testSwappedPojo3dArray() throws Exception {
-		proxy.setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
-		assertObject(proxy.getSwappedPojo3dArray()).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
-		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/swappedPojo3dArray"));
-		assertObject(proxy.getSwappedPojo3dArray()[0][0][0]).isType(SwappedPojo.class);
+	public void testSwappedObject3dArray() throws Exception {
+		proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
+		assertObject(proxy.getSwappedObject3dArray()).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
+		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/swappedObject3dArray"));
+		assertObject(proxy.getSwappedObject3dArray()[0][0][0]).isType(SwappedObject.class);
 	}
 
 	@Test
-	public void testSwappedPojoMap() throws Exception {
-		proxy.setSwappedPojoMap(AMap.of(new SwappedPojo(), new SwappedPojo()));
-		assertObject(proxy.getSwappedPojoMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
-		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/swappedPojoMap"));
-		assertObject(proxy.getSwappedPojoMap().keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(proxy.getSwappedPojoMap().values().iterator().next()).isType(SwappedPojo.class);
+	public void testSwappedObjectMap() throws Exception {
+		proxy.setSwappedObjectMap(AMap.of(new SwappedObject(), new SwappedObject()));
+		assertObject(proxy.getSwappedObjectMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
+		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/swappedObjectMap"));
+		assertObject(proxy.getSwappedObjectMap().keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(proxy.getSwappedObjectMap().values().iterator().next()).isType(SwappedObject.class);
 	}
 
 	@Test
-	public void testSwappedPojo3dMap() throws Exception {
-		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
-		assertObject(proxy.getSwappedPojo3dMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
-		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/swappedPojo3dMap"));
-		assertObject(proxy.getSwappedPojo3dMap().keySet().iterator().next()).isType(SwappedPojo.class);
-		assertObject(proxy.getSwappedPojo3dMap().values().iterator().next()[0][0][0]).isType(SwappedPojo.class);
+	public void testSwappedObject3dMap() throws Exception {
+		proxy.setSwappedObject3dMap(AMap.of(new SwappedObject(), new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+		assertObject(proxy.getSwappedObject3dMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/swappedObject3dMap"));
+		assertObject(proxy.getSwappedObject3dMap().keySet().iterator().next()).isType(SwappedObject.class);
+		assertObject(proxy.getSwappedObject3dMap().values().iterator().next()[0][0][0]).isType(SwappedObject.class);
 	}
 
 	// Implicit swapped POJOs
 
 	@Test
-	public void testImplicitSwappedPojo() throws Exception {
-		proxy.setImplicitSwappedPojo(new ImplicitSwappedPojo());
-		assertObject(proxy.getImplicitSwappedPojo()).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
-		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/implicitSwappedPojo"));
-		assertObject(proxy.getImplicitSwappedPojo()).isType(ImplicitSwappedPojo.class);
+	public void testImplicitSwappedObject() throws Exception {
+		proxy.setImplicitSwappedObject(new ImplicitSwappedObject());
+		assertObject(proxy.getImplicitSwappedObject()).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
+		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/implicitSwappedObject"));
+		assertObject(proxy.getImplicitSwappedObject()).isType(ImplicitSwappedObject.class);
 	}
 
 	@Test
-	public void testImplicitSwappedPojo3dArray() throws Exception {
-		proxy.setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
-		assertObject(proxy.getImplicitSwappedPojo3dArray()).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
-		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/implicitSwappedPojo3dArray"));
-		assertObject(proxy.getImplicitSwappedPojo3dArray()[0][0][0]).isType(ImplicitSwappedPojo.class);
+	public void testImplicitSwappedObject3dArray() throws Exception {
+		proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
+		assertObject(proxy.getImplicitSwappedObject3dArray()).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
+		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/implicitSwappedObject3dArray"));
+		assertObject(proxy.getImplicitSwappedObject3dArray()[0][0][0]).isType(ImplicitSwappedObject.class);
 	}
 
 	@Test
-	public void testImplicitSwappedPojoMap() throws Exception {
-		proxy.setImplicitSwappedPojoMap(AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
-		assertObject(proxy.getImplicitSwappedPojoMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
-		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/implicitSwappedPojoMap"));
-		assertObject(proxy.getImplicitSwappedPojoMap().keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(proxy.getImplicitSwappedPojoMap().values().iterator().next()).isType(ImplicitSwappedPojo.class);
+	public void testImplicitSwappedObjectMap() throws Exception {
+		proxy.setImplicitSwappedObjectMap(AMap.of(new ImplicitSwappedObject(), new ImplicitSwappedObject()));
+		assertObject(proxy.getImplicitSwappedObjectMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
+		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/implicitSwappedObjectMap"));
+		assertObject(proxy.getImplicitSwappedObjectMap().keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(proxy.getImplicitSwappedObjectMap().values().iterator().next()).isType(ImplicitSwappedObject.class);
 	}
 
 	@Test
-	public void testImplicitSwappedPojo3dMap() throws Exception {
-		proxy.setImplicitSwappedPojo3dMap(AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
-		assertObject(proxy.getImplicitSwappedPojo3dMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
-		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/implicitSwappedPojo3dMap"));
-		assertObject(proxy.getImplicitSwappedPojo3dMap().keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
-		assertObject(proxy.getImplicitSwappedPojo3dMap().values().iterator().next()[0][0][0]).isType(ImplicitSwappedPojo.class);
+	public void testImplicitSwappedObject3dMap() throws Exception {
+		proxy.setImplicitSwappedObject3dMap(AMap.of(new ImplicitSwappedObject(), new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+		assertObject(proxy.getImplicitSwappedObject3dMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/implicitSwappedObject3dMap"));
+		assertObject(proxy.getImplicitSwappedObject3dMap().keySet().iterator().next()).isType(ImplicitSwappedObject.class);
+		assertObject(proxy.getImplicitSwappedObject3dMap().values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
 	}
 
 	// Enums
@@ -529,31 +529,31 @@ public class ConfigInterfaceTest {
 
 		// Swapped POJOs
 
-		public SwappedPojo getSwappedPojo();
-		public void setSwappedPojo(SwappedPojo x);
+		public SwappedObject getSwappedObject();
+		public void setSwappedObject(SwappedObject x);
 
-		public SwappedPojo[][][] getSwappedPojo3dArray();
-		public void setSwappedPojo3dArray(SwappedPojo[][][] x);
+		public SwappedObject[][][] getSwappedObject3dArray();
+		public void setSwappedObject3dArray(SwappedObject[][][] x);
 
-		public Map<SwappedPojo,SwappedPojo> getSwappedPojoMap();
-		public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x);
+		public Map<SwappedObject,SwappedObject> getSwappedObjectMap();
+		public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x);
 
-		public Map<SwappedPojo,SwappedPojo[][][]> getSwappedPojo3dMap();
-		public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x);
+		public Map<SwappedObject,SwappedObject[][][]> getSwappedObject3dMap();
+		public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x);
 
 		// Implicit swapped POJOs
 
-		public ImplicitSwappedPojo getImplicitSwappedPojo();
-		public void setImplicitSwappedPojo(ImplicitSwappedPojo x);
+		public ImplicitSwappedObject getImplicitSwappedObject();
+		public void setImplicitSwappedObject(ImplicitSwappedObject x);
 
-		public ImplicitSwappedPojo[][][] getImplicitSwappedPojo3dArray();
-		public void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x);
+		public ImplicitSwappedObject[][][] getImplicitSwappedObject3dArray();
+		public void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] x);
 
-		public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> getImplicitSwappedPojoMap();
-		public void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);
+		public Map<ImplicitSwappedObject,ImplicitSwappedObject> getImplicitSwappedObjectMap();
+		public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
 
-		public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> getImplicitSwappedPojo3dMap();
-		public void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);
+		public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> getImplicitSwappedObject3dMap();
+		public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
 
 		// Enums
 

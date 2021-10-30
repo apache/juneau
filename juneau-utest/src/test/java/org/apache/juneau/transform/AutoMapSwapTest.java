@@ -24,6 +24,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -33,11 +34,11 @@ public class AutoMapSwapTest {
 	private static final Map<String,String> STRINGMAP = AMap.of("foo","bar");
 	private static final OMap OMAP = OMap.of("foo","bar");
 
-	private static PojoSwap find(Class<?> c) {
+	private static ObjectSwap find(Class<?> c) {
 		return AutoMapSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
 	}
 
-	private static PojoSwap find(BeanContext bc, Class<?> c) {
+	private static ObjectSwap find(BeanContext bc, Class<?> c) {
 		return AutoMapSwap.find(bc, ClassInfo.of(c));
 	}
 

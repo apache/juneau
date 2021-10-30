@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Serializer session that lives for the duration of a single use of {@link Serializer}.
@@ -497,7 +497,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		try {
 			if (o == null)
 				return null;
-			PojoSwap f = (type == null || type.isObject() || type.isString() ? getClassMeta(o.getClass()).getSwap(this) : type.getSwap(this));
+			ObjectSwap f = (type == null || type.isObject() || type.isString() ? getClassMeta(o.getClass()).getSwap(this) : type.getSwap(this));
 			if (f == null)
 				return o;
 			return f.swap(this, o);
@@ -876,7 +876,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @throws SerializeException If swap method threw an exception.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Object swap(PojoSwap swap, Object o) throws SerializeException {
+	protected Object swap(ObjectSwap swap, Object o) throws SerializeException {
 		try {
 			if (swap == null)
 				return o;

@@ -36,7 +36,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information about that class.
@@ -89,11 +89,11 @@ public final class ClassMeta<T> implements Type {
 	private final Object primitiveDefault;                  // Default value for primitive type classes.
 	private final Map<String,Method>
 		publicMethods;                                       // All public methods, including static methods.
-	private final PojoSwap<?,?>[] childPojoSwaps;           // Any PojoSwaps where the normal type is a subclass of this class.
-	private final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
-		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
-		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
-	private final PojoSwap<T,?>[] swaps;                     // The object POJO swaps associated with this bean (if it has any).
+	private final ObjectSwap<?,?>[] childSwaps;              // Any ObjectSwaps where the normal type is a subclass of this class.
+	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>>
+		childSwapMap,                                        // Maps normal subclasses to ObjectSwaps.
+		childUnswapMap;                                      // Maps swap subclasses to ObjectSwaps.
+	private final ObjectSwap<T,?>[] swaps;                     // The object POJO swaps associated with this bean (if it has any).
 	private final BuilderSwap<T,?> builderSwap;             // The builder swap associated with this bean (if it has one).
 	private final BeanContext beanContext;                  // The bean context that created this object.
 	private final ClassMeta<?>
@@ -125,19 +125,19 @@ public final class ClassMeta<T> implements Type {
 	 * @param implClass
 	 * 	For interfaces and abstract classes, this represents the "real" class to instantiate.
 	 * 	Can be <jk>null</jk>.
-	 * @param pojoSwap
-	 * 	The {@link PojoSwap} programmatically associated with this class.
+	 * @param swaps
+	 * 	The {@link ObjectSwap} programmatically associated with this class.
 	 * 	Can be <jk>null</jk>.
-	 * @param childPojoSwap
-	 * 	The child {@link PojoSwap PojoSwaps} programmatically associated with this class.
-	 * 	These are the <c>PojoSwaps</c> that have normal classes that are subclasses of this class.
+	 * @param childSwaps
+	 * 	The child {@link ObjectSwap ObjectSwaps} programmatically associated with this class.
+	 * 	These are the <c>ObjectSwaps</c> that have normal classes that are subclasses of this class.
 	 * 	Can be <jk>null</jk>.
 	 * @param delayedInit
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
 		this.innerClass = innerClass;
 		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
@@ -149,7 +149,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
-			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, swaps, childPojoSwaps);
+			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, swaps, childSwaps);
 
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
@@ -160,7 +160,7 @@ public final class ClassMeta<T> implements Type {
 			this.stringConstructor = builder.stringConstructor;
 			this.primitiveDefault = builder.primitiveDefault;
 			this.publicMethods = builder.publicMethods;
-			this.swaps = builder.swaps.isEmpty() ? null : builder.swaps.toArray(new PojoSwap[builder.swaps.size()]);
+			this.swaps = builder.swaps.isEmpty() ? null : builder.swaps.toArray(new ObjectSwap[builder.swaps.size()]);
 			this.builderSwap = builder.builderSwap;
 			this.keyType = builder.keyType;
 			this.valueType = builder.valueType;
@@ -177,7 +177,7 @@ public final class ClassMeta<T> implements Type {
 			this.implClass = builder.implClass;
 			this.childUnswapMap = builder.childUnswapMap;
 			this.childSwapMap = builder.childSwapMap;
-			this.childPojoSwaps = builder.childPojoSwaps;
+			this.childSwaps = builder.childSwaps;
 			this.exampleMethod = builder.exampleMethod;
 			this.exampleField = builder.exampleField;
 			this.example = builder.example;
@@ -223,7 +223,7 @@ public final class ClassMeta<T> implements Type {
 		this.innerClass = mainType.innerClass;
 		this.info = mainType.info;
 		this.implClass = mainType.implClass;
-		this.childPojoSwaps = mainType.childPojoSwaps;
+		this.childSwaps = mainType.childSwaps;
 		this.childSwapMap = mainType.childSwapMap;
 		this.childUnswapMap = mainType.childUnswapMap;
 		this.cc = mainType.cc;
@@ -266,7 +266,7 @@ public final class ClassMeta<T> implements Type {
 		this.info = ClassInfo.of(innerClass);
 		this.args = args;
 		this.implClass = null;
-		this.childPojoSwaps = null;
+		this.childSwaps = null;
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
 		this.cc = ARGS;
@@ -331,12 +331,12 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		AList<PojoSwap> swaps = AList.create();
+		AList<ObjectSwap> swaps = AList.create();
 		BuilderSwap builderSwap;
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
-		PojoSwap<?,?>[] childPojoSwaps;
-		ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
+		ObjectSwap<?,?>[] childSwaps;
+		ConcurrentHashMap<Class<?>,ObjectSwap<?,?>>
 			childSwapMap,
 			childUnswapMap;
 		Method exampleMethod;
@@ -344,13 +344,13 @@ public final class ClassMeta<T> implements Type {
 		String example;
 		Mutater<String,T> stringMutater;
 
-		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
+		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 			BeanContext bc = beanContext;
 
-			this.childPojoSwaps = childPojoSwaps;
-			if (childPojoSwaps == null) {
+			this.childSwaps = childSwaps;
+			if (childSwaps == null) {
 				this.childSwapMap = null;
 				this.childUnswapMap = null;
 			} else {
@@ -530,7 +530,7 @@ public final class ClassMeta<T> implements Type {
 				this.swaps.a(swaps);
 
 			if (bc != null)
-				this.builderSwap = BuilderSwap.findSwapFromPojoClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
+				this.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 
 			findSwaps(this.swaps, bc);
 
@@ -704,13 +704,13 @@ public final class ClassMeta<T> implements Type {
 			return null;
 		}
 
-		private void findSwaps(List<PojoSwap> l, BeanContext bc) {
+		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
 			if (bc != null)
 				for (Swap swap : bc.getAnnotations(Swap.class, innerClass))
-					l.add(createPojoSwap(swap));
+					l.add(createSwap(swap));
 
-			PojoSwap defaultSwap = DefaultSwaps.find(ci);
+			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)
 				defaultSwap = AutoObjectSwap.find(bc, ci);
 			if (defaultSwap == null)
@@ -723,14 +723,14 @@ public final class ClassMeta<T> implements Type {
 				l.add(defaultSwap);
 		}
 
-		private PojoSwap<T,?> createPojoSwap(Swap s) {
+		private ObjectSwap<T,?> createSwap(Swap s) {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
 			ClassInfo ci = ClassInfo.of(c);
 
-			if (ci.isChildOf(PojoSwap.class)) {
-				PojoSwap ps = castOrCreate(PojoSwap.class, c);
+			if (ci.isChildOf(ObjectSwap.class)) {
+				ObjectSwap ps = castOrCreate(ObjectSwap.class, c);
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 				if (! s.template().isEmpty())
@@ -739,12 +739,12 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			if (ci.isChildOf(Surrogate.class)) {
-				List<SurrogateSwap<?,?>> l = SurrogateSwap.findPojoSwaps(c, beanContext);
+				List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, beanContext);
 				if (! l.isEmpty())
-					return (PojoSwap<T,?>)l.iterator().next();
+					return (ObjectSwap<T,?>)l.iterator().next();
 			}
 
-			throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from PojoSwap or Surrogate.", c);
+			throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
 		}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {
@@ -837,39 +837,39 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
+	 * Returns <jk>true</jk> if this class or any child classes has a {@link ObjectSwap} associated with it.
 	 *
 	 * <p>
 	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no
 	 * transforms are associated with a bean property.
 	 *
-	 * @return <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
+	 * @return <jk>true</jk> if this class or any child classes has a {@link ObjectSwap} associated with it.
 	 */
-	protected boolean hasChildPojoSwaps() {
-		return childPojoSwaps != null;
+	protected boolean hasChildSwaps() {
+		return childSwaps != null;
 	}
 
 	/**
-	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the normal class of one of the
+	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the
 	 * child POJO swaps associated with this class.
 	 *
 	 * @param normalClass The normal class being resolved.
-	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
+	 * @return The resolved {@link ObjectSwap} or <jk>null</jk> if none were found.
 	 */
-	protected PojoSwap<?,?> getChildPojoSwapForSwap(Class<?> normalClass) {
+	protected ObjectSwap<?,?> getChildObjectSwapForSwap(Class<?> normalClass) {
 		if (childSwapMap != null) {
-			PojoSwap<?,?> s = childSwapMap.get(normalClass);
+			ObjectSwap<?,?> s = childSwapMap.get(normalClass);
 			if (s == null) {
-				for (PojoSwap<?,?> f : childPojoSwaps)
+				for (ObjectSwap<?,?> f : childSwaps)
 					if (s == null && f.getNormalClass().isParentOf(normalClass))
 						s = f;
 				if (s == null)
-					s = PojoSwap.NULL;
-				PojoSwap<?,?> s2 = childSwapMap.putIfAbsent(normalClass, s);
+					s = ObjectSwap.NULL;
+				ObjectSwap<?,?> s2 = childSwapMap.putIfAbsent(normalClass, s);
 				if (s2 != null)
 					s = s2;
 			}
-			if (s == PojoSwap.NULL)
+			if (s == ObjectSwap.NULL)
 				return null;
 			return s;
 		}
@@ -877,26 +877,26 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the swap class of one of the child
+	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child
 	 * POJO swaps associated with this class.
 	 *
 	 * @param swapClass The swap class being resolved.
-	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
+	 * @return The resolved {@link ObjectSwap} or <jk>null</jk> if none were found.
 	 */
-	protected PojoSwap<?,?> getChildPojoSwapForUnswap(Class<?> swapClass) {
+	protected ObjectSwap<?,?> getChildObjectSwapForUnswap(Class<?> swapClass) {
 		if (childUnswapMap != null) {
-			PojoSwap<?,?> s = childUnswapMap.get(swapClass);
+			ObjectSwap<?,?> s = childUnswapMap.get(swapClass);
 			if (s == null) {
-				for (PojoSwap<?,?> f : childPojoSwaps)
+				for (ObjectSwap<?,?> f : childSwaps)
 					if (s == null && f.getSwapClass().isParentOf(swapClass))
 						s = f;
 				if (s == null)
-					s = PojoSwap.NULL;
-				PojoSwap<?,?> s2 = childUnswapMap.putIfAbsent(swapClass, s);
+					s = ObjectSwap.NULL;
+				ObjectSwap<?,?> s2 = childUnswapMap.putIfAbsent(swapClass, s);
 				if (s2 != null)
 					s = s2;
 			}
-			if (s == PojoSwap.NULL)
+			if (s == ObjectSwap.NULL)
 				return null;
 			return s;
 		}
@@ -938,7 +938,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the serialized (swapped) form of this class if there is an {@link PojoSwap} associated with it.
+	 * Returns the serialized (swapped) form of this class if there is an {@link ObjectSwap} associated with it.
 	 *
 	 * @param session
 	 * 	The bean session.
@@ -946,7 +946,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
 	public ClassMeta<?> getSerializedClassMeta(BeanSession session) {
-		PojoSwap<T,?> ps = getSwap(session);
+		ObjectSwap<T,?> ps = getSwap(session);
 		return (ps == null ? this : ps.getSwapClassMeta(session));
 	}
 
@@ -1482,17 +1482,17 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the {@link PojoSwap} associated with this class that's the best match for the specified session.
+	 * Returns the {@link ObjectSwap} associated with this class that's the best match for the specified session.
 	 *
 	 * @param session
 	 * 	The current bean session.
 	 * 	<br>If multiple swaps are associated with a class, only the first one with a matching media type will
 	 * 	be returned.
 	 * @return
-	 * 	The {@link PojoSwap} associated with this class, or <jk>null</jk> if there are no POJO swaps associated with
+	 * 	The {@link ObjectSwap} associated with this class, or <jk>null</jk> if there are no POJO swaps associated with
 	 * 	this class.
 	 */
-	public PojoSwap<T,?> getSwap(BeanSession session) {
+	public ObjectSwap<T,?> getSwap(BeanSession session) {
 		if (swaps != null) {
 			int matchQuant = 0, matchIndex = -1;
 

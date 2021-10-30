@@ -32,8 +32,8 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -258,7 +258,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			type = object();
 
 		// Swap if necessary
-		PojoSwap swap = type.getSwap(this);
+		ObjectSwap swap = type.getSwap(this);
 		if (swap != null && ! type.isDateOrCalendarOrTemporal()) {
 			value = swap(swap, value);
 			type = swap.getSwapClassMeta(this);

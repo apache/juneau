@@ -29,8 +29,8 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
-import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
@@ -99,7 +99,7 @@ import org.apache.juneau.xml.*;
  * </table>
  *
  * <p>
- * In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
+ * In addition, any class types with {@link ObjectSwap ObjectSwaps} associated with them on the registered
  * bean context can also be passed in.
  *
  * <p>
@@ -648,7 +648,7 @@ public abstract class Parser extends BeanContextable {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.transform.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}

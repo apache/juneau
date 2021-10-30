@@ -29,8 +29,8 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
+import org.apache.juneau.swap.*;
+import org.apache.juneau.swaps.*;
 import org.junit.*;
 
 /**
@@ -218,11 +218,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 	public static class BSwap extends StringSwap<B> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, B o) throws SerializeException {
 			return o.f1;
 		}
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public B unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
 			B b1 = new B();
 			b1.f1 = f;
@@ -249,11 +249,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 	public static class BcSwap extends StringSwap<Bc> {
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public String swap(BeanSession session, Bc o) throws SerializeException {
 			return o.f1;
 		}
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Bc unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
 			Bc b1 = new Bc();
 			b1.f1 = f;

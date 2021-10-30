@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.VarResolverSession;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -341,7 +341,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			sType = aType;
 
 			// Swap if necessary
-			PojoSwap swap = aType.getSwap(this);
+			ObjectSwap swap = aType.getSwap(this);
 			if (swap != null) {
 				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);

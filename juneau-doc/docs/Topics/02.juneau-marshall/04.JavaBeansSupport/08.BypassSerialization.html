@@ -45,7 +45,7 @@
 	
 	<jc>// A swap that produces specialized output for JSON, but default serialization for</jc>
 	<jc>// all other media types.</jc>
-	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
+	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> ObjectSwap&lt;MyBean,Object&gt; {
 		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, MyPojo <jv>object</jv>) <jk>throws</jk> Exception {
 			MediaType <jv>mt</jv> = <jv>session</jv>.getMediaType();
 			<jk>if</jk> (<jv>mt</jv>.hasSubType(<js>"json"</js>))

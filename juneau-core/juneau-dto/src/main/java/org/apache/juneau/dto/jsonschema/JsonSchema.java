@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
@@ -295,14 +295,14 @@ public class JsonSchema {
 	 * <p>
 	 * Serialization method is a no-op.
 	 */
-	public static class JsonTypeOrJsonTypeArraySwap extends PojoSwap<Object,Object> {
+	public static class JsonTypeOrJsonTypeArraySwap extends ObjectSwap<Object,Object> {
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			ClassMeta<?> cm = (
 				o instanceof Collection
@@ -578,14 +578,14 @@ public class JsonSchema {
 	 * <p>
 	 * Serialization method is a no-op.
 	 */
-	public static class JsonSchemaOrSchemaArraySwap extends PojoSwap<Object,Object> {
+	public static class JsonSchemaOrSchemaArraySwap extends ObjectSwap<Object,Object> {
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			ClassMeta<?> cm = (
 				o instanceof Collection
@@ -894,14 +894,14 @@ public class JsonSchema {
 	 * <p>
 	 * Serialization method is a no-op.
 	 */
-	public static class BooleanOrSchemaArraySwap extends PojoSwap<Object,Object> {
+	public static class BooleanOrSchemaArraySwap extends ObjectSwap<Object,Object> {
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			ClassMeta<?> cm = (
 				o instanceof Collection
@@ -1158,14 +1158,14 @@ public class JsonSchema {
 	 * <p>
 	 * Serialization method is a no-op.
 	 */
-	public static class BooleanOrSchemaSwap extends PojoSwap<Object,Object> {
+	public static class BooleanOrSchemaSwap extends ObjectSwap<Object,Object> {
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoSwap */
+		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			ClassMeta<?> cm = (
 				o instanceof Boolean

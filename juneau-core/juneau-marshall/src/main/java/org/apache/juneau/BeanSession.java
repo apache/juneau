@@ -36,7 +36,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link BeanContext}.
@@ -330,19 +330,19 @@ public class BeanSession extends ContextSession {
 	 * 	<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
 	 * 	<tr>
 	 * 		<td>
-	 * 			A class that is the normal type of a registered {@link PojoSwap}.
+	 * 			A class that is the normal type of a registered {@link ObjectSwap}.
 	 * 		</td>
 	 * 		<td>
-	 * 			A value whose class matches the transformed type of that registered {@link PojoSwap}.
+	 * 			A value whose class matches the transformed type of that registered {@link ObjectSwap}.
 	 * 		</td>
 	 * 		<td>&nbsp;</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
-	 * 			A class that is the transformed type of a registered {@link PojoSwap}.
+	 * 			A class that is the transformed type of a registered {@link ObjectSwap}.
 	 * 		</td>
 	 * 		<td>
-	 * 			A value whose class matches the normal type of that registered {@link PojoSwap}.
+	 * 			A value whose class matches the normal type of that registered {@link ObjectSwap}.
 	 * 		</td>
 	 * 		<td>&nbsp;</td>
 	 * 	</tr>
@@ -511,7 +511,7 @@ public class BeanSession extends ContextSession {
 				if (! ((to.isMap() && to.getValueType().isNotObject()) || ((to.isCollection() || to.isOptional()) && to.getElementType().isNotObject())))
 					return (T)value;
 
-			PojoSwap swap = to.getSwap(this);
+			ObjectSwap swap = to.getSwap(this);
 			if (swap != null) {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
@@ -1682,7 +1682,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
-	public final PojoSwap<?,?>[] getSwaps() {
+	public final ObjectSwap<?,?>[] getSwaps() {
 		return ctx.getSwaps();
 	}
 

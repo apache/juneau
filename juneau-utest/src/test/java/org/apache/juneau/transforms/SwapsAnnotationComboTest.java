@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -589,43 +589,43 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	public static class SwapJson extends PojoSwap<Object,Object> {
+	public static class SwapJson extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "JSON";
 		}
 	}
-	public static class SwapXml extends PojoSwap<Object,Object> {
+	public static class SwapXml extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "XML";
 		}
 	}
-	public static class SwapHtml extends PojoSwap<Object,Object> {
+	public static class SwapHtml extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "HTML";
 		}
 	}
-	public static class SwapUon extends PojoSwap<Object,Object> {
+	public static class SwapUon extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "UON";
 		}
 	}
-	public static class SwapUrlEncoding extends PojoSwap<Object,Object> {
+	public static class SwapUrlEncoding extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "URLENCODING";
 		}
 	}
-	public static class SwapMsgPack extends PojoSwap<Object,Object> {
+	public static class SwapMsgPack extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "MSGPACK";
 		}
 	}
-	public static class SwapRdfXml extends PojoSwap<Object,Object> {
+	public static class SwapRdfXml extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "RDFXML";
@@ -645,7 +645,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TestTemplates {}
 
 
-	public static class TemplateSwap extends PojoSwap<Object,Object> {
+	public static class TemplateSwap extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
 			return reader(template);
@@ -735,7 +735,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 
 	public static class TestContextSwap {}
 
-	public static class ContextSwap extends PojoSwap<TestContextSwap,Object> {
+	public static class ContextSwap extends ObjectSwap<TestContextSwap,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwap o, String template) throws Exception {
 			return reader(template);
@@ -748,7 +748,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 
 	public static class TestContextSwaps {}
 
-	public static class ContextSwapJson extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapJson extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -762,7 +762,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			return "JSON";
 		}
 	}
-	public static class ContextSwapXml extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapXml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -776,7 +776,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			return "XML";
 		}
 	}
-	public static class ContextSwapHtml extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapHtml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -790,7 +790,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			return "HTML";
 		}
 	}
-	public static class ContextSwapUon extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapUon extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -804,7 +804,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			return "UON";
 		}
 	}
-	public static class ContextSwapUrlEncoding extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapUrlEncoding extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -818,7 +818,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			return "URLENCODING";
 		}
 	}
-	public static class ContextSwapMsgPack extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapMsgPack extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -832,7 +832,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			return "MSGPACK";
 		}
 	}
-	public static class ContextSwapRdfXml extends PojoSwap<TestContextSwaps,Object> {
+	public static class ContextSwapRdfXml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
@@ -862,7 +862,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		public int f = 1;
 	}
 
-	public static class BeanSwap extends PojoSwap<Object,Object> {
+	public static class BeanSwap extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
 			return reader("SWAPPED");

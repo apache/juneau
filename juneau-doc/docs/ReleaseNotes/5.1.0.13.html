@@ -23,7 +23,7 @@
 <ul class='spaced-list'>
 	<li>{@link oaj.ClassMeta#newInstance()} method can now create new instances of arrays.
 	<li>Arguments passed to {@del Link} are now serialized using {@link oaj.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
-	<li>New date filters:  <c>org.apache.juneau.transforms.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.transforms.Datefilter.SimpleP</c>.
+	<li>New date filters:  <c>org.apache.juneau.swaps.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.swaps.Datefilter.SimpleP</c>.
 	<li>New {@del HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link oaj.html.HtmlDocSerializer} class.  
 		Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 	<li>Fixed bug in {@link oaj.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <c>ClassCastException</c>.  

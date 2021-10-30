@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -2085,8 +2085,8 @@ public abstract class BeanContextable extends Context {
 		 * <p>
 		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSession.Builder#locale(Locale)}.
 		 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
+		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>
@@ -2104,7 +2104,7 @@ public abstract class BeanContextable extends Context {
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.locale(Locale.<jsf>UK</jsf>)
-		 * 		.pojoSwaps(MyBeanSwap.<jk>class</jk>)
+		 * 		.swaps(MyBeanSwap.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Define on session-args instead.</jc>
@@ -2524,13 +2524,13 @@ public abstract class BeanContextable extends Context {
 		 * <p>
 		 * Multiple swaps can be associated with a single class.
 		 * When multiple swaps are applicable to the same class, the media type pattern defined by
-		 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
+		 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 		 *
 		 * <p>
 		 * Values can consist of any of the following types:
 		 * <ul>
-		 * 	<li>Any subclass of {@link PojoSwap}.
-		 * 	<li>Any instance of {@link PojoSwap}.
+		 * 	<li>Any subclass of {@link ObjectSwap}.
+		 * 	<li>Any instance of {@link ObjectSwap}.
 		 * 	<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 	<li>Any array or collection of the objects above.
 		 * </ul>
@@ -2590,7 +2590,7 @@ public abstract class BeanContextable extends Context {
 		 * 	The values to add to this setting.
 		 * 	<br>Values can consist of any of the following types:
 		 * 	<ul>
-		 * 		<li>Any subclass of {@link PojoSwap}.
+		 * 		<li>Any subclass of {@link ObjectSwap}.
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 		<li>Any array or collection of the objects above.
 		 * 	</ul>
@@ -2608,8 +2608,8 @@ public abstract class BeanContextable extends Context {
 		 * <p>
 		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSession.Builder#timeZone(TimeZone)}.
 		 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-		 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
+		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bcode w800'>

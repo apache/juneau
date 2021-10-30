@@ -84,15 +84,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-core-utest</artifactId>
+			<artifactId>juneau-utest-utils</artifactId>
 			<version>${project.version}</version>
-			<type>test-jar</type>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-mock-utest</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
 		</dependency>
 	</dependencies>
 	

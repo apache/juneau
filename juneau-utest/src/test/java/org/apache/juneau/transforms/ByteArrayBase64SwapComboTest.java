@@ -20,6 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.swaps.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

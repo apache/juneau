@@ -15,8 +15,8 @@ package org.apache.juneau.rest.converters;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -66,7 +66,7 @@ public final class Introspectable implements RestConverter {
 			return o;
 		try {
 			BeanSession bs = req.getBeanSession();
-			PojoSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
+			ObjectSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
 			if (swap != null)
 				o = swap.swap(bs, o);
 			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);

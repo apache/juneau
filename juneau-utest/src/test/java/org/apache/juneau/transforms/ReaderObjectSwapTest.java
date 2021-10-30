@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -360,7 +360,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 	@Swap(PojoToSimpleReaderSwap.class)
 	public static class PojoToSimpleReader {}
 
-	public static class PojoToSimpleReaderSwap extends PojoSwap<PojoToSimpleReader,Reader> {
+	public static class PojoToSimpleReaderSwap extends ObjectSwap<PojoToSimpleReader,Reader> {
 		@Override
 		public Reader swap(BeanSession session, PojoToSimpleReader o) throws Exception {
 			return reader("foo");
@@ -375,7 +375,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		}
 	}
 
-	public static class PojoToDynamicReaderSwap extends PojoSwap<PojoToDynamicReader,Object> {
+	public static class PojoToDynamicReaderSwap extends ObjectSwap<PojoToDynamicReader,Object> {
 		@Override
 		public Object swap(BeanSession session, PojoToDynamicReader o) throws Exception {
 			return reader(o.f + "-" + session.getMediaType().getSubTypes().get(0));
@@ -390,7 +390,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		}
 	}
 
-	public static class SometimesSwappedBeanSwap1 extends PojoSwap<SometimesSwappedBean1,Object> {
+	public static class SometimesSwappedBeanSwap1 extends ObjectSwap<SometimesSwappedBean1,Object> {
 		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean1 o) throws Exception {
 			MediaType mt = session.getMediaType();
@@ -408,7 +408,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		}
 	}
 
-	public static class SometimesSwappedBeanSwap2 extends PojoSwap<SometimesSwappedBean2,Object> {
+	public static class SometimesSwappedBeanSwap2 extends ObjectSwap<SometimesSwappedBean2,Object> {
 		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean2 o) throws Exception {
 			MediaType mt = session.getMediaType();

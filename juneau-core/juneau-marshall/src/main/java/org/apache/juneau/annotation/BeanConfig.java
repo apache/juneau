@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Annotation for specifying config properties defined in {@link BeanContext} and {@link BeanTraverseContext}.
@@ -785,15 +785,15 @@ public @interface BeanConfig {
 	 * <p>
 	 * Multiple swaps can be associated with a single class.
 	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
-	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
+	 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
-	 * 	<li class='link'>{@doc PojoSwaps}
-	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
-	 * 	<li class='link'>{@doc OneWayPojoSwaps}
+	 * 	<li class='link'>{@doc Swaps}
+	 * 	<li class='link'>{@doc PerMediaTypeSwaps}
+	 * 	<li class='link'>{@doc OneWaySwaps}
 	 * 	<li class='link'>{@doc SwapAnnotation}
-	 * 	<li class='link'>{@doc AutoPojoSwaps}
+	 * 	<li class='link'>{@doc AutoSwaps}
 	 * 	<li class='link'>{@doc SurrogateClasses}
 	 * </ul>
 	 */
