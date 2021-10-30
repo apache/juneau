@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Dynamically Applied Annotations', created:'8.1.3'} 
+{title:'Dynamically Applied Annotations', created:'8.1.3', updated:'9.0.0'} 
 
 <p>
 	In the section {@doc Transforms}, you were introduced to annotations that can be applied to bean
@@ -26,17 +26,21 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
-	An alternate way of applying these annotations is using the <ja>@XConfig</ja> annotations introduced in section
-	{@doc ConfigurableAnnotations}.  
+	An alternate way of applying these annotations is to attach them to unrelated classes and methods and then
+	tell your serializer or parser where to find them.  
 </p>
 <p class='bpcode w800'>
 	<jc>// Unannotated class.</jc>
 	<jk>public class</jk> Address { ... }
 
-	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, properties=<js>"street,city,state"</js>)
 	<jk>public static class</jk> DummyClass {}
 
-	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
+	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()
+		.applyAnnotations(DummyClass.<jk>class</jk>)
+		.build();
+		
 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>addressBean</jv>);
 </p>
 <p>
@@ -50,11 +54,11 @@
 </p>
 <p class='bpcode w800'>
 	<ja>@RestGet</ja> 
-	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, properties=<js>"street,city,state"</js>)
 	<jk>public</jk> List&lt;Address&gt; getAddresses() {}
 </p>
 <p>
-	Any Juneau annotation that has an <c>on()</c> method can be applied dynamically this way.
+	Any Juneau annotation that has an <c>on()/onClass()</c> method can be applied dynamically this way.
 	These include:
 </p>
 <ul>

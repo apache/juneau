@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Reading Continuous Streams'}
+{title:'Reading Continuous Streams', updated:'9.0.0'}
 
 <p>
 	The following parsers can be configured to read continuous streams of objects from the same input stream:
@@ -25,7 +25,7 @@
 </ul>
 <p>
 	The {@link oaj.json.JsonParser} and {@link oaj.uon.UonParser}
-	classes can read continuous streams by using the {@del oaj.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
+	classes can read continuous streams by using the {@link oaj.parser.Parser.Builder#unbuffered()}
 	setting.
 	This prevents the parsers from using an internal buffer that would read past the end of the currently
 	parsed POJO.
@@ -53,9 +53,9 @@
 	For obvious reasons, do not use the following properties when reading continuous streams:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del oaj.json.JsonParser#JSON_validateEnd}
-	<li class='jf'>{@del oaj.uon.UonParser#UON_validateEnd}
-	<li class='jf'>{@del oaj.parser.Parser#PARSER_autoCloseStreams}
+	<li class='jm'>{@link oaj.json.JsonParser.Builder#validateEnd()}
+	<li class='jm'>{@link oaj.uon.UonParser.Builder#validateEnd()}
+	<li class='jm'>{@link oaj.parser.Parser.Builder#autoCloseStreams()}
 </ul>
 <p>
 	The {@link oaj.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with

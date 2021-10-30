@@ -201,17 +201,17 @@
 			<li><p><a class='doclink' href='#juneau-marshall.Swaps.TemplatedSwaps'>Templated Swaps</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Swaps.SurrogateClasses'>Surrogate Classes</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-marshall.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>created: 8.1.3</span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.BeanDictionaries.BeanSubTypes'>Bean Subtypes</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-marshall.VirtualBeans'>Virtual Beans</a><span class='update'><b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.Recursion'>Non-Tree Models and Recursion Detection</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.VirtualBeans'>Virtual Beans</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.Recursion'>Non-Tree Models and Recursion Detection</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ParsingIntoGenericModels'>Parsing into Generic Models</a><span class='update'>updated: 8.2.0</span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a></p>
-		<li><p><a class='doclink' href='#juneau-marshall.MarshallingUris'>URIs</a></p>
-		<li><p><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a><span class='update'><b><red>review</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.MarshallingUris'>URIs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.FluentAssertions'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JsonDetails'>JSON Details</a></p>
@@ -836,7 +836,7 @@
 
 <h3 class='topic' onclick='toggle(this)'><a href='#Overview.CoreOverview' id='Overview.CoreOverview'>1.1 - Core Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 1.1 - Overview.CoreOverview -->
-<h5 class='toc'>Marshalling APIs</h5>
+<h5 class='topic'>Marshalling APIs</h5>
 <div class='topic'>
 	<p>
 		The <c>juneau-marshall</c> library includes easy-to-use and highly customizable serializers and parsers based around
@@ -912,7 +912,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Marshaller Builders</h5>
+<h5 class='topic'>Marshaller Builders</h5>
 <div class='topic'>
 	<p>
 		Serializers and parsers are builder-based using fluent methods allowing you to quickly create, clone, and modify them
@@ -968,7 +968,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Bean Annotations</h5>
+<h5 class='topic'>Bean Annotations</h5>
 <div class='topic'>
 	<p>
 		Beans and POJO classes, methods, fields, and constructors can also be annotated with a variety of annotations to customize how they are marshalled:
@@ -993,7 +993,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Configuration Annotations</h5>
+<h5 class='topic'>Configuration Annotations</h5>
 <div class='topic'>
 	<p>
 		Serializers and parsers can also be configured using annotations.
@@ -1037,7 +1037,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Simplified JSON Marshalling</h5>
+<h5 class='topic'>Simplified JSON Marshalling</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
@@ -1097,7 +1097,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>UON Marshalling</h5>
+<h5 class='topic'>UON Marshalling</h5>
 <div class='topic'>
 	<p>
 		The Marshalling API also supports UON (URL-Encoded Object Notation).
@@ -1130,7 +1130,7 @@
 		<li class='link'>{@doc UonDetails UON Details} for more information.
 	</ul>
 </div>
-<h5 class='toc'>OpenAPI Marshalling</h5>
+<h5 class='topic'>OpenAPI Marshalling</h5>
 <div class='topic'>
 	<p>
 		The Marshalling API also supports schema-based OpenAPI serialization.
@@ -1169,7 +1169,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>OMap/OList</h5>
+<h5 class='topic'>OMap/OList</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.collections.OMap} and {@link org.apache.juneau.collections.OList} collections classes allow you
@@ -1198,7 +1198,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Serializer and Parser Sets</h5>
+<h5 class='topic'>Serializer and Parser Sets</h5>
 <div class='topic'>
 	<p>
 		<code>SerializerSet</code> and <code>ParserSet</code> classes allow serializers and parsers 
@@ -1235,7 +1235,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>SVL Variables</h5>
+<h5 class='topic'>SVL Variables</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.svl} package defines an API for a language called "Simple Variable Language".
@@ -1261,7 +1261,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Assertions API</h5>
+<h5 class='topic'>Assertions API</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.assertions} package in Juneau is a powerful API for performing fluent style assertions.
@@ -1329,7 +1329,7 @@
 
 <h3 class='topic' onclick='toggle(this)'><a href='#Overview.DtoOverview' id='Overview.DtoOverview'>1.2 - DTO Library Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 1.2 - Overview.DtoOverview -->
-<h5 class='toc'>DTO Libraries</h5>
+<h5 class='topic'>DTO Libraries</h5>
 <div class='topic'>
 	<p>
 		The <c>juneau-dto</c> library contains several predefined POJOs for generating commonly-used document types that
@@ -1337,7 +1337,7 @@
 	</p>
 </div>
 
-<h5 class='toc'>HTML5</h5>
+<h5 class='topic'>HTML5</h5>
 <div class='topic'>
 	<p>
 		The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
@@ -1384,7 +1384,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>ATOM</h5>
+<h5 class='topic'>ATOM</h5>
 <div class='topic'>
 	<p>
 		The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
@@ -1438,7 +1438,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Swagger</h5>
+<h5 class='topic'>Swagger</h5>
 <div class='topic'>
 	<p>
 		The Juneau Swagger DTOs are simply beans with fluent-style setters that allow you to quickly construct 
@@ -1499,7 +1499,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>SwaggerUI</h5>
+<h5 class='topic'>SwaggerUI</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
@@ -1524,7 +1524,7 @@
 
 <h3 class='topic' onclick='toggle(this)'><a href='#Overview.ConfigOverview' id='Overview.ConfigOverview'>1.3 - Config API Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 1.3 - Overview.ConfigOverview -->
-<h5 class='toc'>Config API</h5>
+<h5 class='topic'>Config API</h5>
 <div class='topic'>
 	<p>
 		The <c>juneau-config</c> library contains a powerful API for creating and using INI-style config files.
@@ -1574,7 +1574,7 @@
 
 <h3 class='topic' onclick='toggle(this)'><a href='#Overview.RestOverview' id='Overview.RestOverview'>1.4 - REST Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 1.4 - Overview.RestOverview -->
-<h5 class='toc'>REST Server/Client APIs</h5>
+<h5 class='topic'>REST Server/Client APIs</h5>
 <div class='topic'>
 	<p>
 		The {@doc juneau-rest-server juneau-rest-server} and {@doc juneau-rest-client juneau-rest-client} libraries
@@ -1659,7 +1659,7 @@
 
 <h3 class='topic' onclick='toggle(this)'><a href='#Overview.RestServerOverview' id='Overview.RestServerOverview'>1.5 - REST Server Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 1.5 - Overview.RestServerOverview -->
-<h5 class='toc'>@Rest-Annotated Resources</h5>
+<h5 class='topic'>@Rest-Annotated Resources</h5>
 <div class='topic'>
 	<p>
 		A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.Rest}.
@@ -1716,7 +1716,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>REST Children</h5>
+<h5 class='topic'>REST Children</h5>
 <div class='topic'>
 	<p>
 		Child Resources are REST servlets or objects that are linked to parent resources through the 
@@ -1755,7 +1755,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>REST Group Pages</h5>
+<h5 class='topic'>REST Group Pages</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.BasicRestServletGroup} class provides a default "router" page for 
@@ -1798,7 +1798,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>REST Resource Methods</h5>
+<h5 class='topic'>REST Resource Methods</h5>
 <div class='topic'>
 	<p>
 		The real power behind the REST server API is the ability to define Java methods as REST endpoints.
@@ -1873,7 +1873,7 @@
 	</ul>
 </div>
 	
-<h5 class='toc'>Deploying as a Servlet</h5>
+<h5 class='topic'>Deploying as a Servlet</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.RestServlet} class is the entry point for your REST resources.
@@ -1895,7 +1895,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>Deploying in Spring Boot</h5>
+<h5 class='topic'>Deploying in Spring Boot</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.springboot.SpringRestServlet} class is typically entry point for your REST resources
@@ -1967,7 +1967,7 @@
 
 <h3 class='topic' onclick='toggle(this)'><a href='#Overview.RestClientOverview' id='Overview.RestClientOverview'>1.6 - REST Client Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 1.6 - Overview.RestClientOverview -->
-<h5 class='toc'>REST Client</h5>
+<h5 class='topic'>REST Client</h5>
 <div class='topic'>
 	<p>
 		Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
@@ -1991,7 +1991,7 @@
 	</ul>
 </div>
 
-<h5 class='toc'>REST Testing Framework</h5>
+<h5 class='topic'>REST Testing Framework</h5>
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.mock.MockRestClient} class is used for performing serverless unit testing of {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated
@@ -3818,13 +3818,17 @@
 	Serializing to and from Maps can be accomplished by defining any of the following methods:
 </p>			
 <ul>
-	<li><c><jk>public</jk> Map toMap()</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public</jk> Map toMap()</c> method.
+		<br>Can be any type of map with string keys and object vals. 
 	<li><c><jk>public</jk> OMap toMap()</c> method. 
-	<li><c><jk>public</jk> Map toMap(BeanSession)</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public</jk> Map toMap(BeanSession)</c> method.
+		<br>Can be any type of map with string keys and object vals. 
 	<li><c><jk>public</jk> OMap toMap(BeanSession)</c> method.
-	<li><c><jk>public static</jk> MyPojo fromMap(Map)</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public static</jk> MyPojo fromMap(Map)</c> method.
+		<br>Can be any type of map with string keys and object vals. 
 	<li><c><jk>public static</jk> MyPojo fromMap(OMap)</c> method.
-	<li><c><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</c> method.
+		<br>Can be any type of map with string keys and object vals. 
 	<li><c><jk>public static</jk> MyPojo fromMap(OMap,BeanSession)</c> method.
 </ul>
 <p>
@@ -4026,7 +4030,7 @@
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 	reconstructing during parsing. 
-	However, there are certain kinds of POJOs that we may want to support for serializing, but that are not 
+	However, there are certain kinds of objects that we may want to support for serializing, but that are not 
 	possible to reconstruct during parsing.  
 	For these, we can use one-way object swaps.
 </p>
@@ -4255,7 +4259,7 @@
 	The surrogate class is registered in the same way as a <c>ObjectSwap</c>:
 </p>
 <p class='bpcode w800'>
-	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
+	<jc>// Create a JSON serializer that can serialize our unserializable object.</jc>
 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		.<jsm>create</jsm>()
 		.swaps(MySerializableSurrogate.<jk>class</jk>)
@@ -4274,7 +4278,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.DynamicallyAppliedAnnotations' id='juneau-marshall.DynamicallyAppliedAnnotations'>2.12 - Dynamically Applied Annotations</a><span class='update'>created: 8.1.3</span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.DynamicallyAppliedAnnotations' id='juneau-marshall.DynamicallyAppliedAnnotations'>2.12 - Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.12 - juneau-marshall.DynamicallyAppliedAnnotations -->
 <p>
 	In the section {@doc Transforms}, you were introduced to annotations that can be applied to bean
@@ -4287,17 +4291,21 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
-	An alternate way of applying these annotations is using the <ja>@XConfig</ja> annotations introduced in section
-	{@doc ConfigurableAnnotations}.  
+	An alternate way of applying these annotations is to attach them to unrelated classes and methods and then
+	tell your serializer or parser where to find them.  
 </p>
 <p class='bpcode w800'>
 	<jc>// Unannotated class.</jc>
 	<jk>public class</jk> Address { ... }
 
-	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, properties=<js>"street,city,state"</js>)
 	<jk>public static class</jk> DummyClass {}
 
-	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
+	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()
+		.applyAnnotations(DummyClass.<jk>class</jk>)
+		.build();
+		
 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>addressBean</jv>);
 </p>
 <p>
@@ -4311,11 +4319,11 @@
 </p>
 <p class='bpcode w800'>
 	<ja>@RestGet</ja> 
-	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, properties=<js>"street,city,state"</js>)
 	<jk>public</jk> List&lt;Address&gt; getAddresses() {}
 </p>
 <p>
-	Any Juneau annotation that has an <c>on()</c> method can be applied dynamically this way.
+	Any Juneau annotation that has an <c>on()/onClass()</c> method can be applied dynamically this way.
 	These include:
 </p>
 <ul>
@@ -4440,7 +4448,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BeanDictionaries' id='juneau-marshall.BeanDictionaries'>2.13 - Bean Names and Dictionaries</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BeanDictionaries' id='juneau-marshall.BeanDictionaries'>2.13 - Bean Names and Dictionaries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.13 - juneau-marshall.BeanDictionaries -->
 <p>
 	While parsing into beans, Juneau attempts to determine the class types of bean properties through 
@@ -4517,8 +4525,6 @@
 		- On individual bean properties through the annotation.
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary() Bean(dictionary)} 
 		- On all properties on a bean and all subclasses.
-	<li class='jf'>{@del org.apache.juneau.BeanContext#BEAN_beanDictionary} 
-		- Configuration property on serializers and parsers.
 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 		- Builder method on serializers and parsers.
 </ul>
@@ -4538,13 +4544,6 @@
 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 		.build();
 	
-	<jc>// Same, but use property.</jc>
-	ReaderParser <jv>parser</jv> = JsonParser
-		.<jsm>create</jsm>()
-		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-		.build();
-
 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
 	ReaderParser <jv>parser</jv> = HtmlParser
 		.<jsm>create</jsm>()
@@ -4557,8 +4556,6 @@
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
 		- On individual beans through the annotation.
-	<li class='jf'>{@del org.apache.juneau.BeanContext#BEAN_typePropertyName} 
-		- Configuration property on serializers and parsers.
 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)} 
 		- Builder method on serializers and parsers.
 </ul>
@@ -4592,8 +4589,8 @@
 <div class='info'>
 	Serialized type names are DISABLED by default.
 	They must be enabled on the serializer using the 
-	{@del org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes} 
-	configuration property.
+	{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} 
+	setting.
 </div>
 
 <!-- ==================================================================================================== -->
@@ -4659,7 +4656,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.VirtualBeans' id='juneau-marshall.VirtualBeans'>2.14 - Virtual Beans</a><span class='update'><b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.VirtualBeans' id='juneau-marshall.VirtualBeans'>2.14 - Virtual Beans</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.14 - juneau-marshall.VirtualBeans -->
 <p>
 	The {@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()} setting (enabled by default) allows
@@ -4698,12 +4695,12 @@
 	Getter and setter values can be any {@doc PojoCategories parsable} values, even other virtual beans.
 </p>
 <p>
-	Under-the-covers, a virtual bean is simply a proxy interface on top of an existing <c>BeanMap</c>
+	Under-the-covers, a virtual bean is simply a proxy interface on top of an existing {@link org.apache.juneau.BeanMap}
 	instance.  From a programmatic point-of-view, they're indistinguishable from real beans, and can be 
 	manipulated and serialized like any other bean.
 </p>	
 <p>
-	Virtual beans can also be created programmatically using the <c>BeanContext</c> class:
+	Virtual beans can also be created programmatically using the {@link org.apache.juneau.BeanContext} class:
 </p>
 <p class='bpcode w800'>
 	Address <jv>address</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession().newBean(Address.<jk>class</jk>);
@@ -4712,18 +4709,18 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Recursion' id='juneau-marshall.Recursion'>2.15 - Non-Tree Models and Recursion Detection</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Recursion' id='juneau-marshall.Recursion'>2.15 - Non-Tree Models and Recursion Detection</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.15 - juneau-marshall.Recursion -->
 <p>
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
 	It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
 	If you try to serialize models with loops, you will usually cause a <c>StackOverflowError</c> to 
-	be thrown (if {@del org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
+	be thrown (if {@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)} is not reached 
 	first).
 </p>
 <p>
 	If you still want to use the Juneau serializers on such models, Juneau provides the 
-	{@del org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
+	{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()} setting.
 	It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 	serialization when a duplicate is encountered.
 </p>
@@ -4748,7 +4745,11 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.copy().detectRecursions(<jk>true</jk>).build();
+	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer
+		.<jsf>DEFAULT_READABLE</jsf>
+		.copy()
+		.detectRecursions()
+		.build();
 
 	<jc>// Create a recursive loop.</jc>
 	A <jv>a</jv> = <jk>new</jk> A();
@@ -4896,7 +4897,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ReadingContinuousStreams' id='juneau-marshall.ReadingContinuousStreams'>2.17 - Reading Continuous Streams</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ReadingContinuousStreams' id='juneau-marshall.ReadingContinuousStreams'>2.17 - Reading Continuous Streams</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.17 - juneau-marshall.ReadingContinuousStreams -->
 <p>
 	The following parsers can be configured to read continuous streams of objects from the same input stream:
@@ -4908,7 +4909,7 @@
 </ul>
 <p>
 	The {@link org.apache.juneau.json.JsonParser} and {@link org.apache.juneau.uon.UonParser}
-	classes can read continuous streams by using the {@del org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
+	classes can read continuous streams by using the {@link org.apache.juneau.parser.Parser.Builder#unbuffered()}
 	setting.
 	This prevents the parsers from using an internal buffer that would read past the end of the currently
 	parsed POJO.
@@ -4936,9 +4937,9 @@
 	For obvious reasons, do not use the following properties when reading continuous streams:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.json.JsonParser#JSON_validateEnd}
-	<li class='jf'>{@del org.apache.juneau.uon.UonParser#UON_validateEnd}
-	<li class='jf'>{@del org.apache.juneau.parser.Parser#PARSER_autoCloseStreams}
+	<li class='jm'>{@link org.apache.juneau.json.JsonParser.Builder#validateEnd()}
+	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
+	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#autoCloseStreams()}
 </ul>
 <p>
 	The {@link org.apache.juneau.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with
@@ -4948,26 +4949,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MarshallingUris' id='juneau-marshall.MarshallingUris'>2.18 - URIs</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MarshallingUris' id='juneau-marshall.MarshallingUris'>2.18 - URIs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.18 - juneau-marshall.MarshallingUris -->
 <p>
 	Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
 </p>
-<p>
-	The classes and settings that control the behavior are:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.UriResolver} 
-	<li class='jc'>{@link org.apache.juneau.UriContext}
-	<li class='jc'>{@link org.apache.juneau.UriRelativity}
-	<li class='jc'>{@link org.apache.juneau.UriResolution}
-	<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
-	<ul>
-		<li class='jf'>{@del org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
-		<li class='jf'>{@del org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
-		<li class='jf'>{@del org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution}
-	</ul> 
-</ul>
 <p>
 	The following example shows a bean containing URIs of various forms and how they end up serialized. 
 </p>
@@ -4975,55 +4961,62 @@
 	<jc>// Our bean with properties containing various kinds of URIs.</jc>
 	<jk>public class</jk> TestURIs {
 		<jk>public</jk> URI
-			<jf>f1a</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/f1a"</js>),
-			<jf>f1b</jf> = URI.<jsm>create</jsm>(<js>"/f1b"</js>),
-			<jf>f1c</jf> = URI.<jsm>create</jsm>(<js>"/f1c/x/y"</js>),
-			<jf>f1d</jf> = URI.<jsm>create</jsm>(<js>"f1d"</js>),
-			<jf>f1e</jf> = URI.<jsm>create</jsm>(<js>"f1e/x/y"</js>),
-			<jf>f1f</jf> = URI.<jsm>create</jsm>(<js>""</js>),
-			<jf>f2a</jf> = URI.<jsm>create</jsm>(<js>"context:/f2a/x"</js>),
-			<jf>f2b</jf> = URI.<jsm>create</jsm>(<js>"context:/f2b"</js>),
-			<jf>f2c</jf> = URI.<jsm>create</jsm>(<js>"context:/"</js>),
-			<jf>f2d</jf> = URI.<jsm>create</jsm>(<js>"context:/.."</js>),
-			<jf>f3a</jf> = URI.<jsm>create</jsm>(<js>"servlet:/f3a/x"</js>),
-			<jf>f3b</jf> = URI.<jsm>create</jsm>(<js>"servlet:/f3b"</js>),
-			<jf>f3c</jf> = URI.<jsm>create</jsm>(<js>"servlet:/"</js>),
-			<jf>f3d</jf> = URI.<jsm>create</jsm>(<js>"servlet:/.."</js>),
-			<jf>f4a</jf> = URI.<jsm>create</jsm>(<js>"request:/f4a/x"</js>),
-			<jf>f4b</jf> = URI.<jsm>create</jsm>(<js>"request:/f4b"</js>),
-			<jf>f4c</jf> = URI.<jsm>create</jsm>(<js>"request:/"</js>),
-			<jf>f4d</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>);;
+			<jf>a</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/a"</js>),
+			<jf>b</jf> = URI.<jsm>create</jsm>(<js>"/b"</js>),
+			<jf>c</jf> = URI.<jsm>create</jsm>(<js>"/c/x/y"</js>),
+			<jf>d</jf> = URI.<jsm>create</jsm>(<js>"d"</js>),
+			<jf>e</jf> = URI.<jsm>create</jsm>(<js>"e/x/y"</js>),
+			<jf>f</jf> = URI.<jsm>create</jsm>(<js>""</js>),
+			<jf>g</jf> = URI.<jsm>create</jsm>(<js>"context:/g/x"</js>),
+			<jf>h</jf> = URI.<jsm>create</jsm>(<js>"context:/h"</js>),
+			<jf>i</jf> = URI.<jsm>create</jsm>(<js>"context:/"</js>),
+			<jf>j</jf> = URI.<jsm>create</jsm>(<js>"context:/.."</js>),
+			<jf>k</jf> = URI.<jsm>create</jsm>(<js>"servlet:/k/x"</js>),
+			<jf>l</jf> = URI.<jsm>create</jsm>(<js>"servlet:/l"</js>),
+			<jf>m</jf> = URI.<jsm>create</jsm>(<js>"servlet:/"</js>),
+			<jf>n</jf> = URI.<jsm>create</jsm>(<js>"servlet:/.."</js>),
+			<jf>o</jf> = URI.<jsm>create</jsm>(<js>"request:/o/x"</js>),
+			<jf>p</jf> = URI.<jsm>create</jsm>(<js>"request:/p"</js>),
+			<jf>q</jf> = URI.<jsm>create</jsm>(<js>"request:/"</js>),
+			<jf>r</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>);;
 	}	
 	
 	<jc>// Create a serializer.</jc>
 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		<jsm>create</jsm>()
 		.simple()
-		.uriContext(<js>"{authority:'http://foo.com:123',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/myPath'}"</js>)
+		.uriContext(
+			UriContext.of(
+				<js>"http://foo.com:123"</js>,  <jc>// Authority</jc>
+				<js>"/myContext"</js>,  <jc>// Context root</jc>
+				<js>"/myServlet"</js>,  <jc>// Servlet path</jc>
+				<js>"/myPath"</js>  <jc>// Path info</jc>
+			)
+		)
 		.uriResolution(<jsf>ABSOLUTE</jsf>)
 		.uriRelativity(<jsf>RESOURCE</jsf>)
 		.build();
 		
 	<jc>// Produces:</jc>
 	<jc>// {</jc>
-	<jc>//	f1a:'http://www.apache.org/f1a',</jc>
-	<jc>//	f1b:'http://foo.com:123/f1b',</jc>
-	<jc>//	f1c:'http://foo.com:123/f1c/x/y',</jc>
-	<jc>//	f1d:'http://foo.com:123/myContext/myServlet/f1d',</jc>
-	<jc>//	f1e:'http://foo.com:123/myContext/myServlet/f1e/x/y',</jc>
-	<jc>//	f1f:'http://foo.com:123/myContext/myServlet',</jc>
-	<jc>//	f2a:'http://foo.com:123/myContext/f2a/x',</jc>
-	<jc>//	f2b:'http://foo.com:123/myContext/f2b',</jc>
-	<jc>//	f2c:'http://foo.com:123/myContext',</jc>
-	<jc>//	f2d:'http://foo.com:123'</jc>
-	<jc>//	f3a:'http://foo.com:123/myContext/myServlet/f3a/x',</jc>
-	<jc>//	f3b:'http://foo.com:123/myContext/myServlet/f3b',</jc>
-	<jc>//	f3c:'http://foo.com:123/myContext/myServlet',</jc>
-	<jc>//	f3d:'http://foo.com:123/myContext',</jc>
-	<jc>//	f4a:'http://foo.com:123/myContext/myServlet/myPath/f4a/x',</jc>
-	<jc>//	f4b:'http://foo.com:123/myContext/myServlet/myPath/f4b',</jc>
-	<jc>//	f4c:'http://foo.com:123/myContext/myServlet/myPath',</jc>
-	<jc>//	f4d:'http://foo.com:123/myContext/myServlet'</jc>
+	<jc>//	a:'http://www.apache.org/a',</jc>
+	<jc>//	b:'http://foo.com:123/b',</jc>
+	<jc>//	c:'http://foo.com:123/c/x/y',</jc>
+	<jc>//	d:'http://foo.com:123/myContext/myServlet/d',</jc>
+	<jc>//	e:'http://foo.com:123/myContext/myServlet/e/x/y',</jc>
+	<jc>//	f:'http://foo.com:123/myContext/myServlet',</jc>
+	<jc>//	g:'http://foo.com:123/myContext/g/x',</jc>
+	<jc>//	h:'http://foo.com:123/myContext/h',</jc>
+	<jc>//	i:'http://foo.com:123/myContext',</jc>
+	<jc>//	j:'http://foo.com:123'</jc>
+	<jc>//	k:'http://foo.com:123/myContext/myServlet/k/x',</jc>
+	<jc>//	l:'http://foo.com:123/myContext/myServlet/l',</jc>
+	<jc>//	m:'http://foo.com:123/myContext/myServlet',</jc>
+	<jc>//	n:'http://foo.com:123/myContext',</jc>
+	<jc>//	o:'http://foo.com:123/myContext/myServlet/myPath/o/x',</jc>
+	<jc>//	p:'http://foo.com:123/myContext/myServlet/myPath/p',</jc>
+	<jc>//	q:'http://foo.com:123/myContext/myServlet/myPath',</jc>
+	<jc>//	r:'http://foo.com:123/myContext/myServlet'</jc>
 	<jc>// }</jc>
 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> TestURIs());
 </p>
@@ -5031,9 +5024,9 @@
 	URI resolution is controlled by the following settings:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
+	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriContext(UriContext)}
 		<br>Setting that defines the URI contextual information used to resolve relative URIs.
-	<li class='jf'>{@del org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
+	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
 		<br>Setting that defines how relative URIs should be interpreted.
 		<br>Possible values:
 		<ul>
@@ -5044,7 +5037,7 @@
 				<br>Relative URIs should be considered relative to the request URI.
 				<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
 		</ul>
-	<li class='jf'>{@del org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution}
+	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
 		<br>Setting that defines the final format of serialized URIs.
 		<br>Possible values:
 		<ul>
@@ -5091,7 +5084,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JacksonComparison' id='juneau-marshall.JacksonComparison'>2.19 - Comparison with Jackson</a><span class='update'><b><red>review</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JacksonComparison' id='juneau-marshall.JacksonComparison'>2.19 - Comparison with Jackson</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.19 - juneau-marshall.JacksonComparison -->
 <p>
 	Juneau was developed independently from Jackson, but shares many of the same features and capabilities.
@@ -5142,9 +5135,8 @@
 		<td><c><ja>@JsonAutoDetect</ja>(fieldVisibility=...)</c></td>
 		<td>
 			No equivalent annotation, but can be controlled via: 
-			<br>{@del org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
-			<br>{@del org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
-			<br>Future annotation support planned.
+			<br>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)}
+			<br>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility)}
 		</td>
 	</tr>
 	<tr>
@@ -5160,7 +5152,6 @@
 		<td><ja>@JacksonInject</ja></td>
 		<td>
 			No equivalent.
-			<br>Future support planned.
 		</td>
 			
 	</tr>
@@ -5180,7 +5171,6 @@
 			No equivalent annotation, but can be controlled via various settings:
 			<br>{@link org.apache.juneau.BeanContext}
 			<br>{@link org.apache.juneau.serializer.Serializer}
-			<br>Future annotation support planned.
 		</td>
 	</tr>
 	<tr>

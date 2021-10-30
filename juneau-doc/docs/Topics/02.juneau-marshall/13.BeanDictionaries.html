@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Bean Names and Dictionaries'}
+{title:'Bean Names and Dictionaries', updated:'9.0.0'}
 
 <p>
 	While parsing into beans, Juneau attempts to determine the class types of bean properties through 
@@ -90,8 +90,6 @@
 		- On individual bean properties through the annotation.
 	<li class='ja'>{@link oaj.annotation.Bean#dictionary() Bean(dictionary)} 
 		- On all properties on a bean and all subclasses.
-	<li class='jf'>{@del oaj.BeanContext#BEAN_beanDictionary} 
-		- Configuration property on serializers and parsers.
 	<li class='jm'>{@link oaj.BeanContext.Builder#beanDictionary(Class...)}
 		- Builder method on serializers and parsers.
 </ul>
@@ -111,13 +109,6 @@
 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 		.build();
 	
-	<jc>// Same, but use property.</jc>
-	ReaderParser <jv>parser</jv> = JsonParser
-		.<jsm>create</jsm>()
-		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-		.build();
-
 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
 	ReaderParser <jv>parser</jv> = HtmlParser
 		.<jsm>create</jsm>()
@@ -130,8 +121,6 @@
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
 		- On individual beans through the annotation.
-	<li class='jf'>{@del oaj.BeanContext#BEAN_typePropertyName} 
-		- Configuration property on serializers and parsers.
 	<li class='jm'>{@link oaj.BeanContext.Builder#typePropertyName(String)} 
 		- Builder method on serializers and parsers.
 </ul>
@@ -165,6 +154,6 @@
 <div class='info'>
 	Serialized type names are DISABLED by default.
 	They must be enabled on the serializer using the 
-	{@del oaj.serializer.Serializer#SERIALIZER_addBeanTypes} 
-	configuration property.
+	{@link oaj.serializer.Serializer.Builder#addBeanTypes()} 
+	setting.
 </div>

@@ -13,18 +13,18 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Non-Tree Models and Recursion Detection'}
+{title:'Non-Tree Models and Recursion Detection', updated:'9.0.0'}
 
 <p>
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
 	It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
 	If you try to serialize models with loops, you will usually cause a <c>StackOverflowError</c> to 
-	be thrown (if {@del oaj.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
+	be thrown (if {@link oaj.BeanTraverseContext.Builder#maxDepth(int)} is not reached 
 	first).
 </p>
 <p>
 	If you still want to use the Juneau serializers on such models, Juneau provides the 
-	{@del oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
+	{@link oaj.BeanTraverseContext.Builder#detectRecursions()} setting.
 	It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 	serialization when a duplicate is encountered.
 </p>
@@ -49,7 +49,11 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.copy().detectRecursions(<jk>true</jk>).build();
+	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer
+		.<jsf>DEFAULT_READABLE</jsf>
+		.copy()
+		.detectRecursions()
+		.build();
 
 	<jc>// Create a recursive loop.</jc>
 	A <jv>a</jv> = <jk>new</jk> A();
