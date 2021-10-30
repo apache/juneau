@@ -21,12 +21,12 @@
 <p>	
 	The {@link oaj.swap.ObjectSwap#forMediaTypes()} method can be overridden to 
 	provide a set of media types that the swap is invoked on.
-	It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
+	It's also possible to define multiple swaps against the same object as long as they're differentiated 
 	by media type.
 	When multiple swaps are defined, the best-match media type is used.
 </p>
 <p>
-	In the following example, we define 3 swaps against the same POJO.  
+	In the following example, we define 3 swaps against the same object.  
 	One for JSON, one for XML, and one for all other types.
 </p>
 <p class='bpcode w800'>
@@ -97,7 +97,9 @@
 	In later sections we describe how annotations can be used to shorten this syntax:
 </p>
 <p class='bpcode w800'>
-	<ja>@Swaps</ja>({MyJsonSwap.<jk>class</jk>,MyXmlSwap.<jk>class</jk>,MyOtherSwap.<jk>class</jk>})
+	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
 	<jk>public static class</jk> MyPojo {}
 
 	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/json"</js>)

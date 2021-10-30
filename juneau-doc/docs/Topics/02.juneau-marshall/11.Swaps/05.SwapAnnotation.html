@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Swap Annotation', updated:'8.0.0', flags:'todo'} 
+{title:'@Swap Annotation', updated:'8.0.0,9.0.0'} 
 
 <p>
 	{@link oaj.annotation.Swap @Swap} can be used to associate a swap class using an 
@@ -37,16 +37,12 @@
 	}
 </p>
 <p>
-	Multiple swaps can be associated with a POJO by using the {@del oaj.annotation.Swaps @Swaps} annotation:
+	Multiple swaps can be associated with a class using multiple {@link oaj.annotation.Swap @Swap} annotations:
 </p>
 <p class='bpcode w800'>
-	<ja>@Swaps</ja>(
-		{
-			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
-		}
-	)
+	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
 	<jk>public class</jk> MyPojo {}
 </p>
 <p>
@@ -74,7 +70,7 @@
 		<jk>private</jk> MyPojo <jf>myPojo</jf>;
 	
 		<jc>// Swap applied to bean property.</jc>	
-		<ja>@Beanp</ja>(swap=MyObjectSwap.<jk>class</jk>)
+		<ja>@Beanp</ja>(swap=MyPojoSwap.<jk>class</jk>)
 		<jk>public</jk> MyPojo getMyPojo() {
 			<jk>return</jk> <jf>myPojo</jf>;
 		}
@@ -89,7 +85,7 @@
 <p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 
-		<ja>@Beanp</ja>(swap=MyObjectSwap.<jk>class</jk>)
+		<ja>@Beanp</ja>(swap=MyPojoSwap.<jk>class</jk>)
 		<jk>private</jk> MyPojo <jf>myPojo</jf>;
 	
 		<jk>public</jk> MyPojo getMyPojo() {

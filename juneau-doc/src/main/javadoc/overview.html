@@ -193,11 +193,11 @@
 		<li><p><a class='doclink' href='#juneau-marshall.SerializerSetsParserSets'>SerializerSets and ParserSets</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Swaps'>Swaps</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.Swaps.DefaultPojoSwaps'>Default PojoSwaps</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Swaps.AutoPojoSwaps'>Auto-detected POJO swaps</a><span class='update'>created: 8.1.0</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Swaps.PerMediaTypePojoSwaps'>Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Swaps.OneWayPojoSwaps'>One-way Swaps</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Swaps.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.DefaultSwaps'>Default Swaps</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.AutoSwaps'>Auto-detected swaps</a><span class='update'>created: 8.1.0</span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.PerMediaTypeSwaps'>Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.OneWaySwaps'>One-way Swaps</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Swaps.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Swaps.TemplatedSwaps'>Templated Swaps</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Swaps.SurrogateClasses'>Surrogate Classes</a></p>
 		</ol>
@@ -943,7 +943,7 @@
 		For other objects, "transforms" allow you to perform various mutations on them before serialization and after parsing.
 	</p>
 	<p> 
-		{@doc PojoSwaps POJO swaps} allow you to replace non-serializable POJOs with serializable equivalents.
+		{@doc ObjectSwaps Object swaps} allow you to replace non-serializable objects with serializable equivalents.
 		The {@link org.apache.juneau.swaps} package contains a variety of predefined swaps.
 	</p>
 	<p class='bcode w800'>
@@ -3157,7 +3157,7 @@
 	
 	<jc>// A swap that produces specialized output for JSON, but default serialization for</jc>
 	<jc>// all other media types.</jc>
-	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
+	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> ObjectSwap&lt;MyBean,Object&gt; {
 		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, MyPojo <jv>object</jv>) <jk>throws</jk> Exception {
 			MediaType <jv>mt</jv> = <jv>session</jv>.getMediaType();
 			<jk>if</jk> (<jv>mt</jv>.hasSubType(<js>"json"</js>))
@@ -3640,26 +3640,26 @@
 	non-serializable ones during serialization, and vis-versa during parsing.
 </p>
 <p>
-	Some examples of non-serializable POJOs are <c>File</c>, <c>Reader</c>, 
+	Some examples of non-serializable objects are <c>File</c>, <c>Reader</c>, 
 	<c>Iterable</c>, etc...
 	These are classes that aren't beans and cannot be represented as simple maps, collections, or primitives.
 </p>
 <p>
-	In the following example, we introduce a <c>PojoSwap</c> that will swap in a bean of a particular type
+	In the following example, we introduce a <c>ObjectSwap</c> that will swap in a bean of a particular type
 	with a map containing customized key-value pairs:
 </p>
 <p class='bpcode w800'>
 	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
-	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,OMap&gt; {
+	<jk>public class</jk> MyBeanSwap <jk>extends</jk> ObjectSwap&lt;MyBean,OMap&gt; {
 		
 		<jc>// Converts a bean to a generic map.</jc>
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 		<jk>public</jk> OMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) {
 			<jk>return</jk> OMap.<jsm>of</jsm>(<js>"foo"</js>, <jv>bean</jv>.getBar());
 		}
 		
 		<jc>// Converts the generic map back into a bean.</jc>
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, OMap <jv>omap</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
 			MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
 			<jv>bean</jv>.setBar(<jv>omap</jv>.getString(<js>"foo"</js>));
@@ -3680,7 +3680,7 @@
 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 </p>
 <p>
-	Another example of a <c>PojoSwap</c> is one that converts <c><jk>byte</jk>[]</c> arrays to
+	Another example of a <c>ObjectSwap</c> is one that converts <c><jk>byte</jk>[]</c> arrays to
 	BASE64-encoded strings:
 </p>
 <p class='bpcode w800'>
@@ -3717,20 +3717,20 @@
 	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
 	
 	<jk>byte</jk>[] <jv>bytes</jv> = {1,2,3};
-	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes</jv>);		<jc>// Produces "'AQID'"</jc>
-	<jv>bytes</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[].<jk>class</jk>);		<jc>// Reproduces {1,2,3}</jc>
+	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes</jv>);      <jc>// Produces "'AQID'"</jc>
+	<jv>bytes</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[].<jk>class</jk>);       <jc>// Reproduces {1,2,3}</jc>
 	
 	<jk>byte</jk>[][] <jv>bytes2d</jv> = {{1,2,3},{4,5,6},<jk>null</jk>};
-	<jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes2d</jv>);		<jc>// Produces "['AQID','BAUG',null]"</jc>
-	<jv>bytes2d</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[][].<jk>class</jk>);		<jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
+	<jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes2d</jv>);           <jc>// Produces "['AQID','BAUG',null]"</jc>
+	<jv>bytes2d</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[][].<jk>class</jk>);   <jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
 </p>
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.DefaultPojoSwaps' id='juneau-marshall.Swaps.DefaultPojoSwaps'>2.11.1 - Default PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.11.1 - juneau-marshall.Swaps.DefaultPojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.DefaultSwaps' id='juneau-marshall.Swaps.DefaultSwaps'>2.11.1 - Default Swaps</a></h4>
+<div class='topic'><!-- START: 2.11.1 - juneau-marshall.Swaps.DefaultSwaps -->
 <p>
-	By default, all serializers and parsers have built in <c>PojoSwaps</c> defined for the following common data types:
+	By default, all serializers and parsers have built in <c>ObjectSwaps</c> defined for the following common data types:
 </p>
 <ul class='javatree'>
 	<li class='jc'>{@link java.util.Enumeration}
@@ -3754,92 +3754,17 @@
 	<li class='jc'>{@link java.time.ZoneId}
 </ul>
 <p>
-	Various other swaps are provided in the <c>org.apache.juneau.swaps</c> package:
+	Various other swaps are provided in the {@link org.apache.juneau.transforms} package.
 </p>
-<ul class='javatree'>
-	<li class='jp'><jk>org.apache.juneau.swaps</jk>
-		<ul>
-			<li class='jac'>{@link org.apache.juneau.swaps.ByteArraySwap}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.swaps.ByteArraySwap.Base64}
-				<li class='jc'>{@link org.apache.juneau.swaps.ByteArraySwap.Hex}
-				<li class='jc'>{@link org.apache.juneau.swaps.ByteArraySwap.SpacedHex}
-			</ul>
-			<li class='jac'>{@link org.apache.juneau.swaps.InputStreamSwap}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.swaps.InputStreamSwap.Base64}
-				<li class='jc'>{@link org.apache.juneau.swaps.InputStreamSwap.Hex}
-				<li class='jc'>{@link org.apache.juneau.swaps.InputStreamSwap.SpacedHex}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.swaps.ReaderSwap}
-			<li class='jac'>{@link org.apache.juneau.swaps.TemporalCalendarSwap}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.BasicIsoDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoInstant}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoLocalDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoLocalDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoLocalTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOffsetDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOffsetDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOffsetTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoOrdinalDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoWeekDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.IsoZonedDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap.Rfc1123DateTime}
-			</ul>
-			<li class='jac'>{@link org.apache.juneau.swaps.TemporalDateSwap}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.BasicIsoDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoInstant}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOffsetDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOffsetDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOffsetTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoOrdinalDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoWeekDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.IsoZonedDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap.Rfc1123DateTime}
-			</ul>
-			<li class='jac'>{@link org.apache.juneau.swaps.TemporalSwap}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.BasicIsoDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoInstant}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoLocalDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoLocalDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoLocalTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOffsetDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOffsetDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOffsetTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoOrdinalDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoWeekDate}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoYear}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoYearMonth}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.IsoZonedDateTime}
-				<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap.Rfc1123DateTime}
-			</ul>
-		</ul>
-	</li>
-</ul>
-</div><!-- END: 2.11.1 - juneau-marshall.Swaps.DefaultPojoSwaps -->
+</div><!-- END: 2.11.1 - juneau-marshall.Swaps.DefaultSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.AutoPojoSwaps' id='juneau-marshall.Swaps.AutoPojoSwaps'>2.11.2 - Auto-detected POJO swaps</a><span class='update'>created: 8.1.0</span></h4>
-<div class='topic'><!-- START: 2.11.2 - juneau-marshall.Swaps.AutoPojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.AutoSwaps' id='juneau-marshall.Swaps.AutoSwaps'>2.11.2 - Auto-detected swaps</a><span class='update'>created: 8.1.0</span></h4>
+<div class='topic'><!-- START: 2.11.2 - juneau-marshall.Swaps.AutoSwaps -->
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
-	This can often be simpler than using <c>PojoSwaps</c>.
+	This can often be simpler than using <c>ObjectSwaps</c>.
 </p>
 <p>
 	Objects serialized as <c>Strings</c> can be parsed back into their original objects by 
@@ -3990,59 +3915,59 @@
 		}
 	}
 </p>
-</div><!-- END: 2.11.2 - juneau-marshall.Swaps.AutoPojoSwaps -->
+</div><!-- END: 2.11.2 - juneau-marshall.Swaps.AutoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.PerMediaTypePojoSwaps' id='juneau-marshall.Swaps.PerMediaTypePojoSwaps'>2.11.3 - Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></h4>
-<div class='topic'><!-- START: 2.11.3 - juneau-marshall.Swaps.PerMediaTypePojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.PerMediaTypeSwaps' id='juneau-marshall.Swaps.PerMediaTypeSwaps'>2.11.3 - Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></h4>
+<div class='topic'><!-- START: 2.11.3 - juneau-marshall.Swaps.PerMediaTypeSwaps -->
 <p>
 	Swaps can also be defined per-media-type.		
 </p>
 <p>	
 	The {@link org.apache.juneau.swap.ObjectSwap#forMediaTypes()} method can be overridden to 
 	provide a set of media types that the swap is invoked on.
-	It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
+	It's also possible to define multiple swaps against the same object as long as they're differentiated 
 	by media type.
 	When multiple swaps are defined, the best-match media type is used.
 </p>
 <p>
-	In the following example, we define 3 swaps against the same POJO.  
+	In the following example, we define 3 swaps against the same object.  
 	One for JSON, one for XML, and one for all other types.
 </p>
 <p class='bpcode w800'>
-	<jk>public class</jk> PojoSwapTest {
+	<jk>public class</jk> ObjectSwapTest {
 
 		<jk>public static class</jk> MyPojo {}
 
 		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
 			}
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 			<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
 				<jk>return</jk> <js>"It's JSON!"</js>;
 			}
 		}
 
 		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
 			}
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 			<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
 				<jk>return</jk> <js>"It's XML!"</js>;
 			}
 		}
 
 		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
 			}
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 			<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
 				<jk>return</jk> <js>"It's something else!"</js>;
 			}
@@ -4078,24 +4003,26 @@
 	In later sections we describe how annotations can be used to shorten this syntax:
 </p>
 <p class='bpcode w800'>
-	<ja>@Swaps</ja>({MyJsonSwap.<jk>class</jk>,MyXmlSwap.<jk>class</jk>,MyOtherSwap.<jk>class</jk>})
+	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
 	<jk>public static class</jk> MyPojo {}
 
 	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/json"</js>)
-	<jk>public static class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
+	<jk>public static class</jk> MyJsonSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {...}
 
 	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/xml"</js>)
-	<jk>public static class</jk> MyXmlSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
+	<jk>public static class</jk> MyXmlSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {...}
 
 	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/*"</js>)
-	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
+	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {...}
 </p>
-</div><!-- END: 2.11.3 - juneau-marshall.Swaps.PerMediaTypePojoSwaps -->
+</div><!-- END: 2.11.3 - juneau-marshall.Swaps.PerMediaTypeSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.OneWayPojoSwaps' id='juneau-marshall.Swaps.OneWayPojoSwaps'>2.11.4 - One-way Swaps</a></h4>
-<div class='topic'><!-- START: 2.11.4 - juneau-marshall.Swaps.OneWayPojoSwaps -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.OneWaySwaps' id='juneau-marshall.Swaps.OneWaySwaps'>2.11.4 - One-way Swaps</a></h4>
+<div class='topic'><!-- START: 2.11.4 - juneau-marshall.Swaps.OneWaySwaps -->
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 	reconstructing during parsing. 
@@ -4113,8 +4040,8 @@
 	reconstruct an {@code Iterator} during parsing. 
 </p>
 <p class='bpcode w800'>
-	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+	<jk>public class</jk> IteratorSwap <jk>extends</jk> ObjectSwap&lt;Iterator,List&gt; {
+		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 		<jk>public</jk> List swap(Iterator <jv>iterator</jv>) {
 			List <jv>list</jv> = <jk>new</jk> LinkedList();
 			<jk>while</jk> (<jv>iterator</jv>.hasNext())
@@ -4142,11 +4069,11 @@
 	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(IteratorSwap.<jk>class</jk>).build();
 	<jv>iterator</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 </p>
-</div><!-- END: 2.11.4 - juneau-marshall.Swaps.OneWayPojoSwaps -->
+</div><!-- END: 2.11.4 - juneau-marshall.Swaps.OneWaySwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.SwapAnnotation' id='juneau-marshall.Swaps.SwapAnnotation'>2.11.5 - @Swap Annotation</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Swaps.SwapAnnotation' id='juneau-marshall.Swaps.SwapAnnotation'>2.11.5 - @Swap Annotation</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.11.5 - juneau-marshall.Swaps.SwapAnnotation -->
 <p>
 	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
@@ -4155,31 +4082,27 @@
 	your swap class near your POJO class. 
 </p>
 <p class='bpcode w800'>
-	<ja>@Swap</ja>(MyPojoSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyObjectSwap.<jk>class</jk>)
 	<jk>public class</jk> MyPojo {
 		...
 	}
 	
 	<jc>// Sample swap for converting MyPojo classes to a simple string.</jc>
-	<jk>public class</jk> MyPojoSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+	<jk>public class</jk> MyObjectSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {
 		
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) {
 			<jk>return</jk> <jv>pojo</jv>.toSomeSerializableForm();
 		}
 	}
 </p>
 <p>
-	Multiple swaps can be associated with a POJO by using the {@del org.apache.juneau.annotation.Swaps @Swaps} annotation:
+	Multiple swaps can be associated with a class using multiple {@link org.apache.juneau.annotation.Swap @Swap} annotations:
 </p>
 <p class='bpcode w800'>
-	<ja>@Swaps</ja>(
-		{
-			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
-		}
-	)
+	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
+	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
 	<jk>public class</jk> MyPojo {}
 </p>
 <p>
@@ -4187,7 +4110,7 @@
 	Therefore it's possible to implement a swap that provides fully-customized output.
 </p>
 <p class='bpcode w800'>
-	<jk>public class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,Reader&gt; {
+	<jk>public class</jk> MyJsonSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,Reader&gt; {
 
 		<jk>public</jk> MediaType[] forMediaTypes() {
 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
@@ -4260,7 +4183,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Our templated swap class.</jc>
-	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
+	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> ObjectSwap&lt;Object,Reader&gt; {
 
 		<jk>public</jk> MediaType[] forMediaTypes() {
 			<jc>// Make sure this only applies to the HTML serializer.</jc>
@@ -4282,7 +4205,7 @@
 <div class='topic'><!-- START: 2.11.7 - juneau-marshall.Swaps.SurrogateClasses -->
 <p>
 <p>
-	Surrogate classes are very similar in concept to <c>PojoSwaps</c> except they're simpler to define.
+	Surrogate classes are very similar in concept to <c>ObjectSwaps</c> except they're simpler to define.
 </p>
 <p>
 	For example, let's say we want to be able to serialize the following class, but it's not serializable for 
@@ -4294,7 +4217,7 @@
 	}
 </p>
 <p>
-	This could be solved with the following <c>PojoSwap</c>.
+	This could be solved with the following <c>ObjectSwap</c>.
 </p>
 <p class='bpcode w800'>
 	<jc>// A serializable bean with 1 property.</jc>
@@ -4302,14 +4225,14 @@
 		<jk>public</jk> String <jf>foo</jf>;
 	}
 		
-	<jc>// A PojoSwap that swaps out our non-serializable object with our serializable object.</jc>
-	<jk>public class</jk> MySwap <jk>extends</jk> PojoSwap&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass <jv>pojo</jv>) {
+	<jc>// An ObjectSwap that swaps out our non-serializable object with our serializable object.</jc>
+	<jk>public class</jk> MySwap <jk>extends</jk> ObjectSwap&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
+		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass <jv>object</jv>) {
 			
 			<jc>// Create some serializable class and manually copy the data into it.</jc>
 			MySerializableSurrogate <jv>surrogate</jv> = <jk>new</jk> MySerializableSurrogate();
-			<jv>surrogate</jv>.<jf>foo</jf> = <jv>pojo</jv>.<jf>foo</jf>;
+			<jv>surrogate</jv>.<jf>foo</jf> = <jv>object</jv>.<jf>foo</jf>;
 			<jk>return</jk> <jv>surrogate</jv>;
 		}
 	}
@@ -4323,17 +4246,20 @@
 		<jk>public</jk> String <jf>foo</jf>;
 		
 		<jc>// Constructor takes in our non-serializable object!</jc>
-		<jk>public</jk> MySerializableSurrogate(MyNonSerializableClass <jv>pojo</jv>) {
-			<jk>this</jk>.<jf>foo</jf> = <jv>pojo</jv>.<jf>foo</jf>;
+		<jk>public</jk> MySerializableSurrogate(MyNonSerializableClass <jv>object</jv>) {
+			<jk>this</jk>.<jf>foo</jf> = <jv>object</jv>.<jf>foo</jf>;
 		}
 	}
 </p>
 <p>
-	The surrogate class is registered in the same way as a <c>PojoSwap</c>:
+	The surrogate class is registered in the same way as a <c>ObjectSwap</c>:
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySerializableSurrogate.<jk>class</jk>).build();
+	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()
+		.swaps(MySerializableSurrogate.<jk>class</jk>)
+		.build();
 </p>
 <p>
 	When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate 
@@ -5405,7 +5331,7 @@
 		<td>
 			<b>Swapped objects</b>
 			<br>These are objects that are not directly serializable, but have 
-			{@link org.apache.juneau.swap.ObjectSwap PojoSwaps} associated with them.  
+			{@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated with them.  
 			The purpose of a POJO swap is to convert an object to another object that is easier to serialize 
 			and parse.  
 			For example, the {@link org.apache.juneau.swaps.TemporalDateSwap.IsoLocalDateTime} class can be used to 
@@ -10145,7 +10071,7 @@
 						<li><c><jk>public byte</jk>[] toBytes() {...}</c>
 						<li><c><jk>public byte</jk>[]</jk> toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10160,7 +10086,7 @@
 						<li><c><jk>public</jk> Calendar toCalendar() {...}</c>
 						<li><c><jk>public</jk> Calendar toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a {@link java.util.Calendar} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10181,7 +10107,7 @@
 					<ul>
 						<li><c><jk>public</jk> String toString() {...}</c>
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.String} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a {@link java.lang.String} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10198,7 +10124,7 @@
 						<li><c><jk>public</jk> Boolean toBoolean() {...}</c>
 						<li><c><jk>public</jk> Boolean toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Boolean} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10215,7 +10141,7 @@
 						<li><c><jk>public</jk> Integer toInteger() {...}</c>
 						<li><c><jk>public</jk> Integer toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to an {@link java.lang.Integer} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10231,7 +10157,7 @@
 						<li><c><jk>public</jk> Long toLong() {...}</c>
 						<li><c><jk>public</jk> Long toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Long} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10248,7 +10174,7 @@
 						<li><c><jk>public</jk> Float toFloat() {...}</c>
 						<li><c><jk>public</jk> Float toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Float} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10264,7 +10190,7 @@
 						<li><c><jk>public</jk> Double toDouble() {...}</c>
 						<li><c><jk>public</jk> Double toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link org.apache.juneau.swap.ObjectSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Double} via an {@link org.apache.juneau.swap.ObjectSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -10279,7 +10205,7 @@
 					<ul>
 						<li><c><jk>public</jk> Boolean[][] toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to arrays of the default types via a {@link org.apache.juneau.swap.ObjectSwap}
+				<li>Any POJO transformable to arrays of the default types via an {@link org.apache.juneau.swap.ObjectSwap}
 			</ul>
 		</td>
 	</tr>
@@ -10298,7 +10224,7 @@
 			<ul>
 				<li><c>Map&lt;String,Object&gt;</c> (default)
 				<li>Beans with properties of anything on this list.
-				<li>Any POJO transformable to a map via a {@link org.apache.juneau.swap.ObjectSwap}
+				<li>Any POJO transformable to a map via an {@link org.apache.juneau.swap.ObjectSwap}
 			</ul>
 		</td>
 	</tr>
@@ -12265,7 +12191,7 @@
 	with {@link org.apache.juneau.dto.html5.Div} elements:
 </p>
 <p class='bpcode w800'>
-	<jk>public class</jk> SwaggerUI <jk>extends</jk> PojoSwap&lt;Swagger,Div&gt; {
+	<jk>public class</jk> SwaggerUI <jk>extends</jk> ObjectSwap&lt;Swagger,Div&gt; {
 	
 		<ja>@Override</ja>
 		<jk>public</jk> MediaType[] forMediaTypes() {
@@ -30328,7 +30254,7 @@ Resource bundles are searched using the following base name patterns:
 </p>
 <p class='bpcode w800'>
 	<jc>// Don't do this!</jc>
-	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;OMap,Object&gt; {
+	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> ObjectSwap&lt;OMap,Object&gt; {
 		<jk>public</jk> Object swap(BeanSession session, OMap input) <jk>throws</jk> Exception {
 			<jc>// Security hole!</jc>
 			<jk>return</jk> Class.<jsf>forName</jsf>(input.getString(<js>"class"</js>)).newInstance();
@@ -30548,8 +30474,8 @@ Resource bundles are searched using the following base name patterns:
 		The API for handling non-standard POJOs has been simplified by introducing the concept of a {@del Transform} class, which is associated with the <c>BeanContext</c> class (and thus the Serializer and Parser classes too) through the <c>BeanContext.addTransforms(Class[])</c> method.<br>
 		Two new subclasses of {@del Transform}:
 		<ul>
-			<li>{@del org.apache.juneau.swap.BeanFilter} - Filter POJO beans.</li>
-			<li>{@link org.apache.juneau.swap.ObjectSwap} - Filter POJOs that aren't beans.</li>
+			<li>{@del org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
+			<li>{@del org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
 		</ul>
 		This new API replaces the previous separate <c>Cast</c> and <c>BeanFilter</c> APIs which were considerably more complicated and puts them under a common API. 
 	</li>
@@ -31161,7 +31087,7 @@ Resource bundles are searched using the following base name patterns:
 		New <c>org.apache.juneau.swap</c> package.
 		<ul>
 			<li>Cleaner class structure.</li>
-			<li>Improved {@del org.apache.juneau.swap.BeanFilter} class for defining property filters on beans.</li>
+			<li>Improved {@del org.apache.juneau.transform.BeanFilter} class for defining property filters on beans.</li>
 			<li>Improved {@link org.apache.juneau.utils.PojoQuery} class for defining filters on objects (previously called <c>ObjectFilter</c>).</li>
        		</ul>
        	</li>
@@ -31506,7 +31432,7 @@ Resource bundles are searched using the following base name patterns:
 		Removed <c><ja>@Xml</ja>.valAttr</c> annotation since it's now redundant with <c><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</c>.
 		</li>
 		<li>
-		Fixed timezone bug in {@del org.apache.juneau.swaps.CalendarSwap}.
+		Fixed timezone bug in {@del org.apache.juneau.transforms.CalendarSwap}.
 	</li>
 		<li>
 		Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
@@ -31638,7 +31564,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>
 		Revamped the API for filter support:
 		<ul>
-			<li>Updated {@del org.apache.juneau.swap.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
+			<li>Updated {@del org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
 			<li>Introduced support for bean {@del Bean#subTypeProperty() subtypes}. </li>
 			<li>Replaced <c><ja>@Bean</ja>(filter=xxx)</c> with new {@del @Transform} annotation.</li>
 		</ul>
@@ -31696,7 +31622,7 @@ Resource bundles are searched using the following base name patterns:
 		The new class hierarchy is much simpler to understand.
 	</li>
 	<li>
-		Added {@link org.apache.juneau.swaps.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
+		Added {@del org.apache.juneau.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
 	</li>
 	<li>
 		Added a strict mode to {@link org.apache.juneau.json.JsonParser}.
@@ -32070,8 +31996,8 @@ Resource bundles are searched using the following base name patterns:
 	<li>New {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper
 		attribute when serializing to or parsing from JSON.
 	<li>Changed the default ordering of bean properties to be in parent-to-child class order.
-	<li>New {@del org.apache.juneau.swap.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@del org.apache.juneau.swap.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
-		methods added to {@del org.apache.juneau.swap.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
+	<li>New {@del org.apache.juneau.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@del org.apache.juneau.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
+		methods added to {@del org.apache.juneau.transform.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
 	<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the {@del Bean#subTypeProperty()} annotation.
 		The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 		While targeted for JSON, the restriction is also lifted for all other parsers.  	
@@ -32144,11 +32070,11 @@ Resource bundles are searched using the following base name patterns:
 	Juno 5.1.0.6 is a moderate update.
 </p>
 <ul class='spaced-list'>
-	<li>Simplified API for {@link org.apache.juneau.swap.ObjectSwap}.  
+	<li>Simplified API for {@del org.apache.juneau.transform.PojoSwap}.  
 		Since it's rarely used, the <c>beanContext</c> parameter was replaced with a {@del PojoSwap#getBeanContext()} method on
 		the class.
-	<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.swap.ObjectSwap}.
-		See {@link org.apache.juneau.swap.SurrogateSwap} for details.
+	<li>New simplified way of defining POJO filters without needing to extend {@del org.apache.juneau.transform.PojoSwap}.
+		See {@del org.apache.juneau.transform.SurrogateSwap} for details.
 	<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
 		Will allow the definition of standard XHTML DTOs in future releases.  
 		For now, {@del Img} is an example of defining an XHTML element using Juno DTOs.
@@ -33050,7 +32976,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>New {@del StringVar#doResolve(String)} method.
 	<li>New {@del StringVarResolver#DEFAULT} field.
 	<li>Eliminated dependency on <c>javax.mail.internet.MimeUtility</c> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
-	<li>{@del org.apache.juneau.swaps.CalendarSwap} and {@del org.apache.juneau.swaps.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
+	<li>{@del org.apache.juneau.transforms.CalendarSwap} and {@del org.apache.juneau.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 	<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <c>/servletPath/style.css</c> instead of <c>/servletPath/htdocs/juneau.css</c>.  
 		This coincides with enhancements made in the server code for specifying styles.
 	<li>{@link org.apache.juneau.html.HtmlDocSerializer} wraps output in two div tags instead of one (e.g. <c>&lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</c>).
@@ -33418,7 +33344,7 @@ Resource bundles are searched using the following base name patterns:
 		The following features were added to enable this support:
 		<ul>
 			<li>{@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} - Annotation that defines an identifying name for a bean class.
-			<li>{@del org.apache.juneau.swap.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
+			<li>{@del org.apache.juneau.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
 			<li>{@del org.apache.juneau.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 				during parsing. 
 			<li>{@del BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
@@ -33428,7 +33354,7 @@ Resource bundles are searched using the following base name patterns:
 		</ul>
 		In addition, the {@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} value replaces the <c>@Xml(name)</c> annotation, and the 
 		<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
-	<li>Refactor bean filter support to use {@del org.apache.juneau.swap.BeanFilterBuilder} class.
+	<li>Refactor bean filter support to use {@del org.apache.juneau.transform.BeanFilterBuilder} class.
 		Allows the <c>BeanFilter</c> class to use final fields.
 	<li>{@link org.apache.juneau.msgpack MessagePack} support.
 	<li>Serializers can now serialize directly to {@link java.io.File Files}.
@@ -33678,10 +33604,10 @@ Resource bundles are searched using the following base name patterns:
 	<jk>new</jk> JsonSerializer().setSimpleMode(<jk>true</jk>).setQuoteChar(<js>'"'</js>);
 			</p>
 	</ul>
-	<li>Simplified {@link org.apache.juneau.swap.ObjectSwap} class.  Now just two methods:
+	<li>Simplified {@del org.apache.juneau.transform.PojoSwap} class.  Now just two methods:
 	<ul>
-		<li>{@link org.apache.juneau.swap.ObjectSwap#swap(BeanSession,Object)}
-		<li>{@link org.apache.juneau.swap.ObjectSwap#unswap(BeanSession,Object,ClassMeta)}
+		<li>{@del org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)}
+		<li>{@del org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
 	</ul>
 	<li>General code improvements made to {@link org.apache.juneau.ClassMeta} class.
 	<ul>
@@ -33694,29 +33620,29 @@ Resource bundles are searched using the following base name patterns:
 		Allows for swaps and serializer/parser behavior to be tailored to individual media types.
 	<li>Several new {@link java.util.Calendar} and {@link java.util.Date} swaps:
 	<ul>
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.ToString},{@del org.apache.juneau.swaps.DateSwap.ToString} - To {@link java.lang.String Strings} using the {@code Date.toString()} method.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DT},{@del org.apache.juneau.swaps.DateSwap.ISO8601DT} - To ISO8601 date-time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DTZ},{@del org.apache.juneau.swaps.DateSwap.ISO8601DTZ} - Same as <jsf>ISO8601DT</jsf>, except always serializes in GMT.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DTP},{@del org.apache.juneau.swaps.DateSwap.ISO8601DTP} - Same as <jsf>ISO8601DT</jsf> except with millisecond precision.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.ISO8601DTPZ},{@del org.apache.juneau.swaps.DateSwap.ISO8601DTPZ} - Same as <jsf>ISO8601DTZ</jsf> except with millisecond precision.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.RFC2822DT},{@del org.apache.juneau.swaps.DateSwap.RFC2822DT} - To RFC2822 date-time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.RFC2822DTZ},{@del org.apache.juneau.swaps.DateSwap.RFC2822DTZ} - Same as <jsf>RFC2822DT</jsf>, except always serializes in GMT.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.RFC2822D},{@del org.apache.juneau.swaps.DateSwap.RFC2822D} - To RFC2822 date strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeSimple},{@del org.apache.juneau.swaps.DateSwap.DateTimeSimple} - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateSimple},{@del org.apache.juneau.swaps.DateSwap.DateSimple} - To simple <js>"yyyy/MM/dd"</js> date strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeSimple},{@del org.apache.juneau.swaps.DateSwap.TimeSimple} - To simple <js>"HH:mm:ss"</js> time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateFull},{@del org.apache.juneau.swaps.DateSwap.DateFull} - To {@link java.text.DateFormat#FULL} date strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateLong},{@del org.apache.juneau.swaps.DateSwap.DateLong} - To {@link java.text.DateFormat#LONG} date strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateMedium},{@del org.apache.juneau.swaps.DateSwap.DateMedium} - To {@link java.text.DateFormat#MEDIUM} date strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateShort},{@del org.apache.juneau.swaps.DateSwap.DateShort} - To {@link java.text.DateFormat#SHORT} date strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeFull},{@del org.apache.juneau.swaps.DateSwap.TimeFull} - To {@link java.text.DateFormat#FULL} time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeLong},{@del org.apache.juneau.swaps.DateSwap.TimeLong} - To {@link java.text.DateFormat#LONG} time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeMedium},{@del org.apache.juneau.swaps.DateSwap.TimeMedium} - To {@link java.text.DateFormat#MEDIUM} time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.TimeShort},{@del org.apache.juneau.swaps.DateSwap.TimeShort} - To {@link java.text.DateFormat#SHORT} time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeFull},{@del org.apache.juneau.swaps.DateSwap.DateTimeFull} - To {@link java.text.DateFormat#FULL} date-time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeLong},{@del org.apache.juneau.swaps.DateSwap.DateTimeLong} - To {@link java.text.DateFormat#LONG} date-time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeMedium},{@del org.apache.juneau.swaps.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
-		<li>{@del org.apache.juneau.swaps.CalendarSwap.DateTimeShort},{@del org.apache.juneau.swaps.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.ToString},{@del org.apache.juneau.transforms.DateSwap.ToString} - To {@link java.lang.String Strings} using the {@code Date.toString()} method.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DT},{@del org.apache.juneau.transforms.DateSwap.ISO8601DT} - To ISO8601 date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DTZ},{@del org.apache.juneau.transforms.DateSwap.ISO8601DTZ} - Same as <jsf>ISO8601DT</jsf>, except always serializes in GMT.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DTP},{@del org.apache.juneau.transforms.DateSwap.ISO8601DTP} - Same as <jsf>ISO8601DT</jsf> except with millisecond precision.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.ISO8601DTPZ},{@del org.apache.juneau.transforms.DateSwap.ISO8601DTPZ} - Same as <jsf>ISO8601DTZ</jsf> except with millisecond precision.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.RFC2822DT},{@del org.apache.juneau.transforms.DateSwap.RFC2822DT} - To RFC2822 date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.RFC2822DTZ},{@del org.apache.juneau.transforms.DateSwap.RFC2822DTZ} - Same as <jsf>RFC2822DT</jsf>, except always serializes in GMT.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.RFC2822D},{@del org.apache.juneau.transforms.DateSwap.RFC2822D} - To RFC2822 date strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeSimple},{@del org.apache.juneau.transforms.DateSwap.DateTimeSimple} - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateSimple},{@del org.apache.juneau.transforms.DateSwap.DateSimple} - To simple <js>"yyyy/MM/dd"</js> date strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeSimple},{@del org.apache.juneau.transforms.DateSwap.TimeSimple} - To simple <js>"HH:mm:ss"</js> time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateFull},{@del org.apache.juneau.transforms.DateSwap.DateFull} - To {@link java.text.DateFormat#FULL} date strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateLong},{@del org.apache.juneau.transforms.DateSwap.DateLong} - To {@link java.text.DateFormat#LONG} date strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateMedium},{@del org.apache.juneau.transforms.DateSwap.DateMedium} - To {@link java.text.DateFormat#MEDIUM} date strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateShort},{@del org.apache.juneau.transforms.DateSwap.DateShort} - To {@link java.text.DateFormat#SHORT} date strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeFull},{@del org.apache.juneau.transforms.DateSwap.TimeFull} - To {@link java.text.DateFormat#FULL} time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeLong},{@del org.apache.juneau.transforms.DateSwap.TimeLong} - To {@link java.text.DateFormat#LONG} time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeMedium},{@del org.apache.juneau.transforms.DateSwap.TimeMedium} - To {@link java.text.DateFormat#MEDIUM} time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.TimeShort},{@del org.apache.juneau.transforms.DateSwap.TimeShort} - To {@link java.text.DateFormat#SHORT} time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeFull},{@del org.apache.juneau.transforms.DateSwap.DateTimeFull} - To {@link java.text.DateFormat#FULL} date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeLong},{@del org.apache.juneau.transforms.DateSwap.DateTimeLong} - To {@link java.text.DateFormat#LONG} date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeMedium},{@del org.apache.juneau.transforms.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
+		<li>{@del org.apache.juneau.transforms.CalendarSwap.DateTimeShort},{@del org.apache.juneau.transforms.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
 	</ul>  
 	<li>New method {@del org.apache.juneau.serializer.SerializerGroup#getSerializerMatch(String)} that returns the matched serializer and media type.
 	<li>New method {@del org.apache.juneau.parser.ParserGroup#getParserMatch(String)} that returns the matched parser and media type.
@@ -33736,7 +33662,7 @@ Resource bundles are searched using the following base name patterns:
 			<li>New setter method names for a better fluent design.
 			<li>Updated {@del org.apache.juneau.dto.atom} documentation.
 		</ul>
-	<li>New {@link org.apache.juneau.swap.MapSwap} and {@link org.apache.juneau.swap.StringSwap} classes.
+	<li>New {@del org.apache.juneau.transform.MapSwap} and {@del org.apache.juneau.transform.StringSwap} classes.
 	<li>New {@link org.apache.juneau.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
 	<li>New {@link org.apache.juneau.BeanContext#getClassMeta(Type,Type...)} and {@link org.apache.juneau.BeanSession#getClassMeta(Type,Type...)}
 		methods for retrieving Map and Collection class metas.  
@@ -34969,7 +34895,7 @@ Resource bundles are searched using the following base name patterns:
 				</p>
 		</ul>
 	<li>
-		New {@link org.apache.juneau.swap.Surrogate} interface for identifying surrogate classes.
+		New {@del org.apache.juneau.transform.Surrogate} interface for identifying surrogate classes.
 	<li>
 		Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
 	<li>
@@ -35015,11 +34941,11 @@ Resource bundles are searched using the following base name patterns:
 		</p>
 		This is mostly an internal change and doesn't affect the existing APIs.
 	<li>
-		{@link org.apache.juneau.swap.ObjectSwap#swap(BeanSession,Object)} and {@link org.apache.juneau.swap.ObjectSwap#unswap(BeanSession,Object,ClassMeta)} 
+		{@del org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)} and {@del org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
 		can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
 	<li>
-		New {@del org.apache.juneau.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del org.apache.juneau.swaps.CalendarSwap} and 
-		{@del org.apache.juneau.swaps.DateSwap}.
+		New {@del org.apache.juneau.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del org.apache.juneau.transforms.CalendarSwap} and 
+		{@del org.apache.juneau.transforms.DateSwap}.
 	<li>
 		New annotation {@link org.apache.juneau.html.annotation.Html#anchorText}.
 	<li>
@@ -35525,11 +35451,11 @@ Resource bundles are searched using the following base name patterns:
 		New {@del org.apache.juneau.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
 		readers passed into parsers to be automatically closed after parsing.
 	<li>
-		Syntax changed on unswap method on {@link org.apache.juneau.swap.Surrogate} classes.
+		Syntax changed on unswap method on {@del org.apache.juneau.transform.Surrogate} classes.
 		<br>It's now a regular method instead of a static method.
 	<li>
 		{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
-		{@link org.apache.juneau.swap.Surrogate} classes.
+		{@del org.apache.juneau.transform.Surrogate} classes.
 	<li>
 		New support for {@doc PojoBuilders POJO Builders}.	
 </ul>
@@ -36661,7 +36587,7 @@ Resource bundles are searched using the following base name patterns:
 	<li>
 		{@doc ConfigurableAnnotations Configurable Annotations}
 	<li>
-		{@doc DefaultPojoSwaps Default PojoSwaps}
+		{@del DefaultPojoSwaps Default PojoSwaps}
 	<li>
 		{@doc ConfigImports Config Imports}
 	<li>
@@ -36728,9 +36654,9 @@ Resource bundles are searched using the following base name patterns:
 	<li>
 		New Java 8 date-time transforms:
 		<ul class='javatree'>
-			<li class='jc'>{@link org.apache.juneau.swaps.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
-			<li class='jc'>{@link org.apache.juneau.swaps.TemporalDateSwap} - For {@link java.util.Date}
-			<li class='jc'>{@link org.apache.juneau.swaps.TemporalCalendarSwap} - For {@link java.util.Calendar}
+			<li class='jc'>{@del org.apache.juneau.transforms.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
+			<li class='jc'>{@del org.apache.juneau.transforms.TemporalDateSwap} - For {@link java.util.Date}
+			<li class='jc'>{@del org.apache.juneau.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
 		</ul>
 	<li>
 		All serializers and parsers now have built-in default swaps for common class types:
@@ -37359,8 +37285,8 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New swaps auto-added to all serializers/parsers:
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.swaps.MatchResultSwap} 
-			<li class='jc'>{@link org.apache.juneau.swaps.StackTraceElementSwap} 
+			<li class='jc'>{@del org.apache.juneau.transforms.MatchResultSwap} 
+			<li class='jc'>{@del org.apache.juneau.transforms.StackTraceElementSwap} 
 		</ul>		
 	<li>
 		{@link org.apache.juneau.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
@@ -37467,7 +37393,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New Bean Property Interceptor API for intercepting calls to bean getters/setters.
 		<ul>
-			<li class='jac'>{@link org.apache.juneau.swap.BeanInterceptor}
+			<li class='jac'>{@del org.apache.juneau.transform.BeanInterceptor}
 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor Bean(interceptor)}
 			<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanInterceptor(Class,Class)}
 		</ul>

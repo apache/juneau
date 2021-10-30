@@ -40,11 +40,11 @@
 	<jc>// An ObjectSwap that swaps out our non-serializable object with our serializable object.</jc>
 	<jk>public class</jk> MySwap <jk>extends</jk> ObjectSwap&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
 		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
-		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass <jv>pojo</jv>) {
+		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass <jv>object</jv>) {
 			
 			<jc>// Create some serializable class and manually copy the data into it.</jc>
 			MySerializableSurrogate <jv>surrogate</jv> = <jk>new</jk> MySerializableSurrogate();
-			<jv>surrogate</jv>.<jf>foo</jf> = <jv>pojo</jv>.<jf>foo</jf>;
+			<jv>surrogate</jv>.<jf>foo</jf> = <jv>object</jv>.<jf>foo</jf>;
 			<jk>return</jk> <jv>surrogate</jv>;
 		}
 	}
@@ -58,8 +58,8 @@
 		<jk>public</jk> String <jf>foo</jf>;
 		
 		<jc>// Constructor takes in our non-serializable object!</jc>
-		<jk>public</jk> MySerializableSurrogate(MyNonSerializableClass <jv>pojo</jv>) {
-			<jk>this</jk>.<jf>foo</jf> = <jv>pojo</jv>.<jf>foo</jf>;
+		<jk>public</jk> MySerializableSurrogate(MyNonSerializableClass <jv>object</jv>) {
+			<jk>this</jk>.<jf>foo</jf> = <jv>object</jv>.<jf>foo</jf>;
 		}
 	}
 </p>
@@ -67,8 +67,11 @@
 	The surrogate class is registered in the same way as a <c>ObjectSwap</c>:
 </p>
 <p class='bpcode w800'>
-	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().swaps(MySerializableSurrogate.<jk>class</jk>).build();
+	<jc>// Create a JSON serializer that can serialize our unserializable object.</jc>
+	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()
+		.swaps(MySerializableSurrogate.<jk>class</jk>)
+		.build();
 </p>
 <p>
 	When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate 
