@@ -13,29 +13,38 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'UON Parsers'}
+{title:'XML Parsers', updated:'9.0.0'}
 
 <p>
-	The {@link oaj.uon.UonParser} class is used to parse UON into POJOs.
+	The {@link oaj.xml.XmlParser} class is used to parse XML into POJOs.
 </p>	
 <p>
-	The UON parser provides the following settings:
+	The class hierarchy for the builder of this parser is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
-	<li class='jc'>{@link oaj.uon.UonParser}
+	<li class='jac'>{@link oaj.Context.Builder}
 	<ul>
-		<li class='jf'>{@del oaj.uon.UonParser#UON_decoding UON_decoding}
-		<li class='jf'>{@del oaj.uon.UonParser#UON_validateEnd UON_validateEnd}
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<ul>
+					<li class='jc'>{@link oaj.xml.XmlParser.Builder}
+				</ul>
+			</ul>
+		</ul>
 	</ul>
 </ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
+</p>
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.uon.UonParser}
+	<li class='jc'>{@link oaj.xml.XmlParser}
 	<ul>
-		<li class='jf'>{@link oaj.uon.UonParser#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.uon.UonParser#DEFAULT_DECODING DEFAULT_DECODING}			
+		<li class='jf'>{@link oaj.xml.XmlParser#DEFAULT DEFAULT}
 	</ul>
 </ul>

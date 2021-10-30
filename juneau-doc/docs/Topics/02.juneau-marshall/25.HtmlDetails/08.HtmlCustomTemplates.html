@@ -13,31 +13,19 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'XML Parsers'}
+{title:'Custom Templates'}
 
 <p>
-	The {@link oaj.xml.XmlParser} class is used to parse XML into POJOs.
-</p>	
-<p>
-	The XML parser provides the following settings:
+	Custom page templates can be created by implementing the {@link oaj.html.HtmlDocTemplate}
+	interface and associating it with your {@link oaj.html.HtmlDocSerializer} using the {@link oaj.html.HtmlDocSerializer.Builder#template(Class)}
+	setting.
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
-	<li class='jc'>{@link oaj.xml.XmlParser}
+	<li class='ja'>{@link oaj.html.HtmlDocTemplate}
 	<ul>
-		<li class='jf'>{@del oaj.xml.XmlParser#XML_eventAllocator XML_eventAllocator}
-		<li class='jf'>{@del oaj.xml.XmlParser#XML_preserveRootElement XML_preserveRootElement}
-		<li class='jf'>{@del oaj.xml.XmlParser#XML_reporter XML_reporter}
-		<li class='jf'>{@del oaj.xml.XmlParser#XML_resolver XML_resolver}
-		<li class='jf'>{@del oaj.xml.XmlParser#XML_validating XML_validating}				
+		<li class='jm'>{@link oaj.html.HtmlDocTemplate#writeTo(HtmlDocSerializerSession,HtmlWriter,Object) writeTo(HtmlDocSerializerSession,HtmlWriter,Object)}
 	</ul>
 </ul>
 <p>
-	The following pre-configured parsers are provided for convenience:
+	The interface implementation is open-ended allowing you to define the contents of the page any way you wish.
 </p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.xml.XmlParser}
-	<ul>
-		<li class='jf'>{@link oaj.xml.XmlParser#DEFAULT DEFAULT}
-	</ul>
-</ul>

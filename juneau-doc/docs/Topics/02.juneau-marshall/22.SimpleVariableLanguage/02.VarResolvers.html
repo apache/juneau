@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'VarResolvers and VarResolverSessions', flags:'todo'}
+{title:'VarResolvers and VarResolverSessions', updated:'9.0.0'}
 
 <p>
 	The main class for performing variable resolution is {@link oaj.svl.VarResolver}.
@@ -31,32 +31,24 @@
 <p>
 	Var resolvers can rely on the existence of other objects.
 	For example, {@link oaj.config.vars.ConfigVar} relies on the existence of a {@link oaj.config.Config}.
-	This is accomplished through the following:
-</p>
-<ul class='spaced-list'>
-	<li>Context-objects - Objects set on the resolver.
-	<li>Session-objects - Objects set on the resolver session.
-</ul>
-<p>
-	The following two classes are identical in behavior except for which objects they can access:
+	This is accomplished through the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.svl.VarResolver} - Has access to context objects only.
-	<li class='jc'>{@link oaj.svl.VarResolverSession} - Has access to context and session objects.
+	<li class='jc'>{@link oaj.svl.VarResolver.Builder} 
+	<ul>
+		<li class='jm'>{@link oaj.svl.VarResolver.Builder#beanStore(BeanStore) beanStore(BeanStore)} - Specify a bean store to find beans.
+		<li class='jm'>{@link oaj.svl.VarResolver.Builder#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for all sessions.
+	</ul>
+	<li class='jc'>{@link oaj.svl.VarResolverSession}
+	<ul>
+		<li class='jm'>{@link oaj.svl.VarResolverSession#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for this session.
+	</ul>
 </ul>
 <p>
-	Context and session objects are set through the following methods:
+	Beans are accessible through the following method:
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@del VarResolverBuilder#contextObject(String,Object)} - Context objects.
-	<li class='jm'>{@del VarResolverSession#sessionObject(String,Object)} - Session objects.
-	<li class='jm'>{@del VarResolver#createSession(Map)} - Session objects.
-</ul>
-<p>
-	Both kinds of objects are accessible through the following method:
-</p>
-<ul class='javatree'>
-	<li class='jm'>{@del VarResolverSession#getSessionObject(Class, String, boolean)}
+	<li class='jm'>{@link oaj.svl.VarResolverSession#getBean(Class)}
 </ul>
 <p>
 	Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#copy()} method.
@@ -66,7 +58,8 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a resolver that copies the default resolver and adds $C and $A vars.</jc>
-	VarResolver <jv>myVarResolver</jv> = VarResolver.<jsf>DEFAULT</jsf>
+	VarResolver <jv>myVarResolver</jv> = VarResolver
+		.<jsf>DEFAULT</jsf>
 		.copy()
 		.vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
 		.build();

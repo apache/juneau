@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Typed Literals'}
+{title:'Typed Literals', updated:'9.0.0'}
 
 <p>
 	XML-Schema data-types can be added to non-<c>String</c> literals through the 
@@ -26,8 +26,8 @@
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
 	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
-		.addLiteralTypes(<jk>true</jk>)
+		.rdfxml_tab(3),
+		.addLiteralTypes()
 		.build();
 </p>	
 <p>

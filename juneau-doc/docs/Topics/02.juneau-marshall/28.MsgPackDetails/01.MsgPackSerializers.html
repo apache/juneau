@@ -13,43 +13,42 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'JSON Parsers'}
+{title:'MessagePack Serializers', updated:'9.0.0'}
 
 <p>
-	The {@link oaj.json.JsonParser} class is used to parse JSON into POJOs.
+	The {@link oaj.msgpack.MsgPackSerializer} class is used to serialize POJOs into MessagePack.
 </p>	
 <p>
-	The JSON parser provides the following settings:
+	The class hierarchy for the builder of this serializer is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
-	<li class='jc'>{@link oaj.json.JsonParser}
+	<li class='jac'>{@link oaj.Context.Builder}
 	<ul>
-		<li class='jf'>{@del oaj.json.JsonParser#JSON_validateEnd JSON_validateEnd}
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<ul>
+					<li class='jac'>{@link oaj.serializer.OutputStreamSerializer.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.msgpack.MsgPackSerializer.Builder}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
 	</ul>
 </ul>
 <p>
-	The following pre-configured parsers are provided for convenience:
+	Refer to the builder javadocs for configurable settings.
+</p>
+<p>
+	The following pre-configured serializers are provided for convenience:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.json.JsonParser}
+	<li class='jc'>{@link oaj.msgpack.MsgPackSerializer}
 	<ul>
-		<li class='jf'>{@link oaj.json.JsonParser#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.json.JsonParser#DEFAULT_STRICT DEFAULT_STRICT}
+		<li class='jf'>{@link oaj.msgpack.MsgPackSerializer#DEFAULT DEFAULT}
+		
 	</ul>
 </ul>
-<p>
-	The JSON parser supports ALL valid JSON, including:
-</p>
-<ul class='spaced-list'>
-	<li>
-		Javascript comments.
-	<li>
-		Single or double quoted values.
-	<li>
-		Quoted (strict) or unquoted (non-strict) attributes.
-	<li>
-		JSON fragments (such as string, numeric, or boolean primitive values).
-	<li>
-		Concatenated strings. 
-</ul>	

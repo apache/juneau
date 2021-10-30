@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Namespaces', flags:'review'}
+{title:'Namespaces', updated:'9.0.0'}
 
 <p>
 	You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
@@ -84,7 +84,7 @@
 	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
 	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.rdfxml_tab(3)
 		.disableAutoDetectNamespaces()
 		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
 		.build();

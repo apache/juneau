@@ -13,29 +13,45 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'HtmlDocSerializer'}
+{title:'HtmlDocSerializer', updated:'9.0.0'}
 
 <p>
 	{@link oaj.html.HtmlDocSerializer} is an extension of {@link oaj.html.HtmlSerializer}
 	that wraps serialized POJOs in a complete HTML document. 
 </p>
+<p>
+	The class hierarchy for the builder of this serializer is:
+</p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.html.HtmlDocSerializer}
+	<li class='jac'>{@link oaj.Context.Builder}
 	<ul>
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
-		<li class='jf'>{@del oaj.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<ul>
+					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.xml.XmlSerializer.Builder}
+						<ul>
+							<li class='jc'>{@link oaj.html.HtmlSerializer.Builder}
+							<ul>
+								<li class='jc'>{@link oaj.html.HtmlStrippedDocSerializer.Builder}
+								<ul>
+									<li class='jc'>{@link oaj.html.HtmlDocSerializer.Builder}
+								</ul>
+							</ul>
+						</ul>
+					</ul>
+				</ul>
+			</ul>
+		</ul>
 	</ul>
 </ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
+</p>
 <p>
 	This class is used extensively in the creation of POJO-based user interfaces in the REST API.
 </p>
@@ -60,7 +76,7 @@
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {...}
 </p>
 <p>
-	The {@del oaj.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template} setting defines
+	The {@link oaj.html.HtmlDocSerializer.Builder#template(Class)} setting defines
 	a template for the HTML page being generated.
 	The default template is described next.
 </p>

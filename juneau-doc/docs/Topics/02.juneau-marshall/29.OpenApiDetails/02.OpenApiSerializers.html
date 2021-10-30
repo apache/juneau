@@ -13,10 +13,37 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'OpenAPI Serializers', updated:'8.2.0'} 
+{title:'OpenAPI Serializers', updated:'8.2.0,9.0.0'} 
 
 <p>
 	The {@link oaj.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
+</p>
+<p>
+	The class hierarchy for the builder of this serializer is:
+</p>
+<ul class='javatree'>
+	<li class='jac'>{@link oaj.Context.Builder}
+	<ul>
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<ul>
+					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
+						<ul>
+							<li class='jc'>{@link oaj.oapi.OpenApiSerializer.Builder}
+						</ul>
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+</ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
 </p>
 <p>
 	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing

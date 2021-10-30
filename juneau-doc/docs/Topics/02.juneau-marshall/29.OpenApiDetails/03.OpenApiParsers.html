@@ -13,10 +13,34 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'OpenAPI Parsers', updated: 8.2.0} 
+{title:'OpenAPI Parsers', updated: '8.2.0,9.0.0'} 
 
 <p>
 	The {@link oaj.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
+</p>
+<p>
+	The class hierarchy for the builder of this parser is:
+</p>
+<ul class='javatree'>
+	<li class='jac'>{@link oaj.Context.Builder}
+	<ul>
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<ul>
+					<li class='jc'>{@link oaj.uon.UonParser.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.oapi.OpenApiParser.Builder}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+</ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
 </p>
 <p>
 	The following is the previous example of a schema that defines the format of a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):

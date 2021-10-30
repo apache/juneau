@@ -13,35 +13,39 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'JSON Serializers'}
+{title:'UON Parsers', updated:'9.0.0'}
 
 <p>
-	The {@link oaj.json.JsonSerializer} class is used to serialize POJOs into JSON.
+	The {@link oaj.uon.UonParser} class is used to parse UON into POJOs.
 </p>	
 <p>
-	The JSON serializer provides the following settings:
+	The class hierarchy for the builder of this parser is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
-	<li class='jc'>{@link oaj.json.JsonSerializer}
+	<li class='jac'>{@link oaj.Context.Builder}
 	<ul>
-		<li class='jf'>{@del oaj.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}
-		<li class='jf'>{@del oaj.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}
-		<li class='jf'>{@del oaj.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<ul>
+					<li class='jc'>{@link oaj.uon.UonParser.Builder}
+				</ul>
+			</ul>
+		</ul>
 	</ul>
 </ul>
 <p>
-	The following pre-configured serializers are provided for convenience:
+	Refer to the builder javadocs for configurable settings.
+</p>
+<p>
+	The following pre-configured parsers are provided for convenience:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.json.JsonSerializer}
+	<li class='jc'>{@link oaj.uon.UonParser}
 	<ul>
-		<li class='jf'>{@link oaj.json.JsonSerializer#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.json.JsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
-	</ul>
-	<li class='jc'>{@link oaj.json.SimpleJsonSerializer}
-	<ul>
-		<li class='jf'>{@link oaj.json.SimpleJsonSerializer#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+		<li class='jf'>{@link oaj.uon.UonParser#DEFAULT DEFAULT}
+		<li class='jf'>{@link oaj.uon.UonParser#DEFAULT_DECODING DEFAULT_DECODING}			
 	</ul>
 </ul>

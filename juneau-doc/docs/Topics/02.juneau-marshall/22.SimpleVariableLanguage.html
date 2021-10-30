@@ -16,7 +16,7 @@
 {title:'Simple Variable Language'}
 
 <p>
-	The <l>org.apache.juneau.svl</l> packages defines an API for a language called <l>Simple Variable Language</l>.
+	The {@link org.apache.juneau.svl} packages defines an API for a language called "Simple Variable Language".
 	In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
 	It is used extensively in the Config, REST and Microservice APIs.
 </p>
@@ -51,7 +51,8 @@
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Use the default variable resolver to resolve a string that contains $S (system property) variables</jc>
+	<jc>// Use the default variable resolver to resolve a string that contains 
+	// $S (system property) variables.</jc>
 	String <jv>myProperty</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
 </p>
 <p>

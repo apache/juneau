@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'XML Serializers', flags:'todo'}
+{title:'XML Serializers', updated:'9.0.0'}
 
 <p>
 	The {@link oaj.xml.XmlSerializer} class is used to serialize POJOs into XML.
@@ -23,20 +23,29 @@
 	at the top of the file.
 </p>
 <p>
-	The XML serializers provide the following settings:
+	The class hierarchy for the builder of this serializer is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
-	<li class='jc'>{@link oaj.xml.XmlSerializer}
+	<li class='jac'>{@link oaj.Context.Builder}
 	<ul>
-		<li class='jf'>{@del oaj.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}
-		<li class='jf'>{@del oaj.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}
-		<li class='jf'>{@del oaj.xml.XmlSerializer#XML_disableAutoDetectNamespaces XML_disableAutoDetectNamespaces}
-		<li class='jf'>{@del oaj.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}
-		<li class='jf'>{@del oaj.xml.XmlSerializer#XML_enableNamespaces XML_enableNamespaces}
-		<li class='jf'>{@del oaj.xml.XmlSerializer#XML_namespaces XML_namespaces}
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<ul>
+					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.xml.XmlSerializer.Builder}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
 	</ul>
 </ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
+</p>
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>

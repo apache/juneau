@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Root Property'}
+{title:'Root Property', updated:'9.0.0'}
 
 <p>
 	For all RDF languages, the POJO objects get broken down into simple triplets.
@@ -42,8 +42,8 @@
 	<jc>// Create a new serializer.</jc>
 	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
-		.addRootProperty(<jk>true</jk>)
+		.rdfxml_tab(3),
+		.addRootProperty()
 		.build();
 </p>	
 <p>

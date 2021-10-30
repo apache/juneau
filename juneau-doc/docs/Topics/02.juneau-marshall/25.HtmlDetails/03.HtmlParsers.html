@@ -13,23 +13,39 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'MessagePack Parsers'}
+{title:'HTML Parsers', updated:'9.0.0'}
 
 <p>
-	The {@link oaj.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
+	The {@link oaj.html.HtmlParser} class is used to parse HTML into POJOs.
+	They can also parse the contents produced by {@link oaj.html.HtmlDocSerializer}.
 </p>	
 <p>
-	The MessagePack parser provides the following settings:
+	The class hierarchy for the builder of this parser is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
+	<li class='jac'>{@link oaj.Context.Builder}
+	<ul>
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<ul>
+					<li class='jc'>{@link oaj.html.HtmlParser.Builder}
+				</ul>
+			</ul>
+		</ul>
+	</ul>
 </ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
+</p>
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.msgpack.MsgPackParser}
+	<li class='jc'>{@link oaj.html.HtmlParser}
 	<ul>
-		<li class='jf'>{@link oaj.msgpack.MsgPackParser#DEFAULT DEFAULT}
+		<li class='jf'>{@link oaj.html.HtmlParser#DEFAULT DEFAULT}
 	</ul>
 </ul>

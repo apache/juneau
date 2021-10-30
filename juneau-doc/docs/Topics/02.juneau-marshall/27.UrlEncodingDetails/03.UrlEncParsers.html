@@ -13,24 +13,41 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'HTML Parsers'}
+{title:'URL-Encoding Parsers', updated:'9.0.0'}
 
 <p>
-	The {@link oaj.html.HtmlParser} class is used to parse HTML into POJOs.
-	They can also parse the contents produced by {@link oaj.html.HtmlDocSerializer}.
+	The {@link oaj.urlencoding.UrlEncodingParser} class is used to parse URL-Encoding into POJOs.
 </p>	
 <p>
-	The HTML parser provides the following settings:
+	The class hierarchy for the builder of this parser is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
+	<li class='jac'>{@link oaj.Context.Builder}
+	<ul>
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<ul>
+					<li class='jc'>{@link oaj.uon.UonParser.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.urlenc.UrlEncodingParser.Builder}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
 </ul>
+<p>
+	Refer to the builder javadocs for configurable settings.
+</p>
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.html.HtmlParser}
+	<li class='jc'>{@link oaj.urlencoding.UrlEncodingParser}
 	<ul>
-		<li class='jf'>{@link oaj.html.HtmlParser#DEFAULT DEFAULT}
+		<li class='jf'>{@link oaj.urlencoding.UrlEncodingParser#DEFAULT DEFAULT}
 	</ul>
 </ul>

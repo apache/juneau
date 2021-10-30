@@ -13,31 +13,38 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'UON Serializers'}
+{title:'MessagePack Parsers', updated:'9.0.0'}
 
 <p>
-	The {@link oaj.uon.UonSerializer} class is used to serialize POJOs into UON.
+	The {@link oaj.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
 </p>	
 <p>
-	The UON serializers provides the following settings:
+	The class hierarchy for the builder of this parser is:
 </p>
 <ul class='javatree'>
-	<li class='link'>{@doc GlossaryConfigurableProperties Configurable Properties}
-	<li class='jc'>{@link oaj.uon.UonSerializer}
+	<li class='jac'>{@link oaj.Context.Builder}
 	<ul>
-		<li class='jf'>{@del oaj.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}
-		<li class='jf'>{@del oaj.uon.UonSerializer#UON_encoding UON_encoding}
-		<li class='jf'>{@del oaj.uon.UonSerializer#UON_paramFormat UON_paramFormat}					
+		<li class='jac'>{@link oaj.BeanContextable.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul>
+				<li class='jac'>{@link oaj.parser.OutputStreamParser.Builder}
+				<ul>
+					<li class='jc'>{@link oaj.msgpack.MsgPackParser.Builder}
+				</ul>
+			</ul>
+		</ul>
 	</ul>
 </ul>
 <p>
-	The following pre-configured serializers are provided for convenience:
+	Refer to the builder javadocs for configurable settings.
+</p>
+<p>
+	The following pre-configured parsers are provided for convenience:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.uon.UonSerializer}
+	<li class='jc'>{@link oaj.msgpack.MsgPackParser}
 	<ul>
-		<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_ENCODING DEFAULT_ENCODING}
-		<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+		<li class='jf'>{@link oaj.msgpack.MsgPackParser#DEFAULT DEFAULT}
 	</ul>
 </ul>
