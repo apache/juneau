@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Hello World Example', flags:'todo'}
+{title:'Hello World Example', updated:'9.0.0'}
 
 <p>
 	A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
@@ -63,7 +63,7 @@
 			<js>"&lt;/div&gt;"</js>
 		}
 	)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicUniversalRest {
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
 	
 		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		<jk>public</jk> String sayHello() {

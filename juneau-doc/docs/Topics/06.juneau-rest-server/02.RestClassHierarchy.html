@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Class Hierarchy', updated:'8.1.0', flags:'todo'}
+{title:'Class Hierarchy', updated:'8.1.0,9.0.0',}
 
 <p>
 	The class hierarchy for the REST servlet class is shown below:
@@ -31,6 +31,22 @@
 						<ul>
 							<li class='jac'>{@link oajr.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
 								<br>A default implementation for "router" pages.
+							</li>
+						</ul>
+					</li>
+					<li class='jac'>{@link oajr.BasicRestServletJena org.apache.juneau.rest.BasicRestServletJena}
+						<br>Same as {@link oajr.BasicRestServlet} but adds RDF marshalling support.
+					</li>
+					<li class='jac'>{@link oajr.springboot.SpringRestServlet org.apache.juneau.rest.springboot.SpringRestServlet}
+						<br>Top-level servlet to use in Spring Boot.
+						<ul>
+							<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet org.apache.juneau.rest.springboot.BasicSpringRestServlet}
+								<br>Same as {@link BasicRestServlet} except for Spring Boot.
+								<ul>
+									<li class='jac'>{@link oajr.springboot.BasicSpringRestServletGroup org.apache.juneau.rest.springboot.BasicSpringRestServletGroup}
+										<br>Same as {@link BasicRestServletGroup} except for Spring Boot.
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
