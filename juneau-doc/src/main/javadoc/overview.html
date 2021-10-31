@@ -306,14 +306,14 @@
 			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigPrimitiveTypes'>Primitive Types</a></p>
 			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigPojos'>POJOs</a></p>
 			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigArrays'>Arrays</a></p>
-			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigCollections'>Collections</a></p>
-			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigBinaryData'>Binary Data</a></p>
+			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigCollections'>Collections</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-config.ConfigEntryTypes.ConfigBinaryData'>Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-config.ConfigVariables'>Variables</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ConfigVariables'>Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-config.ConfigVariables.ConfigLogicVariables'>Logic Variables</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-config.ConfigEncodedEntries'>Encoded Entries</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ConfigEncodedEntries'>Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-config.ConfigSectionMaps'>Section Maps</a></p>
 		<li><p><a class='doclink' href='#juneau-config.ConfigSectionBeans'>Section Beans</a></p>
 		<li><p><a class='doclink' href='#juneau-config.ConfigSectionInterfaces'>Section Interfaces</a></p>
@@ -324,16 +324,16 @@
 			<li><p><a class='doclink' href='#juneau-config.ConfigSettingValues.ConfigBulkSettingValues'>Setting Values in Bulk</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-config.ConfigListeners'>Listeners</a></p>
-		<li><p><a class='doclink' href='#juneau-config.ConfigSerializing'>Serializing</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ConfigSerializing'>Serializing</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-config.ConfigImports'>Imports</a><span class='update'>updated: 8.1.0</span></p>
-		<li><p><a class='doclink' href='#juneau-config.ConfigStores'>Config Stores</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ConfigStores'>Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-config.ConfigStores.ConfigMemoryStore'>ConfigMemoryStore</a></p>
 			<li><p><a class='doclink' href='#juneau-config.ConfigStores.ConfigFileStore'>ConfigFileStore</a><span class='update'><b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-config.ConfigStores.CustomConfigStores'>Custom ConfigStores</a></p>
+			<li><p><a class='doclink' href='#juneau-config.ConfigStores.CustomConfigStores'>Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-config.ConfigStores.ConfigStoreListeners'>ConfigStore Listeners</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-config.ReadOnlyConfigs'>Read-only Configs</a></p>
+		<li><p><a class='doclink' href='#juneau-config.ReadOnlyConfigs'>Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-config.ClosingConfigs'>Closing Configs</a></p>
 		<li><p><a class='doclink' href='#juneau-config.SystemDefaultConfig'>System Default Config</a><span class='update'>created: 8.0.0, updated: 8.1.0</span></p>
 	</ol>
@@ -12744,7 +12744,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigEntryTypes.ConfigCollections' id='juneau-config.ConfigEntryTypes.ConfigCollections'>5.2.4 - Collections</a></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigEntryTypes.ConfigCollections' id='juneau-config.ConfigEntryTypes.ConfigCollections'>5.2.4 - Collections</a><span class='update'>updated: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 5.2.4 - juneau-config.ConfigEntryTypes.ConfigCollections -->
 <p>
 	The following methods are provided for accessing maps and collections:
@@ -12816,7 +12816,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigEntryTypes.ConfigBinaryData' id='juneau-config.ConfigEntryTypes.ConfigBinaryData'>5.2.5 - Binary Data</a></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigEntryTypes.ConfigBinaryData' id='juneau-config.ConfigEntryTypes.ConfigBinaryData'>5.2.5 - Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 5.2.5 - juneau-config.ConfigEntryTypes.ConfigBinaryData -->
 <p>
 	The following methods are provided for accessing binary data:
@@ -12843,7 +12843,7 @@
 	The binary data format is controlled via the following setting:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.config.Config#CONFIG_binaryFormat}
+	<li class='jm'>{@link org.apache.juneau.config.Config.Builder#binaryFormat(BinaryFormat)}
 </ul>
 <p>
 	For example:
@@ -12866,14 +12866,14 @@
 	Binary data line wrapping can be controlled via the following setting:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.config.Config#CONFIG_binaryLineLength}
+	<li class='jm'>{@link org.apache.juneau.config.Config.Builder#binaryLineLength(int)}
 </ul>
 </div><!-- END: 5.2.5 - juneau-config.ConfigEntryTypes.ConfigBinaryData -->
 </div><!-- END: 5.2 - juneau-config.ConfigEntryTypes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigVariables' id='juneau-config.ConfigVariables'>5.3 - Variables</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigVariables' id='juneau-config.ConfigVariables'>5.3 - Variables</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 5.3 - juneau-config.ConfigVariables -->
 <p>
 	Config files can contain variables that get resolved dynamically using the previously-described {@link org.apache.juneau.svl.VarResolver} API.
@@ -12921,7 +12921,7 @@
 	The variable resolver is controlled via the following setting:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.config.Config#CONFIG_varResolver}
+	<li class='jm'>{@link org.apache.juneau.config.Config.Builder#varResolver(VarResolver)}
 </ul>
 <p>
 	Additionally, the following method can be used to retrieve a <c>Config</c> with a different variable resolver:
@@ -13014,7 +13014,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigEncodedEntries' id='juneau-config.ConfigEncodedEntries'>5.4 - Encoded Entries</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigEncodedEntries' id='juneau-config.ConfigEncodedEntries'>5.4 - Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 5.4 - juneau-config.ConfigEncodedEntries -->
 <p>
 	Encoded entries allow for sensitive information such as passwords to be obfuscated.
@@ -13049,7 +13049,7 @@
 	Encoders are controlled via the following setting:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.config.Config#CONFIG_encoder}
+	<li class='jm'>{@link org.apache.juneau.config.Config.Builder#encoder(ConfigEncoder)}
 </ul>
 <p>
 	Encoded values can be set to plain-text values.  
@@ -13433,7 +13433,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigSerializing' id='juneau-config.ConfigSerializing'>5.10 - Serializing</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigSerializing' id='juneau-config.ConfigSerializing'>5.10 - Serializing</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 5.10 - juneau-config.ConfigSerializing -->
 <p>
 	The following methods are used for serializing <c>Config</c> objects back into INI files:
@@ -13447,10 +13447,6 @@
 </ul>
 <p>
 	Both methods are thread safe.
-</p>
-<p>
-	The <c>Config</c> class implements the {@del org.apache.juneau.Writable} which means it can be 
-	returned as-is by REST methods to be serialized as INI text.
 </p>
 </div><!-- END: 5.10 - juneau-config.ConfigSerializing -->
 
@@ -13580,7 +13576,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigStores' id='juneau-config.ConfigStores'>5.12 - Config Stores</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigStores' id='juneau-config.ConfigStores'>5.12 - Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 5.12 - juneau-config.ConfigStores -->
 <p>
 	Configuration files are stored in entities called Stores.
@@ -13638,7 +13634,7 @@
 	The store is defined on the <c>Config</c> object via the following setting:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.config.Config#CONFIG_store}
+	<li class='jm'>{@link org.apache.juneau.config.Config.Builder#store(ConfigStore)}
 </ul>
 
 <h5 class='figure'>Example:</h5>
@@ -13726,16 +13722,24 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a config store with a watcher thread and high sensitivity.</jc>
-	ConfigFileStore <jv>fileStore</jv> = ConfigFileStore.<jsm>create</jsm>().directory(<js>"configs"</js>).useWatcher().watcherSensitivity(<jsf>HIGH</jsf>).build();
+	ConfigFileStore <jv>fileStore</jv> = ConfigFileStore
+		.<jsm>create</jsm>()
+		.directory(<js>"configs"</js>)
+		.useWatcher()
+		.watcherSensitivity(<jsf>HIGH</jsf>)
+		.build();
 	
 	<jc>// Create a config using the store defined above.</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(<jv>fileStore</jv>).build();
+	Config <jv>config</jv> = Config
+		.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>)
+		.store(<jv>fileStore</jv>)
+		.build();
 </p>
 </div><!-- END: 5.12.2 - juneau-config.ConfigStores.ConfigFileStore -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigStores.CustomConfigStores' id='juneau-config.ConfigStores.CustomConfigStores'>5.12.3 - Custom ConfigStores</a></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-config.ConfigStores.CustomConfigStores' id='juneau-config.ConfigStores.CustomConfigStores'>5.12.3 - Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 5.12.3 - juneau-config.ConfigStores.CustomConfigStores -->
 <p>
 	The <c>ConfigStore</c> API has been written to allow easy development of custom configuration storage classes.
@@ -13847,53 +13851,6 @@
 		}
 	}
 </p>
-<p>
-	The purpose of the builder class is to simply set values in the {@del org.apache.juneau.ContextProperties}
-	that's passed to the <c>ConfigStore</c>:
-</p>
-<h5 class='figure'>Example Builder Class:</h5>
-<p class='bpcode w800'>
-	<jk>public class</jk> ConfigSqlStoreBuilder <jk>extends</jk> ConfigStoreBuilder {
-
-		<jk>public</jk> ConfigSqlStoreBuilder() {
-			<jk>super</jk>();
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder(ContextProperties <jv>ps</jv>) {
-			<jk>super</jk>(<jv>ps</jv>);
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder jdbcUrl(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder tableName(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_tableName</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder nameColumn(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_nameColumn</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder valueColumn(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_valueColumn</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder pollInterval(<jk>int</jk> <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<ja>@Override</ja> <jc>/* Context.Builder */</jc>
-		<jk>public</jk> ConfigFileStore build() {
-			<jk>return new</jk> ConfigFileStore(getContextProperties());
-		}
-	}
-</p>
 </div><!-- END: 5.12.3 - juneau-config.ConfigStores.CustomConfigStores -->
 
 <!-- ==================================================================================================== -->
@@ -13929,13 +13886,13 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ReadOnlyConfigs' id='juneau-config.ReadOnlyConfigs'>5.13 - Read-only Configs</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.ReadOnlyConfigs' id='juneau-config.ReadOnlyConfigs'>5.13 - Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 5.13 - juneau-config.ReadOnlyConfigs -->
 <p>
 	The following settings can be used to create read-only <c>Config</c> objects:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@del org.apache.juneau.config.Config#CONFIG_readOnly}
+	<li class='jm'>{@link org.apache.juneau.config.Config.Builder#readOnly()}
 </ul>
 
 <h5 class='figure'>Example:</h5>

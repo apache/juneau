@@ -33,8 +33,16 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a config store with a watcher thread and high sensitivity.</jc>
-	ConfigFileStore <jv>fileStore</jv> = ConfigFileStore.<jsm>create</jsm>().directory(<js>"configs"</js>).useWatcher().watcherSensitivity(<jsf>HIGH</jsf>).build();
+	ConfigFileStore <jv>fileStore</jv> = ConfigFileStore
+		.<jsm>create</jsm>()
+		.directory(<js>"configs"</js>)
+		.useWatcher()
+		.watcherSensitivity(<jsf>HIGH</jsf>)
+		.build();
 	
 	<jc>// Create a config using the store defined above.</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(<jv>fileStore</jv>).build();
+	Config <jv>config</jv> = Config
+		.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>)
+		.store(<jv>fileStore</jv>)
+		.build();
 </p>

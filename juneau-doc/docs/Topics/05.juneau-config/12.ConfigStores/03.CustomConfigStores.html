@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Custom ConfigStores'}
+{title:'Custom ConfigStores', updated:'9.0.0'}
 
 <p>
 	The <c>ConfigStore</c> API has been written to allow easy development of custom configuration storage classes.
@@ -122,53 +122,6 @@
 		<jk>public synchronized void</jk> close() {
 			<jk>if</jk> (<jf>watcher</jf> != <jk>null</jk>)
 				<jf>watcher</jf>.cancel();
-		}
-	}
-</p>
-<p>
-	The purpose of the builder class is to simply set values in the {@del oaj.ContextProperties}
-	that's passed to the <c>ConfigStore</c>:
-</p>
-<h5 class='figure'>Example Builder Class:</h5>
-<p class='bpcode w800'>
-	<jk>public class</jk> ConfigSqlStoreBuilder <jk>extends</jk> ConfigStoreBuilder {
-
-		<jk>public</jk> ConfigSqlStoreBuilder() {
-			<jk>super</jk>();
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder(ContextProperties <jv>ps</jv>) {
-			<jk>super</jk>(<jv>ps</jv>);
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder jdbcUrl(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder tableName(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_tableName</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder nameColumn(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_nameColumn</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder valueColumn(String <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_valueColumn</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<jk>public</jk> ConfigSqlStoreBuilder pollInterval(<jk>int</jk> <jv>value</jv>) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, <jv>value</jv>);
-			<jk>return this</jk>;
-		}
-
-		<ja>@Override</ja> <jc>/* Context.Builder */</jc>
-		<jk>public</jk> ConfigFileStore build() {
-			<jk>return new</jk> ConfigFileStore(getContextProperties());
 		}
 	}
 </p>
