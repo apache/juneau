@@ -2603,6 +2603,53 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			bcBuilder.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object during serialization.
+		 * @param unswapFunction The function to convert the object during parsing.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			bcBuilder.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>

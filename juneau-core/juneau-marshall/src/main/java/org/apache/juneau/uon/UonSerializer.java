@@ -810,6 +810,18 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
 		public Builder swaps(java.lang.Class<?>...values) {
 			super.swaps(values);
 			return this;

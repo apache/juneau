@@ -31,6 +31,7 @@ import org.apache.juneau.internal.FluentSetters;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.HashKey;
+import org.apache.juneau.utils.ThrowingFunction;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -1547,6 +1548,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
 

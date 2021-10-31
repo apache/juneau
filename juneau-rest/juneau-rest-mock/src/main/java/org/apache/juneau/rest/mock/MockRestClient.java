@@ -66,6 +66,7 @@ import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Mocked {@link RestClient}.
@@ -923,6 +924,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
 

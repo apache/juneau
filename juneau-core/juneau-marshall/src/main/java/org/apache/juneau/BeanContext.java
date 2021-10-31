@@ -231,7 +231,8 @@ public class BeanContext extends Context {
 		Locale locale;
 		TimeZone timeZone;
 		Class<? extends PropertyNamer> propertyNamer;
-		List<Class<?>> beanDictionary, swaps;
+		List<Class<?>> beanDictionary;
+		List<Object> swaps;
 		Set<Class<?>> notBeanClasses;
 		Set<String> notBeanPackages;
 
@@ -3051,6 +3052,52 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			return swap(normalClass, swappedClass, swapFunction, null);
+		}
+
+		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bcode w800'>
+		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object during serialization.
+		 * @param unswapFunction The function to convert the object during parsing.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, unswapFunction));
+			return this;
+		}
+
+		/**
 		 * Returns the bean swaps list.
 		 *
 		 * <p>
@@ -3059,7 +3106,7 @@ public class BeanContext extends Context {
 		 * @return The bean swaps list.
 		 * @see #swaps(Class...)
 		 */
-		public List<Class<?>> swaps() {
+		public List<Object> swaps() {
 			if (swaps == null)
 				swaps = new ArrayList<>();
 			return swaps;
@@ -3480,7 +3527,8 @@ public class BeanContext extends Context {
 	final TimeZone timeZone;
 	final MediaType mediaType;
 	final Class<? extends PropertyNamer> propertyNamer;
-	final List<Class<?>> beanDictionary, swaps, notBeanClasses;
+	final List<Class<?>> beanDictionary, notBeanClasses;
+	final List<Object> swaps;
 	final List<String> notBeanPackages;
 	final HashKey hashKey;
 
@@ -3552,13 +3600,17 @@ public class BeanContext extends Context {
 
 		LinkedList<ObjectSwap<?,?>> _swaps = new LinkedList<>();
 		for (Object o : ofNullable(swaps).orElse(emptyList())) {
-			ClassInfo ci = ClassInfo.of((Class<?>)o);
-			if (ci.isChildOf(ObjectSwap.class))
-				_swaps.add(castOrCreate(ObjectSwap.class, ci.inner()));
-			else if (ci.isChildOf(Surrogate.class))
-				_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
-			else
-				throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", ci.inner());
+			if (o instanceof ObjectSwap) {
+				_swaps.add((ObjectSwap<?,?>)o);
+			} else {
+				ClassInfo ci = ClassInfo.of((Class<?>)o);
+				if (ci.isChildOf(ObjectSwap.class))
+					_swaps.add(castOrCreate(ObjectSwap.class, ci.inner()));
+				else if (ci.isChildOf(Surrogate.class))
+					_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
+				else
+					throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", ci.inner());
+			}
 		}
 		swapArray = _swaps.toArray(new ObjectSwap[_swaps.size()]);
 

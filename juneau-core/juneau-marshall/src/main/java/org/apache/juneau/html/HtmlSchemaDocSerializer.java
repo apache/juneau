@@ -25,6 +25,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -621,6 +622,18 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
 
