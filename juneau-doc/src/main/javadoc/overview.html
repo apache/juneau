@@ -337,10 +337,10 @@
 		<li><p><a class='doclink' href='#juneau-config.ClosingConfigs'>Closing Configs</a></p>
 		<li><p><a class='doclink' href='#juneau-config.SystemDefaultConfig'>System Default Config</a><span class='update'>created: 8.0.0, updated: 8.1.0</span></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a><span class='update'>updated: <b>9.0.0</b></span></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-rest-server.RestHelloWorldExample'>Hello World Example</a><span class='update'><b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.RestClassHierarchy'>Class Hierarchy</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.RestHelloWorldExample'>Hello World Example</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.RestClassHierarchy'>Class Hierarchy</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestInstantiation'>Instantiation</a><span class='update'><b><red>todo</red></b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-server.RestInstantiation.RestServlet'>RestServlet</a><span class='update'><b><red>todo</red></b></span></p>
@@ -3723,6 +3723,18 @@
 	<jk>byte</jk>[][] <jv>bytes2d</jv> = {{1,2,3},{4,5,6},<jk>null</jk>};
 	<jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes2d</jv>);           <jc>// Produces "['AQID','BAUG',null]"</jc>
 	<jv>bytes2d</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[][].<jk>class</jk>);   <jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
+</p>
+<p>
+	The {@link org.apache.juneau.BeanContextable.Builder#swap(Class,Class,ThrowableFunction)} and {@link org.apache.juneau.BeanContextable.Builder#swap(Class,Class,ThrowableFunction,ThrowableFunction)}
+	methods are another way to define swaps by using functions.
+</p>
+<p class='bpcode w800'>
+	<jc>// Use a function to convert beans to strings.</jc>
+	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()
+		.simple()
+		.swap(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>myBeanStringifier</jsm>(<jv>x</jv>))
+		.build();
 </p>
 
 <!-- ==================================================================================================== -->
@@ -13987,7 +13999,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server' id='juneau-rest-server'>6 - juneau-rest-server</a></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server' id='juneau-rest-server'>6 - juneau-rest-server</a><span class='update'>updated: <b>9.0.0</b></span></h2>
 <div class='topic'><!-- START: 6 - juneau-rest-server -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -14035,6 +14047,10 @@
 
 <h5 class='topic'>Features</h5>
 <ul class='spaced-list'>
+	<li>
+		Deployable in standard Servlet containers.
+	<li>
+		Deployable in Spring Boot environments with full support for injected beans.
 	<li>
 		Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or 
 		Java-serialized-object based on value of <l>Accept</l> header.  
@@ -14102,7 +14118,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestHelloWorldExample' id='juneau-rest-server.RestHelloWorldExample'>6.1 - Hello World Example</a><span class='update'><b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestHelloWorldExample' id='juneau-rest-server.RestHelloWorldExample'>6.1 - Hello World Example</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 6.1 - juneau-rest-server.RestHelloWorldExample -->
 <p>
 	A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.Rest}.
@@ -14152,7 +14168,7 @@
 			<js>"&lt;/div&gt;"</js>
 		}
 	)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicUniversalRest {
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
 	
 		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		<jk>public</jk> String sayHello() {
@@ -14183,7 +14199,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestClassHierarchy' id='juneau-rest-server.RestClassHierarchy'>6.2 - Class Hierarchy</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestClassHierarchy' id='juneau-rest-server.RestClassHierarchy'>6.2 - Class Hierarchy</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 6.2 - juneau-rest-server.RestClassHierarchy -->
 <p>
 	The class hierarchy for the REST servlet class is shown below:
@@ -14204,6 +14220,22 @@
 							</li>
 						</ul>
 					</li>
+					<li class='jac'>{@link org.apache.juneau.rest.BasicRestServletJena org.apache.juneau.rest.BasicRestServletJena}
+						<br>Same as {@link org.apache.juneau.rest.BasicRestServlet} but adds RDF marshalling support.
+					</li>
+					<li class='jac'>{@link org.apache.juneau.rest.springboot.SpringRestServlet org.apache.juneau.rest.springboot.SpringRestServlet}
+						<br>Top-level servlet to use in Spring Boot.
+						<ul>
+							<li class='jac'>{@link org.apache.juneau.rest.springboot.BasicSpringRestServlet org.apache.juneau.rest.springboot.BasicSpringRestServlet}
+								<br>Same as {@link BasicRestServlet} except for Spring Boot.
+								<ul>
+									<li class='jac'>{@link org.apache.juneau.rest.springboot.BasicSpringRestServletGroup org.apache.juneau.rest.springboot.BasicSpringRestServletGroup}
+										<br>Same as {@link BasicRestServletGroup} except for Spring Boot.
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>
@@ -14213,42 +14245,43 @@
 	For top-level resources, you'll typically extend from one of the classes above.
 </p>
 <p>
-	For child resources, you can either extend from one of the classes above, or extend from one of the following
-	that provides identical support but does not extent from <c>HttpServlet</c>:
+	For child resources, you can either extend from one of the classes above, or use one 
+	of the default implementations that don't extend from <c>Servlet</c>:
 </p>
 <ul class='javatree'>
-	<li class='jic'>
-		{@del BasicRestConfig} 
+	<li class='jic'>{@link org.apache.juneau.rest.BasicRestOperations org.apache.juneau.BasicRestOperations}
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.rest.BasicRestObject org.apache.juneau.BasicRestObject}
 		<ul>
-			<li class='jac'>{@del org.apache.juneau.rest.BasicRest org.apache.juneau.rest.BasicRest}
-				<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
-				<ul>
-					<li class='jac'>{@del org.apache.juneau.rest.BasicRestGroup org.apache.juneau.rest.BasicRestGroup}
-						<br>A default implementation for "router" pages.
-					</li>
-				</ul>
-			</li>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
 		</ul>
-	</li>
+	</ul>
 </ul>
 <p>
-	One reason to use the latter classes as your base classes is when you're implementing REST resources as 
-	<ja>@Bean</ja>-annotated Spring Beans and you don't want them to be automatically registered as top-level servlets.
+	In a Spring Boot environment, child classes will typically extend from these latter two when
+	implementing REST resources as <ja>@Bean</ja>-annotated Spring Beans.
+	If you extend from one of the servlet classses, Spring Boot will automatically
+	register them as top-level servlets which typically is not the desired behavior.
 </p>
+<p>
+	The following interfaces are also provided for defining REST endpoint classes:
 
+<ul class='javatree'>
+	<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalRest} - Support for all languages.
+	<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonRest} - Support for JSON.
+	<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonRest} - Support for simplified JSON.
+	<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiRest} - Support for OpenAPI. 
+</ul>
+<p>
+	The interfaces have no methods to implement.  They simply aggregate common class-level
+	annotations used to configure your REST classes.
+</p>
 <p>
 	The servlets with RDF support require Jena on the classpath.  
 	All other serializers and parsers do not have any external library dependencies.
 	For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to 
 	support RDF. 
 </p>
-<p>
-	Everything is configured through the following classes which you will see a lot:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.rest.RestContext} - Each resource class instance has one copy that holds all of its configuration.
-	<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder} - Builder for the class above.
-</ul>
 </div><!-- END: 6.2 - juneau-rest-server.RestClassHierarchy -->
 
 <!-- ==================================================================================================== -->

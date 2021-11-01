@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Instantiation', flags:'todo'}
+{title:'Instantiation', updated:'9.0.0'}
 
 <p>
 	REST resources are deployed in one of two ways:
@@ -28,18 +28,14 @@
 <p>
 	<b>When deployed as a child of another resource, you MAY extend from one of the servlet classes but it's 
 	not necessary.</b>
-	The only requirement is that the class be annotated with <ja>@Rest</ja> and have one of the following constructors:
+	The only requirement is that the class be annotated with <ja>@Rest</ja> and have one of the following constructors
+	if they aren't already Spring Beans:
 </p>
 <ul class='javatree'>
 	<li class='jm'><c><jk>public</jk> T()</c>
 	<li class='jm'><c><jk>public</jk> T(RestContext.Builder)</c>
 </ul>
-<p>
-	And even that requirement is relaxed if you implement your own REST resource resolver (described later).
-</p>
-<p>
-	For example:
-</p>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Top level resource is deployed like any other servlet and must subclass from RestServlet.</jc>
 	<ja>@Rest</ja>(

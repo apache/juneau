@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Class Hierarchy', updated:'8.1.0,9.0.0',}
+{title:'Class Hierarchy', updated:'8.1.0,9.0.0'}
 
 <p>
 	The class hierarchy for the REST servlet class is shown below:
@@ -59,39 +59,41 @@
 	For top-level resources, you'll typically extend from one of the classes above.
 </p>
 <p>
-	For child resources, you can either extend from one of the classes above, or extend from one of the following
-	that provides identical support but does not extent from <c>HttpServlet</c>:
+	For child resources, you can either extend from one of the classes above, or use one 
+	of the default implementations that don't extend from <c>Servlet</c>:
 </p>
 <ul class='javatree'>
-	<li class='jic'>
-		{@del BasicRestConfig} 
+	<li class='jic'>{@link oajr.BasicRestOperations org.apache.juneau.BasicRestOperations}
+	<ul>
+		<li class='jac'>{@link oajr.BasicRestObject org.apache.juneau.BasicRestObject}
 		<ul>
-			<li class='jac'>{@del oajr.BasicRest org.apache.juneau.rest.BasicRest}
-				<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
-				<ul>
-					<li class='jac'>{@del oajr.BasicRestGroup org.apache.juneau.rest.BasicRestGroup}
-						<br>A default implementation for "router" pages.
-					</li>
-				</ul>
-			</li>
+			<li class='jac'>{@link oajr.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
 		</ul>
-	</li>
+	</ul>
 </ul>
 <p>
-	One reason to use the latter classes as your base classes is when you're implementing REST resources as 
-	<ja>@Bean</ja>-annotated Spring Beans and you don't want them to be automatically registered as top-level servlets.
+	In a Spring Boot environment, child classes will typically extend from these latter two when
+	implementing REST resources as <ja>@Bean</ja>-annotated Spring Beans.
+	If you extend from one of the servlet classses, Spring Boot will automatically
+	register them as top-level servlets which typically is not the desired behavior.
 </p>
+<p>
+	The following interfaces are also provided for defining REST endpoint classes:
 
+<ul class='javatree'>
+	<li class='jic'>{@link oajr.config.BasicUniversalRest} - Support for all languages.
+	<li class='jic'>{@link oajr.config.BasicJsonRest} - Support for JSON.
+	<li class='jic'>{@link oajr.config.BasicSimpleJsonRest} - Support for simplified JSON.
+	<li class='jic'>{@link oajr.config.BasicOpenApiRest} - Support for OpenAPI. 
+</ul>
+<p>
+	The interfaces have no methods to implement.  They simply aggregate common class-level
+	annotations used to configure your REST classes.
+</p>
 <p>
 	The servlets with RDF support require Jena on the classpath.  
 	All other serializers and parsers do not have any external library dependencies.
 	For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to 
 	support RDF. 
 </p>
-<p>
-	Everything is configured through the following classes which you will see a lot:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oajr.RestContext} - Each resource class instance has one copy that holds all of its configuration.
-	<li class='jc'>{@link oajr.RestContext.Builder} - Builder for the class above.
-</ul>
+
