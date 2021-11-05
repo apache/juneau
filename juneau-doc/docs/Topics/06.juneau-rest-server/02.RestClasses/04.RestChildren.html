@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Children', flags:'todo'}
+{title:'Children', updated:'9.0.0'}
 
 <p>
 	Child Resources are REST servlets or objects that are linked to parent resources through the 
@@ -40,11 +40,20 @@
 	So in the example above, the child resource is accessed through the URL <l>/parent/foo</l>.
 </p>
 <p>
-	A HUGE advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
+	One advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
 	file.
 	Initialization of and access to the child resources occurs through the parent resource.
 	Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 </p>
-<ul class='seealso'>
-	<li class='jf'>{@del oajr.RestContext#REST_children}
+<p>
+	Child REST objects typically extend from {@link oajr.BasicRestObject} to inherit basic functionality 
+	defined on that class, but as shown above it's not a requirement.
+	Child REST objects can also be preconfigured with basic functionality by implementing one of the 
+	following interfaces as well:
+</p>
+<ul class='javatree'>
+	<li class='jic'>{@link oajr.config.BasicUniversalRest} - Support for all languages.
+	<li class='jic'>{@link oajr.config.BasicJsonRest} - Support for JSON.
+	<li class='jic'>{@link oajr.config.BasicSimpleJsonRest} - Support for simplified JSON.
+	<li class='jic'>{@link oajr.config.BasicOpenApiRest} - Support for OpenAPI. 
 </ul>

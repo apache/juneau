@@ -1,0 +1,63 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'BasicRestObject', created:'8.1.0', updated:'9.0.0'} 
+
+<p>
+	The {@link oajr.BasicRestObject} class is identical to the {@link oajr.BasicRestServlet} class except that
+	it does not extend from <c>HttpServlet</c>.
+	It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
+	servlet.  It can however be used for child resources registered via the {@link oajr.annotation.Rest#children() @Rest(children)} 
+	annotation explained later.
+</p>
+<p>
+	This class is particularly important in Spring Boot environments where you want to defined REST objects as Spring Beans.
+	Spring Boot will automatically deploy any classes that extend from <c>Servlet</c> as top-level resources.  Extending
+	from this class will prevent that behavior.
+</p>
+<p>
+	The code for this class is virtually identical to {@link oajr.BasicRestServlet} but lacks a parent class:
+</p>
+
+<h5 class='figure'>BasicRestServlet.java</h5>
+<p class='bpcode w800'>
+	<ja>@Rest</ja>
+	<jk>public abstract class</jk> BasicRestObject <jk>implements</jk> BasicUniversalRest, BasicRestOperations {
+	
+		<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+		<jk>public</jk> Swagger getSwagger(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.getSwagger().orElseThrow(NotFound::<jk>new</jk>);
+		}
+	
+		<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+		<jk>public</jk> HttpResource getHtdoc(<ja>@Path</ja>(<js>"/*"</js>) String <jv>path</jv>, Locale <jv>locale</jv>) <jk>throws</jk> NotFound {
+			<jk>return</jk> getContext().getStaticFiles().resolve(<jv>path</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
+		}
+	
+		<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+		<jk>public</jk> HttpResource getFavIcon() {
+			String <jv>favIcon</jv> = getContext().getConfig().getString(<js>"REST/favicon"</js>, <js>"images/juneau.png"</js>);
+			<jk>return</jk> getHtdoc(<jv>favIcon</jv>, <jk>null</jk>);
+		}
+	
+		<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+		<jk>public void</jk> error() {}
+	
+		<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+		<jk>public</jk> RestContextStats getStats(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.getContext().getStats();
+		}
+	}
+</p>

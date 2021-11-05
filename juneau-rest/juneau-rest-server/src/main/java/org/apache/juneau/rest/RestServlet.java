@@ -38,8 +38,36 @@ import org.apache.juneau.http.response.*;
 /**
  * Servlet implementation of a REST resource.
  *
+ * <p>
+ * 	The {@link RestServlet} class is the entry point for your REST resources.
+ * 	It extends directly from <l>HttpServlet</l> and is deployed like any other servlet.
+ * </p>
+ * <p>
+ * 	When the servlet <l>init()</l> method is called, it triggers the code to find and process the <l>@Rest</l>
+ * 	annotations on that class and all child classes.
+ * 	These get constructed into a {@link RestContext} object that holds all the configuration
+ * 	information about your resource in a read-only object.
+ * </p>
+ * <p>
+ * 	Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
+ * 	extend from one of the preconfigured default servlets such as {@link BasicRestServlet}.
+ * 	The <l>RestServlet</l> class by itself is not configured with any serializers and parsers, and therefore
+ * 	not very useful on it's own.
+ * 	However, the class does provide a couple of convenience methods to be aware of:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jac'><c>{@link RestServlet} <jk>extends</jk> HttpServlet</c>
+ * 	<ul>
+ * 		<li class='jm'>{@link RestServlet#init(ServletConfig) init(ServletConfig)} - Can override to provide custom initialization.
+ * 		<li class='jm'>{@link RestServlet#service(HttpServletRequest,HttpServletResponse) service(HttpServletRequest,HttpServletResponse)} - Can override to provide custom request handling.
+ * 		<li class='jm'>{@link RestServlet#destroy() destroy()} - Can override to provide custom cleanup.
+ * 		<li class='jm'>{@link RestServlet#getContext() getContext()} - Returns all aspects of the configuration of your resource pulled from all annotations on the class/parent-classes and methods.
+ * 		<li class='jm'>{@link RestServlet#log(Level,String,Object...) log(Level,String,Object...)} - Convenience logging method.
+ * 		<li class='jm'>{@link RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)} - Convenience logging method.
+ * 	</ul>
+ * </ul>
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestServlet}
+ * 	<li class='doc'>{@doc juneau-rest-server}
  * </ul>
  */
 public abstract class RestServlet extends HttpServlet {

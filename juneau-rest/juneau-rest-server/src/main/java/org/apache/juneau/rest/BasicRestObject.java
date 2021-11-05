@@ -41,26 +41,26 @@ public abstract class BasicRestObject extends RestObject implements BasicUnivers
 	// BasicRestConfig methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* BasicRestConfig */
+	@Override /* BasicRestOperations */
 	public Swagger getSwagger(RestRequest req) {
 		return req.getSwagger().orElseThrow(NotFound::new);
 	}
 
-	@Override /* BasicRestConfig */
+	@Override /* BasicRestOperations */
 	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
 		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
-	@Override /* BasicRestConfig */
+	@Override /* BasicRestOperations */
 	public HttpResource getFavIcon() {
 		String favIcon = getContext().getConfig().getString("REST/favicon", "images/juneau.png");
 		return getHtdoc(favIcon, null);
 	}
 
-	@Override /* BasicRestConfig */
+	@Override /* BasicRestOperations */
 	public void error() {}
 
-	@Override /* BasicRestConfig */
+	@Override /* BasicRestOperations */
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}
