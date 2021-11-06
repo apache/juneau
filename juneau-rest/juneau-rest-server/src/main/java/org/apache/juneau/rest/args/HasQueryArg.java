@@ -26,7 +26,13 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link HasQuery} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#contains(String...) contains}(<jv>name</jv>)</c>
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getQueryParams() getQueryParams}()
+ * 		.{@link RequestQueryParams#contains(String...) contains}(<jv>name</jv>);
+ * </p>
  *
  * <p>
  * The parameter type can be a <jk>boolean</jk> or anything convertible from a <jk>boolean</jk>.

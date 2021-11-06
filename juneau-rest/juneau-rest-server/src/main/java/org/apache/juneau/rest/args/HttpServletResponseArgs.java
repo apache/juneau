@@ -12,35 +12,39 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import org.apache.juneau.dto.swagger.Swagger;
+import javax.servlet.http.*;
+
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link Swagger} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link HttpServletResponse} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getSwagger() getSwagger}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HttpServletResponse}
+ * </ul>
  */
-public class SwaggerArg extends SimpleRestOperationArg {
+public class HttpServletResponseArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link SwaggerArg}, or <jk>null</jk> if the parameter type is not {@link Swagger}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static SwaggerArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(Swagger.class))
-			return new SwaggerArg();
+	public static HttpServletResponseArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(HttpServletResponse.class))
+			return new HttpServletResponseArgs(x->x);
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected SwaggerArg() {
-		super((opSession)->opSession.getRequest().getSwagger().orElse(null));
+	protected <T> HttpServletResponseArgs(ThrowingFunction<HttpServletResponse,T> function) {
+		super((session)->function.apply(session.getRestSession().getResponse()));
 	}
 }

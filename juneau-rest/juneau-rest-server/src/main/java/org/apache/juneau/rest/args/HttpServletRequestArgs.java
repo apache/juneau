@@ -12,36 +12,54 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
+import java.security.*;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link Locale} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link HttpServletRequest} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getLocale() getLocale}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link AsyncContext}
+ * 	<li class='jc'><c>{@link Cookie}[]</c>
+ * 	<li class='jc'>{@link DispatcherType}
+ * 	<li class='jc'>{@link HttpServletRequest}
+ * 	<li class='jc'>{@link Principal}
+ * </ul>
  */
-public class LocaleArg extends SimpleRestOperationArg {
+public class HttpServletRequestArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link LocaleArg}, or <jk>null</jk> if the parameter type is not {@link Locale}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static LocaleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(Locale.class))
-			return new LocaleArg();
+	public static HttpServletRequestArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(AsyncContext.class))
+			return new HttpServletRequestArgs(x->x.getAsyncContext());
+		if (paramInfo.isType(Cookie[].class))
+			return new HttpServletRequestArgs(x->x.getCookies());
+		if (paramInfo.isType(DispatcherType.class))
+			return new HttpServletRequestArgs(x->x.getDispatcherType());
+		if (paramInfo.isType(HttpServletRequest.class))
+			return new HttpServletRequestArgs(x->x);
+		if (paramInfo.isType(Principal.class))
+			return new HttpServletRequestArgs(x->x.getUserPrincipal());
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected LocaleArg() {
-		super((opSession)->opSession.getRequest().getLocale());
+	protected <T> HttpServletRequestArgs(ThrowingFunction<HttpServletRequest,T> function) {
+		super((session)->function.apply(session.getRequest().getHttpServletRequest()));
 	}
 }

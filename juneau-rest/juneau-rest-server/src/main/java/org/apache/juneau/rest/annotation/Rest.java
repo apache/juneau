@@ -229,6 +229,12 @@ public @interface Rest {
 	 * <p>
 	 * Defines children of this resource.
 	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Children on child are combined with those on parent class.
+	 * 	<li>Children are list parent-to-child in the order they appear in the annotation.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#children(Object...)}
 	 * </ul>
@@ -258,6 +264,11 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * The configuration file .
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Config file is searched for in child-to-parent order.
+	 * </ul>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -309,6 +320,13 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Converters on child are combined with those on parent class.
+	 * 	<li>Converters are executed child-to-parent in the order they appear in the annotation.
+	 * 	<li>Converters on methods are executed before those on classes.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
@@ -562,7 +580,6 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * </ul>
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
@@ -622,6 +639,11 @@ public @interface Rest {
 	 * <p>
 	 * It is used to populate the Swagger description field.
 	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Description is searched for in child-to-parent order.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
@@ -667,6 +689,11 @@ public @interface Rest {
 	 * 	<jv>builder</jv>.getEncoders().add(<jv>classes</jv>);
 	 * </p>
 	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Encoders on child are combined with those on parent class.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestEncoders}
 	 * </ul>
@@ -696,6 +723,13 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Guards on child are combined with those on parent class.
+	 * 	<li>Guards are executed child-to-parent in the order they appear in the annotation.
+	 * 	<li>Guards on methods are executed before those on classes.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
@@ -820,6 +854,14 @@ public @interface Rest {
 	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
 	 * 	<jv>builder</jv>.getParsers().add(<jv>classes</jv>);
 	 * </p>
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Parsers on child override those on parent class.
+	 * 	<li>{@link org.apache.juneau.parser.ParserSet.Inherit} class can be used to inherit and augment values from parent.
+	 * 	<li>{@link org.apache.juneau.parser.ParserSet.NoInherit} class can be used to suppress inheriting from parent.
+	 * 	<li>Parsers on methods take precedence over those on classes.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestParsers}
@@ -962,6 +1004,11 @@ public @interface Rest {
 	 * 		The paths <js>"/myResource"</js> and <js>"/myResource/*"</js> are equivalent.
 	 * 	<li>
 	 * 		Paths must not end with <js>"/"</js> (per the servlet spec).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Path is searched for in child-to-parent order.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1184,6 +1231,14 @@ public @interface Rest {
 	 * 	<jv>builder</jv>.getSerializers().add(<jv>classes</jv>);
 	 * </p>
 	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Serializers on child override those on parent class.
+	 * 	<li>{@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.
+	 * 	<li>{@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.
+	 * 	<li>Serializers on methods take precedence over those on classes.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestSerializers}
 	 * </ul>
@@ -1233,6 +1288,12 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
 	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
 	 * </ul>
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Static files on child are combined with those on parent class.
+	 * 	<li>Static files are are executed child-to-parent in the order they appear in the annotation.
+	 * </ul>
 	 */
 	Class<? extends StaticFiles> staticFiles() default StaticFiles.Null.class;
 
@@ -1279,6 +1340,11 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * It is used to populate the Swagger title field.
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Label is searched for in child-to-parent order.
+	 * </ul>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

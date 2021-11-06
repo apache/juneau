@@ -24,8 +24,17 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Body} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#schema(HttpPartSchema) schema}(<jv>schema</jv>).{@link RequestBody#asType(Type,Type...) asType}(<jv>type</jv>)</c>.
- * with a {@link HttpPartSchema schema} derived from the {@link Body} annotation.
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getBody() getBody}()
+ * 		.{@link RequestBody#schema(HttpPartSchema) schema}(<jv>schema</jv>)
+ * 		.{@link RequestBody#asType(Type,Type...) asType}(<jv>type</jv>);
+ * </p>
+ *
+ * <p>
+ * {@link HttpPartSchema schema} is derived from the {@link Body} annotation.
  */
 public class BodyArg implements RestOpArg {
 

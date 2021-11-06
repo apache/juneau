@@ -12,36 +12,42 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
-
+import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link TimeZone} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestOpSession} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getTimeZone() getTimeZone}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link BeanStore}
+ * 	<li class='jc'>{@link RestOpSession}
+ * </ul>
  */
-public class TimeZoneArg extends SimpleRestOperationArg {
+public class RestOpSessionArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link TimeZoneArg}, or <jk>null</jk> if the parameter type is not {@link TimeZone}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static TimeZoneArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(TimeZone.class))
-			return new TimeZoneArg();
+	public static RestOpSessionArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(BeanStore.class))
+			return new RestOpSessionArgs(x->x.getBeanStore());
+		if (paramInfo.isType(RestOpSession.class))
+			return new RestOpSessionArgs(x->x);
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected TimeZoneArg() {
-		super((opSession)->opSession.getRequest().getTimeZone().orElse(null));
+	protected <T> RestOpSessionArgs(ThrowingFunction<RestOpSession,T> function) {
+		super((session)->function.apply(session));
 	}
 }

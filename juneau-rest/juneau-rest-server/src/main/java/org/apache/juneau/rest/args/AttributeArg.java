@@ -19,10 +19,17 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link Attr} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link Attr} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String) get}(<jv>name</jv>).{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>.
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getAttributes() getAttributes}()
+ * 		.{@link RequestAttributes#get(String) get}(<jv>name</jv>)
+ * 		.{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>);
+ * </p>
  */
 public class AttributeArg implements RestOpArg {
 

@@ -30,8 +30,17 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Query} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getQueryParams() getQueryParams}().{@link RequestQueryParams#get(String) get}(<jv>name</jv>).{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>)</c>
- * with a {@link HttpPartSchema schema} derived from the {@link Query} annotation.
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getQueryParams() getQueryParams}()
+ * 		.{@link RequestQueryParams#get(String) get}(<jv>name</jv>)
+ * 		.{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>);
+ * </p>
+ *
+ * <p>
+ * {@link HttpPartSchema schema} is derived from the {@link Query} annotation.
  */
 public class QueryArg implements RestOpArg {
 	private final boolean multi;

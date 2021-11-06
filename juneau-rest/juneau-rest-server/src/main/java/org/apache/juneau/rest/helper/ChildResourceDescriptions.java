@@ -60,7 +60,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * 	Default is to maintain the order as specified in the annotation.
 	 */
 	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
-		for (Map.Entry<String,RestContext> e : context.getChildResources().entrySet()) {
+		for (Map.Entry<String,RestContext> e : context.getRestChildren().asMap().entrySet()) {
 			String title = null;
 			try {
 				title = e.getValue().getSwagger(req.getLocale()).flatMap(Swagger::info).flatMap(Info::title).orElse(null);

@@ -12,38 +12,49 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.security.*;
-
-import javax.servlet.http.*;
-
+import java.io.*;
+import javax.servlet.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link Principal} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestResponse} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRestSession() getRestSession}().{@link RestSession#getRequest() getRequest}().{@link HttpServletRequest#getUserPrincipal() getUserPrincipal}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link OutputStream}
+ * 	<li class='jc'>{@link RestResponse}
+ * 	<li class='jc'>{@link ServletOutputStream}
+ * 	<li class='jc'>{@link Writer}
+ * </ul>
  */
-public class PrincipalArg extends SimpleRestOperationArg {
+public class RestResponseArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link PrincipalArg}, or <jk>null</jk> if the parameter type is not {@link Principal}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static PrincipalArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(Principal.class))
-			return new PrincipalArg();
+	public static RestResponseArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(OutputStream.class))
+			return new RestResponseArgs(x->x.getOutputStream());
+		if (paramInfo.isType(RestResponse.class))
+			return new RestResponseArgs(x->x);
+		if (paramInfo.isType(ServletOutputStream.class))
+			return new RestResponseArgs(x->x.getOutputStream());
+		if (paramInfo.isType(Writer.class))
+			return new RestResponseArgs(x->x.getWriter());
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected PrincipalArg() {
-		super((opSession)->opSession.getRestSession().getRequest().getUserPrincipal());
+	protected <T> RestResponseArgs(ThrowingFunction<RestResponse,T> function) {
+		super((session)->function.apply(session.getResponse()));
 	}
 }

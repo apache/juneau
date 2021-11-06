@@ -12,36 +12,39 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link ServletInputStream} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link HttpSession} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getInputStream() getInputStream}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HttpSession}
+ * </ul>
  */
-public class ServetInputStreamArg extends SimpleRestOperationArg {
+public class HttpSessionArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ServetInputStreamArg}, or <jk>null</jk> if the parameter type is not {@link ServletInputStream}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static ServetInputStreamArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ServletInputStream.class))
-			return new ServetInputStreamArg();
+	public static HttpSessionArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(HttpSession.class))
+			return new HttpSessionArgs(x->x);
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected ServetInputStreamArg() {
-		super((opSession)->opSession.getRequest().getInputStream());
+	protected <T> HttpSessionArgs(ThrowingFunction<HttpSession,T> function) {
+		super((session)->function.apply(session.getRestSession().getRequest().getSession()));
 	}
 }

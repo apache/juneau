@@ -13,11 +13,11 @@
 package org.apache.juneau.mstat;
 
 import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -209,6 +209,32 @@ public class MethodExecStore {
 	 */
 	public Collection<MethodExecStats> getStats() {
 		return db.values();
+	}
+
+	/**
+	 * Returns timing information on all method executions on this class.
+	 *
+	 * @return A list of timing statistics ordered by average execution time descending.
+	 */
+	public List<MethodExecStats> getStatsByTotalTime() {
+		return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList());
+	}
+
+	/**
+	 * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.
+	 *
+	 * @return A report of all method execution times ordered by .
+	 */
+	public String getReport() {
+		StringBuilder sb = new StringBuilder()
+			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
+			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
+		getStatsByTotalTime()
+			.stream()
+			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
+			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
+		return sb.toString();
+
 	}
 
 	/**

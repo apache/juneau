@@ -3465,55 +3465,31 @@ public class RestContext extends Context {
 			Value<RestOpArgList.Builder> v = Value.of(
 				RestOpArgList
 					.of(
-						AsyncContextArg.class,
 						AttributeArg.class,
 						BodyArg.class,
-						ConfigArg.class,
-						CookiesArg.class,
-						DispatcherTypeArg.class,
 						FormDataArg.class,
 						HasFormDataArg.class,
 						HasQueryArg.class,
 						HeaderArg.class,
-						HttpServletRequestArg.class,
-						HttpServletResponseArg.class,
-						HttpSessionArg.class,
-						InputStreamArg.class,
+						HttpServletRequestArgs.class,
+						HttpServletResponseArgs.class,
+						HttpSessionArgs.class,
 						InputStreamParserArg.class,
-						LocaleArg.class,
-						MessagesArg.class,
 						MethodArg.class,
-						OutputStreamArg.class,
 						ParserArg.class,
 						PathArg.class,
-						PrincipalArg.class,
 						QueryArg.class,
-						ReaderArg.class,
 						ReaderParserArg.class,
-						RequestAttributesArg.class,
 						RequestBeanArg.class,
-						RequestBodyArg.class,
-						RequestFormDataArg.class,
-						RequestHeadersArg.class,
-						RequestPathArg.class,
-						RequestQueryArg.class,
-						ResourceBundleArg.class,
 						ResponseBeanArg.class,
 						ResponseHeaderArg.class,
 						ResponseStatusArg.class,
-						RestContextArg.class,
-						RestSessionArg.class,
-						RestOpContextArg.class,
-						RestOpSessionArg.class,
-						RestRequestArg.class,
-						RestResponseArg.class,
-						ServetInputStreamArg.class,
-						ServletOutputStreamArg.class,
-						SwaggerArg.class,
-						TimeZoneArg.class,
-						UriContextArg.class,
-						UriResolverArg.class,
-						WriterArg.class,
+						RestContextArgs.class,
+						RestSessionArgs.class,
+						RestOpContextArgs.class,
+						RestOpSessionArgs.class,
+						RestRequestArgs.class,
+						RestResponseArgs.class,
 						DefaultArg.class
 					)
 			);
@@ -6404,8 +6380,8 @@ public class RestContext extends Context {
 	 * 	An unmodifiable map of child resources.
 	 * 	Keys are the {@link Rest#path() @Rest(path)} annotation defined on the child resource.
 	 */
-	public Map<String,RestContext> getChildResources() {
-		return restChildren.asMap();
+	public RestChildren getRestChildren() {
+		return restChildren;
 	}
 
 	/**
@@ -6727,29 +6703,26 @@ public class RestContext extends Context {
 	 * @return
 	 * 	An unmodifiable map of Java method names to call method objects.
 	 */
-	public List<RestOpContext> getOpContexts() {
-		return restOperations.getOpContexts();
+	public RestOperations getRestOperations() {
+		return restOperations;
 	}
 
 	/**
-	 * Returns timing information on all method executions on this class.
+	 * Returns the timing statistics on all method executions on this class.
 	 *
-	 * <p>
-	 * Timing information is maintained for any <ja>@RestResource</ja>-annotated and hook methods.
-	 *
-	 * @return A list of timing statistics ordered by average execution time descending.
+	 * @return The timing statistics on all method executions on this class.
 	 */
-	public List<MethodExecStats> getMethodExecStats() {
-		return methodExecStore.getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(Collectors.toList());
+	public MethodExecStore getMethodExecStore() {
+		return methodExecStore;
 	}
 
 	/**
-	 * Gives access to the internal stack trace database.
+	 * Gives access to the internal statistics on this context.
 	 *
-	 * @return The stack trace database.
+	 * @return The context statistics.
 	 */
 	public RestContextStats getStats() {
-		return new RestContextStats(startTime, getMethodExecStats());
+		return new RestContextStats(startTime, getMethodExecStore().getStatsByTotalTime());
 	}
 
 	/**
@@ -6806,22 +6779,6 @@ public class RestContext extends Context {
 			}
 		}
 		return Optional.ofNullable(s);
-	}
-
-	/**
-	 * Returns the timing information returned by {@link #getMethodExecStats()} in a readable format.
-	 *
-	 * @return A report of all method execution times ordered by .
-	 */
-	public String getMethodExecStatsReport() {
-		StringBuilder sb = new StringBuilder()
-			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
-			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
-		getMethodExecStats()
-			.stream()
-			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
-			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
-		return sb.toString();
 	}
 
 	/**
@@ -7348,10 +7305,6 @@ public class RestContext extends Context {
 	 */
 	public AnnotationWorkList getAnnotations() {
 		return builder.getApplied();
-	}
-
-	RestOperations getRestOperations() {
-		return restOperations;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

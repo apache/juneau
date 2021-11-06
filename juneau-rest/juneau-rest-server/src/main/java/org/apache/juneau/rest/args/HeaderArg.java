@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -30,8 +31,57 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Header} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getHeaders() getHeaders}()./c>
- * with a {@link HttpPartSchema schema} derived from the {@link Header} annotation.
+ * This includes any of the following predefined request header types:
+ *
+ * <ul class='javatree condensed'>
+ * 	<li class='jc'>{@link Accept}
+ * 	<li class='jc'>{@link AcceptCharset}
+ * 	<li class='jc'>{@link AcceptEncoding}
+ * 	<li class='jc'>{@link AcceptLanguage}
+ * 	<li class='jc'>{@link AcceptRanges}
+ * 	<li class='jc'>{@link Authorization}
+ * 	<li class='jc'>{@link CacheControl}
+ * 	<li class='jc'>{@link ClientVersion}
+ * 	<li class='jc'>{@link Connection}
+ * 	<li class='jc'>{@link ContentDisposition}
+ * 	<li class='jc'>{@link ContentEncoding}
+ * 	<li class='jc'>{@link ContentLength}
+ * 	<li class='jc'>{@link ContentType}
+ * 	<li class='jc'>{@link org.apache.juneau.http.header.Date}
+ * 	<li class='jc'>{@link Debug}
+ * 	<li class='jc'>{@link Expect}
+ * 	<li class='jc'>{@link Forwarded}
+ * 	<li class='jc'>{@link From}
+ * 	<li class='jc'>{@link Host}
+ * 	<li class='jc'>{@link IfMatch}
+ * 	<li class='jc'>{@link IfModifiedSince}
+ * 	<li class='jc'>{@link IfNoneMatch}
+ * 	<li class='jc'>{@link IfRange}
+ * 	<li class='jc'>{@link IfUnmodifiedSince}
+ * 	<li class='jc'>{@link MaxForwards}
+ * 	<li class='jc'>{@link NoTrace}
+ * 	<li class='jc'>{@link Origin}
+ * 	<li class='jc'>{@link Pragma}
+ * 	<li class='jc'>{@link ProxyAuthorization}
+ * 	<li class='jc'>{@link Range}
+ * 	<li class='jc'>{@link Referer}
+ * 	<li class='jc'>{@link TE}
+ * 	<li class='jc'>{@link Thrown}
+ * 	<li class='jc'>{@link Upgrade}
+ * 	<li class='jc'>{@link UserAgent}
+ * 	<li class='jc'>{@link Warning}
+ * </ul>
+ *
+ * <p>
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getHeaders() getHeaders}();
+ * </p>
+ *
+ * <p>
+ * {@link HttpPartSchema schema} is derived from the {@link Header} annotation.
  *
  * <p>
  * If the {@link Header#multi()} flag is set, then the data type can be a {@link Collection} or array.

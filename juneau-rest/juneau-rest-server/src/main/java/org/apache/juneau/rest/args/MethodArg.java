@@ -20,7 +20,12 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link Method} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMethod() getMethod}()</c>.
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getMethod() getMethod}();
+ * </p>
  *
  * <p>
  * The parameter type must be {@link String}.

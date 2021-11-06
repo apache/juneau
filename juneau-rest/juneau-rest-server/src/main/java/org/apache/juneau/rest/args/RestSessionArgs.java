@@ -12,36 +12,45 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.util.*;
-
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.util.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestSession} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestSession}
+ * 	<li class='jc'>{@link UrlPath}
+ * 	<li class='jc'>{@link UrlPathMatch}
+ * </ul>
  */
-public class ResourceBundleArg extends SimpleRestOperationArg {
+public class RestSessionArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResourceBundleArg}, or <jk>null</jk> if the parameter type is not {@link ResourceBundle}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static ResourceBundleArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(ResourceBundle.class))
-			return new ResourceBundleArg();
+	public static RestSessionArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(RestSession.class))
+			return new RestSessionArgs(x->x);
+		if (paramInfo.isType(UrlPath.class))
+			return new RestSessionArgs(x->x.getUrlPath());
+		if (paramInfo.isType(UrlPathMatch.class))
+			return new RestSessionArgs(x->x.getUrlPathMatch());
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected ResourceBundleArg() {
-		super((opSession)->opSession.getRequest().getMessages());
+	protected <T> RestSessionArgs(ThrowingFunction<RestSession,T> function) {
+		super((session)->function.apply(session.getRestSession()));
 	}
 }

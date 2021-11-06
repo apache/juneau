@@ -30,8 +30,12 @@ import org.apache.juneau.serializer.*;
  * Resolves method parameters annotated with {@link ResponseHeader} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value must be of type {@link Value} that accepts a value that is then set via
- * <c><jv>opSession</jv>.{@link RestOpSession#getResponse() getResponse}().{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>)</c>.
+ * The parameter value must be of type {@link Value} that accepts a value that is then set via:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getResponse() getResponse}()
+ * 		.{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>);
+ * </p>
  */
 public class ResponseHeaderArg implements RestOpArg {
 	final ResponsePartMeta meta;

@@ -571,3 +571,27 @@ reviewed {
 .nomargin {
 	margin: 0 !important;
 }
+
+ul.condensed {
+	padding-left:0px;
+}
+
+.condensed>li {
+	display: inline-block;
+}
+
+.condensed>li.jm:before {
+	content: '\00a0\00a0\2022\00a0';
+	color: green;
+}
+
+.condensed>li.jc:before {
+	content: '\00a0\00a0\29BF\00a0';
+	color: green;
+}
+
+.condensed>li.ja:before {
+	content: '\00a0\00a0\29BF\00a0';
+	color: DarkTurquoise;
+}
+

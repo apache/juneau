@@ -23,8 +23,15 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link Request} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>requestBeanMeta</jv>)</c>
- * with a {@link RequestBeanMeta meta} derived from the {@link Request} annotation and context configuration.
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>meta</jv>);
+ * </p>
+ *
+ * <p>
+ * {@link RequestBeanMeta meta} is derived from the {@link Request} annotation and context configuration.
  */
 public class RequestBeanArg implements RestOpArg {
 	private final RequestBeanMeta meta;

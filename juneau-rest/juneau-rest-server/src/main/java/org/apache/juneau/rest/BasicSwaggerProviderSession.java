@@ -208,7 +208,7 @@ public class BasicSwaggerProviderSession {
 			js.addBeanDef(defId, new OMap(definitions.getMap(defId)));
 
 		// Iterate through all the @RestOp methods.
-		for (RestOpContext sm : context.getOpContexts()) {
+		for (RestOpContext sm : context.getRestOperations().getOpContexts()) {
 
 			BeanSession bs = sm.getBeanContext().getSession();
 

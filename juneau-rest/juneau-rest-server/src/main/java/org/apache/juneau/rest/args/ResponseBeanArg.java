@@ -25,8 +25,12 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Response} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value must be of type {@link Value} that accepts a value that is then set via
- * <c><jv>opSession</jv>.{@link RestOpSession#getResponse() getResponse}().{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>)</c>.
+ * The parameter value must be of type {@link Value} that accepts a value that is then set via:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getResponse() getResponse}()
+ * 		.{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>);
+ * </p>
  */
 public class ResponseBeanArg implements RestOpArg {
 	final ResponseBeanMeta meta;

@@ -21,8 +21,12 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters on {@link RestOp}-annotated Java methods by retrieving them by type from the REST object bean store.
  *
  * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getBeanStore() getBeanStore}().{@link BeanStore#getBean(Class) getBean}(<jv>type</jv>)</c>
- * which resolves the object from the registered bean store (e.g. Spring-injected beans available in the application).
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getBeanStore() getBeanStore}()
+ * 		.{@link BeanStore#getBean(Class) getBean}(<jv>type</jv>);
+ * </p>
  *
  * <p>
  * This is the default parameter resolver if no other applicable parameter resolvers could be found.

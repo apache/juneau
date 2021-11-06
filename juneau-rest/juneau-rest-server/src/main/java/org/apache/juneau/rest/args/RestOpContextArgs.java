@@ -12,36 +12,50 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import java.io.*;
-
+import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Resolves method parameters of type {@link Reader} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestOpContext} object.
  *
- * <p>
- * The parameter value is resolved using <c><jv>opSession</jv>.{@link RestOpSession#getRequest() getRequest}().{@link RestRequest#getReader() getReader}()</c>.
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link JsonSchemaGenerator}
+ * 	<li class='jc'>{@link ParserSet}
+ * 	<li class='jc'>{@link RestOpContext}
+ * 	<li class='jc'>{@link SerializerSet}
+ * </ul>
  */
-public class ReaderArg extends SimpleRestOperationArg {
+public class RestOpContextArgs extends SimpleRestOperationArg {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ReaderArg}, or <jk>null</jk> if the parameter type is not {@link Reader}.
+	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static ReaderArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(Reader.class))
-			return new ReaderArg();
+	public static RestOpContextArgs create(ParamInfo paramInfo) {
+		if (paramInfo.isType(JsonSchemaGenerator.class))
+			return new RestOpContextArgs(x->x.getJsonSchemaGenerator());
+		if (paramInfo.isType(ParserSet.class))
+			return new RestOpContextArgs(x->x.getParsers());
+		if (paramInfo.isType(RestOpContext.class))
+			return new RestOpContextArgs(x->x);
+		if (paramInfo.isType(SerializerSet.class))
+			return new RestOpContextArgs(x->x.getSerializers());
 		return null;
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param function The function for finding the arg.
 	 */
-	protected ReaderArg() {
-		super((opSession)->opSession.getRequest().getReader());
+	protected <T> RestOpContextArgs(ThrowingFunction<RestOpContext,T> function) {
+		super((session)->function.apply(session.getContext()));
 	}
 }

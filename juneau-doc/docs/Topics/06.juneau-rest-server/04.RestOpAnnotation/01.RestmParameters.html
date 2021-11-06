@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Java Method Parameters', flags:'todo'}
+{title:'@RestOp-annotated Java Method Parameters', flags:'todo'}
 
 <p>
 	Java methods can contain any of the following parameters in any order:
@@ -22,15 +22,15 @@
 	<li>
 		<b>Parameters based on class types:</b>
 		<ul class='spaced-list'>
-			<li><b>Request/response objects:</b>
-				<ul>
-					<li class='jc'>{@link oajr.RestRequest} - The request object.
-					<li class='jc'>{@link javax.servlet.http.HttpServletRequest} - The superclass of <c>RestRequest</c>.
-					<li class='jc'>{@link oajr.RestResponse} - The response object.
-					<li class='jc'>{@link javax.servlet.http.HttpServletResponse} - The superclass of <c>RestResponse</c>.
+			<li>Request/response objects:
+				<ul class='condensed'>
+					<li class='jc'>{@link oajr.RestRequest}
+					<li class='jc'>{@link javax.servlet.http.HttpServletRequest}
+					<li class='jc'>{@link oajr.RestResponse}
+					<li class='jc'>{@link javax.servlet.http.HttpServletResponse}
 				</ul>
-			<li><b>Parsed request header values:</b>
-				<ul>
+			<li>Parsed request header values:
+				<ul class='condensed'>
 					<li class='jc'>{@link oaj.http.header.Accept}
 					<li class='jc'>{@link oaj.http.header.AcceptCharset}
 					<li class='jc'>{@link oaj.http.header.AcceptEncoding}
@@ -61,8 +61,8 @@
 					<li class='jc'>{@link oaj.http.header.Warning}
 					<li class='jc'>{@link java.util.TimeZone}
 				</ul>
-			<li><b>Direct streams on request/response:</b>
-				<ul>
+			<li>Direct streams on request/response:
+				<ul class='condensed'>
 					<li class='jc'>{@link java.io.InputStream}
 					<li class='jc'>{@link javax.servlet.ServletInputStream}
 					<li class='jc'>{@link java.io.Reader}
@@ -70,49 +70,83 @@
 					<li class='jc'>{@link javax.servlet.ServletOutputStream}
 					<li class='jc'>{@link java.io.Writer}
 				</ul>
-			<li><b>Localization:</b>
-				<ul>
-					<li class='jc'>{@link java.util.ResourceBundle} - Client-localized resource bundle.
-					<li class='jc'>{@del oaj.utils.MessageBundle} - A resource bundle with additional features.
-					<li class='jc'>{@link java.util.Locale} - Client locale.
+			<li>Localization:
+				<ul class='condensed'>
+					<li class='jc'>{@link java.util.ResourceBundle}
+					<li class='jc'>{@link oaj.cp.Messages}
+					<li class='jc'>{@link java.util.Locale}
 				</ul>
-			<li><b>Request APIs:</b>
-				<ul>
-					<li class='jc'>{@link oajr.RequestHeaders} - API for accessing request headers.
-					<li class='jc'>{@link oajr.RequestQuery} - API for accessing request query parameters.
-					<li class='jc'>{@link oajr.RequestFormData} - API for accessing request form data.
-					<li class='jc'>{@link oajr.RequestPath} - API for accessing path variables.
-					<li class='jc'>{@link oajr.RequestBody} - API for accessing request body.
+			<li>Request APIs:
+				<ul class='condensed'>
+					<li class='jc'>{@link oajr.RequestAttributes}
+					<li class='jc'>{@link oajr.RequestBody}
+					<li class='jc'>{@link oajr.RequestFormData}
+					<li class='jc'>{@link oajr.RequestHeaders}
+					<li class='jc'>{@link oajr.RequestPath}
+					<li class='jc'>{@link oajr.RequestQuery}
 				</ul>
-			<li><b>Other:</b>
-				<ul>
-					<li class='jc'>{@link oaj.http.HttpMethod} - The method name matched (when using <c><ja>@RestOp</ja>(method=<js>"*"</js>)</c>)
-					<li class='jc'>{@del oajr.RestLogger} - Logger with additional features.
-					<li class='jc'>{@link oajr.RestContext} - The resource read-only context.
-					<li class='jc'>{@link oaj.parser.Parser} - The parser matching the request content type.
-					<li class='jc'>{@link oaj.parser.ReaderParser} - The reader parser matching the request content type.
-					<li class='jc'>{@link oaj.parser.InputStreamParser} - The input stream parser matching the request content type.
-					<li class='jc'>{@link oaj.dto.swagger.Swagger} - The auto-generated Swagger doc.
-					<li class='jc'>{@link oaj.config.Config} - The external config for the resource.
-					<li class='jc'>{@del oajr.RequestProperties} - API for modifying request-time configuration properties.
+			<li>Other:
+				<ul class='condensed'>
+					<li class='jc'>{@link oaj.config.Config}
+					<li class='jc'>{@link oaj.http.HttpMethod}
+					<li class='jc'>{@link oaj.parser.InputStreamParser}
+					<li class='jc'>{@link oaj.parser.Parser}
+					<li class='jc'>{@link oaj.parser.ReaderParser}
+					<li class='jc'>{@link oajr.RestContext}
+					<li class='jc'>{@link oaj.dto.swagger.Swagger}
 				</ul>
 		</ul>
-	<li><b>Annotated parameters:</b>
-		<ul>
-			<li class='ja'>{@link oaj.http.annotation.Path} - Variables in matched URL path patterns.
-			<li class='ja'>{@link oaj.http.annotation.FormData} - Multipart form post parameter values.
-			<li class='ja'>{@link oaj.http.annotation.HasFormData} - Denotes whether the form data parameter exists.
-			<li class='ja'>{@link oaj.http.annotation.Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
-			<li class='ja'>{@link oaj.http.annotation.HasQuery} - Denotes whether the query parameter exists.
-			<li class='ja'>{@link oaj.http.annotation.Header} - A header value.
-			<li class='ja'>{@link oaj.http.annotation.Body} - The HTTP content parsed as a POJO.
-			<li class='ja'>{@link oajr.annotation.Method} - The HTTP method name. 
-			<li class='ja'>{@link oaj.http.annotation.Request} - HTTP request parts available through a proxy bean interface.
-			<li class='ja'>{@link oaj.http.annotation.Response} - HTTP response parts available through a POJO.
-			<li class='ja'>{@link oaj.http.annotation.ResponseHeader} - HTTP response header.
-			<li class='ja'>{@link oaj.http.annotation.ResponseStatus} - HTTP response status code.
+	<li><b>Annotated parameters (either on the parameter or parameter type):</b>
+		<ul class='condensed'>
+			<li class='ja'>{@link oajr.annotation.Attr}
+			<li class='ja'>{@link oaj.http.annotation.Body}
+			<li class='ja'>{@link oaj.http.annotation.Path}
+			<li class='ja'>{@link oaj.http.annotation.FormData}
+			<li class='ja'>{@link oaj.http.annotation.HasFormData}
+			<li class='ja'>{@link oaj.http.annotation.Query}
+			<li class='ja'>{@link oaj.http.annotation.HasQuery}
+			<li class='ja'>{@link oaj.http.annotation.Header}
+			<li class='ja'>{@link oajr.annotation.Method}
+			<li class='ja'>{@link oaj.http.annotation.Request}
+			<li class='ja'>{@link oaj.http.annotation.Response}
+			<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
+			<li class='ja'>{@link oaj.http.annotation.ResponseStatus}
 		</ul>
+	<li><b>Spring Beans</b>
 </ul>
+
+javax.servlet.AsyncContext
+javax.servlet.http.Cookie[]
+javax.servlet.DispatcherType
+javax.servlet.http.HttpSession
+java.security.Principal
+org.apache.juneau.rest.RestOpContext
+org.apache.juneau.rest.RestOpSession
+org.apache.juneau.rest.RestSession
+java.util.TimeZone
+org.apache.juneau.UriContext
+org.apache.juneau.UriResolver
+org.apache.juneau.svl.VarResolverSession
+org.apache.juneau.rest.util.UrlPath
+org.apache.juneau.rest.util.UrlPathMatch
+org.apache.juneau.cp.BeanStore
+org.apache.juneau.BeanContext
+org.apache.juneau.rest.DebugEnablement
+org.apache.juneau.encoders.EncoderSet
+org.apache.juneau.cp.FileFinder
+org.apache.juneau.rest.StaticFiles
+java.util.logging.Logger
+org.apache.juneau.jsonschema.JsonSchemaGenerator
+org.apache.juneau.httppart.HttpPartSerializerSession
+org.apache.juneau.rest.args.HttpPartParserSessionArg
+org.apache.juneau.mstat.MethodExecStore
+org.apache.juneau.rest.RestChildren
+org.apache.juneau.serializer.SerializerSet
+org.apache.juneau.parser.ParserSet
+org.apache.juneau.rest.RestOperations
+org.apache.juneau.mstat.ThrownStore
+
+
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestGet</ja>(<js>"/example1/{a1}/{a2}/{a3}/*"</js>)

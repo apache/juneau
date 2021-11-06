@@ -23,7 +23,7 @@ import java.util.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>Thrown</l> HTTP request header.
+ * Represents a parsed <l>Thrown</l> HTTP response header.
  *
  * <p>
  * Contains exception information including name and optionally a message.

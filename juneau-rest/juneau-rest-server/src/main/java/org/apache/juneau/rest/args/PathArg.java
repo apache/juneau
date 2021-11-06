@@ -29,6 +29,19 @@ import org.apache.juneau.rest.util.*;
 
 /**
  * Resolves method parameters and parameter types annotated with {@link Path} on {@link RestOp}-annotated Java methods.
+ *
+ * <p>
+ * The parameter value is resolved using:
+ * <p class='bcode w800'>
+ * 	<jv>opSession</jv>
+ * 		.{@link RestOpSession#getRequest() getRequest}()
+ * 		.{@link RestRequest#getPathParams() getPathParams}()
+ * 		.{@link RequestPathParams#get(String) get}(<jv>name</jv>)
+ * 		.{@link RequestPathParam#asType(Class) asType}(<jv>type</jv>);
+ * </p>
+ *
+ * <p>
+ * {@link HttpPartSchema schema} is derived from the {@link Path} annotation.
  */
 public class PathArg implements RestOpArg {
 	private final HttpPartParser partParser;
