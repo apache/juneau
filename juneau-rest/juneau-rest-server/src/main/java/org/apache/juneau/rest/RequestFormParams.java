@@ -14,7 +14,10 @@ package org.apache.juneau.rest;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.time.*;
 import java.util.*;
@@ -22,7 +25,10 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
@@ -51,7 +57,7 @@ public class RequestFormParams {
 		Collection<Part> c = null;
 
 		RequestBody body = req.getBody();
-		if (body.isLoaded() || ! req.getContentType().equalsIgnoreCase("multipart/form-data"))
+		if (body.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data"))
 			m = RestUtils.parseQuery(body.getReader());
 		else {
 			c = req.getHttpServletRequest().getParts();
@@ -398,6 +404,21 @@ public class RequestFormParams {
 		return getLast(name);
 	}
 
+	/**
+	 * Returns the form data parameter as the specified bean type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.FormData} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param type The bean type to create.
+	 * @return The bean, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
+		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(()->runtimeException("@FormData(name) not found on class {0}", className(type)));
+		return get(name).asPart(type);
+	}
 	/**
 	 * Returns the last parameter with the specified name as a string.
 	 *

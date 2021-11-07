@@ -13,16 +13,21 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents a single HTTP part on an HTTP request.
@@ -126,6 +131,28 @@ public abstract class RequestHttpPart {
 	 */
 	public String orElse(String other) {
 		return asString().orElse(other);
+	}
+
+	/**
+	 * Returns the value of this part as the specified type.
+	 *
+	 * <p>
+	 * Looks for one of the following constructors:
+	 * <ul class='javatree'>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * </ul>
+	 *
+	 * @param c The part type.
+	 * @return The value of this part as the specified type, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> asPart(Class<T> c) {
+		if (! isPresent())
+			return Optional.empty();
+		ConstructorInfo cc = HttpParts.getConstructor(getRequest().getBeanSession().getClassMeta(c)).orElseThrow(()->runtimeException("Could not determine a method to construct type {0}", className(c)));
+		if (cc.getParamCount() == 1)
+			return Optional.of(cc.invoke(get()));
+		return Optional.of(cc.invoke(getName(), get()));
 	}
 
 	/**
@@ -246,6 +273,15 @@ public abstract class RequestHttpPart {
 	 */
 	public Matcher asMatcher(String regex, int flags) throws BasicHttpException {
 		return asMatcher(Pattern.compile(regex, flags));
+	}
+
+	/**
+	 * Returns the request that created this part.
+	 *
+	 * @return The request that created this part.
+	 */
+	protected RestRequest getRequest() {
+		return request;
 	}
 
 	/**

@@ -13,18 +13,13 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.time.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.assertions.*;
 
 /**
@@ -97,28 +92,6 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 */
 	public Optional<List<String>> asCsvArray() {
 		return asCsvArrayHeader().asList();
-	}
-
-	/**
-	 * Returns the value of this header as a {@link BasicHeader}.
-	 *
-	 * @param c The subclass of {@link BasicHeader} to instantiate.
-	 * @param <T> The subclass of {@link BasicHeader} to instantiate.
-	 * @return The value of this header as a string, never <jk>null</jk>.
-	 */
-	public <T extends BasicHeader> T asHeader(Class<T> c) {
-		try {
-			ClassInfo ci = ClassInfo.of(c);
-			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
-			if (cc != null)
-				return cc.invoke(orElse(null));
-			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
-			if (cc != null)
-				return cc.invoke(getName(), orElse(null));
-		} catch (Exception e) {
-			throw runtimeException(e);
-		}
-		throw runtimeException("Could not determine a method to construct type {0}", className(c));
 	}
 
 	/**

@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Collections.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.time.*;
 import java.util.*;
@@ -24,7 +27,9 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents the path parameters in an HTTP request.
@@ -352,6 +357,22 @@ public class RequestPathParams {
 	 */
 	public RequestPathParam get(String name) {
 		return getLast(name);
+	}
+
+	/**
+	 * Returns the path parameter as the specified bean type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Path} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param type The bean type to create.
+	 * @return The bean, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
+		String name = HttpParts.getName(PATH, cm).orElseThrow(()->runtimeException("@Path(name) not found on class {0}", className(type)));
+		return get(name).asPart(type);
 	}
 
 	/**

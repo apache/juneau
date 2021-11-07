@@ -20,8 +20,10 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -410,6 +412,105 @@ public class HttpParts {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
+		for (org.apache.juneau.http.annotation.Header a : x.getAnnotations(org.apache.juneau.http.annotation.Header.class)) {
+			if (! a.value().isEmpty())
+				return a.value();
+			if (! a.n().isEmpty())
+				return a.n();
+			if (! a.name().isEmpty())
+				return a.name();
+		}
+		return null;
+	};
+
+	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
+		for (org.apache.juneau.http.annotation.Query a : x.getAnnotations(org.apache.juneau.http.annotation.Query.class)) {
+			if (! a.value().isEmpty())
+				return a.value();
+			if (! a.n().isEmpty())
+				return a.n();
+			if (! a.name().isEmpty())
+				return a.name();
+		}
+		return null;
+	};
+
+	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
+		for (org.apache.juneau.http.annotation.FormData a : x.getAnnotations(org.apache.juneau.http.annotation.FormData.class)) {
+			if (! a.value().isEmpty())
+				return a.value();
+			if (! a.n().isEmpty())
+				return a.n();
+			if (! a.name().isEmpty())
+				return a.name();
+		}
+		return null;
+	};
+
+	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
+		for (org.apache.juneau.http.annotation.Path a : x.getAnnotations(org.apache.juneau.http.annotation.Path.class)) {
+			if (! a.value().isEmpty())
+				return a.value();
+			if (! a.n().isEmpty())
+				return a.n();
+			if (! a.name().isEmpty())
+				return a.name();
+		}
+		return null;
+	};
+
+	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
+		ClassInfo ci = x.getInfo();
+		ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
+		if (cc == null)
+			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
+		return cc;
+	};
+
+	/**
+	 * Returns the name of the specified part type.
+	 *
+	 * <p>
+	 * Gets the name from one of the following annotations:
+	 * <ul class='javatreec'>
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	 * </ul>
+	 *
+	 * @param partType The part type.
+	 * @param type The type to check.
+	 * @return The part name.  Never <jk>null</jk>.
+	 */
+	public static Optional<String> getName(HttpPartType partType, ClassMeta<?> type) {
+		switch(partType) {
+			case FORMDATA: return type.getProperty("HttpPartName.FormData", FORMDATA_NAME_FUNCTION);
+			case HEADER: return type.getProperty("HttpPartName.Header", HEADER_NAME_FUNCTION);
+			case PATH: return type.getProperty("HttpPartName.Path", PATH_NAME_FUNCTION);
+			case QUERY: return type.getProperty("HttpPartName.Query", QUERY_NAME_FUNCTION);
+			default: return Optional.empty();
+		}
+	}
+
+	/**
+	 * Returns the constructor for the specified type.
+	 *
+	 * <p>
+	 * Looks for one of the following constructors:
+	 * <ul class='javatree'>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * </ul>
+	 *
+	 * @param type The header type to find the constructor on.
+	 * @return The constructor.  Never <jk>null</jk>.
+	 */
+	public static Optional<ConstructorInfo> getConstructor(ClassMeta<?> type) {
+		return type.getProperty("HttpPart.Constructor", CONSTRUCTOR_FUNCTION);
+	}
 
 	/**
 	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.

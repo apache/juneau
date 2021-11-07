@@ -82,7 +82,8 @@ public class ContentType extends BasicMediaTypeHeader {
 		TEXT_OPENAPI = of("text/openapi"),
 		TEXT_PLAIN = of("text/plain"),
 		TEXT_XML = of("text/xml"),
-		WILDCARD = of("*/*");
+		WILDCARD = of("*/*"),
+		NULL = new ContentType((String)null);
 
 	/**
 	 * Static creator.

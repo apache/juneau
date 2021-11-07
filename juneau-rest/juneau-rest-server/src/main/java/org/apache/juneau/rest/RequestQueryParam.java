@@ -13,18 +13,14 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.time.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * Represents a single query parameter on an HTTP request.
@@ -97,28 +93,6 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 */
 	public Optional<List<String>> asCsvArray() {
 		return asCsvArrayPart().asList();
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicPart}.
-	 *
-	 * @param c The subclass of {@link BasicPart} to instantiate.
-	 * @param <T> The subclass of {@link BasicPart} to instantiate.
-	 * @return The value of this parameter as a string, never <jk>null</jk>.
-	 */
-	public <T extends BasicPart> T asPart(Class<T> c) {
-		try {
-			ClassInfo ci = ClassInfo.of(c);
-			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
-			if (cc != null)
-				return cc.invoke(orElse(null));
-			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
-			if (cc != null)
-				return cc.invoke(getName(), orElse(null));
-		} catch (Exception e) {
-			throw runtimeException(e);
-		}
-		throw runtimeException("Could not determine a method to construct type {0}", className(c));
 	}
 
 	/**

@@ -466,418 +466,58 @@ public final class RestRequest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the <c>Accept</c> header on the request.
+	 * Returns the request header of the specified type.
 	 *
 	 * <p>
-	 * Content-Types that are acceptable for the response.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Accept: text/plain
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Accept getAccept() {
-		return headers.get("Accept").asHeader(Accept.class);
-	}
-
-	/**
-	 * Returns the <c>Accept-Charset</c> header on the request.
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Header} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * <p>
-	 * Character sets that are acceptable.
+	 * Typically any of the following:
+	 * <ul class='javatreec'>
+	 * 	<li class='jc'>{@link Accept}
+	 * 	<li class='jc'>{@link AcceptCharset}
+	 * 	<li class='jc'>{@link AcceptEncoding}
+	 * 	<li class='jc'>{@link AcceptLanguage}
+	 * 	<li class='jc'>{@link AcceptRanges}
+	 * 	<li class='jc'>{@link Authorization}
+	 * 	<li class='jc'>{@link CacheControl}
+	 * 	<li class='jc'>{@link ClientVersion}
+	 * 	<li class='jc'>{@link Connection}
+	 * 	<li class='jc'>{@link ContentDisposition}
+	 * 	<li class='jc'>{@link ContentEncoding}
+	 * 	<li class='jc'>{@link ContentLength}
+	 * 	<li class='jc'>{@link ContentType}
+	 * 	<li class='jc'>{@link Date}
+	 * 	<li class='jc'>{@link Debug}
+	 * 	<li class='jc'>{@link Expect}
+	 * 	<li class='jc'>{@link Forwarded}
+	 * 	<li class='jc'>{@link From}
+	 * 	<li class='jc'>{@link Host}
+	 * 	<li class='jc'>{@link IfMatch}
+	 * 	<li class='jc'>{@link IfModifiedSince}
+	 * 	<li class='jc'>{@link IfNoneMatch}
+	 * 	<li class='jc'>{@link IfRange}
+	 * 	<li class='jc'>{@link IfUnmodifiedSince}
+	 * 	<li class='jc'>{@link MaxForwards}
+	 * 	<li class='jc'>{@link NoTrace}
+	 * 	<li class='jc'>{@link Origin}
+	 * 	<li class='jc'>{@link Pragma}
+	 * 	<li class='jc'>{@link ProxyAuthorization}
+	 * 	<li class='jc'>{@link Range}
+	 * 	<li class='jc'>{@link Referer}
+	 * 	<li class='jc'>{@link TE}
+	 * 	<li class='jc'>{@link Thrown}
+	 * 	<li class='jc'>{@link Upgrade}
+	 * 	<li class='jc'>{@link UserAgent}
+	 * 	<li class='jc'>{@link Warning}
+	 * </ul>
 	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Accept-Charset: utf-8
-	 * </p>
-	 *
+	 * @param type The bean type to create.
 	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public AcceptCharset getAcceptCharset() {
-		return headers.get("Accept-Charset").asHeader(AcceptCharset.class);
-	}
-
-	/**
-	 * Returns the <c>Accept-Encoding</c> header on the request.
-	 *
-	 * <p>
-	 * List of acceptable encodings.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Accept-Encoding: gzip, deflate
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public AcceptEncoding getAcceptEncoding() {
-		return headers.get("Accept-Encoding").asHeader(AcceptEncoding.class);
-	}
-
-	/**
-	 * Returns the <c>Accept-Language</c> header on the request.
-	 *
-	 * <p>
-	 * List of acceptable human languages for response.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Accept-Language: en-US
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public AcceptLanguage getAcceptLanguage() {
-		return headers.get("Accept-Language").asHeader(AcceptLanguage.class);
-	}
-
-	/**
-	 * Returns the <c>Authorization</c> header on the request.
-	 *
-	 * <p>
-	 * Authentication credentials for HTTP authentication.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Authorization getAuthorization() {
-		return headers.get("Authorization").asHeader(Authorization.class);
-	}
-
-	/**
-	 * Returns the <c>Cache-Control</c> header on the request.
-	 *
-	 * <p>
-	 * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Cache-Control: no-cache
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public CacheControl getCacheControl() {
-		return headers.get("Cache-Control").asHeader(CacheControl.class);
-	}
-
-	/**
-	 * Returns the <c>Connection</c> header on the request.
-	 *
-	 * <p>
-	 * Control options for the current connection and list of hop-by-hop request fields.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Connection: keep-alive
-	 * 	Connection: Upgrade
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Connection getConnection() {
-		return headers.get("Connection").asHeader(Connection.class);
-	}
-
-	/**
-	 * Returns the <c>Content-Length</c> header on the request.
-	 *
-	 * <p>
-	 * The length of the request body in octets (8-bit bytes).
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Content-Length: 348
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public ContentLength getContentLength() {
-		return headers.get("Content-Length").asHeader(ContentLength.class);
-	}
-
-	/**
-	 * Returns the <c>Content-Type</c> header on the request.
-	 *
-	 * <p>
-	 * The MIME type of the body of the request (used with POST and PUT requests).
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Content-Type: application/x-www-form-urlencoded
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public ContentType getContentType() {
-		return headers.get("Content-Type").asHeader(ContentType.class);
-	}
-
-	/**
-	 * Returns the <c>Date</c> header on the request.
-	 *
-	 * <p>
-	 * The date and time that the message was originated (in "HTTP-date" format as defined by RFC 7231 Date/Time Formats).
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Date getDate() {
-		return headers.get("Date").asHeader(Date.class);
-	}
-
-	/**
-	 * Returns the <c>Expect</c> header on the request.
-	 *
-	 * <p>
-	 * Indicates that particular server behaviors are required by the client.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Expect: 100-continue
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Expect getExpect() {
-		return headers.get("Expect").asHeader(Expect.class);
-	}
-
-	/**
-	 * Returns the <c>From</c> header on the request.
-	 *
-	 * <p>
-	 * The email address of the user making the request.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	From: user@example.com
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public From getFrom() {
-		return headers.get("From").asHeader(From.class);
-	}
-
-	/**
-	 * Returns the <c>Host</c> header on the request.
-	 *
-	 * <p>
-	 * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening.
-	 * The port number may be omitted if the port is the standard port for the service requested.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Host: en.wikipedia.org:8080
-	 * 	Host: en.wikipedia.org
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Host getHost() {
-		return headers.get("Host").asHeader(Host.class);
-	}
-
-	/**
-	 * Returns the <c>If-Match</c> header on the request.
-	 *
-	 * <p>
-	 * Only perform the action if the client supplied entity matches the same entity on the server.
-	 * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last
-	 * updated it.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public IfMatch getIfMatch() {
-		return headers.get("If-Match").asHeader(IfMatch.class);
-	}
-
-	/**
-	 * Returns the <c>If-Modified-Since</c> header on the request.
-	 *
-	 * <p>
-	 * Allows a 304 Not Modified to be returned if content is unchanged.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public IfModifiedSince getIfModifiedSince() {
-		return headers.get("If-Modified-Since").asHeader(IfModifiedSince.class);
-	}
-
-	/**
-	 * Returns the <c>If-None-Match</c> header on the request.
-	 *
-	 * <p>
-	 * Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public IfNoneMatch getIfNoneMatch() {
-		return headers.get("If-None-Match").asHeader(IfNoneMatch.class);
-	}
-
-	/**
-	 * Returns the <c>If-Range</c> header on the request.
-	 *
-	 * <p>
-	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire ofNullable(entity.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public IfRange getIfRange() {
-		return headers.get("If-Range").asHeader(IfRange.class);
-	}
-
-	/**
-	 * Returns the <c>If-Unmodified-Since</c> header on the request.
-	 *
-	 * <p>
-	 * Only send the response if the entity has not been modified since a specific time.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public IfUnmodifiedSince getIfUnmodifiedSince() {
-		return headers.get("If-Unmodified-Since").asHeader(IfUnmodifiedSince.class);
-	}
-
-	/**
-	 * Returns the <c>Max-Forwards</c> header on the request.
-	 *
-	 * <p>
-	 * Limit the number of times the message can be forwarded through proxies or gateways.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Max-Forwards: 10
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public MaxForwards getMaxForwards() {
-		return headers.get("Max-Forwards").asHeader(MaxForwards.class);
-	}
-
-	/**
-	 * Returns the <c>Pragma</c> header on the request.
-	 *
-	 * <p>
-	 * Implementation-specific fields that may have various effects anywhere along the request-response chain.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Pragma: no-cache
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Pragma getPragma() {
-		return headers.get("Pragma").asHeader(Pragma.class);
-	}
-
-	/**
-	 * Returns the <c>Proxy-Authorization</c> header on the request.
-	 *
-	 * <p>
-	 * Authorization credentials for connecting to a proxy.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public ProxyAuthorization getProxyAuthorization() {
-		return headers.get("Proxy-Authorization").asHeader(ProxyAuthorization.class);
-	}
-
-	/**
-	 * Returns the <c>Range</c> header on the request.
-	 *
-	 * <p>
-	 * Request only part of an entity. Bytes are numbered from 0.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Range: bytes=500-999
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Range getRange() {
-		return headers.get("Range").asHeader(Range.class);
-	}
-
-	/**
-	 * Returns the <c>Referer</c> header on the request.
-	 *
-	 * <p>
-	 * This is the address of the previous web page from which a link to the currently requested page was followed.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Referer: http://en.wikipedia.org/wiki/Main_Page
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Referer getReferer() {
-		return headers.get("Referer").asHeader(Referer.class);
-	}
-
-	/**
-	 * Returns the <c>TE</c> header on the request.
-	 *
-	 * <p>
-	 * The transfer encodings the user agent is willing to accept: the same values as for the response header field
-	 * Transfer-Encoding can be used, plus the "trailers" value (related to the "chunked" transfer method) to notify the
-	 * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	TE: trailers, deflate
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public TE getTE() {
-		return headers.get("TE").asHeader(TE.class);
+	public <T> Optional<T> getHeader(Class<T> type) {
+		return headers.get(type);
 	}
 
 	/**
@@ -893,74 +533,6 @@ public final class RestRequest {
 		if (tz != null)
 			return of(TimeZone.getTimeZone(tz));
 		return empty();
-	}
-
-	/**
-	 * Returns the <c>User-Agent</c> header on the request.
-	 *
-	 * <p>
-	 * The user agent string of the user agent.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public UserAgent getUserAgent() {
-		return headers.get("Upgrade").asHeader(UserAgent.class);
-	}
-
-	/**
-	 * Returns the <c>Upgrade</c> header on the request.
-	 *
-	 * <p>
-	 * Ask the server to upgrade to another protocol.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Upgrade getUpgrade() {
-		return headers.get("Upgrade").asHeader(Upgrade.class);
-	}
-
-	/**
-	 * Returns the <c>Via</c> header on the request.
-	 *
-	 * <p>
-	 * Informs the server of proxies through which the request was sent.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Via getVia() {
-		return headers.get("Via").asHeader(Via.class);
-	}
-
-	/**
-	 * Returns the <c>Warning</c> header on the request.
-	 *
-	 * <p>
-	 * A general warning about possible problems with the entity body.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	Warning: 199 Miscellaneous warning
-	 * </p>
-	 *
-	 * @return The parsed header on the request, never <jk>null</jk>.
-	 */
-	public Warning getWarning() {
-		return headers.get("Warning").asHeader(Warning.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1085,6 +657,20 @@ public final class RestRequest {
 	}
 
 	/**
+	 * Returns the request query parameter of the specified type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param type The bean type to create.
+	 * @return The parsed query parameter on the request, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> getQueryParam(Class<T> type) {
+		return queryParams.get(type);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this request contains the specified header.
 	 *
 	 * @param name The header name.
@@ -1166,6 +752,20 @@ public final class RestRequest {
 	}
 
 	/**
+	 * Returns the request form-data parameter of the specified type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.FormData} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param type The bean type to create.
+	 * @return The parsed form-data parameter on the request, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> getFormParam(Class<T> type) {
+		return getFormParams().get(type);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this request contains the specified header.
 	 *
 	 * @param name The header name.
@@ -1223,6 +823,20 @@ public final class RestRequest {
 	 */
 	public RequestPathParam getPathParam(String name) {
 		return pathParams.get(name);
+	}
+
+	/**
+	 * Returns the request path parameter of the specified type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Path} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param type The bean type to create.
+	 * @return The parsed form-data parameter on the request, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> getPathParam(Class<T> type) {
+		return pathParams.get(type);
 	}
 
 	/**

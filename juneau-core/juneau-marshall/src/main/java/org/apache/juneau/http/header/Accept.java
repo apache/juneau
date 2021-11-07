@@ -173,7 +173,8 @@ public class Accept extends BasicMediaRangeArrayHeader {
 		TEXT_HTML = of("text/html"),
 		TEXT_PLAIN = of("text/plain"),
 		TEXT_XML = of("text/xml"),
-		WILDCARD = of("*/*");
+		WILDCARD = of("*/*"),
+		NULL = new Accept((String)null);
 
 	/**
 	 * Static creator.

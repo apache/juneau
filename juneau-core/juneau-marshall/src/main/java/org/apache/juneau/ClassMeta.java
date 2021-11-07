@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -113,6 +114,9 @@ public final class ClassMeta<T> implements Type {
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
+	private final Map<Class<?>,List<?>> annotationListMap = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
+	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 
 	private final ReadWriteLock lock = new ReentrantReadWriteLock(false);
 	private final Lock rLock = lock.readLock(), wLock = lock.writeLock();
@@ -2076,8 +2080,16 @@ public final class ClassMeta<T> implements Type {
 	 * @param a The annotation to retrieve.
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getLastAnnotation(Class<A> a) {
-		return info.getLastAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
+		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
+		if (o == null) {
+			if (beanContext == null)
+				return info.getLastAnnotation(a, BeanContext.DEFAULT);
+			o = Optional.ofNullable(info.getLastAnnotation(a, beanContext));
+			annotationLastMap.put(a, o);
+		}
+		return o.orElse(null);
 	}
 
 	/**
@@ -2088,8 +2100,33 @@ public final class ClassMeta<T> implements Type {
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
-		return info.getAnnotations(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
+		List<A> l = (List<A>)annotationListMap.get(a);
+		if (l == null) {
+			if (beanContext == null)
+				return info.getAnnotations(a, BeanContext.DEFAULT);
+			l = Collections.unmodifiableList(info.getAnnotations(a, beanContext));
+			annotationListMap.put(a, l);
+		}
+		return l;
+	}
+
+	/**
+	 * Returns a calculated property on this context.
+	 *
+	 * @param name The name of the property.
+	 * @param function The function used to create this property.
+	 * @return The property value.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
+		Optional<T2> t = (Optional<T2>) properties.get(name);
+		if (t == null) {
+			t = Optional.ofNullable(function.apply(this));
+			properties.put(name, t);
+		}
+		return t;
 	}
 
 	@Override /* Object */
