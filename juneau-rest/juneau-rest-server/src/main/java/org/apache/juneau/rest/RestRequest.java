@@ -98,7 +98,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <p>
- * 	The primary methods on this class are shown below:
+ * 	The primary methods on this class are:
  * </p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestRequest}
@@ -1605,7 +1605,7 @@ public final class RestRequest {
 							ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
-								return getBody().schema(schema).asType(type);
+								return getBody().setSchema(schema).asType(type);
 							if (pt == QUERY)
 								return getQueryParam(name).parser(pp).schema(schema).asType(type).orElse(null);
 							if (pt == FORMDATA)

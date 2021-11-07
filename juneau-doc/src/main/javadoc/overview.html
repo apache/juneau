@@ -349,7 +349,6 @@
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestBody'>RequestBody</a><span class='update'><b><red>todo</red></b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders'>RequestHeaders</a><span class='update'><b><red>todo</red></b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes'>RequestAttributes</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery'>RequestQuery</a><span class='update'><b><red>todo</red></b></span></p>
@@ -14857,21 +14856,24 @@
 <p>
 	The hook events can be broken down into two categories:
 </p>
-<ul class='spaced-list'>
-	<li>Resource lifecycle events:
-		<ul class='javatree'>
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#INIT INIT} - Right before initialization.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
-		</ul>
-	<li>REST call lifecycle events:
-		<ul class='javatree'>
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
-		</ul>
+<ul class='javatree'>
+	<li class='je'>{@link org.apache.juneau.rest.annotation.HookEvent}
+	<ul class='spaced-list'>
+		<li>Resource lifecycle events:
+			<ul class='javatree'>
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#INIT INIT} - Right before initialization.
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
+			</ul>
+		<li>REST call lifecycle events:
+			<ul class='javatree'>
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
+			</ul>
+	</ul>
 </ul>
 
 <ul class='seealso'>
@@ -15479,54 +15481,18 @@
 <ul class='seealso'>
 	<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 	<li class='jc'>{@link org.apache.juneau.rest.RestResponse}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestFormDataParams}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestPathParams}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
 </ul>
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestBody' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestBody'>6.3.1 - RequestBody</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.1 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestBody -->
-<p>
-	The {@link org.apache.juneau.rest.RequestBody} object is the API for accessing the body of an HTTP request.
-	It can be accessed by passing it as a parameter on your REST Java method:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestPost</ja>(...)
-	<jk>public</jk> Object myMethod(RequestBody <jv>body</jv>) {...}			
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@RestPost</ja>(...)
-	<jk>public void</jk> doPost(RequestBody <jv>body</jv>) {
-		<jc>// Convert body to a linked list of Person objects.</jc>
-		List&lt;Person&gt; <jv>list</jv> = <jv>body</jv>.asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
-		...
-	}
-</p>
-<p>
-	Some important methods on this class are:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.rest.RequestBody} 
-	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getReader() getReader()} - Get body as a Reader.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getInputStream() getInputStream()} - Get body as an InputStream.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Class) asType(Class)} - Get body converted to a POJO.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Type,Type...) asType(Type,Type...)} - Get body converted to a map or collection of POJOs.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asString() asString()} - Get body as a simple string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asHex() asHex()} - Get body as a hex-encoded string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asSpacedHex() asSpacedHex()} - Get body as spaced-hex-encoded string.
-	</ul>
-</ul>
-
-<ul class='seealso'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
-</ul>
-</div><!-- END: 6.3.1 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestBody -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders'>6.3.2 - RequestHeaders</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.2 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders'>6.3.1 - RequestHeaders</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.1 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders -->
 <p>
 	The {@link org.apache.juneau.rest.RequestHeaders} object is the API for accessing the headers of an HTTP request.
 	It can be accessed by passing it as a parameter on your REST Java method:
@@ -15568,12 +15534,12 @@
 <ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 </ul>
-</div><!-- END: 6.3.2 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders -->
+</div><!-- END: 6.3.1 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestHeaders -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes'>6.3.3 - RequestAttributes</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.3 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes'>6.3.2 - RequestAttributes</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.2 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes -->
 <p>
 	The {@link org.apache.juneau.rest.RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request 
 	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}.
@@ -15603,12 +15569,12 @@
 	Modifications made to request attributes through the <c>RequestAttributes</c> bean are automatically reflected in
 	the underlying servlet request attributes making it possible to mix the usage of both APIs.
 </p>
-</div><!-- END: 6.3.3 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes -->
+</div><!-- END: 6.3.2 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestAttributes -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery'>6.3.4 - RequestQuery</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.4 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery'>6.3.3 - RequestQuery</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.3 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery -->
 <p>
 	The {@link org.apache.juneau.rest.RequestQuery} object is the API for accessing the GET query parameters of an HTTP request.
 	It can be accessed by passing it as a parameter on your REST Java method:
@@ -15655,12 +15621,12 @@
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 </ul>
-</div><!-- END: 6.3.4 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery -->
+</div><!-- END: 6.3.3 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestQuery -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData'>6.3.5 - RequestFormData</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.5 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData'>6.3.4 - RequestFormData</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.4 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData -->
 <p>
 	The {@link org.apache.juneau.rest.RequestFormData} object is the API for accessing the HTTP request body as form data.
 	It can be accessed by passing it as a parameter on your REST Java method:
@@ -15702,12 +15668,12 @@
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 </ul>
-</div><!-- END: 6.3.5 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData -->
+</div><!-- END: 6.3.4 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestFormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch'>6.3.6 - RequestPathMatch</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.6 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch' id='juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch'>6.3.5 - RequestPathMatch</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.5 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch -->
 <p>
 	The {@link org.apache.juneau.rest.RequestPath} object is the API for accessing the matched variables
 	and remainder on the URL path.
@@ -15746,12 +15712,12 @@
 <ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 </ul>
-</div><!-- END: 6.3.6 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch -->
+</div><!-- END: 6.3.5 - juneau-rest-server.RestOpAnnotatedMethods.RestmRequestPathMatch -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource' id='juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource'>6.3.7 - ReaderResource</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.7 - juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource' id='juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource'>6.3.6 - ReaderResource</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.6 - juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource -->
 <p>
 	The {@del ReaderResource} class is a convenience object for defining thread-safe
 	reusable character-based responses.
@@ -15777,12 +15743,12 @@
 			.build();
 	}
 </p>
-</div><!-- END: 6.3.7 - juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource -->
+</div><!-- END: 6.3.6 - juneau-rest-server.RestOpAnnotatedMethods.RestmReaderResource -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource' id='juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource'>6.3.8 - StreamResource</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.8 - juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource' id='juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource'>6.3.7 - StreamResource</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.7 - juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource -->
 <p>
 	The {@del org.apache.juneau.http.StreamResource} class is the binary equivalent to the {@del ReaderResource} object.
 	In essence, it's a container for binary data with optional response headers.
@@ -15804,12 +15770,12 @@
 			.build();
 	}
 </p>
-</div><!-- END: 6.3.8 - juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource -->
+</div><!-- END: 6.3.7 - juneau-rest-server.RestOpAnnotatedMethods.RestmStreamResource -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers' id='juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers'>6.3.9 - @RestOp(matchers)</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.9 - juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers' id='juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers'>6.3.8 - @RestOp(matchers)</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.8 - juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers -->
 <p>
 	{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
 	tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
@@ -15863,12 +15829,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
 </ul>
-</div><!-- END: 6.3.9 - juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers -->
+</div><!-- END: 6.3.8 - juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses' id='juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses'>6.3.10 - Predefined Responses</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.10 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses' id='juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses'>6.3.9 - Predefined Responses</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.9 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses -->
 <p>
 	Predefined response beans are provided for all standard HTTP responses.
 	These can be used as-is or extended to provide customized HTTP responses. 
@@ -15978,12 +15944,12 @@
 		<jk>return new</jk> SeeOther(<js>"servlet:/pets"</js>);  
 	}
 </p>
-</div><!-- END: 6.3.10 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses -->
+</div><!-- END: 6.3.9 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedResponses -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans' id='juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans'>6.3.11 - Predefined Helper Beans</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.11 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans' id='juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans'>6.3.10 - Predefined Helper Beans</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.3.10 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans -->
 <p>
 	The {@link org.apache.juneau.rest.helper} package contains several predefined beans to help when constructing
 	REST interfaces.
@@ -16193,7 +16159,7 @@
 <p>
 	One distinction is that the former defines the description <js>"Redirect to servlet root"</js> in the generated Swagger documentation.
 </p>
-</div><!-- END: 6.3.11 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans -->
+</div><!-- END: 6.3.10 - juneau-rest-server.RestOpAnnotatedMethods.RestmPredefinedHelperBeans -->
 </div><!-- END: 6.3 - juneau-rest-server.RestOpAnnotatedMethods -->
 
 <!-- ==================================================================================================== -->

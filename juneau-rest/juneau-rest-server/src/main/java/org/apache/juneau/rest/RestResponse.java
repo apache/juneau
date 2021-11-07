@@ -52,7 +52,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <p>
- * 	The primary methods on this class are shown below:
+ * 	The primary methods on this class are:
  * </p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}

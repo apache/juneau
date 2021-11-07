@@ -26,7 +26,8 @@ import org.apache.juneau.rest.annotation.*;
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getBody() getBody}()
- * 		.{@link RequestBody#getReaderParser() getReaderParser}();
+ * 		.{@link RequestBody#getParserMatch() getParserMatch}()
+ * 		.{@link ParserMatch#getParser() getParser}();
  * </p>
  */
 public class ReaderParserArg extends SimpleRestOperationArg {
@@ -47,6 +48,6 @@ public class ReaderParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected ReaderParserArg() {
-		super((opSession)->opSession.getRequest().getBody().getReaderParser());
+		super((opSession)->opSession.getRequest().getBody().getParserMatch().map(ParserMatch::getParser).filter(ReaderParser.class::isInstance).orElse(null));
 	}
 }

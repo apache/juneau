@@ -27,6 +27,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
@@ -34,8 +35,56 @@ import org.apache.juneau.rest.util.*;
 /**
  * Contains the body of the HTTP request.
  *
+ * <p>
+ * 	The {@link RequestBody} object is the API for accessing the body of an HTTP request.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
+ * </p>
+ * <p class='bpcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestBody <jv>body</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public void</jk> doPost(RequestBody <jv>body</jv>) {
+ * 		<jc>// Convert body to a linked list of Person objects.</jc>
+ * 		List&lt;Person&gt; <jv>list</jv> = <jv>body</jv>.asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+ * 		...
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestBody}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for accessing the raw contents of the request body:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestBody#asBytes() asBytes()}
+ * 			<li class='jm'>{@link RequestBody#asHex() asHex()}
+ * 			<li class='jm'>{@link RequestBody#asSpacedHex() asSpacedHex()}
+ * 			<li class='jm'>{@link RequestBody#asString() asString()}
+ * 			<li class='jm'>{@link RequestBody#getInputStream() getInputStream()}
+ * 			<li class='jm'>{@link RequestBody#getReader() getReader()}
+ * 		</ul>
+ * 		<li>Methods for parsing the contents of the request body:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestBody#asType(Class) asType(Class)}
+ * 			<li class='jm'>{@link RequestBody#asType(Type, Type...) asType(Type, Type...)}
+ * 			<li class='jm'>{@link RequestBody#setSchema(HttpPartSchema) setSchema(HttpPartSchema)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestBody#cache() cache()}
+ * 			<li class='jm'>{@link RequestBody#getParserMatch() getParserMatch()}
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmRequestBody}
+ * 	<li class='ja'>{@link Body}
  * </ul>
  */
 @SuppressWarnings("unchecked")
@@ -72,7 +121,7 @@ public class RequestBody {
 	 * @param schema The new schema for this body.
 	 * @return This object.
 	 */
-	public RequestBody schema(HttpPartSchema schema) {
+	public RequestBody setSchema(HttpPartSchema schema) {
 		this.schema = schema;
 		return this;
 	}
@@ -349,15 +398,15 @@ public class RequestBody {
 	 * Returns the parser and media type matching the request <c>Content-Type</c> header.
 	 *
 	 * @return
-	 * 	The parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching parser was
+	 * 	The parser matching the request <c>Content-Type</c> header, or {@link Optional#empty()} if no matching parser was
 	 * 	found.
 	 * 	Includes the matching media type.
 	 */
-	public ParserMatch getParserMatch() {
+	public Optional<ParserMatch> getParserMatch() {
 		if (mediaType != null && parser != null)
-			return new ParserMatch(mediaType, parser);
+			return Optional.of(new ParserMatch(mediaType, parser));
 		MediaType mt = getMediaType();
-		return mt == null ? null : parsers.getParserMatch(mt);
+		return Optional.ofNullable(mt == null ? null : parsers.getParserMatch(mt));
 	}
 
 	private MediaType getMediaType() {
@@ -367,46 +416,6 @@ public class RequestBody {
 		if (!ct.isPresent() && body != null)
 			return MediaType.UON;
 		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
-	}
-
-	/**
-	 * Returns the parser matching the request <c>Content-Type</c> header.
-	 *
-	 * @return
-	 * 	The parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching parser was
-	 * 	found.
-	 */
-	public Parser getParser() {
-		ParserMatch pm = getParserMatch();
-		return (pm == null ? null : pm.getParser());
-	}
-
-	/**
-	 * Returns the reader parser matching the request <c>Content-Type</c> header.
-	 *
-	 * @return
-	 * 	The reader parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching
-	 * 	reader parser was found, or the matching parser was an input stream parser.
-	 */
-	public ReaderParser getReaderParser() {
-		Parser p = getParser();
-		if (p != null && p.isReaderParser())
-			return (ReaderParser)p;
-		return null;
-	}
-
-	/**
-	 * Returns the input stream parser matching the request <c>Content-Type</c> header.
-	 *
-	 * @return
-	 * 	The input stream parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching
-	 * 	reader parser was found, or the matching parser was a reader parser.
-	 */
-	public InputStreamParser getInputStreamParser() {
-		Parser p = getParser();
-		if (p != null && ! p.isReaderParser())
-			return (InputStreamParser)p;
-		return null;
 	}
 
 	private <T> T getInner(ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
@@ -436,7 +445,7 @@ public class RequestBody {
 
 		Optional<TimeZone> timeZone = req.getTimeZone();
 		Locale locale = req.getLocale();
-		ParserMatch pm = getParserMatch();
+		ParserMatch pm = getParserMatch().orElse(null);
 
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;

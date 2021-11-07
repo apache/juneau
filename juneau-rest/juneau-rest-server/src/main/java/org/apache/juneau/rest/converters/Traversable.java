@@ -18,6 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -57,7 +58,8 @@ public final class Traversable implements RestConverter {
 				ObjectSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
 				if (swap != null)
 					o = swap.swap(bs, o);
-				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
+				ReaderParser rp = req.getBody().getParserMatch().map(ParserMatch::getParser).filter(ReaderParser.class::isInstance).map(ReaderParser.class::cast).orElse(null);
+				PojoRest p = new PojoRest(o, rp);
 				o = p.get(pathRemainder);
 			} catch (PojoRestException e) {
 				throw new BasicHttpException(e.getStatus(), e);

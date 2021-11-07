@@ -51,21 +51,24 @@
 <p>
 	The hook events can be broken down into two categories:
 </p>
-<ul class='spaced-list'>
-	<li>Resource lifecycle events:
-		<ul class='javatree'>
-			<li class='jf'>{@link oajr.annotation.HookEvent#INIT INIT} - Right before initialization.
-			<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-			<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
-			<li class='jf'>{@link oajr.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
-		</ul>
-	<li>REST call lifecycle events:
-		<ul class='javatree'>
-			<li class='jf'>{@link oajr.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
-			<li class='jf'>{@link oajr.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
-			<li class='jf'>{@link oajr.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
-			<li class='jf'>{@link oajr.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
-		</ul>
+<ul class='javatree'>
+	<li class='je'>{@link oajr.annotation.HookEvent}
+	<ul class='spaced-list'>
+		<li>Resource lifecycle events:
+			<ul class='javatree'>
+				<li class='jf'>{@link oajr.annotation.HookEvent#INIT INIT} - Right before initialization.
+				<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
+				<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
+				<li class='jf'>{@link oajr.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
+			</ul>
+		<li>REST call lifecycle events:
+			<ul class='javatree'>
+				<li class='jf'>{@link oajr.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
+				<li class='jf'>{@link oajr.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
+				<li class='jf'>{@link oajr.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
+				<li class='jf'>{@link oajr.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
+			</ul>
+	</ul>
 </ul>
 
 <ul class='seealso'>

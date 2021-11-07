@@ -26,7 +26,8 @@ import org.apache.juneau.rest.annotation.*;
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getBody() getBody}()
- * 		.{@link RequestBody#getInputStreamParser() getInputStreamParser}();
+ * 		.{@link RequestBody#getParserMatch() getParserMatch}()
+ * 		.{@link ParserMatch#getParser() getParser}();
  * </p>
  */
 public class InputStreamParserArg extends SimpleRestOperationArg {
@@ -47,6 +48,6 @@ public class InputStreamParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected InputStreamParserArg() {
-		super((opSession)->opSession.getRequest().getBody().getInputStreamParser());
+		super((opSession)->opSession.getRequest().getBody().getParserMatch().map(ParserMatch::getParser).filter(InputStreamParser.class::isInstance).orElse(null));
 	}
 }

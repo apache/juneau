@@ -113,7 +113,7 @@ public class RrpcRestOpSession extends RestOpSession {
 				Method m = rmm.getJavaMethod();
 				try {
 					// Parse the args and invoke the method.
-					Parser p = req.getBody().getParser();
+					Parser p = req.getBody().getParserMatch().get().getParser();
 					Object[] args = null;
 					if (m.getGenericParameterTypes().length == 0)
 						args = new Object[0];
