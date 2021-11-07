@@ -41,23 +41,63 @@ import org.apache.juneau.serializer.*;
  * Represents an HTTP response for a REST resource.
  *
  * <p>
- * Essentially an extended {@link HttpServletResponse} with some special convenience methods that allow you to easily
- * output POJOs as responses.
- *
- * <p>
- * Since this class extends {@link HttpServletResponse}, developers are free to use these convenience methods, or
- * revert to using lower level methods like any other servlet response.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@RestGet</ja>
- * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>) {
- * 		<jv>res</jv>.setOutput(<js>"Simple string response"</js>);
- * 	}
+ * 	The {@link RestResponse} object is an extension of the <l>HttpServletResponse</l> class
+ * 	with various built-in convenience methods for use in building REST interfaces.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmRestResponse}
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RestResponse <jv>res</jv>) {...}
+ * </p>
+ *
+ * <p>
+ * 	The primary methods on this class are shown below:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestResponse}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for setting response headers:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestResponse#addHeader(Header) addHeader(Header)}
+ * 			<li class='jm'>{@link RestResponse#addHeader(String,String) addHeader(String,String)}
+ * 			<li class='jm'>{@link RestResponse#containsHeader(String) containsHeader(String)}
+ * 			<li class='jm'>{@link RestResponse#getHeader(String) getHeader(String)}
+ * 			<li class='jm'>{@link RestResponse#setCharacterEncoding(String) setCharacterEncoding(String)}
+ * 			<li class='jm'>{@link RestResponse#setContentType(String) setContentType(String)}
+ * 			<li class='jm'>{@link RestResponse#setHeader(Header) setHeader(Header)}
+ * 			<li class='jm'>{@link RestResponse#setHeader(HttpPartSchema,String,Object) setHeader(HttpPartSchema,String,Object)}
+ * 			<li class='jm'>{@link RestResponse#setHeader(String,Object) setHeader(String,Object)}
+ * 			<li class='jm'>{@link RestResponse#setHeader(String,String) setHeader(String,String)}
+ * 			<li class='jm'>{@link RestResponse#setMaxHeaderLength(int) setMaxHeaderLength(int)}
+ * 			<li class='jm'>{@link RestResponse#setSafeHeaders() setSafeHeaders()}
+ * 		</ul>
+ * 		<li>Methods for setting response bodies:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestResponse#flushBuffer() flushBuffer()}
+ * 			<li class='jm'>{@link RestResponse#getDirectWriter(String) getDirectWriter(String)}
+ * 			<li class='jm'>{@link RestResponse#getNegotiatedOutputStream() getNegotiatedOutputStream()}
+ * 			<li class='jm'>{@link RestResponse#getNegotiatedWriter() getNegotiatedWriter()}
+ * 			<li class='jm'>{@link RestResponse#getSerializerMatch() getSerializerMatch()}
+ * 			<li class='jm'>{@link RestResponse#getWriter() getWriter()}
+ * 			<li class='jm'>{@link RestResponse#sendPlainText(String) sendPlainText(String)}
+ * 			<li class='jm'>{@link RestResponse#sendRedirect(String) sendRedirect(String)}
+ * 			<li class='jm'>{@link RestResponse#setBodySchema(HttpPartSchema) setBodySchema(HttpPartSchema)}
+ * 			<li class='jm'>{@link RestResponse#setOutput(Object) setOutput(Object)}
+ * 			<li class='jm'>{@link RestResponse#setResponseBeanMeta(ResponseBeanMeta) setResponseBeanMeta(ResponseBeanMeta)}
+ * 			<li class='jm'>{@link RestResponse#setException(Throwable) setException(Throwable)}
+ * 		</ul>
+ * 		<li>Other:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestResponse#getAttributes() getAttributes()}
+ * 			<li class='jm'>{@link RestResponse#getContext() getContext()}
+ * 			<li class='jm'>{@link RestResponse#getOpContext() getOpContext()}
+ * 			<li class='jm'>{@link RestResponse#setAttribute(String,Object) setAttribute(String,Object)}
+ * 			<li class='jm'>{@link RestResponse#setDebug() setDebug()}
+ * 			<li class='jm'>{@link RestResponse#setNoTrace() setNoTrace()}
+ * 			<li class='jm'>{@link RestResponse#setStatus(int) setStatus(int)}
+ * 		</ul>
+ * 	</ul>
  * </ul>
  */
 public final class RestResponse {
@@ -199,7 +239,7 @@ public final class RestResponse {
 	 * @param value The property value.
 	 * @return This object.
 	 */
-	public RestResponse attr(String name, Object value) {
+	public RestResponse setAttribute(String name, Object value) {
 		request.setAttribute(name, value);
 		return this;
 	}
@@ -545,22 +585,8 @@ public final class RestResponse {
 	 * @throws SchemaValidationException Header failed schema validation.
 	 * @throws SerializeException Header could not be serialized.
 	 */
-	public RestResponse header(String name, Object value) throws SchemaValidationException, SerializeException {
-		return header(null, null, name, value);
-	}
-
-	/**
-	 * Sets a header from a {@link NameValuePair}.
-	 *
-	 * <p>
-	 * Note that this bypasses the part serializer and set the header value directly.
-	 *
-	 * @param pair The header to set.  Nulls are ignored.
-	 * @return This object.
-	 */
-	public RestResponse header(NameValuePair pair) {
-		if (pair != null)
-			setHeader(pair.getName(), pair.getValue());
+	public RestResponse setHeader(String name, Object value) throws SchemaValidationException, SerializeException {
+		setHeader(name, request.getPartSerializerSession().serialize(HEADER, null, value));
 		return this;
 	}
 
@@ -579,30 +605,8 @@ public final class RestResponse {
 	 * @throws SchemaValidationException Header failed schema validation.
 	 * @throws SerializeException Header could not be serialized.
 	 */
-	public RestResponse header(HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
-		return header(null, schema, name, value);
-	}
-
-	/**
-	 * Sets a header on the request.
-	 * @param serializer
-	 * 	The serializer to use to serialize the header, or <jk>null</jk> to use the part serializer on the request.
-	 * @param schema
-	 * 	The schema to use to serialize the header, or <jk>null</jk> to use the default schema.
-	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @return This object.
-	 * @throws SchemaValidationException Header failed schema validation.
-	 * @throws SerializeException Header could not be serialized.
-	 */
-	public RestResponse header(HttpPartSerializerSession serializer, HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
-		if (serializer == null)
-			serializer = request.getPartSerializerSession();
-		setHeader(name, serializer.serialize(HEADER, schema, value));
+	public RestResponse setHeader(HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
+		setHeader(name, request.getPartSerializerSession().serialize(HEADER, schema, value));
 		return this;
 	}
 
@@ -615,20 +619,9 @@ public final class RestResponse {
 	 * @param schema The body schema
 	 * @return This object.
 	 */
-	public RestResponse bodySchema(HttpPartSchema schema) {
+	public RestResponse setBodySchema(HttpPartSchema schema) {
 		this.bodySchema = ofNullable(schema);
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setHeader(String, String)} but header is defined as a response part
-	 *
-	 * @param h Header to set.
-	 * @throws SchemaValidationException Header part did not pass validation.
-	 * @throws SerializeException Header part could not be serialized.
-	 */
-	public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {
-		setHeader(h.getName(), h.getValue());
 	}
 
 	/**
@@ -811,7 +804,7 @@ public final class RestResponse {
 	 *
 	 * @return This object.
 	 */
-	public RestResponse safeHeaders() {
+	public RestResponse setSafeHeaders() {
 		this.safeHeaders = true;
 		return this;
 	}
@@ -825,7 +818,7 @@ public final class RestResponse {
 	 * @param value The new value for this setting.  The default is <c>8096</c>.
 	 * @return This object.
 	 */
-	public RestResponse maxHeaderLength(int value) {
+	public RestResponse setMaxHeaderLength(int value) {
 		this.maxHeaderLength = value;
 		return this;
 	}
@@ -881,7 +874,10 @@ public final class RestResponse {
 			setHeader(x.getName(), resolveUris(x.getValue()));
 		} else if (header instanceof SerializedHeader) {
 			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
-			setHeader(x.getName(), resolveUris(x.getValue()));
+			String v = x.getValue();
+			if (v != null && v.indexOf("://") != -1)
+				v = resolveUris(v);
+			setHeader(x.getName(), v);
 		} else {
 			setHeader(header.getName(), header.getValue());
 		}

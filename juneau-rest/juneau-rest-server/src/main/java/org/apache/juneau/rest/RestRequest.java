@@ -87,24 +87,107 @@ import org.apache.juneau.utils.*;
  * Represents an HTTP request for a REST resource.
  *
  * <p>
- * Equivalent to {@link HttpServletRequest} except with some additional convenience methods.
+ * 	The {@link RestRequest} object is an extension of the <l>HttpServletRequest</l> class
+ * 	with various built-in convenience methods for use in building REST interfaces.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
+ * </p>
+ *
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {...}
+ * </p>
  *
  * <p>
- * For reference, given the URL <js>"http://localhost:9080/contextRoot/servletPath/foo?bar=baz#qux"</js>, the
- * following methods return the following values....
- * <table class='styled'>
- * 	<tr><th>Method</th><th>Value</th></tr>
- * 	<tr><td>{@code getContextPath()}</td><td>{@code /contextRoot}</td></tr>
- * 	<tr><td>{@code getPathInfo()}</td><td>{@code /foo}</td></tr>
- * 	<tr><td>{@code getPathTranslated()}</td><td>{@code path-to-deployed-war-on-filesystem/foo}</td></tr>
- * 	<tr><td>{@code getQueryString()}</td><td>{@code bar=baz}</td></tr>
- * 	<tr><td>{@code getRequestURI()}</td><td>{@code /contextRoot/servletPath/foo}</td></tr>
- * 	<tr><td>{@code getRequestURL()}</td><td>{@code http://localhost:9080/contextRoot/servletPath/foo}</td></tr>
- * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
- * </table>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmRestRequest}
+ * 	The primary methods on this class are shown below:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestRequest}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for accessing the request body:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#getBody() getBody()}
+ * 			<li class='jm'>{@link RestRequest#getInputStream() getInputStream()}
+ * 			<li class='jm'>{@link RestRequest#getReader() getReader()}
+ * 		</ul>
+ * 		<li>Methods for accessing HTTP parts:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#containsFormParam(String) containsFormParam(String)}
+ * 			<li class='jm'>{@link RestRequest#containsHeader(String) containsHeader(String)}
+ * 			<li class='jm'>{@link RestRequest#containsQueryParam(String) containsQueryParam(String)}
+ * 			<li class='jm'>{@link RestRequest#getHeader(Class) getHeader(Class)}
+ * 			<li class='jm'>{@link RestRequest#getHeader(String) getHeader(String)}
+ * 			<li class='jm'>{@link RestRequest#getHeaders() getHeaders()}
+ * 			<li class='jm'>{@link RestRequest#getFormParam(Class) getFormParam(Class)}
+ * 			<li class='jm'>{@link RestRequest#getFormParam(String) getFormParam(String)}
+ * 			<li class='jm'>{@link RestRequest#getFormParams() getFormParams()}
+ * 			<li class='jm'>{@link RestRequest#getPathParam(Class) getPathParam(Class)}
+ * 			<li class='jm'>{@link RestRequest#getPathParam(String) getPathParam(String)}
+ * 			<li class='jm'>{@link RestRequest#getPathParams() getPathParams()}
+ * 			<li class='jm'>{@link RestRequest#getPathRemainder() getPathRemainder()}
+ * 			<li class='jm'>{@link RestRequest#getQueryParam(Class) getQueryParam(Class)}
+ * 			<li class='jm'>{@link RestRequest#getQueryParam(String) getQueryParam(String)}
+ * 			<li class='jm'>{@link RestRequest#getQueryParams() getQueryParams()}
+ * 			<li class='jm'>{@link RestRequest#getQueryString() getQueryString()}
+ * 		</ul>
+ * 		<li>Methods for localization:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#getLocale() getLocale()}
+ * 			<li class='jm'>{@link RestRequest#getMessage(String,Object...) getMessage(String,Object...)}
+ * 			<li class='jm'>{@link RestRequest#getMessages() getMessages()}
+ * 			<li class='jm'>{@link RestRequest#getTimeZone() getTimeZone()}
+ * 		</ul>
+ * 		<li>Methods for accessing static files:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#getFileFinder() getFileFinder()}
+ * 			<li class='jm'>{@link RestRequest#getStaticFiles() getStaticFiles()}
+ * 			<li class='jm'>{@link RestRequest#getVarResolverSession() getVarResolverSession()}
+ * 		</ul>
+ * 		<li>Methods for assertions:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#assertBody() assertBody()}
+ * 			<li class='jm'>{@link RestRequest#assertCharset() assertCharset()}
+ * 			<li class='jm'>{@link RestRequest#assertFormParam(String) assertFormParam(String)}
+ * 			<li class='jm'>{@link RestRequest#assertHeader(String) assertHeader(String)}
+ * 			<li class='jm'>{@link RestRequest#assertQueryParam(String) assertQueryParam(String)}
+ * 			<li class='jm'>{@link RestRequest#assertRequestLine() assertRequestLine()}
+ * 		</ul>
+ * 		<li>Other:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#getAttribute(String) getAttribute(String)}
+ * 			<li class='jm'>{@link RestRequest#getAttributes() getAttributes()}
+ * 			<li class='jm'>{@link RestRequest#getAuthorityPath() getAuthorityPath()}
+ * 			<li class='jm'>{@link RestRequest#getBeanSession() getBeanSession()}
+ * 			<li class='jm'>{@link RestRequest#getCharset() getCharset()}
+ * 			<li class='jm'>{@link RestRequest#getConfig() getConfig()}
+ * 			<li class='jm'>{@link RestRequest#getContext() getContext()}
+ * 			<li class='jm'>{@link RestRequest#getContextPath() getContextPath()}
+ * 			<li class='jm'>{@link RestRequest#getHttpServletRequest() getHttpServletRequest()}
+ * 			<li class='jm'>{@link RestRequest#getMethod() getMethod()}
+ * 			<li class='jm'>{@link RestRequest#getOpContext() getOpContext()}
+ * 			<li class='jm'>{@link RestRequest#getOperationSwagger() getOperationSwagger()}
+ * 			<li class='jm'>{@link RestRequest#getPartParserSession() getPartParserSession()}
+ * 			<li class='jm'>{@link RestRequest#getPartSerializerSession() getPartSerializerSession()}
+ * 			<li class='jm'>{@link RestRequest#getPathInfo() getPathInfo()}
+ * 			<li class='jm'>{@link RestRequest#getProtocolVersion() getProtocolVersion()}
+ * 			<li class='jm'>{@link RestRequest#getRequest(Class) getRequest(Class)}
+ * 			<li class='jm'>{@link RestRequest#getRequestLine() getRequestLine()}
+ * 			<li class='jm'>{@link RestRequest#getRequestURI() getRequestURI()}
+ * 			<li class='jm'>{@link RestRequest#getRequestURL() getRequestURL()}
+ * 			<li class='jm'>{@link RestRequest#getServletPath() getServletPath()}
+ * 			<li class='jm'>{@link RestRequest#getSession() getSession()}
+ * 			<li class='jm'>{@link RestRequest#getSwagger() getSwagger()}
+ * 			<li class='jm'>{@link RestRequest#getUriContext() getUriContext()}
+ * 			<li class='jm'>{@link RestRequest#getUriResolver() getUriResolver()}
+ * 			<li class='jm'>{@link RestRequest#isDebug() isDebug()}
+ * 			<li class='jm'>{@link RestRequest#isPlainText() isPlainText()}
+ * 			<li class='jm'>{@link RestRequest#isUserInRole(String) isUserInRole(String)}
+ * 			<li class='jm'>{@link RestRequest#setAttribute(String,Object) setAttribute(String,Object)}
+ * 			<li class='jm'>{@link RestRequest#setCharset(Charset) setCharset(Charset)}
+ * 			<li class='jm'>{@link RestRequest#setDebug() setDebug()}
+ * 			<li class='jm'>{@link RestRequest#setException(Throwable) setException(Throwable)}
+ * 			<li class='jm'>{@link RestRequest#setNoTrace() setNoTrace()}
+ * 		</ul>
+ * 	</ul>
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })

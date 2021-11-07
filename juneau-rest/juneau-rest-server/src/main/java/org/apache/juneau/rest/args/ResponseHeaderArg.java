@@ -13,18 +13,17 @@
 package org.apache.juneau.rest.args;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Resolves method parameters annotated with {@link ResponseHeader} on {@link RestOp}-annotated Java methods.
@@ -90,17 +89,13 @@ public class ResponseHeaderArg implements RestOpArg {
 		v.listener(new ValueListener() {
 			@Override
 			public void onSet(Object o) {
-				try {
-					RestRequest req = opSession.getRequest();
-					RestResponse res = opSession.getResponse();
-					ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
-					if (rpm == null)
-						rpm = ResponseHeaderArg.this.meta;
-					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
-					res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), pss, o));
-				} catch (SerializeException | SchemaValidationException e) {
-					throw runtimeException(e);
-				}
+				RestRequest req = opSession.getRequest();
+				RestResponse res = opSession.getResponse();
+				ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
+				if (rpm == null)
+					rpm = ResponseHeaderArg.this.meta;
+				HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
+				res.setHeader(new SerializedHeader(name, o, pss, rpm.getSchema(), false));
 			}
 		});
 		return v;

@@ -54,9 +54,9 @@ public class Rest_RVars_Test {
 			serializers=A1.class
 		)
 		public void a(RestResponse res) {
-			res.attr("A2", "c");
-			res.attr("B2", "c");
-			res.attr("C", "c");
+			res.setAttribute("A2", "c");
+			res.setAttribute("B2", "c");
+			res.setAttribute("C", "c");
 			res.setOutput(null);
 		}
 

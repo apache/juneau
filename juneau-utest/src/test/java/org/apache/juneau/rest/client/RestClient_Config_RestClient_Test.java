@@ -440,7 +440,7 @@ public class RestClient_Config_RestClient_Test {
 			assertObject(req.getHeaders().getAll("Foo").stream().map(RequestHeader::getValue).collect(Collectors.toList())).asJson().is("['x{f:1}','x{f:1}']");
 			assertEquals("{f:1}",foo[0].toString());
 			assertEquals("{f:1}",foo[1].toString());
-			res.header("Foo",bean);
+			res.setHeader("Foo",bean);
 			return OK;
 		}
 	}
