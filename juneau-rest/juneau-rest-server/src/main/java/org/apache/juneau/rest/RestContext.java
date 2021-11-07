@@ -6904,7 +6904,7 @@ public class RestContext extends Context {
 			}
 
 		} catch (Throwable e) {
-			handleError(sb.build(), convertThrowable(e, InternalServerError.class, null));
+			handleError(sb.build(), convertThrowable(e, InternalServerError.class));
 		}
 
 		RestSession s = sb.build();
@@ -6915,7 +6915,7 @@ public class RestContext extends Context {
 			startCall(s);
 			s.run();
 		} catch (Throwable e) {
-			handleError(s, convertThrowable(e, InternalServerError.class, null));
+			handleError(s, convertThrowable(e, InternalServerError.class));
 		} finally {
 			try {
 				s.finish();
@@ -6989,11 +6989,9 @@ public class RestContext extends Context {
 	 *
 	 * @param t The thrown object.
 	 * @param defaultThrowable The default throwable class to create.
-	 * @param msg Optional message to pass to default throwable class.
-	 * @param args Optional message argumetns to pass to default throwable class.
 	 * @return The converted thrown object.
 	 */
-	public Throwable convertThrowable(Throwable t, Class<?> defaultThrowable, String msg, Object...args) {
+	public Throwable convertThrowable(Throwable t, Class<?> defaultThrowable) {
 
 		ClassInfo ci = ClassInfo.ofc(t);
 
@@ -7027,14 +7025,14 @@ public class RestContext extends Context {
 			return new NotFound(t);
 
 		if (defaultThrowable == null)
-			return new InternalServerError(t, msg, args);
+			return new InternalServerError(t);
 
 		ClassInfo eci = ClassInfo.ofc(defaultThrowable);
 
 		try {
 			ConstructorInfo cci = eci.getPublicConstructor(Throwable.class, String.class, Object[].class);
 			if (cci != null)
-	 			return toHttpException((Throwable)cci.invoke(t, msg, args), InternalServerError.class);
+	 			return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
 
 			cci = eci.getPublicConstructor(Throwable.class);
 			if (cci != null)

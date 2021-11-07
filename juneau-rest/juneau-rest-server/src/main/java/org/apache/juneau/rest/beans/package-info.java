@@ -15,4 +15,4 @@
 /**
  * REST Interface Helper Classes
  */
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.rest.beans;

@@ -14,7 +14,7 @@ package org.apache.juneau.rest.springboot;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.beans.*;
 
 /**
  * Specialized subclass of {@link BasicSpringRestServlet} for showing "group" pages.

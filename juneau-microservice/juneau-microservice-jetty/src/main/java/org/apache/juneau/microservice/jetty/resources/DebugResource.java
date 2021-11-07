@@ -18,7 +18,7 @@ import org.apache.juneau.html.annotation.HtmlDocConfig;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.beans.*;
 
 /**
  * Microservice debug utilities.

@@ -10,53 +10,52 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.rest.beans;
 
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.dto.html5.*;
 
-import java.util.*;
+/**
+ * Defines a simple hyperlink class.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bcode w800>
+ * 	<ja>@Rest</ja>
+ * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
+ *
+ * 		<jc>// Produces &lt;a href=&quot;/foo&quot;>bar&lt;/a></jc>
+ * 		<ja>@RestGet</ja>
+ * 		<jk>public</jk> Hyperlink a01() {
+ * 			<jk>return new</jk> Hyperlink(<js>"foo"</js>, <js>"bar"</js>);
+ * 		}
+ *
+ * 		<jc>// Produces &lt;ul>&lt;li>&lt;a href=&quot;/foo&quot;>bar&lt;/a>&lt;/li>&lt;/ul></jc>
+ * 		<ja>@RestGet</ja>
+ * 		<jk>public</jk> Hyperlink[] a02() {
+ * 			<jk>return new</jk> Hyperlink[]{a01()};
+ * 		}
+ *
+ * 		<jc>// Produces &lt;ul>&lt;li>&lt;a href=&quot;/foo&quot;>bar&lt;/a>&lt;/li>&lt;/ul></jc>
+ * 		<ja>@RestGet</ja>
+ * 		<jk>public</jk> Collection&lt;Hyperlink> a03() {
+ * 			<jk>return</jk> Arrays.<jsm>asList</jsm>(a02());
+ * 		}
+ * 	}
+ * </p>
+ */
+public class Hyperlink extends A {
+	/**
+	 * Creates an empty {@link A} element.
+	 */
+	public Hyperlink() {}
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
-
-@SuppressWarnings("serial")
-@FixMethodOrder(NAME_ASCENDING)
-public class Hyperlink_Test {
-
-	@Rest
-	public static class A extends BasicRestServlet {
-		@RestGet
-		public Hyperlink a() {
-			return new Hyperlink("foo", "bar");
-		}
-		@RestGet
-		public Hyperlink[] b() {
-			return new Hyperlink[]{a(),a()};
-		}
-		@RestGet
-		public Collection<Hyperlink> c() {
-			return Arrays.asList(b());
-		}
-	}
-
-	@Test
-	public void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
-		a.get("/a")
-			.accept("text/html+stripped")
-			.run()
-			.assertBody().is("<a href=\"/foo\">bar</a>");
-		a.get("/b")
-			.accept("text/html+stripped")
-			.run()
-			.assertBody().is("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
-		a.get("/c")
-			.accept("text/html+stripped")
-			.run()
-			.assertBody().is("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
+	/**
+	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])}
+	 * nodes.
+	 *
+	 * @param href The {@link A#href(Object)} attribute.
+	 * @param children The {@link A#children(Object[])} nodes.
+	 */
+	public Hyperlink(Object href, Object...children) {
+		super(href, children);
 	}
 }

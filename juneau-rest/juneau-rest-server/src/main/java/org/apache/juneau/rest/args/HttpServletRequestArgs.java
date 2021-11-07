@@ -18,6 +18,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
 
@@ -43,8 +44,8 @@ public class HttpServletRequestArgs extends SimpleRestOperationArg {
 	public static HttpServletRequestArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(AsyncContext.class))
 			return new HttpServletRequestArgs(x->x.getAsyncContext());
-		if (paramInfo.isType(Cookie[].class))
-			return new HttpServletRequestArgs(x->x.getCookies());
+		if (paramInfo.isType(CookieList.class))
+			return new HttpServletRequestArgs(x->CookieList.of(x.getCookies()));
 		if (paramInfo.isType(DispatcherType.class))
 			return new HttpServletRequestArgs(x->x.getDispatcherType());
 		if (paramInfo.isType(HttpServletRequest.class))

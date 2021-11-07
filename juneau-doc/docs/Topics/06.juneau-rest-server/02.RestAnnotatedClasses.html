@@ -1,0 +1,289 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Rest-Annotated Classes', updated:'8.1.2,9.0.0'}
+
+<p>
+	The {@link oajr.annotation.Rest @Rest} annotation is the primary way of defining
+	and configuring REST resource classes.
+	The functionality of the class itself is covered in detail in the topics below.
+</p>
+<ul class='javatree'>
+	<li class='ja'>{@link oajr.annotation.Rest}
+	<ul class='javatreec'>
+		<li class='jm'>{@link oajr.annotation.Rest#allowedHeaderParams() allowedHeaderParams}
+		<li class='jm'>{@link oajr.annotation.Rest#allowedMethodHeaders() allowedMethodHeaders}
+		<li class='jm'>{@link oajr.annotation.Rest#allowedMethodParams() allowedMethodParams}
+		<li class='jm'>{@link oajr.annotation.Rest#beanStore() beanStore}
+		<li class='jm'>{@link oajr.annotation.Rest#builder() builder}
+		<li class='jm'>{@link oajr.annotation.Rest#callLogger() callLogger}
+		<li class='jm'>{@link oajr.annotation.Rest#children() children}
+		<li class='jm'>{@link oajr.annotation.Rest#clientVersionHeader() clientVersionHeader}
+		<li class='jm'>{@link oajr.annotation.Rest#config() config}
+		<li class='jm'>{@link oajr.annotation.Rest#consumes() consumes}
+		<li class='jm'>{@link oajr.annotation.Rest#contextClass() contextClass}
+		<li class='jm'>{@link oajr.annotation.Rest#converters() converters}
+		<li class='jm'>{@link oajr.annotation.Rest#debug() debug}
+		<li class='jm'>{@link oajr.annotation.Rest#debugEnablement() debugEnablement}
+		<li class='jm'>{@link oajr.annotation.Rest#debugOn() debugOn}
+		<li class='jm'>{@link oajr.annotation.Rest#defaultAccept() defaultAccept}
+		<li class='jm'>{@link oajr.annotation.Rest#defaultCharset() defaultCharset}
+		<li class='jm'>{@link oajr.annotation.Rest#defaultContentType() defaultContentType}
+		<li class='jm'>{@link oajr.annotation.Rest#defaultRequestAttributes() defaultRequestAttributes}
+		<li class='jm'>{@link oajr.annotation.Rest#defaultRequestHeaders() defaultRequestHeaders}
+		<li class='jm'>{@link oajr.annotation.Rest#defaultResponseHeaders() defaultResponseHeaders}
+		<li class='jm'>{@link oajr.annotation.Rest#description() description}
+		<li class='jm'>{@link oajr.annotation.Rest#disableBodyParam() disableBodyParam}
+		<li class='jm'>{@link oajr.annotation.Rest#encoders() encoders}
+		<li class='jm'>{@link oajr.annotation.Rest#fileFinder() fileFinder}
+		<li class='jm'>{@link oajr.annotation.Rest#guards() guards}
+		<li class='jm'>{@link oajr.annotation.Rest#maxInput() maxInput}
+		<li class='jm'>{@link oajr.annotation.Rest#messages() messages}
+		<li class='jm'>{@link oajr.annotation.Rest#on() on}
+		<li class='jm'>{@link oajr.annotation.Rest#onClass() onClass}
+		<li class='jm'>{@link oajr.annotation.Rest#parsers() parsers}
+		<li class='jm'>{@link oajr.annotation.Rest#partParser() partParser}
+		<li class='jm'>{@link oajr.annotation.Rest#partSerializer() partSerializer}
+		<li class='jm'>{@link oajr.annotation.Rest#path() path}
+		<li class='jm'>{@link oajr.annotation.Rest#produces() produces}
+		<li class='jm'>{@link oajr.annotation.Rest#renderResponseStackTraces() renderResponseStackTraces}
+		<li class='jm'>{@link oajr.annotation.Rest#responseProcessors() responseProcessors}
+		<li class='jm'>{@link oajr.annotation.Rest#restChildrenClass() restChildrenClass}
+		<li class='jm'>{@link oajr.annotation.Rest#restOpArgs() restOpArgs}
+		<li class='jm'>{@link oajr.annotation.Rest#restOpContextClass() restOpContextClass}
+		<li class='jm'>{@link oajr.annotation.Rest#restOperationsClass() restOperationsClass}
+		<li class='jm'>{@link oajr.annotation.Rest#roleGuard() roleGuard}
+		<li class='jm'>{@link oajr.annotation.Rest#rolesDeclared() rolesDeclared}
+		<li class='jm'>{@link oajr.annotation.Rest#serializers() serializers}
+		<li class='jm'>{@link oajr.annotation.Rest#siteName() siteName}
+		<li class='jm'>{@link oajr.annotation.Rest#staticFiles() staticFiles}
+		<li class='jm'>{@link oajr.annotation.Rest#swagger() swagger}
+		<li class='jm'>{@link oajr.annotation.Rest#swaggerProvider() swaggerProvider}
+		<li class='jm'>{@link oajr.annotation.Rest#title() title}
+		<li class='jm'>{@link oajr.annotation.Rest#uriAuthority() uriAuthority}
+		<li class='jm'>{@link oajr.annotation.Rest#uriContext() uriContext}
+		<li class='jm'>{@link oajr.annotation.Rest#uriRelativity() uriRelativity}
+		<li class='jm'>{@link oajr.annotation.Rest#uriResolution() uriResolution}
+	</ul>
+</ul>
+<p>
+	The {@link oajr.annotation.Rest @Rest} annotation in inheritable from parents and interfaces of resource classes.
+	When multiple annotations are defined at different levels, the annotation values are combined.
+	This is a particularly useful feature because it allows you to define your own configured parent
+	resource classes that can be extended by all your child resources so that they all share common
+	settings.
+</p>
+
+<h5 class='topic'>Predefined Classes</h5>
+<p>
+	Several pre-annotated classes are provided by the framework.  
+	Some extend from {@link javax.servlet.http.HttpServlet} and others do not.
+</p>
+<p>
+	The class hierarchy for classes that extend from {@link javax.servlet.http.HttpServlet} are shown below:
+</p>
+<ul class='javatree'>
+	<li class='jac'>
+		{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
+		<ul>
+			<li class='jac'>
+				{@link oajr.RestServlet org.apache.juneau.rest.RestServlet}
+				<br>Contains all the main logic.
+				<ul>
+					<li class='jac'>{@link oajr.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
+						<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
+						<ul>
+							<li class='jac'>{@link oajr.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
+								<br>A default implementation for "router" pages.
+							</li>
+						</ul>
+					</li>
+					<li class='jac'>{@link oajr.BasicRestServletJena org.apache.juneau.rest.BasicRestServletJena}
+						<br>Same as {@link oajr.BasicRestServlet} but adds RDF marshalling support.
+					</li>
+					<li class='jac'>{@link oajr.springboot.SpringRestServlet org.apache.juneau.rest.springboot.SpringRestServlet}
+						<br>Top-level servlet to use in Spring Boot.
+						<ul>
+							<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet org.apache.juneau.rest.springboot.BasicSpringRestServlet}
+								<br>Same as {@link BasicRestServlet} except for Spring Boot.
+								<ul>
+									<li class='jac'>{@link oajr.springboot.BasicSpringRestServletGroup org.apache.juneau.rest.springboot.BasicSpringRestServletGroup}
+										<br>Same as {@link BasicRestServletGroup} except for Spring Boot.
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+<p>
+	For top-level resources, you'll typically extend from one of the classes above.
+</p>
+<p>
+	For child resources, you can either extend from one of the classes above, or use one 
+	of the default implementations that don't extend from {@link javax.servlet.http.HttpServlet}:
+</p>
+<ul class='javatree'>
+	<li class='jic'>{@link oajr.BasicRestOperations org.apache.juneau.BasicRestOperations}
+	<ul>
+		<li class='jac'>{@link oajr.BasicRestObject org.apache.juneau.BasicRestObject}
+		<ul>
+			<li class='jac'>{@link oajr.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
+		</ul>
+	</ul>
+</ul>
+<p>
+	In a Spring Boot environment, child classes will typically extend from these latter two when
+	implementing REST resources as <ja>@Bean</ja>-annotated Spring Beans.
+	If you extend from one of the servlet classses, Spring Boot will automatically
+	register them as top-level servlets which typically is not the desired behavior.
+</p>
+<p>
+	The following interfaces are also provided for defining REST endpoint classes:
+
+<ul class='javatree'>
+	<li class='jic'>{@link oajr.config.BasicUniversalRest} - Support for all languages.
+	<li class='jic'>{@link oajr.config.BasicJsonRest} - Support for JSON.
+	<li class='jic'>{@link oajr.config.BasicSimpleJsonRest} - Support for simplified JSON.
+	<li class='jic'>{@link oajr.config.BasicOpenApiRest} - Support for OpenAPI. 
+</ul>
+<p>
+	The interfaces have no methods to implement.  They simply aggregate common class-level
+	annotations used to configure your REST classes.
+</p>
+<p>
+	The servlets with RDF support require Jena on the classpath.  
+	All other serializers and parsers do not have any external library dependencies.
+	For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to 
+	support RDF. 
+</p>
+
+<h5 class='topic'>Child Resources</h5>
+<p>
+	Child Resources are REST servlets or objects that are linked to parent resources through the 
+	{@link oajr.annotation.Rest#children() @Rest(children)} annotation.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jd>/** Parent Resource */</jd>
+	<ja>@Rest</ja>(
+		path=<js>"/parent"</js>,
+		children={FooResource.<jk>class</jk>}
+	)
+	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p class='bpcode w800'>
+	<jd>/** Child Resource */</jd>
+ 	<ja>@Rest</ja>(
+		path=<js>"/foo"</js>  <jc>// Path relative to parent resource.</jc>
+	)
+	<jk>public</jk> FooResource {...} <jc>// Note that we don't need to extend from RestServlet.</jc>
+</p>
+<p>
+	The path of the child resource gets appended to the path of the parent resource. 
+	So in the example above, the child resource is accessed through the URL <l>/parent/foo</l>.
+</p>
+<p>
+	One advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
+	file.
+	Initialization of and access to the child resources occurs through the parent resource.
+	Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
+</p>
+<p>
+	Child REST objects typically extend from {@link oajr.BasicRestObject} to inherit basic functionality 
+	defined on that class, but as shown above it's not a requirement.
+	Child REST objects can also be preconfigured with basic functionality by implementing one of the 
+	following interfaces as well:
+</p>
+<ul class='javatree'>
+	<li class='jic'>{@link oajr.config.BasicUniversalRest} - Support for all languages.
+	<li class='jic'>{@link oajr.config.BasicJsonRest} - Support for JSON.
+	<li class='jic'>{@link oajr.config.BasicSimpleJsonRest} - Support for simplified JSON.
+	<li class='jic'>{@link oajr.config.BasicOpenApiRest} - Support for OpenAPI. 
+</ul>
+
+<h5 class='topic'>Path Variables</h5>
+<p>
+	The path can contain variables that get resolved to {@link oaj.http.annotation.Path @Path} parameters
+	or access through the {@link oajr.RestRequest#getPathParams()} method.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode'>
+	<ja>@Rest</ja>(
+		path=<js>"/myResource/{foo}/{bar}"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+
+		<ja>@RestPost</ja>(<js>"/{baz}"</js>)
+		<jk>public void</jk> String doX(<ja>@Path</ja> String <jv>foo</jv>, <ja>@Path</ja> <jk>int</jk> <jv>bar</jv>) {
+			...
+		}
+	}
+</p>
+<p>
+	Variables can be used on either top-level or child resources and can be defined on multiple levels.
+</p>
+<div class='info'>
+	All variables in the path must be specified or else the target will not resolve and a <c>404</c> will result.
+</div>
+
+<h5 class='topic'>Deployment</h5>
+<p>
+	REST resources are deployed in one of two ways:
+</p>
+<ul class='spaced-list'>
+	<li>Deployed in a J2EE container as a servlet.
+	<li>Deployed as a child of another REST resource.
+</ul>
+<p>
+	When deployed in a J2EE container, you MUST extend from one of the servlet classes.
+</p>
+<p>
+	<b>When deployed as a child of another resource, you MAY extend from one of the servlet classes but it's 
+	not necessary.</b>
+	The only requirement is that the class be annotated with <ja>@Rest</ja> and have one of the following constructors
+	if they aren't already Spring Beans:
+</p>
+<ul class='javatree'>
+	<li class='jm'><c><jk>public</jk> T()</c>
+	<li class='jm'><c><jk>public</jk> T(RestContext.Builder)</c>
+</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Top level resource is deployed like any other servlet and must subclass from RestServlet.</jc>
+	<ja>@Rest</ja>(
+		path=<js>"/top"</js>,
+		children={
+			ChildResource.<jk>class</jk>  <jc>// Accessed via URI "/top/child"</jc>
+		}
+	)
+	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Child resources can inherit from RestServlet but it's not a requirement.</jc>
+	<ja>@Rest</ja>(
+		path=<js>"/child"</js>
+	)
+	<jk>public class</jk> ChildResource <jk>extends</jk> WhateverYouWant {...}
+</p>		
+<p>
+	That's all there is to it!
+	There's no code scanning, module configuration/initialization classes, or anything complex like that.
+	It's just a servlet.
+</p>
+

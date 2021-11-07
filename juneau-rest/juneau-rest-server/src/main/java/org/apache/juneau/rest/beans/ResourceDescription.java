@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.rest.beans;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 
@@ -27,7 +27,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
+ * 	<jk>new</jk> ResourceDescription(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  *
  * <ul class='seealso'>

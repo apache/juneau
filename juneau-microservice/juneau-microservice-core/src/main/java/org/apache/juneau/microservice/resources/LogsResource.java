@@ -28,9 +28,9 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.helper.*;
 
 /**
  * REST resource for viewing and accessing log files.

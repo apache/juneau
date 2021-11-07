@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import javax.servlet.http.*;
 
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.beans.*;
 
 /**
  * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.

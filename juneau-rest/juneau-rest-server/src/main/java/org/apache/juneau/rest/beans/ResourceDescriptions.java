@@ -10,37 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.rest.beans;
 
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.response.*;
+import java.util.*;
 
 /**
- * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
+ * A list of {@link ResourceDescription} objects.
  */
-@Response(description="Redirect to servlet root")
-public class SeeOtherRoot extends SeeOther {
+public class ResourceDescriptions extends ArrayList<ResourceDescription> {
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Reusable instance.
-	 */
-	public static final SeeOtherRoot INSTANCE = new SeeOtherRoot();
-
-	/**
-	 * Constructor.
-	 */
-	public SeeOtherRoot() {
-		super(create().location("servlet:/"));
-	}
-
-	/**
-	 * Constructor with no redirect.
-	 * <p>
-	 * Used for end-to-end interfaces.
+	 * Adds a new {@link ResourceDescription} to this list.
 	 *
-	 * @param body Message to send as the response.
+	 * @param name The name of the child resource.
+	 * @param description The description of the child resource.
+	 * @return This object.
 	 */
-	public SeeOtherRoot(String body) {
-		super(create().location("servlet:/").body(body));
+	public ResourceDescriptions append(String name, String description) {
+		super.add(new ResourceDescription(name, description));
+		return this;
+	}
+	/**
+	 * Adds a new {@link ResourceDescription} to this list when the uri is different from the name.
+	 *
+	 * @param name The name of the child resource.
+	 * @param uri The URI of the child resource.
+	 * @param description The description of the child resource.
+	 * @return This object.
+	 */
+	public ResourceDescriptions append(String name, String uri, String description) {
+		super.add(new ResourceDescription(name, uri, description));
+		return this;
 	}
 }
