@@ -71,7 +71,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentRequestQueryParamAssertion#asInteger()}
  * 		<li class='jm'>{@link FluentRequestQueryParamAssertion#asLong()}
  * 		<li class='jm'>{@link FluentRequestQueryParamAssertion#asZonedDateTime()}
- * 		<li class='jm'>{@link FluentRequestQueryParamAssertion#asType(Class)}
+ * 		<li class='jm'>{@link FluentRequestQueryParamAssertion#as(Class)}
  * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}
@@ -197,17 +197,17 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	}
 
 	/**
-	 * Converts the parameter value to a type using {@link RequestQueryParam#asType(Class)} and then returns the value as an any-object assertion.
+	 * Converts the parameter value to a type using {@link RequestQueryParam#as(Class)} and then returns the value as an any-object assertion.
 	 *
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentAnyAssertion<V,R> asType(Class<V> type) {
-		return new FluentAnyAssertion<>(value.asType(type).orElse(null), returns());
+	public <V> FluentAnyAssertion<V,R> as(Class<V> type) {
+		return new FluentAnyAssertion<>(value.as(type).orElse(null), returns());
 	}
 
 	/**
-	 * Converts the parameter value to a type using {@link RequestQueryParam#asType(Type,Type...)} and then returns the value as an any-object assertion.
+	 * Converts the parameter value to a type using {@link RequestQueryParam#as(Type,Type...)} and then returns the value as an any-object assertion.
 	 *
 	 * <p>
 	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
@@ -216,8 +216,8 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @param args Optional type arguments.
 	 * @return A new fluent assertion object.
 	 */
-	public FluentAnyAssertion<Object,R> asType(Type type, Type...args) {
-		return new FluentAnyAssertion<>(value.asType(type, args).orElse(null), returns());
+	public FluentAnyAssertion<Object,R> as(Type type, Type...args) {
+		return new FluentAnyAssertion<>(value.as(type, args).orElse(null), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

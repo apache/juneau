@@ -19,7 +19,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.time.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -33,7 +32,71 @@ import org.apache.juneau.http.*;
 
 /**
  * Represents the path parameters in an HTTP request.
- */
+ *
+ *  <p>
+ * 	The {@link RequestPathParams} object is the API for accessing the matched variables
+ * 	and remainder on the URL path.
+ * </p>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestPathParams <jv>path</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
+ * 	<jk>public void</jk> doGet(RequestPathParams <jv>path</jv>) {
+ * 		<jc>// Example URL:  /123/qux/true/quux</jc>
+ *
+ * 		<jk>int</jk> <jv>foo</jv> = <jv>path</jv>.get(<js>"foo"</js>).asInteger().orElse(0);  <jc>// =123</jc>
+ * 		String <jv>bar</jv> = <jv>path</jv>.get(<js>"bar"</js>).orElse(<jk>null</jk>);  <jc>// =qux</jc>
+ * 		<jk>boolean</jk> <jv>baz</jv> = <jv>path</jv>.get(<js>"baz"</js>).asBoolean().orElse(<jk>false</jk>);  <jc>// =true</jc>
+ * 		String <jv>remainder</jv> = <jv>path</jv>.getRemainder();  <jc>// =quux</jc>
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestPathParams}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving path parameters:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParams#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestPathParams#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestPathParams#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestPathParams#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestPathParams#getAll() getAll()}
+ * 			<li class='jm'>{@link RequestPathParams#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestPathParams#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestPathParams#getLast(String) getLast(String)}
+ * 			<li class='jm'>{@link RequestPathParams#getRemainder() getRemainder()}
+ * 			<li class='jm'>{@link RequestPathParams#getRemainderUndecoded() getRemainderUndecoded()}
+ * 		</ul>
+ * 		<li>Methods overridding path parameters:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParams#add(NameValuePair...) add(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestPathParams#add(String,Object) add(String,Object)}
+ * 			<li class='jm'>{@link RequestPathParams#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestPathParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestPathParams#remove(NameValuePair...) remove(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestPathParams#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestPathParams#set(NameValuePair...) set(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestPathParams#set(String,Object) set(String,Object)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParams#copy() copy()}
+ * 			<li class='jm'>{@link RequestPathParams#isEmpty() isEmpty()}
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+ * </ul>
+*/
 public class RequestPathParams {
 
 	private final RestSession session;
@@ -372,67 +435,7 @@ public class RequestPathParams {
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
 		String name = HttpParts.getName(PATH, cm).orElseThrow(()->runtimeException("@Path(name) not found on class {0}", className(type)));
-		return get(name).asPart(type);
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a string.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<String> getString(String name) {
-		return getLast(name).asString();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as an integer.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Integer> getInteger(String name) {
-		return getLast(name).asInteger();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a boolean.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Boolean> getBoolean(String name) {
-		return getLast(name).asBoolean();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a list from a comma-delimited string.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<List<String>> getCsvArray(String name) {
-		return getLast(name).asCsvArray();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a long.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Long> getLong(String name) {
-		return getLast(name).asLong();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a boolean.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<ZonedDateTime> getDate(String name) {
-		return getLast(name).asDate();
+		return get(name).as(type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

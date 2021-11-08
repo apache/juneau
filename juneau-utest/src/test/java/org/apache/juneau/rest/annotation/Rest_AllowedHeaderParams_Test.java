@@ -30,9 +30,9 @@ public class Rest_AllowedHeaderParams_Test {
 	public static class A {
 		@RestOp
 		public String put(RequestHeaders h) {
-			Accept accept = h.get("Accept").asPart(Accept.class).orElse(Accept.NULL);
-			ContentType contentType = h.get("Content-Type").asPart(ContentType.class).orElse(ContentType.NULL);
-			return "Accept="+(accept.isPresent() ? accept.get() : null)+",Content-Type=" + (contentType.isPresent() ? contentType.get() : null) + ",Custom=" + h.getString("Custom").orElse(null);
+			Accept accept = h.get("Accept").as(Accept.class).orElse(Accept.NULL);
+			ContentType contentType = h.get("Content-Type").as(ContentType.class).orElse(ContentType.NULL);
+			return "Accept="+(accept.isPresent() ? accept.get() : null)+",Content-Type=" + (contentType.isPresent() ? contentType.get() : null) + ",Custom=" + h.get("Custom").orElse(null);
 		}
 	}
 

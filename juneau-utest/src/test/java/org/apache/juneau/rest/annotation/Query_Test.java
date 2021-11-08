@@ -40,12 +40,12 @@ public class Query_Test {
 		@RestGet
 		public String a(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
-			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.getString("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
+			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
-			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.getString("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
+			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 	}
 
@@ -89,22 +89,22 @@ public class Query_Test {
 		@RestGet
 		public String a(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
-			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
+			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestGet
 		public String b(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
-			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
+			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String c(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
-			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
+			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String d(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
-			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
+			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 	}
 
@@ -185,9 +185,9 @@ public class Query_Test {
 		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestQueryParams query) {
 			return OMap.create()
-				.a("f1", query.getString("f1"))
-				.a("f2", query.getString("f2"))
-				.a("f3", query.getString("f3"));
+				.a("f1", query.get("f1").asString())
+				.a("f2", query.get("f2").asString())
+				.a("f3", query.get("f3").asString());
 		}
 		@RestGet
 		public OMap b(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {

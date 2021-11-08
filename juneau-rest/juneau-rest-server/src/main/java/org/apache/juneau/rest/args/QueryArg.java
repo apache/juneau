@@ -36,7 +36,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getQueryParams() getQueryParams}()
  * 		.{@link RequestQueryParams#get(String) get}(<jv>name</jv>)
- * 		.{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>);
+ * 		.{@link RequestQueryParam#as(Class) as}(<jv>type</jv>);
  * </p>
  *
  * <p>
@@ -111,17 +111,17 @@ public class QueryArg implements RestOpArg {
 
 		if (multi) {
 			Collection c = cm.isArray() ? new ArrayList<>() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
-			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).asType(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
+			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			OMap m = new OMap();
 			for (RequestQueryParam e : rh.getAll())
-				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).asType(cm.getValueType()).orElse(null));
+				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null));
 			return req.getBeanSession().convertToType(m, cm);
 		}
 
-		return rh.getLast(name).parser(ps).schema(schema).asType(type.innerType()).orElse(null);
+		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
 	}
 }

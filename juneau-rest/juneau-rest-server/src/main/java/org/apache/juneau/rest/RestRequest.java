@@ -234,7 +234,7 @@ public final class RestRequest {
 		body = new RequestBody(this);
 
 		if (context.isAllowBodyParam()) {
-			String b = queryParams.getString("body").orElse(null);
+			String b = queryParams.get("body").asString().orElse(null);
 			if (b != null) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 				body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
@@ -407,7 +407,7 @@ public final class RestRequest {
 	 * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	 *
 	 *  	<jc>// Get a header value as a POJO.</jc>
-	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>).asType(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
 	 *
 	 * 		<jc>// Get a standard header.</jc>
 	 * 		Optional&lt;CacheControl&gt; = <jv>headers</jv>.getCacheControl();
@@ -530,7 +530,7 @@ public final class RestRequest {
 	 */
 	public Locale getLocale() {
 		Locale best = inner.getLocale();
-		String h = headers.getString("Accept-Language").orElse(null);
+		String h = headers.get("Accept-Language").asString().orElse(null);
 		if (h != null) {
 			StringRanges sr = StringRanges.of(h);
 			float qValue = 0;
@@ -612,7 +612,7 @@ public final class RestRequest {
 	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
 	public Optional<TimeZone> getTimeZone() {
-		String tz = headers.getString("Time-Zone").orElse(null);
+		String tz = headers.get("Time-Zone").asString().orElse(null);
 		if (tz != null)
 			return of(TimeZone.getTimeZone(tz));
 		return empty();
@@ -947,7 +947,7 @@ public final class RestRequest {
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Convert body to a linked list of Person objects.</jc>
-	 * 		List&lt;Person&gt; <jv>list</jv> = <jv>req</jv>.getBody().asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+	 * 		List&lt;Person&gt; <jv>list</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
 	 * 		..
 	 * 	}
 	 * </p>
@@ -1272,7 +1272,7 @@ public final class RestRequest {
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
-		return "true".equals(queryParams.getString("plainText").orElse("false"));
+		return "true".equals(queryParams.get("plainText").asString().orElse("false"));
 	}
 
 	/**
@@ -1356,7 +1356,7 @@ public final class RestRequest {
 	 * @return <jk>true</jk> if debug mode is enabled.
 	 */
 	public boolean isDebug() {
-		return getAttribute("Debug").asType(Boolean.class).orElse(false);
+		return getAttribute("Debug").as(Boolean.class).orElse(false);
 	}
 
 	/**
@@ -1605,15 +1605,15 @@ public final class RestRequest {
 							ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
-								return getBody().setSchema(schema).asType(type);
+								return getBody().setSchema(schema).as(type);
 							if (pt == QUERY)
-								return getQueryParam(name).parser(pp).schema(schema).asType(type).orElse(null);
+								return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
 							if (pt == FORMDATA)
-								return getFormParam(name).parser(pp).schema(schema).asType(type).orElse(null);
+								return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
 							if (pt == HEADER)
-								return getHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
+								return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
 							if (pt == PATH)
-								return getPathParam(name).parser(pp).schema(schema).asType(type).orElse(null);
+								return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
 						}
 						return null;
 					}

@@ -13,8 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-import java.time.*;
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
@@ -47,51 +45,6 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	@Override /* RequestHttpPart */
 	public String getValue() {
 		return value;
-	}
-
-	/**
-	 * Returns the value of this header as an integer.
-	 *
-	 * @return The value of this header as an integer, or {@link Optional#empty()} if the header was not present.
-	 */
-	public Optional<Integer> asInteger() {
-		return asIntegerHeader().asInteger();
-	}
-
-	/**
-	 * Returns the value of this header as a boolean.
-	 *
-	 * @return The value of this header as a boolean, or {@link Optional#empty()} if the header was not present.
-	 */
-	public Optional<Boolean> asBoolean() {
-		return asBooleanHeader().asBoolean();
-	}
-
-	/**
-	 * Returns the value of this header as a long.
-	 *
-	 * @return The value of this header as a long, or {@link Optional#empty()} if the header was not present.
-	 */
-	public Optional<Long> asLong() {
-		return asLongHeader().asLong();
-	}
-
-	/**
-	 * Returns the value of this header as a date.
-	 *
-	 * @return The value of this header as a date, or {@link Optional#empty()} if the header was not present.
-	 */
-	public Optional<ZonedDateTime> asDate() {
-		return asDateHeader().asZonedDateTime();
-	}
-
-	/**
-	 * Returns the value of this header as a list from a comma-delimited string.
-	 *
-	 * @return The value of this header as a list from a comma-delimited string, or {@link Optional#empty()} if the header was not present.
-	 */
-	public Optional<List<String>> asCsvArray() {
-		return asCsvArrayHeader().asList();
 	}
 
 	/**

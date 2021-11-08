@@ -19,7 +19,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.time.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -30,15 +29,85 @@ import org.apache.juneau.utils.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 
 /**
  * Represents the query parameters in an HTTP request.
  *
  * <p>
+ * 	The {@link RequestQueryParams} object is the API for accessing the GET query parameters of an HTTP request.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
+ * </p>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestQueryParams <jv>query</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestQueryParams <jv>query</jv>) {
+ *
+ * 		<jc>// Get query parameters converted to various types.</jc>
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>query</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
+ * 		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
+ * 		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+ * 	 }
+ * </p>
+ *
+ * <p>
+ * 	An important distinction between the behavior of this object and <l>HttpServletRequest.getParameter(String)</l> is
+ * 	that the former will NOT load the body of the request on FORM POSTS and will only look at parameters
+ * 	found in the query string.
+ * 	This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to
+ * 	inadvertently read the body of the request to get a query parameter.
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestQueryParams}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving query parameters:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestQueryParams#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestQueryParams#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestQueryParams#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestQueryParams#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestQueryParams#getAll() getAll()}
+ * 			<li class='jm'>{@link RequestQueryParams#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestQueryParams#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestQueryParams#getLast(String) getLast(String)}
+ * 			<li class='jm'>{@link RequestQueryParams#getSearchArgs() getSearchArgs()}
+ * 		</ul>
+ * 		<li>Methods overridding query parameters:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestQueryParams#add(NameValuePair...) add(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestQueryParams#add(String,Object) add(String,Object)}
+ * 			<li class='jm'>{@link RequestQueryParams#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestQueryParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestQueryParams#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestQueryParams#remove(NameValuePair...) remove(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestQueryParams#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestQueryParams#set(NameValuePair...) set(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestQueryParams#set(String,Object) set(String,Object)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestQueryParams#asQueryString() asQueryString()}
+ * 			<li class='jm'>{@link RequestQueryParams#copy() copy()}
+ * 			<li class='jm'>{@link RequestQueryParams#isEmpty() isEmpty()}
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ * <p>
  * Entries are stored in a case-sensitive map unless overridden via the constructor.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmRequestHeaders}
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
  * </ul>
  */
 public class RequestQueryParams {
@@ -144,6 +213,17 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParams addDefault(NameValuePair...pairs) {
 		return addDefault(Arrays.asList(pairs));
+	}
+
+	/**
+	 * Adds a default entry to the query parameters.
+	 *
+	 * @param name The name.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public RequestQueryParams addDefault(String name, String value) {
+		return addDefault(BasicStringPart.of(name, value));
 	}
 
 	/**
@@ -382,67 +462,7 @@ public class RequestQueryParams {
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
 		String name = HttpParts.getName(QUERY, cm).orElseThrow(()->runtimeException("@Query(name) not found on class {0}", className(type)));
-		return get(name).asPart(type);
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a string.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<String> getString(String name) {
-		return getLast(name).asString();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as an integer.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Integer> getInteger(String name) {
-		return getLast(name).asInteger();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a boolean.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Boolean> getBoolean(String name) {
-		return getLast(name).asBoolean();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a list from a comma-delimited string.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<List<String>> getCsvArray(String name) {
-		return getLast(name).asCsvArray();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a long.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Long> getLong(String name) {
-		return getLast(name).asLong();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a boolean.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<ZonedDateTime> getDate(String name) {
-		return getLast(name).asDate();
+		return get(name).as(type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -516,12 +536,12 @@ public class RequestQueryParams {
 	public SearchArgs getSearchArgs() {
 		if (contains("s","v","o","p","l","i")) {
 			return new SearchArgs.Builder()
-				.search(getString("s").orElse(null))
-				.view(getString("v").orElse(null))
-				.sort(getString("o").orElse(null))
-				.position(getInteger("p").orElse(null))
-				.limit(getInteger("l").orElse(null))
-				.ignoreCase(getBoolean("i").orElse(null))
+				.search(get("s").asString().orElse(null))
+				.view(get("v").asString().orElse(null))
+				.sort(get("o").asString().orElse(null))
+				.position(get("p").asInteger().orElse(null))
+				.limit(get("l").asInteger().orElse(null))
+				.ignoreCase(get("i").asBoolean().orElse(null))
 				.build();
 		}
 		return null;

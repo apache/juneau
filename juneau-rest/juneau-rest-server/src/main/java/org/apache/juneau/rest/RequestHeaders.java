@@ -20,7 +20,6 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -31,15 +30,79 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Represents the headers in an HTTP request.
  *
  * <p>
+ * 	The {@link RequestHeaders} object is the API for accessing the headers of an HTTP request.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
+ * </p>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
+ *
+ * 		<jc>// Add a default value.</jc>
+ * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+ *
+ * 		<jc>// Get a header value as a POJO.</jc>
+ * 		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
+ *
+ * 		<jc>// Get a header as a standard HTTP part.</jc>
+ * 		ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestHeaders}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving headers:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeaders#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestHeaders#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestHeaders#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestHeaders#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestHeaders#getAll() getAll()}
+ * 			<li class='jm'>{@link RequestHeaders#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestHeaders#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestHeaders#getLast(String) getLast(String)}
+ * 		</ul>
+ * 		<li>Methods overridding headers:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeaders#add(Header...) add(Header...)}
+ * 			<li class='jm'>{@link RequestHeaders#add(String, Object) add(String, Object)}
+ * 			<li class='jm'>{@link RequestHeaders#addDefault(Header...) addDefault(Header...)}
+ * 			<li class='jm'>{@link RequestHeaders#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestHeaders#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestHeaders#remove(Header...) remove(Header...)}
+ * 			<li class='jm'>{@link RequestHeaders#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestHeaders#set(Header...) set(Header...)}
+ * 			<li class='jm'>{@link RequestHeaders#set(String,Object) set(String,Object)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeaders#copy() copy()}
+ * 			<li class='jm'>{@link RequestHeaders#isEmpty() isEmpty()}
+ * 			<li class='jm'>{@link RequestHeaders#subset(String...) subset(String...)}
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ * <p>
  * Entries are stored in a case-insensitive map unless overridden via the constructor.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmRequestHeaders}
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
  * </ul>
  */
 public class RequestHeaders {
@@ -154,6 +217,17 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders addDefault(Header...pairs) {
 		return addDefault(Arrays.asList(pairs));
+	}
+
+	/**
+	 * Adds a default entry to the request headers.
+	 *
+	 * @param name The name.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public RequestHeaders addDefault(String name, String value) {
+		return addDefault(BasicStringHeader.of(name, value));
 	}
 
 	/**
@@ -415,67 +489,7 @@ public class RequestHeaders {
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
 		String name = HttpParts.getName(HEADER, cm).orElseThrow(()->runtimeException("@Header(name) not found on class {0}", className(type)));
-		return get(name).asPart(type);
-	}
-
-	/**
-	 * Returns the last header with the specified name as a string.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<String> getString(String name) {
-		return getLast(name).asString();
-	}
-
-	/**
-	 * Returns the last header with the specified name as an integer.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Integer> getInteger(String name) {
-		return getLast(name).asInteger();
-	}
-
-	/**
-	 * Returns the last header with the specified name as a boolean.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Boolean> getBoolean(String name) {
-		return getLast(name).asBoolean();
-	}
-
-	/**
-	 * Returns the last header with the specified name as a list from a comma-delimited string.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<List<String>> getCsvArray(String name) {
-		return getLast(name).asCsvArray();
-	}
-
-	/**
-	 * Returns the last header with the specified name as a long.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Long> getLong(String name) {
-		return getLast(name).asLong();
-	}
-
-	/**
-	 * Returns the last header with the specified name as a boolean.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<ZonedDateTime> getDate(String name) {
-		return getLast(name).asDate();
+		return get(name).as(type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

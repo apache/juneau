@@ -66,7 +66,7 @@ public class RestOpInvoker extends MethodInvoker {
 			Object output = super.invoke(session.getResource(), args);
 
 			// Handle manual call to req.setDebug().
-			Boolean debug = req.getAttribute("Debug").asType(Boolean.class).orElse(null);
+			Boolean debug = req.getAttribute("Debug").as(Boolean.class).orElse(null);
 			if (debug == Boolean.TRUE) {
 				session.debug(true);
 			} else if (debug == Boolean.FALSE) {

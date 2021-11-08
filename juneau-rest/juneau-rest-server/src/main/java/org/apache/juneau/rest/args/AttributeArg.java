@@ -28,7 +28,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getAttributes() getAttributes}()
  * 		.{@link RequestAttributes#get(String) get}(<jv>name</jv>)
- * 		.{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>);
+ * 		.{@link RequestAttribute#as(Class) as}(<jv>type</jv>);
  * </p>
  */
 public class AttributeArg implements RestOpArg {
@@ -71,6 +71,6 @@ public class AttributeArg implements RestOpArg {
 
 	@Override /* RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getRequest().getAttribute(name).asType(type).orElse(null);
+		return opSession.getRequest().getAttribute(name).as(type).orElse(null);
 	}
 }

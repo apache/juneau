@@ -56,8 +56,8 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentRequestBodyAssertion#asBytes()}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#asType(Class)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#asType(Type,Type...)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Class)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Type,Type...)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
@@ -156,14 +156,14 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Converts the body to a type using {@link RequestBody#asType(Class)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link RequestBody#as(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the request body bean is the expected value.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertBody()
-	 * 		.asType(MyBean.<jk>class</jk>)
+	 * 		.as(MyBean.<jk>class</jk>)
 	 * 			.json().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
@@ -182,19 +182,19 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentObjectAssertion<V,R> asType(Class<V> type) {
+	public <V> FluentObjectAssertion<V,R> as(Class<V> type) {
 		return new FluentObjectAssertion<>(valueAsType(type), returns());
 	}
 
 	/**
-	 * Converts the body to a type using {@link RequestBody#asType(Type,Type...)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link RequestBody#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the request body bean is the expected value.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertBody()
-	 * 		.asType(Map.<jk>class</jk>,String.<jk>class</jk>,Integer.<jk>class</jk>)
+	 * 		.as(Map.<jk>class</jk>,String.<jk>class</jk>,Integer.<jk>class</jk>)
 	 * 			.json().is(<js>"{foo:123}"</js>);
 	 * </p>
 	 *
@@ -214,7 +214,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * @param args Optional type arguments.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentObjectAssertion<V,R> asType(Type type, Type...args) {
+	public <V> FluentObjectAssertion<V,R> as(Type type, Type...args) {
 		return new FluentObjectAssertion<>(valueAsType(type, args), returns());
 	}
 
@@ -298,7 +298,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 
 	private <T> T valueAsType(Class<T> c) throws AssertionError {
 		try {
-			return value().cache().asType(c);
+			return value().cache().as(c);
 		} catch (IOException e) {
 			throw error(e, "Exception occurred during call.");
 		}
@@ -306,7 +306,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 
 	private <T> T valueAsType(Type c, Type...args) throws AssertionError {
 		try {
-			return value().cache().asType(c, args);
+			return value().cache().as(c, args);
 		} catch (IOException e) {
 			throw error(e, "Exception occurred during call.");
 		}

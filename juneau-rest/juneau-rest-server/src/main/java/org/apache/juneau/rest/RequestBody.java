@@ -39,7 +39,7 @@ import org.apache.juneau.rest.util.*;
  * 	The {@link RequestBody} object is the API for accessing the body of an HTTP request.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
- * <p class='bpcode w800'>
+ * <p class='bcode w800'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestBody <jv>body</jv>) {...}
  * </p>
@@ -49,7 +49,7 @@ import org.apache.juneau.rest.util.*;
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public void</jk> doPost(RequestBody <jv>body</jv>) {
  * 		<jc>// Convert body to a linked list of Person objects.</jc>
- * 		List&lt;Person&gt; <jv>list</jv> = <jv>body</jv>.asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+ * 		List&lt;Person&gt; <jv>list</jv> = <jv>body</jv>.as(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
@@ -71,8 +71,8 @@ import org.apache.juneau.rest.util.*;
  * 		</ul>
  * 		<li>Methods for parsing the contents of the request body:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestBody#asType(Class) asType(Class)}
- * 			<li class='jm'>{@link RequestBody#asType(Type, Type...) asType(Type, Type...)}
+ * 			<li class='jm'>{@link RequestBody#as(Class) as(Class)}
+ * 			<li class='jm'>{@link RequestBody#as(Type, Type...) as(Type, Type...)}
  * 			<li class='jm'>{@link RequestBody#setSchema(HttpPartSchema) setSchema(HttpPartSchema)}
  * 		</ul>
  * 		<li>Other methods:
@@ -197,19 +197,19 @@ public class RequestBody {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> body = req.getBody().asType(<jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> body = req.getBody().as(<jk>int</jk>.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into an int array.</jc>
-	 * 	<jk>int</jk>[] body = req.getBody().asType(<jk>int</jk>[].<jk>class</jk>);
+	 * 	<jk>int</jk>[] body = req.getBody().as(<jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean body = req.getBody().asType(MyBean.<jk>class</jk>);
+	 * 	MyBean body = req.getBody().as(MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List body = req.getBody().asType(LinkedList.<jk>class</jk>);
+	 * 	List body = req.getBody().as(LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map body = req.getBody().asType(TreeMap.<jk>class</jk>);
+	 * 	Map body = req.getBody().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -224,7 +224,7 @@ public class RequestBody {
 	 * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.
 	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
 	 */
-	public <T> T asType(Class<T> type) throws BadRequest, UnsupportedMediaType, InternalServerError {
+	public <T> T as(Class<T> type) throws BadRequest, UnsupportedMediaType, InternalServerError {
 		return getInner(getClassMeta(type));
 	}
 
@@ -232,21 +232,21 @@ public class RequestBody {
 	 * Reads the input from the HTTP request parsed into a POJO.
 	 *
 	 * <p>
-	 * This is similar to {@link #asType(Class)} but allows for complex collections of POJOs to be created.
+	 * This is similar to {@link #as(Class)} but allows for complex collections of POJOs to be created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; body = req.getBody().asType(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; body = req.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; body = req.getBody().asType(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; body = req.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; body = req.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -271,7 +271,7 @@ public class RequestBody {
 	 * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.
 	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
 	 */
-	public <T> T asType(Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {
+	public <T> T as(Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {
 		return getInner(this.<T>getClassMeta(type, args));
 	}
 

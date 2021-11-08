@@ -13,15 +13,15 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -134,28 +134,6 @@ public abstract class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this part as the specified type.
-	 *
-	 * <p>
-	 * Looks for one of the following constructors:
-	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
-	 * </ul>
-	 *
-	 * @param c The part type.
-	 * @return The value of this part as the specified type, never <jk>null</jk>.
-	 */
-	public <T> Optional<T> asPart(Class<T> c) {
-		if (! isPresent())
-			return Optional.empty();
-		ConstructorInfo cc = HttpParts.getConstructor(getRequest().getBeanSession().getClassMeta(c)).orElseThrow(()->runtimeException("Could not determine a method to construct type {0}", className(c)));
-		if (cc.getParamCount() == 1)
-			return Optional.of(cc.invoke(get()));
-		return Optional.of(cc.invoke(getName(), get()));
-	}
-
-	/**
 	 * Returns the value of this part as a string.
 	 *
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
@@ -176,32 +154,65 @@ public abstract class RequestHttpPart {
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(Type type, Type...args) throws BasicHttpException {
-		return asType(request.getBeanSession().getClassMeta(type, args));
+	public <T> Optional<T> as(Type type, Type...args) throws BasicHttpException {
+		return as(request.getBeanSession().getClassMeta(type, args));
 	}
 
 	/**
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
+	 *
+	 * <p>
+	 * If the specified type is an HTTP part type (extends from {@link org.apache.http.Header}/{@link NameValuePair}), then looks for
+	 * one of the following constructors:
+	 * <ul class='javatree'>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * </ul>
+	 *
+	 * <p>
+	 * If it doesn't find one of those constructors, then it parses it into the specified type using the part parser.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(Class<T> type) throws BasicHttpException {
-		return asType(request.getBeanSession().getClassMeta(type));
+	public <T> Optional<T> as(Class<T> type) throws BasicHttpException {
+		return as(request.getBeanSession().getClassMeta(type));
 	}
 
 	/**
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
+	 *
+	 * <p>
+	 * If the specified type is an HTTP part type (extends from {@link org.apache.http.Header}/{@link NameValuePair}), then looks for
+	 * one of the following constructors:
+	 * <ul class='javatree'>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * </ul>
+	 *
+	 * <p>
+	 * If it doesn't find one of those constructors, then it parses it into the specified type using the part parser.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(ClassMeta<T> type) throws BasicHttpException {
+	public <T> Optional<T> as(ClassMeta<T> type) throws BasicHttpException {
 		try {
+			if (HttpParts.isHttpPart(partType, type)) {
+				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(null);
+				if (cc != null) {
+					if (! isPresent())
+						return Optional.empty();
+					if (cc.hasParamTypes(String.class))
+						return Optional.of(cc.invoke(get()));
+					if (cc.hasParamTypes(String.class, String.class))
+						return Optional.of(cc.invoke(getName(), get()));
+				}
+			}
 			return Optional.ofNullable(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());
@@ -274,6 +285,118 @@ public abstract class RequestHttpPart {
 	public Matcher asMatcher(String regex, int flags) throws BasicHttpException {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
+
+	/**
+	 * Returns the value of this parameter as an integer.
+	 *
+	 * @return The value of this parameter as an integer, or {@link Optional#empty()} if the parameter was not present.
+	 */
+	public Optional<Integer> asInteger() {
+		return asIntegerPart().asInteger();
+	}
+
+	/**
+	 * Returns the value of this parameter as a boolean.
+	 *
+	 * @return The value of this parameter as a boolean, or {@link Optional#empty()} if the parameter was not present.
+	 */
+	public Optional<Boolean> asBoolean() {
+		return asBooleanPart().asBoolean();
+	}
+
+	/**
+	 * Returns the value of this parameter as a long.
+	 *
+	 * @return The value of this parameter as a long, or {@link Optional#empty()} if the parameter was not present.
+	 */
+	public Optional<Long> asLong() {
+		return asLongPart().asLong();
+	}
+
+	/**
+	 * Returns the value of this parameter as a date.
+	 *
+	 * @return The value of this parameter as a date, or {@link Optional#empty()} if the parameter was not present.
+	 */
+	public Optional<ZonedDateTime> asDate() {
+		return asDatePart().asZonedDateTime();
+	}
+
+	/**
+	 * Returns the value of this parameter as a list from a comma-delimited string.
+	 *
+	 * @return The value of this parameter as a list from a comma-delimited string, or {@link Optional#empty()} if the parameter was not present.
+	 */
+	public Optional<List<String>> asCsvArray() {
+		return asCsvArrayPart().asList();
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicCsvArrayPart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicCsvArrayPart}, never <jk>null</jk>.
+	 */
+	public BasicCsvArrayPart asCsvArrayPart() {
+		return new BasicCsvArrayPart(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicDatePart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicDatePart}, never <jk>null</jk>.
+	 */
+	public BasicDatePart asDatePart() {
+		return new BasicDatePart(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicIntegerPart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicIntegerPart}, never <jk>null</jk>.
+	 */
+	public BasicIntegerPart asIntegerPart() {
+		return new BasicIntegerPart(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicBooleanPart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicBooleanPart}, never <jk>null</jk>.
+	 */
+	public BasicBooleanPart asBooleanPart() {
+		return new BasicBooleanPart(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicLongPart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicLongPart}, never <jk>null</jk>.
+	 */
+	public BasicLongPart asLongPart() {
+		return new BasicLongPart(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicStringPart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicStringPart}, never <jk>null</jk>.
+	 */
+	public BasicStringPart asStringPart() {
+		return new BasicStringPart(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this parameter as a {@link BasicUriPart}.
+	 *
+	 * @return The value of this parameter as a {@link BasicUriPart}, never <jk>null</jk>.
+	 */
+	public BasicUriPart asUriPart() {
+		return new BasicUriPart(getName(), getValue());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Assertions
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the request that created this part.

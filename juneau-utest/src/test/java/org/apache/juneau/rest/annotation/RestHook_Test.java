@@ -77,7 +77,7 @@ public class RestHook_Test {
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.set("p3", "pp3");
 			attrs.set("p4", "pp4");
-			return req.getBody().asType(String.class);
+			return req.getBody().as(String.class);
 		}
 	}
 

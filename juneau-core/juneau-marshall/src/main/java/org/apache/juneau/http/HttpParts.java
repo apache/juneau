@@ -487,11 +487,33 @@ public class HttpParts {
 	 */
 	public static Optional<String> getName(HttpPartType partType, ClassMeta<?> type) {
 		switch(partType) {
-			case FORMDATA: return type.getProperty("HttpPartName.FormData", FORMDATA_NAME_FUNCTION);
-			case HEADER: return type.getProperty("HttpPartName.Header", HEADER_NAME_FUNCTION);
-			case PATH: return type.getProperty("HttpPartName.Path", PATH_NAME_FUNCTION);
-			case QUERY: return type.getProperty("HttpPartName.Query", QUERY_NAME_FUNCTION);
+			case FORMDATA: return type.getProperty("HttpPart.formData.name", FORMDATA_NAME_FUNCTION);
+			case HEADER: return type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
+			case PATH: return type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
+			case QUERY: return type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
 			default: return Optional.empty();
+		}
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified type is a part type.
+	 *
+	 * <p>
+	 * A part type extends from either {@link org.apache.http.Header} or {@link org.apache.http.NameValuePair}
+	 * or is annotated with {@link org.apache.juneau.http.annotation.Header}, {@link org.apache.juneau.http.annotation.Query},
+	 * {@link org.apache.juneau.http.annotation.FormData}, or {@link org.apache.juneau.http.annotation.Path}.
+	 *
+	 * @param partType The part type.
+	 * @param type The type to check.
+	 * @return <jk>true</jk> if the specified type is a part type.
+	 */
+	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
+		switch(partType) {
+			case PATH:
+			case QUERY:
+			case FORMDATA: return type.getProperty("HttpPart.isNameValuePair", x->x.isChildOf(NameValuePair.class)).orElse(false);
+			case HEADER: return type.getProperty("HttpPart.isHeader", x->x.isChildOf(org.apache.http.Header.class)).orElse(false);
+			default: return false;
 		}
 	}
 

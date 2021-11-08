@@ -40,7 +40,7 @@ public class FormData_Test {
 		@RestPost
 		public String a(RestRequest req, @FormData(name="p1",allowEmptyValue=true) String p1, @FormData(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestFormParams f = req.getFormParams();
-			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").asString().orElse(null)+"],p2=["+p2+","+f.get("p2").orElse(null)+","+f.get("p2").asType(int.class).orElse(null)+"]";
+			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").asString().orElse(null)+"],p2=["+p2+","+f.get("p2").orElse(null)+","+f.get("p2").as(int.class).orElse(null)+"]";
 		}
 	}
 
@@ -99,9 +99,9 @@ public class FormData_Test {
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestFormParams formData) {
 			return OMap.create()
-				.a("f1", formData.getString("f1"))
-				.a("f2", formData.getString("f2"))
-				.a("f3", formData.getString("f3"));
+				.a("f1", formData.get("f1").asString())
+				.a("f2", formData.get("f2").asString())
+				.a("f3", formData.get("f3").asString());
 		}
 		@RestPost
 		public OMap b(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {

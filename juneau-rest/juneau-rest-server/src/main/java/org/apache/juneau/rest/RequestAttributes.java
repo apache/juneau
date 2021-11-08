@@ -25,11 +25,64 @@ import org.apache.juneau.svl.*;
  * Represents the attributes in an HTTP request.
  *
  * <p>
- * Wraps the request attributes in a {@link Map} interface and provides several convenience methods.
+ * 	The {@link RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request
+ * 	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}.
+ * 	It wraps the request attributes in a {@link java.util.Map} interface and provides several convenience methods.
+ * </p>
  *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmRequestAttributes}
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestAttributes <jv>attributes</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestAttributes <jv>attributes</jv>) {
+ *
+ * 		<jc>// Add a default value.</jc>
+ * 		<jv>attributes</jv>.addDefault(<js>"Foo"</js>, 123);
+ *
+ * 		<jc>// Get an attribute value as a POJO.</jc>
+ * 		UUID <jv>etag</jv> = <jv>attributes</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestHeaders}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving request attributes:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttributes#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestAttributes#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestAttributes#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestAttributes#getAll() getAll()}
+ * 		</ul>
+ * 		<li>Methods for overriding request attributes:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttributes#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestAttributes#addDefault(NamedAttribute...) addDefault(NamedAttribute...)}
+ * 			<li class='jm'>{@link RequestAttributes#addDefault(NamedAttributeList) addDefault(NamedAttributeList)}
+ * 			<li class='jm'>{@link RequestAttributes#addDefault(String,Object) addDefault(String,Object)}
+ * 			<li class='jm'>{@link RequestAttributes#remove(NamedAttribute...) remove(NamedAttribute...)}
+ * 			<li class='jm'>{@link RequestAttributes#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestAttributes#set(NamedAttribute...) set(NamedAttribute...)}
+ * 			<li class='jm'>{@link RequestAttributes#set(String,Object) set(String,Object)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttributes#asMap() asMap()}
+ * 		</ul>
+ * 	</ul>
  * </ul>
+ *
+ * <p>
+ * 	Modifications made to request attributes through the <c>RequestAttributes</c> bean are automatically reflected in
+ * 	the underlying servlet request attributes making it possible to mix the usage of both APIs.
+ * </p>
  */
 public class RequestAttributes {
 
@@ -88,6 +141,17 @@ public class RequestAttributes {
 	 */
 	public RequestAttributes addDefault(NamedAttribute...pairs) {
 		return addDefault(Arrays.asList(pairs));
+	}
+
+	/**
+	 * Adds a default entry to the request attributes.
+	 *
+	 * @param name The name.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public RequestAttributes addDefault(String name, Object value) {
+		return addDefault(BasicNamedAttribute.of(name, value));
 	}
 
 	/**

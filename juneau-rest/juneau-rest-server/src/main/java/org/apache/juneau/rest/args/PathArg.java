@@ -37,7 +37,7 @@ import org.apache.juneau.rest.util.*;
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getPathParams() getPathParams}()
  * 		.{@link RequestPathParams#get(String) get}(<jv>name</jv>)
- * 		.{@link RequestPathParam#asType(Class) asType}(<jv>type</jv>);
+ * 		.{@link RequestPathParam#as(Class) as}(<jv>type</jv>);
  * </p>
  *
  * <p>
@@ -118,6 +118,6 @@ public class PathArg implements RestOpArg {
 			return req.getBeanSession().convertToType(m, type);
 		}
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		return req.getPathParams().get(name).parser(ps).schema(schema).asType(type).orElse(null);
+		return req.getPathParams().get(name).parser(ps).schema(schema).as(type).orElse(null);
 	}
 }

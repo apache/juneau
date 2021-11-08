@@ -16,12 +16,9 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
-import java.time.*;
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 
@@ -70,114 +67,6 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 				throw runtimeException(e);
 			}
 		return value;
-	}
-
-	/**
-	 * Returns the value of this parameter as an integer.
-	 *
-	 * @return The value of this parameter as an integer, or {@link Optional#empty()} if the parameter was not present.
-	 */
-	public Optional<Integer> asInteger() {
-		return asIntegerPart().asInteger();
-	}
-
-	/**
-	 * Returns the value of this parameter as a boolean.
-	 *
-	 * @return The value of this parameter as a boolean, or {@link Optional#empty()} if the parameter was not present.
-	 */
-	public Optional<Boolean> asBoolean() {
-		return asBooleanPart().asBoolean();
-	}
-
-	/**
-	 * Returns the value of this parameter as a long.
-	 *
-	 * @return The value of this parameter as a long, or {@link Optional#empty()} if the parameter was not present.
-	 */
-	public Optional<Long> asLong() {
-		return asLongPart().asLong();
-	}
-
-	/**
-	 * Returns the value of this parameter as a date.
-	 *
-	 * @return The value of this parameter as a date, or {@link Optional#empty()} if the parameter was not present.
-	 */
-	public Optional<ZonedDateTime> asDate() {
-		return asDatePart().asZonedDateTime();
-	}
-
-	/**
-	 * Returns the value of this parameter as a list from a comma-delimited string.
-	 *
-	 * @return The value of this parameter as a list from a comma-delimited string, or {@link Optional#empty()} if the parameter was not present.
-	 */
-	public Optional<List<String>> asCsvArray() {
-		return asCsvArrayPart().asList();
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicCsvArrayPart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicCsvArrayPart}, never <jk>null</jk>.
-	 */
-	public BasicCsvArrayPart asCsvArrayPart() {
-		return new BasicCsvArrayPart(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicDatePart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicDatePart}, never <jk>null</jk>.
-	 */
-	public BasicDatePart asDatePart() {
-		return new BasicDatePart(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicIntegerPart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicIntegerPart}, never <jk>null</jk>.
-	 */
-	public BasicIntegerPart asIntegerPart() {
-		return new BasicIntegerPart(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicBooleanPart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicBooleanPart}, never <jk>null</jk>.
-	 */
-	public BasicBooleanPart asBooleanPart() {
-		return new BasicBooleanPart(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicLongPart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicLongPart}, never <jk>null</jk>.
-	 */
-	public BasicLongPart asLongPart() {
-		return new BasicLongPart(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicStringPart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicStringPart}, never <jk>null</jk>.
-	 */
-	public BasicStringPart asStringPart() {
-		return new BasicStringPart(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this parameter as a {@link BasicUriPart}.
-	 *
-	 * @return The value of this parameter as a {@link BasicUriPart}, never <jk>null</jk>.
-	 */
-	public BasicUriPart asUriPart() {
-		return new BasicUriPart(getName(), getValue());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

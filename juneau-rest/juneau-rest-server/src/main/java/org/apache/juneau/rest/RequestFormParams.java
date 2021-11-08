@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
-import java.time.*;
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -29,6 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
@@ -37,6 +37,76 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents the parsed form-data parameters in an HTTP request.
+ *
+ * <p>
+ * 	The {@link RequestFormParams} object is the API for accessing the HTTP request body as form data.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
+ * </p>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestFormParams <jv>formData</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestFormParams <jv>formData</jv>) {
+ *
+ * 		<jc>// Get query parameters converted to various types.</jc>
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
+ * 		String <jv>p2</jv> = <jv>formData<jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
+ * 		UUID <jv>p3</jv> = <jv>formData</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+ * 	 }
+ * </p>
+ *
+ * <p>
+ * 	Note that this object does NOT take GET parameters into account and only returns values found in the body of the request.
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestFormParams}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving form data parameters:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParams#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestFormParams#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestFormParams#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestFormParams#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestFormParams#getAll() getAll()}
+ * 			<li class='jm'>{@link RequestFormParams#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestFormParams#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestFormParams#getLast(String) getLast(String)}
+ * 			<li class='jm'>{@link RequestFormParams#getSearchArgs() getSearchArgs()}
+ * 		</ul>
+ * 		<li>Methods overridding form data parameters:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParams#add(NameValuePair...) add(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestFormParams#add(Part) add(Part)}
+ * 			<li class='jm'>{@link RequestFormParams#add(String,Object) add(String,Object)}
+ * 			<li class='jm'>{@link RequestFormParams#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestFormParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestFormParams#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestFormParams#remove(NameValuePair...) remove(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestFormParams#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestFormParams#set(NameValuePair...) set(NameValuePair...)}
+ * 			<li class='jm'>{@link RequestFormParams#set(String,Object) set(String,Object)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParams#asQueryString() asQueryString()}
+ * 			<li class='jm'>{@link RequestFormParams#copy() copy()}
+ * 			<li class='jm'>{@link RequestFormParams#isEmpty() isEmpty()}
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
+ * </ul>
  */
 public class RequestFormParams {
 
@@ -161,6 +231,17 @@ public class RequestFormParams {
 	}
 
 	/**
+	 * Adds a default entry to the form data parameters.
+	 *
+	 * @param name The name.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public RequestFormParams addDefault(String name, String value) {
+		return addDefault(BasicStringPart.of(name, value));
+	}
+
+	/**
 	 * Returns all the parameters with the specified name.
 	 *
 	 * @param name The parameter name.
@@ -262,6 +343,7 @@ public class RequestFormParams {
 		list.add(h);
 		return this;
 	}
+
 	/**
 	 * Adds request parameter values.
 	 *
@@ -417,66 +499,7 @@ public class RequestFormParams {
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
 		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(()->runtimeException("@FormData(name) not found on class {0}", className(type)));
-		return get(name).asPart(type);
-	}
-	/**
-	 * Returns the last parameter with the specified name as a string.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<String> getString(String name) {
-		return getLast(name).asString();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as an integer.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Integer> getInteger(String name) {
-		return getLast(name).asInteger();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a boolean.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Boolean> getBoolean(String name) {
-		return getLast(name).asBoolean();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a list from a comma-delimited string.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<List<String>> getCsvArray(String name) {
-		return getLast(name).asCsvArray();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a long.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<Long> getLong(String name) {
-		return getLast(name).asLong();
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a boolean.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<ZonedDateTime> getDate(String name) {
-		return getLast(name).asDate();
+		return get(name).as(type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -550,12 +573,12 @@ public class RequestFormParams {
 	public SearchArgs getSearchArgs() {
 		if (contains("s","v","o","p","l","i")) {
 			return new SearchArgs.Builder()
-				.search(getString("s").orElse(null))
-				.view(getString("v").orElse(null))
-				.sort(getString("o").orElse(null))
-				.position(getInteger("p").orElse(null))
-				.limit(getInteger("l").orElse(null))
-				.ignoreCase(getBoolean("i").orElse(null))
+				.search(get("s").asString().orElse(null))
+				.view(get("v").asString().orElse(null))
+				.sort(get("o").asString().orElse(null))
+				.position(get("p").asInteger().orElse(null))
+				.limit(get("l").asInteger().orElse(null))
+				.ignoreCase(get("i").asBoolean().orElse(null))
 				.build();
 		}
 		return null;

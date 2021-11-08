@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getBody() getBody}()
  * 		.{@link RequestBody#setSchema(HttpPartSchema) setSchema}(<jv>schema</jv>)
- * 		.{@link RequestBody#asType(Type,Type...) asType}(<jv>type</jv>);
+ * 		.{@link RequestBody#as(Type,Type...) as}(<jv>type</jv>);
  * </p>
  *
  * <p>
@@ -65,6 +65,6 @@ public class BodyArg implements RestOpArg {
 
 	@Override /* RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getRequest().getBody().setSchema(schema).asType(type);
+		return opSession.getRequest().getBody().setSchema(schema).as(type);
 	}
 }
