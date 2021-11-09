@@ -16,14 +16,74 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.regex.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Represents a single form-data parameter on an HTTP request.
+ *
+ * <p>
+ * Typically accessed through the {@link RequestFormParams} class.
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestFormParam}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving simple string values:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParam#asString() asString()}
+ * 			<li class='jm'>{@link RequestFormParam#get() get()}
+ * 			<li class='jm'>{@link RequestFormParam#isPresent() isPresent()}
+ * 			<li class='jm'>{@link RequestFormParam#orElse(String) orElse(String)}
+ * 		</ul>
+ * 		<li>Methods for retrieving as other common types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParam#asBoolean() asBoolean()}
+ * 			<li class='jm'>{@link RequestFormParam#asBooleanPart() asBooleanPart()}
+ * 			<li class='jm'>{@link RequestFormParam#asCsvArray() asCsvArray()}
+ * 			<li class='jm'>{@link RequestFormParam#asCsvArrayPart() asCsvArrayPart()}
+ * 			<li class='jm'>{@link RequestFormParam#asDate() asDate()}
+ * 			<li class='jm'>{@link RequestFormParam#asDatePart() asDatePart()}
+ * 			<li class='jm'>{@link RequestFormParam#asInteger() asInteger()}
+ * 			<li class='jm'>{@link RequestFormParam#asIntegerPart() asIntegerPart()}
+ * 			<li class='jm'>{@link RequestFormParam#asLong() asLong()}
+ * 			<li class='jm'>{@link RequestFormParam#asLongPart() asLongPart()}
+ * 			<li class='jm'>{@link RequestFormParam#asMatcher(Pattern) asMatcher(Pattern)}
+ * 			<li class='jm'>{@link RequestFormParam#asMatcher(String) asMatcher(String)}
+ * 			<li class='jm'>{@link RequestFormParam#asMatcher(String,int) asMatcher(String,int)}
+ * 			<li class='jm'>{@link RequestFormParam#asStringPart() asStringPart()}
+ * 			<li class='jm'>{@link RequestFormParam#asUriPart() asUriPart()}
+ * 		</ul>
+ * 		<li>Methods for retrieving as custom types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParam#as(Class) as(Class)}
+ * 			<li class='jm'>{@link RequestFormParam#as(ClassMeta) as(ClassMeta)}
+ * 			<li class='jm'>{@link RequestFormParam#as(Type,Type...) as(Type,Type...)}
+ * 			<li class='jm'>{@link RequestFormParam#parser(HttpPartParserSession) parser(HttpPartParserSession)}
+ * 			<li class='jm'>{@link RequestFormParam#schema(HttpPartSchema) schema(HttpPartSchema)}
+ * 		</ul>
+ * 		<li>Methods for performing assertion checks:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParam#assertCsvArray() assertCsvArray()}
+ * 			<li class='jm'>{@link RequestFormParam#assertDate() assertDate()}
+ * 			<li class='jm'>{@link RequestFormParam#assertInteger() assertInteger()}
+ * 			<li class='jm'>{@link RequestFormParam#assertLong() assertLong()}
+ * 			<li class='jm'>{@link RequestFormParam#assertString() assertString()}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestFormParam#getName() getName()}
+ * 			<li class='jm'>{@link RequestFormParam#getValue() getValue()}
+* 		</ul>
+ * </ul>
  */
 public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
@@ -160,15 +220,6 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 */
 	public FluentListAssertion<String,RequestFormParam> assertCsvArray() {
 		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Header passthrough methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Override /* Object */
-	public String toString() {
-		return getName() + "=" + getValue();
 	}
 
 	// <FluentSetters>

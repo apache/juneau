@@ -26,8 +26,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * 	The {@link RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request
- * 	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}.
- * 	It wraps the request attributes in a {@link java.util.Map} interface and provides several convenience methods.
+ * 	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}).
  * </p>
  *
  * <p class='bcode w800'>
@@ -83,6 +82,10 @@ import org.apache.juneau.svl.*;
  * 	Modifications made to request attributes through the <c>RequestAttributes</c> bean are automatically reflected in
  * 	the underlying servlet request attributes making it possible to mix the usage of both APIs.
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='jc'>{@link RequestAttribute}
+ * </ul>
  */
 public class RequestAttributes {
 

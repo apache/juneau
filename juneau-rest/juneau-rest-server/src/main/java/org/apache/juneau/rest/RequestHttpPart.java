@@ -31,6 +31,14 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Represents a single HTTP part on an HTTP request.
+ *
+ * Parent of the following classes:
+ * <ul class='javatreec'>
+ * 	<li class='jc'>{@link RequestHeader}
+ * 	<li class='jc'>{@link RequestQueryParam}
+ * 	<li class='jc'>{@link RequestFormParam}
+ * 	<li class='jc'>{@link RequestPathParam}
+ * </ul>
  */
 @FluentSetters
 public abstract class RequestHttpPart {
@@ -425,7 +433,7 @@ public abstract class RequestHttpPart {
 
 	@Override /* Object */
 	public String toString() {
-		return getName() + ": " + getValue();
+		return getName() + "=" + getValue();
 	}
 
 	// <FluentSetters>

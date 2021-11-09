@@ -14,18 +14,83 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
+import java.lang.reflect.*;
+import java.util.regex.*;
+
 import org.apache.http.*;
+import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.assertions.*;
 
 /**
  * Represents a single header on an HTTP request.
+ *
+ * <p>
+ * Typically accessed through the {@link RequestHeaders} class.
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestHeader}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving simple string values:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeader#asString() asString()}
+ * 			<li class='jm'>{@link RequestHeader#get() get()}
+ * 			<li class='jm'>{@link RequestHeader#isPresent() isPresent()}
+ * 			<li class='jm'>{@link RequestHeader#orElse(String) orElse(String)}
+ * 		</ul>
+ * 		<li>Methods for retrieving as other common types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeader#asBoolean() asBoolean()}
+ * 			<li class='jm'>{@link RequestHeader#asBooleanHeader() asBooleanHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asCsvArray() asCsvArray()}
+ * 			<li class='jm'>{@link RequestHeader#asCsvArrayHeader() asCsvArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asDate() asDate()}
+ * 			<li class='jm'>{@link RequestHeader#asDateHeader() asDateHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asEntityTagArrayHeader() asEntityTagArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asEntityTagHeader() asEntityTagHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asInteger() asInteger()}
+ * 			<li class='jm'>{@link RequestHeader#asIntegerHeader() asIntegerHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asLong() asLong()}
+ * 			<li class='jm'>{@link RequestHeader#asLongHeader() asLongHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asMatcher(Pattern) asMatcher(Pattern)}
+ * 			<li class='jm'>{@link RequestHeader#asMatcher(String) asMatcher(String)}
+ * 			<li class='jm'>{@link RequestHeader#asMatcher(String,int) asMatcher(String,int)}
+ * 			<li class='jm'>{@link RequestHeader#asStringHeader() asStringHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asStringRangeArrayHeader() asStringRangeArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asUriHeader() asUriHeader()}
+ * 		</ul>
+ * 		<li>Methods for retrieving as custom types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeader#as(Class) as(Class)}
+ * 			<li class='jm'>{@link RequestHeader#as(ClassMeta) as(ClassMeta)}
+ * 			<li class='jm'>{@link RequestHeader#as(Type,Type...) as(Type,Type...)}
+ * 			<li class='jm'>{@link RequestHeader#parser(HttpPartParserSession) parser(HttpPartParserSession)}
+ * 			<li class='jm'>{@link RequestHeader#schema(HttpPartSchema) schema(HttpPartSchema)}
+ * 		</ul>
+ * 		<li>Methods for performing assertion checks:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeader#assertCsvArray() assertCsvArray()}
+ * 			<li class='jm'>{@link RequestHeader#assertDate() assertDate()}
+ * 			<li class='jm'>{@link RequestHeader#assertInteger() assertInteger()}
+ * 			<li class='jm'>{@link RequestHeader#assertLong() assertLong()}
+ * 			<li class='jm'>{@link RequestHeader#assertString() assertString()}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeader#getName() getName()}
+ * 			<li class='jm'>{@link RequestHeader#getValue() getValue()}
+* 		</ul>
+ * </ul>
  */
 public class RequestHeader extends RequestHttpPart implements Header {
 
 	private final String value;
+
 	/**
 	 * Constructor.
 	 *
@@ -142,24 +207,93 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this request header.
+	 * Provides the ability to perform fluent-style assertions on this parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getHeader(<js>"Content-Type"</js>)
-	 * 		.assertValue().is(<js>"application/json"</js>);
+	 * 		.getHeader(<js>"foo"</js>)
+	 * 		.assertString().contains(<js>"bar"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * The assertion test returns the original object allowing you to chain multiple requests like so:
+	 * <p class='bcode w800'>
+	 * 	String <jv>foo</jv> = <jv>request</jv>
+	 * 		.getHeader(<js>"foo"</js>)
+	 * 		.assertString().contains(<js>"bar"</js>)
+	 * 		.asString().get();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentRequestHeaderAssertion<RequestHeader> assertValue() {
-		return new FluentRequestHeaderAssertion<>(this, this);
+	public FluentStringAssertion<RequestHeader> assertString() {
+		return new FluentStringAssertion<>(orElse(null), this);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Header passthrough methods.
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Provides the ability to perform fluent-style assertions on an integer parameter.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jv>request</jv>
+	 * 		.getHeader(<js>"age"</js>)
+	 * 		.assertInteger().isGreaterThan(1);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentIntegerAssertion<RequestHeader> assertInteger() {
+		return new FluentIntegerAssertion<>(asIntegerPart().asInteger().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a long parameter.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jv>request</jv>
+	 * 		.getHeader(<js>"length"</js>)
+	 * 		.assertLong().isLessThan(100000);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentLongAssertion<RequestHeader> assertLong() {
+		return new FluentLongAssertion<>(asLongPart().asLong().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date parameter.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jv>request</jv>
+	 * 		.getHeader(<js>"time"</js>)
+	 * 		.assertDate().isAfterNow();
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentZonedDateTimeAssertion<RequestHeader> assertDate() {
+		return new FluentZonedDateTimeAssertion<>(asDatePart().asZonedDateTime().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on comma-separated string parameters.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jv>request</jv>
+	 * 		.getHeader(<js>"allow"</js>)
+	 * 		.assertCsvArray().contains(<js>"GET"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentListAssertion<String,RequestHeader> assertCsvArray() {
+		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
+	}
 
 	/**
 	 * Parses the value.

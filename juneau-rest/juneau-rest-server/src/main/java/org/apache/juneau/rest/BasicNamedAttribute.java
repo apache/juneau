@@ -27,8 +27,10 @@ import org.apache.juneau.http.part.*;
  */
 @BeanIgnore
 public class BasicNamedAttribute implements NamedAttribute {
-	private final String name;
-	private final Object value;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -71,6 +73,13 @@ public class BasicNamedAttribute implements NamedAttribute {
 	public static BasicNamedAttribute of(String name, Supplier<?> value) {
 		return new BasicNamedAttribute(name, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final String name;
+	private final Object value;
 
 	/**
 	 * Constructor.

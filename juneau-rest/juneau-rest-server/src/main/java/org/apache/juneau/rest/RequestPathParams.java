@@ -94,6 +94,7 @@ import org.apache.juneau.http.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='jc'>{@link RequestPathParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
  * </ul>
 */

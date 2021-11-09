@@ -106,6 +106,7 @@ import org.apache.juneau.http.part.*;
  * Entries are stored in a case-sensitive map unless overridden via the constructor.
  *
  * <ul class='seealso'>
+ * 	<li class='jc'>{@link RequestQueryParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
  * </ul>

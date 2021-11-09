@@ -21,6 +21,38 @@ import org.apache.juneau.http.response.*;
 
 /**
  * Represents a single request attribute on an HTTP request.
+ *
+ * <p>
+ * Typically accessed through the {@link RequestAttributes} class.
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestAttribute}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving simple string values:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttribute#asString() asString()}
+ * 			<li class='jm'>{@link RequestAttribute#get() get()}
+ * 			<li class='jm'>{@link RequestAttribute#isPresent() isPresent()}
+ * 			<li class='jm'>{@link RequestAttribute#orElse(Object) orElse(Object)}
+ * 		</ul>
+ * 		<li>Methods for retrieving as custom types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttribute#as(Class) as(Class)}
+ * 		</ul>
+ * 		<li>Methods for performing assertion checks:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttribute#assertName() assertName()}
+ * 			<li class='jm'>{@link RequestAttribute#assertValue() assertValue()}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestAttribute#getName() getName()}
+ * 			<li class='jm'>{@link RequestAttribute#getValue() getValue()}
+* 		</ul>
+ * </ul>
  */
 public class RequestAttribute extends BasicNamedAttribute {
 
@@ -62,12 +94,4 @@ public class RequestAttribute extends BasicNamedAttribute {
 	public <T> Optional<T> as(Class<T> type) {
 		return ofNullable(req.getBeanSession().convertToType(getValue(), type));
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Header passthrough methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

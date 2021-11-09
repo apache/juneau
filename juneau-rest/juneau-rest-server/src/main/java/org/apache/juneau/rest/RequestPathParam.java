@@ -14,12 +14,73 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
+import java.lang.reflect.*;
+import java.util.regex.*;
+
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.httppart.*;
 
 /**
  * Represents a single path parameter on an HTTP request.
+ *
+ * <p>
+ * Typically accessed through the {@link RequestPathParams} class.
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestPathParam}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving simple string values:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParam#asString() asString()}
+ * 			<li class='jm'>{@link RequestPathParam#get() get()}
+ * 			<li class='jm'>{@link RequestPathParam#isPresent() isPresent()}
+ * 			<li class='jm'>{@link RequestPathParam#orElse(String) orElse(String)}
+ * 		</ul>
+ * 		<li>Methods for retrieving as other common types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParam#asBoolean() asBoolean()}
+ * 			<li class='jm'>{@link RequestPathParam#asBooleanPart() asBooleanPart()}
+ * 			<li class='jm'>{@link RequestPathParam#asCsvArray() asCsvArray()}
+ * 			<li class='jm'>{@link RequestPathParam#asCsvArrayPart() asCsvArrayPart)}
+ * 			<li class='jm'>{@link RequestPathParam#asDate() asDate()}
+ * 			<li class='jm'>{@link RequestPathParam#asDatePart() asDatePart()}
+ * 			<li class='jm'>{@link RequestPathParam#asInteger() asInteger()}
+ * 			<li class='jm'>{@link RequestPathParam#asIntegerPart() asIntegerPart()}
+ * 			<li class='jm'>{@link RequestPathParam#asLong() asLong()}
+ * 			<li class='jm'>{@link RequestPathParam#asLongPart() asLongPart()}
+ * 			<li class='jm'>{@link RequestPathParam#asMatcher(Pattern) asMatcher(Pattern)}
+ * 			<li class='jm'>{@link RequestPathParam#asMatcher(String) asMatcher(String)}
+ * 			<li class='jm'>{@link RequestPathParam#asMatcher(String,int) asMatcher(String,int)}
+ * 			<li class='jm'>{@link RequestPathParam#asStringPart() asStringPart()}
+ * 			<li class='jm'>{@link RequestPathParam#asUriPart() asUriPart()}
+ * 		</ul>
+ * 		<li>Methods for retrieving as custom types:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParam#as(Class) as(Class)}
+ * 			<li class='jm'>{@link RequestPathParam#as(ClassMeta) as(ClassMeta)}
+ * 			<li class='jm'>{@link RequestPathParam#as(Type,Type...) as(Type,Type...)}
+ * 			<li class='jm'>{@link RequestPathParam#parser(HttpPartParserSession) parser(HttpPartParserSession)}
+ * 			<li class='jm'>{@link RequestPathParam#schema(HttpPartSchema) schema(HttpPartSchema)}
+ * 		</ul>
+ * 		<li>Methods for performing assertion checks:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParam#assertCsvArray() assertCsvArray()}
+ * 			<li class='jm'>{@link RequestPathParam#assertDate() assertDate()}
+ * 			<li class='jm'>{@link RequestPathParam#assertInteger() assertInteger()}
+ * 			<li class='jm'>{@link RequestPathParam#assertLong() assertLong()}
+ * 			<li class='jm'>{@link RequestPathParam#assertString() assertString()}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestPathParam#getName() getName()}
+ * 			<li class='jm'>{@link RequestPathParam#getValue() getValue()}
+* 		</ul>
+ * </ul>
  */
 public class RequestPathParam extends RequestHttpPart implements NameValuePair {
 
@@ -137,15 +198,6 @@ public class RequestPathParam extends RequestHttpPart implements NameValuePair {
 	 */
 	public FluentListAssertion<String,RequestPathParam> assertCsvArray() {
 		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Header passthrough methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Override /* Object */
-	public String toString() {
-		return getName() + "=" + getValue();
 	}
 
 	// <FluentSetters>

@@ -54,7 +54,7 @@ import org.apache.juneau.utils.*;
  *
  * 		<jc>// Get query parameters converted to various types.</jc>
  * 		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
- * 		String <jv>p2</jv> = <jv>formData<jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
+ * 		String <jv>p2</jv> = <jv>formData</jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
  * 		UUID <jv>p3</jv> = <jv>formData</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
  * 	 }
  * </p>
@@ -104,6 +104,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='jc'>{@link RequestFormParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
  * </ul>
