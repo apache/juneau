@@ -285,7 +285,6 @@ RestcResponse = #juneau-rest-client.RestcProxies.RestcResponse, Overview > junea
 RestcResponseBody = #juneau-rest-client.RestcResponseBody, Overview > juneau-rest-client > Response Body
 RestcResponseHeaders = #juneau-rest-client.RestcResponseHeaders, Overview > juneau-rest-client > Response Headers
 RestcResponseStatus = #juneau-rest-client.RestcResponseStatus, Overview > juneau-rest-client > Response Status
-RestmMatchers = #juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers, Overview > juneau-rest-server > @RestOp-Annotated Methods > @RestOp(matchers)
 Security = #Security, Overview > Security Best-Practices
 SecurityMarshall = #Security.SecurityMarshall, Overview > Security Best-Practices > juneau-marshall
 SecurityRest = #Security.SecurityRest, Overview > Security Best-Practices > juneau-rest-server

@@ -348,9 +348,6 @@
 			<li><p><a class='doclink' href='#juneau-rest-server.RestAnnotatedClasses.RestLifecycleHooks'>Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<ol>
-			<li><p><a class='doclink' href='#juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers'>@RestOp(matchers)</a><span class='update'><b><red>todo</red></b></span></p>
-		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestRpc'>REST/RPC</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestOpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a><span class='update'><b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestOpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a><span class='update'><b><red>todo</red></b></span></p>
@@ -15469,21 +15466,7 @@
 	}
 </p>
 
-<ul class='seealso'>
-	<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
-	<li class='jc'>{@link org.apache.juneau.rest.RestResponse}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestFormParams}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestPathParams}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
-</ul>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers' id='juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers'>6.3.1 - @RestOp(matchers)</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.3.1 - juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers -->
+<h5 class='topic'>Matchers</h5>
 <p>
 	{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
 	tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
@@ -15517,17 +15500,17 @@
 </p>
 
 <ul class='notes'>
-	<li>
+	<li class='note'>
 		If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
-	<li>
+	<li class='note'>
 		If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the 
 		method to be invoked.
-	<li>
+	<li class='note'>
 		Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
 		<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and 
 		<l>"/foo/{baz}"</l>).
 		<br>If you try to do so, a <l>ServletException</l> will be thrown on startup.
-	<li>
+	<li class='note'>
 		Methods with matchers take precedence over methods without.
 		<br>Otherwise, methods are attempted in the order they appear in the class.
 </ul>
@@ -15537,7 +15520,21 @@
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
 </ul>
-</div><!-- END: 6.3.1 - juneau-rest-server.RestOpAnnotatedMethods.RestmMatchers -->
+
+<h5 class='topic'>More Information</h5>
+<p>
+	Refer to the following Javadocs for more information:
+</p>
+<ul class='javatreec w900'>
+	<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
+	<li class='jc'>{@link org.apache.juneau.rest.RestResponse}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestFormParams}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestPathParams}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
+</ul>
 </div><!-- END: 6.3 - juneau-rest-server.RestOpAnnotatedMethods -->
 
 <!-- ==================================================================================================== -->
