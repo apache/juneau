@@ -1,0 +1,250 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Header / @Path / @Query / @FormData', updated:'8.1.0,9.0.0'} 
+
+<p>
+	The {@link oaj.http.annotation.Header @Header} / {@link oaj.http.annotation.Path @Path} / {@link oaj.http.annotation.Query @Query} / {@link oaj.http.annotation.FormData @FormData}
+	annotations allow for defining part schemas based on the OpenAPI standard.
+</p>
+<ul class='javatree'>
+	<li class='ja'>{@link oaj.http.annotation.Header}
+	<ul class='javatreec'>
+		<li class='jm'>{@link oaj.http.annotation.Header#_default() _default()}
+		<li class='jm'>{@link oaj.http.annotation.Header#_enum() _enum()}
+		<li class='jm'>{@link oaj.http.annotation.Header#allowEmptyValue() allowEmptyValue()}
+		<li class='jm'>{@link oaj.http.annotation.Header#api() api()}
+		<li class='jm'>{@link oaj.http.annotation.Header#collectionFormat() collectionFormat()}
+		<li class='jm'>{@link oaj.http.annotation.Header#description() description()}
+		<li class='jm'>{@link oaj.http.annotation.Header#example() example()}
+		<li class='jm'>{@link oaj.http.annotation.Header#exclusiveMaximum() exclusiveMaximum()}
+		<li class='jm'>{@link oaj.http.annotation.Header#exclusiveMinimum() exclusiveMinimum()}
+		<li class='jm'>{@link oaj.http.annotation.Header#format() format()}
+		<li class='jm'>{@link oaj.http.annotation.Header#items() items()}
+		<li class='jm'>{@link oaj.http.annotation.Header#maximum() maximum()}
+		<li class='jm'>{@link oaj.http.annotation.Header#maxItems() maxItems()}
+		<li class='jm'>{@link oaj.http.annotation.Header#maxLength() maxLength()}
+		<li class='jm'>{@link oaj.http.annotation.Header#minimum() minimum()}
+		<li class='jm'>{@link oaj.http.annotation.Header#minItems() minItems()}
+		<li class='jm'>{@link oaj.http.annotation.Header#minLength() minLength()}
+		<li class='jm'>{@link oaj.http.annotation.Header#multipleOf() multipleOf()}
+		<li class='jm'>{@link oaj.http.annotation.Header#name() name()}
+		<li class='jm'>{@link oaj.http.annotation.Header#parser() parser()}
+		<li class='jm'>{@link oaj.http.annotation.Header#pattern() pattern()}
+		<li class='jm'>{@link oaj.http.annotation.Header#required() required()}
+		<li class='jm'>{@link oaj.http.annotation.Header#type() type()}
+		<li class='jm'>{@link oaj.http.annotation.Header#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link oaj.http.annotation.Header#value() value()}
+	</ul>
+	<li class='ja'>{@link oaj.http.annotation.Query}
+	<ul class='javatreec'>
+		<li class='jm'>{@link oaj.http.annotation.Query#_default() _default()}
+		<li class='jm'>{@link oaj.http.annotation.Query#_enum() _enum()}
+		<li class='jm'>{@link oaj.http.annotation.Query#allowEmptyValue() allowEmptyValue()}
+		<li class='jm'>{@link oaj.http.annotation.Query#api() api()}
+		<li class='jm'>{@link oaj.http.annotation.Query#collectionFormat() collectionFormat()}
+		<li class='jm'>{@link oaj.http.annotation.Query#description() description()}
+		<li class='jm'>{@link oaj.http.annotation.Query#example() example()}
+		<li class='jm'>{@link oaj.http.annotation.Query#exclusiveMaximum() exclusiveMaximum()}
+		<li class='jm'>{@link oaj.http.annotation.Query#exclusiveMinimum() exclusiveMinimum()}
+		<li class='jm'>{@link oaj.http.annotation.Query#format() format()}
+		<li class='jm'>{@link oaj.http.annotation.Query#items() items()}
+		<li class='jm'>{@link oaj.http.annotation.Query#maximum() maximum()}
+		<li class='jm'>{@link oaj.http.annotation.Query#maxItems() maxItems()}
+		<li class='jm'>{@link oaj.http.annotation.Query#maxLength() maxLength()}
+		<li class='jm'>{@link oaj.http.annotation.Query#minimum() minimum()}
+		<li class='jm'>{@link oaj.http.annotation.Query#minItems() minItems()}
+		<li class='jm'>{@link oaj.http.annotation.Query#minLength() minLength()}
+		<li class='jm'>{@link oaj.http.annotation.Query#multipleOf() multipleOf()}
+		<li class='jm'>{@link oaj.http.annotation.Query#name() name()}
+		<li class='jm'>{@link oaj.http.annotation.Query#parser() parser()}
+		<li class='jm'>{@link oaj.http.annotation.Query#pattern() pattern()}
+		<li class='jm'>{@link oaj.http.annotation.Query#required() required()}
+		<li class='jm'>{@link oaj.http.annotation.Query#type() type()}
+		<li class='jm'>{@link oaj.http.annotation.Query#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link oaj.http.annotation.Query#value() value()}
+	</ul>
+	<li class='ja'>{@link oaj.http.annotation.FormData}
+	<ul class='javatreec'>
+		<li class='jm'>{@link oaj.http.annotation.FormData#_default() _default()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#_enum() _enum()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#allowEmptyValue() allowEmptyValue()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#api() api()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#collectionFormat() collectionFormat()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#description() description()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#example() example()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#format() format()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#items() items()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#maximum() maximum()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#maxItems() maxItems()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#maxLength() maxLength()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#minimum() minimum()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#minItems() minItems()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#minLength() minLength()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#multipleOf() multipleOf()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#name() name()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#parser() parser()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#pattern() pattern()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#required() required()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#type() type()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link oaj.http.annotation.FormData#value() value()}
+	</ul>
+	<li class='ja'>{@link oaj.http.annotation.Path}
+	<ul class='javatreec'>
+		<li class='jm'>{@link oaj.http.annotation.Path#_enum() _enum()}
+		<li class='jm'>{@link oaj.http.annotation.Path#allowEmptyValue() allowEmptyValue()}
+		<li class='jm'>{@link oaj.http.annotation.Path#api() api()}
+		<li class='jm'>{@link oaj.http.annotation.Path#collectionFormat() collectionFormat()}
+		<li class='jm'>{@link oaj.http.annotation.Path#description() description()}
+		<li class='jm'>{@link oaj.http.annotation.Path#example() example()}
+		<li class='jm'>{@link oaj.http.annotation.Path#exclusiveMaximum() exclusiveMaximum()}
+		<li class='jm'>{@link oaj.http.annotation.Path#exclusiveMinimum() exclusiveMinimum()}
+		<li class='jm'>{@link oaj.http.annotation.Path#format() format()}
+		<li class='jm'>{@link oaj.http.annotation.Path#items() items()}
+		<li class='jm'>{@link oaj.http.annotation.Path#maximum() maximum()}
+		<li class='jm'>{@link oaj.http.annotation.Path#maxLength() maxLength()}
+		<li class='jm'>{@link oaj.http.annotation.Path#minimum() minimum()}
+		<li class='jm'>{@link oaj.http.annotation.Path#minLength() minLength()}
+		<li class='jm'>{@link oaj.http.annotation.Path#multipleOf() multipleOf()}
+		<li class='jm'>{@link oaj.http.annotation.Path#name() name()}
+		<li class='jm'>{@link oaj.http.annotation.Path#parser() parser()}
+		<li class='jm'>{@link oaj.http.annotation.Path#pattern() pattern()}
+		<li class='jm'>{@link oaj.http.annotation.Path#type() type()}
+		<li class='jm'>{@link oaj.http.annotation.Path#value() value()}
+	</ul>
+</ul>
+<p>
+	The {@link oaj.http.annotation.Header @Header} annotation is used to retrieve parsed request headers.
+	The {@link oaj.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
+	The {@link oaj.http.annotation.FormData @FormData} annotation is used to retrieve request form post parameters.
+	And the {@link oaj.http.annotation.Path @Path} annotation is used to retrieve parsed URL path variables and
+	remainders.
+</p>
+<p>
+	The most typical scenario is to simply use the <c>value</c> field to define parameter names:
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(
+		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>, 
+		<ja>@Query</ja>(<js>"p2"</js>) String <jv>p2</jv>, 
+		<ja>@Query</ja>(<js>"p3"</js>) UUID <jv>p3</jv>) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
+		RequestQueryParams <jv>query</jv> = <jv>req</jv>.getQueryParams();
+		<jk>int</jk> <jv>p1</jv> = <jv>query</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
+		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
+		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+	}
+</p>
+<p>
+	The special name <js>"*"</js> (or blank) can be used to represent all values.
+	When used, the data type must be a <c>Map</c> or bean.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a map.</jc>
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Same, but name "*" is inferred.</jc>
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a bean.</jc>
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Query</ja> MyQueryBean <jv>bean</jv>) {...}
+</p>
+
+<p>
+	The default registered part parser {@link oaj.oapi.OpenApiParser} is used to convert strings
+	to POJOs using schemas defined via annotations.
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestGet</ja>(<js>"/testQuery"</js>)	
+	<jk>public void</jk> testQuery(
+		<ja>@Query</ja>(
+			name=<js>"queryParamName"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Long[][] <jv>queryParameter</jv>
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	Input validations such as <c>minLength/maxLength</c> that don't match the input will result in automatic <c>400 Bad Request</c> responses.
+</p>
+
+<p>
+	The request part annotations are also used for supplying swagger information about the HTTP part.
+	This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Query</ja>(
+		name=<js>"name"</js>,
+		description=<js>"Pet name"</js>,
+		required=<jk>true</jk>,
+		example=<js>"Doggie"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@Query</ja>(
+		name=<js>"name"</js>,
+		api={
+			<js>"description: 'Pet name',"</js>,
+			<js>"required: true,"</js>,
+			<js>"example: 'Doggie',"</js>
+			<js>"x-extra: 'extra field'"</js>
+		}
+	)
+</p>
+<p>
+	{@doc RestSvlVariables SVL Variables} (e.g. "$L{my.localized.variable}") are supported on annotation fields as well.
+	Among other things, this allow for annotation values to be defined externally and the ability to produce localized swagger documents
+	based on the <c>Accept-Language</c> on a request.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Query</ja>(
+		description=<js>"$L{PetNameDescription}"</js>
+	)
+</p>

@@ -13,33 +13,14 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Response', flags:'todo'}
+{title:'@Response beans', updated:'8.1.0,9.0.0'} 
 
 <p>
-	The {@link oaj.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link oaj.http.annotation.Response}
-	<ul>
-		<li class='jf'>{@link oaj.http.annotation.Response#api() api} - Free-form Swagger JSON.
-		<li class='jf'>{@link oaj.http.annotation.Response#code() code} - HTTP status code.
-		<li class='jf'>{@link oaj.http.annotation.Response#description() description} - Description.
-		<li class='jf'>{@link oaj.http.annotation.Response#example() example} - Serialized example.
-		<li class='jf'>{@link oaj.http.annotation.Response#examples() examples} - Serialized examples per media type.
-		<li class='jf'>{@link oaj.http.annotation.Response#headers() headers} - Swagger about headers added to response.
-		<li class='jf'>{@link oaj.http.annotation.Response#serializer() serializer} - Override the part serializer.
-		<li class='jf'>{@link oaj.http.annotation.Response#schema() schema} - Swagger schema.
-		<li class='jf'>{@link oaj.http.annotation.Response#value() value} - Free-form Swagger JSON.
-	</ul>
-</ul>
-<p>
-	It can be used in the following locations:
+	The {@link oaj.http.annotation.Response} annotation can also be used in the following locations:
 </p>
 <ul>
-	<li>Exception classes thrown from <ja>@RestOp</ja>-annotated methods.
-	<li>Return type classes of <ja>@RestOp</ja>-annotated methods.
+	<li>Argument/exception/return types of <ja>@RestOp</ja>-annotated methods.
 	<li><ja>@RestOp</ja>-annotated methods themselves.
-	<li>Arguments and argument-types of <ja>@RestOp</ja>-annotated methods.
 </ul>
 
 <p>
@@ -403,4 +384,116 @@
 <ul class='seealso'>
 	<li class='link'>{@doc RestOpenApiSchemaPartSerializing}
 </ul>
+
+<p>
+	The {@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestOp</ja>-annotated parameters to denote them as an HTTP response headers.
+</p>
+<ul class='javatree'>
+	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
+	<ul>
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#_default() _default} - Default value if not present.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#_enum() _enum} - Output validation.  Must match one of the values.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#$ref() $ref} - Schema reference.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#code() code} - HTTP status codes that this header applies to.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#description() description} - Description.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#example() example} - Serialized example.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum} - Output validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum} - Output validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#format() format} - The schema type format.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#maximum() maximum} - Output validation.  Maximum numeric value. 
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#maxItems() maxItems} - Output validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#maxLength() maxLength} - Output validation.  Maximum length of a string.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#minimum() minimum} - Output validation.  Minimum numeric value. 
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#minItems() minItems} - Output validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#minLength() minLength} - Output validation.  Minimum length of a string.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#multipleOf() multipleOf} - Output validation.  Number must be a multiple of.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#name() name} - Header name.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#pattern() pattern} - Output validation.  Must match regular expression.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#serializer() serializer} - Override the part serializer.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#type() type} - The schema type.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#uniqueItems() uniqueItems} - Output validation. Collections must contain unique items only.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#value() value} - Free-form Swagger JSON.
+	</ul>
+</ul>
+<p>
+	This annotation can only be applied to parameters of type {@link oaj.Value}.
+</p>
+<p>
+	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
+	on a response:
+</p>
+<p class='bpcode w800'>
+	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
+	<ja>@RestGet</ja>(...)
+	<jk>public void</jk> login(RestResponse res) {
+		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
+		...
+	}
+ 
+	<jc>// Example #2 - Use on parameter.</jc>
+	<ja>@RestGet</ja>(...)
+	<jk>public void</jk> login(
+			<ja>@ResponseHeader</ja>(
+				name=<js>"X-Rate-Limit"</js>,
+				type=<js>"integer"</js>,
+				format=<js>"int32"</js>,
+				description=<js>"Calls per hour allowed by the user."</js>,
+				example=<js>"123"</js>
+			)
+			Value&lt;Integer&gt; <jv>rateLimit</jv>
+ 	) 
+ 	{
+		<jv>rateLimit</jv>.set(1000);
+		...
+	}
+
+	<jc>// Example #3 - Use on type.</jc>
+	<ja>@RestGet</ja>(...)
+	<jk>public void</jk> login(Value&lt;RateLimit&gt; <jv>rateLimit</jv>) {
+		<jv>rateLimit</jv>.set(<jk>new</jk> RateLimit());
+		...
+	}
+
+	<ja>@ResponseHeader</ja>(
+		name=<js>"X-Rate-Limit"</js>, 
+		type=<js>"integer"</js>, 
+		format=<js>"int32"</js>, 
+		description=<js>"Calls per hour allowed by the user."</js>, 
+		example=<js>"123"</js>
+	)
+	<jk>public class</jk> RateLimit {
+		<jc>// OpenApiSerializer knows to look for this method based on format/type.</jc>
+		<jk>public</jk> Integer toInteger() {
+			<jk>return</jk> 1000;
+		}
+	}
+</p>
+
+<p>
+	The {@link oaj.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestOp</ja>-annotated parameters to denote them as an HTTP response status codes.
+</p>
+<ul class='javatree'>
+	<li class='ja'>{@link oaj.http.annotation.ResponseStatus}
+</ul>
+<p>
+	This can only be applied to parameters of the {@link oaj.Value} class with an {@link java.lang.Integer} type.
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Defined on parameter.</jc>
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
+		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; <jv>status</jv>
+	) 
+	{
+		<jk>if</jk> (! <jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>))
+			<jv>status</jv>.set(401);
+	}
+</p>
 

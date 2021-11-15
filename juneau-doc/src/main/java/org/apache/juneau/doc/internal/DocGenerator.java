@@ -120,7 +120,7 @@ public class DocGenerator {
 								contents
 									.append("\n")
 									.append("<!-- ==================================================================================================== -->\n\n")
-									.append("<h4 class='topic' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</h4>\n")
+									.append("<h5 class='topic' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</h4>\n")
 									.append("<div class='topic'>").append("<!-- START: ").append(pf3.fullNumber).append(" - " ).append(pf3.fullId).append(" -->\n")
 									.append(pf3.contents).append("\n")
 									.append("</div>").append("<!-- END: ").append(pf3.fullNumber).append(" - ").append(pf3.fullId).append(" -->\n");

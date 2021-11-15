@@ -13,24 +13,25 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Body', updated:'8.1.0', flags:'todo'}
+{title:'@Body and Request Bodies', updated:'8.1.0,9.0.0'} 
 
 <p>
 	The {@link oaj.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.Body}
-	<ul>
-		<li class='jf'>{@link oaj.http.annotation.Body#api() api} - Free-form Swagger JSON.
-		<li class='jf'>{@link oaj.http.annotation.Body#description() description} - Description.
-		<li class='jf'>{@link oaj.http.annotation.Body#example() example} - Serialized example.
-		<li class='jf'>{@link oaj.http.annotation.Body#examples() examples} - Serialized examples per media type.
-		<li class='jf'>{@link oaj.http.annotation.Body#required() required} - Input validation.  Body must be present.
-		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - Swagger schema.
-		<li class='jf'>{@link oaj.http.annotation.Body#value() value} - Free-form Swagger JSON.
+	<ul class='javatreec'>
+		<li class='jm'>{@link oaj.http.annotation.Body#api() api()}
+		<li class='jm'>{@link oaj.http.annotation.Body#description() description()}
+		<li class='jm'>{@link oaj.http.annotation.Body#example() example()}
+		<li class='jm'>{@link oaj.http.annotation.Body#examples() examples()}
+		<li class='jm'>{@link oaj.http.annotation.Body#on() on()}
+		<li class='jm'>{@link oaj.http.annotation.Body#onClass() onClass()}
+		<li class='jm'>{@link oaj.http.annotation.Body#required() required()}
+		<li class='jm'>{@link oaj.http.annotation.Body#schema() schema()}
+		<li class='jm'>{@link oaj.http.annotation.Body#value() value()}
 	</ul>
 </ul>
-
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter</jc>
@@ -51,12 +52,13 @@
 <p class='bpcode w800'>
 	<ja>@RestPost</ja>
 	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
-		Pet <jv>pet</jv> = <jv>req</jv>.getBody().asType(Pet.<jk>class</jk>);
+		Pet <jv>pet</jv> = <jv>req</jv>.getBody().as(Pet.<jk>class</jk>);
 		...
 	}
 </p>
 <p>
-	Any of the following types can be used for the parameter or POJO class (matched in the specified order):
+	In addition to {@link oajr.annotation.Body @Body}-annotated parameters/types, the body of an HTTP request
+	can be retrieved by passing in parameters of the following types (matched in the specified order):
 </p>
 <ol class='spaced-list'>
 	<li>
@@ -102,18 +104,14 @@
 		Any {@link java.util.Optional} of anything on this list.
 </ol>
 <p>
-	The {@link oaj.oapi.OpenApiSerializer} class can be used to serialize HTTP bodies to OpenAPI-based output.
+	The {@link oaj.http.annotation.Body} annotation can also be used to parse HTTP request bodies using OpenAPI schemas 
+	when the body content type matches the {@link oaj.oapi.OpenApiParser} parser via the header <c>Content-Type: text/openapi</c>.
 </p>
 <p>
-	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
+	The following shows the same for a request body:
 </p>
 <p class='bpcode w800'>
-	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
-	<ja>@RestPost</ja>(
-		path=<js>"/testBody"</js>,
-		serializers=OpenApiSerializers.<jk>class</jk>,
-		defaultAccept=<js>"text/openapi"</js>
-	)	
+	<ja>@RestPost</ja>(<js>"/testBody"</js>)	
 	<jk>public void</jk> testBody(
 		<ja>@Body</ja>(
 			schema=<ja>@Schema</ja>(
@@ -137,13 +135,46 @@
 	) {...}
 </p>
 <p>
-	Input will be converted based on the types and formats defined in the schema definition.
-	Input validations such as <c>minLength/maxLength</c> that don't match the input will result in automatic <c>400 Bad Request</c> responses.
+	The list of valid POJO types for parameters depends on type and format of the value or items/entries of the value.
+	For example, instead of <c>Longs</c> in the example above, we could also define a 2-dimensional array of POJOs convertible from <c>Longs</c>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo[][] <jv>body</jv>) {...}
+	
+	<jc>// POJO convertible from a Long.</jc>
+	<jk>public class</jk> MyPojo {
+		<jk>public</jk> MyPojo(Long <jv>input</jv>) {...}
+	}
 </p>
 <p>
-	For more information about valid parameter types when using OpenAPI parsing, see {@doc OpenApiParsers OpenAPI Parsers}
+	Or even POJOs that take in arrays of <c>Longs[]</c>:
 </p>
-
+<p class='bpcode w800'>
+	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo[] <jv>body</jv>) {...}
+	
+	<jc>// POJO convertible from a Long[].</jc>
+	<jk>public class</jk> MyPojo {
+		<jk>public</jk> MyPojo(Long[] <jv>input</jv>) {...}
+	}
+</p>
+<p>
+	Or even POJOs that take in the whole 2-dimensional array:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo <jv>body</jv>) {...}
+	
+	<jc>// POJO convertible from a Long[][].</jc>
+	<jk>public class</jk> MyPojo {
+		<jk>public</jk> MyPojo(Long[][] <jv>input</jv>) {...}
+	}
+</p>
+<p>
+	As you can see, the complexity of possible input types expands significantly.
+	For more information about valid parameter types, see {@doc OpenApiParsers OpenAPI Parsers}
+</p>
 <p>
 	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
 	This information is used to populate the auto-generated Swagger documentation and UI.
@@ -168,7 +199,7 @@
 	})
 </p>
 <p>
-	{@doc RestSvlVariables} (e.g. "$L{my.localized.variable}")
+	Like the other HTTP part annotations, {@doc RestSvlVariables SVL Variables} (e.g. "$L{my.localized.variable}")
 	are supported on annotation fields.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -178,29 +209,3 @@
 		description=<js>"$L{PetObjectDescription}"</js>
 	)
 </p>
-
-<ul class='notes'>
-	<li>
-		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
-		<br>Values on child classes override values on parent classes.
-	<li>
-		Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
-		<br>Values on methods override values on POJO classes.
-</ul>
-
-<div class='warn'>
-	If using this annotation on a Spring bean, note that you are likely to encounter issues when using on parameterized
-	types such as <code>List&lt;MyBean&gt;</code>.  This is due to the fact that Spring uses CGLIB to recompile classes
- 	at runtime, and CGLIB was written before generics were introduced into Java and is a virtually-unsupported library.
- 	Therefore, parameterized types will often be stripped from class definitions and replaced with unparameterized types
-	(e.g. <code>List</code>).  Under these circumstances, you are likely to get <code>ClassCastExceptions</code>
-	when trying to access generalized <code>OMaps</code> as beans.  The best solution to this issue is to either
-	specify the parameter as a bean array (e.g. <code>MyBean[]</code>) or declare the method as final so that CGLIB
-	will not try to recompile it.
-</div>
-
-
-<ul class='seealso'>
-	<li class='jc'>{@link oajr.RequestBody}
-	<li class='link'>{@doc RestOpenApiSchemaPartParsing}
-</ul>

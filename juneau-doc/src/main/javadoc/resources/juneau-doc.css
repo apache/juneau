@@ -216,6 +216,8 @@ div.severe { background-color:#faced3; border-left:3px solid #b32400; }
 .new { background-color:lightgreen; }
 .updated { background-color:#CFC; }
 .todo { background-color:#FD8; }
+yellow { color:yellow; }
+red { color:red; }
 
 review { display:block; background-color:#ffdf00; padding:10px; border-radius:5px; text-align:center; box-shadow:1px 1px 1px 0px rgba(0, 0, 0, 0.5); margin:20px 0px; font-weight:bold; width:800px !important; }
 reviewed { display:block; background-color:lightgreen; padding:10px; border-radius:5px; text-align:center; box-shadow:1px 1px 1px 0px rgba(0, 0, 0, 0.5); margin:20px 0px; font-weight:bold; width:800px !important; }
@@ -230,6 +232,7 @@ ul.javatreec, .javatreec ul {  padding-left:0px; margin:0px; }
 .javatreec li.je::before  { color:#906029; content:'\00a0\00a0\24d4\00a0'; }
 .javatreec li.jf::before  { color:#008000; content:'\00a0\00a0\25cf\00a0'; }
 .javatreec li.jm::before  { color:#008000; content:'\00a0\00a0\25cf\00a0'; }
+.javatreec li.jmp::before  { color:#eed304; content:'\00a0\00a0\25c6\00a0'; }
 
 li.jc::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\24d2\00a0\00a0'; }
 li.jac::marker { font-weight:bolder; font-size:small; color:#eed304; content:'\00a0\00a0\24d2\00a0\00a0'; }
@@ -239,6 +242,7 @@ li.je::marker  { font-weight:bolder; font-size:small; color:#906029; content:'\0
 li.jm::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\25cf\00a0\00a0'; }
 li.jf::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\25cf\00a0\00a0'; }
 li.jp::marker  { font-weight:bolder; font-size:small; color:#e09c01; content:'\00a0\00a0\229e\00a0\00a0'; }
+li.jmp::marker  { font-weight:bolder; font-size:small; color:#eed304; content:'\00a0\00a0\25c6\00a0\00a0'; }
 
 li.note::marker  { font-weight:bolder; font-size:large; color:#F5A400; content:'\00a0\00a0\270E\00a0\00a0'; }
 li.warn::marker  { font-weight:bolder; font-size:x-large; color:#e09c01; content:'\00a0\00a0\26A0\00a0\00a0'; }
