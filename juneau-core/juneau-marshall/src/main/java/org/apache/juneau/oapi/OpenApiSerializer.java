@@ -19,10 +19,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 
@@ -126,7 +126,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default format for HTTP parts.
 		 *
 		 * <p>
-		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()}.
+		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#format()}.
 		 *
 		 * <p>
 		 * Possible values:
@@ -183,7 +183,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
 		 *
 		 * <p>
-		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()}.
+		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()}.
 		 *
 		 * <p>
 		 * Possible values:

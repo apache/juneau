@@ -29,17 +29,17 @@ import java.lang.annotation.*;
  * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * </ul>
 <p>
-	Identical to {@link oaj.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
+	Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
 	URL-encoded form posts.
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oaj.http.annotation.HasQuery}
+	<li class='ja'>{@link HasQuery}
 </ul>
 <p>
-	Unlike {@link oaj.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
+	Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
 	of URL-encoded form posts.
-	Therefore, this annotation can be used in conjunction with the {@link oaj.http.annotation.Body @Body} annotation or
-	{@link oajr.RestRequest#getBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
+	Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
+	{@code RestRequestgetBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
  </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>

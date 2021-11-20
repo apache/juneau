@@ -25,7 +25,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.http.annotation.Schema;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;

@@ -31,7 +31,7 @@ import java.lang.annotation.*;
 	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oaj.http.annotation.HasFormData}
+	<li class='ja'>{@link HasFormData}
 </ul>
 
 <h5 class='figure'>Example:</h5>
@@ -85,12 +85,12 @@ import java.lang.annotation.*;
 
 <h5 class='topic'>Important note concerning FORM posts</h5>
 <p>
-	This annotation should not be combined with the {@link oaj.http.annotation.Body @Body} annotation or {@link oajr.RestRequest#getBody()} method
+	This annotation should not be combined with the {@link Body @Body} annotation or {@code RestRequest.getBody()} method
 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet API to
 	parse the body content as key-value pairs, resulting in empty content.
 </p>
 <p>
-	The {@link oaj.http.annotation.HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
+	The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
 	without triggering the servlet to drain the body content.
 </p>
 

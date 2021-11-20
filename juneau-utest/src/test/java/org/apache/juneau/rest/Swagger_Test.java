@@ -20,8 +20,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.jsonschema.annotation.Tag;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -30,6 +28,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Contact;
 import org.apache.juneau.http.annotation.License;
+import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Swagger;
 import org.apache.juneau.rest.mock.*;

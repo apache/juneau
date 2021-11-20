@@ -21,7 +21,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 

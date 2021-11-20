@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Swagger @Swagger} annotation.

@@ -21,9 +21,6 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.Items;
-import org.apache.juneau.jsonschema.annotation.Schema;
-import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

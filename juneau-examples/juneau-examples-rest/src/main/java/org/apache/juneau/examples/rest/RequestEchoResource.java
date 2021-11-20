@@ -15,7 +15,6 @@ package org.apache.juneau.examples.rest;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;

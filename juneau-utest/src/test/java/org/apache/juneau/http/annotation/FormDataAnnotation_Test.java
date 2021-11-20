@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 

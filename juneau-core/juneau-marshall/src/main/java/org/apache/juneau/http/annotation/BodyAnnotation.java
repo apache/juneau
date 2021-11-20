@@ -21,7 +21,6 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 

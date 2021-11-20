@@ -22,8 +22,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.jsonschema.annotation.Schema;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})

@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.

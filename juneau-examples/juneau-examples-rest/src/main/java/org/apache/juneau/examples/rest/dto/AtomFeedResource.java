@@ -16,13 +16,11 @@ import static org.apache.juneau.dto.atom.AtomBuilder.*;
 
 import java.net.URI;
 
-import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

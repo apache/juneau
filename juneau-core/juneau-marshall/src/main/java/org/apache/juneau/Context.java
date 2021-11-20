@@ -539,7 +539,7 @@ public abstract class Context implements MetaProvider {
 		 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+		 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.SchemaAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}

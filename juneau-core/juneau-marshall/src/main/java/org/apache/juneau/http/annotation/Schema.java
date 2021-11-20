@@ -10,14 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jsonschema.annotation;
+package org.apache.juneau.http.annotation;
 
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.oapi.*;
 
 /**
@@ -75,6 +75,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
+@Target({PARAMETER,METHOD,TYPE,FIELD})
 @Retention(RUNTIME)
 @Repeatable(SchemaAnnotation.Array.class)
 @ContextApply(SchemaAnnotation.Apply.class)

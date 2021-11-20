@@ -29,7 +29,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;

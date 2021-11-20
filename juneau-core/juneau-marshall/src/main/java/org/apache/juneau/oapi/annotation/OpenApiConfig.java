@@ -50,7 +50,7 @@ public @interface OpenApiConfig {
 	 * Default format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()}.
+	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#format()}.
 	 *
 	 * <p>
 	 * Possible values:
@@ -83,7 +83,7 @@ public @interface OpenApiConfig {
 	 * Configuration property:  Default collection format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()}.
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()}.
 	 *
 	 * <p>
 	 * Possible values:

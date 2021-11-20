@@ -5486,7 +5486,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default OpenAPI format for HTTP parts.
 		 *
 		 * <p>
-		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()} for
+		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#format()} for
 		 * the OpenAPI serializer and parser on this client.
 		 *
 		 * <p>
@@ -5547,7 +5547,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
 		 *
 		 * <p>
-		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()} for the
+		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()} for the
 		 * OpenAPI serializer and parser on this client.
 		 *
 		 * <p>

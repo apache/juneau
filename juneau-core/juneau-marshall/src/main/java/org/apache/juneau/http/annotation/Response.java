@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;

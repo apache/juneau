@@ -20,8 +20,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.http.annotation.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
