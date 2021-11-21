@@ -32,7 +32,6 @@ public class PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Path a1 = PathAnnotation.create()
-		.api("api")
 		.d("d")
 		.description("description")
 		.n("n")
@@ -45,7 +44,6 @@ public class PathAnnotation_Test {
 		.build();
 
 	Path a2 = PathAnnotation.create()
-		.api("api")
 		.d("d")
 		.description("description")
 		.n("n")
@@ -61,7 +59,6 @@ public class PathAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "api:['api'],"
 				+ "d:['d'],"
 				+ "description:['description'],"
 				+ "n:'n',"
@@ -124,7 +121,6 @@ public class PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Path(
-		api="api",
 		d="d",
 		description="description",
 		n="n",
@@ -139,7 +135,6 @@ public class PathAnnotation_Test {
 	Path d1 = D1.class.getAnnotationsByType(Path.class)[0];
 
 	@Path(
-		api="api",
 		d="d",
 		description="description",
 		n="n",

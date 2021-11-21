@@ -38,8 +38,7 @@ public class HttpPartSchema_Body_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Body(
-		d={"b1","b2"},
-		api="{g1:true}"
+		d={"b1","b2"}
 	)
 	@Schema(
 		$ref="c1",
@@ -56,8 +55,7 @@ public class HttpPartSchema_Body_Test {
 	public static class A03 {
 		public void a(
 				@Body(
-					d={"b1","b2"},
-					api="{g1:true}"
+					d={"b1","b2"}
 				)
 				@Schema(
 					$ref="c1",
@@ -79,8 +77,7 @@ public class HttpPartSchema_Body_Test {
 	public static class A04 {
 		public void a(
 				@Body(
-					d={"b3","b3"},
-					api="{g2:true}"
+					d={"b3","b3"}
 				)
 				@Schema(
 					$ref="c3",

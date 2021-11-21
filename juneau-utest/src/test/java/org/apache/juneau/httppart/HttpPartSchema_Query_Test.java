@@ -50,8 +50,7 @@ public class HttpPartSchema_Query_Test {
 
 	@Query(
 		n="x",
-		d={"b1","b2"},
-		api="{g1:true}"
+		d={"b1","b2"}
 	)
 	@Schema(
 		t="number",
@@ -105,8 +104,7 @@ public class HttpPartSchema_Query_Test {
 		public void a(
 				@Query(
 					n="x",
-					d={"b1","b2"},
-					api="{g1:true}"
+					d={"b1","b2"}
 				)
 				@Schema(
 					t="number",
@@ -165,8 +163,7 @@ public class HttpPartSchema_Query_Test {
 		public void a(
 				@Query(
 					n="y",
-					d={"b3","b3"},
-					api="{g2:true}"
+					d={"b3","b3"}
 				)
 				@Schema(
 					t="integer",

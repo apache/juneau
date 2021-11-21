@@ -32,7 +32,6 @@ public class QueryAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Query a1 = QueryAnnotation.create()
-		.api("api")
 		.d("d")
 		.description("description")
 		.multi(true)
@@ -46,7 +45,6 @@ public class QueryAnnotation_Test {
 		.build();
 
 	Query a2 = QueryAnnotation.create()
-		.api("api")
 		.d("d")
 		.description("description")
 		.multi(true)
@@ -63,7 +61,6 @@ public class QueryAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "api:['api'],"
 				+ "d:['d'],"
 				+ "description:['description'],"
 				+ "multi:true,"
@@ -127,7 +124,6 @@ public class QueryAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Query(
-		api="api",
 		d="d",
 		description="description",
 		multi=true,
@@ -143,7 +139,6 @@ public class QueryAnnotation_Test {
 	Query d1 = D1.class.getAnnotationsByType(Query.class)[0];
 
 	@Query(
-		api="api",
 		d="d",
 		description="description",
 		multi=true,

@@ -77,7 +77,6 @@ public class ResponseHeaderAnnotation {
 	public static ResponseHeader copy(ResponseHeader a, VarResolverSession r) {
 		return
 			create()
-			.api(r.resolve(a.api()))
 			.code(a.code())
 			.d(r.resolve(a.d()))
 			.description(r.resolve(a.description()))
@@ -132,7 +131,7 @@ public class ResponseHeaderAnnotation {
 		int[] code={};
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String n="", name="", value="";
-		String[] api={}, d={}, description={};
+		String[] d={}, description={};
 
 		/**
 		 * Constructor.
@@ -148,17 +147,6 @@ public class ResponseHeaderAnnotation {
 		 */
 		public ResponseHeader build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link ResponseHeader#api} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder api(String...value) {
-			this.api = value;
-			return this;
 		}
 
 		/**
@@ -287,12 +275,11 @@ public class ResponseHeaderAnnotation {
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final int[] code;
 		private final String n, name, value;
-		private final String[] api, d, description;
+		private final String[] d, description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.api = copyOf(b.api);
 			this.code = Arrays.copyOf(b.code, b.code.length);
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
@@ -302,11 +289,6 @@ public class ResponseHeaderAnnotation {
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* ResponseHeader */
-		public String[] api() {
-			return api;
 		}
 
 		@Override /* ResponseHeader */

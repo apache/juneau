@@ -31,7 +31,6 @@ public class BodyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Body a1 = BodyAnnotation.create()
-		.api("api")
 		.d("d")
 		.description("description")
 		.on("on")
@@ -39,7 +38,6 @@ public class BodyAnnotation_Test {
 		.build();
 
 	Body a2 = BodyAnnotation.create()
-		.api("api")
 		.d("d")
 		.description("description")
 		.on("on")
@@ -50,7 +48,6 @@ public class BodyAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "api:['api'],"
 				+ "d:['d'],"
 				+ "description:['description'],"
 				+ "on:['on'],"
@@ -106,7 +103,6 @@ public class BodyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Body(
-		api="api",
 		d="d",
 		description="description",
 		on="on",
@@ -116,7 +112,6 @@ public class BodyAnnotation_Test {
 	Body d1 = D1.class.getAnnotationsByType(Body.class)[0];
 
 	@Body(
-		api="api",
 		d="d",
 		description="description",
 		on="on",

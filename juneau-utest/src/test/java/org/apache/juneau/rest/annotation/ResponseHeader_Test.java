@@ -184,11 +184,9 @@ public class ResponseHeader_Test {
 		public void b(
 			@ResponseHeader(
 				name="H",
-				api={
-					"description:'a',",
-					"type:'string'"
-				}
-			) Value<C2> h) {}
+				schema=@Schema("{description:'a',type:'string'}")
+			)
+			Value<C2> h) {}
 
 		public static class C3 {}
 		@RestGet

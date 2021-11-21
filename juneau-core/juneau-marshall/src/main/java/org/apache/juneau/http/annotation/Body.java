@@ -141,30 +141,6 @@ import org.apache.juneau.json.*;
 public @interface Body {
 
 	/**
-	 * <p class='bcode w800'>
-	 * 	<ja>@Body</ja>({
-	 * 		<js>"description: 'Pet object to add to the store',"</js>,
-	 * 		<js>"required: true,"</js>,
-	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 	})
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Body</ja>(api={
-	 * 		<js>"description: 'Pet object to add to the store',"</js>,
-	 * 		<js>"required: true,"</js>,
-	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 	})
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String[] api() default {};
-
-	/**
 	 * Synonym for {@link #description()}.
 	 */
 	String[] d() default {};

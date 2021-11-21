@@ -53,11 +53,7 @@ public class Swagger_Path_Test {
 
 		@Path(
 			n="P",
-			api={
-				"description:'a\nb',",
-				"type:'string',",
-				"enum:['a','b']"
-			}
+			schema=@Schema("{description:'a\nb',type:'string',enum:['a','b']}")
 		)
 		public static class A2 {
 			public A2(String x) {}
@@ -206,19 +202,13 @@ public class Swagger_Path_Test {
 		@RestPut(path="/b/{P}")
 		public void b(@Path(
 			n="P",
-			api={
-				"description:'a',",
-				"type:'string'"
-			}
+			schema=@Schema("{description:'a',type:'string'}")
 		) String h) {}
 
 		@RestPost(path="/c/{P}")
 		public void c(@Path(
 			n="P",
-			api={
-				"description:'b',",
-				"type:'string'"
-			},
+			schema=@Schema("{description:'b',type:'string'}"),
 			d="a"
 		)
 		@Schema(t="string")

@@ -76,7 +76,6 @@ public class FormDataAnnotation {
 	public static FormData copy(FormData a, VarResolverSession r) {
 		return
 			create()
-			.api(r.resolve(a.api()))
 			.d(r.resolve(a.d()))
 			.description(r.resolve(a.description()))
 			.multi(a.multi())
@@ -119,7 +118,7 @@ public class FormDataAnnotation {
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String n="", name="", value="";
-		String[] api={}, d={}, description={};
+		String[] d={}, description={};
 
 		/**
 		 * Constructor.
@@ -135,17 +134,6 @@ public class FormDataAnnotation {
 		 */
 		public FormData build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link FormData#api} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder api(String...value) {
-			this.api = value;
-			return this;
 		}
 
 		/**
@@ -292,12 +280,11 @@ public class FormDataAnnotation {
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String n, name, value;
-		private final String[] api, d, description;
+		private final String[] d, description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.api = copyOf(b.api);
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
 			this.multi = b.multi;
@@ -308,11 +295,6 @@ public class FormDataAnnotation {
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* FormData */
-		public String[] api() {
-			return api;
 		}
 
 		@Override /* FormData */

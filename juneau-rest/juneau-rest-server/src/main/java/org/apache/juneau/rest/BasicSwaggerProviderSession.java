@@ -945,8 +945,6 @@ public class BasicSwaggerProviderSession {
 		if (BodyAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
@@ -958,8 +956,6 @@ public class BasicSwaggerProviderSession {
 		if (QueryAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
@@ -971,8 +967,6 @@ public class BasicSwaggerProviderSession {
 		if (FormDataAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
@@ -984,8 +978,6 @@ public class BasicSwaggerProviderSession {
 		if (HeaderAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
@@ -997,8 +989,6 @@ public class BasicSwaggerProviderSession {
 		if (PathAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
@@ -1147,8 +1137,6 @@ public class BasicSwaggerProviderSession {
 		if (ResponseHeaderAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om

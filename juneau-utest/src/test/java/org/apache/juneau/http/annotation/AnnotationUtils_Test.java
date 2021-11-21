@@ -64,7 +64,6 @@ public class AnnotationUtils_Test {
 		assertTrue(BodyAnnotation.empty(body().build()));
 		assertTrue(BodyAnnotation.empty((Body)null));
 
-		assertFalse(BodyAnnotation.empty(body().api(a("foo")).build()));
 		assertFalse(BodyAnnotation.empty(body().d(a("foo")).build()));
 		assertFalse(BodyAnnotation.empty(body().description(a("foo")).build()));
 	}
@@ -97,7 +96,6 @@ public class AnnotationUtils_Test {
 		assertTrue(FormDataAnnotation.empty((FormData)null));
 		assertTrue(FormDataAnnotation.empty(formData().build()));
 
-		assertFalse(FormDataAnnotation.empty(formData().api(a("foo")).build()));
 		assertFalse(FormDataAnnotation.empty(formData().d(a("foo")).build()));
 		assertFalse(FormDataAnnotation.empty(formData().description(a("foo")).build()));
 		assertFalse(FormDataAnnotation.empty(formData().multi(true).build()));
@@ -129,7 +127,6 @@ public class AnnotationUtils_Test {
 		assertTrue(QueryAnnotation.empty((Query)null));
 		assertTrue(QueryAnnotation.empty(query().build()));
 
-		assertFalse(QueryAnnotation.empty(query().api(a("foo")).build()));
 		assertFalse(QueryAnnotation.empty(query().d(a("foo")).build()));
 		assertFalse(QueryAnnotation.empty(query().description(a("foo")).build()));
 		assertFalse(QueryAnnotation.empty(query().multi(true).build()));
@@ -161,7 +158,6 @@ public class AnnotationUtils_Test {
 		assertTrue(HeaderAnnotation.empty((Header)null));
 		assertTrue(HeaderAnnotation.empty(header().build()));
 
-		assertFalse(HeaderAnnotation.empty(header().api(a("foo")).build()));
 		assertFalse(HeaderAnnotation.empty(header().d(a("foo")).build()));
 		assertFalse(HeaderAnnotation.empty(header().description(a("foo")).build()));
 		assertFalse(HeaderAnnotation.empty(header().multi(true).build()));
@@ -199,7 +195,6 @@ public class AnnotationUtils_Test {
 		assertTrue(PathAnnotation.empty((Path)null));
 		assertTrue(PathAnnotation.empty(path().build()));
 
-		assertFalse(PathAnnotation.empty(path().api(a("foo")).build()));
 		assertFalse(PathAnnotation.empty(path().d(a("foo")).build()));
 		assertFalse(PathAnnotation.empty(path().description(a("foo")).build()));
 		assertFalse(PathAnnotation.empty(path().n("foo").build()));
@@ -253,7 +248,6 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseHeaderAnnotation.empty(A1.class.getAnnotation(ResponseHeader.class)));
 		assertTrue(ResponseHeaderAnnotation.empty(A2.class.getAnnotation(ResponseHeader.class)));
 
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().api(a("foo")).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().code(a(0)).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().d(a("foo")).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().description(a("foo")).build()));

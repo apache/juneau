@@ -50,8 +50,7 @@ public class HttpPartSchema_ResponseHeader_Test {
 
 	@ResponseHeader(
 		n="x",
-		d={"b1","b2"},
-		api="{g1:true}"
+		d={"b1","b2"}
 	)
 	@Schema(
 		t="number",
@@ -101,8 +100,7 @@ public class HttpPartSchema_ResponseHeader_Test {
 		public void a(
 				@ResponseHeader(
 					n="x",
-					d={"b1","b2"},
-					api="{g1:true}"
+					d={"b1","b2"}
 				)
 				@Schema(
 					t="number",
@@ -157,8 +155,7 @@ public class HttpPartSchema_ResponseHeader_Test {
 		public void a(
 				@ResponseHeader(
 					n="y",
-					d={"b3","b3"},
-					api="{g2:true}"
+					d={"b3","b3"}
 				)
 				@Schema(
 					t="integer",

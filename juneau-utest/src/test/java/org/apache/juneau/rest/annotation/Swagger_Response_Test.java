@@ -103,7 +103,7 @@ public class Swagger_Response_Test {
 		@RestOp
 		public A5 j() {return null;}
 
-		@Response(headers=@ResponseHeader(name="foo",api=" type:'b' "))
+		@Response(headers=@ResponseHeader(name="foo",schema=@Schema("{type:'b'}")))
 		public static class A6 {}
 		@RestOp
 		public void k(Value<A6> r) {}
@@ -338,7 +338,7 @@ public class Swagger_Response_Test {
 		@RestOp
 		public void e() throws D5 {}
 
-		@Response(headers=@ResponseHeader(name="foo", api=" {type:'number'} "))
+		@Response(headers=@ResponseHeader(name="foo", schema=@Schema(" {type:'number'} ")))
 		public static class D6 extends Throwable {}
 		@RestOp
 		public void f() throws D6 {}

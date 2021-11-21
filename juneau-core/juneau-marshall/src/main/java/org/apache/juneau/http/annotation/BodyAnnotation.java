@@ -75,7 +75,6 @@ public class BodyAnnotation {
 	public static Body copy(Body a, VarResolverSession r) {
 		return
 			create()
-			.api(r.resolve(a.api()))
 			.d(r.resolve(a.d()))
 			.description(r.resolve(a.description()))
 			.on(r.resolve(a.on()))
@@ -108,24 +107,13 @@ public class BodyAnnotation {
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] api={}, d={}, description={};
+		String[] d={}, description={};
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
 			super(Body.class);
-		}
-
-		/**
-		 * Sets the {@link Body#api} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder api(String...value) {
-			this.api = value;
-			return this;
 		}
 
 		/**
@@ -205,21 +193,15 @@ public class BodyAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Body {
 
-		private final String[] api, d, description;
+		private final String[] d, description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.api = copyOf(b.api);
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
 			this.schema = b.schema;
 			postConstruct();
-		}
-
-		@Override /* Body */
-		public String[] api() {
-			return api;
 		}
 
 		@Override /* Body */

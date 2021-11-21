@@ -32,7 +32,6 @@ public class ResponseHeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	ResponseHeader a1 = ResponseHeaderAnnotation.create()
-		.api("api")
 		.code(1)
 		.d("d")
 		.description("description")
@@ -45,7 +44,6 @@ public class ResponseHeaderAnnotation_Test {
 		.build();
 
 	ResponseHeader a2 = ResponseHeaderAnnotation.create()
-		.api("api")
 		.code(1)
 		.d("d")
 		.description("description")
@@ -61,7 +59,6 @@ public class ResponseHeaderAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "api:['api'],"
 				+ "code:[1],"
 				+ "d:['d'],"
 				+ "description:['description'],"
@@ -122,7 +119,6 @@ public class ResponseHeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@ResponseHeader(
-		api="api",
 		code=1,
 		d="d",
 		description="description",
@@ -137,7 +133,6 @@ public class ResponseHeaderAnnotation_Test {
 	ResponseHeader d1 = D1.class.getAnnotationsByType(ResponseHeader.class)[0];
 
 	@ResponseHeader(
-		api="api",
 		code=1,
 		d="d",
 		description="description",
