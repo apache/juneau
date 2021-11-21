@@ -234,7 +234,7 @@ public class AnnotationUtils_Test {
 		assertFalse(ResponseAnnotation.empty(response().example(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().exs(a("foo")).build()));
-		assertFalse(ResponseAnnotation.empty(response().headers(new ResponseHeader[]{responseHeader().$ref("foo").build()}).build()));
+		assertFalse(ResponseAnnotation.empty(response().headers(new ResponseHeader[]{responseHeader().name("foo").build()}).build()));
 		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));
 		assertFalse(ResponseAnnotation.empty(response().schema(schema().$ref("foo").build()).build()));
 		assertFalse(ResponseAnnotation.empty(response().serializer(OpenApiSerializer.class).build()));
@@ -253,48 +253,13 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseHeaderAnnotation.empty(A1.class.getAnnotation(ResponseHeader.class)));
 		assertTrue(ResponseHeaderAnnotation.empty(A2.class.getAnnotation(ResponseHeader.class)));
 
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader()._default(a("foo")).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader()._enum(a("foo")).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().api(a("foo")).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().code(a(0)).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().cf("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().collectionFormat("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().d(a("foo")).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().description(a("foo")).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().df(a("foo")).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().e(a("foo")).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().emax(true).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().emin(true).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().ex(a("foo")).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().example(a("foo")).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().exclusiveMaximum(true).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().exclusiveMinimum(true).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().f("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().format("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().items(items().$ref("foo").build()).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().max("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().maxi(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().maximum("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().maxItems(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().maxl(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().maxLength(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().min("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().mini(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().minimum("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().minItems(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().minl(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().minLength(0).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().mo("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().multipleOf("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().n("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().name("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().p("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().pattern("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().serializer(OpenApiSerializer.class).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().t("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().type("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().ui(true).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().uniqueItems(true).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().value("foo").build()));
 	}
 

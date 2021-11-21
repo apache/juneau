@@ -44,7 +44,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void a01_value() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A01.class).apply(Schema.class, A01.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, A01.class).build();
 		assertEquals("x", s.getName());
 	}
 
@@ -73,7 +73,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void a02_basic_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A02.class).apply(Schema.class, A02.class).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, A02.class).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
 		assertEquals(HttpPartFormat.INT32, s.getFormat());
@@ -121,7 +121,7 @@ public class HttpPartSchema_Path_Test {
 	@Test
 	public void a03_basic_onParameter() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, mpi).apply(Schema.class, mpi).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, mpi).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
 		assertEquals(HttpPartFormat.INT32, s.getFormat());
@@ -169,7 +169,7 @@ public class HttpPartSchema_Path_Test {
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, mpi).apply(Schema.class, mpi).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, mpi).noValidate().build();
 		assertEquals("y", s.getName());
 		assertEquals(HttpPartDataType.INTEGER, s.getType());
 		assertEquals(HttpPartFormat.INT64, s.getFormat());
@@ -264,7 +264,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void a05_basic_nestedItems_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, A05.class).apply(Schema.class, A05.class).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, A05.class).noValidate().build();
 		assertEquals("x", s.getName());
 
 		HttpPartSchema items = s.getItems();
@@ -349,7 +349,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b02a_pattern() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B02a.class).apply(Schema.class, B02a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B02a.class).build();
 		s.validateInput("x");
 		s.validateInput("xx");
 		assertThrown(()->s.validateInput("y")).message().is("Value does not match expected pattern.  Must match pattern: x.*");
@@ -363,7 +363,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b03a_length() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B03a.class).apply(Schema.class, B03a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B03a.class).build();
 		s.validateInput("12");
 		s.validateInput("123");
 		s.validateInput(null);
@@ -388,7 +388,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b03b_length_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B03b.class).apply(Schema.class, B03b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B03b.class).build();
 
 		s.getItems().validateInput("12");
 		s.getItems().getItems().validateInput("123");
@@ -421,7 +421,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b04a_enum() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04a.class).apply(Schema.class, B04a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B04a.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
@@ -433,7 +433,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b04b_enum() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04b.class).apply(Schema.class, B04b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B04b.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
@@ -445,7 +445,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b04c_enum_json() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04c.class).apply(Schema.class, B04c.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B04c.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
@@ -469,7 +469,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void b04d_enum_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04d.class).apply(Schema.class, B04d.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, B04d.class).build();
 
 		s.getItems().validateInput("W");
 		s.getItems().getItems().validateInput("X");
@@ -491,7 +491,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c01a_minmax_ints() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C01a.class).apply(Schema.class, C01a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C01a.class).build();
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -516,7 +516,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c01b_minmax_ints_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C01b.class).apply(Schema.class, C01b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C01b.class).build();
 
 		s.getItems().validateOutput(10, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
@@ -545,7 +545,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c02a_minmax_exclusive() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C02a.class).apply(Schema.class, C02a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C02a.class).build();
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -570,7 +570,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c02b_minmax_exclusive_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C02b.class).apply(Schema.class, C02b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C02b.class).build();
 
 		s.getItems().validateOutput(11, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
@@ -599,7 +599,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c03_minmax_floats() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C03a.class).apply(Schema.class, C03a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C03a.class).build();
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -624,7 +624,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c03b_minmax_floats_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C03b.class).apply(Schema.class, C03b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C03b.class).build();
 
 		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
@@ -653,7 +653,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c04a_minmax_floats_exclusive() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C04a.class).apply(Schema.class, C04a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C04a.class).build();
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -678,7 +678,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c04b_minmax_floats_exclusive_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C04b.class).apply(Schema.class, C04b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C04b.class).build();
 
 		s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
@@ -707,7 +707,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c05a_multipleOf() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C05a.class).apply(Schema.class, C05a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C05a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(20, BeanContext.DEFAULT);
@@ -734,7 +734,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c05b_multipleOf_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C05b.class).apply(Schema.class, C05b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C05b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -773,7 +773,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c06a_multipleOf_floats() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C06a.class).apply(Schema.class, C06a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C06a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(20.2f, BeanContext.DEFAULT);
@@ -798,7 +798,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void c06b_multipleOf_floats_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C06b.class).apply(Schema.class, C06b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, C06b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -843,7 +843,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void d01a_uniqueItems_arrays() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, D01.class).apply(Schema.class, D01.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, D01.class).build();
 
 		String[] good = split("a,b"), bad = split("a,a");
 
@@ -861,7 +861,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void d01b_uniqueItems_collections() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, D01.class).apply(Schema.class, D01.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, D01.class).build();
 
 		AList<String>
 			good = AList.of(split("a,b")),
@@ -897,7 +897,7 @@ public class HttpPartSchema_Path_Test {
 
 	@Test
 	public void d02a_minMaxItems_arrays() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, D02.class).apply(Schema.class, D02.class).build();
+		HttpPartSchema s = HttpPartSchema.create().applyAll(Path.class, D02.class).build();
 
 		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);

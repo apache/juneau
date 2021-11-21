@@ -69,7 +69,7 @@ public class ResponseAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "api:['api'],"
 				+ "code:[1],"
@@ -79,11 +79,11 @@ public class ResponseAnnotation_Test {
 				+ "example:['example'],"
 				+ "examples:['examples'],"
 				+ "exs:['exs'],"
-				+ "headers:[{'$ref':'',_default:[],_enum:[],api:[],cf:'',code:[],collectionFormat:'',d:[],description:[],df:[],e:[],emax:false,emin:false,ex:[],example:[],exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',n:'',name:'',on:[],onClass:[],p:'',pattern:'',serializer:'org.apache.juneau.httppart.HttpPartSerializer$Null',t:'',type:'',ui:false,uniqueItems:false,value:''}],"
+				+ "headers:[*],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
-				+ "schema:{'$ref':'',_default:[],_enum:[],additionalProperties:[],aev:false,allOf:[],allowEmptyValue:false,cf:'',collectionFormat:'',d:[],description:[],df:[],discriminator:'',e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,externalDocs:{description:[],url:'',value:[]},f:'',format:'',ignore:false,items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxProperties:-1,maxi:-1,maximum:'',maxl:-1,maxp:-1,min:'',minItems:-1,minLength:-1,minProperties:-1,mini:-1,minimum:'',minl:-1,minp:-1,mo:'',multipleOf:'',on:[],onClass:[],p:'',pattern:'',properties:[],r:false,readOnly:false,required:false,ro:false,sie:false,skipIfEmpty:false,t:'',title:'',type:'',ui:false,uniqueItems:false,value:[],xml:[]},"
+				+ "schema:{*,"
 				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
 				+ "value:[2]"
 			+ "}"

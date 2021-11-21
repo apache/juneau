@@ -80,6 +80,7 @@ public class BodyAnnotation {
 			.description(r.resolve(a.description()))
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
+			.schema(SchemaAnnotation.copy(a.schema(), r))
 			.build();
 	}
 
@@ -106,6 +107,7 @@ public class BodyAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
+		Schema schema = SchemaAnnotation.DEFAULT;
 		String[] api={}, d={}, description={};
 
 		/**
@@ -157,6 +159,17 @@ public class BodyAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets the {@link Body#schema} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder schema(Schema value) {
+			this.schema = value;
+			return this;
+		}
+
 		// <FluentSetters>
 
 		@Override /* GENERATED - TargetedAnnotationBuilder */
@@ -193,12 +206,14 @@ public class BodyAnnotation {
 	private static class Impl extends TargetedAnnotationTImpl implements Body {
 
 		private final String[] api, d, description;
+		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
 			this.api = copyOf(b.api);
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
+			this.schema = b.schema;
 			postConstruct();
 		}
 
@@ -215,6 +230,11 @@ public class BodyAnnotation {
 		@Override /* Body */
 		public String[] description() {
 			return description;
+		}
+
+		@Override /* Body */
+		public Schema schema() {
+			return schema;
 		}
 	}
 

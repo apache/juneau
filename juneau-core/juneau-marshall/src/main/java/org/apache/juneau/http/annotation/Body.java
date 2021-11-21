@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.json.*;
 
 /**
  * REST request body annotation.
@@ -228,4 +229,31 @@ public @interface Body {
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
+
+	/**
+	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 *
+	 * <p>
+	 * The schema defining the type used for parameter.
+	 *
+	 * <p>
+	 * This is a required attribute per the swagger definition.
+	 * However, if not explicitly specified, the value will be auto-generated using {@link JsonSchemaSerializer}.
+	 *
+	 * <p>
+	 * The {@link Schema @Schema} annotation can also be used standalone on the parameter or type.
+	 * Values specified on this field override values specified on the type, and values specified on child types override values
+	 * specified on parent types.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing and parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing and serializing validation.
+	 * </ul>
+	 */
+	Schema schema() default @Schema;
 }

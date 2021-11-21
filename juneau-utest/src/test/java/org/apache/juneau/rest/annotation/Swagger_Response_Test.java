@@ -38,7 +38,7 @@ public class Swagger_Response_Test {
 		@Response(
 			description={"a","b"},
 			schema=@Schema(type="string"),
-			headers=@ResponseHeader(name="foo",type="string"),
+			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example="'a'",
 			examples=" {foo:'a'} "
 		)
@@ -77,7 +77,7 @@ public class Swagger_Response_Test {
 			},
 			description={"a","b"},
 			schema=@Schema(type="string"),
-			headers=@ResponseHeader(name="foo",type="string"),
+			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example="'a'",
 			examples=" {foo:'a'} "
 		)
@@ -289,7 +289,7 @@ public class Swagger_Response_Test {
 		@Response(
 			description= {"a","b"},
 			schema=@Schema(type="string"),
-			headers=@ResponseHeader(name="foo",type="string"),
+			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)
@@ -320,7 +320,7 @@ public class Swagger_Response_Test {
 			},
 			description= {"a","b"},
 			schema=@Schema(type="string"),
-			headers=@ResponseHeader(name="foo",type="string"),
+			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)

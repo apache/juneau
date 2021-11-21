@@ -18,6 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.ResponseHeader;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -78,7 +79,9 @@ public class ResponseHeader_Test {
 
 		@ResponseHeader(
 			name="H",
-			description="a",
+			description="a"
+		)
+		@Schema(
 			type="string"
 		)
 		public static class B1 {}
@@ -87,10 +90,7 @@ public class ResponseHeader_Test {
 
 		@ResponseHeader(
 			name="H",
-			api={
-				"description:'a',",
-				"type:'string'"
-			}
+			schema=@Schema("{description:'a',type:'string'}")
 		)
 		public static class B2 {}
 		@RestGet
@@ -98,11 +98,10 @@ public class ResponseHeader_Test {
 
 		@ResponseHeader(
 			name="H",
-			api={
-				"description:'b',",
-				"type:'number'"
-			},
-			description="a",
+			schema=@Schema("description:'b',type:'number'}"),
+			description="a"
+		)
+		@Schema(
 			type="string"
 		)
 		public static class B3 {}
@@ -130,7 +129,6 @@ public class ResponseHeader_Test {
 		public void g(Value<B7> h) {}
 	}
 
-
 	@Test
 	public void b01_swagger_onPojo() throws Exception {
 		HeaderInfo x;
@@ -146,7 +144,7 @@ public class ResponseHeader_Test {
 
 		x = s.getResponseInfo("/c","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());
-		assertEquals("string", x.getType());
+		assertEquals("number", x.getType());
 
 		x = s.getResponseInfo("/d","get",100).getHeader("H");
 		assertNotNull(x);
@@ -174,9 +172,12 @@ public class ResponseHeader_Test {
 		public void a(
 			@ResponseHeader(
 				name="H",
-				description="a",
+				description="a"
+			)
+			@Schema(
 				type="string"
-			) Value<C1> h) {}
+			)
+			Value<C1> h) {}
 
 		public static class C2 {}
 		@RestGet
@@ -194,13 +195,13 @@ public class ResponseHeader_Test {
 		public void c(
 			@ResponseHeader(
 				name="H",
-				api={
-					"description:'b',",
-					"type:'number'"
-				},
-				description="a",
+				schema=@Schema("{description:'b',type:'number'}"),
+				description="a"
+			)
+			@Schema(
 				type="string"
-			) Value<C3> h) {}
+			)
+			Value<C3> h) {}
 
 		public static class C4 {}
 		@RestGet
@@ -234,7 +235,7 @@ public class ResponseHeader_Test {
 
 		x = sc.getResponseInfo("/c","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());
-		assertEquals("string", x.getType());
+		assertEquals("number", x.getType());
 
 		x = sc.getResponseInfo("/d","get",100).getHeader("H");
 		assertNotNull(x);

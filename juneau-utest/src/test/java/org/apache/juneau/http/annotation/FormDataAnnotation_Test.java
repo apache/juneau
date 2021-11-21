@@ -61,7 +61,7 @@ public class FormDataAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "api:['api'],"
 				+ "d:['d'],"
@@ -72,6 +72,7 @@ public class FormDataAnnotation_Test {
 				+ "on:['on'],"
 				+ "onClass:['org.apache.juneau.http.annotation.FormDataAnnotation_Test$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
+				+ "schema:{*},"
 				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
 				+ "value:'value'"
 			+ "}"

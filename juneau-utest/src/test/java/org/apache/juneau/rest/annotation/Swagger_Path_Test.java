@@ -71,11 +71,7 @@ public class Swagger_Path_Test {
 
 		@Path(
 			n="P",
-			api={
-				"description:'b\nc',",
-				"type:'string',",
-				"enum:['b','c']"
-			},
+			schema=@Schema("{description:'b\nc',type:'string',enum:['b','c']}"),
 			d={"a","b"}
 		)
 		@Schema(
@@ -138,8 +134,8 @@ public class Swagger_Path_Test {
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
+		assertObject(x.getEnum()).asJson().is("['b','c']");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['b','c']}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertEquals("P", x.getName());

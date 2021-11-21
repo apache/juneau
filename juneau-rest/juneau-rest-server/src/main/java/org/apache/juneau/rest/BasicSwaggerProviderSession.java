@@ -310,17 +310,17 @@ public class BasicSwaggerProviderSession {
 
 				if (mpi.hasAnnotation(Body.class) || pt.hasAnnotation(Body.class)) {
 					OMap param = paramMap.getMap(BODY + ".body", true).a("in", BODY);
-					for (Body a : mpi.getAnnotations(Body.class))
-						merge(param, a);
-					for (Body a : pt.getAnnotations(Body.class))
-						merge(param, a);
 					OMap schema = getSchema(param.getMap("schema"), type, bs);
 					if (schema == null)
 						schema = new OMap();
-					for (Schema a : mpi.getAnnotations(Schema.class))
-						merge(schema, a);
 					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(schema, a);
+					for (Body a : pt.getAnnotations(Body.class))
+						merge(param, a);
+					for (Schema a : mpi.getAnnotations(Schema.class))
+						merge(schema, a);
+					for (Body a : mpi.getAnnotations(Body.class))
+						merge(param, a);
 					param.putIfAbsent("required", true);
 					param.appendSkipEmpty("schema", schema);
 					addBodyExamples(sm, param, false, type, locale);
@@ -332,13 +332,13 @@ public class BasicSwaggerProviderSession {
 					for (Query a : pt.getAnnotations(Query.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					OMap param = paramMap.getMap(QUERY + "." + name, true).a("name", name).a("in", QUERY);
-					for (Query a : mpi.getAnnotations(Query.class))
+					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(param, a);
 					for (Query a : pt.getAnnotations(Query.class))
 						merge(param, a);
 					for (Schema a : mpi.getAnnotations(Schema.class))
 						merge(param, a);
-					for (Schema a : pt.getAnnotations(Schema.class))
+					for (Query a : mpi.getAnnotations(Query.class))
 						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, QUERY, type);
@@ -350,13 +350,13 @@ public class BasicSwaggerProviderSession {
 					for (FormData a : pt.getAnnotations(FormData.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).a("name", name).a("in", FORM_DATA);
-					for (FormData a : mpi.getAnnotations(FormData.class))
+					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(param, a);
 					for (FormData a : pt.getAnnotations(FormData.class))
 						merge(param, a);
 					for (Schema a : mpi.getAnnotations(Schema.class))
 						merge(param, a);
-					for (Schema a : pt.getAnnotations(Schema.class))
+					for (FormData a : mpi.getAnnotations(FormData.class))
 						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, FORM_DATA, type);
@@ -368,13 +368,13 @@ public class BasicSwaggerProviderSession {
 					for (Header a : pt.getAnnotations(Header.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					OMap param = paramMap.getMap(HEADER + "." + name, true).a("name", name).a("in", HEADER);
-					for (Header a : mpi.getAnnotations(Header.class))
+					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(param, a);
 					for (Header a : pt.getAnnotations(Header.class))
 						merge(param, a);
 					for (Schema a : mpi.getAnnotations(Schema.class))
 						merge(param, a);
-					for (Schema a : pt.getAnnotations(Schema.class))
+					for (Header a : mpi.getAnnotations(Header.class))
 						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, HEADER, type);
@@ -386,13 +386,13 @@ public class BasicSwaggerProviderSession {
 					for (Path a : pt.getAnnotations(Path.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					OMap param = paramMap.getMap(PATH + "." + name, true).a("name", name).a("in", PATH);
-					for (Path a : mpi.getAnnotations(Path.class))
+					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(param, a);
 					for (Path a : pt.getAnnotations(Path.class))
 						merge(param, a);
 					for (Schema a : mpi.getAnnotations(Schema.class))
 						merge(param, a);
-					for (Schema a : pt.getAnnotations(Schema.class))
+					for (Path a : mpi.getAnnotations(Path.class))
 						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, PATH, type);
@@ -425,8 +425,12 @@ public class BasicSwaggerProviderSession {
 							String ha = a.name();
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
+								for (Schema a2 : ecmi.getAnnotations(Schema.class))
+									merge(header, a2);
+								for (Schema a2 : ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class))
+									merge(header, a2);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().unwrap(Value.class,Optional.class).innerType(), bs));
 							}
 						}
 					}
@@ -453,6 +457,10 @@ public class BasicSwaggerProviderSession {
 							if (! isMulti(a)) {
 								for (Integer code : codes) {
 									OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
+									for (Schema a2 : ecmi.getAnnotations(Schema.class))
+										merge(header, a2);
+									for (Schema a2 : ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class))
+										merge(header, a2);
 									merge(header, a);
 									mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
@@ -483,6 +491,10 @@ public class BasicSwaggerProviderSession {
 						if (! isMulti(a)) {
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
+								for (Schema a2 : mpi.getAnnotations(Schema.class))
+									merge(header, a2);
+								for (Schema a2 : mpi.getParameterType().getAnnotations(Schema.class))
+									merge(header, a2);
 								merge(header, a);
 								mergePartSchema(header, getSchema(header, Value.getParameterType(type), bs));
 							}
@@ -935,6 +947,8 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 		;
@@ -946,6 +960,8 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 		;
@@ -957,6 +973,8 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 		;
@@ -968,6 +986,8 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 		;
@@ -979,6 +999,8 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 		;
@@ -1127,27 +1149,10 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
 

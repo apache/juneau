@@ -309,6 +309,29 @@ public @interface Header {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
+	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 *
+	 * <p>
+	 * The schema defining the type used for parameter.
+	 *
+	 * <p>
+	 * The {@link Schema @Schema} annotation can also be used standalone on the parameter or type.
+	 * Values specified on this field override values specified on the type, and values specified on child types override values
+	 * specified on parent types.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing and parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing and serializing validation.
+	 * </ul>
+	 */
+	Schema schema() default @Schema;
+
+	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>

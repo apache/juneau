@@ -516,7 +516,7 @@ public class HttpPartSchema {
 	 * @return The schema information about the parameter.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, ParamInfo mpi) {
-		return create().apply(c, mpi).apply(Schema.class, mpi).build();
+		return create().applyAll(c, mpi).build();
 	}
 
 	/**
@@ -549,7 +549,7 @@ public class HttpPartSchema {
 	 * @return The schema information about the parameter.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, Method m) {
-		return create().apply(c, m).apply(Schema.class, m).build();
+		return create().applyAll(c, m).build();
 	}
 
 	/**
@@ -577,7 +577,7 @@ public class HttpPartSchema {
 	 * @return The schema information about the parameter.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, java.lang.reflect.Type t) {
-		return create().apply(c, t).apply(Schema.class, t).build();
+		return create().applyAll(c, t).build();
 	}
 
 	/**
@@ -670,12 +670,20 @@ public class HttpPartSchema {
 			return this;
 		}
 
+		Builder applyAll(Class<? extends Annotation> c, ParamInfo mpi) {
+			return apply(Schema.class, mpi).apply(c, mpi);
+		}
+
 		Builder apply(Class<? extends Annotation> c, Method m) {
 			apply(c, m.getGenericReturnType());
 			Annotation a = m.getAnnotation(c);
 			if (a != null)
 				return apply(a);
 			return this;
+		}
+
+		Builder applyAll(Class<? extends Annotation> c, Method m) {
+			return apply(Schema.class, m).apply(c, m);
 		}
 
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
@@ -687,6 +695,10 @@ public class HttpPartSchema {
 				apply(c, Value.getParameterType(t));
 			}
 			return this;
+		}
+
+		Builder applyAll(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+			return apply(Schema.class, t).apply(c, t);
 		}
 
 		/**
@@ -722,10 +734,14 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(Body a) {
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
 			return this;
 		}
 
 		Builder apply(Header a) {
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
@@ -733,29 +749,17 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(ResponseHeader a) {
-			_default(joinnlOrNull(a._default(), a.df()));
-			_enum(toSet(a._enum(), a.e()));
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
 			allowEmptyValue(false);
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			format(firstNonEmpty(a.format(), a.f()));
-			items(a.items());
-			maximum(toNumber(a.maximum(), a.max()));
-			maxItems(firstNmo(a.maxItems(), a.maxi()));
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minimum(toNumber(a.minimum(), a.min()));
-			minItems(firstNmo(a.minItems(), a.mini()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			multipleOf(toNumber(a.multipleOf(), a.mo()));
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
 			serializer(a.serializer());
-			type(firstNonEmpty(a.type(), a.t()));
-			uniqueItems(a.uniqueItems() || a.ui());			return this;
+			return this;
 		}
 
 		Builder apply(FormData a) {
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
@@ -763,6 +767,8 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(Query a) {
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
@@ -770,6 +776,8 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(Path a) {
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
@@ -778,7 +786,7 @@ public class HttpPartSchema {
 			if (startsWith(name, '/')) {
 				allowEmptyValue();
 				required(false);
-			} else {
+			} else if (required == null) {
 				required(true);
 			}
 

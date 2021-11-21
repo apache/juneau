@@ -42,10 +42,11 @@ public class ResponseBodyAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1']"
+				+ "onClass:['"+CNAME+"$X1'],"
+				+ "schema:{*}"
 			+ "}"
 		);
 	}

@@ -59,7 +59,7 @@ public class PathAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "api:['api'],"
 				+ "d:['d'],"
@@ -69,6 +69,7 @@ public class PathAnnotation_Test {
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
+				+ "schema:{*},"
 				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
 				+ "value:'value'"
 			+ "}"

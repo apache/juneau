@@ -48,13 +48,14 @@ public class BodyAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "api:['api'],"
 				+ "d:['d'],"
 				+ "description:['description'],"
 				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1']"
+				+ "onClass:['"+CNAME+"$X1'],"
+				+ "schema:{*}"
 			+ "}"
 		);
 	}

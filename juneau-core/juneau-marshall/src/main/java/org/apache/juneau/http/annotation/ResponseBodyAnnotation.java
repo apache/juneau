@@ -75,6 +75,7 @@ public class ResponseBodyAnnotation {
 			create()
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
+			.schema(SchemaAnnotation.copy(a.schema(), r))
 			.build();
 	}
 
@@ -91,11 +92,24 @@ public class ResponseBodyAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
+		Schema schema = SchemaAnnotation.DEFAULT;
+
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
 			super(ResponseBody.class);
+		}
+
+		/**
+		 * Sets the {@link ResponseBody#schema} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder schema(Schema value) {
+			this.schema = value;
+			return this;
 		}
 
 		/**
@@ -142,9 +156,17 @@ public class ResponseBodyAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements ResponseBody {
 
+		private final Schema schema;
+
 		Impl(Builder b) {
 			super(b);
+			this.schema = b.schema;
 			postConstruct();
+		}
+
+		@Override /* ResponseBody */
+		public Schema schema() {
+			return schema;
 		}
 	}
 

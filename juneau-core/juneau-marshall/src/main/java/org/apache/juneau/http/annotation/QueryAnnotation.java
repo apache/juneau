@@ -85,6 +85,7 @@ public class QueryAnnotation {
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
 			.parser(a.parser())
+			.schema(SchemaAnnotation.copy(a.schema(), r))
 			.serializer(a.serializer())
 			.value(r.resolve(a.value()))
 			.build();
@@ -116,6 +117,7 @@ public class QueryAnnotation {
 		boolean multi;
 		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
+		Schema schema = SchemaAnnotation.DEFAULT;
 		String n="", name="", value="";
 		String[] api={}, d={}, description={};
 
@@ -213,6 +215,17 @@ public class QueryAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Query#schema} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder schema(Schema value) {
+			this.schema = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Query#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -280,6 +293,7 @@ public class QueryAnnotation {
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String n, name, value;
 		private final String[] api, d, description;
+		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
@@ -290,6 +304,7 @@ public class QueryAnnotation {
 			this.n = b.n;
 			this.name = b.name;
 			this.parser = b.parser;
+			this.schema = b.schema;
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
@@ -328,6 +343,11 @@ public class QueryAnnotation {
 		@Override /* Query */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
+		}
+
+		@Override /* Query */
+		public Schema schema() {
+			return schema;
 		}
 
 		@Override /* Query */

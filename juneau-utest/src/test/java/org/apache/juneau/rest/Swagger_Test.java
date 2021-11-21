@@ -1826,7 +1826,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public P4c a() {return null;}
 	}
-	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="d-description",type="integer",format="int32"))
+	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="d-description",schema=@Schema(type="integer",format="int32")))
 	public static class P4c {}
 
 	@Test
@@ -1850,7 +1850,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public P5c a() {return null;}
 	}
-	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="$L{foo}",type="integer",format="int32"))
+	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="$L{foo}",schema=@Schema(type="integer",format="int32")))
 	public static class P5c {}
 
 	@Test
