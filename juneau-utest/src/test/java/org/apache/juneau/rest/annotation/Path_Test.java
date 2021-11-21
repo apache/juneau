@@ -798,11 +798,11 @@ public class Path_Test {
 	@Rest(path="/k2")
 	public static class K2 {
 		@RestGet(path="/")
-		public String a(@Path(n="k1",r=false) String k1) {
+		public String a(@Path("k1") @Schema(r=false) String k1) {
 			return k1 == null ? "nil" : k1;
 		}
 		@RestGet(path="/foo/{bar}")
-		public String b(@Path(n="k1",r=false) String k1, @Path(n="bar",r=false) String bar) {
+		public String b(@Path("k1") @Schema(r=false) String k1, @Path("bar") @Schema(r=false) String bar) {
 			return (k1 == null ? "nil" : k1) + "," + (bar == null ? "nil" : bar);
 		}
 	}
@@ -840,11 +840,11 @@ public class Path_Test {
 	@Rest(path="/l2")
 	public static class L2 {
 		@RestGet(path={"/","/{foo}"})
-		public String a(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
+		public String a(@Path("l1") @Schema(r=false) String l1, @Path("foo") @Schema(r=false) String foo) {
 			return "1," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}
 		@RestGet(path={"/foo","/foo/{foo}"})
-		public String b(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
+		public String b(@Path("l1") @Schema(r=false) String l1, @Path("foo") @Schema(r=false) String foo) {
 			return "2," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}
 	}

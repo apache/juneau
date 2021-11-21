@@ -152,7 +152,7 @@ public class Header_Test {
 	@Rest
 	public static class D1 {
 		@RestGet
-		public OMap a(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
+		public OMap a(@Header(name="h1") @Schema(_default="1") String h1, @Header(name="h2") @Schema(_default="2") String h2, @Header(name="h3") @Schema(_default="3") String h3) {
 			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
@@ -171,7 +171,7 @@ public class Header_Test {
 	@Rest
 	public static class D2 {
 		@RestGet
-		public OMap a(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
+		public OMap a(@Header("h1") @Schema(_default="1") String h1, @Header("h2") @Schema(_default="2") String h2, @Header("h3") @Schema(_default="3") String h3) {
 			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
@@ -194,7 +194,7 @@ public class Header_Test {
 	@Rest
 	public static class E {
 		@RestGet(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public OMap a(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
+		public OMap a(@Header("h1") @Schema(_default="4") String h1, @Header("h2") @Schema(_default="5") String h2, @Header("h3") @Schema(_default="6") String h3) {
 			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)

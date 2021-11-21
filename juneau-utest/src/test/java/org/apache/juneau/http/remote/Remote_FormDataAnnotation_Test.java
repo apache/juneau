@@ -83,14 +83,14 @@ public class Remote_FormDataAnnotation_Test {
 		@RemoteOp(path="a") String postX4(@FormData("*") Bean b);
 		@RemoteOp(path="a") String postX5(@FormData Bean b);
 		@RemoteOp(path="a") String postX6(@FormData("x") Bean[] b);
-		@RemoteOp(path="a") String postX7(@FormData(n="x",cf="uon") Bean[] b);
+		@RemoteOp(path="a") String postX7(@FormData("x") @Schema(cf="uon") Bean[] b);
 		@RemoteOp(path="a") String postX8(@FormData("x") List<Bean> b);
-		@RemoteOp(path="a") String postX9(@FormData(n="x",cf="uon") List<Bean> b);
+		@RemoteOp(path="a") String postX9(@FormData("x") @Schema(cf="uon") List<Bean> b);
 		@RemoteOp(path="a") String postX10(@FormData("x") Map<String,Bean> b);
 		@RemoteOp(path="a") String postX11(@FormData("*") Map<String,Bean> b);
 		@RemoteOp(path="a") String postX12(@FormData Map<String,Bean> b);
-		@RemoteOp(path="a") String postX13(@FormData(n="x",f="uon") Map<String,Bean> b);
-		@RemoteOp(path="a") String postX14(@FormData(f="uon") Map<String,Bean> b);
+		@RemoteOp(path="a") String postX13(@FormData("x") @Schema(f="uon") Map<String,Bean> b);
+		@RemoteOp(path="a") String postX14(@FormData @Schema(f="uon") Map<String,Bean> b);
 		@RemoteOp(path="a") String postX15(@FormData("*") Reader b);
 		@RemoteOp(path="a") String postX16(@FormData Reader b);
 		@RemoteOp(path="a") String postX17(@FormData("*") InputStream b);
@@ -151,10 +151,10 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface B1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",df="foo") String b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",df="foo",aev=true) String b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",df="") String b);
-		@RemoteOp(path="/") String postX4(@FormData(n="x",df="",aev=true) String b);
+		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(df="foo") String b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(df="foo",aev=true) String b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(df="") String b);
+		@RemoteOp(path="/") String postX4(@FormData("x") @Schema(df="",aev=true) String b);
 	}
 
 	@Test
@@ -188,20 +188,20 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface C1 {
-		@RemoteOp(path="/a") String postX1(@FormData(n="x") String...b);
-		@RemoteOp(path="/b") String postX2(@FormData(n="x") String...b);
-		@RemoteOp(path="/a") String postX3(@FormData(n="x",cf="csv") String...b);
-		@RemoteOp(path="/b") String postX4(@FormData(n="x",cf="csv") String...b);
-		@RemoteOp(path="/a") String postX5(@FormData(n="x",cf="ssv") String...b);
-		@RemoteOp(path="/b") String postX6(@FormData(n="x",cf="ssv") String...b);
-		@RemoteOp(path="/a") String postX7(@FormData(n="x",cf="tsv") String...b);
-		@RemoteOp(path="/b") String postX8(@FormData(n="x",cf="tsv") String...b);
-		@RemoteOp(path="/a") String postX9(@FormData(n="x",cf="pipes") String...b);
-		@RemoteOp(path="/b") String postX10(@FormData(n="x",cf="pipes") String...b);
-		@RemoteOp(path="/a") String postX11(@FormData(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteOp(path="/b") String postX12(@FormData(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteOp(path="/a") String postX13(@FormData(n="x",cf="uon") String...b);
-		@RemoteOp(path="/b") String postX14(@FormData(n="x",cf="uon") String...b);
+		@RemoteOp(path="/a") String postX1(@FormData("x") String...b);
+		@RemoteOp(path="/b") String postX2(@FormData("x") String...b);
+		@RemoteOp(path="/a") String postX3(@FormData("x") @Schema(cf="csv") String...b);
+		@RemoteOp(path="/b") String postX4(@FormData("x") @Schema(cf="csv") String...b);
+		@RemoteOp(path="/a") String postX5(@FormData("x") @Schema(cf="ssv") String...b);
+		@RemoteOp(path="/b") String postX6(@FormData("x") @Schema(cf="ssv") String...b);
+		@RemoteOp(path="/a") String postX7(@FormData("x") @Schema(cf="tsv") String...b);
+		@RemoteOp(path="/b") String postX8(@FormData("x") @Schema(cf="tsv") String...b);
+		@RemoteOp(path="/a") String postX9(@FormData("x") @Schema(cf="pipes") String...b);
+		@RemoteOp(path="/b") String postX10(@FormData("x") @Schema(cf="pipes") String...b);
+		@RemoteOp(path="/a") String postX11(@FormData("x") @Schema(cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/b") String postX12(@FormData("x") @Schema(cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/a") String postX13(@FormData("x") @Schema(cf="uon") String...b);
+		@RemoteOp(path="/b") String postX14(@FormData("x") @Schema(cf="uon") String...b);
 	}
 
 	@Test
@@ -237,49 +237,49 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface D1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",min="1",max="10") int b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",min="1",max="10",emin=false,emax=false) int b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",min="1",max="10",emin=true,emax=true) int b);
-		@RemoteOp(path="/") String postX4(@FormData(n="x",min="1",max="10",emin=true,emax=true) int b);
-		@RemoteOp(path="/") String postX5(@FormData(n="x",min="1",max="10") short b);
-		@RemoteOp(path="/") String postX6(@FormData(n="x",min="1",max="10",emin=false,emax=false) short b);
-		@RemoteOp(path="/") String postX7(@FormData(n="x",min="1",max="10",emin=true,emax=true) short b);
-		@RemoteOp(path="/") String postX8(@FormData(n="x",min="1",max="10") long b);
-		@RemoteOp(path="/") String postX9(@FormData(n="x",min="1",max="10",emin=false,emax=false) long b);
-		@RemoteOp(path="/") String postX10(@FormData(n="x",min="1",max="10",emin=true,emax=true) long b);
-		@RemoteOp(path="/") String postX11(@FormData(n="x",min="1",max="10") float b);
-		@RemoteOp(path="/") String postX12(@FormData(n="x",min="1",max="10",emin=false,emax=false) float b);
-		@RemoteOp(path="/") String postX13(@FormData(n="x",min="1",max="10",emin=true,emax=true) float b);
-		@RemoteOp(path="/") String postX14(@FormData(n="x",min="1",max="10") double b);
-		@RemoteOp(path="/") String postX15(@FormData(n="x",min="1",max="10",emin=false,emax=false) double b);
-		@RemoteOp(path="/") String postX16(@FormData(n="x",min="1",max="10",emin=true,emax=true) double b);
-		@RemoteOp(path="/") String postX17(@FormData(n="x",min="1",max="10") byte b);
-		@RemoteOp(path="/") String postX18(@FormData(n="x",min="1",max="10",emin=false,emax=false) byte b);
-		@RemoteOp(path="/") String postX19(@FormData(n="x",min="1",max="10",emin=true,emax=true) byte b);
-		@RemoteOp(path="/") String postX20(@FormData(n="x",min="1",max="10") AtomicInteger b);
-		@RemoteOp(path="/") String postX21(@FormData(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
-		@RemoteOp(path="/") String postX22(@FormData(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
-		@RemoteOp(path="/") String postX23(@FormData(n="x",min="1",max="10") BigDecimal b);
-		@RemoteOp(path="/") String postX24(@FormData(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
-		@RemoteOp(path="/") String postX25(@FormData(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
-		@RemoteOp(path="/") String postX26(@FormData(n="x",min="1",max="10") Integer b);
-		@RemoteOp(path="/") String postX27(@FormData(n="x",min="1",max="10",emin=false,emax=false) Integer b);
-		@RemoteOp(path="/") String postX28(@FormData(n="x",min="1",max="10",emin=true,emax=true) Integer b);
-		@RemoteOp(path="/") String postX29(@FormData(n="x",min="1",max="10") Short b);
-		@RemoteOp(path="/") String postX30(@FormData(n="x",min="1",max="10",emin=false,emax=false) Short b);
-		@RemoteOp(path="/") String postX31(@FormData(n="x",min="1",max="10",emin=true,emax=true) Short b);
-		@RemoteOp(path="/") String postX32(@FormData(n="x",min="1",max="10") Long b);
-		@RemoteOp(path="/") String postX33(@FormData(n="x",min="1",max="10",emin=false,emax=false) Long b);
-		@RemoteOp(path="/") String postX34(@FormData(n="x",min="1",max="10",emin=true,emax=true) Long b);
-		@RemoteOp(path="/") String postX35(@FormData(n="x",min="1",max="10") Float b);
-		@RemoteOp(path="/") String postX36(@FormData(n="x",min="1",max="10",emin=false,emax=false) Float b);
-		@RemoteOp(path="/") String postX37(@FormData(n="x",min="1",max="10",emin=true,emax=true) Float b);
-		@RemoteOp(path="/") String postX38(@FormData(n="x",min="1",max="10") Double b);
-		@RemoteOp(path="/") String postX39(@FormData(n="x",min="1",max="10",emin=false,emax=false) Double b);
-		@RemoteOp(path="/") String postX40(@FormData(n="x",min="1",max="10",emin=true,emax=true) Double b);
-		@RemoteOp(path="/") String postX41(@FormData(n="x",min="1",max="10") Byte b);
-		@RemoteOp(path="/") String postX42(@FormData(n="x",min="1",max="10",emin=false,emax=false) Byte b);
-		@RemoteOp(path="/") String postX43(@FormData(n="x",min="1",max="10",emin=true,emax=true) Byte b);
+		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(min="1",max="10") int b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) int b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) int b);
+		@RemoteOp(path="/") String postX4(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) int b);
+		@RemoteOp(path="/") String postX5(@FormData("x") @Schema(min="1",max="10") short b);
+		@RemoteOp(path="/") String postX6(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) short b);
+		@RemoteOp(path="/") String postX7(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) short b);
+		@RemoteOp(path="/") String postX8(@FormData("x") @Schema(min="1",max="10") long b);
+		@RemoteOp(path="/") String postX9(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) long b);
+		@RemoteOp(path="/") String postX10(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) long b);
+		@RemoteOp(path="/") String postX11(@FormData("x") @Schema(min="1",max="10") float b);
+		@RemoteOp(path="/") String postX12(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) float b);
+		@RemoteOp(path="/") String postX13(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) float b);
+		@RemoteOp(path="/") String postX14(@FormData("x") @Schema(min="1",max="10") double b);
+		@RemoteOp(path="/") String postX15(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) double b);
+		@RemoteOp(path="/") String postX16(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) double b);
+		@RemoteOp(path="/") String postX17(@FormData("x") @Schema(min="1",max="10") byte b);
+		@RemoteOp(path="/") String postX18(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteOp(path="/") String postX19(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteOp(path="/") String postX20(@FormData("x") @Schema(min="1",max="10") AtomicInteger b);
+		@RemoteOp(path="/") String postX21(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteOp(path="/") String postX22(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteOp(path="/") String postX23(@FormData("x") @Schema(min="1",max="10") BigDecimal b);
+		@RemoteOp(path="/") String postX24(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteOp(path="/") String postX25(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteOp(path="/") String postX26(@FormData("x") @Schema(min="1",max="10") Integer b);
+		@RemoteOp(path="/") String postX27(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteOp(path="/") String postX28(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteOp(path="/") String postX29(@FormData("x") @Schema(min="1",max="10") Short b);
+		@RemoteOp(path="/") String postX30(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteOp(path="/") String postX31(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteOp(path="/") String postX32(@FormData("x") @Schema(min="1",max="10") Long b);
+		@RemoteOp(path="/") String postX33(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteOp(path="/") String postX34(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteOp(path="/") String postX35(@FormData("x") @Schema(min="1",max="10") Float b);
+		@RemoteOp(path="/") String postX36(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteOp(path="/") String postX37(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteOp(path="/") String postX38(@FormData("x") @Schema(min="1",max="10") Double b);
+		@RemoteOp(path="/") String postX39(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteOp(path="/") String postX40(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteOp(path="/") String postX41(@FormData("x") @Schema(min="1",max="10") Byte b);
+		@RemoteOp(path="/") String postX42(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteOp(path="/") String postX43(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	@Test
@@ -474,7 +474,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @FormData(maxItems,minItems,uniqueItems)
+	// @FormData(maxItems) @Schema(minItems,uniqueItems)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -487,12 +487,12 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface E1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",cf="pipes",mini=1,maxi=2) String...b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",cf="pipes",ui=false) String...b);
-		@RemoteOp(path="/") String postX4(@FormData(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
-		@RemoteOp(path="/") String postX5(@FormData(n="x",cf="pipes",ui=true) String...b);
-		@RemoteOp(path="/") String postX6(@FormData(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
+		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(cf="pipes", mini=1,maxi=2) String...b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(items=@Items(cf="pipes", mini=1,maxi=2)) String[]...b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(cf="pipes",ui=false) String...b);
+		@RemoteOp(path="/") String postX4(@FormData("x") @Schema(items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteOp(path="/") String postX5(@FormData("x") @Schema(cf="pipes",ui=true) String...b);
+		@RemoteOp(path="/") String postX6(@FormData("x") @Schema(items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	@Test
@@ -517,7 +517,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @FormData(maxLength,minLength,enum,pattern)
+	// @FormData(maxLength) @Schema(minLength,enum,pattern)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -530,12 +530,12 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface F1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",minl=2,maxl=3) String b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",e={"foo"}) String b);
-		@RemoteOp(path="/") String postX4(@FormData(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
-		@RemoteOp(path="/") String postX5(@FormData(n="x",p="foo\\d{1,3}") String b);
-		@RemoteOp(path="/") String postX6(@FormData(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
+		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(minl=2,maxl=3) String b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(e={"foo"}) String b);
+		@RemoteOp(path="/") String postX4(@FormData("x") @Schema(cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteOp(path="/") String postX5(@FormData("x") @Schema(p="foo\\d{1,3}") String b);
+		@RemoteOp(path="/") String postX6(@FormData("x") @Schema(cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	@Test
@@ -579,20 +579,20 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface G1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",mo="2") int b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",mo="2") short b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",mo="2") long b);
-		@RemoteOp(path="/") String postX4(@FormData(n="x",mo="2") float b);
-		@RemoteOp(path="/") String postX5(@FormData(n="x",mo="2") double b);
-		@RemoteOp(path="/") String postX6(@FormData(n="x",mo="2") byte b);
-		@RemoteOp(path="/") String postX7(@FormData(n="x",mo="2") AtomicInteger b);
-		@RemoteOp(path="/") String postX8(@FormData(n="x",mo="2") BigDecimal b);
-		@RemoteOp(path="/") String postX9(@FormData(n="x",mo="2") Integer b);
-		@RemoteOp(path="/") String postX10(@FormData(n="x",mo="2") Short b);
-		@RemoteOp(path="/") String postX11(@FormData(n="x",mo="2") Long b);
-		@RemoteOp(path="/") String postX12(@FormData(n="x",mo="2") Float b);
-		@RemoteOp(path="/") String postX13(@FormData(n="x",mo="2") Double b);
-		@RemoteOp(path="/") String postX14(@FormData(n="x",mo="2") Byte b);
+		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(mo="2") int b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(mo="2") short b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(mo="2") long b);
+		@RemoteOp(path="/") String postX4(@FormData("x") @Schema(mo="2") float b);
+		@RemoteOp(path="/") String postX5(@FormData("x") @Schema(mo="2") double b);
+		@RemoteOp(path="/") String postX6(@FormData("x") @Schema(mo="2") byte b);
+		@RemoteOp(path="/") String postX7(@FormData("x") @Schema(mo="2") AtomicInteger b);
+		@RemoteOp(path="/") String postX8(@FormData("x") @Schema(mo="2") BigDecimal b);
+		@RemoteOp(path="/") String postX9(@FormData("x") @Schema(mo="2") Integer b);
+		@RemoteOp(path="/") String postX10(@FormData("x") @Schema(mo="2") Short b);
+		@RemoteOp(path="/") String postX11(@FormData("x") @Schema(mo="2") Long b);
+		@RemoteOp(path="/") String postX12(@FormData("x") @Schema(mo="2") Float b);
+		@RemoteOp(path="/") String postX13(@FormData("x") @Schema(mo="2") Double b);
+		@RemoteOp(path="/") String postX14(@FormData("x") @Schema(mo="2") Byte b);
 	}
 
 	@Test
@@ -642,9 +642,9 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface H1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x") String b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",r=false) String b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",r=true) String b);
+		@RemoteOp(path="/") String postX1(@FormData("x") String b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(r=false) String b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(r=true) String b);
 	}
 
 	@Test
@@ -670,9 +670,9 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface I1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",aev=true) String b);
-		@RemoteOp(path="/") String postX2(@FormData(n="x",aev=true,sie=false) String b);
-		@RemoteOp(path="/") String postX3(@FormData(n="x",sie=true) String b);
+		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(aev=true) String b);
+		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(aev=true,sie=false) String b);
+		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(sie=true) String b);
 	}
 
 	@Test
@@ -737,11 +737,11 @@ public class Remote_FormDataAnnotation_Test {
 		public String getX1() {
 			return "b1";
 		}
-		@FormData(n="c")
+		@FormData("c")
 		public String getX2() {
 			return "c1";
 		}
-		@FormData(n="e",aev=true)
+		@FormData("e") @Schema(aev=true)
 		public String getX4() {
 			return "";
 		}
@@ -757,15 +757,15 @@ public class Remote_FormDataAnnotation_Test {
 		public String getX7() {
 			return "123";
 		}
-		@FormData(n="i1",sie=true)
+		@FormData("i1") @Schema(sie=true)
 		public String getX8() {
 			return "foo";
 		}
-		@FormData(n="i2",sie=true)
+		@FormData("i2") @Schema(sie=true)
 		public String getX9() {
 			return "";
 		}
-		@FormData(n="i3",sie=true)
+		@FormData("i3") @Schema(sie=true)
 		public String getX10() {
 			return null;
 		}
@@ -799,7 +799,7 @@ public class Remote_FormDataAnnotation_Test {
 		public Map<String,Object> getB() {
 			return AMap.of("b1","true","b2","123","b3","null");
 		}
-		@FormData(n="*",aev=true)
+		@FormData("*") @Schema(aev=true)
 		public Map<String,Object> getC() {
 			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
@@ -837,7 +837,7 @@ public class Remote_FormDataAnnotation_Test {
 		public PartList getB() {
 			return parts("b1","true","b2","123","b3","null");
 		}
-		@FormData(n="*")
+		@FormData("*")
 		public PartList getC() {
 			return parts("c1","v1","c2",123,"c3",null,"c4","");
 		}
@@ -927,7 +927,7 @@ public class Remote_FormDataAnnotation_Test {
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@FormData(n="d",aev=true)
+		@FormData("d") @Schema(aev=true)
 		public List<Object> getX3() {
 			return AList.create();
 		}
@@ -943,7 +943,7 @@ public class Remote_FormDataAnnotation_Test {
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@FormData(n="h",aev=true)
+		@FormData("h") @Schema(aev=true)
 		public Object[] getX7() {
 			return new Object[]{};
 		}

@@ -34,11 +34,11 @@ public class Swagger_Body_Test {
 	public static class A {
 
 		@Body(
-			d={"a","b"},
-			r=true,
-			schema=@Schema(type="string"),
-			ex=" 'a' ",
-			exs="{foo:'bar'}"
+			d={"a","b"}
+		)
+		@Schema(
+			type="string",
+			r=true
 		)
 		public static class A1 {
 			public A1(String x) {}
@@ -46,12 +46,10 @@ public class Swagger_Body_Test {
 		@RestGet
 		public void a(A1 h) {}
 
-		@Body({
-			"description:'a\nb',",
+		@Body(description="a\nb")
+		@Schema({
 			"required:true,",
-			"schema:{type:'string'},",
-			"example:'\\'a\\'',",
-			"examples:{foo:'bar'}"
+			"type:'string'",
 		})
 		public static class A2 {
 			public A2(String x) {}
@@ -59,18 +57,10 @@ public class Swagger_Body_Test {
 		@RestPut
 		public void b(A2 h) {}
 
-		@Body(
-			value={
-				"description:'a\nb',",
-				"required:true,",
-				"schema:{type:'string'},",
-				"example:'\\'a\\'',",
-				"examples:{foo:'bar'}"
-			},
-			d={"b","c"},
-			schema=@Schema(type="string"),
-			ex="'b'",
-			exs="{foo:'baz'}"
+		@Body(description="a\nb")
+		@Schema(
+			required=true,
+			type="string"
 		)
 		public static class A3 {
 			public A3(String x) {}
@@ -87,29 +77,24 @@ public class Swagger_Body_Test {
 		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertEquals("'a'", x.getExample());
-		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
+		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertEquals("'a'", x.getExample());
-		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
+		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertEquals("b\nc", x.getDescription());
+		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertEquals("'b'", x.getExample());
-		assertObject(x.getExamples()).asJson().is("{foo:'baz'}");
+		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
 	}
 
 	@Rest
 	public static class B {
 
-		@Body(schema=@Schema(" type:'b' "))
+		@Body
+		@Schema(" type:'b' ")
 		public static class B1 {}
 		@RestGet
 		public void a(B1 h) {}
@@ -153,33 +138,6 @@ public class Swagger_Body_Test {
 	}
 
 	@Rest
-	public static class C {
-		@Body(ex=" {f1:'b'} ")
-		public static class C1 {
-			public String f1;
-		}
-		@RestOp
-		public void a(C1 h) {}
-
-		@Body(exs={" foo:'bar' "})
-		public static class C2 {}
-		@RestGet
-		public void b(C2 h) {}
-	}
-
-	@Test
-	public void c01_exampleFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
-		ParameterInfo x;
-
-		x = s.getParameterInfo("/a","get","body",null);
-		assertEquals("{f1:'b'}", x.getExample());
-
-		x = s.getParameterInfo("/b","get","body",null);
-		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
-	}
-
-	@Rest
 	public static class D {
 
 		public static class D1 {
@@ -189,12 +147,13 @@ public class Swagger_Body_Test {
 		@RestGet
 		public void a(
 			@Body(
-				d= {"a","b"},
+				d= {"a","b"}
+			)
+			@Schema(
 				r=true,
-				schema=@Schema(type="string"),
-				ex="a",
-				exs=" {foo:'bar'} "
-			) D1 b) {}
+				type="string"
+			)
+			D1 b) {}
 
 		public static class D2 {
 			public D2(String x) {}
@@ -202,13 +161,12 @@ public class Swagger_Body_Test {
 
 		@RestPut
 		public void b(
-			@Body({
-				"description:'a\nb',",
+			@Body(description="a\nb")
+			@Schema({
 				"required:true,",
-				"schema:{type:'string'},",
-				"example:'a',",
-				"examples:{foo:'bar'}"
-			}) D2 b) {}
+				"type:'string'",
+			})
+			D2 b) {}
 
 		public static class D3 {
 			public D3(String x) {}
@@ -217,18 +175,15 @@ public class Swagger_Body_Test {
 		@RestPost
 		public void c(
 			@Body(
+				d= {"b","c"}
+			)
+			@Schema(
 				value= {
-					"description:'a\nb',",
 					"required:true,",
-					"schema:{type:'string'},",
-					"example:'a',",
-					"examples:{foo:'bar'}"
-				},
-				d= {"b","c"},
-				schema=@Schema(type="string"),
-				ex="b",
-				exs=" {foo:'baz'} "
-			) D3 b) {}
+					"type:'string'"
+				}
+			)
+			D3 b) {}
 	}
 
 	@Test
@@ -239,23 +194,17 @@ public class Swagger_Body_Test {
 		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertEquals("a", x.getExample());
-		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
+		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertEquals("a", x.getExample());
-		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
+		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/c","post","body",null);
 		assertEquals("b\nc", x.getDescription());
 		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertEquals("b", x.getExample());
-		assertObject(x.getExamples()).asJson().is("{foo:'baz'}");
+		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
 	}
 
 	@Rest
@@ -263,7 +212,7 @@ public class Swagger_Body_Test {
 
 		public static class E1 {}
 		@RestGet
-		public void a(@Body(schema=@Schema(" { type:'b' } ")) E1 b) {}
+		public void a(@Body()@Schema(" { type:'b' } ") E1 b) {}
 
 		public static class E2 {
 			public String f1;
@@ -310,35 +259,5 @@ public class Swagger_Body_Test {
 
 		x = s.getParameterInfo("/f","get","body",null);
 		assertObject(x.getSchema()).asJson().is("{type:'boolean'}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class F {
-
-		public static class F1 {
-			public String f1;
-		}
-		@RestGet
-		public void a(@Body(ex="{f1:'b'}") F1 b) {}
-
-		public static class F2 {}
-		@RestPut
-		public void b(@Body(exs={" foo:'bar' "}) F2 b) {}
-	}
-
-	@Test
-	public void f01_exampleFromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
-		ParameterInfo x;
-
-		x = s.getParameterInfo("/a","get","body",null);
-		assertEquals("{f1:'b'}", x.getExample());
-
-		x = s.getParameterInfo("/b","put","body",null);
-		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 	}
 }

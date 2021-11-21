@@ -516,7 +516,7 @@ public class HttpPartSchema {
 	 * @return The schema information about the parameter.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, ParamInfo mpi) {
-		return create().apply(c, mpi).build();
+		return create().apply(c, mpi).apply(Schema.class, mpi).build();
 	}
 
 	/**
@@ -549,7 +549,7 @@ public class HttpPartSchema {
 	 * @return The schema information about the parameter.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, Method m) {
-		return create().apply(c, m).build();
+		return create().apply(c, m).apply(Schema.class, m).build();
 	}
 
 	/**
@@ -577,7 +577,7 @@ public class HttpPartSchema {
 	 * @return The schema information about the parameter.
 	 */
 	public static HttpPartSchema create(Class<? extends Annotation> c, java.lang.reflect.Type t) {
-		return create().apply(c, t).build();
+		return create().apply(c, t).apply(Schema.class, t).build();
 	}
 
 	/**
@@ -722,85 +722,41 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(Body a) {
-			required(a.required() || a.r());
-			allowEmptyValue(! (a.required() || a.r()));
-			apply(a.schema());
 			return this;
 		}
 
 		Builder apply(Header a) {
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
-			required(a.required() || a.r());
-			type(firstNonEmpty(a.type(), a.t()));
-			format(firstNonEmpty(a.format(), a.f()));
-			allowEmptyValue(a.allowEmptyValue() || a.aev());
-			items(a.items());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
-			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
-			maxItems(firstNmo(a.maxItems(), a.maxi()));
-			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
-			multipleOf(toNumber(a.multipleOf(), a.mo()));
-			skipIfEmpty(a.skipIfEmpty() || a.sie());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
 		}
 
 		Builder apply(ResponseHeader a) {
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
-			type(firstNonEmpty(a.type(), a.t()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			_enum(toSet(a._enum(), a.e()));
+			allowEmptyValue(false);
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
 			format(firstNonEmpty(a.format(), a.f()));
 			items(a.items());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
 			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
 			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minimum(toNumber(a.minimum(), a.min()));
 			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
+			minLength(firstNmo(a.minLength(), a.minl()));
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
-			allowEmptyValue(false);
+			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
 			serializer(a.serializer());
-			return this;
+			type(firstNonEmpty(a.type(), a.t()));
+			uniqueItems(a.uniqueItems() || a.ui());			return this;
 		}
 
 		Builder apply(FormData a) {
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
-			required(a.required() || a.r());
-			type(firstNonEmpty(a.type(), a.t()));
-			format(firstNonEmpty(a.format(), a.f()));
-			allowEmptyValue(a.allowEmptyValue() || a.aev());
-			items(a.items());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
-			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
-			maxItems(firstNmo(a.maxItems(), a.maxi()));
-			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
-			multipleOf(toNumber(a.multipleOf(), a.mo()));
-			skipIfEmpty(a.skipIfEmpty() || a.sie());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -808,26 +764,6 @@ public class HttpPartSchema {
 
 		Builder apply(Query a) {
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
-			required(a.required() || a.r());
-			type(firstNonEmpty(a.type(), a.t()));
-			format(firstNonEmpty(a.format(), a.f()));
-			allowEmptyValue(a.allowEmptyValue() || a.aev());
-			items(a.items());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
-			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
-			maxItems(firstNmo(a.maxItems(), a.maxi()));
-			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
-			multipleOf(toNumber(a.multipleOf(), a.mo()));
-			skipIfEmpty(a.skipIfEmpty() || a.sie());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -835,23 +771,6 @@ public class HttpPartSchema {
 
 		Builder apply(Path a) {
 			name(firstNonEmpty(a.name(), a.n(), a.value()));
-			type(firstNonEmpty(a.type(), a.t()));
-			format(firstNonEmpty(a.format(), a.f()));
-			items(a.items());
-			allowEmptyValue(a.allowEmptyValue() || a.aev());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
-			maxItems(firstNmo(a.maxItems(), a.maxi()));
-			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
-			multipleOf(toNumber(a.multipleOf(), a.mo()));
 			parser(a.parser());
 			serializer(a.serializer());
 
@@ -860,87 +779,87 @@ public class HttpPartSchema {
 				allowEmptyValue();
 				required(false);
 			} else {
-				required(a.required() && a.r());
+				required(true);
 			}
 
 			return this;
 		}
 
 		Builder apply(Response a) {
-			codes(a.value());
-			codes(a.code());
-			required(false);
 			allowEmptyValue(true);
-			serializer(a.serializer());
-			parser(a.parser());
 			apply(a.schema());
-			return this;
+			codes(a.code());
+			codes(a.value());
+			parser(a.parser());
+			required(false);
+			serializer(a.serializer());			return this;
 		}
 
 		Builder apply(Items a) {
-			type(firstNonEmpty(a.type(), a.t()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			_enum(toSet(a._enum(), a.e()));
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
 			format(firstNonEmpty(a.format(), a.f()));
 			items(a.items());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
 			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
 			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minimum(toNumber(a.minimum(), a.min()));
 			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
+			minLength(firstNmo(a.minLength(), a.minl()));
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
-			return this;
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			type(firstNonEmpty(a.type(), a.t()));
+			uniqueItems(a.uniqueItems() || a.ui());			return this;
 		}
 
 		Builder apply(SubItems a) {
-			type(firstNonEmpty(a.type(), a.t()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			_enum(toSet(a._enum(), a.e()));
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
 			format(firstNonEmpty(a.format(), a.f()));
 			items(HttpPartSchema.toOMap(a.items()));
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
 			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
 			maxItems(firstNmo(a.maxItems(), a.maxi()));
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
+			minimum(toNumber(a.minimum(), a.min()));
 			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
+			minLength(firstNmo(a.minLength(), a.minl()));
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
-			return this;
+			pattern(firstNonEmpty(a.pattern(), a.p()));
+			type(firstNonEmpty(a.type(), a.t()));
+			uniqueItems(a.uniqueItems() || a.ui());			return this;
 		}
 
 		Builder apply(Schema a) {
-			type(firstNonEmpty(a.type(), a.t()));
+			_default(joinnlOrNull(a._default(), a.df()));
+			_enum(toSet(a._enum(), a.e()));
+			additionalProperties(HttpPartSchema.toOMap(a.additionalProperties()));
+			allowEmptyValue(a.allowEmptyValue() || a.aev());
+			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
 			format(firstNonEmpty(a.format(), a.f()));
 			items(a.items());
-			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			_default(joinnlOrNull(a._default(), a.df()));
 			maximum(toNumber(a.maximum(), a.max()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			minimum(toNumber(a.minimum(), a.min()));
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
-			maxLength(firstNmo(a.maxLength(), a.maxl()));
-			minLength(firstNmo(a.minLength(), a.minl()));
-			pattern(firstNonEmpty(a.pattern(), a.p()));
 			maxItems(firstNmo(a.maxItems(), a.maxi()));
-			minItems(firstNmo(a.minItems(), a.mini()));
-			uniqueItems(a.uniqueItems() || a.ui());
-			_enum(toSet(a._enum(), a.e()));
-			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			maxLength(firstNmo(a.maxLength(), a.maxl()));
 			maxProperties(firstNmo(a.maxProperties(), a.maxp()));
+			minimum(toNumber(a.minimum(), a.min()));
+			minItems(firstNmo(a.minItems(), a.mini()));
+			minLength(firstNmo(a.minLength(), a.minl()));
 			minProperties(firstNmo(a.minProperties(), a.minp()));
+			multipleOf(toNumber(a.multipleOf(), a.mo()));
+			pattern(firstNonEmpty(a.pattern(), a.p()));
 			properties(HttpPartSchema.toOMap(a.properties()));
-			additionalProperties(HttpPartSchema.toOMap(a.additionalProperties()));
+			required(a.required() || a.r());
+			skipIfEmpty(a.skipIfEmpty() || a.sie());
+			type(firstNonEmpty(a.type(), a.t()));
+			uniqueItems(a.uniqueItems() || a.ui());
 			return this;
 		}
 

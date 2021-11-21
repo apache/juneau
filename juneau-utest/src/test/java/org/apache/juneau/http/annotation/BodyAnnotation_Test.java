@@ -34,32 +34,16 @@ public class BodyAnnotation_Test {
 		.api("api")
 		.d("d")
 		.description("description")
-		.ex("ex")
-		.example("example")
-		.examples("examples")
-		.exs("exs")
 		.on("on")
 		.onClass(X1.class)
-		.r(true)
-		.required(true)
-		.schema(SchemaAnnotation.create().build())
-		.value("value")
 		.build();
 
 	Body a2 = BodyAnnotation.create()
 		.api("api")
 		.d("d")
 		.description("description")
-		.ex("ex")
-		.example("example")
-		.examples("examples")
-		.exs("exs")
 		.on("on")
 		.onClass(X1.class)
-		.r(true)
-		.required(true)
-		.schema(SchemaAnnotation.create().build())
-		.value("value")
 		.build();
 
 	@Test
@@ -69,16 +53,8 @@ public class BodyAnnotation_Test {
 				+ "api:['api'],"
 				+ "d:['d'],"
 				+ "description:['description'],"
-				+ "ex:['ex'],"
-				+ "example:['example'],"
-				+ "examples:['examples'],"
-				+ "exs:['exs'],"
 				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "r:true,"
-				+ "required:true,"
-				+ "schema:{'$ref':'',_default:[],_enum:[],additionalProperties:[],allOf:[],cf:'',collectionFormat:'',d:[],description:[],df:[],discriminator:'',e:[],emax:false,emin:false,ex:[],example:[],examples:[],exclusiveMaximum:false,exclusiveMinimum:false,exs:[],externalDocs:{description:[],url:'',value:[]},f:'',format:'',ignore:false,items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxProperties:-1,maxi:-1,maximum:'',maxl:-1,maxp:-1,min:'',minItems:-1,minLength:-1,minProperties:-1,mini:-1,minimum:'',minl:-1,minp:-1,mo:'',multipleOf:'',on:[],onClass:[],p:'',pattern:'',properties:[],r:false,readOnly:false,required:false,ro:false,t:'',title:'',type:'',ui:false,uniqueItems:false,value:[],xml:[]},"
-				+ "value:['value']"
+				+ "onClass:['"+CNAME+"$X1']"
 			+ "}"
 		);
 	}
@@ -132,16 +108,8 @@ public class BodyAnnotation_Test {
 		api="api",
 		d="d",
 		description="description",
-		ex="ex",
-		example="example",
-		examples="examples",
-		exs="exs",
 		on="on",
-		onClass=X1.class,
-		r=true,
-		required=true,
-		schema=@Schema,
-		value="value"
+		onClass=X1.class
 	)
 	public static class D1 {}
 	Body d1 = D1.class.getAnnotationsByType(Body.class)[0];
@@ -150,16 +118,8 @@ public class BodyAnnotation_Test {
 		api="api",
 		d="d",
 		description="description",
-		ex="ex",
-		example="example",
-		examples="examples",
-		exs="exs",
 		on="on",
-		onClass=X1.class,
-		r=true,
-		required=true,
-		schema=@Schema,
-		value="value"
+		onClass=X1.class
 	)
 	public static class D2 {}
 	Body d2 = D2.class.getAnnotationsByType(Body.class)[0];

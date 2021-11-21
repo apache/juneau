@@ -35,7 +35,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
-@Header(type="integer",format="int64")
+@Header
+@Schema(type="integer",format="int64")
 public class BasicLongHeader extends BasicHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------

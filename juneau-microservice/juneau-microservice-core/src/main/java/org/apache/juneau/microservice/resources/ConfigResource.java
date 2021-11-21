@@ -94,7 +94,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap getConfigSection(
-			@Path(n="section", d="Section name in config file.", ex="REST") String section
+			@Path(n="section", d="Section name in config file.") String section
 		) throws SectionNotFound, BadConfig {
 
 		return getSection(section);
@@ -111,8 +111,8 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public String getConfigEntry(
-			@Path(n="section", d="Section name in config file.", ex="REST") String section,
-			@Path(n="key", d="Key name in section.", ex="theme") String key
+			@Path(n="section", d="Section name in config file.") String section,
+			@Path(n="key", d="Key name in section.") String key
 		) throws SectionNotFound, BadConfig {
 
 		return getSection(section).getString(key);
@@ -163,11 +163,11 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigSection(
-			@Path(n="section", d="Section name in config file.", ex="REST") String section,
+			@Path(n="section", d="Section name in config file.") String section,
 			@Body(
-				d="New contents of config section as a simple map of key/value pairs.",
-				ex="{theme:'servlet:/htdocs/themes/dark.css'}"
-			) Map<String,Object> contents
+				d="New contents of config section as a simple map of key/value pairs."
+			)
+			Map<String,Object> contents
 		) throws Exception {
 
 		getContext().getConfig().setSection(section, null, contents);
@@ -185,9 +185,9 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public String setConfigValue(
-			@Path(n="section", d="Section name in config file.", ex="REST") String section,
-			@Path(n="key", d="Key name in section.", ex="theme") String key,
-			@Body(d="New value for entry.", ex="servlet:/htdocs/themes/dark.css") String value
+			@Path(n="section", d="Section name in config file.") String section,
+			@Path(n="key", d="Key name in section.") String key,
+			@Body(d="New value for entry.") String value
 		) throws SectionNotFound, BadConfig {
 
 		getContext().getConfig().set(section + '/' + key, value);

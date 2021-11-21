@@ -91,7 +91,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,example,examples,*")
+@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,*")
 public class ParameterInfo extends SwaggerElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
@@ -610,135 +610,6 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo _enum(Object...value) {
 		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// example
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Bean property getter:  <property>example</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Bean property setter:  <property>example</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setExample(Object value) {
-		example = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>example</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Object> example() {
-		return Optional.ofNullable(getExample());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>example</property>.
-	 *
-	 * @param value The property value.
-	 * @return This object.
-	 */
-	public ParameterInfo example(Object value) {
-		setExample(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Bean property getter:  <property>examples</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,String> getExamples() {
-		return examples;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setExamples(Map<String,String> value) {
-		examples = newMap(value);
-	}
-
-	/**
-	 * Bean property appender:  <property>examples</property>.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public ParameterInfo addExamples(Map<String,String> values) {
-		examples = mapBuilder(examples).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>examples</property>.
-	 *
-	 * <p>
-	 * Adds a single value to the <property>examples</property> property.
-	 *
-	 * @param name The extra property name.
-	 * @param value The extra property value.
-	 * @return This object.
-	 */
-	public ParameterInfo example(String name, String value) {
-		examples = mapBuilder(examples).sparse().add(name, value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>examples</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Map<String,String>> examples() {
-		return Optional.ofNullable(getExamples());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public ParameterInfo examples(Map<String,String> value) {
-		setExamples(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>examples</property>.
-	 *
-	 * @param json
-	 * 	The new value for this property as a JSON object.
-	 * @return This object.
-	 */
-	public ParameterInfo examples(String json) {
-		setExamples(mapBuilder(String.class,String.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1904,8 +1775,6 @@ public class ParameterInfo extends SwaggerElement {
 			case "default": return toType(getDefault(), type);
 			case "description": return toType(getDescription(), type);
 			case "enum": return toType(getEnum(), type);
-			case "example": return toType(getExample(), type);
-			case "examples": return toType(getExamples(), type);
 			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
 			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
 			case "format": return toType(getFormat(), type);
@@ -1938,8 +1807,6 @@ public class ParameterInfo extends SwaggerElement {
 			case "default": return _default(value);
 			case "description": return description(stringify(value));
 			case "enum": return _enum(value);
-			case "example": return example(stringify(value));
-			case "examples": return examples(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			case "exclusiveMaximum": return exclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum": return exclusiveMinimum(toBoolean(value));
 			case "format": return format(stringify(value));

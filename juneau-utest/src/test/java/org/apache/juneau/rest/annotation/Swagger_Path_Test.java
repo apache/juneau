@@ -35,10 +35,11 @@ public class Swagger_Path_Test {
 
 		@Path(
 			n="P",
-			d={"a","b"},
-			t="string",
+			d={"a","b"}
+		)
+		@Schema(
 			e="a,b",
-			ex="a"
+			t="string"
 		)
 		public static class A1 {
 			public A1(String x) {}
@@ -55,8 +56,7 @@ public class Swagger_Path_Test {
 			api={
 				"description:'a\nb',",
 				"type:'string',",
-				"enum:['a','b'],",
-				"example:'a'"
+				"enum:['a','b']"
 			}
 		)
 		public static class A2 {
@@ -74,13 +74,13 @@ public class Swagger_Path_Test {
 			api={
 				"description:'b\nc',",
 				"type:'string',",
-				"enum:['b','c'],",
-				"example:'b'"
+				"enum:['b','c']"
 			},
-			d={"a","b"},
+			d={"a","b"}
+		)
+		@Schema(
 			t="string",
-			e="a,b",
-			ex="a"
+			e="a,b"
 		)
 		public static class A3 {
 			public A3(String x) {}
@@ -103,7 +103,8 @@ public class Swagger_Path_Test {
 		@RestDelete(path="/d/{P}")
 		public void d(A4 f) {}
 
-		@Path(n="P",e={" ['a','b'] "})
+		@Path(n="P")
+		@Schema(e={" ['a','b'] "})
 		public static class A5 {
 			@Override
 			public String toString() {
@@ -124,24 +125,21 @@ public class Swagger_Path_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertEquals("a", x.getExample());
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/a/a'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertEquals("a", x.getExample());
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/b/a'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertEquals("a", x.getExample());
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/c/a'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertEquals("P", x.getName());
@@ -199,33 +197,15 @@ public class Swagger_Path_Test {
 	}
 
 	@Rest
-	public static class C {
-
-		@Path(n="P",ex={" {f1:'a'} "})
-		public static class C1 {
-			public String f1;
-		}
-		@RestGet(path="/a/{P}")
-		public void a(C1 f) {}
-	}
-
-	@Test
-	public void c01_exampleFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
-
-		ParameterInfo x = s.getParameterInfo("/a/{P}","get","path","P");
-		assertEquals("{f1:'a'}", x.getExample());
-	}
-
-	@Rest
 	public static class D {
 
 		@RestGet(path="/a/{P}")
 		public void a(@Path(
 			n="P",
-			d="a",
-			t="string"
-		) String h) {}
+			d="a"
+		)
+		@Schema(t="string")
+		String h) {}
 
 		@RestPut(path="/b/{P}")
 		public void b(@Path(
@@ -243,15 +223,16 @@ public class Swagger_Path_Test {
 				"description:'b',",
 				"type:'string'"
 			},
-			d="a",
-			t="string"
-		) String h) {}
+			d="a"
+		)
+		@Schema(t="string")
+		String h) {}
 
 		@RestDelete(path="/d/{P}")
 		public void d(@Path("P") String h) {}
 
 		@RestOp(path="/e/{P}")
-		public void e(@Path(n="P",e={" ['a','b'] "}) String h) {}
+		public void e(@Path("P") @Schema(e={" ['a','b'] "}) String h) {}
 	}
 
 	@Test
@@ -329,20 +310,5 @@ public class Swagger_Path_Test {
 
 		x = s.getParameterInfo("/f/{P}","get","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'boolean',required:true}");
-	}
-
-	@Rest
-	public static class F {
-
-		@RestGet(path="/a/{P}")
-		public void a(@Path(n="P",ex="{f1:'b'}") String h) {}
-	}
-
-	@Test
-	public void f01_exampleFromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
-
-		ParameterInfo x = s.getParameterInfo("/a/{P}","get","path","P");
-		assertEquals("{f1:'b'}", x.getExample());
 	}
 }

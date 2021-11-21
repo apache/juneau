@@ -297,10 +297,6 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 				m.put("model", om.isEmpty() ? i("none") : om);
 			}
 
-			Map<String,?> examples = pi.getExamples();
-			if (examples != null)
-				for (Map.Entry<String,?> e : examples.entrySet())
-					m.put(e.getKey(), e.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

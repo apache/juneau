@@ -38,7 +38,7 @@ public class IfNoneMatch_Test {
 	@Rest
 	public static class A {
 		@RestOp
-		public StringReader get(@Header(name=HEADER,multi=true,allowEmptyValue=true) String[] h) {
+		public StringReader get(@Header(name=HEADER,multi=true) @Schema(allowEmptyValue=true) String[] h) {
 			return reader(h == null ? "null" : StringUtils.join(h, ','));
 		}
 	}

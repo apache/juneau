@@ -35,9 +35,9 @@ public class Swagger_FormData_Test {
 
 		@FormData(
 			name="F",
-			description= {"a","b"},
-			type="string"
+			description= {"a","b"}
 		)
+		@Schema(type="string")
 		public static class A1 {
 			public A1(String x) {}
 		}
@@ -63,9 +63,9 @@ public class Swagger_FormData_Test {
 				"description:'b\nc',",
 				"type:'string'"
 			},
-			description= {"a","b"},
-			type="string"
+			description= {"a","b"}
 		)
+		@Schema(type="string")
 		public static class A3 {
 			public A3(String x) {}
 		}
@@ -149,34 +149,16 @@ public class Swagger_FormData_Test {
 	}
 
 	@Rest
-	public static class C {
-
-		@FormData(name="F", example={"{f1:'a'}"})
-		public static class C1 {
-			public String f1;
-		}
-		@RestGet
-		public void a(C1 f) {}
-	}
-
-	@Test
-	public void c01_exampleFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
-
-		ParameterInfo x = s.getParameterInfo("/a","get","formData","F");
-		assertEquals("{f1:'a'}", x.getExample());
-	}
-
-	@Rest
 	public static class D {
 
 		@RestGet
 		public void a(
 			@FormData(
 				name="F",
-				description={"a","b"},
-				type="string"
-			) String f) {}
+				description={"a","b"}
+			)
+			@Schema(type="string")
+			String f) {}
 
 		@RestPut
 		public void b(
@@ -196,9 +178,10 @@ public class Swagger_FormData_Test {
 					"description:'b\nc',",
 					"type:'string'",
 				},
-				description={"a","b"},
-				type="string"
-			) String f) {}
+				description={"a","b"}
+			)
+			@Schema(type="string")
+			String f) {}
 
 		@RestDelete
 		public void d(@FormData("F") String f) {}
@@ -279,23 +262,5 @@ public class Swagger_FormData_Test {
 
 		x = s.getParameterInfo("/f","get","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'boolean'}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class F {
-		@RestGet
-		public void a(@FormData(name="F", example="{f1:'a'}") String f) {}
-	}
-
-	@Test
-	public void f01_exampleFromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
-
-		ParameterInfo x = s.getParameterInfo("/a","get","formData","F");
-		assertEquals("{f1:'a'}", x.getExample());
 	}
 }

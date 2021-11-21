@@ -1622,7 +1622,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteOp(method="GET", path="/headerList")
 		String headerList(
-			@Header(value="*", allowEmptyValue=true) HeaderList a
+			@Header(value="*") @Schema(allowEmptyValue=true) HeaderList a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------

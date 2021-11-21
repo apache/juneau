@@ -83,6 +83,8 @@ public class SchemaAnnotation {
 			.$ref(r.resolve(a.$ref()))
 			.additionalProperties(r.resolve(a.additionalProperties()))
 			.allOf(r.resolve(a.allOf()))
+			.aev(a.aev())
+			.allowEmptyValue(a.allowEmptyValue())
 			.cf(r.resolve(a.cf()))
 			.collectionFormat(r.resolve(a.collectionFormat()))
 			.d(r.resolve(a.d()))
@@ -92,12 +94,8 @@ public class SchemaAnnotation {
 			.e(r.resolve(a.e()))
 			.emax(a.emax())
 			.emin(a.emin())
-			.ex(r.resolve(a.ex()))
-			.example(r.resolve(a.example()))
-			.examples(r.resolve(a.examples()))
 			.exclusiveMaximum(a.exclusiveMaximum())
 			.exclusiveMinimum(a.exclusiveMinimum())
-			.exs(r.resolve(a.exs()))
 			.externalDocs(ExternalDocsAnnotation.copy(a.externalDocs(), r))
 			.f(r.resolve(a.f()))
 			.format(r.resolve(a.format()))
@@ -130,6 +128,8 @@ public class SchemaAnnotation {
 			.readOnly(a.readOnly())
 			.required(a.required())
 			.ro(a.ro())
+			.sie(a.sie())
+			.skipIfEmpty(a.skipIfEmpty())
 			.t(r.resolve(a.t()))
 			.title(r.resolve(a.title()))
 			.type(r.resolve(a.type()))
@@ -173,7 +173,6 @@ public class SchemaAnnotation {
 			.appendSkipEmpty("discriminator", a.discriminator())
 			.appendSkipEmpty("description", joinnl(a.description(), a.d()))
 			.appendSkipEmpty("enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("externalDocs", ExternalDocsAnnotation.merge(om.getMap("externalDocs"), a.externalDocs()))
@@ -197,7 +196,6 @@ public class SchemaAnnotation {
 			.appendSkipEmpty("type", a.type(), a.t())
 			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 			.appendSkipEmpty("xml", joinnl(a.xml()))
-			.appendSkipEmpty("example", joinnl(a.example(), a.ex()))
 			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
@@ -242,12 +240,12 @@ public class SchemaAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
 
-		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, ui, uniqueItems;
+		boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
 		ExternalDocs externalDocs=ExternalDocsAnnotation.DEFAULT;
 		Items items=ItemsAnnotation.DEFAULT;
 		long maxi=-1, maxItems=-1, maxl=-1, maxLength=-1, maxp=-1, maxProperties=-1, mini=-1, minItems=-1, minl=-1, minLength=-1, minp=-1, minProperties=-1;
 		String $ref="", cf="", collectionFormat="", discriminator="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", title="", type="";
-		String[] _default={}, _enum={}, additionalProperties={}, allOf={}, d={}, description={}, df={}, e={}, ex={}, example={}, examples={}, exs={}, properties={}, value={}, xml={};
+		String[] _default={}, _enum={}, additionalProperties={}, allOf={}, d={}, description={}, df={}, e={}, properties={}, value={}, xml={};
 
 		/**
 		 * Constructor.
@@ -317,6 +315,28 @@ public class SchemaAnnotation {
 		 */
 		public Builder allOf(String...value) {
 			this.allOf = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#aev} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder aev(boolean value) {
+			this.aev = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#allowEmptyValue} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowEmptyValue(boolean value) {
+			this.allowEmptyValue = value;
 			return this;
 		}
 
@@ -420,39 +440,6 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#ex} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder ex(String...value) {
-			this.ex = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#example} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder example(String...value) {
-			this.example = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#examples} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder examples(String...value) {
-			this.examples = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Schema#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -471,17 +458,6 @@ public class SchemaAnnotation {
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#exs} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exs(String...value) {
-			this.exs = value;
 			return this;
 		}
 
@@ -816,6 +792,28 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Schema#sie} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder sie(boolean value) {
+			this.sie = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#skipIfEmpty} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder skipIfEmpty(boolean value) {
+			this.skipIfEmpty = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -933,12 +931,12 @@ public class SchemaAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Schema {
 
-		private final boolean exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, ignore;
+		private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;
 		private final ExternalDocs externalDocs;
 		private final Items items;
 		private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;
 		private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;
-		private final String[] description, d, _default, df, _enum, e, allOf, properties, additionalProperties, xml, example, ex, examples, exs, value;
+		private final String[] description, d, _default, df, _enum, e, allOf, properties, additionalProperties, xml, value;
 
 		Impl(Builder b) {
 			super(b);
@@ -947,6 +945,8 @@ public class SchemaAnnotation {
 			this._enum = copyOf(b._enum);
 			this.additionalProperties = copyOf(b.additionalProperties);
 			this.allOf = copyOf(b.allOf);
+			this.aev = b.aev;
+			this.allowEmptyValue = b.allowEmptyValue;
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
 			this.d = copyOf(b.d);
@@ -956,12 +956,8 @@ public class SchemaAnnotation {
 			this.e = copyOf(b.e);
 			this.emax = b.emax;
 			this.emin = b.emin;
-			this.ex = copyOf(b.ex);
-			this.example = copyOf(b.example);
-			this.examples = copyOf(b.examples);
 			this.exclusiveMaximum = b.exclusiveMaximum;
 			this.exclusiveMinimum = b.exclusiveMinimum;
-			this.exs = copyOf(b.exs);
 			this.externalDocs = b.externalDocs;
 			this.f = b.f;
 			this.format = b.format;
@@ -992,6 +988,8 @@ public class SchemaAnnotation {
 			this.readOnly = b.readOnly;
 			this.required = b.required;
 			this.ro = b.ro;
+			this.sie = b.sie;
+			this.skipIfEmpty = b.skipIfEmpty;
 			this.t = b.t;
 			this.title = b.title;
 			this.type = b.type;
@@ -1025,6 +1023,16 @@ public class SchemaAnnotation {
 		@Override /* Schema */
 		public String[] allOf() {
 			return allOf;
+		}
+
+		@Override /* Schema */
+		public boolean aev() {
+			return aev;
+		}
+
+		@Override /* Schema */
+		public boolean allowEmptyValue() {
+			return allowEmptyValue;
 		}
 
 		@Override /* Schema */
@@ -1073,21 +1081,6 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Schema */
-		public String[] ex() {
-			return ex;
-		}
-
-		@Override /* Schema */
-		public String[] example() {
-			return example;
-		}
-
-		@Override /* Schema */
-		public String[] examples() {
-			return examples;
-		}
-
-		@Override /* Schema */
 		public boolean exclusiveMaximum() {
 			return exclusiveMaximum;
 		}
@@ -1095,11 +1088,6 @@ public class SchemaAnnotation {
 		@Override /* Schema */
 		public boolean exclusiveMinimum() {
 			return exclusiveMinimum;
-		}
-
-		@Override /* Schema */
-		public String[] exs() {
-			return exs;
 		}
 
 		@Override /* Schema */
@@ -1250,6 +1238,16 @@ public class SchemaAnnotation {
 		@Override /* Schema */
 		public boolean ro() {
 			return ro;
+		}
+
+		@Override /* Schema */
+		public boolean sie() {
+			return sie;
+		}
+
+		@Override /* Schema */
+		public boolean skipIfEmpty() {
+			return skipIfEmpty;
 		}
 
 		@Override /* Schema */

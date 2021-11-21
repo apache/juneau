@@ -46,12 +46,8 @@ public class SchemaAnnotation_Test {
 		.e("e")
 		.emax(true)
 		.emin(true)
-		.ex("ex")
-		.example("example")
-		.examples("examples")
 		.exclusiveMaximum(true)
 		.exclusiveMinimum(true)
-		.exs("exs")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.f("f")
 		.format("format")
@@ -108,12 +104,8 @@ public class SchemaAnnotation_Test {
 		.e("e")
 		.emax(true)
 		.emin(true)
-		.ex("ex")
-		.example("example")
-		.examples("examples")
 		.exclusiveMaximum(true)
 		.exclusiveMinimum(true)
-		.exs("exs")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.f("f")
 		.format("format")
@@ -163,7 +155,9 @@ public class SchemaAnnotation_Test {
 				+ "_default:['default'],"
 				+ "_enum:['enum'],"
 				+ "additionalProperties:['additionalProperties'],"
+				+ "aev:false,"
 				+ "allOf:['allOf'],"
+				+ "allowEmptyValue:false,"
 				+ "cf:'cf',"
 				+ "collectionFormat:'collectionFormat',"
 				+ "d:['d'],"
@@ -173,12 +167,8 @@ public class SchemaAnnotation_Test {
 				+ "e:['e'],"
 				+ "emax:true,"
 				+ "emin:true,"
-				+ "ex:['ex'],"
-				+ "example:['example'],"
-				+ "examples:['examples'],"
 				+ "exclusiveMaximum:true,"
 				+ "exclusiveMinimum:true,"
-				+ "exs:['exs'],"
 				+ "externalDocs:{description:[],url:'',value:[]},"
 				+ "f:'f',"
 				+ "format:'format',"
@@ -211,6 +201,7 @@ public class SchemaAnnotation_Test {
 				+ "readOnly:true,"
 				+ "required:true,"
 				+ "ro:true,"
+				+ "sie:false,skipIfEmpty:false,"
 				+ "t:'t',"
 				+ "title:'title',"
 				+ "type:'type',"
@@ -284,12 +275,8 @@ public class SchemaAnnotation_Test {
 		e="e",
 		emax=true,
 		emin=true,
-		ex="ex",
-		example="example",
-		examples="examples",
 		exclusiveMaximum=true,
 		exclusiveMinimum=true,
-		exs="exs",
 		externalDocs=@ExternalDocs,
 		f="f",
 		format="format",
@@ -348,12 +335,8 @@ public class SchemaAnnotation_Test {
 		e="e",
 		emax=true,
 		emin=true,
-		ex="ex",
-		example="example",
-		examples="examples",
 		exclusiveMaximum=true,
 		exclusiveMinimum=true,
-		exs="exs",
 		externalDocs=@ExternalDocs,
 		f="f",
 		format="format",

@@ -34,7 +34,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
-@Header(type="boolean")
+@Header
+@Schema(type="boolean")
 public class BasicBooleanHeader extends BasicHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------

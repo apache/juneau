@@ -32,102 +32,28 @@ public class PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Path a1 = PathAnnotation.create()
-		._enum("enum")
-		.aev(true)
-		.allowEmptyValue(true)
 		.api("api")
-		.cf("cf")
-		.collectionFormat("collectionFormat")
 		.d("d")
 		.description("description")
-		.e("e")
-		.emax(true)
-		.emin(true)
-		.ex("ex")
-		.example("example")
-		.exclusiveMaximum(true)
-		.exclusiveMinimum(true)
-		.f("f")
-		.format("format")
-		.items(ItemsAnnotation.DEFAULT)
-		.max("max")
-		.maxi(1)
-		.maximum("maximum")
-		.maxItems(2)
-		.maxl(3)
-		.maxLength(4)
-		.min("min")
-		.mini(5)
-		.minimum("minimum")
-		.minItems(6)
-		.minl(7)
-		.minLength(8)
-		.mo("mo")
-		.multipleOf("multipleOf")
 		.n("n")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
-		.p("p")
 		.parser(OpenApiParser.class)
-		.pattern("pattern")
-		.r(true)
-		.required(true)
 		.serializer(OpenApiSerializer.class)
-		.t("t")
-		.type("type")
-		.ui(true)
-		.uniqueItems(true)
 		.value("value")
 		.build();
 
 	Path a2 = PathAnnotation.create()
-		._enum("enum")
-		.aev(true)
-		.allowEmptyValue(true)
 		.api("api")
-		.cf("cf")
-		.collectionFormat("collectionFormat")
 		.d("d")
 		.description("description")
-		.e("e")
-		.emax(true)
-		.emin(true)
-		.ex("ex")
-		.example("example")
-		.exclusiveMaximum(true)
-		.exclusiveMinimum(true)
-		.f("f")
-		.format("format")
-		.items(ItemsAnnotation.DEFAULT)
-		.max("max")
-		.maxi(1)
-		.maximum("maximum")
-		.maxItems(2)
-		.maxl(3)
-		.maxLength(4)
-		.min("min")
-		.mini(5)
-		.minimum("minimum")
-		.minItems(6)
-		.minl(7)
-		.minLength(8)
-		.mo("mo")
-		.multipleOf("multipleOf")
 		.n("n")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
-		.p("p")
 		.parser(OpenApiParser.class)
-		.pattern("pattern")
-		.r(true)
-		.required(true)
 		.serializer(OpenApiSerializer.class)
-		.t("t")
-		.type("type")
-		.ui(true)
-		.uniqueItems(true)
 		.value("value")
 		.build();
 
@@ -135,52 +61,15 @@ public class PathAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
-				+ "_enum:['enum'],"
-				+ "aev:true,"
-				+ "allowEmptyValue:true,"
 				+ "api:['api'],"
-				+ "cf:'cf',"
-				+ "collectionFormat:'collectionFormat',"
 				+ "d:['d'],"
 				+ "description:['description'],"
-				+ "e:['e'],"
-				+ "emax:true,"
-				+ "emin:true,"
-				+ "ex:['ex'],"
-				+ "example:['example'],"
-				+ "exclusiveMaximum:true,"
-				+ "exclusiveMinimum:true,"
-				+ "f:'f',"
-				+ "format:'format',"
-				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},"
-				+ "max:'max',"
-				+ "maxItems:2,"
-				+ "maxLength:4,"
-				+ "maxi:1,"
-				+ "maximum:'maximum',"
-				+ "maxl:3,"
-				+ "min:'min',"
-				+ "minItems:6,"
-				+ "minLength:8,"
-				+ "mini:5,"
-				+ "minimum:'minimum',"
-				+ "minl:7,"
-				+ "mo:'mo',"
-				+ "multipleOf:'multipleOf',"
 				+ "n:'n',"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
-				+ "p:'p',"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
-				+ "pattern:'pattern',"
-				+ "r:true,"
-				+ "required:true,"
 				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
-				+ "t:'t',"
-				+ "type:'type',"
-				+ "ui:true,"
-				+ "uniqueItems:true,"
 				+ "value:'value'"
 			+ "}"
 		);
@@ -234,104 +123,30 @@ public class PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Path(
-		_enum="enum",
-		aev=true,
-		allowEmptyValue=true,
 		api="api",
-		cf="cf",
-		collectionFormat="collectionFormat",
 		d="d",
 		description="description",
-		e="e",
-		emax=true,
-		emin=true,
-		ex="ex",
-		example="example",
-		exclusiveMaximum=true,
-		exclusiveMinimum=true,
-		f="f",
-		format="format",
-		items=@Items,
-		max="max",
-		maxi=1,
-		maximum="maximum",
-		maxItems=2,
-		maxl=3,
-		maxLength=4,
-		min="min",
-		mini=5,
-		minimum="minimum",
-		minItems=6,
-		minl=7,
-		minLength=8,
-		mo="mo",
-		multipleOf="multipleOf",
 		n="n",
 		name="name",
 		on="on",
 		onClass=X1.class,
-		p="p",
 		parser=OpenApiParser.class,
-		pattern="pattern",
-		r=true,
-		required=true,
 		serializer=OpenApiSerializer.class,
-		t="t",
-		type="type",
-		ui=true,
-		uniqueItems=true,
 		value="value"
 	)
 	public static class D1 {}
 	Path d1 = D1.class.getAnnotationsByType(Path.class)[0];
 
 	@Path(
-		_enum="enum",
-		aev=true,
-		allowEmptyValue=true,
 		api="api",
-		cf="cf",
-		collectionFormat="collectionFormat",
 		d="d",
 		description="description",
-		e="e",
-		emax=true,
-		emin=true,
-		ex="ex",
-		example="example",
-		exclusiveMaximum=true,
-		exclusiveMinimum=true,
-		f="f",
-		format="format",
-		items=@Items,
-		max="max",
-		maxi=1,
-		maximum="maximum",
-		maxItems=2,
-		maxl=3,
-		maxLength=4,
-		min="min",
-		mini=5,
-		minimum="minimum",
-		minItems=6,
-		minl=7,
-		minLength=8,
-		mo="mo",
-		multipleOf="multipleOf",
 		n="n",
 		name="name",
 		on="on",
 		onClass=X1.class,
-		p="p",
 		parser=OpenApiParser.class,
-		pattern="pattern",
-		r=true,
-		required=true,
 		serializer=OpenApiSerializer.class,
-		t="t",
-		type="type",
-		ui=true,
-		uniqueItems=true,
 		value="value"
 	)
 	public static class D2 {}

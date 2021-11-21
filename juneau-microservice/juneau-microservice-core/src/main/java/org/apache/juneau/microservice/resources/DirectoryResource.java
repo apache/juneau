@@ -181,7 +181,7 @@ public class DirectoryResource extends BasicRestServlet {
 		description="Add or overwrite a file on the file system."
 	)
 	public RedirectToRoot updateFile(
-		@Body(schema=@Schema(type="string",format="binary")) InputStream is,
+		@Body @Schema(type="string",format="binary") InputStream is,
 		@Path("/*") String path
 	) throws InternalServerError {
 

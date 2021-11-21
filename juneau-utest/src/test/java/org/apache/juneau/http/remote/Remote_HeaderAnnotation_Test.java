@@ -68,14 +68,14 @@ public class Remote_HeaderAnnotation_Test {
 		@RemoteOp(path="a") String getX4(@Header("*") Bean b);
 		@RemoteOp(path="a") String getX5(@Header Bean b);
 		@RemoteOp(path="a") String getX6(@Header("x") Bean[] b);
-		@RemoteOp(path="a") String getX7(@Header(n="x",cf="uon") Bean[] b);
+		@RemoteOp(path="a") String getX7(@Header("x") @Schema(cf="uon") Bean[] b);
 		@RemoteOp(path="a") String getX8(@Header("x") List<Bean> b);
-		@RemoteOp(path="a") String getX9(@Header(n="x",cf="uon") List<Bean> b);
+		@RemoteOp(path="a") String getX9(@Header("x") @Schema(cf="uon") List<Bean> b);
 		@RemoteOp(path="a") String getX10(@Header("x") Map<String,Bean> b);
 		@RemoteOp(path="a") String getX11(@Header("*") Map<String,Bean> b);
 		@RemoteOp(path="a") String getX12(@Header Map<String,Bean> b);
-		@RemoteOp(path="a") String getX13(@Header(n="x",f="uon") Map<String,Bean> b);
-		@RemoteOp(path="a") String getX14(@Header(format="uon") Map<String,Bean> b);
+		@RemoteOp(path="a") String getX13(@Header("x") @Schema(f="uon") Map<String,Bean> b);
+		@RemoteOp(path="a") String getX14(@Header() @Schema(format="uon") Map<String,Bean> b);
 		@RemoteOp(path="a") String getX15(@Header("*") HeaderList b);
 		@RemoteOp(path="a") String getX16(@Header HeaderList b);
 		@RemoteOp(path="a") String getX17(@Header org.apache.http.Header b);
@@ -125,10 +125,10 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface B1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",df="foo") String b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",df="foo",aev=true) String b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",df="") String b);
-		@RemoteOp(path="/") String getX4(@Header(n="x",df="",aev=true) String b);
+		@RemoteOp(path="/") String getX1(@Header("x") @Schema(df="foo") String b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(df="foo",aev=true) String b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(df="") String b);
+		@RemoteOp(path="/") String getX4(@Header("x") @Schema(df="",aev=true) String b);
 	}
 
 	@Test
@@ -159,13 +159,13 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface C1 {
-		@RemoteOp(path="/a") String getX1(@Header(n="x") String...b);
-		@RemoteOp(path="/a") String getX2(@Header(n="x",cf="csv") String...b);
-		@RemoteOp(path="/a") String getX3(@Header(n="x",cf="ssv") String...b);
-		@RemoteOp(path="/a") String getX4(@Header(n="x",cf="tsv") String...b);
-		@RemoteOp(path="/a") String getX5(@Header(n="x",cf="pipes") String...b);
-		@RemoteOp(path="/a") String getX6(@Header(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteOp(path="/a") String getX7(@Header(n="x",cf="uon") String...b);
+		@RemoteOp(path="/a") String getX1(@Header("x") String...b);
+		@RemoteOp(path="/a") String getX2(@Header("x") @Schema(cf="csv") String...b);
+		@RemoteOp(path="/a") String getX3(@Header("x") @Schema(cf="ssv") String...b);
+		@RemoteOp(path="/a") String getX4(@Header("x") @Schema(cf="tsv") String...b);
+		@RemoteOp(path="/a") String getX5(@Header("x") @Schema(cf="pipes") String...b);
+		@RemoteOp(path="/a") String getX6(@Header("x") @Schema(cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/a") String getX7(@Header("x") @Schema(cf="uon") String...b);
 	}
 
 	@Test
@@ -195,48 +195,48 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface D1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",min="1",max="10") int b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",min="1",max="10",emin=false,emax=false) int b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",min="1",max="10",emin=true,emax=true) int b);
-		@RemoteOp(path="/") String getX4(@Header(n="x",min="1",max="10") short b);
-		@RemoteOp(path="/") String getX5(@Header(n="x",min="1",max="10",emin=false,emax=false) short b);
-		@RemoteOp(path="/") String getX6(@Header(n="x",min="1",max="10",emin=true,emax=true) short b);
-		@RemoteOp(path="/") String getX7(@Header(n="x",min="1",max="10") long b);
-		@RemoteOp(path="/") String getX8(@Header(n="x",min="1",max="10",emin=false,emax=false) long b);
-		@RemoteOp(path="/") String getX9(@Header(n="x",min="1",max="10",emin=true,emax=true) long b);
-		@RemoteOp(path="/") String getX10(@Header(n="x",min="1",max="10") float b);
-		@RemoteOp(path="/") String getX11(@Header(n="x",min="1",max="10",emin=false,emax=false) float b);
-		@RemoteOp(path="/") String getX12(@Header(n="x",min="1",max="10",emin=true,emax=true) float b);
-		@RemoteOp(path="/") String getX13(@Header(n="x",min="1",max="10") double b);
-		@RemoteOp(path="/") String getX14(@Header(n="x",min="1",max="10",emin=false,emax=false) double b);
-		@RemoteOp(path="/") String getX15(@Header(n="x",min="1",max="10",emin=true,emax=true) double b);
-		@RemoteOp(path="/") String getX16(@Header(n="x",min="1",max="10") byte b);
-		@RemoteOp(path="/") String getX17(@Header(n="x",min="1",max="10",emin=false,emax=false) byte b);
-		@RemoteOp(path="/") String getX18(@Header(n="x",min="1",max="10",emin=true,emax=true) byte b);
-		@RemoteOp(path="/") String getX19(@Header(n="x",min="1",max="10") AtomicInteger b);
-		@RemoteOp(path="/") String getX20(@Header(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
-		@RemoteOp(path="/") String getX21(@Header(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
-		@RemoteOp(path="/") String getX22(@Header(n="x",min="1",max="10") BigDecimal b);
-		@RemoteOp(path="/") String getX23(@Header(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
-		@RemoteOp(path="/") String getX24(@Header(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
-		@RemoteOp(path="/") String getX25(@Header(n="x",min="1",max="10") Integer b);
-		@RemoteOp(path="/") String getX26(@Header(n="x",min="1",max="10",emin=false,emax=false) Integer b);
-		@RemoteOp(path="/") String getX27(@Header(n="x",min="1",max="10",emin=true,emax=true) Integer b);
-		@RemoteOp(path="/") String getX28(@Header(n="x",min="1",max="10") Short b);
-		@RemoteOp(path="/") String getX29(@Header(n="x",min="1",max="10",emin=false,emax=false) Short b);
-		@RemoteOp(path="/") String getX30(@Header(n="x",min="1",max="10",emin=true,emax=true) Short b);
-		@RemoteOp(path="/") String getX31(@Header(n="x",min="1",max="10") Long b);
-		@RemoteOp(path="/") String getX32(@Header(n="x",min="1",max="10",emin=false,emax=false) Long b);
-		@RemoteOp(path="/") String getX33(@Header(n="x",min="1",max="10",emin=true,emax=true) Long b);
-		@RemoteOp(path="/") String getX34(@Header(n="x",min="1",max="10") Float b);
-		@RemoteOp(path="/") String getX35(@Header(n="x",min="1",max="10",emin=false,emax=false) Float b);
-		@RemoteOp(path="/") String getX36(@Header(n="x",min="1",max="10",emin=true,emax=true) Float b);
-		@RemoteOp(path="/") String getX37(@Header(n="x",min="1",max="10") Double b);
-		@RemoteOp(path="/") String getX38(@Header(n="x",min="1",max="10",emin=false,emax=false) Double b);
-		@RemoteOp(path="/") String getX39(@Header(n="x",min="1",max="10",emin=true,emax=true) Double b);
-		@RemoteOp(path="/") String getX40(@Header(n="x",min="1",max="10") Byte b);
-		@RemoteOp(path="/") String getX41(@Header(n="x",min="1",max="10",emin=false,emax=false) Byte b);
-		@RemoteOp(path="/") String getX42(@Header(n="x",min="1",max="10",emin=true,emax=true) Byte b);
+		@RemoteOp(path="/") String getX1(@Header("x") @Schema(min="1",max="10") int b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) int b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) int b);
+		@RemoteOp(path="/") String getX4(@Header("x") @Schema(min="1",max="10") short b);
+		@RemoteOp(path="/") String getX5(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) short b);
+		@RemoteOp(path="/") String getX6(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) short b);
+		@RemoteOp(path="/") String getX7(@Header("x") @Schema(min="1",max="10") long b);
+		@RemoteOp(path="/") String getX8(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) long b);
+		@RemoteOp(path="/") String getX9(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) long b);
+		@RemoteOp(path="/") String getX10(@Header("x") @Schema(min="1",max="10") float b);
+		@RemoteOp(path="/") String getX11(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) float b);
+		@RemoteOp(path="/") String getX12(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) float b);
+		@RemoteOp(path="/") String getX13(@Header("x") @Schema(min="1",max="10") double b);
+		@RemoteOp(path="/") String getX14(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) double b);
+		@RemoteOp(path="/") String getX15(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) double b);
+		@RemoteOp(path="/") String getX16(@Header("x") @Schema(min="1",max="10") byte b);
+		@RemoteOp(path="/") String getX17(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteOp(path="/") String getX18(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteOp(path="/") String getX19(@Header("x") @Schema(min="1",max="10") AtomicInteger b);
+		@RemoteOp(path="/") String getX20(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteOp(path="/") String getX21(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteOp(path="/") String getX22(@Header("x") @Schema(min="1",max="10") BigDecimal b);
+		@RemoteOp(path="/") String getX23(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteOp(path="/") String getX24(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteOp(path="/") String getX25(@Header("x") @Schema(min="1",max="10") Integer b);
+		@RemoteOp(path="/") String getX26(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteOp(path="/") String getX27(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteOp(path="/") String getX28(@Header("x") @Schema(min="1",max="10") Short b);
+		@RemoteOp(path="/") String getX29(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteOp(path="/") String getX30(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteOp(path="/") String getX31(@Header("x") @Schema(min="1",max="10") Long b);
+		@RemoteOp(path="/") String getX32(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteOp(path="/") String getX33(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteOp(path="/") String getX34(@Header("x") @Schema(min="1",max="10") Float b);
+		@RemoteOp(path="/") String getX35(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteOp(path="/") String getX36(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteOp(path="/") String getX37(@Header("x") @Schema(min="1",max="10") Double b);
+		@RemoteOp(path="/") String getX38(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteOp(path="/") String getX39(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteOp(path="/") String getX40(@Header("x") @Schema(min="1",max="10") Byte b);
+		@RemoteOp(path="/") String getX41(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteOp(path="/") String getX42(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	@Test
@@ -445,12 +445,12 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface E1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",cf="pipes",mini=1,maxi=2) String...b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",cf="pipes",ui=false) String...b);
-		@RemoteOp(path="/") String getX4(@Header(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
-		@RemoteOp(path="/") String getX5(@Header(n="x",cf="pipes",ui=true) String...b);
-		@RemoteOp(path="/") String getX6(@Header(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
+		@RemoteOp(path="/") String getX1(@Header("x") @Schema(cf="pipes",mini=1,maxi=2) String...b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(cf="pipes",ui=false) String...b);
+		@RemoteOp(path="/") String getX4(@Header("x") @Schema(items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteOp(path="/") String getX5(@Header("x") @Schema(cf="pipes",ui=true) String...b);
+		@RemoteOp(path="/") String getX6(@Header("x") @Schema(items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	@Test
@@ -489,12 +489,12 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface F1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",minl=2,maxl=3) String b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",e={"foo"}) String b);
-		@RemoteOp(path="/") String getX4(@Header(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
-		@RemoteOp(path="/") String getX5(@Header(n="x",p="foo\\d{1,3}") String b);
-		@RemoteOp(path="/") String getX6(@Header(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
+		@RemoteOp(path="/") String getX1(@Header("x") @Schema(minl=2,maxl=3) String b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(e={"foo"}) String b);
+		@RemoteOp(path="/") String getX4(@Header("x") @Schema(cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteOp(path="/") String getX5(@Header("x") @Schema(p="foo\\d{1,3}") String b);
+		@RemoteOp(path="/") String getX6(@Header("x") @Schema(cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	@Test
@@ -539,20 +539,20 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface G1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",mo="2") int b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",mo="2") short b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",mo="2") long b);
-		@RemoteOp(path="/") String getX4(@Header(n="x",mo="2") float b);
-		@RemoteOp(path="/") String getX5(@Header(n="x",mo="2") double b);
-		@RemoteOp(path="/") String getX6(@Header(n="x",mo="2") byte b);
-		@RemoteOp(path="/") String getX7(@Header(n="x",mo="2") AtomicInteger b);
-		@RemoteOp(path="/") String getX8(@Header(n="x",mo="2") BigDecimal b);
-		@RemoteOp(path="/") String getX9(@Header(n="x",mo="2") Integer b);
-		@RemoteOp(path="/") String getX10(@Header(n="x",mo="2") Short b);
-		@RemoteOp(path="/") String getX11(@Header(n="x",mo="2") Long b);
-		@RemoteOp(path="/") String getX12(@Header(n="x",mo="2") Float b);
-		@RemoteOp(path="/") String getX13(@Header(n="x",mo="2") Double b);
-		@RemoteOp(path="/") String getX14(@Header(n="x",mo="2") Byte b);
+		@RemoteOp(path="/") String getX1(@Header("x") @Schema(mo="2") int b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(mo="2") short b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(mo="2") long b);
+		@RemoteOp(path="/") String getX4(@Header("x") @Schema(mo="2") float b);
+		@RemoteOp(path="/") String getX5(@Header("x") @Schema(mo="2") double b);
+		@RemoteOp(path="/") String getX6(@Header("x") @Schema(mo="2") byte b);
+		@RemoteOp(path="/") String getX7(@Header("x") @Schema(mo="2") AtomicInteger b);
+		@RemoteOp(path="/") String getX8(@Header("x") @Schema(mo="2") BigDecimal b);
+		@RemoteOp(path="/") String getX9(@Header("x") @Schema(mo="2") Integer b);
+		@RemoteOp(path="/") String getX10(@Header("x") @Schema(mo="2") Short b);
+		@RemoteOp(path="/") String getX11(@Header("x") @Schema(mo="2") Long b);
+		@RemoteOp(path="/") String getX12(@Header("x") @Schema(mo="2") Float b);
+		@RemoteOp(path="/") String getX13(@Header("x") @Schema(mo="2") Double b);
+		@RemoteOp(path="/") String getX14(@Header("x") @Schema(mo="2") Byte b);
 	}
 
 	@Test
@@ -603,9 +603,9 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface H1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x") String b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",r=false) String b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",r=true) String b);
+		@RemoteOp(path="/") String getX1(@Header("x") String b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(r=false) String b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(r=true) String b);
 	}
 
 	@Test
@@ -632,9 +632,9 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface I1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",aev=true) String b);
-		@RemoteOp(path="/") String getX2(@Header(n="x",aev=true,sie=false) String b);
-		@RemoteOp(path="/") String getX3(@Header(n="x",sie=true) String b);
+		@RemoteOp(path="/") String getX1(@Header("x") @Schema(aev=true) String b);
+		@RemoteOp(path="/") String getX2(@Header("x") @Schema(aev=true,sie=false) String b);
+		@RemoteOp(path="/") String getX3(@Header("x") @Schema(sie=true) String b);
 	}
 
 	@Test
@@ -704,7 +704,7 @@ public class Remote_HeaderAnnotation_Test {
 		public String getX2() {
 			return "c1";
 		}
-		@Header(name="e",allowEmptyValue=true)
+		@Header(name="e") @Schema(allowEmptyValue=true)
 		public String getX4() {
 			return "";
 		}
@@ -720,15 +720,15 @@ public class Remote_HeaderAnnotation_Test {
 		public String getX7() {
 			return "123";
 		}
-		@Header(n="i1",sie=true)
+		@Header("i1") @Schema(sie=true)
 		public String getX8() {
 			return "foo";
 		}
-		@Header(n="i2",sie=true)
+		@Header("i2") @Schema(sie=true)
 		public String getX9() {
 			return "";
 		}
-		@Header(n="i3",sie=true)
+		@Header("i3") @Schema(sie=true)
 		public String getX10() {
 			return null;
 		}
@@ -762,7 +762,7 @@ public class Remote_HeaderAnnotation_Test {
 		public Map<String,Object> getB() {
 			return AMap.of("b1","true","b2","123","b3","null");
 		}
-		@Header(name="*",aev=true)
+		@Header(name="*") @Schema(aev=true)
 		public Map<String,Object> getC() {
 			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
@@ -792,27 +792,27 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	public static class K3a {
-		@Header(aev=true)
+		@Header() @Schema(aev=true)
 		public HeaderList getA() {
 			return headerList(stringHeader("a1","v1"),integerHeader("a2",123),basicHeader("a3",null),stringHeader("a4",""));
 		}
-		@Header(value="*",aev=true)
+		@Header(value="*") @Schema(aev=true)
 		public HeaderList getB() {
 			return headers("b1","true","b2","123","b3","null");
 		}
-		@Header(n="*",aev=true)
+		@Header("*") @Schema(aev=true)
 		public HeaderList getC() {
 			return headerList(stringHeader("c1","v1"),integerHeader("c2",123),basicHeader("c3",null),stringHeader("c4",""));
 		}
-		@Header(value="*",aev=true)
+		@Header(value="*") @Schema(aev=true)
 		public HeaderList getD() {
 			return null;
 		}
-		@Header(aev=true)
+		@Header() @Schema(aev=true)
 		public org.apache.http.Header[] getE() {
 			return headerList(stringHeader("e1","v1"),integerHeader("e2",123),basicHeader("e3",null),stringHeader("e4","")).getAll();
 		}
-		@Header(aev=true)
+		@Header() @Schema(aev=true)
 		public BasicHeader[] getF() {
 			return headerList(stringHeader("f1","v1"),integerHeader("f2",123),basicHeader("f3",null),stringHeader("f4","")).stream().toArray(BasicHeader[]::new);
 		}
@@ -850,7 +850,7 @@ public class Remote_HeaderAnnotation_Test {
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Header(name="d",aev=true)
+		@Header(name="d") @Schema(aev=true)
 		public List<Object> getX3() {
 			return AList.create();
 		}
@@ -866,7 +866,7 @@ public class Remote_HeaderAnnotation_Test {
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@Header(name="h",aev=true)
+		@Header(name="h") @Schema(aev=true)
 		public Object[] getX7() {
 			return new Object[]{};
 		}

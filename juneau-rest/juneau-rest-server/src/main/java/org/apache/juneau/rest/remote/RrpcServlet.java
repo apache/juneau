@@ -94,7 +94,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		nav="<h5>Interface:  $RP{javaInterface}</h5>"
 	)
 	public Collection<LinkString> listMethods(
-			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface
+			@Path(name="javaInterface", description="Java interface name") String javaInterface
 		) throws Exception {
 
 		List<LinkString> l = new ArrayList<>();
@@ -115,8 +115,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		}
 	)
 	public Div showEntryForm(
-			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface,
-			@Path(name="javaMethod", description="Java method name", example="myMethod") String javaMethod
+			@Path(name="javaInterface", description="Java interface name") String javaInterface,
+			@Path(name="javaMethod", description="Java method name") String javaMethod
 		) throws NotFound, Exception {
 
 		// Find the method.
@@ -182,8 +182,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			Reader r,
 			ReaderParser p,
 			@Header("Content-Type") ContentType contentType,
-			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface,
-			@Path(name="javaMethod", description="Java method name", example="myMethod") String javaMethod
+			@Path(name="javaInterface", description="Java interface name") String javaInterface,
+			@Path(name="javaMethod", description="Java method name") String javaMethod
 		) throws UnsupportedMediaType, NotFound, Exception {
 
 		// Find the parser.

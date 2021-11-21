@@ -37,12 +37,12 @@ public class Query_Test {
 	@Rest
 	public static class A {
 		@RestGet
-		public String a(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
+		public String a(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 		@RestPost
-		public String b(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
+		public String b(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
@@ -86,22 +86,22 @@ public class Query_Test {
 	@Rest
 	public static class B {
 		@RestGet
-		public String a(RestRequest req, @Query(n="p1") String p1) throws Exception {
+		public String a(RestRequest req, @Query("p1") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestGet
-		public String b(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
+		public String b(RestRequest req, @Query("p1") @Schema(f="uon") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
-		public String c(RestRequest req, @Query(n="p1") String p1) throws Exception {
+		public String c(RestRequest req, @Query("p1") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
-		public String d(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
+		public String d(RestRequest req, @Query("p1") @Schema(f="uon") String p1) throws Exception {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
@@ -133,27 +133,27 @@ public class Query_Test {
 		}
 
 		@RestGet
-		public Object a(@Query(n="x",cf="multi") String[] x) {
+		public Object a(@Query(n="x") @Schema(cf="multi") String[] x) {
 			return x;
 		}
 		@RestGet
-		public Object b(@Query(n="x",cf="multi") int[] x) {
+		public Object b(@Query(n="x") @Schema(cf="multi") int[] x) {
 			return x;
 		}
 		@RestGet
-		public Object c(@Query(n="x",cf="multi") List<String> x) {
+		public Object c(@Query(n="x") @Schema(cf="multi") List<String> x) {
 			return x;
 		}
 		@RestGet
-		public Object d(@Query(n="x",cf="multi") List<Integer> x) {
+		public Object d(@Query(n="x") @Schema(cf="multi") List<Integer> x) {
 			return x;
 		}
 		@RestGet
-		public Object e(@Query(n="x",cf="multi",items=@Items(f="uon")) C1[] x) {
+		public Object e(@Query(n="x") @Schema(cf="multi",items=@Items(f="uon")) C1[] x) {
 			return x;
 		}
 		@RestGet
-		public Object f(@Query(n="x",cf="multi",items=@Items(f="uon")) List<C1> x) {
+		public Object f(@Query(n="x") @Schema(cf="multi",items=@Items(f="uon")) List<C1> x) {
 			return x;
 		}
 	}
@@ -196,14 +196,14 @@ public class Query_Test {
 				.a("f3", f3);
 		}
 		@RestGet
-		public OMap c(@Query(n="f1",df="1") String f1, @Query(n="f2",df="2") String f2, @Query(n="f3",df="3") String f3) {
+		public OMap c(@Query("f1") @Schema(df="1") String f1, @Query("f2") @Schema(df="2") String f2, @Query("f3") @Schema(df="3") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
 		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap d(@Query(n="f1",df="4") String f1, @Query(n="f2",df="5") String f2, @Query(n="f3",df="6") String f3) {
+		public OMap d(@Query("f1") @Schema(df="4") String f1, @Query("f2") @Schema(df="5") String f2, @Query("f3") @Schema(df="6") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)

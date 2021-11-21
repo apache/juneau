@@ -1632,10 +1632,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected void processParameterAnnotations() {
 			for (Annotation[] aa : restMethod.getParameterAnnotations()) {
 
+				String def = null;
+				for (Annotation a : aa) {
+					if (a instanceof Schema) {
+						Schema s = (Schema)a;
+						def = joinnlFirstNonEmptyArray(s._default(), s.df());
+					}
+				}
+
 				for (Annotation a : aa) {
 					if (a instanceof Header) {
 						Header h = (Header)a;
-						String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 						if (def != null) {
 							try {
 								defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
@@ -1646,7 +1653,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					}
 					if (a instanceof Query) {
 						Query h = (Query)a;
-						String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 						if (def != null) {
 							try {
 								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
@@ -1657,7 +1663,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					}
 					if (a instanceof FormData) {
 						FormData h = (FormData)a;
-						String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 						if (def != null) {
 							try {
 								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));

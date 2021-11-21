@@ -1598,80 +1598,6 @@ public class Swagger_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// /paths/<path>/<method>/parameters/query/example
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class L1 {
-		@RestGet(path="/path/{foo}/query")
-		public X a(@Query("foo") X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void l01_query_example_default() throws Exception {
-		assertEquals(null, getSwagger(new L1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-		assertEquals("{id:1}", getSwaggerWithFile(new L1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-	}
-
-	@Rest(swagger=@Swagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
-	public static class L2 {
-		@RestGet(path="/path/{foo}/query")
-		public X a(@Query("foo") X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void l02_query_example_swaggerOnClass() throws Exception {
-		assertEquals("{id:2}", getSwagger(new L2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-		assertEquals("{id:2}", getSwaggerWithFile(new L2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-	}
-
-	@Rest(swagger=@Swagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
-	public static class L3 {
-		@RestGet(path="/path/{foo}/query",swagger=@OpSwagger("parameters:[{'in':'query',name:'foo',example:'{id:3}'}]"))
-		public X a() {
-			return null;
-		}
-	}
-
-	@Test
-	public void l03_query_example_swaggerOnMethod() throws Exception {
-		assertEquals("{id:3}", getSwagger(new L3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-		assertEquals("{id:3}", getSwaggerWithFile(new L3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-	}
-
-	@Rest(swagger=@Swagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
-	public static class L4 {
-		@RestGet(path="/path/{foo}/query")
-		public X a(@Query(n="foo",ex="{id:4}") X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void l04_query_example_swaggerOnAnnotation() throws Exception {
-		assertEquals("{id:4}", getSwagger(new L4()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-		assertEquals("{id:4}", getSwaggerWithFile(new L4()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-	}
-
-	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
-	public static class L5 {
-		@RestGet(path="/path/{foo}/query")
-		public X a(@Query(n="foo",ex="{id:$L{5}}") X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void l05_query_example_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("{id:5}", getSwagger(new L5()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-		assertEquals("{id:5}", getSwaggerWithFile(new L5()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// /paths/<path>/<method>/parameters/body/examples
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -1681,68 +1607,6 @@ public class Swagger_Test {
 		public X a(@Body X foo) {
 			return null;
 		}
-	}
-
-	@Test
-	public void m01_body_examples_default() throws Exception {
-		assertEquals(null, getSwagger(new M1()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
-		assertObject(getSwaggerWithFile(new M1()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'a'}");
-	}
-
-	@Rest(swagger=@Swagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
-	public static class M2 {
-		@RestGet(path="/path/{foo}/body")
-		public X a(@Body X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void m02_body_examples_swaggerOnClass() throws Exception {
-		assertObject(getSwagger(new M2()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'b'}");
-		assertObject(getSwaggerWithFile(new M2()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'b'}");
-	}
-
-	@Rest(swagger=@Swagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
-	public static class M3 {
-		@RestGet(path="/path/{foo}/body",swagger=@OpSwagger("parameters:[{'in':'body',examples:{foo:'c'}}]"))
-		public X a() {
-			return null;
-		}
-	}
-
-	@Test
-	public void m03_body_examples_swaggerOnMethods() throws Exception {
-		assertObject(getSwagger(new M3()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'c'}");
-		assertObject(getSwaggerWithFile(new M3()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'c'}");
-	}
-
-	@Rest(swagger=@Swagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
-	public static class M4 {
-		@RestGet(path="/path/{foo}/body")
-		public X a(@Body(exs="{foo:'d'}") X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void m04_body_examples_swaggerOnAnnotation() throws Exception {
-		assertObject(getSwagger(new M4()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'d'}");
-		assertObject(getSwaggerWithFile(new M4()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'d'}");
-	}
-
-	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
-	public static class M5 {
-		@RestGet(path="/path/{foo}/body")
-		public X a(@Body(exs="{foo:'$L{foo}'}") X foo) {
-			return null;
-		}
-	}
-
-	@Test
-	public void m05_body_examples_swaggerOnAnnotation_localized() throws Exception {
-		assertObject(getSwagger(new M5()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'l-foo'}");
-		assertObject(getSwaggerWithFile(new M5()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).asJson().is("{foo:'l-foo'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -2350,15 +2214,12 @@ public class Swagger_Test {
 		}
 	}
 
-
 	@Test
 	public void t01_bodyWithReadOnlyProperty() throws Exception {
 		MockRestClient p = MockRestClient.build(T1.class);
 		org.apache.juneau.dto.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getBody().asString(), org.apache.juneau.dto.swagger.Swagger.class);
 		Operation o = s.getOperation("/", "get");
-		ParameterInfo pi = o.getParameter("body", null);
 
-		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", pi.getExamples().get("application/json+simple"));
 		ResponseInfo ri = o.getResponse("200");
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json+simple"));
 	}

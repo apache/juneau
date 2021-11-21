@@ -76,57 +76,16 @@ public class FormDataAnnotation {
 	public static FormData copy(FormData a, VarResolverSession r) {
 		return
 			create()
-			._default(r.resolve(a._default()))
-			._enum(r.resolve(a._enum()))
-			.aev(a.aev())
-			.allowEmptyValue(a.allowEmptyValue())
 			.api(r.resolve(a.api()))
-			.cf(r.resolve(a.cf()))
-			.collectionFormat(r.resolve(a.collectionFormat()))
 			.d(r.resolve(a.d()))
 			.description(r.resolve(a.description()))
-			.df(r.resolve(a.df()))
-			.e(r.resolve(a.e()))
-			.emax(a.emax())
-			.emin(a.emin())
-			.ex(r.resolve(a.ex()))
-			.example(r.resolve(a.example()))
-			.exclusiveMaximum(a.exclusiveMaximum())
-			.exclusiveMinimum(a.exclusiveMinimum())
-			.f(r.resolve(a.f()))
-			.format(r.resolve(a.format()))
-			.items(ItemsAnnotation.copy(a.items(), r))
-			.max(r.resolve(a.max()))
-			.maxi(a.maxi())
-			.maximum(r.resolve(a.maximum()))
-			.maxItems(a.maxItems())
-			.maxl(a.maxl())
-			.maxLength(a.maxLength())
-			.min(r.resolve(a.min()))
-			.mini(a.mini())
-			.minimum(r.resolve(a.minimum()))
-			.minItems(a.minItems())
-			.minl(a.minl())
-			.minLength(a.minLength())
-			.mo(r.resolve(a.mo()))
 			.multi(a.multi())
-			.multipleOf(r.resolve(a.multipleOf()))
 			.n(r.resolve(a.n()))
 			.name(r.resolve(a.name()))
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
-			.p(r.resolve(a.p()))
 			.parser(a.parser())
-			.pattern(r.resolve(a.pattern()))
-			.r(a.r())
-			.required(a.required())
 			.serializer(a.serializer())
-			.sie(a.sie())
-			.skipIfEmpty(a.skipIfEmpty())
-			.t(r.resolve(a.t()))
-			.type(r.resolve(a.type()))
-			.ui(a.ui())
-			.uniqueItems(a.uniqueItems())
 			.value(r.resolve(a.value()))
 			.build();
 	}
@@ -154,13 +113,11 @@ public class FormDataAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
 
-		boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, multi, r, required, sie, skipIfEmpty, ui, uniqueItems;
+		boolean multi;
 		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
-		Items items = ItemsAnnotation.DEFAULT;
-		long maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
-		String cf="", collectionFormat="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", n="", name="", p="", pattern="", t="", type="", value="";
-		String[] _default={}, _enum={}, api={}, d={}, description={}, df={}, e={}, ex={}, example={};
+		String n="", name="", value="";
+		String[] api={}, d={}, description={};
 
 		/**
 		 * Constructor.
@@ -179,50 +136,6 @@ public class FormDataAnnotation {
 		}
 
 		/**
-		 * Sets the {@link FormData#_default} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder _default(String...value) {
-			this._default = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#_enum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder _enum(String...value) {
-			this._enum = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#aev} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder aev(boolean value) {
-			this.aev = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#allowEmptyValue} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder allowEmptyValue(boolean value) {
-			this.allowEmptyValue = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link FormData#api} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -230,28 +143,6 @@ public class FormDataAnnotation {
 		 */
 		public Builder api(String...value) {
 			this.api = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#cf} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder cf(String value) {
-			this.cf = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#collectionFormat} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder collectionFormat(String value) {
-			this.collectionFormat = value;
 			return this;
 		}
 
@@ -278,270 +169,6 @@ public class FormDataAnnotation {
 		}
 
 		/**
-		 * Sets the {@link FormData#df} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder df(String...value) {
-			this.df = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#e} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder e(String...value) {
-			this.e = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#emax} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder emax(boolean value) {
-			this.emax = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#emin} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder emin(boolean value) {
-			this.emin = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#ex} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder ex(String...value) {
-			this.ex = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#example} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder example(String...value) {
-			this.example = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#exclusiveMaximum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMaximum(boolean value) {
-			this.exclusiveMaximum = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#exclusiveMinimum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMinimum(boolean value) {
-			this.exclusiveMinimum = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#f} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder f(String value) {
-			this.f = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#format} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder format(String value) {
-			this.format = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#items} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder items(Items value) {
-			this.items = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#max} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder max(String value) {
-			this.max = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#maxi} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxi(long value) {
-			this.maxi = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#maximum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maximum(String value) {
-			this.maximum = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#maxItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxItems(long value) {
-			this.maxItems = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#maxl} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxl(long value) {
-			this.maxl = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#maxLength} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder maxLength(long value) {
-			this.maxLength = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#min} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder min(String value) {
-			this.min = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#mini} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder mini(long value) {
-			this.mini = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#minimum} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minimum(String value) {
-			this.minimum = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#minItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minItems(long value) {
-			this.minItems = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#minl} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minl(long value) {
-			this.minl = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#minLength} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder minLength(long value) {
-			this.minLength = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#mo} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder mo(String value) {
-			this.mo = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link FormData#multi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -549,17 +176,6 @@ public class FormDataAnnotation {
 		 */
 		public Builder multi(boolean value) {
 			this.multi = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#multipleOf} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder multipleOf(String value) {
-			this.multipleOf = value;
 			return this;
 		}
 
@@ -586,17 +202,6 @@ public class FormDataAnnotation {
 		}
 
 		/**
-		 * Sets the {@link FormData#p} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder p(String value) {
-			this.p = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link FormData#parser} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -608,39 +213,6 @@ public class FormDataAnnotation {
 		}
 
 		/**
-		 * Sets the {@link FormData#pattern} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder pattern(String value) {
-			this.pattern = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#r} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder r(boolean value) {
-			this.r = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#required} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder required(boolean value) {
-			this.required = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link FormData#serializer} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -648,72 +220,6 @@ public class FormDataAnnotation {
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
 			this.serializer = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#sie} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder sie(boolean value) {
-			this.sie = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#skipIfEmpty} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder skipIfEmpty(boolean value) {
-			this.skipIfEmpty = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#t} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder t(String value) {
-			this.t = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#type} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder type(String value) {
-			this.type = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#ui} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder ui(boolean value) {
-			this.ui = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link FormData#uniqueItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder uniqueItems(boolean value) {
-			this.uniqueItems = value;
 			return this;
 		}
 
@@ -769,102 +275,29 @@ public class FormDataAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements FormData {
 
-		private final boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, multi, r, required, sie, skipIfEmpty, ui, uniqueItems;
+		private final boolean multi;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final Items items;
-		private final long maxItems, maxLength, maxi, maxl, minItems, minLength, mini, minl;
-		private final String cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, n, name, p, pattern, t, type, value;
-		private final String[] _default, _enum, api, d, description, df, e, ex, example;
+		private final String n, name, value;
+		private final String[] api, d, description;
 
 		Impl(Builder b) {
 			super(b);
-			this._default = copyOf(b._default);
-			this._enum = copyOf(b._enum);
-			this.aev = b.aev;
-			this.allowEmptyValue = b.allowEmptyValue;
 			this.api = copyOf(b.api);
-			this.cf = b.cf;
-			this.collectionFormat = b.collectionFormat;
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
-			this.df = copyOf(b.df);
-			this.e = copyOf(b.e);
-			this.emax = b.emax;
-			this.emin = b.emin;
-			this.ex = copyOf(b.ex);
-			this.example = copyOf(b.example);
-			this.exclusiveMaximum = b.exclusiveMaximum;
-			this.exclusiveMinimum = b.exclusiveMinimum;
-			this.f = b.f;
-			this.format = b.format;
-			this.items = b.items;
-			this.max = b.max;
-			this.maxi = b.maxi;
-			this.maximum = b.maximum;
-			this.maxItems = b.maxItems;
-			this.maxl = b.maxl;
-			this.maxLength = b.maxLength;
-			this.min = b.min;
-			this.mini = b.mini;
-			this.minimum = b.minimum;
-			this.minItems = b.minItems;
-			this.minl = b.minl;
-			this.minLength = b.minLength;
-			this.mo = b.mo;
 			this.multi = b.multi;
-			this.multipleOf = b.multipleOf;
 			this.n = b.n;
 			this.name = b.name;
-			this.p = b.p;
 			this.parser = b.parser;
-			this.pattern = b.pattern;
-			this.r = b.r;
-			this.required = b.required;
 			this.serializer = b.serializer;
-			this.sie = b.sie;
-			this.skipIfEmpty = b.skipIfEmpty;
-			this.t = b.t;
-			this.type = b.type;
-			this.ui = b.ui;
-			this.uniqueItems = b.uniqueItems;
 			this.value = b.value;
 			postConstruct();
 		}
 
 		@Override /* FormData */
-		public String[] _default() {
-			return _default;
-		}
-
-		@Override /* FormData */
-		public String[] _enum() {
-			return _enum;
-		}
-
-		@Override /* FormData */
-		public boolean aev() {
-			return aev;
-		}
-
-		@Override /* FormData */
-		public boolean allowEmptyValue() {
-			return allowEmptyValue;
-		}
-
-		@Override /* FormData */
 		public String[] api() {
 			return api;
-		}
-
-		@Override /* FormData */
-		public String cf() {
-			return cf;
-		}
-
-		@Override /* FormData */
-		public String collectionFormat() {
-			return collectionFormat;
 		}
 
 		@Override /* FormData */
@@ -878,133 +311,8 @@ public class FormDataAnnotation {
 		}
 
 		@Override /* FormData */
-		public String[] df() {
-			return df;
-		}
-
-		@Override /* FormData */
-		public String[] e() {
-			return e;
-		}
-
-		@Override /* FormData */
-		public boolean emax() {
-			return emax;
-		}
-
-		@Override /* FormData */
-		public boolean emin() {
-			return emin;
-		}
-
-		@Override /* FormData */
-		public String[] ex() {
-			return ex;
-		}
-
-		@Override /* FormData */
-		public String[] example() {
-			return example;
-		}
-
-		@Override /* FormData */
-		public boolean exclusiveMaximum() {
-			return exclusiveMaximum;
-		}
-
-		@Override /* FormData */
-		public boolean exclusiveMinimum() {
-			return exclusiveMinimum;
-		}
-
-		@Override /* FormData */
-		public String f() {
-			return f;
-		}
-
-		@Override /* FormData */
-		public String format() {
-			return format;
-		}
-
-		@Override /* FormData */
-		public Items items() {
-			return items;
-		}
-
-		@Override /* FormData */
-		public String max() {
-			return max;
-		}
-
-		@Override /* FormData */
-		public long maxi() {
-			return maxi;
-		}
-
-		@Override /* FormData */
-		public String maximum() {
-			return maximum;
-		}
-
-		@Override /* FormData */
-		public long maxItems() {
-			return maxItems;
-		}
-
-		@Override /* FormData */
-		public long maxl() {
-			return maxl;
-		}
-
-		@Override /* FormData */
-		public long maxLength() {
-			return maxLength;
-		}
-
-		@Override /* FormData */
-		public String min() {
-			return min;
-		}
-
-		@Override /* FormData */
-		public long mini() {
-			return mini;
-		}
-
-		@Override /* FormData */
-		public String minimum() {
-			return minimum;
-		}
-
-		@Override /* FormData */
-		public long minItems() {
-			return minItems;
-		}
-
-		@Override /* FormData */
-		public long minl() {
-			return minl;
-		}
-
-		@Override /* FormData */
-		public long minLength() {
-			return minLength;
-		}
-
-		@Override /* FormData */
-		public String mo() {
-			return mo;
-		}
-
-		@Override /* FormData */
 		public boolean multi() {
 			return multi;
-		}
-
-		@Override /* FormData */
-		public String multipleOf() {
-			return multipleOf;
 		}
 
 		@Override /* FormData */
@@ -1018,63 +326,13 @@ public class FormDataAnnotation {
 		}
 
 		@Override /* FormData */
-		public String p() {
-			return p;
-		}
-
-		@Override /* FormData */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
 		@Override /* FormData */
-		public String pattern() {
-			return pattern;
-		}
-
-		@Override /* FormData */
-		public boolean r() {
-			return r;
-		}
-
-		@Override /* FormData */
-		public boolean required() {
-			return required;
-		}
-
-		@Override /* FormData */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
-		}
-
-		@Override /* FormData */
-		public boolean sie() {
-			return sie;
-		}
-
-		@Override /* FormData */
-		public boolean skipIfEmpty() {
-			return skipIfEmpty;
-		}
-
-		@Override /* FormData */
-		public String t() {
-			return t;
-		}
-
-		@Override /* FormData */
-		public String type() {
-			return type;
-		}
-
-		@Override /* FormData */
-		public boolean ui() {
-			return ui;
-		}
-
-		@Override /* FormData */
-		public boolean uniqueItems() {
-			return uniqueItems;
 		}
 
 		@Override

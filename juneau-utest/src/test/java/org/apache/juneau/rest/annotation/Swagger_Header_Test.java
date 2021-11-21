@@ -35,9 +35,9 @@ public class Swagger_Header_Test {
 
 		@Header(
 			name="H",
-			description={"a","b"},
-			type="string"
+			description={"a","b"}
 		)
+		@Schema(type="string")
 		public static class A1 {
 			public A1(String x) {}
 		}
@@ -63,9 +63,9 @@ public class Swagger_Header_Test {
 				"description:'b\nc',",
 				"type:'string'"
 			},
-			description={"a","b"},
-			type="string"
+			description={"a","b"}
 		)
+		@Schema(type="string")
 		public static class A3 {
 			public A3(String x) {}
 		}
@@ -137,29 +137,6 @@ public class Swagger_Header_Test {
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class C {
-
-		@Header(name="H", example="{f1:'a'}")
-		public static class C1 {
-			public String f1;
-		}
-		@RestGet
-		public void a(C1 h) {}
-	}
-
-	@Test
-	public void c01_exampleFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
-
-		ParameterInfo x = s.getParameterInfo("/a","get","header","H");
-		assertEquals("{f1:'a'}", x.getExample());
-	}
-
 	@Rest
 	public static class D {
 
@@ -167,9 +144,10 @@ public class Swagger_Header_Test {
 		public void a(
 			@Header(
 				name="H",
-				description={"a","b"},
-				type="string"
-			) String h) {}
+				description={"a","b"}
+			)
+			@Schema(type="string")
+			String h) {}
 
 		@RestPut
 		public void b(
@@ -189,9 +167,10 @@ public class Swagger_Header_Test {
 					"description:'b\nc',",
 					"type:'string'",
 				},
-				description={"a","b"},
-				type="string"
-			) String h) {}
+				description={"a","b"}
+			)
+			@Schema(type="string")
+			String h) {}
 
 		@RestDelete
 		public void d(@Header("H") String h) {}
@@ -272,24 +251,5 @@ public class Swagger_Header_Test {
 
 		x = s.getParameterInfo("/f","get","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'boolean'}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class F {
-
-		@RestGet
-		public void a(@Header(name="H", example={"a","b"}) String h) {}
-	}
-
-	@Test
-	public void f01_exampleFromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
-
-		ParameterInfo x = s.getParameterInfo("/a","get","header","H");
-		assertEquals("a\nb", x.getExample());
 	}
 }

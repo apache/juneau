@@ -16,8 +16,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 
 /**
@@ -84,13 +87,35 @@ public @interface Schema {
 	/**
 	 * <mk>default</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * <br>(Note: "default" has no meaning for required parameters.)
+	 *
+	 * <p>
+	 * Additionally, this value is used to create instances of POJOs that are then serialized as language-specific examples in the generated Swagger documentation
+	 * if the examples are not defined in some other way.
+	 *
+	 * <p>
+	 * The format of this value is a string.
+	 * <br>Multiple lines are concatenated with newlines.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public</jk> Order placeOrder(
+	 * 		<ja>@Header</ja>(<js>"X-PetId"</js>) <ja>@Schema</ja>(_default=<js>"100"</js>) <jk>long</jk> <jv>petId</jv>,
+	 * 		<ja>@Header</ja>(<js>"X-AdditionalInfo"</js>) <ja>@Schema</ja>(format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo <jv>additionalInfo</jv>,
+	 * 		<ja>@Header</ja>(<js>"X-Flags"</js>) <ja>@Schema</ja>(collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] <jv>flags</jv>
+	 * 	) {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is any {@doc SimplifiedJson}.
-	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		Server-side schema-based parsing.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 */
 	String[] _default() default {};
@@ -98,13 +123,44 @@ public @interface Schema {
 	/**
 	 * <mk>enum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * The format is a {@doc SimplifiedJson} array or comma-delimited list.
+	 * <br>Multiple lines are concatenated with newlines.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Comma-delimited list</jc>
+	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
+	 * 		<ja>@Header</ja>(<js>"X-Status"</js>)
+	 * 		<ja>@Schema</ja>(_enum=<js>"AVAILABLE,PENDING,SOLD"</js>)
+	 * 		PetStatus <jv>status</jv>
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// JSON array</jc>
+	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
+	 * 		<ja>@Header</ja>(<js>"X-Status"</js>)
+	 * 		<ja>@Schema</ja>(_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>)
+	 * 		PetStatus <jv>status</jv>
+	 * 	) {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} array or comma-delimited list.
-	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	String[] _enum() default {};
@@ -154,6 +210,32 @@ public @interface Schema {
 	String[] allOf() default {};
 
 	/**
+	 * Synonym for {@link #allowEmptyValue()}.
+	 */
+	boolean aev() default false;
+
+	/**
+	 * <mk>allowEmptyValue</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued heaver values.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
+	 */
+	boolean allowEmptyValue() default false;
+
+	/**
 	 * Synonym for {@link #collectionFormat()}.
 	 */
 	String cf() default "";
@@ -200,6 +282,9 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing.
 	 * </ul>
+	 *
+	 * <p>
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 	 */
 	String collectionFormat() default "";
 
@@ -219,7 +304,7 @@ public @interface Schema {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
+	 * 		<ja>@Body</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -227,7 +312,7 @@ public @interface Schema {
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
-	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
+	 * 	<ja>@Body</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
@@ -277,57 +362,28 @@ public @interface Schema {
 	boolean emin() default false;
 
 	/**
-	 * Synonym for {@link #readOnly()}.
-	 */
-	String[] ex() default {};
-
-	/**
-	 * <mk>example</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <p>
-	 * A free-form property to include an example of an instance for this schema.
-	 *
-	 * <p>
-	 * This attribute defines a JSON representation of the body value that is used by <c>BasicRestInfoProvider</c> to construct
-	 * media-type-based examples of the body of the request.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object or plain text string.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] example() default {};
-
-	/**
-	 * <mk>examples</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <p>
-	 * This is a JSON object whose keys are media types and values are string representations of that value.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] examples() default {};
-
-	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Defines whether the maximum is matched exclusively.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 * <br>If <jk>true</jk>, must be accompanied with <c>maximum</c>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	boolean exclusiveMaximum() default false;
@@ -335,20 +391,29 @@ public @interface Schema {
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Defines whether the minimum is matched exclusively.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 * <br>If <jk>true</jk>, must be accompanied with <c>minimum</c>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
-
-	/**
-	 * Synonym for {@link #examples()}.
-	 */
-	String[] exs() default {};
 
 	/**
 	 * <mk>externalDocs</mk> field of the {@doc ExtSwaggerSchemaObject}.
@@ -372,15 +437,73 @@ public @interface Schema {
 	/**
 	 * <mk>format</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
+	 * <p>
+	 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"int32"</js> - Signed 32 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"int64"</js> - Signed 64 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"float"</js> - 32-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"double"</js> - 64-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"byte"</js> - BASE-64 encoded characters.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 	<li>
+	 * 		<js>"binary"</js> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 		<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 	<li>
+	 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"date-time"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
+	 * 		<br>This format does not affect the serialization or parsing of the parameter.
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
+	 * 		<br>Only valid with type <js>"object"</js>.
+	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link FormatType}.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPut</ja>
 	 * 	<jk>public void</jk> setAge(
-	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
+	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+	 * </ul>
+
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
@@ -403,13 +526,21 @@ public @interface Schema {
 	/**
 	 * <mk>items</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * <p>
+	 * Required if <c>type</c> is <js>"array"</js>.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 		Server-side schema-based parsing and parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing and serializing validation.
 	 * </ul>
 	 */
 	Items items() default @Items;
@@ -427,12 +558,26 @@ public @interface Schema {
 	/**
 	 * <mk>maximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Defines the maximum value for a parameter of numeric types.
+	 * <br>The value must be a valid JSON number.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	String maximum() default "";
@@ -440,12 +585,25 @@ public @interface Schema {
 	/**
 	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	long maxItems() default -1;
@@ -458,12 +616,27 @@ public @interface Schema {
 	/**
 	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
+	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
+	 * <br>The value <c>-1</c> is always ignored.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	long maxLength() default -1;
@@ -500,12 +673,26 @@ public @interface Schema {
 	/**
 	 * <mk>minimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Defines the minimum value for a parameter of numeric types.
+	 * <br>The value must be a valid JSON number.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	String minimum() default "";
@@ -513,12 +700,25 @@ public @interface Schema {
 	/**
 	 * <mk>minItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	long minItems() default -1;
@@ -531,12 +731,27 @@ public @interface Schema {
 	/**
 	 * <mk>minLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
+	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
+	 * <br>The value <c>-1</c> is always ignored.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	long minLength() default -1;
@@ -568,12 +783,26 @@ public @interface Schema {
 	/**
 	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
+	 * <br>The value must be a valid JSON number.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is numeric.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	String multipleOf() default "";
@@ -683,20 +912,31 @@ public @interface Schema {
 	/**
 	 * <mk>pattern</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
+	 * <p>
+	 * A string input is valid if it matches the specified regular expression pattern.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestPut</ja>
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String <jv>input<jv>) {...}
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja> <js>@Schema</ja>(pattern=<js>"/\\w+\\.\\d+/"</js>) String <jv>input<jv>) {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is plain text.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		This string SHOULD be a valid regular expression.
+	 * 		Server-side generated Swagger documentation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	String pattern() default "";
@@ -738,15 +978,19 @@ public @interface Schema {
 	 * <mk>required</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
-	 * 	Determines whether this parameter is mandatory.
-	 *  <br>The property MAY be included and its default value is false.
+	 * Determines whether the parameter is mandatory.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
+	 * 		<ja>@Body</ja> <ja>@Schema</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -758,12 +1002,14 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is boolean.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	boolean required() default false;
@@ -772,6 +1018,25 @@ public @interface Schema {
 	 * Synonym for {@link #readOnly()}.
 	 */
 	boolean ro() default false;
+
+	/**
+	 * Synonym for {@link #skipIfEmpty()}.
+	 */
+	boolean sie() default false;
+
+	/**
+	 * Skips this value during serialization if it's an empty string or empty collection/array.
+	 *
+	 * <p>
+	 * Note that <jk>null</jk> values are already ignored.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
+	 */
+	boolean skipIfEmpty() default false;
 
 	/**
 	 * Synonym for {@link #type()}.
@@ -794,12 +1059,50 @@ public @interface Schema {
 	/**
 	 * <mk>type</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"string"</js>
+	 * 		<br>Parameter must be a string or a POJO convertible from a string.
+	 * 	<li>
+	 * 		<js>"number"</js>
+	 * 		<br>Parameter must be a number primitive or number object.
+	 * 		<br>If parameter is <c>Object</c>, creates either a <c>Float</c> or <c>Double</c> depending on the size of the number.
+	 * 	<li>
+	 * 		<js>"integer"</js>
+	 * 		<br>Parameter must be a integer/long primitive or integer/long object.
+	 * 		<br>If parameter is <c>Object</c>, creates either a <c>Short</c>, <c>Integer</c>, or <c>Long</c> depending on the size of the number.
+	 * 	<li>
+	 * 		<js>"boolean"</js>
+	 * 		<br>Parameter must be a boolean primitive or object.
+	 * 	<li>
+	 * 		<js>"array"</js>
+	 * 		<br>Parameter must be an array or collection.
+	 * 		<br>Elements must be strings or POJOs convertible from strings.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
+	 * 	<li>
+	 * 		<js>"object"</js>
+	 * 		<br>Parameter must be a map or bean.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
+	 * 	<li>
+	 * 		<js>"file"</js>
+	 * 		<br>This type is currently not supported.
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link ParameterType}.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
+	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -807,33 +1110,23 @@ public @interface Schema {
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
-	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
+	 * 	<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is plain text.
+	 * 		Server-side schema-based parsing.
 	 * 	<li>
-	 * 		The possible values are:
-	 * 		<ul>
-	 * 			<li><js>"object"</js>
-	 * 			<li><js>"string"</js>
-	 * 			<li><js>"number"</js>
-	 * 			<li><js>"integer"</js>
-	 * 			<li><js>"boolean"</js>
-	 * 			<li><js>"array"</js>
-	 * 			<li><js>"file"</js>
-	 * 		</ul>
+	 * 		Server-side generated Swagger documentation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
-	 *
 	 */
 	String type() default "";
 
@@ -845,12 +1138,29 @@ public @interface Schema {
 	/**
 	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <ul class='notes'>
+	 * <p>
+	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
+	 * <br>Otherwise, the collection or array is checked for duplicate items.
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is boolean.
+	 * 		Server-side schema-based parsing validation.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;

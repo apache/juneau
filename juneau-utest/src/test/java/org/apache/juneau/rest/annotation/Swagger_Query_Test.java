@@ -35,9 +35,9 @@ public class Swagger_Query_Test {
 
 		@Query(
 			n="Q",
-			d= {"a","b"},
-			t="string"
+			d= {"a","b"}
 		)
+		@Schema(t="string")
 		public static class A1 {
 			public A1(String x) {}
 		}
@@ -63,9 +63,9 @@ public class Swagger_Query_Test {
 				"description: 'b\nc',",
 				"type:'string'"
 			},
-			d={"a","b"},
-			t="string"
+			d={"a","b"}
 		)
+		@Schema(t="string")
 		public static class A3 {
 			public A3(String x) {}
 		}
@@ -149,34 +149,15 @@ public class Swagger_Query_Test {
 	}
 
 	@Rest
-	public static class C {
-
-		@Query(n="Q", ex={"{f1:'a'}"})
-		public static class C1 {
-			public String f1;
-		}
-		@RestGet
-		public void a(C1 q) {}
-	}
-
-	@Test
-	public void c01_exampleFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
-
-		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
-		assertEquals("{f1:'a'}", x.getExample());
-	}
-
-	@Rest
 	public static class D {
 
 		@RestGet
 		public void a(
 			@Query(
 				n="Q",
-				d= {"a","b"},
-				t="string"
+				d= {"a","b"}
 			)
+			@Schema(t="string")
 			String q) {}
 
 		@RestPut
@@ -198,9 +179,9 @@ public class Swagger_Query_Test {
 					"description: 'b\nc',",
 					"type:'string'"
 				},
-				d= {"a","b"},
-				t="string"
+				d= {"a","b"}
 			)
+			@Schema(t="string")
 			String q) {}
 
 		@RestDelete
@@ -248,24 +229,5 @@ public class Swagger_Query_Test {
 
 		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
 		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class F {
-
-		@RestGet
-		public void a(@Query(n="Q",ex={"a","b"}) String q) {}
-	}
-
-	@Test
-	public void f01_exampleFromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
-
-		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
-		assertEquals("a\nb", x.getExample());
 	}
 }

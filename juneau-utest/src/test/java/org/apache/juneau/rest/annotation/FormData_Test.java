@@ -38,7 +38,7 @@ public class FormData_Test {
 	@Rest(parsers=UrlEncodingParser.class)
 	public static class A {
 		@RestPost
-		public String a(RestRequest req, @FormData(name="p1",allowEmptyValue=true) String p1, @FormData(name="p2",allowEmptyValue=true) int p2) throws Exception {
+		public String a(RestRequest req, @FormData("p1") @Schema(allowEmptyValue=true) String p1, @FormData("p2") @Schema(allowEmptyValue=true) int p2) throws Exception {
 			RequestFormParams f = req.getFormParams();
 			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").asString().orElse(null)+"],p2=["+p2+","+f.get("p2").orElse(null)+","+f.get("p2").as(int.class).orElse(null)+"]";
 		}
@@ -68,12 +68,12 @@ public class FormData_Test {
 	@Rest
 	public static class B {
 		@RestPost
-		public String a(RestRequest req, @FormData(value="p1") String p1) throws Exception {
+		public String a(RestRequest req, @FormData("p1") String p1) throws Exception {
 			RequestFormParams f = req.getFormParams();
 			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").orElse(null)+"]";
 		}
 		@RestPost
-		public String b(RestRequest req, @FormData(value="p1",format="uon") String p1) throws Exception {
+		public String b(RestRequest req, @FormData("p1") @Schema(format="uon") String p1) throws Exception {
 			RequestFormParams f = req.getFormParams();
 			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").orElse(null)+"]";
 		}
@@ -111,14 +111,14 @@ public class FormData_Test {
 				.a("f3", f3);
 		}
 		@RestPost
-		public OMap c(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
+		public OMap c(@FormData("f1") @Schema(_default="1") String f1, @FormData("f2") @Schema(_default="2") String f2, @FormData("f3") @Schema(_default="3") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap d(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
+		public OMap d(@FormData("f1") @Schema(_default="4") String f1, @FormData("f2") @Schema(_default="5") String f2, @FormData("f3") @Schema(_default="6") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)

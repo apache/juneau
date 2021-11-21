@@ -314,8 +314,15 @@ public class BasicSwaggerProviderSession {
 						merge(param, a);
 					for (Body a : pt.getAnnotations(Body.class))
 						merge(param, a);
+					OMap schema = getSchema(param.getMap("schema"), type, bs);
+					if (schema == null)
+						schema = new OMap();
+					for (Schema a : mpi.getAnnotations(Schema.class))
+						merge(schema, a);
+					for (Schema a : pt.getAnnotations(Schema.class))
+						merge(schema, a);
 					param.putIfAbsent("required", true);
-					param.appendSkipEmpty("schema", getSchema(param.getMap("schema"), type, bs));
+					param.appendSkipEmpty("schema", schema);
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
@@ -328,6 +335,10 @@ public class BasicSwaggerProviderSession {
 					for (Query a : mpi.getAnnotations(Query.class))
 						merge(param, a);
 					for (Query a : pt.getAnnotations(Query.class))
+						merge(param, a);
+					for (Schema a : mpi.getAnnotations(Schema.class))
+						merge(param, a);
+					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, QUERY, type);
@@ -343,6 +354,10 @@ public class BasicSwaggerProviderSession {
 						merge(param, a);
 					for (FormData a : pt.getAnnotations(FormData.class))
 						merge(param, a);
+					for (Schema a : mpi.getAnnotations(Schema.class))
+						merge(param, a);
+					for (Schema a : pt.getAnnotations(Schema.class))
+						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, FORM_DATA, type);
 
@@ -357,6 +372,10 @@ public class BasicSwaggerProviderSession {
 						merge(param, a);
 					for (Header a : pt.getAnnotations(Header.class))
 						merge(param, a);
+					for (Schema a : mpi.getAnnotations(Schema.class))
+						merge(param, a);
+					for (Schema a : pt.getAnnotations(Schema.class))
+						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, HEADER, type);
 
@@ -370,6 +389,10 @@ public class BasicSwaggerProviderSession {
 					for (Path a : mpi.getAnnotations(Path.class))
 						merge(param, a);
 					for (Path a : pt.getAnnotations(Path.class))
+						merge(param, a);
+					for (Schema a : mpi.getAnnotations(Schema.class))
+						merge(param, a);
+					for (Schema a : pt.getAnnotations(Schema.class))
 						merge(param, a);
 					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, PATH, type);
@@ -910,16 +933,10 @@ public class BasicSwaggerProviderSession {
 		if (BodyAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
-			.appendSkipFalse("required", a.required() || a.r())
-			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
 		;
 	}
 
@@ -930,27 +947,7 @@ public class BasicSwaggerProviderSession {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue() || a.aev())
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipFalse("required", a.required() || a.r())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -961,27 +958,7 @@ public class BasicSwaggerProviderSession {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue() || a.aev())
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipFalse("required", a.required())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -992,26 +969,7 @@ public class BasicSwaggerProviderSession {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipFalse("required", a.required() || a.r())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -1022,24 +980,7 @@ public class BasicSwaggerProviderSession {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -1055,10 +996,8 @@ public class BasicSwaggerProviderSession {
 			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("discriminator", a.discriminator())
-			.appendSkipEmpty("description", resolve(a.description()), resolve(a.d()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("example", resolve(a.example()), resolve(a.ex()))
-			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
@@ -1217,7 +1156,7 @@ public class BasicSwaggerProviderSession {
 			param
 				.appendIf(false, true, true, "collectionFormat", schema.remove("collectionFormat"))
 				.appendIf(false, true, true, "default", schema.remove("default"))
-				.appendIf(false, true, true, "description", schema.remove("enum"))
+				.appendIf(false, true, true, "description", schema.remove("description"))
 				.appendIf(false, true, true, "enum", schema.remove("enum"))
 				.appendIf(false, true, true, "example", schema.remove("example"))
 				.appendIf(false, true, true, "exclusiveMaximum", schema.remove("exclusiveMaximum"))

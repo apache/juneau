@@ -78,16 +78,8 @@ public class BodyAnnotation {
 			.api(r.resolve(a.api()))
 			.d(r.resolve(a.d()))
 			.description(r.resolve(a.description()))
-			.ex(r.resolve(a.ex()))
-			.example(r.resolve(a.example()))
-			.examples(r.resolve(a.examples()))
-			.exs(r.resolve(a.exs()))
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
-			.r(a.r())
-			.required(a.required())
-			.schema(SchemaAnnotation.copy(a.schema(), r))
-			.value(r.resolve(a.value()))
 			.build();
 	}
 
@@ -114,9 +106,7 @@ public class BodyAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
-		boolean required, r;
-		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] api={}, d={}, description={}, ex={}, example={}, examples={}, exs={}, value={};
+		String[] api={}, d={}, description={};
 
 		/**
 		 * Constructor.
@@ -167,94 +157,6 @@ public class BodyAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Body#ex} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder ex(String...value) {
-			this.ex = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#example} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder example(String...value) {
-			this.example = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#examples} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder examples(String...value) {
-			this.examples = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#exs} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exs(String...value) {
-			this.exs = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#r} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder r(boolean value) {
-			this.r = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#required} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder required(boolean value) {
-			this.required = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#schema} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder schema(Schema value) {
-			this.schema = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 
 		@Override /* GENERATED - TargetedAnnotationBuilder */
@@ -290,23 +192,13 @@ public class BodyAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Body {
 
-		private final String[] api, d, description, ex, example, examples, exs, value;
-		private final boolean r, required;
-		private final Schema schema;
+		private final String[] api, d, description;
 
 		Impl(Builder b) {
 			super(b);
 			this.api = copyOf(b.api);
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
-			this.ex = copyOf(b.ex);
-			this.example = copyOf(b.example);
-			this.examples = copyOf(b.examples);
-			this.exs = copyOf(b.exs);
-			this.r = b.r;
-			this.required = b.required;
-			this.schema = b.schema;
-			this.value = copyOf(b.value);
 			postConstruct();
 		}
 
@@ -323,46 +215,6 @@ public class BodyAnnotation {
 		@Override /* Body */
 		public String[] description() {
 			return description;
-		}
-
-		@Override /* Body */
-		public String[] ex() {
-			return ex;
-		}
-
-		@Override /* Body */
-		public String[] example() {
-			return example;
-		}
-
-		@Override /* Body */
-		public String[] examples() {
-			return examples;
-		}
-
-		@Override /* Body */
-		public String[] exs() {
-			return exs;
-		}
-
-		@Override /* Body */
-		public boolean r() {
-			return r;
-		}
-
-		@Override /* Body */
-		public boolean required() {
-			return required;
-		}
-
-		@Override /* Body */
-		public Schema schema() {
-			return schema;
-		}
-
-		@Override /* Body */
-		public String[] value() {
-			return value;
 		}
 	}
 

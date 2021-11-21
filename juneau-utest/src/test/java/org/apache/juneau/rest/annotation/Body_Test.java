@@ -23,9 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.http.annotation.HasQuery;
-import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.client.*;
@@ -896,13 +894,13 @@ public class Body_Test {
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestPost
-		public XBeans.XB a(@Body(r=true) XBeans.XB content) throws Exception {
+		public XBeans.XB a(@Body @Schema(r=true) XBeans.XB content) throws Exception {
 			return content;
 		}
 		@RestPost
 		@Bean(on="A,B,C",sort=true)
 		@UrlEncoding(on="C",expandedParams=true)
-		public XBeans.XE b(@Body(r=true) XBeans.XE content) throws Exception {
+		public XBeans.XE b(@Body @Schema(r=true) XBeans.XE content) throws Exception {
 			return content;
 		}
 	}

@@ -59,7 +59,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
+@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,requiredProperties,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
 public class SchemaInfo extends SwaggerElement {
 
 	private String
@@ -85,7 +85,8 @@ public class SchemaInfo extends SwaggerElement {
 		exclusiveMaximum,
 		exclusiveMinimum,
 		uniqueItems,
-		readOnly;
+		readOnly,
+		required;
 	private Object
 		_default,
 		example;
@@ -96,7 +97,7 @@ public class SchemaInfo extends SwaggerElement {
 		_enum,
 		allOf;
 	private Set<String>
-		required;
+		requiredProperties;
 	private Map<String,SchemaInfo> properties;
 	private SchemaInfo additionalProperties;
 
@@ -137,7 +138,8 @@ public class SchemaInfo extends SwaggerElement {
 		this.pattern = copyFrom.pattern;
 		this.readOnly = copyFrom.readOnly;
 		this.ref = copyFrom.ref;
-		this.required = newSet(copyFrom.required);
+		this.required = copyFrom.required;
+		this.requiredProperties = newSet(copyFrom.requiredProperties);
 		this.title = copyFrom.title;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
@@ -1636,17 +1638,62 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>required</property>.
 	 *
-	 * <p>
-	 * The list of required properties.
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getRequired() {
+	public Boolean getRequired() {
 		return required;
 	}
 
 	/**
 	 * Bean property setter:  <property>required</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setRequired(Boolean value) {
+		required = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>required</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> required() {
+		return Optional.ofNullable(getRequired());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>required</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public SchemaInfo required(Boolean value) {
+		setRequired(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// requiredProperties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>requiredProperties</property>.
+	 *
+	 * <p>
+	 * The list of required properties.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<String> getRequiredProperties() {
+		return requiredProperties;
+	}
+
+	/**
+	 * Bean property setter:  <property>requiredProperties</property>.
 	 *
 	 * <p>
 	 * The list of required properties.
@@ -1662,12 +1709,12 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
-	public void setRequired(Collection<String> value) {
-		required = newSet(value);
+	public void setRequiredProperties(Collection<String> value) {
+		requiredProperties = newSet(value);
 	}
 
 	/**
-	 * Bean property appender:  <property>required</property>.
+	 * Bean property appender:  <property>requiredProperties</property>.
 	 *
 	 * <p>
 	 * The list of required properties.
@@ -1677,41 +1724,41 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SchemaInfo addRequired(Collection<String> value) {
-		required = setBuilder(required).sparse().addAny(value).build();
+	public SchemaInfo addRequiredProperties(Collection<String> value) {
+		requiredProperties = setBuilder(requiredProperties).sparse().addAny(value).build();
 		return this;
 	}
 
 	/**
-	 * Bean property fluent getter:  <property>required</property>.
+	 * Bean property fluent getter:  <property>requiredProperties</property>.
 	 *
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public Optional<Set<String>> required() {
-		return Optional.ofNullable(getRequired());
+	public Optional<Set<String>> requiredProperties() {
+		return Optional.ofNullable(getRequiredProperties());
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>required</property>.
+	 * Bean property fluent setter:  <property>requiredProperties</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public SchemaInfo required(Collection<String> value) {
-		setRequired(value);
+	public SchemaInfo requiredProperties(Collection<String> value) {
+		setRequiredProperties(value);
 		return this;
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>required</property>.
+	 * Bean property fluent setter:  <property>requiredProperties</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public SchemaInfo required(String...value) {
-		setRequired(setBuilder(String.class).sparse().addJson(value).build());
+	public SchemaInfo requiredProperties(String...value) {
+		setRequiredProperties(setBuilder(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1981,7 +2028,8 @@ public class SchemaInfo extends SwaggerElement {
 			case "properties": return toType(getProperties(), type);
 			case "readOnly": return toType(getReadOnly(), type);
 			case "$ref": return toType(getRef(), type);
-			case "required": return toType(getRequired(), type);
+			case "rquired": return toType(getRequired(), type);
+			case "requiredProperties": return toType(getRequiredProperties(), type);
 			case "title": return toType(getTitle(), type);
 			case "type": return toType(getType(), type);
 			case "uniqueItems": return toType(getUniqueItems(), type);
@@ -2020,7 +2068,8 @@ public class SchemaInfo extends SwaggerElement {
 			case "properties": return properties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
 			case "readOnly": return readOnly(toBoolean(value));
 			case "$ref": return ref(stringify(value));
-			case "required": return required(listBuilder(String.class).sparse().addAny(value).build());
+			case "required": return required(toBoolean(value));
+			case "requiredProperties": return requiredProperties(listBuilder(String.class).sparse().addAny(value).build());
 			case "title": return title(stringify(value));
 			case "type": return type(stringify(value));
 			case "uniqueItems": return uniqueItems(toBoolean(value));
@@ -2060,6 +2109,7 @@ public class SchemaInfo extends SwaggerElement {
 			.appendIf(readOnly != null, "readOnly")
 			.appendIf(ref != null, "$ref")
 			.appendIf(required != null, "required")
+			.appendIf(requiredProperties != null, "requiredProperties")
 			.appendIf(title != null, "title")
 			.appendIf(type != null, "type")
 			.appendIf(uniqueItems != null, "uniqueItems")

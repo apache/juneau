@@ -152,7 +152,7 @@ public class ResponseBeanMeta {
 			ClassInfo ci = cm.getInfo();
 			for (MethodInfo m : ci.getAllMethods()) {
 				if (m.isPublic()) {
-					assertNoInvalidAnnotations(m, Header.class, Query.class, FormData.class, Path.class);
+					assertNoInvalidAnnotations(m, Header.class, Query.class, FormData.class, Path.class, Schema.class);
 					if (m.hasAnnotation(ResponseHeader.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnNotVoid(m, ResponseHeader.class);

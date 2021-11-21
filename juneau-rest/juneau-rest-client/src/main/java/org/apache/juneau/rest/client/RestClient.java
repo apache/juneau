@@ -4326,7 +4326,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
-		 * The {@link FormData#skipIfEmpty()} annotation overrides this setting.
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
 		 *
 		 * @param value
 		 * 	The new value for this setting.
@@ -4347,7 +4347,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
-		 * The {@link FormData#skipIfEmpty()} annotation overrides this setting.
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
 		 *
 		 * @return This object.
 		 */
@@ -4364,7 +4364,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
-		 * The {@link org.apache.juneau.http.annotation.Header#skipIfEmpty()} annotation overrides this setting.
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
 		 *
 		 * @param value
 		 * 	The new value for this setting.
@@ -4385,7 +4385,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
-		 * The {@link org.apache.juneau.http.annotation.Header#skipIfEmpty()} annotation overrides this setting.
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
 		 *
 		 * @return This object.
 		 */
@@ -4402,7 +4402,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
-		 * The {@link Query#skipIfEmpty()} annotation overrides this setting.
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
 		 *
 		 * @param value
 		 * 	The new value for this setting.
@@ -4423,7 +4423,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
-		 * The {@link Query#skipIfEmpty()} annotation overrides this setting.
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
 		 *
 		 * @return This object.
 		 */

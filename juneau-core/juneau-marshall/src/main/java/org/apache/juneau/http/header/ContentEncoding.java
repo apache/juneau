@@ -68,7 +68,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
-@Header(name="Content-Encoding",_enum={"gzip","compress","deflate","identity","other"})
+@Header("Content-Encoding")
+@Schema(_enum={"gzip","compress","deflate","identity","other"})
 public class ContentEncoding extends BasicStringHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------

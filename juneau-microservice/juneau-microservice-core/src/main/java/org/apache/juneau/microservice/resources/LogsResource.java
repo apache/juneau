@@ -120,12 +120,12 @@ public class LogsResource extends BasicRestServlet {
 	public void viewFile(
 			RestResponse res,
 			@Path("/*") String path,
-			@Query(n="highlight", d="Add severity color highlighting.", ex="true") boolean highlight,
-			@Query(n="start", d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", ex="2014-01-23T11:25:47") String start,
-			@Query(n="end", d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", ex="2014-01-24") String end,
-			@Query(n="thread", d="Thread name filter.\nOnly show log entries with the specified thread name.", ex="thread-pool-33-thread-1") String thread,
-			@Query(n="loggers", d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", ex="['LinkIndexService','LinkIndexRestService']") String[] loggers,
-			@Query(n="severity", d="Severity filter.\nOnly show log entries with the specified severity.", ex="['ERROR','WARN']") String[] severity
+			@Query(n="highlight", d="Add severity color highlighting.") boolean highlight,
+			@Query(n="start", d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String start,
+			@Query(n="end", d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String end,
+			@Query(n="thread", d="Thread name filter.\nOnly show log entries with the specified thread name.") String thread,
+			@Query(n="loggers", d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.") String[] loggers,
+			@Query(n="severity", d="Severity filter.\nOnly show log entries with the specified severity.") String[] severity
 		) throws NotFound, MethodNotAllowed, IOException {
 
 		File f = getFile(path);
@@ -189,11 +189,11 @@ public class LogsResource extends BasicRestServlet {
 	public LogParser viewParsedEntries(
 			RestRequest req,
 			@Path("/*") String path,
-			@Query(n="start", d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", ex="2014-01-23T11:25:47") String start,
-			@Query(n="end", d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", ex="2014-01-24") String end,
-			@Query(n="thread", d="Thread name filter.\nOnly show log entries with the specified thread name.", ex="thread-pool-33-thread-1") String thread,
-			@Query(n="loggers", d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.", ex="['LinkIndexService','LinkIndexRestService']") String[] loggers,
-			@Query(n="severity", d="Severity filter.\nOnly show log entries with the specified severity.", ex="['ERROR','WARN']") String[] severity
+			@Query(n="start", d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String start,
+			@Query(n="end", d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String end,
+			@Query(n="thread", d="Thread name filter.\nOnly show log entries with the specified thread name.") String thread,
+			@Query(n="loggers", d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.") String[] loggers,
+			@Query(n="severity", d="Severity filter.\nOnly show log entries with the specified severity.") String[] severity
 		) throws NotFound, IOException {
 
 		File f = getFile(path);

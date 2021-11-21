@@ -198,7 +198,8 @@ public class HttpPartSchema_Response_Test {
 
 	@Response(
 		schema=@Schema(
-			p="x.*"
+			p="x.*",
+			aev=true
 		)
 	)
 	public static class B02a {}
