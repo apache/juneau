@@ -32,7 +32,6 @@ public class ResponseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Response a1 = ResponseAnnotation.create()
-		.api("api")
 		.code(1)
 		.d("d")
 		.description("description")
@@ -50,7 +49,6 @@ public class ResponseAnnotation_Test {
 		.build();
 
 	Response a2 = ResponseAnnotation.create()
-		.api("api")
 		.code(1)
 		.d("d")
 		.description("description")
@@ -71,7 +69,6 @@ public class ResponseAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "api:['api'],"
 				+ "code:[1],"
 				+ "d:['d'],"
 				+ "description:['description'],"
@@ -136,7 +133,6 @@ public class ResponseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Response(
-		api="api",
 		code=1,
 		d="d",
 		description="description",
@@ -156,7 +152,6 @@ public class ResponseAnnotation_Test {
 	Response d1 = D1.class.getAnnotationsByType(Response.class)[0];
 
 	@Response(
-		api="api",
 		code=1,
 		d="d",
 		description="description",

@@ -51,13 +51,11 @@ public class Swagger_Response_Test {
 		public A1 b() {return null;}
 
 		@Response(
-			api={
-				"description:'a\nb',",
-				"schema:{type:'string'},",
-				"headers:{foo:{type:'string'}},",
-				"example:'a',",
-				"examples:{foo:'a'}"
-			}
+			description="a\nb",
+			schema=@Schema(type="string"),
+			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			example="'a'",
+			examples=" {foo:'a'} "
 		)
 		public static class A2 {
 			public A2(String x){}
@@ -68,13 +66,6 @@ public class Swagger_Response_Test {
 		public A2 d() {return null;}
 
 		@Response(
-			api={
-				"description:'b',",
-				"schema:{type:'number'},",
-				"headers:{bar:{type:'number'}},",
-				"example:'b',",
-				"examples:{bar:'b'}"
-			},
 			description={"a","b"},
 			schema=@Schema(type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
@@ -134,27 +125,27 @@ public class Swagger_Response_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("a", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/d","delete",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("a", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/e","get",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{bar:{type:'number'},foo:{type:'string'}}");
+		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/f","get",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{bar:{type:'number'},foo:{type:'string'}}");
+		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
@@ -298,26 +289,17 @@ public class Swagger_Response_Test {
 		public void a() throws D1 {}
 
 		@Response(
-			api={
-				"description:'a\nb',",
-				"schema:{type:'string'},",
-				"headers:{foo:{type:'string'}},",
-				"example:'a',",
-				"examples:{foo:'a'}"
-			}
+			description= {"a","b"},
+			schema=@Schema(type="string"),
+			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			example=" 'a' ",
+			examples=" {foo:'a'} "
 		)
 		public static class D2 extends Throwable {}
 		@RestPut
 		public void b() throws D2 {}
 
 		@Response(
-			api={
-				"description:'b',",
-				"schema:{type:'number'},",
-				"headers:{bar:{type:'number'}},",
-				"example:'b',",
-				"examples:{bar:'b'}"
-			},
 			description= {"a","b"},
 			schema=@Schema(type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
@@ -360,13 +342,13 @@ public class Swagger_Response_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExample()).asJson().is("'a'");
+		assertObject(x.getExample()).asJson().is("'\\'a\\''");
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/c","post",500);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{bar:{type:'number'},foo:{type:'string'}}");
+		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 

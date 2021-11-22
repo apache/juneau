@@ -1092,8 +1092,6 @@ public class BasicSwaggerProviderSession {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("example", resolve(a.example(), a.ex()))

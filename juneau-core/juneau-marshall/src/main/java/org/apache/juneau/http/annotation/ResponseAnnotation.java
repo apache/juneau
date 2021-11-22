@@ -95,7 +95,7 @@ public class ResponseAnnotation {
 		int[] code={}, value={};
 		ResponseHeader[] headers={};
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] api={}, d={}, description={}, ex={}, example={}, examples={}, exs={};
+		String[] d={}, description={}, ex={}, example={}, examples={}, exs={};
 
 		/**
 		 * Constructor.
@@ -111,17 +111,6 @@ public class ResponseAnnotation {
 		 */
 		public Response build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Response#api} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder api(String...value) {
-			this.api = value;
-			return this;
 		}
 
 		/**
@@ -296,11 +285,10 @@ public class ResponseAnnotation {
 		private final int[] code, value;
 		private final ResponseHeader[] headers;
 		private final Schema schema;
-		private final String[] api, d, description, ex, example, examples, exs;
+		private final String[] d, description, ex, example, examples, exs;
 
 		Impl(Builder b) {
 			super(b);
-			this.api = copyOf(b.api);
 			this.code = Arrays.copyOf(b.code, b.code.length);
 			this.d = copyOf(b.d);
 			this.description = copyOf(b.description);
@@ -314,11 +302,6 @@ public class ResponseAnnotation {
 			this.serializer = b.serializer;
 			this.value = Arrays.copyOf(b.value, b.value.length);
 			postConstruct();
-		}
-
-		@Override /* Response */
-		public String[] api() {
-			return api;
 		}
 
 		@Override /* Response */

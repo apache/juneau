@@ -219,7 +219,6 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseAnnotation.empty(response().build()));
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
-		assertFalse(ResponseAnnotation.empty(response().api(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().code(a(0)).build()));
 		assertFalse(ResponseAnnotation.empty(response().d(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().description(a("foo")).build()));
