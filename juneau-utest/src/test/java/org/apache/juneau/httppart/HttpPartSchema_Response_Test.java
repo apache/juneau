@@ -318,7 +318,7 @@ public class HttpPartSchema_Response_Test {
 		assertThrown(()->s.validateInput("Z")).message().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
 	}
 
-	@Response(schema=@Schema(e="['X','Y']"))
+	@Response(schema=@Schema(e="X,Y"))
 	public static class B04c {}
 
 	@Test
@@ -333,9 +333,9 @@ public class HttpPartSchema_Response_Test {
 	@Response(
 		schema=@Schema(
 			items=@Items(
-				e="['W']",
+				e="W",
 				items=@SubItems(
-					e="['X']",
+					e="X",
 					items={
 						"enum:['Y'],",
 						"items:{enum:['Z']}"

@@ -30,14 +30,12 @@ public class ContactAnnotation_Test {
 		.email("email")
 		.name("name")
 		.url("url")
-		.value("value")
 		.build();
 
 	Contact a2 = ContactAnnotation.create()
 		.email("email")
 		.name("name")
 		.url("url")
-		.value("value")
 		.build();
 
 	@Test
@@ -46,8 +44,7 @@ public class ContactAnnotation_Test {
 			+ "{"
 				+ "email:'email',"
 				+ "name:'name',"
-				+ "url:'url',"
-				+ "value:['value']"
+				+ "url:'url'"
 			+ "}"
 		);
 	}
@@ -76,8 +73,7 @@ public class ContactAnnotation_Test {
 	@Contact(
 		email="email",
 		name="name",
-		url="url",
-		value="value"
+		url="url"
 	)
 	public static class D1 {}
 	Contact d1 = D1.class.getAnnotationsByType(Contact.class)[0];
@@ -85,8 +81,7 @@ public class ContactAnnotation_Test {
 	@Contact(
 		email="email",
 		name="name",
-		url="url",
-		value="value"
+		url="url"
 	)
 	public static class D2 {}
 	Contact d2 = D2.class.getAnnotationsByType(Contact.class)[0];

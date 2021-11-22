@@ -708,15 +708,6 @@ public class BasicSwaggerProviderSession {
 		}
 	}
 
-	private OMap newMap(OMap om, String[] value, String location, Object...locationArgs) throws ParseException {
-		if (value.length == 0)
-			return om == null ? new OMap() : om;
-			OMap om2 = parseMap(joinnl(value), location, locationArgs);
-		if (om == null)
-			return om2;
-		return om.append(om2);
-	}
-
 	private OMap merge(OMap...maps) {
 		OMap m = maps[0];
 		for (int i = 1; i < maps.length; i++) {
@@ -749,36 +740,36 @@ public class BasicSwaggerProviderSession {
 		return null;
 	}
 
-	private OMap toMap(ExternalDocs a, String location, Object...locationArgs) throws ParseException {
+	private OMap toMap(ExternalDocs a, String location, Object...locationArgs) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
-		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
+		OMap om = OMap.create()
 			.appendSkipEmpty("description", resolve(joinnl(a.description())))
 			.appendSkipEmpty("url", resolve(a.url()));
 		return nullIfEmpty(om);
 	}
 
-	private OMap toMap(Contact a, String location, Object...locationArgs) throws ParseException {
+	private OMap toMap(Contact a, String location, Object...locationArgs) {
 		if (ContactAnnotation.empty(a))
 			return null;
-		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
+		OMap om = OMap.create()
 			.appendSkipEmpty("name", resolve(a.name()))
 			.appendSkipEmpty("url", resolve(a.url()))
 			.appendSkipEmpty("email", resolve(a.email()));
 		return nullIfEmpty(om);
 	}
 
-	private OMap toMap(License a, String location, Object...locationArgs) throws ParseException {
+	private OMap toMap(License a, String location, Object...locationArgs) {
 		if (LicenseAnnotation.empty(a))
 			return null;
-		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
+		OMap om = OMap.create()
 			.appendSkipEmpty("name", resolve(a.name()))
 			.appendSkipEmpty("url", resolve(a.url()));
 		return nullIfEmpty(om);
 	}
 
-	private OMap toMap(Tag a, String location, Object...locationArgs) throws ParseException {
-		OMap om = newMap(new OMap(), a.value(), location, locationArgs);
+	private OMap toMap(Tag a, String location, Object...locationArgs) {
+		OMap om = OMap.create();
 		om
 			.appendSkipEmpty("name", resolve(a.name()))
 			.appendSkipEmpty("description", resolve(joinnl(a.description())))
@@ -786,7 +777,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private OList toList(Tag[] aa, String location, Object...locationArgs) throws ParseException {
+	private OList toList(Tag[] aa, String location, Object...locationArgs) {
 		if (aa.length == 0)
 			return null;
 		OList ol = new OList();
@@ -1000,8 +991,6 @@ public class BasicSwaggerProviderSession {
 		if (SchemaAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("additionalProperties", toOMap(a.additionalProperties()))
 			.appendSkipEmpty("allOf", joinnl(a.allOf()))
@@ -1037,12 +1026,10 @@ public class BasicSwaggerProviderSession {
 		;
 	}
 
-	private OMap merge(OMap om, ExternalDocs a) throws ParseException {
+	private OMap merge(OMap om, ExternalDocs a) {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("url", a.url())
@@ -1053,8 +1040,6 @@ public class BasicSwaggerProviderSession {
 		if (ItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
@@ -1081,8 +1066,6 @@ public class BasicSwaggerProviderSession {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
@@ -1175,8 +1158,6 @@ public class BasicSwaggerProviderSession {
 		return param;
 	}
 
-
-
 	private OMap toOMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;
@@ -1189,17 +1170,14 @@ public class BasicSwaggerProviderSession {
 		return OMap.ofJson(s);
 	}
 
-	private Set<String> toSet(String[] ss) throws ParseException {
+	private Set<String> toSet(String[] ss) {
 		if (ss.length == 0)
 			return null;
-		String s = joinnl(ss);
-		if (s.isEmpty())
-			return null;
-		s = resolve(s);
 		Set<String> set = ASet.of();
-		for (Object o : StringUtils.parseListOrCdl(s))
-			set.add(o.toString());
-		return set;
+		for (String s : ss)
+			for (String s2 : split(s, ','))
+				set.add(trim(s2));
+		return set.isEmpty() ? null : set;
 	}
 
 	static String joinnl(String[]...s) {

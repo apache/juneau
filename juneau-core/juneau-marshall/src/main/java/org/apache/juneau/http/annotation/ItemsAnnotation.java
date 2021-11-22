@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Items @Items} annotation.
@@ -38,54 +37,6 @@ public class ItemsAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Items copy(Items a, VarResolverSession r) {
-		return
-			create()
-			._default(r.resolve(a._default()))
-			._enum(r.resolve(a._enum()))
-			.$ref(r.resolve(a.$ref()))
-			.cf(r.resolve(a.cf()))
-			.collectionFormat(r.resolve(a.collectionFormat()))
-			.df(r.resolve(a.df()))
-			.e(r.resolve(a.e()))
-			.emax(a.emax())
-			.emin(a.emin())
-			.exclusiveMaximum(a.exclusiveMaximum())
-			.exclusiveMinimum(a.exclusiveMinimum())
-			.f(r.resolve(a.f()))
-			.format(r.resolve(a.format()))
-			.items(SubItemsAnnotation.copy(a.items(), r))
-			.max(r.resolve(a.max()))
-			.maxi(a.maxi())
-			.maximum(r.resolve(a.maximum()))
-			.maxItems(a.maxItems())
-			.maxl(a.maxLength())
-			.maxLength(a.maxLength())
-			.min(r.resolve(a.min()))
-			.mini(a.mini())
-			.minimum(r.resolve(a.minimum()))
-			.minItems(a.minItems())
-			.minl(a.minl())
-			.minLength(a.minLength())
-			.mo(r.resolve(a.mo()))
-			.multipleOf(r.resolve(a.mo()))
-			.p(r.resolve(a.p()))
-			.pattern(r.resolve(a.pattern()))
-			.t(r.resolve(a.t()))
-			.type(r.resolve(a.type()))
-			.ui(a.ui())
-			.uniqueItems(a.uniqueItems())
-			.value(r.resolve(a.value()))
-			.build();
 	}
 
 	/**
@@ -114,7 +65,7 @@ public class ItemsAnnotation {
 		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		long maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
 		String $ref="", cf="", collectionFormat="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", type="";
-		String[] _default={}, _enum={}, df={}, e={}, value={};
+		String[] _default={}, _enum={}, df={}, e={};
 		SubItems items = SubItemsAnnotation.DEFAULT;
 
 		/**
@@ -507,17 +458,6 @@ public class ItemsAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Items#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 		// </FluentSetters>
 	}
@@ -531,7 +471,7 @@ public class ItemsAnnotation {
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
-		private final String[] _default, _enum, df, e, value;
+		private final String[] _default, _enum, df, e;
 		private final SubItems items;
 
 		Impl(Builder b) {
@@ -570,7 +510,6 @@ public class ItemsAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			this.value = copyOf(b.value);
 			postConstruct();
 		}
 
@@ -742,11 +681,6 @@ public class ItemsAnnotation {
 		@Override /* Items */
 		public boolean uniqueItems() {
 			return uniqueItems;
-		}
-
-		@Override /* Items */
-		public String[] value() {
-			return value;
 		}
 	}
 }

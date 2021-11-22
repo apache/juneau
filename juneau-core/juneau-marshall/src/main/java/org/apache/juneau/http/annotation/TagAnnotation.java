@@ -54,7 +54,7 @@ public class TagAnnotation {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		String name="";
-		String[] description={}, value={};
+		String[] description={};
 
 		/**
 		 * Constructor.
@@ -105,17 +105,6 @@ public class TagAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Tag#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 
 		// </FluentSetters>
@@ -129,14 +118,13 @@ public class TagAnnotation {
 
 		private final ExternalDocs externalDocs;
 		private final String name;
-		private final String[] description, value;
+		private final String[] description;
 
 		Impl(Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.externalDocs = b.externalDocs;
 			this.name = b.name;
-			this.value = copyOf(b.value);
 			postConstruct();
 		}
 
@@ -153,11 +141,6 @@ public class TagAnnotation {
 		@Override /* Tag */
 		public String name() {
 			return name;
-		}
-
-		@Override /* Tag */
-		public String[] value() {
-			return value;
 		}
 	}
 }

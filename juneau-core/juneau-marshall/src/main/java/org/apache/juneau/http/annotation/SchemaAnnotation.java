@@ -91,8 +91,6 @@ public class SchemaAnnotation {
 		OMap om = new OMap();
 		if (SchemaAnnotation.empty(a))
 			return om;
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("additionalProperties", parseMap(a.additionalProperties()))
 			.appendSkipEmpty("allOf", joinnl(a.allOf()))
@@ -131,8 +129,6 @@ public class SchemaAnnotation {
 	private static OMap merge(OMap om, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return om;
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
@@ -797,17 +793,6 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Schema#xml} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -864,7 +849,7 @@ public class SchemaAnnotation {
 		private final Items items;
 		private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;
 		private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;
-		private final String[] description, d, _default, df, _enum, e, allOf, properties, additionalProperties, xml, value;
+		private final String[] description, d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;
 
 		Impl(Builder b) {
 			super(b);
@@ -923,7 +908,6 @@ public class SchemaAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			this.value = copyOf(b.value);
 			this.xml = copyOf(b.xml);
 			postConstruct();
 		}
@@ -1201,11 +1185,6 @@ public class SchemaAnnotation {
 		@Override /* Schema */
 		public boolean uniqueItems() {
 			return uniqueItems;
-		}
-
-		@Override /* Schema */
-		public String[] value() {
-			return value;
 		}
 
 		@Override /* Schema */

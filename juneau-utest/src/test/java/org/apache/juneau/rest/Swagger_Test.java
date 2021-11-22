@@ -289,8 +289,8 @@ public class Swagger_Test {
 			description="$L{baz}",
 			version="$L{foo}",
 			termsOfService="$L{foo}",
-			contact=@Contact("{name:'$L{foo}',url:'$L{bar}',email:'$L{baz}'}"),
-			license=@License("{name:'$L{foo}',url:'$L{bar}'}")
+			contact=@Contact(name="$L{foo}",url="$L{bar}",email="$L{baz}"),
+			license=@License(name="$L{foo}",url="$L{bar}")
 		),
 		messages="BasicRestInfoProviderTest"
 	)
@@ -399,7 +399,7 @@ public class Swagger_Test {
 	@Rest(
 		swagger=@Swagger(
 			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}",
-			tags=@Tag(name="b-name",value=" { description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
+			tags=@Tag(name="b-name",description="b-description", externalDocs=@ExternalDocs(description="b-description",url="b-url"))
 		)
 	)
 	public static class C4 {}
@@ -439,7 +439,7 @@ public class Swagger_Test {
 		swagger=@Swagger(
 			tags={
 				@Tag(name="s-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url")),
-				@Tag(name="s-name",value="{description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")
+				@Tag(name="s-name",description="c-description",externalDocs=@ExternalDocs(description="c-description",url="c-url"))
 			}
 		)
 	)
@@ -624,8 +624,8 @@ public class Swagger_Test {
 	@Rest(
 		swagger=@Swagger(
 			value="{info:{externalDocs:{description:'a-description',url:'a-url'}}}",
-			externalDocs=@ExternalDocs(" description:'b-description', url:'b-url' ")
-			)
+			externalDocs=@ExternalDocs(description="b-description", url="b-url")
+		)
 	)
 	public static class D4 {}
 
@@ -643,7 +643,7 @@ public class Swagger_Test {
 	@Rest(
 		swagger=@Swagger(
 			value="{externalDocs:{description:'a-description',url:'a-url'}}",
-			externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{bar}'}")
+			externalDocs=@ExternalDocs(description="$L{foo}",url="$L{bar}")
 		),
 		messages="BasicRestInfoProviderTest"
 	)
@@ -1040,7 +1040,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G5 {
-		@RestGet(path="/path/{foo}",swagger=@OpSwagger(externalDocs=@ExternalDocs("{description:'d-description',url:'d-url'}")))
+		@RestGet(path="/path/{foo}",swagger=@OpSwagger(externalDocs=@ExternalDocs(description="d-description",url="d-url")))
 		public X a() {
 			return null;
 		}
@@ -1054,7 +1054,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G6 {
-		@RestGet(path="/path/{foo}",swagger=@OpSwagger(externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{foo}'}")))
+		@RestGet(path="/path/{foo}",swagger=@OpSwagger(externalDocs=@ExternalDocs(description="$L{foo}",url="$L{foo}")))
 		public X a() {
 			return null;
 		}
@@ -2158,7 +2158,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public S5c a() {return null;}
 	}
-	@Response(code=100,schema=@Schema("{$ref:'$L{foo}'}"))
+	@Response(code=100,schema=@Schema($ref="l-foo"))
 	public static class S5c extends X {}
 
 	@Test

@@ -128,7 +128,7 @@ public class RestOpAnnotation_Test {
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
 				+ "summary:'summary',"
-				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:'',value:[]},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
+				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:''},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
 				+ "value:'value'"
 			+ "}"
 		);

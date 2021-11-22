@@ -437,7 +437,7 @@ public class HttpPartSchema_Path_Test {
 		assertThrown(()->s.validateInput("Z")).message().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
 	}
 
-	@Path @Schema(e="['X','Y']")
+	@Path @Schema(e="X,Y")
 	public static class B04c {}
 
 	@Test
@@ -452,9 +452,9 @@ public class HttpPartSchema_Path_Test {
 	@Path
 	@Schema(
 		items=@Items(
-			e="['W']",
+			e="W",
 			items=@SubItems(
-				e="['X']",
+				e="X",
 				items={
 					"enum:['Y'],",
 					"items:{enum:['Z']}"

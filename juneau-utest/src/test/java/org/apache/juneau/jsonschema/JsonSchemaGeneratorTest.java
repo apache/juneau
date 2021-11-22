@@ -1205,108 +1205,6 @@ public class JsonSchemaGeneratorTest {
 	}
 
 	//====================================================================================================
-	// JSONSCHEMA_defaultSchemas
-	//====================================================================================================
-
-	// If default schema contains 'type', it's considered complete.
-	@Test
-	public void defaultSchemas() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy()
-			.defaultSchema(SimpleBean.class, OMap.of("type", "bar"))
-			.defaultSchema(BeanMap.class, OMap.of("type", "bar"))
-			.defaultSchema(BeanList.class, OMap.of("type", "bar"))
-			.defaultSchema(BeanList[][].class, OMap.of("type", "bar"))
-			.defaultSchema(boolean.class, OMap.of("type", "bar"))
-			.defaultSchema(Boolean.class, OMap.of("type", "bar"))
-			.defaultSchema(short.class, OMap.of("type", "bar"))
-			.defaultSchema(Short.class, OMap.of("type", "bar"))
-			.defaultSchema(int.class, OMap.of("type", "bar"))
-			.defaultSchema(Integer.class, OMap.of("type", "bar"))
-			.defaultSchema(long.class, OMap.of("type", "bar"))
-			.defaultSchema(Long.class, OMap.of("type", "bar"))
-			.defaultSchema(float.class, OMap.of("type", "bar"))
-			.defaultSchema(Float.class, OMap.of("type", "bar"))
-			.defaultSchema(double.class, OMap.of("type", "bar"))
-			.defaultSchema(Double.class, OMap.of("type", "bar"))
-			.defaultSchema(String.class, OMap.of("type", "bar"))
-			.defaultSchema(StringBuilder.class, OMap.of("type", "bar"))
-			.defaultSchema(Character.class, OMap.of("type", "bar"))
-			.defaultSchema(char.class, OMap.of("type", "bar"))
-			.defaultSchema(TestEnumToString.class, OMap.of("type", "bar"))
-			.build().getSession();
-		assertObject(s.getSchema(SimpleBean.class)).asJson().contains("type:'bar'}");
-		assertObject(s.getSchema(BeanMap.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(BeanList.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(BeanList[][].class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(boolean.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Boolean.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(short.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Short.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(int.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Integer.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(long.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Long.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(float.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Float.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(double.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Double.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(String.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(StringBuilder.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(Character.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(char.class)).asJson().contains("type:'bar'");
-		assertObject(s.getSchema(TestEnumToString.class)).asJson().contains("type:'bar'");
-	}
-
-	// If default schema does not contain 'type', the value is augmented
-	@Test
-	public void defaultSchemasNoType() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy()
-			.defaultSchema(SimpleBean.class, OMap.of("foo", "bar"))
-			.defaultSchema(BeanMap.class, OMap.of("foo", "bar"))
-			.defaultSchema(BeanList.class, OMap.of("foo", "bar"))
-			.defaultSchema(BeanList[][].class, OMap.of("foo", "bar"))
-			.defaultSchema(boolean.class, OMap.of("foo", "bar"))
-			.defaultSchema(Boolean.class, OMap.of("foo", "bar"))
-			.defaultSchema(short.class, OMap.of("foo", "bar"))
-			.defaultSchema(Short.class, OMap.of("foo", "bar"))
-			.defaultSchema(int.class, OMap.of("foo", "bar"))
-			.defaultSchema(Integer.class, OMap.of("foo", "bar"))
-			.defaultSchema(long.class, OMap.of("foo", "bar"))
-			.defaultSchema(Long.class, OMap.of("foo", "bar"))
-			.defaultSchema(float.class, OMap.of("foo", "bar"))
-			.defaultSchema(Float.class, OMap.of("foo", "bar"))
-			.defaultSchema(double.class, OMap.of("foo", "bar"))
-			.defaultSchema(Double.class, OMap.of("foo", "bar"))
-			.defaultSchema(String.class, OMap.of("foo", "bar"))
-			.defaultSchema(StringBuilder.class, OMap.of("foo", "bar"))
-			.defaultSchema(Character.class, OMap.of("foo", "bar"))
-			.defaultSchema(char.class, OMap.of("foo", "bar"))
-			.defaultSchema(TestEnumToString.class, OMap.of("foo", "bar"))
-			.build().getSession();
-		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}");
-		assertObject(s.getSchema(BeanMap.class)).asJson().is("{foo:'bar',type:'object',additionalProperties:{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}}");
-		assertObject(s.getSchema(BeanList.class)).asJson().is("{foo:'bar',type:'array',items:{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}}");
-		assertObject(s.getSchema(BeanList[][].class)).asJson().is("{foo:'bar',type:'array',items:{type:'array',items:{foo:'bar',type:'array',items:{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}}}}");
-		assertObject(s.getSchema(boolean.class)).asJson().is("{foo:'bar',type:'boolean'}");
-		assertObject(s.getSchema(Boolean.class)).asJson().is("{foo:'bar',type:'boolean'}");
-		assertObject(s.getSchema(short.class)).asJson().is("{foo:'bar',type:'integer',format:'int16'}");
-		assertObject(s.getSchema(Short.class)).asJson().is("{foo:'bar',type:'integer',format:'int16'}");
-		assertObject(s.getSchema(int.class)).asJson().is("{foo:'bar',type:'integer',format:'int32'}");
-		assertObject(s.getSchema(Integer.class)).asJson().is("{foo:'bar',type:'integer',format:'int32'}");
-		assertObject(s.getSchema(long.class)).asJson().is("{foo:'bar',type:'integer',format:'int64'}");
-		assertObject(s.getSchema(Long.class)).asJson().is("{foo:'bar',type:'integer',format:'int64'}");
-		assertObject(s.getSchema(float.class)).asJson().is("{foo:'bar',type:'number',format:'float'}");
-		assertObject(s.getSchema(Float.class)).asJson().is("{foo:'bar',type:'number',format:'float'}");
-		assertObject(s.getSchema(double.class)).asJson().is("{foo:'bar',type:'number',format:'double'}");
-		assertObject(s.getSchema(Double.class)).asJson().is("{foo:'bar',type:'number',format:'double'}");
-		assertObject(s.getSchema(String.class)).asJson().is("{foo:'bar',type:'string'}");
-		assertObject(s.getSchema(StringBuilder.class)).asJson().is("{foo:'bar',type:'string'}");
-		assertObject(s.getSchema(Character.class)).asJson().is("{foo:'bar',type:'string'}");
-		assertObject(s.getSchema(char.class)).asJson().is("{foo:'bar',type:'string'}");
-		assertObject(s.getSchema(TestEnumToString.class)).asJson().is("{foo:'bar',type:'string','enum':['one','two','three']}");
-	}
-
-	//====================================================================================================
 	// JSONSCHEMA_allowNestedExamples
 	//====================================================================================================
 
@@ -1522,7 +1420,7 @@ public class JsonSchemaGeneratorTest {
 	// @JsonSchema on ObjectSwap
 	//====================================================================================================
 
-	@Schema(onClass=B.class,value="{foo:'bar'}")
+	@Schema(onClass=B.class,$ref="ref")
 	static class BConfig {}
 
 	static class B {}
@@ -1532,7 +1430,7 @@ public class JsonSchemaGeneratorTest {
 	public void schemaOnClass_onConfig() throws Exception {
 		AnnotationWorkList al = bConfig.getAnnotationList().getWork(null);
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		assertObject(x.getSchema(new B())).asJson().contains("foo:'bar'");
+		assertObject(x.getSchema(new B())).asJson().contains("'$ref':'ref'");
 	}
 
 }

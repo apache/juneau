@@ -4056,10 +4056,18 @@ public class HttpPartSchema {
 	}
 
 	final static Set<String> toSet(String[]...s) {
+		boolean isNotEmpty = false;
 		for (String[] ss : s)
-			if (ss != null && ss.length > 0)
-				return toSet(joinnl(ss));
-		return null;
+			isNotEmpty |= ss.length > 0;
+		if (! isNotEmpty)
+			return null;
+		Set<String> set = ASet.of();
+		for (String[] ss : s)
+			if (ss != null)
+				for (String ss2 : ss)
+					for (String ss3 : split(ss2, ','))
+						set.add(trim(ss3));
+		return set.isEmpty() ? null : set;
 	}
 
 	final static Set<String> toSet(String s) {

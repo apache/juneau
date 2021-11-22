@@ -64,7 +64,7 @@ public class OpSwaggerAnnotation_Test {
 				+ "consumes:['consumes'],"
 				+ "deprecated:'deprecated',"
 				+ "description:['description'],"
-				+ "externalDocs:{description:[],url:'',value:[]},"
+				+ "externalDocs:{description:[],url:''},"
 				+ "operationId:'operationId',"
 				+ "parameters:['parameters'],"
 				+ "produces:['produces'],"

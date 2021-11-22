@@ -46,7 +46,7 @@ public class Swagger_Header_Test {
 
 		@Header(
 			name="H",
-			schema=@Schema("{description:'a\nb',type:'string'}")
+			schema=@Schema(description="a\nb",type="string")
 		)
 		public static class A2 {
 			public A2(String x) {}
@@ -56,7 +56,7 @@ public class Swagger_Header_Test {
 
 		@Header(
 			name="H",
-			schema=@Schema("{description:'b\nc',type:'string'}"),
+			schema=@Schema(description="b\nc",type="string"),
 			description={"a","b"}
 		)
 		@Schema(type="string")
@@ -147,14 +147,14 @@ public class Swagger_Header_Test {
 		public void b(
 			@Header(
 				name="H",
-				schema=@Schema("{description:'a\nb',type:'string'}")
+				schema=@Schema(description="a\nb",type="string")
 			) String h) {}
 
 		@RestPost
 		public void c(
 			@Header(
 				name="H",
-				schema=@Schema("{description:'b\nc',type:'string'}"),
+				schema=@Schema(description="b\nc",type="string"),
 				description={"a","b"}
 			)
 			@Schema(type="string")

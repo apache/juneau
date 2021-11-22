@@ -63,21 +63,6 @@ public class ResponseStatusAnnotation {
 		return create().on(on);
 	}
 
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static ResponseStatus copy(ResponseStatus a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.build();
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -173,7 +158,7 @@ public class ResponseStatusAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.annotations(copy(a, vr()));
+			b.annotations(a);
 		}
 	}
 

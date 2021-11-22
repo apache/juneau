@@ -61,7 +61,6 @@ public class ItemsAnnotation_Test {
 		.type("type")
 		.ui(true)
 		.uniqueItems(true)
-		.value("value")
 		.build();
 
 	Items a2 = ItemsAnnotation.create()
@@ -98,7 +97,6 @@ public class ItemsAnnotation_Test {
 		.type("type")
 		.ui(true)
 		.uniqueItems(true)
-		.value("value")
 		.build();
 
 	@Test
@@ -118,7 +116,7 @@ public class ItemsAnnotation_Test {
 				+ "exclusiveMinimum:true,"
 				+ "f:'f',"
 				+ "format:'format',"
-				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},"
+				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},"
 				+ "max:'max',"
 				+ "maxItems:2,"
 				+ "maxLength:4,"
@@ -138,8 +136,7 @@ public class ItemsAnnotation_Test {
 				+ "t:'t',"
 				+ "type:'type',"
 				+ "ui:true,"
-				+ "uniqueItems:true,"
-				+ "value:['value']"
+				+ "uniqueItems:true"
 			+ "}"
 		);
 	}
@@ -202,8 +199,7 @@ public class ItemsAnnotation_Test {
 		t="t",
 		type="type",
 		ui=true,
-		uniqueItems=true,
-		value="value"
+		uniqueItems=true
 	)
 	public static class D1 {}
 	Items d1 = D1.class.getAnnotationsByType(Items.class)[0];
@@ -241,8 +237,7 @@ public class ItemsAnnotation_Test {
 		t="t",
 		type="type",
 		ui=true,
-		uniqueItems=true,
-		value="value"
+		uniqueItems=true
 	)
 	public static class D2 {}
 	Items d2 = D2.class.getAnnotationsByType(Items.class)[0];

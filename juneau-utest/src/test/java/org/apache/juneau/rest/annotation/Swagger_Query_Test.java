@@ -46,7 +46,7 @@ public class Swagger_Query_Test {
 
 		@Query(
 			n="Q",
-			schema=@Schema("{description: 'a\nb',type:'string'}")
+			schema=@Schema(description="a\nb",type="string")
 		)
 		public static class A2 {
 			public A2(String x) {}
@@ -56,7 +56,7 @@ public class Swagger_Query_Test {
 
 		@Query(
 			n="Q",
-			schema=@Schema("{description: 'b\nc',type:'string'}"),
+			schema=@Schema(description="b\nc",type="string"),
 			d={"a","b"}
 		)
 		@Schema(t="string")
@@ -158,7 +158,7 @@ public class Swagger_Query_Test {
 		public void b(
 			@Query(
 				n="Q",
-				schema=@Schema("{description: 'a\nb',type:'string'}")
+				schema=@Schema(description="a\nb",type="string")
 			)
 			String q) {}
 
@@ -166,7 +166,7 @@ public class Swagger_Query_Test {
 		public void c(
 			@Query(
 				n="Q",
-				schema=@Schema("{description: 'b\nc',type:'string'}"),
+				schema=@Schema(description="b\nc",type="string"),
 				d= {"a","b"}
 			)
 			@Schema(t="string")

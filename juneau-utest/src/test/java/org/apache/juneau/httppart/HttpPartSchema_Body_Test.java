@@ -388,7 +388,7 @@ public class HttpPartSchema_Body_Test {
 
 	@Body
 	@Schema(
-		e="['X','Y']"
+		e="X,Y"
 	)
 	public static class B04c {}
 
@@ -404,9 +404,9 @@ public class HttpPartSchema_Body_Test {
 	@Body
 	@Schema(
 		items=@Items(
-			e="['W']",
+			e="W",
 			items=@SubItems(
-				e="['X']",
+				e="X",
 				items={
 					"enum:['Y'],",
 					"items:{enum:['Z']}"

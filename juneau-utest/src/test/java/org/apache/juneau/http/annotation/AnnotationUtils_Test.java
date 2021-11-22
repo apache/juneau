@@ -81,7 +81,6 @@ public class AnnotationUtils_Test {
 		assertFalse(ContactAnnotation.empty(contact().email("foo").build()));
 		assertFalse(ContactAnnotation.empty(contact().name("foo").build()));
 		assertFalse(ContactAnnotation.empty(contact().url("foo").build()));
-		assertFalse(ContactAnnotation.empty(contact().value(a("foo")).build()));
 	}
 
 	@Test
@@ -180,7 +179,6 @@ public class AnnotationUtils_Test {
 
 		assertFalse(LicenseAnnotation.empty(license().name("foo").build()));
 		assertFalse(LicenseAnnotation.empty(license().url("foo").build()));
-		assertFalse(LicenseAnnotation.empty(license().value(a("foo")).build()));
 	}
 
 	@Test
@@ -269,7 +267,6 @@ public class AnnotationUtils_Test {
 		assertObject(tag().description(a("foo")).build().description()).asJson().is("['foo']");
 		assertObject(tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url()).asJson().is("'foo'");
 		assertObject(tag().name("foo").build().name()).asJson().is("'foo'");
-		assertObject(tag().value(a("foo")).build().value()).asJson().is("['foo']");
 	}
 
 	@Test
@@ -283,7 +280,6 @@ public class AnnotationUtils_Test {
 
 		assertFalse(ExternalDocsAnnotation.empty(externalDocs().description(a("foo")).build()));
 		assertFalse(ExternalDocsAnnotation.empty(externalDocs().url("foo").build()));
-		assertFalse(ExternalDocsAnnotation.empty(externalDocs().value(a("foo")).build()));
 	}
 
 	@Test
@@ -346,7 +342,6 @@ public class AnnotationUtils_Test {
 		assertFalse(SchemaAnnotation.empty(schema().type("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().ui(true).build()));
 		assertFalse(SchemaAnnotation.empty(schema().uniqueItems(true).build()));
-		assertFalse(SchemaAnnotation.empty(schema().value(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().xml(a("foo")).build()));
 	}
 
@@ -393,7 +388,6 @@ public class AnnotationUtils_Test {
 		assertFalse(SubItemsAnnotation.empty(subItems().type("foo").build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().ui(true).build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().uniqueItems(true).build()));
-		assertFalse(SubItemsAnnotation.empty(subItems().value(a("foo")).build()));
 	}
 
 	@Test
@@ -438,7 +432,6 @@ public class AnnotationUtils_Test {
 		assertFalse(ItemsAnnotation.empty(items().type("foo").build()));
 		assertFalse(ItemsAnnotation.empty(items().ui(true).build()));
 		assertFalse(ItemsAnnotation.empty(items().uniqueItems(true).build()));
-		assertFalse(ItemsAnnotation.empty(items().value(a("foo")).build()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

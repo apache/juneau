@@ -30,13 +30,11 @@ public class ExternalDocsAnnotation_Test {
 	ExternalDocs a1 = ExternalDocsAnnotation.create()
 		.description("description")
 		.url("url")
-		.value("value")
 		.build();
 
 	ExternalDocs a2 = ExternalDocsAnnotation.create()
 		.description("description")
 		.url("url")
-		.value("value")
 		.build();
 
 	@Test
@@ -44,8 +42,7 @@ public class ExternalDocsAnnotation_Test {
 		assertObject(a1).asString().is(""
 			+ "{"
 				+ "description:['description'],"
-				+ "url:'url',"
-				+ "value:['value']"
+				+ "url:'url'"
 			+ "}"
 		);
 	}
@@ -77,16 +74,14 @@ public class ExternalDocsAnnotation_Test {
 
 	@ExternalDocs(
 		description="description",
-		url="url",
-		value="value"
+		url="url"
 	)
 	public static class D1 {}
 	ExternalDocs d1 = D1.class.getAnnotationsByType(ExternalDocs.class)[0];
 
 	@ExternalDocs(
 		description="description",
-		url="url",
-		value="value"
+		url="url"
 	)
 	public static class D2 {}
 	ExternalDocs d2 = D2.class.getAnnotationsByType(ExternalDocs.class)[0];

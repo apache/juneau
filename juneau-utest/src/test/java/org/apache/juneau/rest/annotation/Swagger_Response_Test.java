@@ -103,7 +103,7 @@ public class Swagger_Response_Test {
 		@RestOp
 		public A5 j() {return null;}
 
-		@Response(headers=@ResponseHeader(name="foo",schema=@Schema("{type:'b'}")))
+		@Response(headers=@ResponseHeader(name="foo",schema=@Schema(type="object")))
 		public static class A6 {}
 		@RestOp
 		public void k(Value<A6> r) {}
@@ -171,16 +171,16 @@ public class Swagger_Response_Test {
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/k","get",200);
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'b'}}");
+		assertObject(x.getHeaders()).asJson().is("{foo:{type:'object'}}");
 
 		x = s.getResponseInfo("/l","get",200);
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'b'}}");
+		assertObject(x.getHeaders()).asJson().is("{foo:{type:'object'}}");
 	}
 
 	@Rest
 	public static class B {
 
-		@Response(schema=@Schema(" type:'number' "))
+		@Response(schema=@Schema(type="number"))
 		public static class B1 {}
 		@RestGet
 		public void a(Value<B1> r) {}
@@ -338,7 +338,7 @@ public class Swagger_Response_Test {
 		@RestOp
 		public void e() throws D5 {}
 
-		@Response(headers=@ResponseHeader(name="foo", schema=@Schema(" {type:'number'} ")))
+		@Response(headers=@ResponseHeader(name="foo", schema=@Schema(type="number")))
 		public static class D6 extends Throwable {}
 		@RestOp
 		public void f() throws D6 {}
@@ -383,7 +383,7 @@ public class Swagger_Response_Test {
 	@Rest
 	public static class E {
 
-		@Response(schema=@Schema(" type:'number' "))
+		@Response(schema=@Schema(type="number"))
 		public static class E1 extends Throwable {}
 		@RestGet
 		public void a() throws E1 {}

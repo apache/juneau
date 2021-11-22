@@ -47,10 +47,10 @@ public class Swagger_Body_Test {
 		public void a(A1 h) {}
 
 		@Body(description="a\nb")
-		@Schema({
-			"required:true,",
-			"type:'string'",
-		})
+		@Schema(
+			required=true,
+			type="string"
+		)
 		public static class A2 {
 			public A2(String x) {}
 		}
@@ -94,7 +94,7 @@ public class Swagger_Body_Test {
 	public static class B {
 
 		@Body
-		@Schema(" type:'b' ")
+		@Schema(type="object")
 		public static class B1 {}
 		@RestGet
 		public void a(B1 h) {}
@@ -125,7 +125,7 @@ public class Swagger_Body_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'b'}");
+		assertObject(x.getSchema()).asJson().is("{type:'object'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
@@ -162,10 +162,10 @@ public class Swagger_Body_Test {
 		@RestPut
 		public void b(
 			@Body(description="a\nb")
-			@Schema({
-				"required:true,",
-				"type:'string'",
-			})
+			@Schema(
+				required=true,
+				type="string"
+			)
 			D2 b) {}
 
 		public static class D3 {
@@ -178,10 +178,8 @@ public class Swagger_Body_Test {
 				d= {"b","c"}
 			)
 			@Schema(
-				value= {
-					"required:true,",
-					"type:'string'"
-				}
+				required=true,
+				type="string"
 			)
 			D3 b) {}
 	}
@@ -212,7 +210,7 @@ public class Swagger_Body_Test {
 
 		public static class E1 {}
 		@RestGet
-		public void a(@Body()@Schema(" { type:'b' } ") E1 b) {}
+		public void a(@Body @Schema(type="object") E1 b) {}
 
 		public static class E2 {
 			public String f1;
@@ -243,7 +241,7 @@ public class Swagger_Body_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'b'}");
+		assertObject(x.getSchema()).asJson().is("{type:'object'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");

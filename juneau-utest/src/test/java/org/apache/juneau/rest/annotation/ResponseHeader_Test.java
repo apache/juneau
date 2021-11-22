@@ -90,7 +90,7 @@ public class ResponseHeader_Test {
 
 		@ResponseHeader(
 			name="H",
-			schema=@Schema("{description:'a',type:'string'}")
+			schema=@Schema(description="a",type="string")
 		)
 		public static class B2 {}
 		@RestGet
@@ -98,7 +98,7 @@ public class ResponseHeader_Test {
 
 		@ResponseHeader(
 			name="H",
-			schema=@Schema("description:'b',type:'number'}"),
+			schema=@Schema(description="b",type="number"),
 			description="a"
 		)
 		@Schema(
@@ -184,7 +184,7 @@ public class ResponseHeader_Test {
 		public void b(
 			@ResponseHeader(
 				name="H",
-				schema=@Schema("{description:'a',type:'string'}")
+				schema=@Schema(description="a",type="string")
 			)
 			Value<C2> h) {}
 
@@ -193,7 +193,7 @@ public class ResponseHeader_Test {
 		public void c(
 			@ResponseHeader(
 				name="H",
-				schema=@Schema("{description:'b',type:'number'}"),
+				schema=@Schema(description="b",type="number"),
 				description="a"
 			)
 			@Schema(

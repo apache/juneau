@@ -61,7 +61,6 @@ public class SubItemsAnnotation_Test {
 		.type("type")
 		.ui(true)
 		.uniqueItems(true)
-		.value("value")
 		.build();
 
 	SubItems a2 = SubItemsAnnotation.create()
@@ -98,7 +97,6 @@ public class SubItemsAnnotation_Test {
 		.type("type")
 		.ui(true)
 		.uniqueItems(true)
-		.value("value")
 		.build();
 
 	@Test
@@ -138,8 +136,7 @@ public class SubItemsAnnotation_Test {
 				+ "t:'t',"
 				+ "type:'type',"
 				+ "ui:true,"
-				+ "uniqueItems:true,"
-				+ "value:['value']"
+				+ "uniqueItems:true"
 			+ "}"
 		);
 	}
@@ -202,8 +199,7 @@ public class SubItemsAnnotation_Test {
 		t="t",
 		type="type",
 		ui=true,
-		uniqueItems=true,
-		value="value"
+		uniqueItems=true
 	)
 	public static class D1 {}
 	SubItems d1 = D1.class.getAnnotationsByType(SubItems.class)[0];
@@ -241,8 +237,7 @@ public class SubItemsAnnotation_Test {
 		t="t",
 		type="type",
 		ui=true,
-		uniqueItems=true,
-		value="value"
+		uniqueItems=true
 	)
 	public static class D2 {}
 	SubItems d2 = D2.class.getAnnotationsByType(SubItems.class)[0];

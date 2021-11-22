@@ -19,8 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -230,29 +228,6 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
 			generatorBuilder.beanDefMapper(value);
 			return this;
-		}
-
-		/**
-		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Default schemas.
-		 *
-		 * <p>
-		 * Allows you to override or provide custom schema information for particular class types.
-		 * <p>
-		 * Keys are full class names.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='jf'>{@link Schema#value}
-		 * </ul>
-		 *
-		 * @param c
-		 * 	The class to define a default schema for.
-		 * @param schema
-		 * 	The schema.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder defaultSchema(Class<?> c, OMap schema) {
-			return annotations(SchemaAnnotation.create(c).value(schema.toString()).build());
 		}
 
 		/**

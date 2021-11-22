@@ -30,14 +30,12 @@ public class TagAnnotation_Test {
 		.description("description")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.name("name")
-		.value("value")
 		.build();
 
 	Tag a2 = TagAnnotation.create()
 		.description("description")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.name("name")
-		.value("value")
 		.build();
 
 	@Test
@@ -45,9 +43,8 @@ public class TagAnnotation_Test {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "description:['description'],"
-				+ "externalDocs:{description:[],url:'',value:[]},"
-				+ "name:'name',"
-				+ "value:['value']"
+				+ "externalDocs:{description:[],url:''},"
+				+ "name:'name'"
 			+ "}"
 		);
 	}
@@ -80,8 +77,7 @@ public class TagAnnotation_Test {
 	@Tag(
 		description="description",
 		externalDocs=@ExternalDocs,
-		name="name",
-		value="value"
+		name="name"
 	)
 	public static class D1 {}
 	Tag d1 = D1.class.getAnnotationsByType(Tag.class)[0];
@@ -89,8 +85,7 @@ public class TagAnnotation_Test {
 	@Tag(
 		description="description",
 		externalDocs=@ExternalDocs,
-		name="name",
-		value="value"
+		name="name"
 	)
 	public static class D2 {}
 	Tag d2 = D2.class.getAnnotationsByType(Tag.class)[0];

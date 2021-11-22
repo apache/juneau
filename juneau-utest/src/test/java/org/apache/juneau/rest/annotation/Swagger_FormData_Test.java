@@ -46,7 +46,7 @@ public class Swagger_FormData_Test {
 
 		@FormData(
 			name="F",
-			schema=@Schema("{description:'a\nb',type:'string'}")
+			schema=@Schema(description="a\nb",type="string")
 		)
 		public static class A2 {
 			public A2(String x) {}
@@ -56,7 +56,7 @@ public class Swagger_FormData_Test {
 
 		@FormData(
 			name="F",
-			schema=@Schema("{description:'b\nc',type:'string'}"),
+			schema=@Schema(description="b\nc",type="string"),
 			description= {"a","b"}
 		)
 		@Schema(type="string")
@@ -158,14 +158,14 @@ public class Swagger_FormData_Test {
 		public void b(
 			@FormData(
 				name="F",
-				schema=@Schema("{description:'a\nb',type:'string'}")
+				schema=@Schema(description="a\nb",type="string")
 			) String f) {}
 
 		@RestPost
 		public void c(
 			@FormData(
 				name="F",
-				schema=@Schema("{description:'b\nc',type:'string'}"),
+				schema=@Schema(description="b\nc",type="string"),
 				description={"a","b"}
 			)
 			@Schema(type="string")

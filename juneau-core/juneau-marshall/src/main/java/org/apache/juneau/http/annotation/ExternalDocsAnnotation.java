@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link ExternalDocs @ExternalDocs} annotation.
@@ -44,22 +43,6 @@ public class ExternalDocsAnnotation {
 	}
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static ExternalDocs copy(ExternalDocs a, VarResolverSession r) {
-		return
-			create()
-			.description(r.resolve(a.description()))
-			.url(r.resolve(a.url()))
-			.value(r.resolve(a.value()))
-			.build();
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
@@ -80,8 +63,6 @@ public class ExternalDocsAnnotation {
 	public static OMap merge(OMap om, ExternalDocs a) throws ParseException {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("description", joinnl(a.description()))
 			.appendSkipEmpty("url", a.url())
@@ -102,7 +83,7 @@ public class ExternalDocsAnnotation {
 	public static class Builder extends AnnotationBuilder {
 
 		String url="";
-		String[] description={}, value={};
+		String[] description={};
 
 		/**
 		 * Constructor.
@@ -142,17 +123,6 @@ public class ExternalDocsAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link ExternalDocs#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 		// </FluentSetters>
 	}
@@ -164,13 +134,12 @@ public class ExternalDocsAnnotation {
 	private static class Impl extends AnnotationImpl implements ExternalDocs {
 
 		private final String url;
-		private final String[] description, value;
+		private final String[] description;
 
 		Impl(Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.url = b.url;
-			this.value = copyOf(b.value);
 			postConstruct();
 		}
 
@@ -182,11 +151,6 @@ public class ExternalDocsAnnotation {
 		@Override
 		public String url() {
 			return url;
-		}
-
-		@Override
-		public String[] value() {
-			return value;
 		}
 	}
 }

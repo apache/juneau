@@ -12,12 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link License @License} annotation.
@@ -38,22 +35,6 @@ public class LicenseAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static License copy(License a, VarResolverSession r) {
-		return
-			create()
-			.name(r.resolve(a.name()))
-			.url(r.resolve(a.url()))
-			.value(r.resolve(a.value()))
-			.build();
 	}
 
 	/**
@@ -80,7 +61,6 @@ public class LicenseAnnotation {
 	public static class Builder extends AnnotationBuilder {
 
 		String name="", url="";
-		String[] value={};
 
 		/**
 		 * Constructor.
@@ -121,17 +101,6 @@ public class LicenseAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link License#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 
 		// </FluentSetters>
@@ -144,13 +113,11 @@ public class LicenseAnnotation {
 	private static class Impl extends AnnotationImpl implements License {
 
 		private final String name, url;
-		private final String[] value;
 
 		Impl(Builder b) {
 			super(b);
 			this.name = b.name;
 			this.url = b.url;
-			this.value = copyOf(b.value);
 			postConstruct();
 		}
 
@@ -162,11 +129,6 @@ public class LicenseAnnotation {
 		@Override /* License */
 		public String url() {
 			return url;
-		}
-
-		@Override /* License */
-		public String[] value() {
-			return value;
 		}
 	}
 }

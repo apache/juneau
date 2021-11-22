@@ -505,7 +505,7 @@ public class HttpPartSchema_FormData_Test {
 	}
 
 	@FormData
-	@Schema(e="['X','Y']")
+	@Schema(e="X,Y")
 	public static class B04c {}
 
 	@Test
@@ -520,9 +520,9 @@ public class HttpPartSchema_FormData_Test {
 	@FormData
 	@Schema(
 		items=@Items(
-			e="['W']",
+			e="W",
 			items=@SubItems(
-				e="['X']",
+				e="X",
 				items={
 					"enum:['Y'],",
 					"items:{enum:['Z']}"

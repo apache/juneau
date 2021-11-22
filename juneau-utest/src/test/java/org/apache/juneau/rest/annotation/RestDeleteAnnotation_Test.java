@@ -99,7 +99,7 @@ public class RestDeleteAnnotation_Test {
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "summary:'summary',"
-				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:'',value:[]},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
+				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:''},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
 				+ "value:'value'"
 			+ "}"
 		);

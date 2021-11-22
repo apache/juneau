@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link SubItems @SubItems} annotation.
@@ -44,54 +43,6 @@ public class SubItemsAnnotation {
 	}
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static SubItems copy(SubItems a, VarResolverSession r) {
-		return
-			create()
-			._default(r.resolve(a._default()))
-			._enum(r.resolve(a._enum()))
-			.$ref(r.resolve(a.$ref()))
-			.cf(r.resolve(a.cf()))
-			.collectionFormat(r.resolve(a.collectionFormat()))
-			.df(r.resolve(a.df()))
-			.e(r.resolve(a.e()))
-			.emax(a.emax())
-			.emin(a.emin())
-			.exclusiveMaximum(a.exclusiveMaximum())
-			.exclusiveMinimum(a.exclusiveMinimum())
-			.f(r.resolve(a.f()))
-			.format(r.resolve(a.format()))
-			.items(r.resolve(a.items()))
-			.max(r.resolve(a.max()))
-			.maxi(a.maxi())
-			.maximum(r.resolve(a.maximum()))
-			.maxItems(a.maxItems())
-			.maxl(a.maxLength())
-			.maxLength(a.maxLength())
-			.min(r.resolve(a.min()))
-			.mini(a.mini())
-			.minimum(r.resolve(a.minimum()))
-			.minItems(a.minItems())
-			.minl(a.minl())
-			.minLength(a.minLength())
-			.mo(r.resolve(a.mo()))
-			.multipleOf(r.resolve(a.mo()))
-			.p(r.resolve(a.p()))
-			.pattern(r.resolve(a.pattern()))
-			.t(r.resolve(a.t()))
-			.type(r.resolve(a.type()))
-			.ui(a.ui())
-			.uniqueItems(a.uniqueItems())
-			.value(r.resolve(a.value()))
-			.build();
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
@@ -112,8 +63,6 @@ public class SubItemsAnnotation {
 	public static OMap merge(OMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
-		if (a.value().length > 0)
-			om.putAll(parseMap(a.value()));
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
@@ -152,7 +101,7 @@ public class SubItemsAnnotation {
 		String $ref="", cf="", collectionFormat="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", type="";
 		long maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
 		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		String[] _default={}, _enum={}, df={}, e={}, items={}, value={};
+		String[] _default={}, _enum={}, df={}, e={}, items={};
 
 		/**
 		 * Constructor.
@@ -544,17 +493,6 @@ public class SubItemsAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the <c>value</c> property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(String...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 		// </FluentSetters>
 	}
@@ -568,7 +506,7 @@ public class SubItemsAnnotation {
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
-		private final String[] _default, _enum, df, e, items, value;
+		private final String[] _default, _enum, df, e, items;
 
 		Impl(Builder b) {
 			super(b);
@@ -606,7 +544,6 @@ public class SubItemsAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			this.value = copyOf(b.value);
 			postConstruct();
 		}
 
@@ -778,11 +715,6 @@ public class SubItemsAnnotation {
 		@Override /* SubItems */
 		public boolean uniqueItems() {
 			return uniqueItems;
-		}
-
-		@Override /* SubItems */
-		public String[] value() {
-			return value;
 		}
 	}
 }

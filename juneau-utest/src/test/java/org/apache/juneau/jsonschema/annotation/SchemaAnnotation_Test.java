@@ -85,7 +85,6 @@ public class SchemaAnnotation_Test {
 		.type("type")
 		.ui(true)
 		.uniqueItems(true)
-		.value("value")
 		.xml("xml")
 		.build();
 
@@ -143,7 +142,6 @@ public class SchemaAnnotation_Test {
 		.type("type")
 		.ui(true)
 		.uniqueItems(true)
-		.value("value")
 		.xml("xml")
 		.build();
 
@@ -169,11 +167,11 @@ public class SchemaAnnotation_Test {
 				+ "emin:true,"
 				+ "exclusiveMaximum:true,"
 				+ "exclusiveMinimum:true,"
-				+ "externalDocs:{description:[],url:'',value:[]},"
+				+ "externalDocs:{description:[],url:''},"
 				+ "f:'f',"
 				+ "format:'format',"
 				+ "ignore:true,"
-				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false,value:[]},"
+				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},"
 				+ "max:'max',"
 				+ "maxItems:2,"
 				+ "maxLength:4,"
@@ -207,7 +205,6 @@ public class SchemaAnnotation_Test {
 				+ "type:'type',"
 				+ "ui:true,"
 				+ "uniqueItems:true,"
-				+ "value:['value'],"
 				+ "xml:['xml']"
 			+ "}"
 		);
@@ -314,7 +311,6 @@ public class SchemaAnnotation_Test {
 		type="type",
 		ui=true,
 		uniqueItems=true,
-		value="value",
 		xml="xml"
 	)
 	public static class D1 {}
@@ -374,7 +370,6 @@ public class SchemaAnnotation_Test {
 		type="type",
 		ui=true,
 		uniqueItems=true,
-		value="value",
 		xml="xml"
 	)
 	public static class D2 {}

@@ -53,7 +53,7 @@ public class Swagger_Path_Test {
 
 		@Path(
 			n="P",
-			schema=@Schema("{description:'a\nb',type:'string',enum:['a','b']}")
+			schema=@Schema(description="a\nb",type="string",_enum={"a","b"})
 		)
 		public static class A2 {
 			public A2(String x) {}
@@ -67,7 +67,7 @@ public class Swagger_Path_Test {
 
 		@Path(
 			n="P",
-			schema=@Schema("{description:'b\nc',type:'string',enum:['b','c']}"),
+			schema=@Schema(description="b\nc",type="string",_enum={"b","c"}),
 			d={"a","b"}
 		)
 		@Schema(
@@ -96,7 +96,7 @@ public class Swagger_Path_Test {
 		public void d(A4 f) {}
 
 		@Path(n="P")
-		@Schema(e={" ['a','b'] "})
+		@Schema(e="a,b")
 		public static class A5 {
 			@Override
 			public String toString() {
@@ -202,13 +202,13 @@ public class Swagger_Path_Test {
 		@RestPut(path="/b/{P}")
 		public void b(@Path(
 			n="P",
-			schema=@Schema("{description:'a',type:'string'}")
+			schema=@Schema(description="a",type="string")
 		) String h) {}
 
 		@RestPost(path="/c/{P}")
 		public void c(@Path(
 			n="P",
-			schema=@Schema("{description:'b',type:'string'}"),
+			schema=@Schema(description="b",type="string"),
 			d="a"
 		)
 		@Schema(t="string")
@@ -218,7 +218,7 @@ public class Swagger_Path_Test {
 		public void d(@Path("P") String h) {}
 
 		@RestOp(path="/e/{P}")
-		public void e(@Path("P") @Schema(e={" ['a','b'] "}) String h) {}
+		public void e(@Path("P") @Schema(e="a,b") String h) {}
 	}
 
 	@Test
