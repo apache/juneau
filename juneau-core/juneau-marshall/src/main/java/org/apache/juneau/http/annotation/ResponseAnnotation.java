@@ -68,34 +68,6 @@ public class ResponseAnnotation {
 	}
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Response copy(Response a, VarResolverSession r) {
-		return
-			create()
-			.api(r.resolve(a.api()))
-			.code(a.code())
-			.d(r.resolve(a.d()))
-			.description(r.resolve(a.description()))
-			.ex(r.resolve(a.ex()))
-			.example(r.resolve(a.example()))
-			.examples(r.resolve(a.examples()))
-			.exs(r.resolve(a.exs()))
-			.headers(ResponseHeaderAnnotation.copy(a.headers(), r))
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.parser(a.parser())
-			.schema(SchemaAnnotation.copy(a.schema(), r))
-			.serializer(a.serializer())
-			.value(a.value())
-			.build();
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
@@ -435,7 +407,7 @@ public class ResponseAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.annotations(copy(a, vr()));
+			b.annotations(a);
 		}
 	}
 

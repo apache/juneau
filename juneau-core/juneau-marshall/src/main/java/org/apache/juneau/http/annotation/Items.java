@@ -87,9 +87,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] _default() default {};
@@ -100,9 +97,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] _enum() default {};
@@ -113,9 +107,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String $ref() default "";
@@ -131,9 +122,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String collectionFormat() default "";
@@ -164,9 +152,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean exclusiveMaximum() default false;
@@ -177,9 +162,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
@@ -195,9 +177,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String format() default "";
@@ -226,9 +205,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String maximum() default "";
@@ -239,9 +215,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long maxItems() default -1;
@@ -257,9 +230,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long maxLength() default -1;
@@ -280,9 +250,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String minimum() default "";
@@ -293,9 +260,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long minItems() default -1;
@@ -311,9 +275,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long minLength() default -1;
@@ -329,9 +290,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String multipleOf() default "";
@@ -347,9 +305,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String pattern() default "";
@@ -365,9 +320,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String type() default "";
@@ -383,9 +335,6 @@ public @interface Items {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;
@@ -472,9 +421,6 @@ public @interface Items {
 	 * 		</p>
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>

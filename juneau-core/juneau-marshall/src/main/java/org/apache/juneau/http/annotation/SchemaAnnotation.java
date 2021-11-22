@@ -69,78 +69,6 @@ public class SchemaAnnotation {
 	}
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Schema copy(Schema a, VarResolverSession r) {
-		return
-			create()
-			._default(r.resolve(a._default()))
-			._enum(r.resolve(a._enum()))
-			.$ref(r.resolve(a.$ref()))
-			.additionalProperties(r.resolve(a.additionalProperties()))
-			.allOf(r.resolve(a.allOf()))
-			.aev(a.aev())
-			.allowEmptyValue(a.allowEmptyValue())
-			.cf(r.resolve(a.cf()))
-			.collectionFormat(r.resolve(a.collectionFormat()))
-			.d(r.resolve(a.d()))
-			.description(r.resolve(a.description()))
-			.df(r.resolve(a.df()))
-			.discriminator(r.resolve(a.discriminator()))
-			.e(r.resolve(a.e()))
-			.emax(a.emax())
-			.emin(a.emin())
-			.exclusiveMaximum(a.exclusiveMaximum())
-			.exclusiveMinimum(a.exclusiveMinimum())
-			.externalDocs(ExternalDocsAnnotation.copy(a.externalDocs(), r))
-			.f(r.resolve(a.f()))
-			.format(r.resolve(a.format()))
-			.ignore(a.ignore())
-			.items(ItemsAnnotation.copy(a.items(), r))
-			.max(r.resolve(a.max()))
-			.maxi(a.maxi())
-			.maximum(r.resolve(a.maximum()))
-			.maxItems(a.maxItems())
-			.maxl(a.maxLength())
-			.maxLength(a.maxLength())
-			.maxp(a.maxp())
-			.maxProperties(a.maxProperties())
-			.min(r.resolve(a.min()))
-			.mini(a.mini())
-			.minimum(r.resolve(a.minimum()))
-			.minItems(a.minItems())
-			.minl(a.minl())
-			.minLength(a.minLength())
-			.minp(a.minp())
-			.minProperties(a.minProperties())
-			.mo(r.resolve(a.mo()))
-			.multipleOf(r.resolve(a.mo()))
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.p(r.resolve(a.p()))
-			.pattern(r.resolve(a.pattern()))
-			.properties(r.resolve(a.properties()))
-			.r(a.r())
-			.readOnly(a.readOnly())
-			.required(a.required())
-			.ro(a.ro())
-			.sie(a.sie())
-			.skipIfEmpty(a.skipIfEmpty())
-			.t(r.resolve(a.t()))
-			.title(r.resolve(a.title()))
-			.type(r.resolve(a.type()))
-			.ui(a.ui())
-			.uniqueItems(a.uniqueItems())
-			.value(r.resolve(a.value()))
-			.xml(r.resolve(a.xml()))
-			.build();
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
@@ -1311,7 +1239,7 @@ public class SchemaAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.annotations(copy(a, vr()));
+			b.annotations(a);
 		}
 	}
 

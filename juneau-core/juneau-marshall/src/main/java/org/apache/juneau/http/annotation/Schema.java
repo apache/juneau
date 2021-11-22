@@ -174,9 +174,6 @@ public @interface Schema {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String $ref() default "";
@@ -188,9 +185,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] additionalProperties() default {};
@@ -202,9 +196,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] allOf() default {};
@@ -321,8 +312,7 @@ public @interface Schema {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String[] description() default {};
@@ -339,9 +329,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String discriminator() default "";
@@ -422,9 +409,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
@@ -507,9 +491,6 @@ public @interface Schema {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -653,9 +634,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long maxProperties() default -1;
@@ -768,9 +746,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long minProperties() default -1;
@@ -948,9 +923,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] properties() default {};
@@ -967,9 +939,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean readOnly() default false;
@@ -1049,9 +1018,6 @@ public @interface Schema {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String title() default "";
@@ -1217,9 +1183,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
 	 */
@@ -1232,9 +1195,6 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] xml() default {};

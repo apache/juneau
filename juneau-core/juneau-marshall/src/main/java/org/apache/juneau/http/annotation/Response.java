@@ -134,8 +134,7 @@ public @interface Response {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
@@ -168,8 +167,7 @@ public @interface Response {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String[] description() default {};
@@ -288,8 +286,7 @@ public @interface Response {
 	 * 	<li>
 	 * 		The format of this object can also be a simple String if the body has a schema associated with it, meaning it's meant to be treated as an HTTP part.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String[] example() default {};
@@ -328,8 +325,7 @@ public @interface Response {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * 	<li>
 	 * 		Resolution of variables is delayed until request time and occurs before parsing.
 	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.

@@ -63,22 +63,6 @@ public class ResponseBodyAnnotation {
 		return create().on(on);
 	}
 
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static ResponseBody copy(ResponseBody a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.schema(SchemaAnnotation.copy(a.schema(), r))
-			.build();
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -195,7 +179,7 @@ public class ResponseBodyAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.annotations(copy(a, vr()));
+			b.annotations(a);
 		}
 	}
 

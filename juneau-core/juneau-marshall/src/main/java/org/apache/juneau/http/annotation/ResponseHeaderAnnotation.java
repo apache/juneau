@@ -68,43 +68,6 @@ public class ResponseHeaderAnnotation {
 	}
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static ResponseHeader copy(ResponseHeader a, VarResolverSession r) {
-		return
-			create()
-			.code(a.code())
-			.d(r.resolve(a.d()))
-			.description(r.resolve(a.description()))
-			.n(r.resolve(a.n()))
-			.name(r.resolve(a.name()))
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.schema(SchemaAnnotation.copy(a.schema(), r))
-			.serializer(a.serializer())
-			.value(r.resolve(a.value()))
-			.build();
-	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static ResponseHeader[] copy(ResponseHeader[] a, VarResolverSession r) {
-		ResponseHeader[] b = new ResponseHeader[a.length];
-		for (int i = 0; i < a.length; i++)
-			b[i] = copy(a[i], r);
-		return b;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
 	 * @param a The annotation to check.
@@ -357,7 +320,7 @@ public class ResponseHeaderAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.annotations(copy(a, vr()));
+			b.annotations(a);
 		}
 	}
 
