@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The request was valid, but the server is refusing action.
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class Forbidden extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class SeeOther extends BasicHttpResponse {
 
 	/** HTTP status code */

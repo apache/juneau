@@ -95,9 +95,6 @@ import java.lang.annotation.*;
 </p>
 
  *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestHasFormDataAnnotation}
- * </ul>
  */
 @Documented
 @Target({PARAMETER})

@@ -14,7 +14,6 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -94,7 +93,6 @@ public class ResponseHeaderAnnotation {
 		int[] code={};
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String n="", name="", value="";
-		String[] d={}, description={};
 
 		/**
 		 * Constructor.
@@ -120,28 +118,6 @@ public class ResponseHeaderAnnotation {
 		 */
 		public Builder code(int...value) {
 			this.code = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link ResponseHeader#d} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder d(String...value) {
-			this.d = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link ResponseHeader#description} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -238,14 +214,11 @@ public class ResponseHeaderAnnotation {
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final int[] code;
 		private final String n, name, value;
-		private final String[] d, description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
 			this.code = Arrays.copyOf(b.code, b.code.length);
-			this.d = copyOf(b.d);
-			this.description = copyOf(b.description);
 			this.n = b.n;
 			this.name = b.name;
 			this.schema = b.schema;
@@ -257,16 +230,6 @@ public class ResponseHeaderAnnotation {
 		@Override /* ResponseHeader */
 		public int[] code() {
 			return code;
-		}
-
-		@Override /* ResponseHeader */
-		public String[] d() {
-			return d;
-		}
-
-		@Override /* ResponseHeader */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* ResponseHeader */

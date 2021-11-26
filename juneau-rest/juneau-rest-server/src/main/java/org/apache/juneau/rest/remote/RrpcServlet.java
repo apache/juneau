@@ -25,8 +25,8 @@ import java.util.concurrent.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -94,7 +94,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		nav="<h5>Interface:  $RP{javaInterface}</h5>"
 	)
 	public Collection<LinkString> listMethods(
-			@Path(name="javaInterface", description="Java interface name") String javaInterface
+			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface
 		) throws Exception {
 
 		List<LinkString> l = new ArrayList<>();
@@ -115,8 +115,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		}
 	)
 	public Div showEntryForm(
-			@Path(name="javaInterface", description="Java interface name") String javaInterface,
-			@Path(name="javaMethod", description="Java method name") String javaMethod
+			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface,
+			@Path("javaMethod") @Schema(description="Java method name") String javaMethod
 		) throws NotFound, Exception {
 
 		// Find the method.
@@ -182,8 +182,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			Reader r,
 			ReaderParser p,
 			@Header("Content-Type") ContentType contentType,
-			@Path(name="javaInterface", description="Java interface name") String javaInterface,
-			@Path(name="javaMethod", description="Java method name") String javaMethod
+			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface,
+			@Path("javaMethod") @Schema(description="Java method name") String javaMethod
 		) throws UnsupportedMediaType, NotFound, Exception {
 
 		// Find the parser.

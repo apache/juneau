@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * This and all future requests should be directed to the given URI.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class MovedPermanently extends BasicHttpResponse {
 
 	/** HTTP status code */

@@ -20,7 +20,7 @@ package org.apache.juneau.swap;
  * <br>It's purpose is to identify a class as a builder when it's used on a constructor of the built class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ObjectBuilders}
+ * 	<li class='link'>{@doc PojoBuilders}
  * </ul>
  *
  * @param <T> The type of objects that this builder creates.

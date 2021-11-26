@@ -34,10 +34,10 @@ public class Swagger_Path_Test {
 	public static class A {
 
 		@Path(
-			n="P",
-			d={"a","b"}
+			n="P"
 		)
 		@Schema(
+			d={"a","b"},
 			e="a,b",
 			t="string"
 		)
@@ -67,10 +67,10 @@ public class Swagger_Path_Test {
 
 		@Path(
 			n="P",
-			schema=@Schema(description="b\nc",type="string",_enum={"b","c"}),
-			d={"a","b"}
+			schema=@Schema(description="b\nc",type="string",_enum={"b","c"})
 		)
 		@Schema(
+			d={"a","b"},
 			t="string",
 			e="a,b"
 		)
@@ -128,10 +128,10 @@ public class Swagger_Path_Test {
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertEquals("P", x.getName());
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).asJson().is("['b','c']");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['b','c']}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'b\\nc',required:true,'enum':['b','c']}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertEquals("P", x.getName());
@@ -193,10 +193,9 @@ public class Swagger_Path_Test {
 
 		@RestGet(path="/a/{P}")
 		public void a(@Path(
-			n="P",
-			d="a"
+			n="P"
 		)
-		@Schema(t="string")
+		@Schema(d="a", t="string")
 		String h) {}
 
 		@RestPut(path="/b/{P}")
@@ -208,10 +207,9 @@ public class Swagger_Path_Test {
 		@RestPost(path="/c/{P}")
 		public void c(@Path(
 			n="P",
-			schema=@Schema(description="b",type="string"),
-			d="a"
+			schema=@Schema(description="b",type="string")
 		)
-		@Schema(t="string")
+		@Schema(d="a", t="string")
 		String h) {}
 
 		@RestDelete(path="/d/{P}")
@@ -235,7 +233,7 @@ public class Swagger_Path_Test {
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertEquals("a", x.getDescription());
+		assertEquals("b", x.getDescription());
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");

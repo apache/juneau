@@ -33,8 +33,6 @@ public class ResponseAnnotation_Test {
 
 	Response a1 = ResponseAnnotation.create()
 		.code(1)
-		.d("d")
-		.description("description")
 		.ex("ex")
 		.example("example")
 		.examples("examples")
@@ -50,8 +48,6 @@ public class ResponseAnnotation_Test {
 
 	Response a2 = ResponseAnnotation.create()
 		.code(1)
-		.d("d")
-		.description("description")
 		.ex("ex")
 		.example("example")
 		.examples("examples")
@@ -70,8 +66,6 @@ public class ResponseAnnotation_Test {
 		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "code:[1],"
-				+ "d:['d'],"
-				+ "description:['description'],"
 				+ "ex:['ex'],"
 				+ "example:['example'],"
 				+ "examples:['examples'],"
@@ -134,8 +128,6 @@ public class ResponseAnnotation_Test {
 
 	@Response(
 		code=1,
-		d="d",
-		description="description",
 		ex="ex",
 		example="example",
 		examples="examples",
@@ -153,8 +145,6 @@ public class ResponseAnnotation_Test {
 
 	@Response(
 		code=1,
-		d="d",
-		description="description",
 		ex="ex",
 		example="example",
 		examples="examples",

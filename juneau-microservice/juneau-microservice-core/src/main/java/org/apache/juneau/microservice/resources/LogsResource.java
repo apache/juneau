@@ -120,12 +120,12 @@ public class LogsResource extends BasicRestServlet {
 	public void viewFile(
 			RestResponse res,
 			@Path("/*") String path,
-			@Query(n="highlight", d="Add severity color highlighting.") boolean highlight,
-			@Query(n="start", d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String start,
-			@Query(n="end", d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String end,
-			@Query(n="thread", d="Thread name filter.\nOnly show log entries with the specified thread name.") String thread,
-			@Query(n="loggers", d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.") String[] loggers,
-			@Query(n="severity", d="Severity filter.\nOnly show log entries with the specified severity.") String[] severity
+			@Query("highlight") @Schema(d="Add severity color highlighting.") boolean highlight,
+			@Query("start") @Schema(d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String start,
+			@Query("end") @Schema(d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String end,
+			@Query("thread") @Schema(d="Thread name filter.\nOnly show log entries with the specified thread name.") String thread,
+			@Query("loggers") @Schema(d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.") String[] loggers,
+			@Query("severity") @Schema(d="Severity filter.\nOnly show log entries with the specified severity.") String[] severity
 		) throws NotFound, MethodNotAllowed, IOException {
 
 		File f = getFile(path);
@@ -189,11 +189,11 @@ public class LogsResource extends BasicRestServlet {
 	public LogParser viewParsedEntries(
 			RestRequest req,
 			@Path("/*") String path,
-			@Query(n="start", d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String start,
-			@Query(n="end", d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String end,
-			@Query(n="thread", d="Thread name filter.\nOnly show log entries with the specified thread name.") String thread,
-			@Query(n="loggers", d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.") String[] loggers,
-			@Query(n="severity", d="Severity filter.\nOnly show log entries with the specified severity.") String[] severity
+			@Query("start") @Schema(d="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String start,
+			@Query("end") @Schema(d="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS") String end,
+			@Query("thread") @Schema(d="Thread name filter.\nOnly show log entries with the specified thread name.") String thread,
+			@Query("loggers") @Schema(d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.") String[] loggers,
+			@Query("severity") @Schema(d="Severity filter.\nOnly show log entries with the specified severity.") String[] severity
 		) throws NotFound, IOException {
 
 		File f = getFile(path);
@@ -234,24 +234,24 @@ public class LogsResource extends BasicRestServlet {
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Response(schema=@Schema(type="string",format="binary"), description="Contents of file")
+	@Response @Schema(type="string",format="binary",description="Contents of file")
 	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
 		}
 	}
 
-	@Response(description="Redirect to root page on success")
+	@Response @Schema(description="Redirect to root page on success")
 	static class RedirectToRoot extends SeeOtherRoot {}
 
-	@Response(description="File action")
+	@Response @Schema(description="File action")
 	public static class Action extends LinkString {
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
 	}
 
-	@Response(description="File or directory details")
+	@Response @Schema(description="File or directory details")
 	@Bean(properties="type,name,size,lastModified,actions,files")
 	public static class FileResource {
 		private final File f;

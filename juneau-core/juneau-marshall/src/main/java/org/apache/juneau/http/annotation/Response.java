@@ -41,7 +41,6 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestResponseAnnotation}
  * 	<li class='link'>{@doc RestcResponse}
  * 	<li class='link'>{@doc RestSwagger}
  * 	<li class='extlink'>{@doc ExtSwaggerResponseObject}
@@ -61,30 +60,6 @@ public @interface Response {
 	 * The default value is <c>500</c> for exceptions and <c>200</c> for return types.
 	 */
 	int[] code() default {};
-
-	/**
-	 * Synonym for {@link #description()}.
-	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerResponseObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
-	 * </ul>
-	 */
-	String[] description() default {};
 
 	/**
 	 * Synonym for {@link #example()}.

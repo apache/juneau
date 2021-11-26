@@ -32,8 +32,6 @@ public class FormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	FormData a1 = FormDataAnnotation.create()
-		.d("d")
-		.description("description")
 		.multi(true)
 		.n("n")
 		.name("name")
@@ -45,8 +43,6 @@ public class FormDataAnnotation_Test {
 		.build();
 
 	FormData a2 = FormDataAnnotation.create()
-		.d("d")
-		.description("description")
 		.multi(true)
 		.n("n")
 		.name("name")
@@ -61,8 +57,6 @@ public class FormDataAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "d:['d'],"
-				+ "description:['description'],"
 				+ "multi:true,"
 				+ "n:'n',"
 				+ "name:'name',"
@@ -124,8 +118,6 @@ public class FormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@FormData(
-		d="d",
-		description="description",
 		multi=true,
 		n="n",
 		name="name",
@@ -139,8 +131,6 @@ public class FormDataAnnotation_Test {
 	FormData d1 = D1.class.getAnnotationsByType(FormData.class)[0];
 
 	@FormData(
-		d="d",
-		description="description",
 		multi=true,
 		n="n",
 		name="name",

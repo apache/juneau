@@ -31,15 +31,11 @@ public class BodyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Body a1 = BodyAnnotation.create()
-		.d("d")
-		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.build();
 
 	Body a2 = BodyAnnotation.create()
-		.d("d")
-		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.build();
@@ -48,8 +44,6 @@ public class BodyAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "d:['d'],"
-				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "schema:{*}"
@@ -103,8 +97,6 @@ public class BodyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Body(
-		d="d",
-		description="description",
 		on="on",
 		onClass=X1.class
 	)
@@ -112,8 +104,6 @@ public class BodyAnnotation_Test {
 	Body d1 = D1.class.getAnnotationsByType(Body.class)[0];
 
 	@Body(
-		d="d",
-		description="description",
 		on="on",
 		onClass=X1.class
 	)

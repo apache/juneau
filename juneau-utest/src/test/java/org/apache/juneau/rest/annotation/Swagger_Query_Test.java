@@ -34,10 +34,9 @@ public class Swagger_Query_Test {
 	public static class A {
 
 		@Query(
-			n="Q",
-			d= {"a","b"}
+			n="Q"
 		)
-		@Schema(t="string")
+		@Schema(d= {"a","b"}, t="string")
 		public static class A1 {
 			public A1(String x) {}
 		}
@@ -56,10 +55,9 @@ public class Swagger_Query_Test {
 
 		@Query(
 			n="Q",
-			schema=@Schema(description="b\nc",type="string"),
-			d={"a","b"}
+			schema=@Schema(description="b\nc",type="string")
 		)
-		@Schema(t="string")
+		@Schema(d={"a","b"}, t="string")
 		public static class A3 {
 			public A3(String x) {}
 		}
@@ -89,7 +87,7 @@ public class Swagger_Query_Test {
 
 		x = s.getParameterInfo("/c","post","query","Q");
 		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/d","delete","query","Q");
@@ -148,10 +146,9 @@ public class Swagger_Query_Test {
 		@RestGet
 		public void a(
 			@Query(
-				n="Q",
-				d= {"a","b"}
+				n="Q"
 			)
-			@Schema(t="string")
+			@Schema(d= {"a","b"}, t="string")
 			String q) {}
 
 		@RestPut
@@ -166,10 +163,9 @@ public class Swagger_Query_Test {
 		public void c(
 			@Query(
 				n="Q",
-				schema=@Schema(description="b\nc",type="string"),
-				d= {"a","b"}
+				schema=@Schema(description="b\nc",type="string")
 			)
-			@Schema(t="string")
+			@Schema(d= {"a","b"}, t="string")
 			String q) {}
 
 		@RestDelete
@@ -193,7 +189,7 @@ public class Swagger_Query_Test {
 
 		x = s.getParameterInfo("/c","post","query","Q");
 		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/d","delete","query","Q");

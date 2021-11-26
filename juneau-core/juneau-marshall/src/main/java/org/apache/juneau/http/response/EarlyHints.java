@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Used to return some response headers before final HTTP message.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class EarlyHints extends BasicHttpResponse {
 
 	/** HTTP status code */

@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * If the client receives an error code such as 403 (Forbidden) or 405 (Method Not Allowed) then it shouldn't send the request's body.
  * The response 417 Expectation Failed indicates that the request should be repeated without the Expect header as it indicates that the server doesn't support expectations (this is the case, for example, of HTTP/1.0 servers).
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class Continue extends BasicHttpResponse {
 
 	/** HTTP status code */

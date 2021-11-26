@@ -83,7 +83,6 @@ import org.apache.juneau.annotation.*;
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestResponseAnnotation}
  * 	<li class='link'>{@doc RestcResponse}
  * </ul>
  */

@@ -47,7 +47,7 @@
 		<ja>@Path</ja> 
 		<jk>int</jk> getPetId();
 
-		<ja>@Query</ja>(name=<js>"verbose"</js>)
+		<ja>@Query</ja>(<js>"verbose"</js>)
 		<jk>boolean</jk> isDebug();
 
 		<ja>@Header</ja>(<js>"*"</js>)
@@ -82,7 +82,8 @@
 	<jk>public interface</jk> Request {
 
 		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
-		<ja>@Query</ja>(
+		<ja>@Query</ja>
+		<ja>@Schema</ja>(
 			collectionFormat=<js>"pipes"</js>
 			items=<ja>@Items</ja>(
 				items=<ja>@SubItems</ja>(

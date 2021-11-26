@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class UpgradeRequired extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

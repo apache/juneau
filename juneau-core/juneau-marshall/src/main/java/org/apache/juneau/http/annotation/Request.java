@@ -85,7 +85,6 @@ import org.apache.juneau.oapi.*;
  * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestRequestAnnotation}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>

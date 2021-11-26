@@ -210,7 +210,7 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * Converts the parameter value to a type using {@link RequestQueryParam#as(Type,Type...)} and then returns the value as an any-object assertion.
 	 *
 	 * <p>
-	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See {@doc ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param type The object type to create.
 	 * @param args Optional type arguments.

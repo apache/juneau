@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class NotImplemented extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

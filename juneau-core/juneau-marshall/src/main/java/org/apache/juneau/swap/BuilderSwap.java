@@ -22,7 +22,7 @@ import org.apache.juneau.reflect.*;
  * Specialized transform for builder classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ObjectBuilders}
+ * 	<li class='link'>{@doc PojoBuilders}
  * </ul>
  *
  * @param <T> The bean class.

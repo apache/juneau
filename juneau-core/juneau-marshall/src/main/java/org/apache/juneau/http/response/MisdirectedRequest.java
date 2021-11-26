@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class MisdirectedRequest extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

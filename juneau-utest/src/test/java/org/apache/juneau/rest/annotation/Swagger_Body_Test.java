@@ -33,10 +33,9 @@ public class Swagger_Body_Test {
 	@Rest
 	public static class A {
 
-		@Body(
-			d={"a","b"}
-		)
+		@Body
 		@Schema(
+			d={"a","b"},
 			type="string",
 			r=true
 		)
@@ -46,8 +45,9 @@ public class Swagger_Body_Test {
 		@RestGet
 		public void a(A1 h) {}
 
-		@Body(description="a\nb")
+		@Body
 		@Schema(
+			description="a\nb",
 			required=true,
 			type="string"
 		)
@@ -57,8 +57,9 @@ public class Swagger_Body_Test {
 		@RestPut
 		public void b(A2 h) {}
 
-		@Body(description="a\nb")
+		@Body
 		@Schema(
+			description="a\nb",
 			required=true,
 			type="string"
 		)
@@ -146,10 +147,9 @@ public class Swagger_Body_Test {
 
 		@RestGet
 		public void a(
-			@Body(
-				d= {"a","b"}
-			)
+			@Body
 			@Schema(
+				d= {"a","b"},
 				r=true,
 				type="string"
 			)
@@ -161,8 +161,9 @@ public class Swagger_Body_Test {
 
 		@RestPut
 		public void b(
-			@Body(description="a\nb")
+			@Body
 			@Schema(
+				description="a\nb",
 				required=true,
 				type="string"
 			)
@@ -174,10 +175,9 @@ public class Swagger_Body_Test {
 
 		@RestPost
 		public void c(
-			@Body(
-				d= {"b","c"}
-			)
+			@Body
 			@Schema(
+				d= {"b","c"},
 				required=true,
 				type="string"
 			)

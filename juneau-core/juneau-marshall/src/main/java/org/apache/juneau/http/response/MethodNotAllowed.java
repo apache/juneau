@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class MethodNotAllowed extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

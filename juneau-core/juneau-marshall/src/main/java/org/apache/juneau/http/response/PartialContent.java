@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.
  * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class PartialContent extends BasicHttpResponse {
 
 	/** HTTP status code */

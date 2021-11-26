@@ -203,24 +203,24 @@ public class DirectoryResource extends BasicRestServlet {
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Response(schema=@Schema(type="string",format="binary"), description="Contents of file")
+	@Response @Schema(type="string",format="binary",description="Contents of file")
 	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
 		}
 	}
 
-	@Response(description="Redirect to root page on success")
+	@Response @Schema(description="Redirect to root page on success")
 	static class RedirectToRoot extends SeeOtherRoot {}
 
-	@Response(description="File action")
+	@Response @Schema(description="File action")
 	public static class Action extends LinkString {
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
 	}
 
-	@Response(description="File or directory details")
+	@Response @Schema(description="File or directory details")
 	@Bean(properties="type,name,size,lastModified,actions,files")
 	public class FileResource {
 		private final File f;

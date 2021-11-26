@@ -311,18 +311,13 @@ public class BasicSwaggerProviderSession {
 				if (mpi.hasAnnotation(Body.class) || pt.hasAnnotation(Body.class)) {
 					OMap param = paramMap.getMap(BODY + ".body", true).a("in", BODY);
 					OMap schema = getSchema(param.getMap("schema"), type, bs);
-					if (schema == null)
-						schema = new OMap();
-					for (Schema a : pt.getAnnotations(Schema.class))
-						merge(schema, a);
-					for (Body a : pt.getAnnotations(Body.class))
-						merge(param, a);
-					for (Schema a : mpi.getAnnotations(Schema.class))
-						merge(schema, a);
-					for (Body a : mpi.getAnnotations(Body.class))
-						merge(param, a);
+					pt.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+					mpi.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+					pt.getAnnotations(Body.class).forEach(x -> merge(schema, x.schema()));
+					mpi.getAnnotations(Body.class).forEach(x -> merge(schema, x.schema()));
+					pushupSchemaFields(BODY, param, schema);
+					param.appendIf(true, true, true, "schema", schema);
 					param.putIfAbsent("required", true);
-					param.appendSkipEmpty("schema", schema);
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
@@ -331,16 +326,13 @@ public class BasicSwaggerProviderSession {
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					for (Query a : pt.getAnnotations(Query.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+
 					OMap param = paramMap.getMap(QUERY + "." + name, true).a("name", name).a("in", QUERY);
-					for (Schema a : pt.getAnnotations(Schema.class))
-						merge(param, a);
-					for (Query a : pt.getAnnotations(Query.class))
-						merge(param, a);
-					for (Schema a : mpi.getAnnotations(Schema.class))
-						merge(param, a);
-					for (Query a : mpi.getAnnotations(Query.class))
-						merge(param, a);
-					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					pt.getAnnotations(Query.class).forEach(x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					mpi.getAnnotations(Query.class).forEach(x -> merge(param, x.schema()));
+					pushupSchemaFields(QUERY, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, QUERY, type);
 
 				} else if (mpi.hasAnnotation(FormData.class) || pt.hasAnnotation(FormData.class)) {
@@ -349,16 +341,13 @@ public class BasicSwaggerProviderSession {
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					for (FormData a : pt.getAnnotations(FormData.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+
 					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).a("name", name).a("in", FORM_DATA);
-					for (Schema a : pt.getAnnotations(Schema.class))
-						merge(param, a);
-					for (FormData a : pt.getAnnotations(FormData.class))
-						merge(param, a);
-					for (Schema a : mpi.getAnnotations(Schema.class))
-						merge(param, a);
-					for (FormData a : mpi.getAnnotations(FormData.class))
-						merge(param, a);
-					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					pt.getAnnotations(FormData.class).forEach(x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					mpi.getAnnotations(FormData.class).forEach(x -> merge(param, x.schema()));
+					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, FORM_DATA, type);
 
 				} else if (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class)) {
@@ -367,16 +356,13 @@ public class BasicSwaggerProviderSession {
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					for (Header a : pt.getAnnotations(Header.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+
 					OMap param = paramMap.getMap(HEADER + "." + name, true).a("name", name).a("in", HEADER);
-					for (Schema a : pt.getAnnotations(Schema.class))
-						merge(param, a);
-					for (Header a : pt.getAnnotations(Header.class))
-						merge(param, a);
-					for (Schema a : mpi.getAnnotations(Schema.class))
-						merge(param, a);
-					for (Header a : mpi.getAnnotations(Header.class))
-						merge(param, a);
-					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					pt.getAnnotations(Header.class).forEach(x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					mpi.getAnnotations(Header.class).forEach(x -> merge(param, x.schema()));
+					pushupSchemaFields(HEADER, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, HEADER, type);
 
 				} else if (mpi.hasAnnotation(Path.class) || pt.hasAnnotation(Path.class)) {
@@ -385,16 +371,13 @@ public class BasicSwaggerProviderSession {
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
 					for (Path a : pt.getAnnotations(Path.class))
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+
 					OMap param = paramMap.getMap(PATH + "." + name, true).a("name", name).a("in", PATH);
-					for (Schema a : pt.getAnnotations(Schema.class))
-						merge(param, a);
-					for (Path a : pt.getAnnotations(Path.class))
-						merge(param, a);
-					for (Schema a : mpi.getAnnotations(Schema.class))
-						merge(param, a);
-					for (Path a : mpi.getAnnotations(Path.class))
-						merge(param, a);
-					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					pt.getAnnotations(Path.class).forEach(x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
+					mpi.getAnnotations(Path.class).forEach(x -> merge(param, x.schema()));
+					pushupSchemaFields(PATH, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, PATH, type);
 					param.putIfAbsent("required", true);
 				}
@@ -413,8 +396,10 @@ public class BasicSwaggerProviderSession {
 						for (Integer code : codes) {
 							OMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
-							if (! om.containsKey("schema"))
-								om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), eci.inner(), bs));
+							OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
+							eci.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+							pushupSchemaFields(RESPONSE, om, schema);
+							om.appendIf(true, true, true, "schema", schema);
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
@@ -425,12 +410,9 @@ public class BasicSwaggerProviderSession {
 							String ha = a.name();
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-								for (Schema a2 : ecmi.getAnnotations(Schema.class))
-									merge(header, a2);
-								for (Schema a2 : ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class))
-									merge(header, a2);
-								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getReturnType().unwrap(Value.class,Optional.class).innerType(), bs));
+								ecmi.getAnnotations(Schema.class).forEach(x -> merge(header, x));
+								ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class).forEach(x -> merge(header, x));
+								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class,Optional.class).innerType(), bs));
 							}
 						}
 					}
@@ -444,8 +426,10 @@ public class BasicSwaggerProviderSession {
 					for (Integer code : codes) {
 						OMap om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
-						if (! om.containsKey("schema"))
-							om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
+						OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
+						mi.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+						pushupSchemaFields(RESPONSE, om, schema);
+						om.appendIf(true, true, true, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 					}
 				}
@@ -457,12 +441,10 @@ public class BasicSwaggerProviderSession {
 							if (! isMulti(a)) {
 								for (Integer code : codes) {
 									OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-									for (Schema a2 : ecmi.getAnnotations(Schema.class))
-										merge(header, a2);
-									for (Schema a2 : ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class))
-										merge(header, a2);
-									merge(header, a);
-									mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
+									ecmi.getAnnotations(Schema.class).forEach(x -> merge(header, x));
+									ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class).forEach(x -> merge(header, x));
+									merge(header, a.schema());
+									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
 							}
 						}
@@ -470,8 +452,11 @@ public class BasicSwaggerProviderSession {
 				}
 			} else if (m.getGenericReturnType() != void.class) {
 				OMap om = responses.getMap("200", true);
-				if (! om.containsKey("schema"))
-					om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
+				ClassInfo pt2 = ClassInfo.of(m.getGenericReturnType());
+				OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
+				pt2.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+				pushupSchemaFields(RESPONSE, om, schema);
+				om.appendIf(true, true, true, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 			}
 
@@ -486,17 +471,15 @@ public class BasicSwaggerProviderSession {
 					String name = null;
 					for (ResponseHeader a : la)
 						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-					Type type = mpi.getParameterType().innerType();
+					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (ResponseHeader a : la) {
 						if (! isMulti(a)) {
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
-								for (Schema a2 : mpi.getAnnotations(Schema.class))
-									merge(header, a2);
-								for (Schema a2 : mpi.getParameterType().getAnnotations(Schema.class))
-									merge(header, a2);
-								merge(header, a);
-								mergePartSchema(header, getSchema(header, Value.getParameterType(type), bs));
+								mpi.getAnnotations(Schema.class).forEach(x -> merge(header, x));
+								mpi.getParameterType().getAnnotations(Schema.class).forEach(x -> merge(header, x));
+								merge(header, a.schema());
+								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, type, bs));
 							}
 						}
 					}
@@ -504,19 +487,17 @@ public class BasicSwaggerProviderSession {
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
 					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).a(pt.getAnnotations(Response.class));
 					Set<Integer> codes = getCodes(la, 200);
-					Type type = mpi.getParameterType().innerType();
+					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (Response a : la) {
 						for (Integer code : codes) {
-							OMap response = responses.getMap(String.valueOf(code), true);
-							merge(response, a);
-						}
-					}
-					type = Value.getParameterType(type);
-					if (type != null) {
-						for (String code : responses.keySet()) {
-							OMap om = responses.getMap(code);
-							if (! om.containsKey("schema"))
-								om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), type, bs));
+							OMap om = responses.getMap(String.valueOf(code), true);
+							merge(om, a);
+							OMap schema = getSchema(om.getMap("schema"), type, bs);
+							pt.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+							mpi.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+							la.forEach(x -> merge(schema, x.schema()));
+							pushupSchemaFields(RESPONSE, om, schema);
+							om.appendIf(true, true, true, "schema", schema);
 						}
 					}
 				}
@@ -789,7 +770,7 @@ public class BasicSwaggerProviderSession {
 	private OMap getSchema(OMap schema, Type type, BeanSession bs) throws Exception {
 
 		if (type == Swagger.class)
-			return null;
+			return OMap.create();
 
 		schema = newMap(schema);
 
@@ -803,7 +784,7 @@ public class BasicSwaggerProviderSession {
 
 		OMap om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
 
-		return nullIfEmpty(om);
+		return om;
 	}
 
 	/**
@@ -932,98 +913,47 @@ public class BasicSwaggerProviderSession {
 		return om.modifiable();
 	}
 
-	private OMap merge(OMap om, Body a) throws ParseException {
-		if (BodyAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-		;
-	}
-
-	private OMap merge(OMap om, Query a) throws ParseException {
-		if (QueryAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-		;
-	}
-
-	private OMap merge(OMap om, FormData a) throws ParseException {
-		if (FormDataAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-		;
-	}
-
-	private OMap merge(OMap om, Header a) throws ParseException {
-		if (HeaderAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-		;
-	}
-
-	private OMap merge(OMap om, Path a) throws ParseException {
-		if (PathAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-		;
-	}
-
-	private OMap merge(OMap om, Schema a) throws ParseException {
-		if (SchemaAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		return om
-			.appendSkipEmpty("additionalProperties", toOMap(a.additionalProperties()))
-			.appendSkipEmpty("allOf", joinnl(a.allOf()))
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
-			.appendSkipEmpty("discriminator", a.discriminator())
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipMinusOne("maxProperties", a.maxProperties(), a.maxp())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipMinusOne("minProperties", a.minProperties(), a.minp())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipEmpty("properties", toOMap(a.properties()))
-			.appendSkipFalse("readOnly", a.readOnly() || a.ro())
-			.appendSkipFalse("required", a.required() || a.r())
-			.appendSkipEmpty("title", a.title())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-			.appendSkipEmpty("xml", joinnl(a.xml()))
-			.appendSkipEmpty("$ref", a.$ref())
-		;
+	private OMap merge(OMap om, Schema a) {
+		try {
+			if (SchemaAnnotation.empty(a))
+				return om;
+			om = newMap(om);
+			return om
+				.appendSkipEmpty("additionalProperties", toOMap(a.additionalProperties()))
+				.appendSkipEmpty("allOf", joinnl(a.allOf()))
+				.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+				.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+				.appendSkipEmpty("discriminator", a.discriminator())
+				.appendSkipEmpty("description", resolve(a.description(), a.d()))
+				.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+				.appendSkipEmpty("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
+				.appendSkipEmpty("format", a.format(), a.f())
+				.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
+				.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+				.appendSkipEmpty("maximum", a.maximum(), a.max())
+				.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+				.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+				.appendSkipMinusOne("maxProperties", a.maxProperties(), a.maxp())
+				.appendSkipEmpty("minimum", a.minimum(), a.min())
+				.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+				.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+				.appendSkipMinusOne("minProperties", a.minProperties(), a.minp())
+				.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+				.appendSkipEmpty("pattern", a.pattern(), a.p())
+				.appendSkipEmpty("properties", toOMap(a.properties()))
+				.appendSkipFalse("readOnly", a.readOnly() || a.ro())
+				.appendSkipFalse("required", a.required() || a.r())
+				.appendSkipEmpty("title", a.title())
+				.appendSkipEmpty("type", a.type(), a.t())
+				.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
+				.appendSkipEmpty("xml", joinnl(a.xml()))
+				.appendSkipEmpty("$ref", a.$ref())
+			;
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private OMap merge(OMap om, ExternalDocs a) {
@@ -1092,8 +1022,9 @@ public class BasicSwaggerProviderSession {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
 		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
 			.appendSkipEmpty("headers", merge(om.getMap("headers"), a.headers()))
@@ -1101,7 +1032,7 @@ public class BasicSwaggerProviderSession {
 		;
 	}
 
-	private OMap merge(OMap om, ResponseHeader[] a) throws ParseException {
+	private OMap merge(OMap om, ResponseHeader[] a) {
 		if (a.length == 0)
 			return om;
 		om = newMap(om);
@@ -1109,48 +1040,42 @@ public class BasicSwaggerProviderSession {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
 				throw runtimeException("@ResponseHeader used without name or value.");
-			om.getMap(name, true).putAll(merge(null, aa));
+			merge(om.getMap(name, true), aa.schema());
 		}
 		return om;
 	}
 
-	private OMap merge(OMap om, ResponseHeader a) throws ParseException {
-		if (ResponseHeaderAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-		;
-	}
-
-	private OMap mergePartSchema(OMap param, OMap schema) {
-		if (schema != null) {
-			param
-				.appendIf(false, true, true, "collectionFormat", schema.remove("collectionFormat"))
-				.appendIf(false, true, true, "default", schema.remove("default"))
-				.appendIf(false, true, true, "description", schema.remove("description"))
-				.appendIf(false, true, true, "enum", schema.remove("enum"))
-				.appendIf(false, true, true, "example", schema.remove("example"))
-				.appendIf(false, true, true, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
-				.appendIf(false, true, true, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
-				.appendIf(false, true, true, "format", schema.remove("format"))
-				.appendIf(false, true, true, "items", schema.remove("items"))
-				.appendIf(false, true, true, "maximum", schema.remove("maximum"))
-				.appendIf(false, true, true, "maxItems", schema.remove("maxItems"))
-				.appendIf(false, true, true, "maxLength", schema.remove("maxLength"))
-				.appendIf(false, true, true, "minimum", schema.remove("minimum"))
-				.appendIf(false, true, true, "minItems", schema.remove("minItems"))
-				.appendIf(false, true, true, "minLength", schema.remove("minLength"))
-				.appendIf(false, true, true, "multipleOf", schema.remove("multipleOf"))
-				.appendIf(false, true, true, "pattern", schema.remove("pattern"))
-				.appendIf(false, true, true, "required", schema.remove("required"))
-				.appendIf(false, true, true, "type", schema.remove("type"))
-				.appendIf(false, true, true, "uniqueItems", schema.remove("uniqueItems"));
+	private OMap pushupSchemaFields(RestParamType type, OMap param, OMap schema) {
+		if (schema != null && ! schema.isEmpty()) {
+			if (type == BODY || type == RESPONSE) {
+				param
+					.appendIf(true, true, true, "description", schema.remove("description"));
+			} else {
+				param
+					.appendIf(false, true, true, "collectionFormat", schema.remove("collectionFormat"))
+					.appendIf(false, true, true, "default", schema.remove("default"))
+					.appendIf(false, true, true, "description", schema.remove("description"))
+					.appendIf(false, true, true, "enum", schema.remove("enum"))
+					.appendIf(false, true, true, "example", schema.remove("example"))
+					.appendIf(false, true, true, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
+					.appendIf(false, true, true, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
+					.appendIf(false, true, true, "format", schema.remove("format"))
+					.appendIf(false, true, true, "items", schema.remove("items"))
+					.appendIf(false, true, true, "maximum", schema.remove("maximum"))
+					.appendIf(false, true, true, "maxItems", schema.remove("maxItems"))
+					.appendIf(false, true, true, "maxLength", schema.remove("maxLength"))
+					.appendIf(false, true, true, "minimum", schema.remove("minimum"))
+					.appendIf(false, true, true, "minItems", schema.remove("minItems"))
+					.appendIf(false, true, true, "minLength", schema.remove("minLength"))
+					.appendIf(false, true, true, "multipleOf", schema.remove("multipleOf"))
+					.appendIf(false, true, true, "pattern", schema.remove("pattern"))
+					.appendIf(false, true, true, "required", schema.remove("required"))
+					.appendIf(false, true, true, "type", schema.remove("type"))
+					.appendIf(false, true, true, "uniqueItems", schema.remove("uniqueItems"));
 
 			if ("object".equals(param.getString("type")) && ! schema.isEmpty())
 				param.put("schema", schema);
+			}
 		}
 
 		return param;

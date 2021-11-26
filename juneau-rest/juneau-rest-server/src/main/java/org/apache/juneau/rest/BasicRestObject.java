@@ -31,7 +31,7 @@ import org.apache.juneau.http.response.*;
  * but you want this resource to be deployed as a child instead.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BasicRest}
+ * 	<li class='link'>{@doc BasicRestObject}
  * </ul>
  */
 @Rest

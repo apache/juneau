@@ -95,7 +95,7 @@ public class ResponseAnnotation {
 		int[] code={}, value={};
 		ResponseHeader[] headers={};
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] d={}, description={}, ex={}, example={}, examples={}, exs={};
+		String[] ex={}, example={}, examples={}, exs={};
 
 		/**
 		 * Constructor.
@@ -121,28 +121,6 @@ public class ResponseAnnotation {
 		 */
 		public Builder code(int...value) {
 			this.code = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Response#d} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder d(String...value) {
-			this.d = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Response#description} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -285,13 +263,11 @@ public class ResponseAnnotation {
 		private final int[] code, value;
 		private final ResponseHeader[] headers;
 		private final Schema schema;
-		private final String[] d, description, ex, example, examples, exs;
+		private final String[] ex, example, examples, exs;
 
 		Impl(Builder b) {
 			super(b);
 			this.code = Arrays.copyOf(b.code, b.code.length);
-			this.d = copyOf(b.d);
-			this.description = copyOf(b.description);
 			this.ex = copyOf(b.ex);
 			this.example = copyOf(b.example);
 			this.examples = copyOf(b.examples);
@@ -307,16 +283,6 @@ public class ResponseAnnotation {
 		@Override /* Response */
 		public int[] code() {
 			return code;
-		}
-
-		@Override /* Response */
-		public String[] d() {
-			return d;
-		}
-
-		@Override /* Response */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Response */

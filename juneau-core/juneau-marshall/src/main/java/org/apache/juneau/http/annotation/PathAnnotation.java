@@ -14,7 +14,6 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -93,7 +92,6 @@ public class PathAnnotation {
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String n="", name="", value="";
-		String[] d={}, description={};
 
 		/**
 		 * Constructor.
@@ -109,28 +107,6 @@ public class PathAnnotation {
 		 */
 		public Path build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Path#d} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder d(String...value) {
-			this.d = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Path#description} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
-			return this;
 		}
 
 		/**
@@ -243,13 +219,10 @@ public class PathAnnotation {
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String n, name, value;
-		private final String[] d, description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.d = copyOf(b.d);
-			this.description = copyOf(b.description);
 			this.n = b.n;
 			this.name = b.name;
 			this.parser = b.parser;
@@ -257,16 +230,6 @@ public class PathAnnotation {
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* Path */
-		public String[] d() {
-			return d;
-		}
-
-		@Override /* Path */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Path */

@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class Found extends BasicHttpResponse {
 
 	/** HTTP status code */

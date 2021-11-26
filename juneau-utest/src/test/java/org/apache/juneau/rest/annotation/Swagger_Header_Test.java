@@ -34,10 +34,9 @@ public class Swagger_Header_Test {
 	public static class A {
 
 		@Header(
-			name="H",
-			description={"a","b"}
+			name="H"
 		)
-		@Schema(type="string")
+		@Schema(description={"a","b"}, type="string")
 		public static class A1 {
 			public A1(String x) {}
 		}
@@ -56,10 +55,9 @@ public class Swagger_Header_Test {
 
 		@Header(
 			name="H",
-			schema=@Schema(description="b\nc",type="string"),
-			description={"a","b"}
+			schema=@Schema(description="b\nc",type="string")
 		)
-		@Schema(type="string")
+		@Schema(description={"a","b"}, type="string")
 		public static class A3 {
 			public A3(String x) {}
 		}
@@ -81,7 +79,7 @@ public class Swagger_Header_Test {
 		assertObject(x.getType()).asJson().is("'string'");
 
 		x = s.getParameterInfo("/c","post","header","H");
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertObject(x.getType()).asJson().is("'string'");
 	}
 
@@ -137,10 +135,9 @@ public class Swagger_Header_Test {
 		@RestGet
 		public void a(
 			@Header(
-				name="H",
-				description={"a","b"}
+				name="H"
 			)
-			@Schema(type="string")
+			@Schema(description={"a","b"}, type="string")
 			String h) {}
 
 		@RestPut
@@ -154,10 +151,9 @@ public class Swagger_Header_Test {
 		public void c(
 			@Header(
 				name="H",
-				schema=@Schema(description="b\nc",type="string"),
-				description={"a","b"}
+				schema=@Schema(description="b\nc",type="string")
 			)
-			@Schema(type="string")
+			@Schema(description={"a","b"}, type="string")
 			String h) {}
 
 		@RestDelete
@@ -181,7 +177,7 @@ public class Swagger_Header_Test {
 
 		x = s.getParameterInfo("/c","post","header","H");
 		assertEquals("H", x.getName());
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/d","delete","header","H");

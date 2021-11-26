@@ -31,10 +31,6 @@ import org.apache.juneau.swap.*;
  * <p>
  * Bean filters are created by {@link Builder} which is the programmatic equivalent to the {@link Bean @Bean}
  * annotation.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc BeanFilters}
- * </ul>
  */
 public final class BeanFilter {
 

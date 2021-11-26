@@ -47,8 +47,7 @@ public class HttpPartSchema_FormData_Test {
 	}
 
 	@FormData(
-		n="x",
-		d={"b1","b2"}
+		n="x"
 	)
 	@Schema(
 		t="number",
@@ -101,8 +100,7 @@ public class HttpPartSchema_FormData_Test {
 	public static class A03 {
 		public void a(
 				@FormData(
-					n="x",
-					d={"b1","b2"}
+					n="x"
 				)
 				@Schema(
 					t="number",
@@ -160,8 +158,7 @@ public class HttpPartSchema_FormData_Test {
 	public static class A04 {
 		public void a(
 				@FormData(
-					n="y",
-					d={"b3","b3"}
+					n="y"
 				)
 				@Schema(
 					t="integer",

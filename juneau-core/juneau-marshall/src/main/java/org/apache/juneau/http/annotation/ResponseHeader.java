@@ -113,7 +113,6 @@ import org.apache.juneau.oapi.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestResponseHeaderAnnotation}
  * 	<li class='link'>{@doc RestSwagger}
  * 	<li class='extlink'>{@doc ExtSwaggerHeaderObject}
  * </ul>
@@ -121,7 +120,6 @@ import org.apache.juneau.oapi.*;
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestResponseAnnotation}
  * 	<li class='link'>{@doc RestcResponse}
  * </ul>
 */
@@ -144,30 +142,6 @@ public @interface ResponseHeader {
 	 * </ul>
 	 */
 	int[] code() default {};
-
-	/**
-	 * Synonym for {@link #description()}.
-	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
-	 * </ul>
-	 */
-	String[] description() default {};
 
 	/**
 	 * Synonym for {@link #name()}.

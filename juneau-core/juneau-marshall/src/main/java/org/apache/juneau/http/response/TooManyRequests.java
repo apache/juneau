@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class TooManyRequests extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

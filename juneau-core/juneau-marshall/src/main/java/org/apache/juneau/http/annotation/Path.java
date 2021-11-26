@@ -55,7 +55,6 @@ import org.apache.juneau.oapi.*;
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestPathAnnotation}
  * 	<li class='link'>{@doc RestSwagger}
  * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
  * </ul>
@@ -71,7 +70,6 @@ import org.apache.juneau.oapi.*;
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestRequestAnnotation}
  * 	<li class='link'>{@doc RestcRequest}
  * </ul>
  */
@@ -82,33 +80,6 @@ import org.apache.juneau.oapi.*;
 @Repeatable(PathAnnotation.Array.class)
 @ContextApply(PathAnnotation.Applier.class)
 public @interface Path {
-
-	/**
-	 * Synonym for {@link #description()}.
-	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerParameterObject}.
-	 *
-	 * <p>
-	 * A brief description of the parameter. This could contain examples of use.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
-	 * </ul>
-	 */
-	String[] description() default {};
 
 	/**
 	 * Synonym for {@link #name()}.

@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class MultipleChoices extends BasicHttpResponse {
 
 	/** HTTP status code */

@@ -351,10 +351,11 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.HttpParts'>HTTP Parts</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.PartSerializers_PartParsers'>Part Serializers / Part Parsers</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Header_Query_FormData_Path'>@Header / @Path / @Query / @FormData</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Header_Path_Query_FormData'>@Header / @Path / @Query / @FormData</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Body'>@Body and Request Bodies</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Request'>@Request</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Response_ReponseHeader_ResponseStatus'>@Response / @ResponseHeader / @ResponseStatus</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.RequestBeans'>@Request beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus'>@Response / @ResponseHeader / @ResponseStatus</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.ResponseBeans'>@Response beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams'>RequestHeaders / RequestQueryParams / RequestFormParams / RequestPathParams</a><span class='update'>created: <b>9.0.0</b></span></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.RestHandlingFormPosts'>Handling Form Posts</a><span class='update'><b><red>todo</red></b></span></p>
@@ -15650,14 +15651,14 @@
 	parts via the schema itself:
 </p>
 <p class='bpcode w800'>
-	<ja>@Query</ja>(..., format=<js>"uon"</js>) Map&lt;Integer,MyBean> <jv>myMap</jv>
+	<ja>@Query</ja>(..., schema=<ja>@Schema</ja>(format=<js>"uon"</js>)) Map&lt;Integer,MyBean> <jv>myMap</jv>
 </p>
 </div><!-- END: 6.4.1 - juneau-rest-server.HttpParts.PartSerializers_PartParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.Header_Query_FormData_Path' id='juneau-rest-server.HttpParts.Header_Query_FormData_Path'>6.4.2 - @Header / @Path / @Query / @FormData</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.4.2 - juneau-rest-server.HttpParts.Header_Query_FormData_Path -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.Header_Path_Query_FormData' id='juneau-rest-server.HttpParts.Header_Path_Query_FormData'>6.4.2 - @Header / @Path / @Query / @FormData</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.4.2 - juneau-rest-server.HttpParts.Header_Path_Query_FormData -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} / {@link org.apache.juneau.http.annotation.Path @Path} / {@link org.apache.juneau.http.annotation.Query @Query} / {@link org.apache.juneau.http.annotation.FormData @FormData}
 	annotations allow for defining part schemas based on the OpenAPI standard.
@@ -15665,109 +15666,41 @@
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<ul class='javatreec'>
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#_default() _default()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#api() api()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#description() description()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#example() example()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#format() format()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#items() items()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#maximum() maximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#maxItems() maxItems()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#maxLength() maxLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#minimum() minimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#minItems() minItems()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#minLength() minLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#multipleOf() multipleOf()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#multi() multi()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#name() name()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#parser() parser()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#pattern() pattern()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#required() required()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#type() type()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#schema() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#serializer() serializer()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Header#value() value()}
 	</ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<ul class='javatreec'>
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#_default() _default()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#allowEmptyValue() allowEmptyValue()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#api() api()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#collectionFormat() collectionFormat()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#description() description()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#example() example()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#exclusiveMaximum() exclusiveMaximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#exclusiveMinimum() exclusiveMinimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#format() format()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#items() items()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#maximum() maximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#maxItems() maxItems()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#maxLength() maxLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#minimum() minimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#minItems() minItems()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#minLength() minLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#multipleOf() multipleOf()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#multi() multi()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#name() name()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#parser() parser()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#pattern() pattern()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#required() required()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#type() type()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#schema() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#serializer() serializer()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Query#value() value()}
 	</ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<ul class='javatreec'>
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#_default() _default()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#api() api()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#description() description()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#example() example()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#format() format()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#items() items()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#multi() multi()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#name() name()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#parser() parser()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#required() required()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#type() type()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#schema() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#serializer() serializer()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#value() value()}
 	</ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<ul class='javatreec'>
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#api() api()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#collectionFormat() collectionFormat()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#description() description()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#example() example()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#exclusiveMaximum() exclusiveMaximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#exclusiveMinimum() exclusiveMinimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#format() format()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#items() items()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#maximum() maximum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#maxLength() maxLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#minimum() minimum()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#minLength() minLength()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#multipleOf() multipleOf()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#name() name()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#parser() parser()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#pattern() pattern()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#type() type()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#schema() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#serializer() serializer()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Path#value() value()}
 	</ul>
 </ul>
@@ -15824,14 +15757,79 @@
 
 <p>
 	The default registered part parser {@link org.apache.juneau.oapi.OpenApiParser} is used to convert strings
-	to POJOs using schemas defined via annotations.
+	to POJOs using schemas defined via the {@link org.apache.juneau.http.annotation.Schema} annotation.
+</p>
+<ul class='javatree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema}
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#_default() _default()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#_enum() _enum()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#$ref() $ref()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#additionalProperties() additionalProperties()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#aev() aev()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#allOf() allOf()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#allowEmptyValue() allowEmptyValue()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#cf() cf()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#collectionFormat() collectionFormat()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#d() d()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#description() description()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#df() df()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#discriminator() discriminator()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#e() e()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#emax() emax()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#emin() emin()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMaximum() exclusiveMaximum()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMinimum() exclusiveMinimum()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#externalDocs() externalDocs()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#f() f()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#format() format()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#ignore() ignore()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#items() items()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#max() max()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maxi() maxi()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maximum() maximum()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maxItems() maxItems()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maxl() maxl()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maxLength() maxLength()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maxp() maxp()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#maxProperties() maxProperties()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#min() min()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#mini() mini()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#minimum() minimum()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#minItems() minItems()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#minl() minl()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#minLength() minLength()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#minp() minp()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#minProperties() minProperties()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#mo() mo()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#multipleOf() multipleOf()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#on() on()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#onClass() onClass()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#p() p()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#pattern() pattern()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#properties() properties()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#r() r()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#readOnly() readOnly()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#required() required()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#ro() ro()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#sie() sie()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#skipIfEmpty() v()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#t() t()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#title() title()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#type() type()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#ui() ui()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#uniqueItems() uniqueItems()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Schema#xml() xml()}
+	</ul>
+</ul>
+<p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestGet</ja>(<js>"/testQuery"</js>)	
 	<jk>public void</jk> testQuery(
-		<ja>@Query</ja>(
-			name=<js>"queryParamName"</js>,
+		<ja>@Query</ja>(<js>"queryParamName"</js>)
+		<ja>@Schema</ja>(
 			collectionFormat=<js>"pipes"</js>,
 			items=<ja>@SubItems</ja>(
 				collectionFormat=<js>"csv"</js>,
@@ -15860,24 +15858,11 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Normal</jc>
-	<ja>@Query</ja>(
-		name=<js>"name"</js>,
+	<ja>@Query</ja>(<js>"name"</js>)
+	<ja>@Schema</ja>(
 		description=<js>"Pet name"</js>,
 		required=<jk>true</jk>,
 		example=<js>"Doggie"</js>
-	)
-</p>
-<p class='bpcode w800'>
-	<jc>// Free-form</jc>
-	<jc>// Note the extra field</jc>
-	<ja>@Query</ja>(
-		name=<js>"name"</js>,
-		api={
-			<js>"description: 'Pet name',"</js>,
-			<js>"required: true,"</js>,
-			<js>"example: 'Doggie',"</js>
-			<js>"x-extra: 'extra field'"</js>
-		}
 	)
 </p>
 <p>
@@ -15887,11 +15872,11 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@Query</ja>(
+	<ja>@Schema</ja>(
 		description=<js>"$L{PetNameDescription}"</js>
 	)
 </p>
-</div><!-- END: 6.4.2 - juneau-rest-server.HttpParts.Header_Query_FormData_Path -->
+</div><!-- END: 6.4.2 - juneau-rest-server.HttpParts.Header_Path_Query_FormData -->
 
 <!-- ==================================================================================================== -->
 
@@ -15903,14 +15888,12 @@
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<ul class='javatreec'>
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#api() api()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#description() description()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#example() example()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#examples() examples()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#on() on()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#onClass() onClass()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#required() required()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#parser() parser()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#schema() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#serializer() serializer()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.Body#value() value()}
 	</ul>
 </ul>
@@ -15995,23 +15978,22 @@
 <p class='bpcode w800'>
 	<ja>@RestPost</ja>(<js>"/testBody"</js>)	
 	<jk>public void</jk> testBody(
-		<ja>@Body</ja>(
-			schema=<ja>@Schema</ja>(
-				items=<ja>@Items</ja>(
-					collectionFormat=<js>"pipes"</js>,
-					items=<ja>@SubItems</ja>(
-						collectionFormat=<js>"csv"</js>,
-						type=<js>"integer"</js>, 
-						format=<js>"int64"</js>,
-						minimum=<js>"0"</js>,
-						maximum=<js>"100"</js>
-						minLength=1,
-						maxLength=10
-					)
-				),
-				minLength=1,
-				maxLength=10
-			)
+		<ja>@Body</ja>
+		<ja>@Schema</ja>(
+			items=<ja>@Items</ja>(
+				collectionFormat=<js>"pipes"</js>,
+				items=<ja>@SubItems</ja>(
+					collectionFormat=<js>"csv"</js>,
+					type=<js>"integer"</js>, 
+					format=<js>"int64"</js>,
+					minimum=<js>"0"</js>,
+					maximum=<js>"100"</js>
+					minLength=1,
+					maxLength=10
+				)
+			),
+			minLength=1,
+			maxLength=10
 		)
 		Long[][] <jv>body</jv>
 	) {...}
@@ -16057,46 +16039,12 @@
 	As you can see, the complexity of possible input types expands significantly.
 	For more information about valid parameter types, see {@doc OpenApiParsers OpenAPI Parsers}
 </p>
-<p>
-	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
-	This information is used to populate the auto-generated Swagger documentation and UI.
-</p>
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// Normal</jc>
-	<ja>@Body</ja>(
-		description=<js>"Pet object to add to the store"</js>,
-		required=<jk>true</jk>,
-		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	)
-</p>
-<p class='bpcode w800'>
-	<jc>// Free-form</jc>
-	<jc>// Note the extra field</jc>
-	<ja>@Body</ja>({
-		<js>"description: 'Pet object to add to the store',"</js>,
-		<js>"required: true,"</js>,
-		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
-		<js>"x-extra: 'extra field'"</js>
-	})
-</p>
-<p>
-	Like the other HTTP part annotations, {@doc RestSvlVariables SVL Variables} (e.g. "$L{my.localized.variable}")
-	are supported on annotation fields.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Localized</jc>
-	<ja>@Body</ja>(
-		description=<js>"$L{PetObjectDescription}"</js>
-	)
-</p>
 </div><!-- END: 6.4.3 - juneau-rest-server.HttpParts.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.Request' id='juneau-rest-server.HttpParts.Request'>6.4.4 - @Request</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.4.4 - juneau-rest-server.HttpParts.Request -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.RequestBeans' id='juneau-rest-server.HttpParts.RequestBeans'>6.4.4 - @Request beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.4.4 - juneau-rest-server.HttpParts.RequestBeans -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestOp</ja>-annotated method 
 	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
@@ -16129,7 +16077,7 @@
 		<ja>@Path</ja> 
 		<jk>int</jk> getPetId();
 
-		<ja>@Query</ja>(name=<js>"verbose"</js>)
+		<ja>@Query</ja>(<js>"verbose"</js>)
 		<jk>boolean</jk> isDebug();
 
 		<ja>@Header</ja>(<js>"*"</js>)
@@ -16164,7 +16112,8 @@
 	<jk>public interface</jk> Request {
 
 		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
-		<ja>@Query</ja>(
+		<ja>@Query</ja>
+		<ja>@Schema</ja>(
 			collectionFormat=<js>"pipes"</js>
 			items=<ja>@Items</ja>(
 				items=<ja>@SubItems</ja>(
@@ -16190,23 +16139,91 @@
 	<ja>@Request</ja>
 	<jk>public interface</jk> UpdatePet {...}
 </p>
-</div><!-- END: 6.4.4 - juneau-rest-server.HttpParts.Request -->
+</div><!-- END: 6.4.4 - juneau-rest-server.HttpParts.RequestBeans -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.Response_ReponseHeader_ResponseStatus' id='juneau-rest-server.HttpParts.Response_ReponseHeader_ResponseStatus'>6.4.5 - @Response / @ResponseHeader / @ResponseStatus</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.4.5 - juneau-rest-server.HttpParts.Response_ReponseHeader_ResponseStatus -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus' id='juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus'>6.4.5 - @Response / @ResponseHeader / @ResponseStatus</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.4.5 - juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus -->
 <p>
-	The 
+	The {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotations
+	allow you to define method parameters for setting HTTP response parts:
+</p>
+
+<ul class='javatree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() api()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() code()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() description()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() example()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() examples()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() headers()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() on()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() onClass()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() parser()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() serializer()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.Response#() value()}
+	</ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#on() on()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#onClass() onClass()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#schema() schema()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()}
+	</ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseStatus#on() on()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseStatus#onClass() onClass()}
+	</ul>
+</ul>	
+<p>
+	Response part parameters are defined using a settable {@link org.apache.juneau.Value} object.
 </p>
 <p>
-	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a response header can be converted to a 2-dimensional array of <c>Longs</c>:
+	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be used to set
+	the response body as a settable parameter:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestGet</ja>(<js>"/testResponseBody"</js>)	
+	<jk>public void</jk> testResponseBody(
+		<ja>@Response</ja>(
+			serializer=OpenApiSerialier.<jk>class</jk>
+		)
+		<ja>@Schema</ja>(
+			items=<ja>@Items</ja>(
+				collectionFormat=<js>"pipes"</js>,
+				items=<ja>@SubItems</ja>(
+					collectionFormat=<js>"csv"</js>,
+					type=<js>"integer"</js>, 
+					format=<js>"int64"</js>,
+					minimum=<js>"0"</js>,
+					maximum=<js>"100"</js>
+					minLength=1,
+					maxLength=10
+				)
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Value&lt;Long[][]&gt; <jv>responseBody</jv>
+	) {...}
+</p>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader} annotation can be used to set
+	response headers:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestGet</ja>(<js>"/testResponseHeader"</js>)	
 	<jk>public void</jk> testResponseHeader(
-		<ja>@ResponseHeader</ja>(
-			name=<js>"My-Header"</js>,
+		<ja>@ResponseHeader</ja>(<js>"My-Header"</js>)
+		<ja>@Schema</ja>(
 			collectionFormat=<js>"pipes"</js>,
 			items=<ja>@SubItems</ja>(
 				collectionFormat=<js>"csv"</js>,
@@ -16226,60 +16243,35 @@
 	}
 </p>
 <p>
-	The following shows the same for a response body:
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be used to 
+	set the HTTP response code:
 </p>
+<h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
-	<ja>@RestGet</ja>(<js>"/testResponseBody"</js>)	
-	<jk>public void</jk> testResponseBody(
-		<ja>@Response</ja>(
-			serializers=OpenApiSerialier.<jk>class</jk>,
-			defaultAccept=<js>"text/openapi"</js>,
-			schema=<ja>@Schema</ja>(
-				items=<ja>@Items</ja>(
-					collectionFormat=<js>"pipes"</js>,
-					items=<ja>@SubItems</ja>(
-						collectionFormat=<js>"csv"</js>,
-						type=<js>"integer"</js>, 
-						format=<js>"int64"</js>,
-						minimum=<js>"0"</js>,
-						maximum=<js>"100"</js>
-						minLength=1,
-						maxLength=10
-					)
-				),
-				minLength=1,
-				maxLength=10
-			)
-		)
-		Value&lt;Long[][]&gt; <jv>responseBody</jv>
-	) {...}
+	<jc>// Defined on parameter.</jc>
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
+		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; <jv>status</jv>
+	) 
+	{
+		<jk>if</jk> (! <jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>))
+			<jv>status</jv>.set(401);
+	}
 </p>
+</div><!-- END: 6.4.5 - juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus -->
 
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.ResponseBeans' id='juneau-rest-server.HttpParts.ResponseBeans'>6.4.6 - @Response beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.4.6 - juneau-rest-server.HttpParts.ResponseBeans -->
 <p>
-	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#code() code} - HTTP status code.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#description() description} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#example() example} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#examples() examples} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#headers() headers} - Swagger about headers added to response.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#serializer() serializer} - Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#value() value} - Free-form Swagger JSON.
-	</ul>
-</ul>
-<p>
-	It can be used in the following locations:
+	The {@link org.apache.juneau.http.annotation.Response} annotation can also be used in the following locations:
 </p>
 <ul>
-	<li>Exception classes thrown from <ja>@RestOp</ja>-annotated methods.
-	<li>Return type classes of <ja>@RestOp</ja>-annotated methods.
+	<li>Argument/exception/return types of <ja>@RestOp</ja>-annotated methods.
 	<li><ja>@RestOp</ja>-annotated methods themselves.
-	<li>Arguments and argument-types of <ja>@RestOp</ja>-annotated methods.
 </ul>
 
 <p>
@@ -16755,16 +16747,16 @@
 			<jv>status</jv>.set(401);
 	}
 </p>
-</div><!-- END: 6.4.5 - juneau-rest-server.HttpParts.Response_ReponseHeader_ResponseStatus -->
+</div><!-- END: 6.4.6 - juneau-rest-server.HttpParts.ResponseBeans -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams' id='juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams'>6.4.6 - RequestHeaders / RequestQueryParams / RequestFormParams / RequestPathParams</a><span class='update'>created: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.4.6 - juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams' id='juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams'>6.4.7 - RequestHeaders / RequestQueryParams / RequestFormParams / RequestPathParams</a><span class='update'>created: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.4.7 - juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams -->
 <p>
 	TODO
 </p>
-</div><!-- END: 6.4.6 - juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams -->
+</div><!-- END: 6.4.7 - juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams -->
 </div><!-- END: 6.4 - juneau-rest-server.HttpParts -->
 
 <!-- ==================================================================================================== -->

@@ -14,7 +14,6 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -89,7 +88,6 @@ public class BodyAnnotation {
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] d={}, description={};
 
 		/**
 		 * Constructor.
@@ -105,28 +103,6 @@ public class BodyAnnotation {
 		 */
 		public Body build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Body#d} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder d(String...value) {
-			this.d = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Body#description} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
-			return this;
 		}
 
 		/**
@@ -175,25 +151,12 @@ public class BodyAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Body {
 
-		private final String[] d, description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.d = copyOf(b.d);
-			this.description = copyOf(b.description);
 			this.schema = b.schema;
 			postConstruct();
-		}
-
-		@Override /* Body */
-		public String[] d() {
-			return d;
-		}
-
-		@Override /* Body */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Body */

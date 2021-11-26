@@ -96,7 +96,6 @@ import org.apache.juneau.json.*;
  * </ol>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestBodyAnnotation}
  * 	<li class='link'>{@doc RestSwagger}
  * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
  * </ul>
@@ -110,7 +109,6 @@ import org.apache.juneau.json.*;
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestRequestAnnotation}
  * 	<li class='link'>{@doc RestcRequest}
  * </ul>
  *
@@ -139,50 +137,6 @@ import org.apache.juneau.json.*;
 @Repeatable(BodyAnnotation.Array.class)
 @ContextApply(BodyAnnotation.Applier.class)
 public @interface Body {
-
-	/**
-	 * Synonym for {@link #description()}.
-	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerParameterObject}.
-	 *
-	 * <p>
-	 * A brief description of the body. This could contain examples of use.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestPost</ja>
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
-	 * 	) {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestPost</ja>
-	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
-	 *
-	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
-	 * 	<jk>public class</jk> Pet {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
-	 * </ul>
-	 */
-	String[] description() default {};
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.

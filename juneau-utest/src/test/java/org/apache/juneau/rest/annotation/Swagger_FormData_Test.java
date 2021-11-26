@@ -34,10 +34,9 @@ public class Swagger_FormData_Test {
 	public static class A {
 
 		@FormData(
-			name="F",
-			description= {"a","b"}
+			name="F"
 		)
-		@Schema(type="string")
+		@Schema(description={"a","b"}, type="string")
 		public static class A1 {
 			public A1(String x) {}
 		}
@@ -56,10 +55,9 @@ public class Swagger_FormData_Test {
 
 		@FormData(
 			name="F",
-			schema=@Schema(description="b\nc",type="string"),
-			description= {"a","b"}
+			schema=@Schema(description="b\nc",type="string")
 		)
-		@Schema(type="string")
+		@Schema(description={"a","b"}, type="string")
 		public static class A3 {
 			public A3(String x) {}
 		}
@@ -89,7 +87,7 @@ public class Swagger_FormData_Test {
 
 		x = s.getParameterInfo("/c","post","formData","F");
 		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/d","delete","formData","F");
@@ -148,10 +146,9 @@ public class Swagger_FormData_Test {
 		@RestGet
 		public void a(
 			@FormData(
-				name="F",
-				description={"a","b"}
+				name="F"
 			)
-			@Schema(type="string")
+			@Schema(description={"a","b"}, type="string")
 			String f) {}
 
 		@RestPut
@@ -165,10 +162,9 @@ public class Swagger_FormData_Test {
 		public void c(
 			@FormData(
 				name="F",
-				schema=@Schema(description="b\nc",type="string"),
-				description={"a","b"}
+				schema=@Schema(description="b\nc",type="string")
 			)
-			@Schema(type="string")
+			@Schema(description={"a","b"}, type="string")
 			String f) {}
 
 		@RestDelete
@@ -192,7 +188,7 @@ public class Swagger_FormData_Test {
 
 		x = s.getParameterInfo("/c","post","formData","F");
 		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
+		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
 
 		x = s.getParameterInfo("/d","delete","formData","F");

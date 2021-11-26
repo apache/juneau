@@ -32,8 +32,6 @@ public class HeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Header a1 = HeaderAnnotation.create()
-		.d("d")
-		.description("description")
 		.multi(true)
 		.n("n")
 		.name("name")
@@ -45,8 +43,6 @@ public class HeaderAnnotation_Test {
 		.build();
 
 	Header a2 = HeaderAnnotation.create()
-		.d("d")
-		.description("description")
 		.multi(true)
 		.n("n")
 		.name("name")
@@ -61,8 +57,6 @@ public class HeaderAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "d:['d'],"
-				+ "description:['description'],"
 				+ "multi:true,"
 				+ "n:'n',"
 				+ "name:'name',"
@@ -124,8 +118,6 @@ public class HeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Header(
-		d="d",
-		description="description",
 		multi=true,
 		n="n",
 		name="name",
@@ -139,8 +131,6 @@ public class HeaderAnnotation_Test {
 	Header d1 = D1.class.getAnnotationsByType(Header.class)[0];
 
 	@Header(
-		d="d",
-		description="description",
 		multi=true,
 		n="n",
 		name="name",

@@ -90,9 +90,6 @@ import java.lang.annotation.*;
 	</tr>
 </table>
  *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestHasQueryAnnotation}
- * </ul>
  */
 @Documented
 @Target({PARAMETER})

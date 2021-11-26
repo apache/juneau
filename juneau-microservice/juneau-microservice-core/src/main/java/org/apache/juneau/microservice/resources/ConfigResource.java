@@ -24,6 +24,7 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Response;
+import org.apache.juneau.http.annotation.Schema;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -94,7 +95,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap getConfigSection(
-			@Path(n="section", d="Section name in config file.") String section
+			@Path("section") @Schema(d="Section name in config file.") String section
 		) throws SectionNotFound, BadConfig {
 
 		return getSection(section);
@@ -111,8 +112,8 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public String getConfigEntry(
-			@Path(n="section", d="Section name in config file.") String section,
-			@Path(n="key", d="Key name in section.") String key
+			@Path("section") @Schema(d="Section name in config file.") String section,
+			@Path("key") @Schema(d="Key name in section.") String key
 		) throws SectionNotFound, BadConfig {
 
 		return getSection(section).getString(key);
@@ -129,7 +130,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigContentsFormPost(
-			@FormData(n="contents", d="New contents in INI file format.") String contents
+			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
 		) throws Exception {
 
 		return setConfigContents(new StringReader(contents));
@@ -146,7 +147,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigContents(
-			@Body(d="New contents in INI file format.") Reader contents
+			@Body @Schema(d="New contents in INI file format.") Reader contents
 		) throws Exception {
 
 		return getContext().getConfig().load(contents, true).toMap();
@@ -163,10 +164,8 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigSection(
-			@Path(n="section", d="Section name in config file.") String section,
-			@Body(
-				d="New contents of config section as a simple map of key/value pairs."
-			)
+			@Path("section") @Schema(d="Section name in config file.") String section,
+			@Body @Schema(d="New contents of config section as a simple map of key/value pairs.")
 			Map<String,Object> contents
 		) throws Exception {
 
@@ -185,9 +184,9 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public String setConfigValue(
-			@Path(n="section", d="Section name in config file.") String section,
-			@Path(n="key", d="Key name in section.") String key,
-			@Body(d="New value for entry.") String value
+			@Path("section") @Schema(d="Section name in config file.") String section,
+			@Path("key") @Schema(d="Key name in section.") String key,
+			@Body @Schema(d="New value for entry.") String value
 		) throws SectionNotFound, BadConfig {
 
 		getContext().getConfig().set(section + '/' + key, value);
@@ -198,7 +197,7 @@ public class ConfigResource extends BasicRestServlet {
 	// Helper beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Response(description="Section not found.")
+	@Response @Schema(description="Section not found.")
 	private class SectionNotFound extends NotFound {
 		private static final long serialVersionUID = 1L;
 
@@ -207,7 +206,7 @@ public class ConfigResource extends BasicRestServlet {
 		}
 	}
 
-	@Response(description="The configuration file contained syntax errors and could not be parsed.")
+	@Response @Schema(description="The configuration file contained syntax errors and could not be parsed.")
 	private class BadConfig extends InternalServerError {
 		private static final long serialVersionUID = 1L;
 

@@ -78,10 +78,10 @@ public class ResponseHeader_Test {
 	public static class B {
 
 		@ResponseHeader(
-			name="H",
-			description="a"
+			name="H"
 		)
 		@Schema(
+			description="a",
 			type="string"
 		)
 		public static class B1 {}
@@ -98,10 +98,10 @@ public class ResponseHeader_Test {
 
 		@ResponseHeader(
 			name="H",
-			schema=@Schema(description="b",type="number"),
-			description="a"
+			schema=@Schema(description="b",type="number")
 		)
 		@Schema(
+			description="a",
 			type="string"
 		)
 		public static class B3 {}
@@ -118,7 +118,7 @@ public class ResponseHeader_Test {
 		@RestGet
 		public void e(Value<B5> h) {}
 
-		@ResponseHeader(name="H", description="a")
+		@ResponseHeader(name="H") @Schema(description="a")
 		public static class B6 {}
 		@RestGet
 		public void f(Value<B6> h) {}
@@ -143,7 +143,7 @@ public class ResponseHeader_Test {
 		assertEquals("string", x.getType());
 
 		x = s.getResponseInfo("/c","get",200).getHeader("H");
-		assertEquals("a", x.getDescription());
+		assertEquals("b", x.getDescription());
 		assertEquals("number", x.getType());
 
 		x = s.getResponseInfo("/d","get",100).getHeader("H");
@@ -171,10 +171,10 @@ public class ResponseHeader_Test {
 		@RestGet
 		public void a(
 			@ResponseHeader(
-				name="H",
-				description="a"
+				name="H"
 			)
 			@Schema(
+				description="a",
 				type="string"
 			)
 			Value<C1> h) {}
@@ -193,10 +193,10 @@ public class ResponseHeader_Test {
 		public void c(
 			@ResponseHeader(
 				name="H",
-				schema=@Schema(description="b",type="number"),
-				description="a"
+				schema=@Schema(description="b",type="number")
 			)
 			@Schema(
+				description="a",
 				type="string"
 			)
 			Value<C3> h) {}
@@ -211,7 +211,7 @@ public class ResponseHeader_Test {
 
 		public static class C6 {}
 		@RestGet
-		public void f(@ResponseHeader(name="H", description="a") Value<C6> h) {}
+		public void f(@ResponseHeader(name="H") @Schema(description="a") Value<C6> h) {}
 
 		public static class C7 {}
 		@RestGet
@@ -232,7 +232,7 @@ public class ResponseHeader_Test {
 		assertEquals("string", x.getType());
 
 		x = sc.getResponseInfo("/c","get",200).getHeader("H");
-		assertEquals("a", x.getDescription());
+		assertEquals("b", x.getDescription());
 		assertEquals("number", x.getType());
 
 		x = sc.getResponseInfo("/d","get",100).getHeader("H");

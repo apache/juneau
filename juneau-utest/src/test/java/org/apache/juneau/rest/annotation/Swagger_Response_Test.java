@@ -36,8 +36,7 @@ public class Swagger_Response_Test {
 	public static class A {
 
 		@Response(
-			description={"a","b"},
-			schema=@Schema(type="string"),
+			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example="'a'",
 			examples=" {foo:'a'} "
@@ -51,8 +50,7 @@ public class Swagger_Response_Test {
 		public A1 b() {return null;}
 
 		@Response(
-			description="a\nb",
-			schema=@Schema(type="string"),
+			schema=@Schema(description="a\nb",type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example="'a'",
 			examples=" {foo:'a'} "
@@ -66,8 +64,7 @@ public class Swagger_Response_Test {
 		public A2 d() {return null;}
 
 		@Response(
-			description={"a","b"},
-			schema=@Schema(type="string"),
+			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example="'a'",
 			examples=" {foo:'a'} "
@@ -278,8 +275,7 @@ public class Swagger_Response_Test {
 	public static class D {
 
 		@Response(
-			description= {"a","b"},
-			schema=@Schema(type="string"),
+			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example=" 'a' ",
 			examples=" {foo:'a'} "
@@ -289,8 +285,7 @@ public class Swagger_Response_Test {
 		public void a() throws D1 {}
 
 		@Response(
-			description= {"a","b"},
-			schema=@Schema(type="string"),
+			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example=" 'a' ",
 			examples=" {foo:'a'} "
@@ -300,8 +295,7 @@ public class Swagger_Response_Test {
 		public void b() throws D2 {}
 
 		@Response(
-			description= {"a","b"},
-			schema=@Schema(type="string"),
+			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
 			example=" 'a' ",
 			examples=" {foo:'a'} "

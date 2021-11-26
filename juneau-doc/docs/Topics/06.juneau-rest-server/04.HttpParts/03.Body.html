@@ -21,14 +21,12 @@
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.Body}
 	<ul class='javatreec'>
-		<li class='jm'>{@link oaj.http.annotation.Body#api() api()}
 		<li class='jm'>{@link oaj.http.annotation.Body#description() description()}
-		<li class='jm'>{@link oaj.http.annotation.Body#example() example()}
-		<li class='jm'>{@link oaj.http.annotation.Body#examples() examples()}
 		<li class='jm'>{@link oaj.http.annotation.Body#on() on()}
 		<li class='jm'>{@link oaj.http.annotation.Body#onClass() onClass()}
-		<li class='jm'>{@link oaj.http.annotation.Body#required() required()}
+		<li class='jm'>{@link oaj.http.annotation.Body#parser() parser()}
 		<li class='jm'>{@link oaj.http.annotation.Body#schema() schema()}
+		<li class='jm'>{@link oaj.http.annotation.Body#serializer() serializer()}
 		<li class='jm'>{@link oaj.http.annotation.Body#value() value()}
 	</ul>
 </ul>
@@ -113,23 +111,22 @@
 <p class='bpcode w800'>
 	<ja>@RestPost</ja>(<js>"/testBody"</js>)	
 	<jk>public void</jk> testBody(
-		<ja>@Body</ja>(
-			schema=<ja>@Schema</ja>(
-				items=<ja>@Items</ja>(
-					collectionFormat=<js>"pipes"</js>,
-					items=<ja>@SubItems</ja>(
-						collectionFormat=<js>"csv"</js>,
-						type=<js>"integer"</js>, 
-						format=<js>"int64"</js>,
-						minimum=<js>"0"</js>,
-						maximum=<js>"100"</js>
-						minLength=1,
-						maxLength=10
-					)
-				),
-				minLength=1,
-				maxLength=10
-			)
+		<ja>@Body</ja>
+		<ja>@Schema</ja>(
+			items=<ja>@Items</ja>(
+				collectionFormat=<js>"pipes"</js>,
+				items=<ja>@SubItems</ja>(
+					collectionFormat=<js>"csv"</js>,
+					type=<js>"integer"</js>, 
+					format=<js>"int64"</js>,
+					minimum=<js>"0"</js>,
+					maximum=<js>"100"</js>
+					minLength=1,
+					maxLength=10
+				)
+			),
+			minLength=1,
+			maxLength=10
 		)
 		Long[][] <jv>body</jv>
 	) {...}
@@ -174,38 +171,4 @@
 <p>
 	As you can see, the complexity of possible input types expands significantly.
 	For more information about valid parameter types, see {@doc OpenApiParsers OpenAPI Parsers}
-</p>
-<p>
-	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
-	This information is used to populate the auto-generated Swagger documentation and UI.
-</p>
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// Normal</jc>
-	<ja>@Body</ja>(
-		description=<js>"Pet object to add to the store"</js>,
-		required=<jk>true</jk>,
-		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	)
-</p>
-<p class='bpcode w800'>
-	<jc>// Free-form</jc>
-	<jc>// Note the extra field</jc>
-	<ja>@Body</ja>({
-		<js>"description: 'Pet object to add to the store',"</js>,
-		<js>"required: true,"</js>,
-		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
-		<js>"x-extra: 'extra field'"</js>
-	})
-</p>
-<p>
-	Like the other HTTP part annotations, {@doc RestSvlVariables SVL Variables} (e.g. "$L{my.localized.variable}")
-	are supported on annotation fields.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Localized</jc>
-	<ja>@Body</ja>(
-		description=<js>"$L{PetObjectDescription}"</js>
-	)
 </p>

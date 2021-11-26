@@ -21,7 +21,7 @@ import org.apache.juneau.rest.beans.*;
  * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BasicRestGroup}
+ * 	<li class='link'>{@doc BasicRestServletGroup}
  * </ul>
  */
 @Rest

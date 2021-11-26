@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class FailedDependency extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

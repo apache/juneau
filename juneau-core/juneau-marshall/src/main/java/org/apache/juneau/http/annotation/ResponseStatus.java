@@ -86,14 +86,12 @@ import org.apache.juneau.annotation.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestResponseStatusAnnotation}
  * 	<li class='link'>{@doc RestSwagger}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestResponseAnnotation}
  * 	<li class='link'>{@doc RestcResponse}
  * </ul>
  */

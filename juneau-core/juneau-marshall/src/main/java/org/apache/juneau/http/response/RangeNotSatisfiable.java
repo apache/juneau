@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
+@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
 public class RangeNotSatisfiable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

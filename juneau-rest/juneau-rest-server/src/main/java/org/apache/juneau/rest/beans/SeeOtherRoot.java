@@ -18,7 +18,7 @@ import org.apache.juneau.http.response.*;
 /**
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
  */
-@Response(description="Redirect to servlet root")
+@Response @Schema(description="Redirect to servlet root")
 public class SeeOtherRoot extends SeeOther {
 
 	/**

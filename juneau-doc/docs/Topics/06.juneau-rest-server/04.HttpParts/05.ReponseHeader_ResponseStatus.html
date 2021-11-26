@@ -38,32 +38,13 @@
 	</ul>
 	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
 	<ul class='javatreec'>
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#_default() _default()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#_enum() _enum()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#$ref() $ref()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#api() api()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#code() code()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#collectionFormat() collectionFormat()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#description() description()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#example() example()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#format() format()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#items() items()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#maximum() maximum()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#maxItems() maxItems()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#maxLength() maxLength()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#minimum() minimum()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#minItems() minItems()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#minLength() minLength()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#multipleOf() multipleOf()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#name() name()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#on() on()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#onClass() onClass()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#pattern() pattern()}
+		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#schema() schema()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#serializer() serializer()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#type() type()}
-		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#uniqueItems() uniqueItems()}
 		<li class='jm'>{@link oaj.http.annotation.ResponseHeader#value() value()}
 	</ul>
 	<li class='ja'>{@link oaj.http.annotation.ResponseStatus}
@@ -83,24 +64,23 @@
 	<ja>@RestGet</ja>(<js>"/testResponseBody"</js>)	
 	<jk>public void</jk> testResponseBody(
 		<ja>@Response</ja>(
-			serializers=OpenApiSerialier.<jk>class</jk>,
-			defaultAccept=<js>"text/openapi"</js>,
-			schema=<ja>@Schema</ja>(
-				items=<ja>@Items</ja>(
-					collectionFormat=<js>"pipes"</js>,
-					items=<ja>@SubItems</ja>(
-						collectionFormat=<js>"csv"</js>,
-						type=<js>"integer"</js>, 
-						format=<js>"int64"</js>,
-						minimum=<js>"0"</js>,
-						maximum=<js>"100"</js>
-						minLength=1,
-						maxLength=10
-					)
-				),
-				minLength=1,
-				maxLength=10
-			)
+			serializer=OpenApiSerialier.<jk>class</jk>
+		)
+		<ja>@Schema</ja>(
+			items=<ja>@Items</ja>(
+				collectionFormat=<js>"pipes"</js>,
+				items=<ja>@SubItems</ja>(
+					collectionFormat=<js>"csv"</js>,
+					type=<js>"integer"</js>, 
+					format=<js>"int64"</js>,
+					minimum=<js>"0"</js>,
+					maximum=<js>"100"</js>
+					minLength=1,
+					maxLength=10
+				)
+			),
+			minLength=1,
+			maxLength=10
 		)
 		Value&lt;Long[][]&gt; <jv>responseBody</jv>
 	) {...}
@@ -112,8 +92,8 @@
 <p class='bpcode w800'>
 	<ja>@RestGet</ja>(<js>"/testResponseHeader"</js>)	
 	<jk>public void</jk> testResponseHeader(
-		<ja>@ResponseHeader</ja>(
-			name=<js>"My-Header"</js>,
+		<ja>@ResponseHeader</ja>(<js>"My-Header"</js>)
+		<ja>@Schema</ja>(
 			collectionFormat=<js>"pipes"</js>,
 			items=<ja>@SubItems</ja>(
 				collectionFormat=<js>"csv"</js>,
