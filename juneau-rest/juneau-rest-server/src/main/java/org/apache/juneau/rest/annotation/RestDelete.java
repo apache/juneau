@@ -30,7 +30,7 @@ import org.apache.juneau.encoders.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>DELETE</jsf>)</c>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestMethod}
+ * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
 @Documented

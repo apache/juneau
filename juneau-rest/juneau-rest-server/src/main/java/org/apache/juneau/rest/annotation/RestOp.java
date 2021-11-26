@@ -31,7 +31,7 @@ import org.apache.juneau.encoders.*;
  * Identifies a REST operation Java method on a {@link RestServlet} implementation class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestMethod}
+ * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
 @Documented

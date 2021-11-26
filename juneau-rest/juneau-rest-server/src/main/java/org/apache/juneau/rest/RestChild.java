@@ -31,10 +31,6 @@ import org.apache.juneau.cp.*;
  * 		}
  * 	}
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestChildren}
- * </ul>
  */
 public class RestChild {
 

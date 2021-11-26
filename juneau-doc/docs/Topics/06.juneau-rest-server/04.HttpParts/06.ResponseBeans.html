@@ -358,7 +358,7 @@
 
 <h5 class='topic'>Automatic HTTP status</h5>
 <p>
-	When the {@link oaj.http.annotation.Response#code() @Response(code)} value is specified, 
+	When the {@link oaj.http.annotation.ResponseCode#value() @Response(value)} value is specified, 
 	the HTTP status is automatically set to that value on the response regardless of how it's used.
 </p>
 <p>
@@ -367,7 +367,7 @@
 <p class='bpcode w800'>
 	<ja>@RestGet</ja>(<js>"/ok"</js>)
 	<jk>public void</jk> sendContinue(
-		<ja>@Response</ja>(code=100) Value&lt;String&gt; <jv>body</jv>
+		<ja>@ResponseCode</ja>(code=100) Value&lt;String&gt; <jv>body</jv>
 	) 
 	{
 		<jv>body</jv>.set(<js>"OK"</js>);
@@ -391,31 +391,11 @@
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
 	<ul>
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#_default() _default} - Default value if not present.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#_enum() _enum} - Output validation.  Must match one of the values.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#$ref() $ref} - Schema reference.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#api() api} - Free-form Swagger JSON.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#code() code} - HTTP status codes that this header applies to.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#collectionFormat() collectionFormat} - How collections of items are formatted.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#description() description} - Description.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#example() example} - Serialized example.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum} - Output validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum} - Output validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#format() format} - The schema type format.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#items() items} - The schema of items in a collection.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#maximum() maximum} - Output validation.  Maximum numeric value. 
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#maxItems() maxItems} - Output validation.  Maximum number of items in a collection. 
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#maxLength() maxLength} - Output validation.  Maximum length of a string.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#minimum() minimum} - Output validation.  Minimum numeric value. 
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#minItems() minItems} - Output validation.  Minimum number of items in a collection. 
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#minLength() minLength} - Output validation.  Minimum length of a string.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#multipleOf() multipleOf} - Output validation.  Number must be a multiple of.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#name() name} - Header name.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#pattern() pattern} - Output validation.  Must match regular expression.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#serializer() serializer} - Override the part serializer.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#type() type} - The schema type.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#uniqueItems() uniqueItems} - Output validation. Collections must contain unique items only.
-		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#value() value} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#name() name}
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#on() on}
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#onClass() onClass}
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#serializer() serializer}
+		<li class='jf'>{@link oaj.http.annotation.ResponseHeader#value() value}
 	</ul>
 </ul>
 <p>

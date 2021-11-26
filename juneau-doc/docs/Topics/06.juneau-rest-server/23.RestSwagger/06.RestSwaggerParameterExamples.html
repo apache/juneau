@@ -82,9 +82,9 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		{@link oaj.http.annotation.Body#example() @Body(example)} annotation.
+		{@del oaj.http.annotation.Body#example() @Body(example)} annotation.
 	<li>
-		{@link oaj.http.annotation.Body#examples() @Body(examples)} annotation.
+		{@del oaj.http.annotation.Body#examples() @Body(examples)} annotation.
 	<li>
 		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <c><ja>@Swagger</ja>(value)</c>/<c><ja>@OpSwagger</ja>(value)</c>).
 	<li>
@@ -93,7 +93,7 @@
 		Allowing Juneau to auto-generate a code example.
 </ul>
 <p>
-	When using {@link oaj.http.annotation.Body#example() @Body(example)}, you specify a Simple JSON representation of your POJO.
+	When using {@del oaj.http.annotation.Body#example() @Body(example)}, you specify a Simple JSON representation of your POJO.
 	The Swagger generator will then convert that JSON into a POJO using the registered serializers on the REST method to produce examples for all
  	supported language types.
 </p>
@@ -107,7 +107,7 @@
 </p>
 
 <p>
-	The {@link oaj.http.annotation.Body#examples() @Body(examples)} annotation allows you to specify raw output values per media type.
+	The {@del oaj.http.annotation.Body#examples() @Body(examples)} annotation allows you to specify raw output values per media type.
 	This field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
 </p>
 

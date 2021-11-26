@@ -186,9 +186,9 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<li>
 		New annotations for multi-part support:
 		<ul>
-			<li class='jm'>{@link oaj.http.annotation.Header#multi()}
-			<li class='jm'>{@link oaj.http.annotation.Query#multi()}
-			<li class='jm'>{@link oaj.http.annotation.FormData#multi()}
+			<li class='jm'>{@del oaj.http.annotation.Header#multi()}
+			<li class='jm'>{@del oaj.http.annotation.Query#multi()}
+			<li class='jm'>{@del oaj.http.annotation.FormData#multi()}
 		</ul>
 	<li>
 		{@del oaj.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions} setting no longer requires {@del oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} 
@@ -392,7 +392,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 			<li class='jc'>{@link oajr.ResponseHandler}
 		</ul>
 	<li>
-		New {@link oaj.http.annotation.Path#required() @Path(required)} annotation support.
+		New {@del oaj.http.annotation.Path#required() @Path(required)} annotation support.
 		<br>A path can be marked as not-required when the path variable is resolved by a parent resource like so:
 		<p class='bcode w800'>
 	<ja>@Rest</ja>(path=<js>"/parent/{p1}"</js>,children=Child.<jk>class</jk>)
@@ -443,9 +443,9 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		the <c><ja>@ConfigurationContext</ja>(initializers=JuneauRestInitializer.<jk>class</jk>)</c> when unit testing
 		using <ja>@SpringBootTest</ja>.
 	<li>
-		New {@link oajr.helper.ResourceDescription#ResourceDescription(String,String,String)} constructor and {@link oajr.helper.ResourceDescriptions#append(String,String,String)} method.
+		New {@del oajr.helper.ResourceDescription#ResourceDescription(String,String,String)} constructor and {@del oajr.helper.ResourceDescriptions#append(String,String,String)} method.
 	<li>
-		New {@link oajr.helper.Hyperlink} class.
+		New {@del oajr.helper.Hyperlink} class.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

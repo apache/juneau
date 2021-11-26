@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.*;
  * a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestAnnotation}
+ * 	<li class='link'>{@doc RestAnnotatedClasses}
  * </ul>
  */
 @Documented

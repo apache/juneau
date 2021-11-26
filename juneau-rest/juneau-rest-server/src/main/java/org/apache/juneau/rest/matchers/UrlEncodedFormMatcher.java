@@ -20,7 +20,7 @@ import org.apache.juneau.rest.*;
  * Predefined matcher for matching requests with content type <js>"application/x-www-form-urlencoded"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmMatchers}
+ * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
 public class UrlEncodedFormMatcher extends RestMatcher {

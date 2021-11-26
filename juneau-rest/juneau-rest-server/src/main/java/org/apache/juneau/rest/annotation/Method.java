@@ -43,7 +43,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmParameters}
+ * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
 @Documented

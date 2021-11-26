@@ -28,10 +28,6 @@ import org.apache.juneau.http.annotation.*;
  * <p class='bcode w800'>
  * 	<jk>new</jk> ResourceDescription(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmPredefinedHelperBeans}
- * </ul>
  */
 @Bean(properties="name,description", findFluentSetters=true)
 @Response(schema=@Schema(ignore=true))

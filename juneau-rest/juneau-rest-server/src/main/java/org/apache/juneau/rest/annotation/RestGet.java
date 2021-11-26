@@ -32,7 +32,7 @@ import org.apache.juneau.http.header.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>GET</jsf>)</c>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestMethod}
+ * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
 @Documented

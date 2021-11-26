@@ -426,7 +426,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmRequestHeaders}
+	 * 	<li class='link'>{@doc HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -653,7 +653,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmRequestAttributes}
+	 * 	<li class='link'>{@doc HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -718,7 +718,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmRequestQuery}
+	 * 	<li class='link'>{@doc HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -804,7 +804,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmRequestFormData}
+	 * 	<li class='link'>{@doc HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -960,7 +960,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmRequestBody}
+	 * 	<li class='link'>{@doc HttpParts}
 	 * </ul>
 	 *
 	 * @return

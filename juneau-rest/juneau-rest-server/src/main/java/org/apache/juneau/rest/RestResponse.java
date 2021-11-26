@@ -212,7 +212,7 @@ public final class RestResponse {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
-	 * 	<li class='link'>{@doc RestmReturnTypes}
+	 * 	<li class='link'>{@doc RestOpAnnotatedMethods}
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.

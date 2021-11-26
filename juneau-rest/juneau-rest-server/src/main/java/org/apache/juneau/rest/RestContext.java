@@ -5342,7 +5342,6 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc RestChildren}
 		 * 	<li class='ja'>{@link Rest#children()}
 		 * </ul>
 		 *
