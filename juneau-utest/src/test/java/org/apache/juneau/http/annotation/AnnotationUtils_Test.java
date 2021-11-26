@@ -92,7 +92,6 @@ public class AnnotationUtils_Test {
 		assertTrue(FormDataAnnotation.empty((FormData)null));
 		assertTrue(FormDataAnnotation.empty(formData().build()));
 
-		assertFalse(FormDataAnnotation.empty(formData().multi(true).build()));
 		assertFalse(FormDataAnnotation.empty(formData().name("foo").build()));
 		assertFalse(FormDataAnnotation.empty(formData().parser(OpenApiParser.class).build()));
 		assertFalse(FormDataAnnotation.empty(formData().serializer(OpenApiSerializer.class).build()));
@@ -119,7 +118,6 @@ public class AnnotationUtils_Test {
 		assertTrue(QueryAnnotation.empty((Query)null));
 		assertTrue(QueryAnnotation.empty(query().build()));
 
-		assertFalse(QueryAnnotation.empty(query().multi(true).build()));
 		assertFalse(QueryAnnotation.empty(query().name("foo").build()));
 		assertFalse(QueryAnnotation.empty(query().parser(OpenApiParser.class).build()));
 		assertFalse(QueryAnnotation.empty(query().serializer(OpenApiSerializer.class).build()));
@@ -146,7 +144,6 @@ public class AnnotationUtils_Test {
 		assertTrue(HeaderAnnotation.empty((Header)null));
 		assertTrue(HeaderAnnotation.empty(header().build()));
 
-		assertFalse(HeaderAnnotation.empty(header().multi(true).build()));
 		assertFalse(HeaderAnnotation.empty(header().name("foo").build()));
 		assertFalse(HeaderAnnotation.empty(header().parser(OpenApiParser.class).build()));
 		assertFalse(HeaderAnnotation.empty(header().serializer(OpenApiSerializer.class).build()));

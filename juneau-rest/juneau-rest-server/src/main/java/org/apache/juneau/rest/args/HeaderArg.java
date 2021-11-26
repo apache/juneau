@@ -85,7 +85,7 @@ import org.apache.juneau.rest.annotation.*;
  * {@link HttpPartSchema schema} is derived from the {@link Header} annotation.
  *
  * <p>
- * If the {@link Header#multi()} flag is set, then the data type can be a {@link Collection} or array.
+ * If the {@link Schema#collectionFormat()} value is {@link HttpPartCollectionFormat#MULTI}, then the data type can be a {@link Collection} or array.
  */
 public class HeaderArg implements RestOpArg {
 	private final HttpPartParser partParser;
@@ -120,20 +120,10 @@ public class HeaderArg implements RestOpArg {
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
-		this.multi = getMulti(pi);
+		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())
 			throw new ArgException(pi, "Use of multipart flag on @Header parameter that is not an array or Collection");
-	}
-
-	private boolean getMulti(ParamInfo paramInfo) {
-		for (Header h : paramInfo.getAnnotations(Header.class))
-			if (h.multi())
-				return true;
-		for (Header h : paramInfo.getParameterType().getAnnotations(Header.class))
-			if (h.multi())
-				return true;
-		return false;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

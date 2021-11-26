@@ -108,7 +108,6 @@ public class QueryAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
 
-		boolean multi;
 		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
@@ -128,17 +127,6 @@ public class QueryAnnotation {
 		 */
 		public Query build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Query#multi} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder multi(boolean value) {
-			this.multi = value;
-			return this;
 		}
 
 		/**
@@ -237,7 +225,6 @@ public class QueryAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Query {
 
-		private final boolean multi;
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final String name, value;
@@ -245,18 +232,12 @@ public class QueryAnnotation {
 
 		Impl(Builder b) {
 			super(b);
-			this.multi = b.multi;
 			this.name = b.name;
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* Query */
-		public boolean multi() {
-			return multi;
 		}
 
 		@Override /* Query */

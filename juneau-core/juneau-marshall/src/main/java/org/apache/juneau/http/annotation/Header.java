@@ -85,23 +85,6 @@ import org.apache.juneau.oapi.*;
 public @interface Header {
 
 	/**
-	 * Denotes a multi-part parameter (e.g. multiple entries with the same name).
-	 *
-	 * <h5 class='figure'>Example</h5>
-	 * 	<jk>public void</jk> doPost(
-	 * 		<ja>@Header</ja>(name=<js>"Beans"</js>, multi=<jk>true</jk>) MyBean[] <jv>beans</jv>
-	 * 	) {
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Meant to be used on multi-part parameters (e.g. <js>"Header: h1"</js>, <js>"Header: h2"</js> instead of <js>"Header: @(h1,h2)"</js>)
-	 * 	<li>
-	 * 		The data type must be a collection or array type.
-	 * </ul>
-	 */
-	boolean multi() default false;
-
-	/**
 	 * HTTP header name.
 	 * <p>
 	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.

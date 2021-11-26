@@ -32,7 +32,6 @@ public class QueryAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Query a1 = QueryAnnotation.create()
-		.multi(true)
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -42,7 +41,6 @@ public class QueryAnnotation_Test {
 		.build();
 
 	Query a2 = QueryAnnotation.create()
-		.multi(true)
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -55,7 +53,6 @@ public class QueryAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "multi:true,"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -115,7 +112,6 @@ public class QueryAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Query(
-		multi=true,
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -127,7 +123,6 @@ public class QueryAnnotation_Test {
 	Query d1 = D1.class.getAnnotationsByType(Query.class)[0];
 
 	@Query(
-		multi=true,
 		name="name",
 		on="on",
 		onClass=X1.class,

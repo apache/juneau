@@ -40,7 +40,7 @@ public class BasicMediaRangeArrayHeader_Test {
 	@Rest
 	public static class A {
 		@RestOp
-		public StringReader get(@Header(name=HEADER,multi=true) String[] h) {
+		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
 			return reader(h == null ? "null" : StringUtils.join(h, '|'));
 		}
 	}

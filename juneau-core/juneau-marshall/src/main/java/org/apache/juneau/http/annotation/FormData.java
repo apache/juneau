@@ -119,23 +119,6 @@ import org.apache.juneau.oapi.*;
 public @interface FormData {
 
 	/**
-	 * Denotes a multi-part parameter (e.g. multiple entries with the same name).
-	 *
-	 * <h5 class='figure'>Example</h5>
-	 * 	<jk>public void</jk> doPost(
-	 * 		<ja>@FormData</ja>(name=<js>"beans"</js>, multi=<jk>true</jk>) MyBean[] <jv>beans</jv>
-	 * 	) {
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Meant to be used on multi-part parameters (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
-	 * 	<li>
-	 * 		The data type must be a collection or array type.
-	 * </ul>
-	 */
-	boolean multi() default false;
-
-	/**
 	 * FORM parameter name.
 	 *
 	 * <p>

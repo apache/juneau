@@ -41,6 +41,9 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * {@link HttpPartSchema schema} is derived from the {@link Query} annotation.
+ *
+ * <p>
+ * If the {@link Schema#collectionFormat()} value is {@link HttpPartCollectionFormat#MULTI}, then the data type can be a {@link Collection} or array.
  */
 public class QueryArg implements RestOpArg {
 	private final boolean multi;
@@ -75,20 +78,10 @@ public class QueryArg implements RestOpArg {
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
-		this.multi = getMulti(pi) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
+		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())
 			throw new ArgException(pi, "Use of multipart flag on @Query parameter that is not an array or Collection");
-	}
-
-	private boolean getMulti(ParamInfo paramInfo) {
-		for (Query q : paramInfo.getAnnotations(Query.class))
-			if (q.multi())
-				return true;
-		for (Query q : paramInfo.getParameterType().getAnnotations(Query.class))
-			if (q.multi())
-				return true;
-		return false;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
