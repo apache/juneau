@@ -26,7 +26,9 @@ import org.apache.juneau.http.annotation.*;
  * This code indicates that the server has received and is processing the request, but no response is available yet.
  * This prevents the client from timing out and assuming the request was lost.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class Processing extends BasicHttpResponse {
 
 	/** HTTP status code */

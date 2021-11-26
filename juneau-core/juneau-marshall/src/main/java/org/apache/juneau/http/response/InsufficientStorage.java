@@ -26,7 +26,9 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server is unable to store the representation needed to complete the request.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class InsufficientStorage extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

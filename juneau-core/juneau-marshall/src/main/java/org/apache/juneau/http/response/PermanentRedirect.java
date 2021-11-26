@@ -25,7 +25,9 @@ import org.apache.juneau.http.annotation.*;
  * The request and all future requests should be repeated using another URI. 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change.
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class PermanentRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */

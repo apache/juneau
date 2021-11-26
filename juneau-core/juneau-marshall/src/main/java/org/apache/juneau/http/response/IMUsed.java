@@ -24,7 +24,9 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server has fulfilled a request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class IMUsed extends BasicHttpResponse {
 
 	/** HTTP status code */

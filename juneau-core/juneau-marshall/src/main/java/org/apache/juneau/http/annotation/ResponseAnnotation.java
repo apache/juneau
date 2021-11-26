@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -92,7 +91,6 @@ public class ResponseAnnotation {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
-		int[] code={}, value={};
 		ResponseHeader[] headers={};
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String[] examples={};
@@ -111,17 +109,6 @@ public class ResponseAnnotation {
 		 */
 		public Response build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Response#code} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder code(int...value) {
-			this.code = value;
-			return this;
 		}
 
 		/**
@@ -179,17 +166,6 @@ public class ResponseAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Response#value} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(int...value) {
-			this.value = value;
-			return this;
-		}
-
 		// <FluentSetters>
 
 		@Override /* GENERATED - TargetedAnnotationBuilder */
@@ -227,26 +203,18 @@ public class ResponseAnnotation {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final int[] code, value;
 		private final ResponseHeader[] headers;
 		private final Schema schema;
 		private final String[] examples;
 
 		Impl(Builder b) {
 			super(b);
-			this.code = Arrays.copyOf(b.code, b.code.length);
 			this.examples = copyOf(b.examples);
 			this.headers = copyOf(b.headers);
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
-			this.value = Arrays.copyOf(b.value, b.value.length);
 			postConstruct();
-		}
-
-		@Override /* Response */
-		public int[] code() {
-			return code;
 		}
 
 		@Override /* Response */
@@ -272,11 +240,6 @@ public class ResponseAnnotation {
 		@Override /* Response */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
-		}
-
-		@Override /* Response */
-		public int[] value() {
-			return value;
 		}
 	}
 

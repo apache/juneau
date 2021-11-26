@@ -1670,7 +1670,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public O1c a() { return null;}
 	}
-	@Response(code=100)
+	@Response @ResponseCode(100)
 	public static class O1c {
 		public String a;
 	}
@@ -1720,7 +1720,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public O4c a() {return null;}
 	}
-	@Response(code=100) @Schema(description="c-100-description")
+	@Response @ResponseCode(100) @Schema(description="c-100-description")
 	public static class O4c {}
 
 	@Test
@@ -1744,7 +1744,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public O5c a() {return null;}
 	}
-	@Response(code=100) @Schema(description="$L{foo}")
+	@Response @ResponseCode(100) @Schema(description="$L{foo}")
 	public static class O5c {}
 
 	@Test
@@ -1772,7 +1772,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public P1c a() {return null;}
 	}
-	@Response(code=100)
+	@Response @ResponseCode(100)
 	public static class P1c {
 		public String a;
 	}
@@ -1826,7 +1826,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public P4c a() {return null;}
 	}
-	@Response(code=100,headers=@ResponseHeader(name="X-Foo",schema=@Schema(description="d-description",type="integer",format="int32")))
+	@Response(headers=@ResponseHeader(name="X-Foo",schema=@Schema(description="d-description",type="integer",format="int32"))) @ResponseCode(100)
 	public static class P4c {}
 
 	@Test
@@ -1850,7 +1850,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public P5c a() {return null;}
 	}
-	@Response(code=100,headers=@ResponseHeader(name="X-Foo",schema=@Schema(description="$L{foo}",type="integer",format="int32")))
+	@Response(headers=@ResponseHeader(name="X-Foo",schema=@Schema(description="$L{foo}",type="integer",format="int32"))) @ResponseCode(100)
 	public static class P5c {}
 
 	@Test
@@ -1878,7 +1878,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public R1c a() {return null;}
 	}
-	@Response(code=100)
+	@Response @ResponseCode(100)
 	public static class R1c {
 		public String a;
 	}
@@ -1928,7 +1928,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public R4c a() {return null;}
 	}
-	@Response(code=100,examples="{foo:{bar:'d'}}")
+	@Response(examples="{foo:{bar:'d'}}") @ResponseCode(100)
 	public static class R4c {}
 
 	@Test
@@ -1952,7 +1952,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public R5c a() {return null;}
 	}
-	@Response(code=100,examples="{foo:{bar:'$L{foo}'}}")
+	@Response(examples="{foo:{bar:'$L{foo}'}}") @ResponseCode(100)
 	public static class R5c {}
 
 	@Test
@@ -1980,7 +1980,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public S1c a() {return null;}
 	}
-	@Response(code=100)
+	@Response @ResponseCode(100)
 	public static class S1c extends X {}
 
 	@Test
@@ -2028,7 +2028,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public S4c a() {return null;}
 	}
-	@Response(code=100,schema=@Schema($ref="d"))
+	@Response(schema=@Schema($ref="d")) @ResponseCode(100)
 	public static class S4c extends X {}
 
 	@Test
@@ -2052,7 +2052,7 @@ public class Swagger_Test {
 		@RestGet(path="/path/{foo}/responses/100")
 		public S5c a() {return null;}
 	}
-	@Response(code=100,schema=@Schema($ref="l-foo"))
+	@Response(schema=@Schema($ref="l-foo")) @ResponseCode(100)
 	public static class S5c extends X {}
 
 	@Test

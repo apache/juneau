@@ -24,7 +24,9 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The request has been fulfilled, resulting in the creation of a new resource.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class Created extends BasicHttpResponse {
 
 	/** HTTP status code */

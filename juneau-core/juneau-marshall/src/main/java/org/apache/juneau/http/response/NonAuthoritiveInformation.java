@@ -24,7 +24,9 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is returning a modified version of the origin's response.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class NonAuthoritiveInformation extends BasicHttpResponse {
 
 	/** HTTP status code */

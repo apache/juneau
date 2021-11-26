@@ -27,7 +27,9 @@ import org.apache.juneau.http.annotation.*;
  * The URI provided was too long for the server to process.
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class UriTooLong extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

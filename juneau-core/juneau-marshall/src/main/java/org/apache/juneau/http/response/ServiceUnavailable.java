@@ -27,7 +27,9 @@ import org.apache.juneau.http.annotation.*;
  * The server is currently unavailable (because it is overloaded or down for maintenance).
  * <br>Generally, this is a temporary state.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class ServiceUnavailable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

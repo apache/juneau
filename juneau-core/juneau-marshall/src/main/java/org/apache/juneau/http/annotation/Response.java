@@ -53,13 +53,6 @@ import org.apache.juneau.oapi.*;
 public @interface Response {
 
 	/**
-	 * The HTTP response code.
-	 *
-	 * The default value is <c>500</c> for exceptions and <c>200</c> for return types.
-	 */
-	int[] code() default {};
-
-	/**
 	 * Serialized examples of the body of a response.
 	 *
 	 * <p>
@@ -157,23 +150,4 @@ public @interface Response {
 	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
-
-	/**
-	 * A synonym for {@link #code()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the code.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining the response code:
-	 * <p class='bcode w800'>
-	 * 	<ja>@Response</ja>(code=404)
-	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Response</ja>(404)
-	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
-	 * </p>
-	 */
-	int[] value() default {};
 }

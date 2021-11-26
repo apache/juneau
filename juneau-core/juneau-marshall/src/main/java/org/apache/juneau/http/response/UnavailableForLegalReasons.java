@@ -26,7 +26,9 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class UnavailableForLegalReasons extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

@@ -27,7 +27,9 @@ import org.apache.juneau.http.annotation.*;
  * The request entity has a media type which the server or resource does not support.
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class UnsupportedMediaType extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

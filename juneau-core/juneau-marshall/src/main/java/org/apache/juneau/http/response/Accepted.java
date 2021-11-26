@@ -25,7 +25,9 @@ import org.apache.juneau.http.annotation.*;
  * The request has been accepted for processing, but the processing has not been completed.
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class Accepted extends BasicHttpResponse {
 
 	/** HTTP status code */

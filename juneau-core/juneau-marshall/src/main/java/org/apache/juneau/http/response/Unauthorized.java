@@ -29,7 +29,9 @@ import org.apache.juneau.http.annotation.*;
  * <br>401 semantically means "unauthenticated",i.e. the user does not have the necessary credentials.
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class Unauthorized extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

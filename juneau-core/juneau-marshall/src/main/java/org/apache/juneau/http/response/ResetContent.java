@@ -25,7 +25,9 @@ import org.apache.juneau.http.annotation.*;
  * The server successfully processed the request, but is not returning any content.
  * Unlike a 204 response, this response requires that the requester reset the document view.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class ResetContent extends BasicHttpResponse {
 
 	/** HTTP status code */

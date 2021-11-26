@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -76,6 +77,8 @@ public class ResponseCodeAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
+		int value[] = {};
+
 		/**
 		 * Constructor.
 		 */
@@ -90,6 +93,17 @@ public class ResponseCodeAnnotation {
 		 */
 		public ResponseCode build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the {@link ResponseCode#value} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder value(int...value) {
+			this.value = value;
+			return this;
 		}
 
 		// <FluentSetters>
@@ -127,9 +141,17 @@ public class ResponseCodeAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements ResponseCode {
 
+		private final int[] value;
+
 		Impl(Builder b) {
 			super(b);
+			this.value = Arrays.copyOf(b.value, b.value.length);
 			postConstruct();
+		}
+
+		@Override /* Response */
+		public int[] value() {
+			return value;
 		}
 	}
 

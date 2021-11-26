@@ -32,7 +32,6 @@ public class ResponseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Response a1 = ResponseAnnotation.create()
-		.code(1)
 		.examples("examples")
 		.headers(ResponseHeaderAnnotation.DEFAULT)
 		.on("on")
@@ -40,11 +39,9 @@ public class ResponseAnnotation_Test {
 		.parser(OpenApiParser.class)
 		.schema(SchemaAnnotation.DEFAULT)
 		.serializer(OpenApiSerializer.class)
-		.value(2)
 		.build();
 
 	Response a2 = ResponseAnnotation.create()
-		.code(1)
 		.examples("examples")
 		.headers(ResponseHeaderAnnotation.DEFAULT)
 		.on("on")
@@ -52,22 +49,19 @@ public class ResponseAnnotation_Test {
 		.parser(OpenApiParser.class)
 		.schema(SchemaAnnotation.DEFAULT)
 		.serializer(OpenApiSerializer.class)
-		.value(2)
 		.build();
 
 	@Test
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "code:[1],"
 				+ "examples:['examples'],"
 				+ "headers:[*],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
 				+ "schema:{*,"
-				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
-				+ "value:[2]"
+				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer'"
 			+ "}"
 		);
 	}
@@ -118,29 +112,25 @@ public class ResponseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Response(
-		code=1,
 		examples="examples",
 		headers=@ResponseHeader,
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		schema=@Schema,
-		serializer=OpenApiSerializer.class,
-		value=2
+		serializer=OpenApiSerializer.class
 	)
 	public static class D1 {}
 	Response d1 = D1.class.getAnnotationsByType(Response.class)[0];
 
 	@Response(
-		code=1,
 		examples="examples",
 		headers=@ResponseHeader,
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		schema=@Schema,
-		serializer=OpenApiSerializer.class,
-		value=2
+		serializer=OpenApiSerializer.class
 	)
 	public static class D2 {}
 	Response d2 = D2.class.getAnnotationsByType(Response.class)[0];

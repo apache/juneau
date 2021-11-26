@@ -27,7 +27,9 @@ import org.apache.juneau.http.annotation.*;
  * The requested resource could not be found but may be available in the future.
  * <br>Subsequent requests by the client are permissible.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class NotFound extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 

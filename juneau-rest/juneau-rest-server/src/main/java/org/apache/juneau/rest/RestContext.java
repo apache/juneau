@@ -46,7 +46,7 @@ import java.util.stream.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
@@ -56,7 +56,6 @@ import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -70,6 +69,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.args.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.processors.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
@@ -7090,10 +7090,10 @@ public class RestContext extends Context {
 		int code = 500;
 
 		ClassInfo ci = ClassInfo.ofc(e);
-		Response r = ci.getLastAnnotation(Response.class);
+		ResponseCode r = ci.getLastAnnotation(ResponseCode.class);
 		if (r != null)
-			if (r.code().length > 0)
-				code = r.code()[0];
+			if (r.value().length > 0)
+				code = r.value()[0];
 
 		BasicHttpException e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : BasicHttpException.create(BasicHttpException.class).causedBy(e).statusCode(code).build());
 

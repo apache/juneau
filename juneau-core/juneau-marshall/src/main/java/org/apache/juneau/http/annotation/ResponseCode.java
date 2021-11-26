@@ -124,4 +124,10 @@ public @interface ResponseCode {
 	 */
 	Class<?>[] onClass() default {};
 
+	/**
+	 * The HTTP response codes.
+	 *
+	 * The default value is <c>500</c> for exceptions and <c>200</c> for return types.
+	 */
+	int[] value() default {};
 }

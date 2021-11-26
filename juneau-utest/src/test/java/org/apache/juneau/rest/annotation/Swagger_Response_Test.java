@@ -74,14 +74,14 @@ public class Swagger_Response_Test {
 		@RestOp
 		public A3 f() {return null;}
 
-		@Response(code=100)
+		@Response @ResponseCode(100)
 		public static class A4 {}
 		@RestOp
 		public void g(Value<A4> r) {}
 		@RestOp
 		public A4 h() {return null;}
 
-		@Response(100)
+		@Response @ResponseCode(100)
 		public static class A5 {}
 		@RestOp
 		public void i(Value<A5> r) {}
@@ -289,12 +289,12 @@ public class Swagger_Response_Test {
 		@RestPost
 		public void c() throws D3 {}
 
-		@Response(code=100)
+		@Response @ResponseCode(100)
 		public static class D4 extends Throwable {}
 		@RestDelete
 		public void d() throws D4 {}
 
-		@Response(code=100)
+		@Response @ResponseCode(100)
 		public static class D5 extends Throwable {}
 		@RestOp
 		public void e() throws D5 {}

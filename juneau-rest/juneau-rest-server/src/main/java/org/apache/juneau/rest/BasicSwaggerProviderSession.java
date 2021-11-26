@@ -371,7 +371,8 @@ public class BasicSwaggerProviderSession {
 			for (ClassInfo eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
 					List<Response> la = eci.getAnnotations(Response.class);
-					Set<Integer> codes = getCodes(la, 500);
+					List<ResponseCode> la2 = eci.getAnnotations(ResponseCode.class);
+					Set<Integer> codes = getCodes(la2, 500);
 					for (Response a : la) {
 						for (Integer code : codes) {
 							OMap om = responses.getMap(String.valueOf(code), true);
@@ -401,7 +402,8 @@ public class BasicSwaggerProviderSession {
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)) {
 				List<Response> la = mi.getAnnotations(Response.class);
-				Set<Integer> codes = getCodes(la, 200);
+				List<ResponseCode> la2 = mi.getAnnotations(ResponseCode.class);
+				Set<Integer> codes = getCodes(la2, 200);
 				for (Response a : la) {
 					for (Integer code : codes) {
 						OMap om = responses.getMap(String.valueOf(code), true);
@@ -464,7 +466,8 @@ public class BasicSwaggerProviderSession {
 
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
 					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).a(pt.getAnnotations(Response.class));
-					Set<Integer> codes = getCodes(la, 200);
+					List<ResponseCode> la2 = AList.of(mpi.getAnnotations(ResponseCode.class)).a(pt.getAnnotations(ResponseCode.class));
+					Set<Integer> codes = getCodes(la2, 200);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (Response a : la) {
 						for (Integer code : codes) {
@@ -1088,12 +1091,10 @@ public class BasicSwaggerProviderSession {
 		return "";
 	}
 
-	private static Set<Integer> getCodes(List<Response> la, Integer def) {
+	private static Set<Integer> getCodes(List<ResponseCode> la, Integer def) {
 		Set<Integer> codes = new TreeSet<>();
-		for (Response a : la) {
+		for (ResponseCode a : la) {
 			for (int i : a.value())
-				codes.add(i);
-			for (int i : a.code())
 				codes.add(i);
 		}
 		if (codes.isEmpty() && def != null)

@@ -720,6 +720,8 @@ public class HttpPartSchema {
 				apply((Path)a);
 			else if (a instanceof Response)
 				apply((Response)a);
+			else if (a instanceof ResponseCode)
+				apply((ResponseCode)a);
 			else if (a instanceof ResponseHeader)
 				apply((ResponseHeader)a);
 			else if (a instanceof HasQuery)
@@ -796,11 +798,15 @@ public class HttpPartSchema {
 		Builder apply(Response a) {
 			allowEmptyValue(true);
 			apply(a.schema());
-			codes(a.code());
-			codes(a.value());
 			parser(a.parser());
 			required(false);
-			serializer(a.serializer());			return this;
+			serializer(a.serializer());
+			return this;
+		}
+
+		Builder apply(ResponseCode a) {
+			codes(a.value());
+			return this;
 		}
 
 		Builder apply(Items a) {

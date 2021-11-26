@@ -50,8 +50,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(ci.innerType());
-		for (Response r : ci.getAnnotations(Response.class))
-			b.apply(r);
+		ci.getAnnotations(Response.class).forEach(x -> b.apply(x));
+		ci.getAnnotations(ResponseCode.class).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -67,8 +67,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		for (Response r : m.getAnnotations(Response.class))
-			b.apply(r);
+		m.getAnnotations(Response.class).forEach(x -> b.apply(x));
+		m.getAnnotations(ResponseCode.class).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -84,8 +84,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		for (Response r : mpi.getAnnotations(Response.class))
-			b.apply(r);
+		mpi.getAnnotations(Response.class).forEach(x -> b.apply(x));
+		mpi.getAnnotations(ResponseCode.class).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -180,11 +180,15 @@ public class ResponseBeanMeta {
 					partSerializer = a.serializer();
 				if (a.parser() != HttpPartParser.Null.class)
 					partParser = a.parser();
+				schema.apply(a.schema());
+			}
+			return this;
+		}
+
+		Builder apply(ResponseCode a) {
+			if (a != null) {
 				if (a.value().length > 0)
 					code = a.value()[0];
-				if (a.code().length > 0)
-					code = a.code()[0];
-				schema.apply(a.schema());
 			}
 			return this;
 		}

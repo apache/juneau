@@ -25,7 +25,9 @@ import org.apache.juneau.http.annotation.*;
  * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class NotModified extends BasicHttpResponse {
 
 	/** HTTP status code */

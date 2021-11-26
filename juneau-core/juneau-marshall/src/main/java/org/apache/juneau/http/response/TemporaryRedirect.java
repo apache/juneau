@@ -26,7 +26,9 @@ import org.apache.juneau.http.annotation.*;
  * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
  * For example, a POST request should be repeated using another POST request.
  */
-@Response(code=STATUS_CODE) @Schema(description=REASON_PHRASE)
+@Response
+@ResponseCode(STATUS_CODE)
+@Schema(description=REASON_PHRASE)
 public class TemporaryRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */
