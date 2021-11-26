@@ -417,8 +417,6 @@ public class HttpParts {
 		for (org.apache.juneau.http.annotation.Header a : x.getAnnotations(org.apache.juneau.http.annotation.Header.class)) {
 			if (! a.value().isEmpty())
 				return a.value();
-			if (! a.n().isEmpty())
-				return a.n();
 			if (! a.name().isEmpty())
 				return a.name();
 		}
@@ -429,8 +427,6 @@ public class HttpParts {
 		for (org.apache.juneau.http.annotation.Query a : x.getAnnotations(org.apache.juneau.http.annotation.Query.class)) {
 			if (! a.value().isEmpty())
 				return a.value();
-			if (! a.n().isEmpty())
-				return a.n();
 			if (! a.name().isEmpty())
 				return a.name();
 		}
@@ -441,8 +437,6 @@ public class HttpParts {
 		for (org.apache.juneau.http.annotation.FormData a : x.getAnnotations(org.apache.juneau.http.annotation.FormData.class)) {
 			if (! a.value().isEmpty())
 				return a.value();
-			if (! a.n().isEmpty())
-				return a.n();
 			if (! a.name().isEmpty())
 				return a.name();
 		}
@@ -453,8 +447,6 @@ public class HttpParts {
 		for (org.apache.juneau.http.annotation.Path a : x.getAnnotations(org.apache.juneau.http.annotation.Path.class)) {
 			if (! a.value().isEmpty())
 				return a.value();
-			if (! a.n().isEmpty())
-				return a.n();
 			if (! a.name().isEmpty())
 				return a.name();
 		}

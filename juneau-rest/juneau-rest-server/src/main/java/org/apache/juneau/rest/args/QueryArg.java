@@ -65,29 +65,20 @@ public class QueryArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected QueryArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
-		this.name = getName(paramInfo);
-		this.type = paramInfo.getParameterType();
-		this.schema = HttpPartSchema.create(Query.class, paramInfo);
+	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
+		ClassInfo pt = pi.getParameterType();
+
+		this.name = QueryAnnotation.findName(pi.getAnnotations(Query.class), pt.getAnnotations(Query.class)).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
+		this.type = pi.getParameterType();
+		this.schema = HttpPartSchema.create(Query.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
-		this.multi = getMulti(paramInfo) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
+		this.multi = getMulti(pi) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())
-			throw new ArgException(paramInfo, "Use of multipart flag on @Query parameter that is not an array or Collection");
-	}
-
-	private String getName(ParamInfo paramInfo) {
-		String n = null;
-		for (Query h : paramInfo.getAnnotations(Query.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		for (Query h : paramInfo.getParameterType().getAnnotations(Query.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		if (n == null)
-			throw new ArgException(paramInfo, "@Query used without name or value");
-		return n;
+			throw new ArgException(pi, "Use of multipart flag on @Query parameter that is not an array or Collection");
 	}
 
 	private boolean getMulti(ParamInfo paramInfo) {

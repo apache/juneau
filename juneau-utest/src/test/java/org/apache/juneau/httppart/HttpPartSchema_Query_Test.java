@@ -48,9 +48,7 @@ public class HttpPartSchema_Query_Test {
 		assertEquals("x", s.getName());
 	}
 
-	@Query(
-		n="x"
-	)
+	@Query("x")
 	@Schema(
 		t="number",
 		f="int32",
@@ -101,9 +99,7 @@ public class HttpPartSchema_Query_Test {
 
 	public static class A03 {
 		public void a(
-				@Query(
-					n="x"
-				)
+				@Query("x")
 				@Schema(
 					t="number",
 					f="int32",
@@ -159,9 +155,7 @@ public class HttpPartSchema_Query_Test {
 
 	public static class A04 {
 		public void a(
-				@Query(
-					n="y"
-				)
+				@Query("y")
 				@Schema(
 					t="integer",
 					f="int64",
@@ -215,9 +209,7 @@ public class HttpPartSchema_Query_Test {
 		assertEquals("c3\nc4", s.getDefault());
 	}
 
-	@Query(
-		n="x"
-	)
+	@Query("x")
 	@Schema(
 		items=@Items(
 			t="number",

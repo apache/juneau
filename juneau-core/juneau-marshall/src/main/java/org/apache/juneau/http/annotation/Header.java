@@ -102,11 +102,6 @@ public @interface Header {
 	boolean multi() default false;
 
 	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
 	 * HTTP header name.
 	 * <p>
 	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.

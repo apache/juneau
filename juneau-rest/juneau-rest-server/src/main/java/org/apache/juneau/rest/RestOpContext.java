@@ -1645,7 +1645,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						Header h = (Header)a;
 						if (def != null) {
 							try {
-								defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+								defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @Header annotation");
 							}
@@ -1655,7 +1655,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						Query h = (Query)a;
 						if (def != null) {
 							try {
-								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @Query annotation");
 							}
@@ -1665,7 +1665,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						FormData h = (FormData)a;
 						if (def != null) {
 							try {
-								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @FormData annotation");
 							}

@@ -188,15 +188,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/typedBeanHeaders")
 	public String typedBeanHeaders(
-			@Header(n="a") @Schema(cf="uon") TypedBean a,
-			@Header(n="an") @Schema(cf="uon") TypedBean an,
-			@Header(n="b") @Schema(cf="uon") TypedBean[][][] b,
-			@Header(n="c") @Schema(cf="uon") List<TypedBean> c,
-			@Header(n="d") @Schema(cf="uon") List<TypedBean[][][]> d,
-			@Header(n="e") @Schema(cf="uon") Map<String,TypedBean> e,
-			@Header(n="f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
-			@Header(n="g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
-			@Header(n="h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
+			@Header("a") @Schema(cf="uon") TypedBean a,
+			@Header("an") @Schema(cf="uon") TypedBean an,
+			@Header("b") @Schema(cf="uon") TypedBean[][][] b,
+			@Header("c") @Schema(cf="uon") List<TypedBean> c,
+			@Header("d") @Schema(cf="uon") List<TypedBean[][][]> d,
+			@Header("e") @Schema(cf="uon") Map<String,TypedBean> e,
+			@Header("f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
+			@Header("g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
+			@Header("h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
@@ -224,10 +224,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/swappedObjectHeaders")
 	public String swappedObjectHeaders(
-			@Header(n="a") @Schema(cf="uon") SwappedObject a,
-			@Header(n="b") @Schema(cf="uon") SwappedObject[][][] b,
-			@Header(n="c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
-			@Header(n="d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
+			@Header("a") @Schema(cf="uon") SwappedObject a,
+			@Header("b") @Schema(cf="uon") SwappedObject[][][] b,
+			@Header("c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
+			@Header("d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -247,10 +247,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/implicitSwappedObjectHeaders")
 	public String implicitSwappedObjectHeaders(
-			@Header(n="a") @Schema(cf="uon") ImplicitSwappedObject a,
-			@Header(n="b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
-			@Header(n="c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
-			@Header(n="d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
+			@Header("a") @Schema(cf="uon") ImplicitSwappedObject a,
+			@Header("b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
+			@Header("c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@Header("d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -270,15 +270,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/enumHeaders")
 	public String enumHeaders(
-			@Header(n="a") @Schema(cf="uon") TestEnum a,
-			@Header(n="an") @Schema(cf="uon") TestEnum an,
-			@Header(n="b") @Schema(cf="uon") TestEnum[][][] b,
-			@Header(n="c") @Schema(cf="uon") List<TestEnum> c,
-			@Header(n="d") @Schema(cf="uon") List<List<List<TestEnum>>> d,
-			@Header(n="e") @Schema(cf="uon") List<TestEnum[][][]> e,
-			@Header(n="f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
-			@Header(n="g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
-			@Header(n="h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
+			@Header("a") @Schema(cf="uon") TestEnum a,
+			@Header("an") @Schema(cf="uon") TestEnum an,
+			@Header("b") @Schema(cf="uon") TestEnum[][][] b,
+			@Header("c") @Schema(cf="uon") List<TestEnum> c,
+			@Header("d") @Schema(cf="uon") List<List<List<TestEnum>>> d,
+			@Header("e") @Schema(cf="uon") List<TestEnum[][][]> e,
+			@Header("f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
+			@Header("g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
+			@Header("h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
 		assertEquals(TestEnum.TWO, a);
@@ -467,15 +467,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/beanQueries")
 	public String beanQueries(
-			@Query(n="a") @Schema(cf="uon") ABean a,
-			@Query(n="an") @Schema(cf="uon") ABean an,
-			@Query(n="b") @Schema(cf="uon") ABean[][][] b,
-			@Query(n="c") @Schema(cf="uon") List<ABean> c,
-			@Query(n="d") @Schema(cf="uon") List<ABean[][][]> d,
-			@Query(n="e") @Schema(cf="uon") Map<String,ABean> e,
-			@Query(n="f") @Schema(cf="uon") Map<String,List<ABean>> f,
-			@Query(n="g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
-			@Query(n="h") @Schema(cf="uon") Map<Integer,List<ABean>> h
+			@Query("a") @Schema(cf="uon") ABean a,
+			@Query("an") @Schema(cf="uon") ABean an,
+			@Query("b") @Schema(cf="uon") ABean[][][] b,
+			@Query("c") @Schema(cf="uon") List<ABean> c,
+			@Query("d") @Schema(cf="uon") List<ABean[][][]> d,
+			@Query("e") @Schema(cf="uon") Map<String,ABean> e,
+			@Query("f") @Schema(cf="uon") Map<String,List<ABean>> f,
+			@Query("g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
+			@Query("h") @Schema(cf="uon") Map<Integer,List<ABean>> h
 		) throws Exception {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
@@ -500,15 +500,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/typedBeanQueries")
 	public String typedBeanQueries(
-			@Query(n="a") @Schema(cf="uon") TypedBean a,
-			@Query(n="an") @Schema(cf="uon") TypedBean an,
-			@Query(n="b") @Schema(cf="uon") TypedBean[][][] b,
-			@Query(n="c") @Schema(cf="uon") List<TypedBean> c,
-			@Query(n="d") @Schema(cf="uon") List<TypedBean[][][]> d,
-			@Query(n="e") @Schema(cf="uon") Map<String,TypedBean> e,
-			@Query(n="f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
-			@Query(n="g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
-			@Query(n="h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
+			@Query("a") @Schema(cf="uon") TypedBean a,
+			@Query("an") @Schema(cf="uon") TypedBean an,
+			@Query("b") @Schema(cf="uon") TypedBean[][][] b,
+			@Query("c") @Schema(cf="uon") List<TypedBean> c,
+			@Query("d") @Schema(cf="uon") List<TypedBean[][][]> d,
+			@Query("e") @Schema(cf="uon") Map<String,TypedBean> e,
+			@Query("f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
+			@Query("g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
+			@Query("h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
@@ -536,10 +536,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/swappedObjectQueries")
 	public String swappedObjectQueries(
-			@Query(n="a") @Schema(cf="uon") SwappedObject a,
-			@Query(n="b") @Schema(cf="uon") SwappedObject[][][] b,
-			@Query(n="c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
-			@Query(n="d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
+			@Query("a") @Schema(cf="uon") SwappedObject a,
+			@Query("b") @Schema(cf="uon") SwappedObject[][][] b,
+			@Query("c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
+			@Query("d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -559,10 +559,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/implicitSwappedObjectQueries")
 	public String implicitSwappedObjectQueries(
-			@Query(n="a") @Schema(cf="uon") ImplicitSwappedObject a,
-			@Query(n="b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
-			@Query(n="c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
-			@Query(n="d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
+			@Query("a") @Schema(cf="uon") ImplicitSwappedObject a,
+			@Query("b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
+			@Query("c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@Query("d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -582,15 +582,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestGet(path="/enumQueries")
 	public String enumQueries(
-			@Query(n="a") @Schema(cf="uon") TestEnum a,
-			@Query(n="an") @Schema(cf="uon") TestEnum an,
-			@Query(n="b") @Schema(cf="uon") TestEnum[][][] b,
-			@Query(n="c") @Schema(cf="uon") List<TestEnum> c,
-			@Query(n="d") @Schema(cf="uon") List<List<List<TestEnum>>> d,
-			@Query(n="e") @Schema(cf="uon") List<TestEnum[][][]> e,
-			@Query(n="f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
-			@Query(n="g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
-			@Query(n="h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
+			@Query("a") @Schema(cf="uon") TestEnum a,
+			@Query("an") @Schema(cf="uon") TestEnum an,
+			@Query("b") @Schema(cf="uon") TestEnum[][][] b,
+			@Query("c") @Schema(cf="uon") List<TestEnum> c,
+			@Query("d") @Schema(cf="uon") List<List<List<TestEnum>>> d,
+			@Query("e") @Schema(cf="uon") List<TestEnum[][][]> e,
+			@Query("f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
+			@Query("g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
+			@Query("h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
 		assertEquals(TestEnum.TWO, a);
@@ -655,7 +655,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestGet(path="/beanQuery")
 	public String beanQuery(
 			@Query("a") String a,
-			@Query(n="b") @Schema(allowEmptyValue=true) String b,
+			@Query("b") @Schema(allowEmptyValue=true) String b,
 			@Query("c") String c
 		) throws Exception {
 
@@ -669,7 +669,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestGet(path="/partListQuery")
 	public String partListQuery(
 		@Query("a") String a,
-		@Query(n="b") @Schema(allowEmptyValue=true) String b,
+		@Query("b") @Schema(allowEmptyValue=true) String b,
 		@Query("c") String c
 	) throws Exception {
 
@@ -801,15 +801,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestPost(path="/beanFormData")
 	public String beanFormData(
-			@FormData(n="a") @Schema(cf="uon") ABean a,
-			@FormData(n="an") @Schema(cf="uon") ABean an,
-			@FormData(n="b") @Schema(cf="uon") ABean[][][] b,
-			@FormData(n="c") @Schema(cf="uon") List<ABean> c,
-			@FormData(n="d") @Schema(cf="uon") List<ABean[][][]> d,
-			@FormData(n="e") @Schema(cf="uon") Map<String,ABean> e,
-			@FormData(n="f") @Schema(cf="uon") Map<String,List<ABean>> f,
-			@FormData(n="g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
-			@FormData(n="h") @Schema(cf="uon") Map<Integer,List<ABean>> h
+			@FormData("a") @Schema(cf="uon") ABean a,
+			@FormData("an") @Schema(cf="uon") ABean an,
+			@FormData("b") @Schema(cf="uon") ABean[][][] b,
+			@FormData("c") @Schema(cf="uon") List<ABean> c,
+			@FormData("d") @Schema(cf="uon") List<ABean[][][]> d,
+			@FormData("e") @Schema(cf="uon") Map<String,ABean> e,
+			@FormData("f") @Schema(cf="uon") Map<String,List<ABean>> f,
+			@FormData("g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
+			@FormData("h") @Schema(cf="uon") Map<Integer,List<ABean>> h
 		) throws Exception {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
@@ -834,15 +834,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestPost(path="/typedBeanFormData")
 	public String typedBeanFormData(
-			@FormData(n="a") @Schema(cf="uon") TypedBean a,
-			@FormData(n="an") @Schema(cf="uon") TypedBean an,
-			@FormData(n="b") @Schema(cf="uon") TypedBean[][][] b,
-			@FormData(n="c") @Schema(cf="uon") List<TypedBean> c,
-			@FormData(n="d") @Schema(cf="uon") List<TypedBean[][][]> d,
-			@FormData(n="e") @Schema(cf="uon") Map<String,TypedBean> e,
-			@FormData(n="f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
-			@FormData(n="g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
-			@FormData(n="h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
+			@FormData("a") @Schema(cf="uon") TypedBean a,
+			@FormData("an") @Schema(cf="uon") TypedBean an,
+			@FormData("b") @Schema(cf="uon") TypedBean[][][] b,
+			@FormData("c") @Schema(cf="uon") List<TypedBean> c,
+			@FormData("d") @Schema(cf="uon") List<TypedBean[][][]> d,
+			@FormData("e") @Schema(cf="uon") Map<String,TypedBean> e,
+			@FormData("f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
+			@FormData("g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
+			@FormData("h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
@@ -870,10 +870,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestPost(path="/swappedObjectFormData")
 	public String swappedObjectFormData(
-			@FormData(n="a") @Schema(cf="uon") SwappedObject a,
-			@FormData(n="b") @Schema(cf="uon") SwappedObject[][][] b,
-			@FormData(n="c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
-			@FormData(n="d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
+			@FormData("a") @Schema(cf="uon") SwappedObject a,
+			@FormData("b") @Schema(cf="uon") SwappedObject[][][] b,
+			@FormData("c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
+			@FormData("d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -893,10 +893,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestPost(path="/implicitSwappedObjectFormData")
 	public String implicitSwappedObjectFormData(
-			@FormData(n="a") @Schema(cf="uon") ImplicitSwappedObject a,
-			@FormData(n="b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
-			@FormData(n="c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
-			@FormData(n="d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
+			@FormData("a") @Schema(cf="uon") ImplicitSwappedObject a,
+			@FormData("b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
+			@FormData("c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
+			@FormData("d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
 		) throws Exception {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
@@ -916,15 +916,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestPost(path="/enumFormData")
 	public String enumFormData(
-			@FormData(n="a") @Schema(cf="uon") TestEnum a,
-			@FormData(n="an") @Schema(cf="uon") TestEnum an,
-			@FormData(n="b") @Schema(cf="uon") TestEnum[][][] b,
-			@FormData(n="c") @Schema(cf="uon") List<TestEnum> c,
-			@FormData(n="d") @Schema(cf="uon") List<List<List<TestEnum>>> d,
-			@FormData(n="e") @Schema(cf="uon") List<TestEnum[][][]> e,
-			@FormData(n="f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
-			@FormData(n="g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
-			@FormData(n="h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
+			@FormData("a") @Schema(cf="uon") TestEnum a,
+			@FormData("an") @Schema(cf="uon") TestEnum an,
+			@FormData("b") @Schema(cf="uon") TestEnum[][][] b,
+			@FormData("c") @Schema(cf="uon") List<TestEnum> c,
+			@FormData("d") @Schema(cf="uon") List<List<List<TestEnum>>> d,
+			@FormData("e") @Schema(cf="uon") List<TestEnum[][][]> e,
+			@FormData("f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
+			@FormData("g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
+			@FormData("h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
 		assertEquals(TestEnum.TWO, a);

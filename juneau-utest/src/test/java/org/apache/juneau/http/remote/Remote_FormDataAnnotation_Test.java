@@ -697,7 +697,7 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface J1 {
-		@RemoteOp(path="/") String postX1(@FormData(n="x",serializer=MockWriterSerializer.X.class) String b);
+		@RemoteOp(path="/") String postX1(@FormData(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
 	@Test
@@ -923,7 +923,7 @@ public class Remote_FormDataAnnotation_Test {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@FormData(n="c",serializer=MockWriterSerializer.X.class)
+		@FormData(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
@@ -939,7 +939,7 @@ public class Remote_FormDataAnnotation_Test {
 		public Object[] getX5() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@FormData(n="g",serializer=MockWriterSerializer.X.class)
+		@FormData(name="g",serializer=MockWriterSerializer.X.class)
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}

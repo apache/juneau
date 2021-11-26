@@ -660,7 +660,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Remote
 	public static interface J1 {
-		@RemoteOp(path="/") String getX1(@Header(n="x",serializer=MockWriterSerializer.X.class) String b);
+		@RemoteOp(path="/") String getX1(@Header(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
 	@Test

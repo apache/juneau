@@ -33,7 +33,6 @@ public class FormDataAnnotation_Test {
 
 	FormData a1 = FormDataAnnotation.create()
 		.multi(true)
-		.n("n")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -44,7 +43,6 @@ public class FormDataAnnotation_Test {
 
 	FormData a2 = FormDataAnnotation.create()
 		.multi(true)
-		.n("n")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -58,7 +56,6 @@ public class FormDataAnnotation_Test {
 		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "multi:true,"
-				+ "n:'n',"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['org.apache.juneau.http.annotation.FormDataAnnotation_Test$X1'],"
@@ -119,7 +116,6 @@ public class FormDataAnnotation_Test {
 
 	@FormData(
 		multi=true,
-		n="n",
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -132,7 +128,6 @@ public class FormDataAnnotation_Test {
 
 	@FormData(
 		multi=true,
-		n="n",
 		name="name",
 		on="on",
 		onClass=X1.class,

@@ -14,9 +14,11 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -75,6 +77,24 @@ public class PathAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	/**
+	 * Finds the name from the specified lists of annotations.
+	 *
+	 * <p>
+	 * The last matching name found is returned.
+	 *
+	 * @param lists The lists to search.
+	 * @return The last matching name, or {@link Optional#empty()} if not found.
+	 */
+	@SafeVarargs
+	public static Optional<String> findName(List<Path>...lists) {
+		String n = null;
+		for (List<Path> l : lists)
+			for (Path h : l)
+				n = firstNonEmpty(h.name(), h.value(), n);
+		return Optional.ofNullable(n);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -91,7 +111,7 @@ public class PathAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String n="", name="", value="";
+		String name="", value="";
 
 		/**
 		 * Constructor.
@@ -107,17 +127,6 @@ public class PathAnnotation {
 		 */
 		public Path build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Path#n} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder n(String value) {
-			this.n = value;
-			return this;
 		}
 
 		/**
@@ -218,23 +227,17 @@ public class PathAnnotation {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final String n, name, value;
+		private final String  name, value;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.n = b.n;
 			this.name = b.name;
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* Path */
-		public String n() {
-			return n;
 		}
 
 		@Override /* Path */

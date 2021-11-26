@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.args;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.annotation.PathAnnotation.*;
 
 import java.lang.reflect.*;
 
@@ -77,18 +77,15 @@ public class PathArg implements RestOpArg {
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
 	}
 
-	private String getName(ParamInfo paramInfo, UrlPathMatcher pathMatcher) {
-		String p = null;
-		for (Path h : paramInfo.getAnnotations(Path.class))
-			p = firstNonEmpty(h.name(), h.n(), h.value(), p);
-		for (Path h : paramInfo.getParameterType().getAnnotations(Path.class))
-			p = firstNonEmpty(h.name(), h.n(), h.value(), p);
+	private String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
+		ClassInfo pt = pi.getParameterType();
+		String p = findName(pi.getAnnotations(Path.class), pt.getAnnotations(Path.class)).orElse(null);
 		if (p != null)
 			return p;
 		if (pathMatcher != null) {
 			int idx = 0;
-			int i = paramInfo.getIndex();
-			MethodInfo mi = paramInfo.getMethod();
+			int i = pi.getIndex();
+			MethodInfo mi = pi.getMethod();
 
 			for (int j = 0; j < i; j++)
 				if (mi.getParam(i).getLastAnnotation(Path.class) != null)
@@ -96,7 +93,7 @@ public class PathArg implements RestOpArg {
 
 			String[] vars = pathMatcher.getVars();
 			if (vars.length <= idx)
-				throw new ArgException(paramInfo, "Number of attribute parameters exceeds the number of URL pattern variables");
+				throw new ArgException(pi, "Number of attribute parameters exceeds the number of URL pattern variables");
 
 			// Check for {#} variables.
 			String idxs = String.valueOf(idx);
@@ -106,7 +103,7 @@ public class PathArg implements RestOpArg {
 
 			return pathMatcher.getVars()[idx];
 		}
-		throw new ArgException(paramInfo, "@Path used without name or value");
+		throw new ArgException(pi, "@Path used without name or value");
 	}
 
 	@Override /* RestOpArg */

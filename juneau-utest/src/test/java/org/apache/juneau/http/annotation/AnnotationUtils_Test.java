@@ -93,7 +93,6 @@ public class AnnotationUtils_Test {
 		assertTrue(FormDataAnnotation.empty(formData().build()));
 
 		assertFalse(FormDataAnnotation.empty(formData().multi(true).build()));
-		assertFalse(FormDataAnnotation.empty(formData().n("foo").build()));
 		assertFalse(FormDataAnnotation.empty(formData().name("foo").build()));
 		assertFalse(FormDataAnnotation.empty(formData().parser(OpenApiParser.class).build()));
 		assertFalse(FormDataAnnotation.empty(formData().serializer(OpenApiSerializer.class).build()));
@@ -104,7 +103,6 @@ public class AnnotationUtils_Test {
 	public void a04_HasFormData() throws Exception {
 		assertObject(hasFormData().build().annotationType()).asJson().contains("HasFormData");
 
-		assertObject(hasFormData().n("foo").build().n()).asJson().is("'foo'");
 		assertObject(hasFormData().name("foo").build().name()).asJson().is("'foo'");
 		assertObject(hasFormData().value("foo").build().value()).asJson().is("'foo'");
 	}
@@ -122,7 +120,6 @@ public class AnnotationUtils_Test {
 		assertTrue(QueryAnnotation.empty(query().build()));
 
 		assertFalse(QueryAnnotation.empty(query().multi(true).build()));
-		assertFalse(QueryAnnotation.empty(query().n("foo").build()));
 		assertFalse(QueryAnnotation.empty(query().name("foo").build()));
 		assertFalse(QueryAnnotation.empty(query().parser(OpenApiParser.class).build()));
 		assertFalse(QueryAnnotation.empty(query().serializer(OpenApiSerializer.class).build()));
@@ -133,7 +130,6 @@ public class AnnotationUtils_Test {
 	public void a06_HasQuery() throws Exception {
 		assertObject(hasQuery().build().annotationType()).asJson().contains("HasQuery");
 
-		assertObject(hasQuery().n("foo").build().n()).asJson().is("'foo'");
 		assertObject(hasQuery().name("foo").build().name()).asJson().is("'foo'");
 		assertObject(hasQuery().value("foo").build().value()).asJson().is("'foo'");
 	}
@@ -151,7 +147,6 @@ public class AnnotationUtils_Test {
 		assertTrue(HeaderAnnotation.empty(header().build()));
 
 		assertFalse(HeaderAnnotation.empty(header().multi(true).build()));
-		assertFalse(HeaderAnnotation.empty(header().n("foo").build()));
 		assertFalse(HeaderAnnotation.empty(header().name("foo").build()));
 		assertFalse(HeaderAnnotation.empty(header().parser(OpenApiParser.class).build()));
 		assertFalse(HeaderAnnotation.empty(header().serializer(OpenApiSerializer.class).build()));
@@ -184,7 +179,6 @@ public class AnnotationUtils_Test {
 		assertTrue(PathAnnotation.empty((Path)null));
 		assertTrue(PathAnnotation.empty(path().build()));
 
-		assertFalse(PathAnnotation.empty(path().n("foo").build()));
 		assertFalse(PathAnnotation.empty(path().name("foo").build()));
 		assertFalse(PathAnnotation.empty(path().parser(OpenApiParser.class).build()));
 		assertFalse(PathAnnotation.empty(path().serializer(OpenApiSerializer.class).build()));
@@ -209,10 +203,8 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
 		assertFalse(ResponseAnnotation.empty(response().code(a(0)).build()));
-		assertFalse(ResponseAnnotation.empty(response().ex(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().example(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
-		assertFalse(ResponseAnnotation.empty(response().exs(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().headers(new ResponseHeader[]{responseHeader().name("foo").build()}).build()));
 		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));
 		assertFalse(ResponseAnnotation.empty(response().schema(schema().$ref("foo").build()).build()));
@@ -233,7 +225,6 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseHeaderAnnotation.empty(A2.class.getAnnotation(ResponseHeader.class)));
 
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().code(a(0)).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().n("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().name("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().serializer(OpenApiSerializer.class).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().value("foo").build()));

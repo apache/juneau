@@ -62,11 +62,6 @@ public @interface Response {
 	int[] code() default {};
 
 	/**
-	 * Synonym for {@link #example()}.
-	 */
-	String[] ex() default {};
-
-	/**
 	 * A serialized example of the body of a response.
 	 *
 	 * <p>
@@ -221,11 +216,6 @@ public @interface Response {
 	 * </ul>
 	 */
 	String[] examples() default {};
-
-	/**
-	 * Synonym for {@link #examples()}.
-	 */
-	String[] exs() default {};
 
 	/**
 	 * <mk>headers</mk> field of the {@doc ExtSwaggerResponseObject}.

@@ -742,7 +742,7 @@ public class HttpPartSchema {
 		Builder apply(Header a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -752,7 +752,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			allowEmptyValue(false);
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			serializer(a.serializer());
 			return this;
 		}
@@ -760,7 +760,7 @@ public class HttpPartSchema {
 		Builder apply(FormData a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -769,7 +769,7 @@ public class HttpPartSchema {
 		Builder apply(Query a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -778,7 +778,7 @@ public class HttpPartSchema {
 		Builder apply(Path a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			parser(a.parser());
 			serializer(a.serializer());
 
@@ -872,12 +872,12 @@ public class HttpPartSchema {
 		}
 
 		Builder apply(HasQuery a) {
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			return this;
 		}
 
 		Builder apply(HasFormData a) {
-			name(firstNonEmpty(a.name(), a.n(), a.value()));
+			name(firstNonEmpty(a.name(), a.value()));
 			return this;
 		}
 

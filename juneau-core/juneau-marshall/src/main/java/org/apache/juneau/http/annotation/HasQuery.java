@@ -98,11 +98,6 @@ import java.lang.annotation.*;
 public @interface HasQuery {
 
 	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
 	 * URL query parameter name.
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.

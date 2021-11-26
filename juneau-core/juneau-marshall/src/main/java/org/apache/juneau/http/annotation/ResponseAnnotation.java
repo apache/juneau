@@ -95,7 +95,7 @@ public class ResponseAnnotation {
 		int[] code={}, value={};
 		ResponseHeader[] headers={};
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] ex={}, example={}, examples={}, exs={};
+		String[] example={}, examples={};
 
 		/**
 		 * Constructor.
@@ -125,17 +125,6 @@ public class ResponseAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Response#ex} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder ex(String...value) {
-			this.ex = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Response#example} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -154,17 +143,6 @@ public class ResponseAnnotation {
 		 */
 		public Builder examples(String...value) {
 			this.examples = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Response#exs} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exs(String...value) {
-			this.exs = value;
 			return this;
 		}
 
@@ -263,15 +241,13 @@ public class ResponseAnnotation {
 		private final int[] code, value;
 		private final ResponseHeader[] headers;
 		private final Schema schema;
-		private final String[] ex, example, examples, exs;
+		private final String[] example, examples;
 
 		Impl(Builder b) {
 			super(b);
 			this.code = Arrays.copyOf(b.code, b.code.length);
-			this.ex = copyOf(b.ex);
 			this.example = copyOf(b.example);
 			this.examples = copyOf(b.examples);
-			this.exs = copyOf(b.exs);
 			this.headers = copyOf(b.headers);
 			this.parser = b.parser;
 			this.schema = b.schema;
@@ -286,11 +262,6 @@ public class ResponseAnnotation {
 		}
 
 		@Override /* Response */
-		public String[] ex() {
-			return ex;
-		}
-
-		@Override /* Response */
 		public String[] example() {
 			return example;
 		}
@@ -298,11 +269,6 @@ public class ResponseAnnotation {
 		@Override /* Response */
 		public String[] examples() {
 			return examples;
-		}
-
-		@Override /* Response */
-		public String[] exs() {
-			return exs;
 		}
 
 		@Override /* Response */

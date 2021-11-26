@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.annotation.HasFormDataAnnotation.*;
 
 import java.lang.reflect.*;
 
@@ -57,20 +57,11 @@ public class HasFormDataArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved.
 	 */
-	protected HasFormDataArg(ParamInfo paramInfo) {
-		this.name = getName(paramInfo);
-		this.type = paramInfo.getParameterType().innerType();
-	}
-
-	private String getName(ParamInfo paramInfo) {
-		String n = null;
-		for (HasFormData h : paramInfo.getAnnotations(HasFormData.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		if (n == null)
-			throw new ArgException(paramInfo, "@HasFormData used without name or value");
-		return n;
+	protected HasFormDataArg(ParamInfo pi) {
+		this.name = findName(pi.getAnnotations(HasFormData.class)).orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
+		this.type = pi.getParameterType().innerType();
 	}
 
 	@Override /* RestOpArg */

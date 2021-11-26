@@ -33,9 +33,7 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class A {
 
-		@Query(
-			n="Q"
-		)
+		@Query("Q")
 		@Schema(d= {"a","b"}, t="string")
 		public static class A1 {
 			public A1(String x) {}
@@ -44,7 +42,7 @@ public class Swagger_Query_Test {
 		public void a(A1 q) {}
 
 		@Query(
-			n="Q",
+			name="Q",
 			schema=@Schema(description="a\nb",type="string")
 		)
 		public static class A2 {
@@ -54,7 +52,7 @@ public class Swagger_Query_Test {
 		public void b(A2 q) {}
 
 		@Query(
-			n="Q",
+			name="Q",
 			schema=@Schema(description="b\nc",type="string")
 		)
 		@Schema(d={"a","b"}, t="string")
@@ -97,7 +95,7 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class B {
 
-		@Query(n="Q")
+		@Query(name="Q")
 		public static class B1 {}
 		@RestGet
 		public void a(B1 q) {}
@@ -145,28 +143,29 @@ public class Swagger_Query_Test {
 
 		@RestGet
 		public void a(
-			@Query(
-				n="Q"
-			)
+			@Query("Q")
 			@Schema(d= {"a","b"}, t="string")
-			String q) {}
+			String q
+		) {}
 
 		@RestPut
 		public void b(
 			@Query(
-				n="Q",
+				name="Q",
 				schema=@Schema(description="a\nb",type="string")
 			)
-			String q) {}
+			String q
+		) {}
 
 		@RestPost
 		public void c(
 			@Query(
-				n="Q",
+				name="Q",
 				schema=@Schema(description="b\nc",type="string")
 			)
 			@Schema(d= {"a","b"}, t="string")
-			String q) {}
+			String q
+		) {}
 
 		@RestDelete
 		public void d(@Query("Q") String q) {}

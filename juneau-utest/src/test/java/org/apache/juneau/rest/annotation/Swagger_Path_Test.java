@@ -33,9 +33,7 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class A {
 
-		@Path(
-			n="P"
-		)
+		@Path("P")
 		@Schema(
 			d={"a","b"},
 			e="a,b",
@@ -52,7 +50,7 @@ public class Swagger_Path_Test {
 		public void a(A1 f) {}
 
 		@Path(
-			n="P",
+			name="P",
 			schema=@Schema(description="a\nb",type="string",_enum={"a","b"})
 		)
 		public static class A2 {
@@ -66,7 +64,7 @@ public class Swagger_Path_Test {
 		public void b(A2 f) {}
 
 		@Path(
-			n="P",
+			name="P",
 			schema=@Schema(description="b\nc",type="string",_enum={"b","c"})
 		)
 		@Schema(
@@ -95,7 +93,7 @@ public class Swagger_Path_Test {
 		@RestDelete(path="/d/{P}")
 		public void d(A4 f) {}
 
-		@Path(n="P")
+		@Path("P")
 		@Schema(e="a,b")
 		public static class A5 {
 			@Override
@@ -145,7 +143,7 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class B {
 
-		@Path(n="P")
+		@Path(name="P")
 		public static class B1 {}
 		@RestGet(path="/a/{P}")
 		public void a(B1 f) {}
@@ -192,25 +190,30 @@ public class Swagger_Path_Test {
 	public static class D {
 
 		@RestGet(path="/a/{P}")
-		public void a(@Path(
-			n="P"
-		)
-		@Schema(d="a", t="string")
-		String h) {}
+		public void a(
+			@Path("P")
+			@Schema(d="a", t="string")
+			String h
+		) {}
 
 		@RestPut(path="/b/{P}")
-		public void b(@Path(
-			n="P",
-			schema=@Schema(description="a",type="string")
-		) String h) {}
+		public void b(
+			@Path(
+				name="P",
+				schema=@Schema(description="a",type="string")
+			)
+			String h
+		) {}
 
 		@RestPost(path="/c/{P}")
-		public void c(@Path(
-			n="P",
-			schema=@Schema(description="b",type="string")
-		)
-		@Schema(d="a", t="string")
-		String h) {}
+		public void c(
+			@Path(
+				name="P",
+				schema=@Schema(description="b",type="string")
+			)
+			@Schema(d="a", t="string")
+			String h
+		) {}
 
 		@RestDelete(path="/d/{P}")
 		public void d(@Path("P") String h) {}

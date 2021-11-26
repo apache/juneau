@@ -27,13 +27,11 @@ public class HasFormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HasFormData a1 = HasFormDataAnnotation.create()
-		.n("n")
 		.name("name")
 		.value("value")
 		.build();
 
 	HasFormData a2 = HasFormDataAnnotation.create()
-		.n("n")
 		.name("name")
 		.value("value")
 		.build();
@@ -42,7 +40,6 @@ public class HasFormDataAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
-				+ "n:'n',"
 				+ "name:'name',"
 				+ "value:'value'"
 			+ "}"
@@ -65,5 +62,4 @@ public class HasFormDataAnnotation_Test {
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
 		assertTrue(bc1 == bc2);
 	}
-
 }

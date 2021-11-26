@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.annotation.HasQueryAnnotation.*;
 
 import java.lang.reflect.*;
 
@@ -57,20 +57,11 @@ public class HasQueryArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved.
 	 */
-	protected HasQueryArg(ParamInfo paramInfo) {
-		this.name = getName(paramInfo);
-		this.type = paramInfo.getParameterType().innerType();
-	}
-
-	private String getName(ParamInfo paramInfo) {
-		String n = null;
-		for (HasQuery h : paramInfo.getAnnotations(HasQuery.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		if (n == null)
-			throw new ArgException(paramInfo, "@HasQuery used without name or value");
-		return n;
+	protected HasQueryArg(ParamInfo pi) {
+		this.name = findName(pi.getAnnotations(HasQuery.class)).orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));
+		this.type = pi.getParameterType().innerType();
 	}
 
 	@Override /* RestOpArg */

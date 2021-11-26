@@ -136,11 +136,6 @@ public @interface FormData {
 	boolean multi() default false;
 
 	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
 	 * FORM parameter name.
 	 *
 	 * <p>

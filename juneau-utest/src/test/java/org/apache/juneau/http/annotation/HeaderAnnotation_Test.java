@@ -33,7 +33,6 @@ public class HeaderAnnotation_Test {
 
 	Header a1 = HeaderAnnotation.create()
 		.multi(true)
-		.n("n")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -44,7 +43,6 @@ public class HeaderAnnotation_Test {
 
 	Header a2 = HeaderAnnotation.create()
 		.multi(true)
-		.n("n")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -58,7 +56,6 @@ public class HeaderAnnotation_Test {
 		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "multi:true,"
-				+ "n:'n',"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -119,7 +116,6 @@ public class HeaderAnnotation_Test {
 
 	@Header(
 		multi=true,
-		n="n",
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -132,7 +128,6 @@ public class HeaderAnnotation_Test {
 
 	@Header(
 		multi=true,
-		n="n",
 		name="name",
 		on="on",
 		onClass=X1.class,

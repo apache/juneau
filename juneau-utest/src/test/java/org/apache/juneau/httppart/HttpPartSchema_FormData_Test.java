@@ -46,9 +46,7 @@ public class HttpPartSchema_FormData_Test {
 		assertEquals("x", s.getName());
 	}
 
-	@FormData(
-		n="x"
-	)
+	@FormData("x")
 	@Schema(
 		t="number",
 		f="int32",
@@ -99,9 +97,7 @@ public class HttpPartSchema_FormData_Test {
 
 	public static class A03 {
 		public void a(
-				@FormData(
-					n="x"
-				)
+				@FormData("x")
 				@Schema(
 					t="number",
 					f="int32",
@@ -157,9 +153,7 @@ public class HttpPartSchema_FormData_Test {
 
 	public static class A04 {
 		public void a(
-				@FormData(
-					n="y"
-				)
+				@FormData("y")
 				@Schema(
 					t="integer",
 					f="int64",

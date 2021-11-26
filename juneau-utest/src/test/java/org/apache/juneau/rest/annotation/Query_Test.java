@@ -133,27 +133,27 @@ public class Query_Test {
 		}
 
 		@RestGet
-		public Object a(@Query(n="x") @Schema(cf="multi") String[] x) {
+		public Object a(@Query("x") @Schema(cf="multi") String[] x) {
 			return x;
 		}
 		@RestGet
-		public Object b(@Query(n="x") @Schema(cf="multi") int[] x) {
+		public Object b(@Query("x") @Schema(cf="multi") int[] x) {
 			return x;
 		}
 		@RestGet
-		public Object c(@Query(n="x") @Schema(cf="multi") List<String> x) {
+		public Object c(@Query("x") @Schema(cf="multi") List<String> x) {
 			return x;
 		}
 		@RestGet
-		public Object d(@Query(n="x") @Schema(cf="multi") List<Integer> x) {
+		public Object d(@Query("x") @Schema(cf="multi") List<Integer> x) {
 			return x;
 		}
 		@RestGet
-		public Object e(@Query(n="x") @Schema(cf="multi",items=@Items(f="uon")) C1[] x) {
+		public Object e(@Query("x") @Schema(cf="multi",items=@Items(f="uon")) C1[] x) {
 			return x;
 		}
 		@RestGet
-		public Object f(@Query(n="x") @Schema(cf="multi",items=@Items(f="uon")) List<C1> x) {
+		public Object f(@Query("x") @Schema(cf="multi",items=@Items(f="uon")) List<C1> x) {
 			return x;
 		}
 	}

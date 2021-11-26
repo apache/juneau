@@ -103,11 +103,6 @@ import java.lang.annotation.*;
 public @interface HasFormData {
 
 	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
 	 * FORM parameter name.
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.

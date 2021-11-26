@@ -29,13 +29,11 @@ public class HasQueryAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HasQuery a1 = HasQueryAnnotation.create()
-		.n("n")
 		.name("name")
 		.value("value")
 		.build();
 
 	HasQuery a2 = HasQueryAnnotation.create()
-		.n("n")
 		.name("name")
 		.value("value")
 		.build();
@@ -44,7 +42,6 @@ public class HasQueryAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
-				+ "n:'n',"
 				+ "name:'name',"
 				+ "value:'value'"
 			+ "}"

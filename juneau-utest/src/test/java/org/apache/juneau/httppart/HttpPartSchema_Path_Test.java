@@ -48,9 +48,7 @@ public class HttpPartSchema_Path_Test {
 		assertEquals("x", s.getName());
 	}
 
-	@Path(
-		n="x"
-	)
+	@Path("x")
 	@Schema(
 		t="number",
 		f="int32",
@@ -89,9 +87,7 @@ public class HttpPartSchema_Path_Test {
 
 	public static class A03 {
 		public void a(
-				@Path(
-					n="x"
-				)
+				@Path("x")
 				@Schema(
 					t="number",
 					f="int32",
@@ -135,9 +131,7 @@ public class HttpPartSchema_Path_Test {
 
 	public static class A04 {
 		public void a(
-				@Path(
-					n="y"
-				)
+				@Path("y")
 				@Schema(
 					t="integer",
 					f="int64",

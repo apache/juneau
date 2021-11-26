@@ -144,11 +144,6 @@ public @interface ResponseHeader {
 	int[] code() default {};
 
 	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
 	 * The HTTP header name.
 	 *
 	 * <ul class='notes'>

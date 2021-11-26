@@ -679,7 +679,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface J1 {
-		@RemoteOp(path="/") String getX1(@Query(n="x",serializer=MockWriterSerializer.X.class) String b);
+		@RemoteOp(path="/") String getX1(@Query(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
 	@Test
@@ -887,7 +887,7 @@ public class Remote_QueryAnnotation_Test {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Query(n="c",serializer=MockWriterSerializer.X.class)
+		@Query(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
@@ -903,7 +903,7 @@ public class Remote_QueryAnnotation_Test {
 		public Object[] getX5() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@Query(n="g",serializer=MockWriterSerializer.X.class)
+		@Query(name="g",serializer=MockWriterSerializer.X.class)
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}

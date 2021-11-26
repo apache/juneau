@@ -77,7 +77,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="a/{x}") String getX14(@Path @Schema(f="uon") Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX15(@Path("*") PartList b);
 		@RemoteOp(path="a/{x}") String getX16(@Path PartList b);
-		@RemoteOp(path="a/{x}") String getX17(@Path(n="x",serializer=UonSerializer.class) Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX17(@Path(name="x",serializer=UonSerializer.class) Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX18(@Path("*") NameValuePair b);
 		@RemoteOp(path="a/{x}") String getX19(@Path NameValuePair b);
 		@RemoteOp(path="a/{x}") String getX20(@Path NameValuePair[] b);
@@ -569,7 +569,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface H1 {
-		@RemoteOp(path="/{x}") String getX1(@Path(n="x",serializer=MockWriterSerializer.X.class) String b);
+		@RemoteOp(path="/{x}") String getX1(@Path(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
 	@Test
@@ -735,7 +735,7 @@ public class Remote_PathAnnotation_Test {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Path(n="c",serializer=MockWriterSerializer.X.class)
+		@Path(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
@@ -747,7 +747,7 @@ public class Remote_PathAnnotation_Test {
 		public Object[] getX5() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@Path(n="g",serializer=MockWriterSerializer.X.class)
+		@Path(name="g",serializer=MockWriterSerializer.X.class)
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}

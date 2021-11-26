@@ -82,11 +82,6 @@ import org.apache.juneau.oapi.*;
 public @interface Path {
 
 	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
 	 * URL path variable name.
 	 *
 	 * <p>

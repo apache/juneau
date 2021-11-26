@@ -48,9 +48,7 @@ public class HttpPartSchema_Header_Test {
 		assertEquals("x", s.getName());
 	}
 
-	@Header(
-		n="x"
-	)
+	@Header("x")
 	@Schema(
 		t="number",
 		f="int32",
@@ -101,9 +99,7 @@ public class HttpPartSchema_Header_Test {
 
 	public static class A03 {
 		public void a(
-				@Header(
-					n="x"
-				)
+				@Header("x")
 				@Schema(
 					t="number",
 					f="int32",
@@ -159,9 +155,7 @@ public class HttpPartSchema_Header_Test {
 
 	public static class A04 {
 		public void a(
-				@Header(
-					n="y"
-				)
+				@Header("y")
 				@Schema(
 					t="integer",
 					f="int64",

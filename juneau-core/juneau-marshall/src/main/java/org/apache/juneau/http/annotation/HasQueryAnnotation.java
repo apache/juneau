@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -37,6 +40,24 @@ public class HasQueryAnnotation {
 		return new Builder();
 	}
 
+	/**
+	 * Finds the name from the specified lists of annotations.
+	 *
+	 * <p>
+	 * The last matching name found is returned.
+	 *
+	 * @param lists The lists to search.
+	 * @return The last matching name, or {@link Optional#empty()} if not found.
+	 */
+	@SafeVarargs
+	public static Optional<String> findName(List<HasQuery>...lists) {
+		String n = null;
+		for (List<HasQuery> l : lists)
+			for (HasQuery h : l)
+				n = firstNonEmpty(h.name(), h.value(), n);
+		return Optional.ofNullable(n);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -50,7 +71,7 @@ public class HasQueryAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder {
 
-		String n="", name="", value="";
+		String name="", value="";
 
 		/**
 		 * Constructor.
@@ -66,17 +87,6 @@ public class HasQueryAnnotation {
 		 */
 		public HasQuery build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link HasQuery#n} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder n(String value) {
-			this.n = value;
-			return this;
 		}
 
 		/**
@@ -111,19 +121,13 @@ public class HasQueryAnnotation {
 
 	private static class Impl extends AnnotationImpl implements HasQuery {
 
-		private final String n, name, value;
+		private final String name, value;
 
 		Impl(Builder b) {
 			super(b);
-			this.n = b.n;
 			this.name = b.name;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override
-		public String n() {
-			return n;
 		}
 
 		@Override

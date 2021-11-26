@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.args;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.annotation.ResponseHeaderAnnotation.*;
 
 import java.lang.reflect.*;
 
@@ -57,29 +57,20 @@ public class ResponseHeaderArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected ResponseHeaderArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
-		this.name = getName(paramInfo);
-		this.type = paramInfo.getParameterType().innerType();
-		HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, paramInfo);
+	protected ResponseHeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
+		ClassInfo pt = pi.getParameterType();
+
+		this.name = findName(pi.getAnnotations(ResponseHeader.class), pt.getAnnotations(ResponseHeader.class)).orElseThrow(() -> new ArgException(pi, "@ResponseHeader used without name or value"));
+		this.type = pi.getParameterType().innerType();
+		HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, pi);
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ofNullable(schema.getSerializer()).map(x -> HttpPartSerializer.creator().type(x).apply(annotations).create()).orElse(null));
 
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
-			throw new ArgException(paramInfo, "Type must be Value<?> on parameter annotated with @ResponseHeader annotation");
-	}
-
-	private static String getName(ParamInfo paramInfo) {
-		String n = null;
-		for (ResponseHeader h : paramInfo.getAnnotations(ResponseHeader.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		for (ResponseHeader h : paramInfo.getParameterType().getAnnotations(ResponseHeader.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		if (n == null)
-			throw new ArgException(paramInfo, "@ResponseHeader used without name or value");
-		return n;
+			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @ResponseHeader annotation");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

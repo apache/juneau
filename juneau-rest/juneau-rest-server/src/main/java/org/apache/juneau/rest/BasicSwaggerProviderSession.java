@@ -321,12 +321,7 @@ public class BasicSwaggerProviderSession {
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
-					String name = null;
-					for (Query a : mpi.getAnnotations(Query.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-					for (Query a : pt.getAnnotations(Query.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-
+					String name = QueryAnnotation.findName(mpi.getAnnotations(Query.class), pt.getAnnotations(Query.class)).orElse(null);
 					OMap param = paramMap.getMap(QUERY + "." + name, true).a("name", name).a("in", QUERY);
 					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
 					pt.getAnnotations(Query.class).forEach(x -> merge(param, x.schema()));
@@ -336,12 +331,7 @@ public class BasicSwaggerProviderSession {
 					addParamExample(sm, param, QUERY, type);
 
 				} else if (mpi.hasAnnotation(FormData.class) || pt.hasAnnotation(FormData.class)) {
-					String name = null;
-					for (FormData a : mpi.getAnnotations(FormData.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-					for (FormData a : pt.getAnnotations(FormData.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-
+					String name = FormDataAnnotation.findName(mpi.getAnnotations(FormData.class), pt.getAnnotations(FormData.class)).orElse(null);
 					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).a("name", name).a("in", FORM_DATA);
 					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
 					pt.getAnnotations(FormData.class).forEach(x -> merge(param, x.schema()));
@@ -351,12 +341,7 @@ public class BasicSwaggerProviderSession {
 					addParamExample(sm, param, FORM_DATA, type);
 
 				} else if (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class)) {
-					String name = null;
-					for (Header a : mpi.getAnnotations(Header.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-					for (Header a : pt.getAnnotations(Header.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-
+					String name = HeaderAnnotation.findName(mpi.getAnnotations(Header.class), pt.getAnnotations(Header.class)).orElse(null);
 					OMap param = paramMap.getMap(HEADER + "." + name, true).a("name", name).a("in", HEADER);
 					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
 					pt.getAnnotations(Header.class).forEach(x -> merge(param, x.schema()));
@@ -366,12 +351,7 @@ public class BasicSwaggerProviderSession {
 					addParamExample(sm, param, HEADER, type);
 
 				} else if (mpi.hasAnnotation(Path.class) || pt.hasAnnotation(Path.class)) {
-					String name = null;
-					for (Path a : mpi.getAnnotations(Path.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-					for (Path a : pt.getAnnotations(Path.class))
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
-
+					String name = PathAnnotation.findName(mpi.getAnnotations(Path.class), pt.getAnnotations(Path.class)).orElse(null);
 					OMap param = paramMap.getMap(PATH + "." + name, true).a("name", name).a("in", PATH);
 					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
 					pt.getAnnotations(Path.class).forEach(x -> merge(param, x.schema()));
@@ -468,9 +448,7 @@ public class BasicSwaggerProviderSession {
 				if (mpi.hasAnnotation(ResponseHeader.class) || pt.hasAnnotation(ResponseHeader.class)) {
 					List<ResponseHeader> la = AList.of(mpi.getAnnotations(ResponseHeader.class)).a(pt.getAnnotations(ResponseHeader.class));
 					Set<Integer> codes = getCodes2(la, 200);
-					String name = null;
-					for (ResponseHeader a : la)
-						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					String name = ResponseHeaderAnnotation.findName(la).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (ResponseHeader a : la) {
 						if (! isMulti(a)) {
@@ -1025,8 +1003,8 @@ public class BasicSwaggerProviderSession {
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
-			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
-			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
+			.appendSkipEmpty("example", resolve(a.example()))
+			.appendSkipEmpty("examples", parseMap(a.examples()))
 			.appendSkipEmpty("headers", merge(om.getMap("headers"), a.headers()))
 			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
 		;

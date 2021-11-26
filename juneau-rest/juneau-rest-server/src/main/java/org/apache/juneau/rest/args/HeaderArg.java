@@ -14,6 +14,7 @@ package org.apache.juneau.rest.args;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
+import static org.apache.juneau.http.annotation.HeaderAnnotation.*;
 
 import java.util.*;
 
@@ -109,29 +110,20 @@ public class HeaderArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param paramInfo The Java method parameter being resolved.
+	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected HeaderArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
-		this.name = getName(paramInfo);
-		this.type = paramInfo.getParameterType();
-		this.schema = HttpPartSchema.create(Header.class, paramInfo);
+	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
+		ClassInfo pt = pi.getParameterType();
+
+		this.name = findName(pi.getAnnotations(Header.class), pt.getAnnotations(Header.class)).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
+		this.type = pi.getParameterType();
+		this.schema = HttpPartSchema.create(Header.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
-		this.multi = getMulti(paramInfo);
+		this.multi = getMulti(pi);
 
 		if (multi && ! type.isCollectionOrArray())
-			throw new ArgException(paramInfo, "Use of multipart flag on @Header parameter that is not an array or Collection");
-	}
-
-	private String getName(ParamInfo paramInfo) {
-		String n = null;
-		for (Header h : paramInfo.getAnnotations(Header.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		for (Header h : paramInfo.getParameterType().getAnnotations(Header.class))
-			n = firstNonEmpty(h.name(), h.n(), h.value(), n);
-		if (n == null)
-			throw new ArgException(paramInfo, "@Header used without name or value");
-		return n;
+			throw new ArgException(pi, "Use of multipart flag on @Header parameter that is not an array or Collection");
 	}
 
 	private boolean getMulti(ParamInfo paramInfo) {

@@ -14,6 +14,7 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -76,6 +77,24 @@ public class ResponseHeaderAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	/**
+	 * Finds the name from the specified lists of annotations.
+	 *
+	 * <p>
+	 * The last matching name found is returned.
+	 *
+	 * @param lists The lists to search.
+	 * @return The last matching name, or {@link Optional#empty()} if not found.
+	 */
+	@SafeVarargs
+	public static Optional<String> findName(List<ResponseHeader>...lists) {
+		String n = null;
+		for (List<ResponseHeader> l : lists)
+			for (ResponseHeader h : l)
+				n = firstNonEmpty(h.name(), h.value(), n);
+		return Optional.ofNullable(n);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -92,7 +111,7 @@ public class ResponseHeaderAnnotation {
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
 		int[] code={};
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String n="", name="", value="";
+		String name="", value="";
 
 		/**
 		 * Constructor.
@@ -118,17 +137,6 @@ public class ResponseHeaderAnnotation {
 		 */
 		public Builder code(int...value) {
 			this.code = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link ResponseHeader#n} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder n(String value) {
-			this.n = value;
 			return this;
 		}
 
@@ -213,13 +221,12 @@ public class ResponseHeaderAnnotation {
 
 		private final Class<? extends HttpPartSerializer> serializer;
 		private final int[] code;
-		private final String n, name, value;
+		private final String name, value;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
 			this.code = Arrays.copyOf(b.code, b.code.length);
-			this.n = b.n;
 			this.name = b.name;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
@@ -230,11 +237,6 @@ public class ResponseHeaderAnnotation {
 		@Override /* ResponseHeader */
 		public int[] code() {
 			return code;
-		}
-
-		@Override /* ResponseHeader */
-		public String n() {
-			return n;
 		}
 
 		@Override /* ResponseHeader */
