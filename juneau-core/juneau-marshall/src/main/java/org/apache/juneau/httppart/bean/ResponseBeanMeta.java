@@ -158,7 +158,7 @@ public class ResponseBeanMeta {
 						assertReturnNotVoid(m, ResponseHeader.class);
 						HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(ResponseHeader.class), m.getPropertyName());
 						headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
-					} else if (m.hasAnnotation(ResponseStatus.class)) {
+					} else if (m.hasAnnotation(ResponseCode.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnType(m, ResponseHeader.class, int.class, Integer.class);
 						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
@@ -231,9 +231,9 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns the <ja>@ResponseStatus</ja>-annotated method.
+	 * Returns the <ja>@ResponseCode</ja>-annotated method.
 	 *
-	 * @return The <ja>@ResponseStatus</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 * @return The <ja>@ResponseCode</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseBeanPropertyMeta getStatusMethod() {
 		return statusMethod;

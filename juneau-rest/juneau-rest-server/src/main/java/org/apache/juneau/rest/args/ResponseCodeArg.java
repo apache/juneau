@@ -21,9 +21,9 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link ResponseStatus} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters annotated with {@link ResponseCode} on {@link RestOp}-annotated Java methods.
  */
-public class ResponseStatusArg implements RestOpArg {
+public class ResponseCodeArg implements RestOpArg {
 
 	private final Type type;
 
@@ -31,11 +31,11 @@ public class ResponseStatusArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResponseStatusArg}, or <jk>null</jk> if the parameter is not annotated with {@link ResponseStatus}.
+	 * @return A new {@link ResponseCodeArg}, or <jk>null</jk> if the parameter is not annotated with {@link ResponseCode}.
 	 */
-	public static ResponseStatusArg create(ParamInfo paramInfo) {
-		if (paramInfo.hasAnnotation(ResponseStatus.class) || paramInfo.getParameterType().hasAnnotation(ResponseStatus.class))
-			return new ResponseStatusArg(paramInfo);
+	public static ResponseCodeArg create(ParamInfo paramInfo) {
+		if (paramInfo.hasAnnotation(ResponseCode.class) || paramInfo.getParameterType().hasAnnotation(ResponseCode.class))
+			return new ResponseCodeArg(paramInfo);
 		return null;
 	}
 
@@ -44,11 +44,11 @@ public class ResponseStatusArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	protected ResponseStatusArg(ParamInfo paramInfo) {
+	protected ResponseCodeArg(ParamInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class || Value.getParameterType(type) != Integer.class)
-			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @ResponseStatus annotation");
+			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @ResponseCode annotation");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

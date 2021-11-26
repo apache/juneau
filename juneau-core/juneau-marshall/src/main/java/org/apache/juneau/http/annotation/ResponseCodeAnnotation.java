@@ -23,16 +23,16 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link ResponseStatus @ResponseStatus} annotation.
+ * Utility classes and methods for the {@link ResponseCode @ResponseCode} annotation.
  */
-public class ResponseStatusAnnotation {
+public class ResponseCodeAnnotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
-	public static final ResponseStatus DEFAULT = create().build();
+	public static final ResponseCode DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -80,15 +80,15 @@ public class ResponseStatusAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(ResponseStatus.class);
+			super(ResponseCode.class);
 		}
 
 		/**
-		 * Instantiates a new {@link ResponseStatus @ResponseStatus} object initialized with this builder.
+		 * Instantiates a new {@link ResponseCode @ResponseCode} object initialized with this builder.
 		 *
-		 * @return A new {@link ResponseStatus @ResponseStatus} object.
+		 * @return A new {@link ResponseCode @ResponseCode} object.
 		 */
-		public ResponseStatus build() {
+		public ResponseCode build() {
 			return new Impl(this);
 		}
 
@@ -125,7 +125,7 @@ public class ResponseStatusAnnotation {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static class Impl extends TargetedAnnotationTImpl implements ResponseStatus {
+	private static class Impl extends TargetedAnnotationTImpl implements ResponseCode {
 
 		Impl(Builder b) {
 			super(b);
@@ -138,9 +138,9 @@ public class ResponseStatusAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link ResponseStatus} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Applies targeted {@link ResponseCode} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<ResponseStatus,BeanContext.Builder> {
+	public static class Applier extends AnnotationApplier<ResponseCode,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -148,12 +148,12 @@ public class ResponseStatusAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(ResponseStatus.class, BeanContext.Builder.class, vr);
+			super(ResponseCode.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseStatus> ai, BeanContext.Builder b) {
-			ResponseStatus a = ai.getAnnotation();
+		public void apply(AnnotationInfo<ResponseCode> ai, BeanContext.Builder b) {
+			ResponseCode a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
@@ -167,7 +167,7 @@ public class ResponseStatusAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A collection of {@link ResponseStatus @ResponseStatus annotations}.
+	 * A collection of {@link ResponseCode @ResponseCode annotations}.
 	 */
 	@Documented
 	@Target({METHOD,TYPE})
@@ -178,6 +178,6 @@ public class ResponseStatusAnnotation {
 		/**
 		 * The child annotations.
 		 */
-		ResponseStatus[] value();
+		ResponseCode[] value();
 	}
 }

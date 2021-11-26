@@ -50,7 +50,7 @@ public enum RestParamType {
 	RESPONSE_HEADER("responseHeader"),
 
 	/** Response status value */
-	RESPONSE_STATUS("responseStatus"),
+	RESPONSE_CODE("responseCode"),
 
 	/** Not a standard Swagger-defined field */
 	OTHER("other");

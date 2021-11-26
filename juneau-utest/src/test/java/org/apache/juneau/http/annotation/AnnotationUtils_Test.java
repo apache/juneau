@@ -228,7 +228,7 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a14_ResponseStatus() throws Exception {
-		assertObject(responseStatus().build().annotationType()).asJson().contains("ResponseStatus");
+		assertObject(responseCode().build().annotationType()).asJson().contains("ResponseCode");
 	}
 
 	@Test
@@ -461,8 +461,8 @@ public class AnnotationUtils_Test {
 		return ResponseHeaderAnnotation.create();
 	}
 
-	private static ResponseStatusAnnotation.Builder responseStatus() {
-		return ResponseStatusAnnotation.create();
+	private static ResponseCodeAnnotation.Builder responseCode() {
+		return ResponseCodeAnnotation.create();
 	}
 
 	private static TagAnnotation.Builder tag() {

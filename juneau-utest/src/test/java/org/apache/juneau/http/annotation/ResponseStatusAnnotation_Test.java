@@ -30,12 +30,12 @@ public class ResponseStatusAnnotation_Test {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	ResponseStatus a1 = ResponseStatusAnnotation.create()
+	ResponseCode a1 = ResponseCodeAnnotation.create()
 		.on("on")
 		.onClass(X1.class)
 		.build();
 
-	ResponseStatus a2 = ResponseStatusAnnotation.create()
+	ResponseCode a2 = ResponseCodeAnnotation.create()
 		.on("on")
 		.onClass(X1.class)
 		.build();
@@ -82,9 +82,9 @@ public class ResponseStatusAnnotation_Test {
 
 	@Test
 	public void c01_otherMethods() throws Exception {
-		ResponseStatus c1 = ResponseStatusAnnotation.create(C1.class).on(C2.class).build();
-		ResponseStatus c2 = ResponseStatusAnnotation.create("a").on("b").build();
-		ResponseStatus c4 = ResponseStatusAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		ResponseCode c1 = ResponseCodeAnnotation.create(C1.class).on(C2.class).build();
+		ResponseCode c2 = ResponseCodeAnnotation.create("a").on("b").build();
+		ResponseCode c4 = ResponseCodeAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertObject(c2).asJson().contains("on:['a','b']");
@@ -95,19 +95,19 @@ public class ResponseStatusAnnotation_Test {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@ResponseStatus(
+	@ResponseCode(
 		on="on",
 		onClass=X1.class
 	)
 	public static class D1 {}
-	ResponseStatus d1 = D1.class.getAnnotationsByType(ResponseStatus.class)[0];
+	ResponseCode d1 = D1.class.getAnnotationsByType(ResponseCode.class)[0];
 
-	@ResponseStatus(
+	@ResponseCode(
 		on="on",
 		onClass=X1.class
 	)
 	public static class D2 {}
-	ResponseStatus d2 = D2.class.getAnnotationsByType(ResponseStatus.class)[0];
+	ResponseCode d2 = D2.class.getAnnotationsByType(ResponseCode.class)[0];
 
 	@Test
 	public void d01_comparisonWithDeclarativeAnnotations() {

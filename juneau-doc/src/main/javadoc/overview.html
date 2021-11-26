@@ -354,7 +354,7 @@
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Header_Path_Query_FormData'>@Header / @Path / @Query / @FormData</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.Body'>@Body and Request Bodies</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.RequestBeans'>@Request beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus'>@Response / @ResponseHeader / @ResponseStatus</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.ReponseHeader_ResponseCode'>@Response / @ResponseHeader / @ResponseCode</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.ResponseBeans'>@Response beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.HttpParts.RequestHeader_RequestQueryParams_RequestFormParams_RequestPathParams'>RequestHeaders / RequestQueryParams / RequestFormParams / RequestPathParams</a><span class='update'>created: <b>9.0.0</b></span></p>
 		</ol>
@@ -430,7 +430,7 @@
 		<li><p><a class='doclink' href='#juneau-rest-client.RestcRequestQueryParameters'>Request Query Parameters</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.RestcRequestFormData'>Request Form Data</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.RestcRequestBody'>Request Body</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.RestcResponseStatus'>Response Status</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RestcResponseCode'>Response Status</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.RestcResponseHeaders'>Response Headers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.RestcResponseBody'>Response Body</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.RestcCustomCallHandlers'>Custom Call Handlers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></p>
@@ -1805,7 +1805,7 @@
 		<ul>
 			<li>Typically a POJO serialized based on {@link org.apache.juneau.http.header.Accept} request header.
 			<li>Support for raw values such as <c>Readers</c> and <c>InputStreams</c> (among others).
-			<li>Support for response beans annotated with {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus}.
+			<li>Support for response beans annotated with {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode}.
 			<li>Support for Apache Http Core interfaces: {@link org.apache.http.HttpEntity} / {@link org.apache.http.HttpResponse} / {@link org.apache.juneau.http.resource.HttpResource}.
 			<li>Standard HTTP responses such as {@link org.apache.juneau.http.response.Ok} and {@link org.apache.juneau.http.response.TemporaryRedirect} provided in {@link org.apache.juneau.http.response} package.
 			<li>Extensible API for defining custom return types.
@@ -15124,7 +15124,7 @@
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
 		</ul>
 </ul>
 <p>
@@ -15574,7 +15574,7 @@
 	<ul class='javatreec'>
 		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	</ul>
 	<li>Sub-annotations:
@@ -16143,10 +16143,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus' id='juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus'>6.4.5 - @Response / @ResponseHeader / @ResponseStatus</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.4.5 - juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpParts.ReponseHeader_ResponseCode' id='juneau-rest-server.HttpParts.ReponseHeader_ResponseCode'>6.4.5 - @Response / @ResponseHeader / @ResponseCode</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.4.5 - juneau-rest-server.HttpParts.ReponseHeader_ResponseCode -->
 <p>
-	The {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotations
+	The {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode} annotations
 	allow you to define method parameters for setting HTTP response parts:
 </p>
 
@@ -16177,10 +16177,10 @@
 		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()}
 		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()}
 	</ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
 	<ul class='javatreec'>
-		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseStatus#on() on()}
-		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseStatus#onClass() onClass()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseCode#on() on()}
+		<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseCode#onClass() onClass()}
 	</ul>
 </ul>	
 <p>
@@ -16243,7 +16243,7 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be used to 
+	The {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode} annotation annotation can be used to 
 	set the HTTP response code:
 </p>
 <h5 class='figure'>Examples:</h5>
@@ -16253,14 +16253,14 @@
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
 		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
-		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; <jv>status</jv>
+		<ja>@ResponseCode</ja> Value&lt;Integer&gt; <jv>status</jv>
 	) 
 	{
 		<jk>if</jk> (! <jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>))
 			<jv>status</jv>.set(401);
 	}
 </p>
-</div><!-- END: 6.4.5 - juneau-rest-server.HttpParts.ReponseHeader_ResponseStatus -->
+</div><!-- END: 6.4.5 - juneau-rest-server.HttpParts.ReponseHeader_ResponseCode -->
 
 <!-- ==================================================================================================== -->
 
@@ -16279,7 +16279,7 @@
 	public non-static methods of the class to identify parts of a response:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} 
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody} 
 </ul>
@@ -16464,9 +16464,9 @@
 	}
 </p>
 
-<h5 class='topic'>@ResponseStatus on methods of @Response-annotated types</h5>
+<h5 class='topic'>@ResponseCode on methods of @Response-annotated types</h5>
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
+	The {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode} annotation can be used on 
 	the method of a <ja>@Response</ja>-annotated class to identify HTTP response
 	statuses other than <c>200</c> (the default).	
 </p>
@@ -16476,7 +16476,7 @@
 	<ja>@Response</ja>
 	<jk>public class</jk> AddPetSuccess {
  
-		<ja>@ResponseStatus</ja>
+		<ja>@ResponseCode</ja>
 		<jk>public int</jk> getStatus() {
 			<jk>return</jk> 201;
 		}
@@ -16724,10 +16724,10 @@
 </p>
 
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestOp</ja>-annotated parameters to denote them as an HTTP response status codes.
+	The {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode} annotation annotation can be applied to <ja>@RestOp</ja>-annotated parameters to denote them as an HTTP response status codes.
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
 </ul>
 <p>
 	This can only be applied to parameters of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
@@ -16740,7 +16740,7 @@
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
 		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
-		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; <jv>status</jv>
+		<ja>@ResponseCode</ja> Value&lt;Integer&gt; <jv>status</jv>
 	) 
 	{
 		<jk>if</jk> (! <jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>))
@@ -19120,7 +19120,7 @@ Resource bundles are searched using the following base name patterns:
 <ul class='seealso'>
 	<li class='link'>{@doc RestResponseAnnotation}
 	<li class='link'>{@doc RestResponseHeaderAnnotation}
-	<li class='link'>{@doc RestResponseStatusAnnotation}
+	<li class='link'>{@doc RestResponseCodeAnnotation}
 </ul>
 </div><!-- END: 6.23.7 - juneau-rest-server.RestSwagger.RestSwaggerResponses -->
 
@@ -21837,7 +21837,7 @@ Resource bundles are searched using the following base name patterns:
 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
-	RestResponseStatusLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
+	RestResponseCodeLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
 	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.code();
 	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
 	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
@@ -22422,8 +22422,8 @@ Resource bundles are searched using the following base name patterns:
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestcResponseStatus' id='juneau-rest-client.RestcResponseStatus'>9.6 - Response Status</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.6 - juneau-rest-client.RestcResponseStatus -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestcResponseCode' id='juneau-rest-client.RestcResponseCode'>9.6 - Response Status</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 9.6 - juneau-rest-client.RestcResponseCode -->
 <p>
 	After execution using {@del org.apache.juneau.rest.client2.RestRequest#run()} or {@del org.apache.juneau.rest.client2.RestRequest#complete()}, the following methods can be used
 	to get the response status:
@@ -22434,7 +22434,7 @@ Resource bundles are searched using the following base name patterns:
 		<li class='jm'><c>{@del org.apache.juneau.rest.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
 		<li class='jm'><c>{@del org.apache.juneau.rest.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
 		<li class='jm'><c>{@del org.apache.juneau.rest.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
-		<li class='jm'><c>{@del org.apache.juneau.rest.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@del org.apache.juneau.rest.client2.RestResponseStatusLineAssertion}</c>
+		<li class='jm'><c>{@del org.apache.juneau.rest.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@del org.apache.juneau.rest.client2.RestResponseCodeLineAssertion}</c>
 	</ul>
 </ul>
 
@@ -22482,7 +22482,7 @@ Resource bundles are searched using the following base name patterns:
 		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
 		.getBody().asString();
 </p>
-</div><!-- END: 9.6 - juneau-rest-client.RestcResponseStatus -->
+</div><!-- END: 9.6 - juneau-rest-client.RestcResponseCode -->
 
 <!-- ==================================================================================================== -->
 
@@ -23925,7 +23925,7 @@ Resource bundles are searched using the following base name patterns:
 		<ja>@ResponseHeader</ja>(<js>"E-Tag"</js>)
 		UUID getUUID();
 		
-		<ja>@ResponseStatus</ja>
+		<ja>@ResponseCode</ja>
 		<jk>int</jk> getStatus();
 	}
 </p>
@@ -23947,7 +23947,7 @@ Resource bundles are searched using the following base name patterns:
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
 </ul>
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
@@ -28813,7 +28813,7 @@ Resource bundles are searched using the following base name patterns:
 		<td>Denotes a method as an HTTP response header on a <ja>@Response</ja>-annotated bean.</td>
 	</tr>
 	<tr>
-		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}</ul></td>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}</ul></td>
 		<td><ul><li>Methods<li>Parameters</ul></td>
 		<td>Denotes a method as an HTTP response status code on a <ja>@Response</ja>-annotated bean.</td>
 	</tr>

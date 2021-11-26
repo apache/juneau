@@ -1689,7 +1689,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(@ResponseStatus Value<Integer> foo) {}
+		public void a(@ResponseCode Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1701,7 +1701,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{description:'b-100-description'}}"))
-		public void a(@ResponseStatus Value<Integer> foo) {}
+		public void a(@ResponseCode Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1791,7 +1791,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public X a(@ResponseStatus Value<Integer> foo) {
+		public X a(@ResponseCode Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -1805,7 +1805,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
-		public X a(@ResponseStatus Value<Integer> foo) {
+		public X a(@ResponseCode Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -1897,7 +1897,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(@ResponseStatus Value<Integer> foo) {}
+		public void a(@ResponseCode Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1909,7 +1909,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
-		public void a(@ResponseStatus Value<Integer> foo) {}
+		public void a(@ResponseCode Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1997,7 +1997,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(@ResponseStatus Value<Integer> foo) {}
+		public void a(@ResponseCode Value<Integer> foo) {}
 	}
 
 	@Test
@@ -2009,7 +2009,7 @@ public class Swagger_Test {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
-		public void a(@ResponseStatus Value<Integer> foo) {}
+		public void a(@ResponseCode Value<Integer> foo) {}
 	}
 
 	@Test

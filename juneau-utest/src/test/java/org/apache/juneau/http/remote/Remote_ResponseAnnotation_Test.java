@@ -64,7 +64,7 @@ public class Remote_ResponseAnnotation_Test {
 	public interface A1a {
 		@ResponseBody Reader getBody();
 		@ResponseHeader("X") String getHeader();
-		@ResponseStatus int getStatus();
+		@ResponseCode int getStatus();
 	}
 
 	@Remote

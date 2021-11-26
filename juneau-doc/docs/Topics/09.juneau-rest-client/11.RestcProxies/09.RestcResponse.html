@@ -46,7 +46,7 @@
 		<ja>@ResponseHeader</ja>(<js>"E-Tag"</js>)
 		UUID getUUID();
 		
-		<ja>@ResponseStatus</ja>
+		<ja>@ResponseCode</ja>
 		<jk>int</jk> getStatus();
 	}
 </p>
@@ -68,7 +68,7 @@
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.ResponseBody}
 	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
-	<li class='ja'>{@link oaj.http.annotation.ResponseStatus}
+	<li class='ja'>{@link oaj.http.annotation.ResponseCode}
 </ul>
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.

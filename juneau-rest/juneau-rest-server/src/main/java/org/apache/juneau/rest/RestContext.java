@@ -3483,7 +3483,7 @@ public class RestContext extends Context {
 						RequestBeanArg.class,
 						ResponseBeanArg.class,
 						ResponseHeaderArg.class,
-						ResponseStatusArg.class,
+						ResponseCodeArg.class,
 						RestContextArgs.class,
 						RestSessionArgs.class,
 						RestOpContextArgs.class,
