@@ -1003,7 +1003,6 @@ public class BasicSwaggerProviderSession {
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
-			.appendSkipEmpty("example", resolve(a.example()))
 			.appendSkipEmpty("examples", parseMap(a.examples()))
 			.appendSkipEmpty("headers", merge(om.getMap("headers"), a.headers()))
 			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))

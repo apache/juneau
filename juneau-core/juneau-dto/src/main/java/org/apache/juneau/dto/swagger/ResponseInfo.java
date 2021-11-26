@@ -61,13 +61,12 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(properties="description,schema,headers,example,examples,*")
+@Bean(properties="description,schema,headers,examples,*")
 public class ResponseInfo extends SwaggerElement {
 
 	private String description;
 	private SchemaInfo schema;
 	private Map<String,HeaderInfo> headers;
-	private Object example;
 	private Map<String,Object> examples;
 
 	/**
@@ -84,7 +83,6 @@ public class ResponseInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.example = copyFrom.example;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
 
 		if (copyFrom.examples == null)
@@ -127,8 +125,6 @@ public class ResponseInfo extends SwaggerElement {
 				schema = r.schema;
 			if (r.headers != null)
 				headers = r.headers;
-			if (r.example != null)
-				example = r.example;
 			if (r.examples != null)
 				examples = r.examples;
 		}
@@ -191,50 +187,6 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public ResponseInfo description(String value) {
 		setDescription(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// example
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Bean property getter:  <property>example</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Bean property setter:  <property>example</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setExample(Object value) {
-		example = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>example</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Object> example() {
-		return Optional.ofNullable(getExample());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>example</property>.
-	 *
-	 * @param value The property value.
-	 * @return This object.
-	 */
-	public ResponseInfo example(Object value) {
-		setExample(value);
 		return this;
 	}
 
@@ -543,7 +495,6 @@ public class ResponseInfo extends SwaggerElement {
 			return null;
 		switch (property) {
 			case "description": return toType(getDescription(), type);
-			case "example": return toType(getExample(), type);
 			case "examples": return toType(getExamples(), type);
 			case "headers": return toType(getHeaders(), type);
 			case "schema": return toType(getSchema(), type);
@@ -557,7 +508,6 @@ public class ResponseInfo extends SwaggerElement {
 			return this;
 		switch (property) {
 			case "description": return description(stringify(value));
-			case "example": return example(value);
 			case "examples": return examples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
 			case "headers": return headers(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
 			case "schema": return schema(stringify(value));
@@ -571,7 +521,6 @@ public class ResponseInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
 			.appendIf(description != null, "description")
-			.appendIf(example != null, "example")
 			.appendIf(examples != null, "examples")
 			.appendIf(headers != null, "headers")
 			.appendIf(schema != null, "schema");

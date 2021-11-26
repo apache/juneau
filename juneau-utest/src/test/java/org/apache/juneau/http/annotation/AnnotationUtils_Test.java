@@ -200,7 +200,6 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
 		assertFalse(ResponseAnnotation.empty(response().code(a(0)).build()));
-		assertFalse(ResponseAnnotation.empty(response().example(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
 		assertFalse(ResponseAnnotation.empty(response().headers(new ResponseHeader[]{responseHeader().name("foo").build()}).build()));
 		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));

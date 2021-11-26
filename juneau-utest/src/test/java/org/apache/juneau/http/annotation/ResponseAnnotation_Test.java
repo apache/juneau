@@ -33,7 +33,6 @@ public class ResponseAnnotation_Test {
 
 	Response a1 = ResponseAnnotation.create()
 		.code(1)
-		.example("example")
 		.examples("examples")
 		.headers(ResponseHeaderAnnotation.DEFAULT)
 		.on("on")
@@ -46,7 +45,6 @@ public class ResponseAnnotation_Test {
 
 	Response a2 = ResponseAnnotation.create()
 		.code(1)
-		.example("example")
 		.examples("examples")
 		.headers(ResponseHeaderAnnotation.DEFAULT)
 		.on("on")
@@ -62,7 +60,6 @@ public class ResponseAnnotation_Test {
 		assertObject(a1).asJson().matches(""
 			+ "{"
 				+ "code:[1],"
-				+ "example:['example'],"
 				+ "examples:['examples'],"
 				+ "headers:[*],"
 				+ "on:['on'],"
@@ -122,7 +119,6 @@ public class ResponseAnnotation_Test {
 
 	@Response(
 		code=1,
-		example="example",
 		examples="examples",
 		headers=@ResponseHeader,
 		on="on",
@@ -137,7 +133,6 @@ public class ResponseAnnotation_Test {
 
 	@Response(
 		code=1,
-		example="example",
 		examples="examples",
 		headers=@ResponseHeader,
 		on="on",

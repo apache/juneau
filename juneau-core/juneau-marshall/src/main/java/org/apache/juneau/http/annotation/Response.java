@@ -19,8 +19,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
 
 /**
@@ -62,128 +60,10 @@ public @interface Response {
 	int[] code() default {};
 
 	/**
-	 * A serialized example of the body of a response.
-	 *
-	 * <p>
-	 * This is the {@doc SimplifiedJson} of an example of the body.
-	 *
-	 * <p>
-	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
-	 * supported language types.
-	 * <br>These values are then used to automatically populate the {@link #examples} field.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * There are several other options for defining this example:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Defining an <js>"example"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@Swagger</ja>(value)</code>/<code><ja>@OpSwagger</ja>(value)</code>).
-	 * 	<li>
-	 * 		Defining an <js>"example"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
-	 * 	<li>
-	 * 		Allowing Juneau to auto-generate a code example.
-	 * </ul>
-	 *
-	 * <p>
-	 * The latter is important because Juneau also supports auto-generation of JSON-Schema from POJO classes using {@link JsonSchemaSerializer} which has several of it's own
-	 * options for auto-detecting and calculation POJO examples.
-	 *
-	 * <p>
-	 * In particular, examples can be defined via static methods, fields, and annotations on the classes themselves.
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Annotation on class.</jc>
-	 * 	<ja>@Example</ja>(<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
-	 * 	<jk>public class</jk> PetCreate {
-	 * 		...
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Annotation on static method.</jc>
-	 * 	<jk>public class</jk> PetCreate {
-	 *
-	 * 		<ja>@Example</ja>
-	 * 		<jk>public static</jk> PetCreate <jsm>sample</jsm>() {
-	 * 			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
-	 * 		}
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Static method with specific name 'example'.</jc>
-	 * 	<jk>public class</jk> PetCreate {
-	 *
-	 * 		<jk>public static</jk> PetCreate <jsm>example</jsm>() {
-	 * 			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
-	 * 		}
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Static field.</jc>
-	 * 	<jk>public class</jk> PetCreate {
-	 *
-	 * 		<ja>@Example</ja>
-	 * 		<jk>public static</jk> PetCreate <jsf>EXAMPLE</jsf> = <jk>new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * Examples can also be specified via generic properties as well using the {@link Marshalled#example() @Marshalled(example)} annotation at either the class or method level.
-	 * <p class='bcode w800'>
-	 * 	<jc>// Examples defined at class level.</jc>
-	 * 	<ja>@Rest</ja>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		applyMarshalled={
-	 * 			<ja>@Marshalled</ja>(on=<js>"PetCreate"</js>,example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='ja'>{@link Bean#example() Bean(example)}
-	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
-	 * 	<li class='jc'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder}
-	 * 	<ul>
-	 * 		<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) addExamplesTo(TypeCategory...)}
-	 * 		<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() allowNestedExamples()}
-	 * 	</ul>
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is any {@doc SimplifiedJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
-	 * 		has a schema associated with it meancan be converted from a String.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The format of this object can also be a simple String if the body has a schema associated with it, meaning it's meant to be treated as an HTTP part.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
-	 * </ul>
-	 */
-	String[] example() default {};
-
-	/**
 	 * Serialized examples of the body of a response.
 	 *
 	 * <p>
 	 * This is a {@doc SimplifiedJson} object whose keys are media types and values are string representations of that value.
-	 *
-	 * <p>
-	 * In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
-	 * <br>However, this field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
 	 *
 	 * <p class='bcode w800'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>

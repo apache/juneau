@@ -38,7 +38,6 @@ public class Swagger_Response_Test {
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
-			example="'a'",
 			examples=" {foo:'a'} "
 		)
 		public static class A1 {
@@ -52,7 +51,6 @@ public class Swagger_Response_Test {
 		@Response(
 			schema=@Schema(description="a\nb",type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
-			example="'a'",
 			examples=" {foo:'a'} "
 		)
 		public static class A2 {
@@ -66,7 +64,6 @@ public class Swagger_Response_Test {
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
-			example="'a'",
 			examples=" {foo:'a'} "
 		)
 		public static class A3 {
@@ -108,42 +105,36 @@ public class Swagger_Response_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/b","put",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/c","post",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/d","delete",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/e","get",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/f","get",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/g","get",100);
@@ -234,7 +225,6 @@ public class Swagger_Response_Test {
 	@Rest
 	public static class C {
 
-		@Response(example="{f1:'a'}")
 		public static class C1 {
 			public String f1;
 		}
@@ -259,10 +249,8 @@ public class Swagger_Response_Test {
 		ResponseInfo x;
 
 		x = sc.getResponseInfo("/a","get",200);
-		assertEquals("{f1:'a'}", x.getExample());
 
 		x = sc.getResponseInfo("/b","put",200);
-		assertEquals("{f1:'a'}", x.getExample());
 
 		x = sc.getResponseInfo("/c","post",200);
 		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
@@ -277,7 +265,6 @@ public class Swagger_Response_Test {
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
-			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)
 		public static class D1 extends Throwable {}
@@ -287,7 +274,6 @@ public class Swagger_Response_Test {
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
-			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)
 		public static class D2 extends Throwable {}
@@ -297,7 +283,6 @@ public class Swagger_Response_Test {
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
 			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
-			example=" 'a' ",
 			examples=" {foo:'a'} "
 		)
 		public static class D3 extends Throwable {}
@@ -329,21 +314,18 @@ public class Swagger_Response_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/b","put",500);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExample()).asJson().is("'\\'a\\''");
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/c","post",500);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
 		x = s.getResponseInfo("/d","delete",100);
@@ -380,11 +362,6 @@ public class Swagger_Response_Test {
 	@Rest
 	public static class F {
 
-		@Response(example={" {f1:'b'} "})
-		public static class F1 extends Throwable {}
-		@RestGet
-		public void a() throws F1 {}
-
 		@Response(examples={" foo:'b' "})
 		public static class F2 extends Throwable {}
 		@RestPut
@@ -395,9 +372,6 @@ public class Swagger_Response_Test {
 	public void f01_exampeFromThrowable() throws Exception {
 		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
 		ResponseInfo x;
-
-		x = s.getResponseInfo("/a","get",500);
-		assertEquals("{f1:'b'}", x.getExample());
 
 		x = s.getResponseInfo("/b","put",500);
 		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
