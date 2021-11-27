@@ -108,12 +108,12 @@ public class ResponseHeader_Test {
 		@RestGet
 		public void c(Value<B3> h) {}
 
-		@ResponseHeader(name="H", code=100)
+		@ResponseHeader(name="H") @ResponseCode(100)
 		public static class B4 {}
 		@RestGet
 		public void d(Value<B4> h) {}
 
-		@ResponseHeader(name="H", code={100,101})
+		@ResponseHeader(name="H") @ResponseCode({100,101})
 		public static class B5 {}
 		@RestGet
 		public void e(Value<B5> h) {}
@@ -203,11 +203,11 @@ public class ResponseHeader_Test {
 
 		public static class C4 {}
 		@RestGet
-		public void d(@ResponseHeader(name="H", code=100) Value<C4> h) {}
+		public void d(@ResponseHeader(name="H") @ResponseCode(100) Value<C4> h) {}
 
 		public static class C5 {}
 		@RestGet
-		public void e(@ResponseHeader(name="H", code={100,101}) Value<C5> h) {}
+		public void e(@ResponseHeader(name="H") @ResponseCode({100,101}) Value<C5> h) {}
 
 		public static class C6 {}
 		@RestGet

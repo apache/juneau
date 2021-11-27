@@ -449,7 +449,8 @@ public class BasicSwaggerProviderSession {
 
 				if (mpi.hasAnnotation(ResponseHeader.class) || pt.hasAnnotation(ResponseHeader.class)) {
 					List<ResponseHeader> la = AList.of(mpi.getAnnotations(ResponseHeader.class)).a(pt.getAnnotations(ResponseHeader.class));
-					Set<Integer> codes = getCodes2(la, 200);
+					List<ResponseCode> la2 = AList.of(mpi.getAnnotations(ResponseCode.class)).a(pt.getAnnotations(ResponseCode.class));
+					Set<Integer> codes = getCodes(la2, 200);
 					String name = ResponseHeaderAnnotation.findName(la).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (ResponseHeader a : la) {
@@ -1095,17 +1096,6 @@ public class BasicSwaggerProviderSession {
 		Set<Integer> codes = new TreeSet<>();
 		for (ResponseCode a : la) {
 			for (int i : a.value())
-				codes.add(i);
-		}
-		if (codes.isEmpty() && def != null)
-			codes.add(def);
-		return codes;
-	}
-
-	private static Set<Integer> getCodes2(List<ResponseHeader> la, Integer def) {
-		Set<Integer> codes = new TreeSet<>();
-		for (ResponseHeader a : la) {
-			for (int i : a.code())
 				codes.add(i);
 		}
 		if (codes.isEmpty() && def != null)

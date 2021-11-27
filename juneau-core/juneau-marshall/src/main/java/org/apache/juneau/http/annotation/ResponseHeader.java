@@ -132,18 +132,6 @@ import org.apache.juneau.oapi.*;
 public @interface ResponseHeader {
 
 	/**
-	 * The HTTP status (or statuses) of the response.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The is a comma-delimited list of HTTP status codes that this header applies to.
-	 * 	<li>
-	 * 		The default value is <js>"200"</js>.
-	 * </ul>
-	 */
-	int[] code() default {};
-
-	/**
 	 * The HTTP header name.
 	 *
 	 * <ul class='notes'>

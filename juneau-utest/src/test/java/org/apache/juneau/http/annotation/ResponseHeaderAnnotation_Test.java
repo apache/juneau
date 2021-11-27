@@ -32,7 +32,6 @@ public class ResponseHeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	ResponseHeader a1 = ResponseHeaderAnnotation.create()
-		.code(1)
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -41,7 +40,6 @@ public class ResponseHeaderAnnotation_Test {
 		.build();
 
 	ResponseHeader a2 = ResponseHeaderAnnotation.create()
-		.code(1)
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -53,7 +51,6 @@ public class ResponseHeaderAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().matches(""
 			+ "{"
-				+ "code:[1],"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -110,7 +107,6 @@ public class ResponseHeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@ResponseHeader(
-		code=1,
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -121,7 +117,6 @@ public class ResponseHeaderAnnotation_Test {
 	ResponseHeader d1 = D1.class.getAnnotationsByType(ResponseHeader.class)[0];
 
 	@ResponseHeader(
-		code=1,
 		name="name",
 		on="on",
 		onClass=X1.class,

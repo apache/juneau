@@ -218,7 +218,6 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseHeaderAnnotation.empty(A1.class.getAnnotation(ResponseHeader.class)));
 		assertTrue(ResponseHeaderAnnotation.empty(A2.class.getAnnotation(ResponseHeader.class)));
 
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().code(a(0)).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().name("foo").build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().serializer(OpenApiSerializer.class).build()));
 		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().value("foo").build()));
@@ -485,9 +484,5 @@ public class AnnotationUtils_Test {
 
 	private static String[] a(String...s) {
 		return s;
-	}
-
-	private static int[] a(int...i) {
-		return i;
 	}
 }

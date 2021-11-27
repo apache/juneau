@@ -109,7 +109,6 @@ public class ResponseHeaderAnnotation {
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
-		int[] code={};
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String name="", value="";
 
@@ -127,17 +126,6 @@ public class ResponseHeaderAnnotation {
 		 */
 		public ResponseHeader build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link ResponseHeader#code} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder code(int...value) {
-			this.code = value;
-			return this;
 		}
 
 		/**
@@ -220,23 +208,16 @@ public class ResponseHeaderAnnotation {
 	private static class Impl extends TargetedAnnotationTImpl implements ResponseHeader {
 
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final int[] code;
 		private final String name, value;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
-			this.code = Arrays.copyOf(b.code, b.code.length);
 			this.name = b.name;
 			this.schema = b.schema;
 			this.serializer = b.serializer;
 			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* ResponseHeader */
-		public int[] code() {
-			return code;
 		}
 
 		@Override /* ResponseHeader */
