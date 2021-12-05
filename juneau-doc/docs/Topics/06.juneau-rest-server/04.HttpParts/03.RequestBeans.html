@@ -13,20 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Request beans', updated:'8.1.0,9.0.0'} 
+{title:'@Request Beans', updated:'8.1.0,9.0.0'} 
 
 <p>
-	The {@link oaj.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestOp</ja>-annotated method 
-	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link oaj.http.annotation.Request}
-	<ul>
-		<li class='jf'>{@link oaj.http.annotation.Request#parser() parser} - Override the part parser.
-	</ul>
-</ul>
-<p>
-	It's used in combination with the following annotation to define proxy interfaces against HTTP requests:
+	The {@link oaj.http.annotation.Request @Request} annotation can used to define proxy interfaces against 
+	HTTP requests in combination with the following annotations used on methods:
 </p>
 <ul class='javatreec'>
 	<li class='ja'>{@link oaj.http.annotation.Header}
@@ -34,17 +25,18 @@
 	<li class='ja'>{@link oaj.http.annotation.FormData}
 	<li class='ja'>{@link oaj.http.annotation.Path}
 	<li class='ja'>{@link oaj.http.annotation.Body}
+	<li class='ja'>{@link oaj.http.annotation.Schema}
 </ul>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
-	<jk>public void</jk> putPet(UpdatePet <jv>updatePet</jv>) {...}
+	<jk>public void</jk> addPet(UpdatePetBean <jv>updatePet</jv>) {...}
 
 	<ja>@Request</ja>
-	<jk>public interface</jk> UpdatePet {
+	<jk>public interface</jk> UpdatePetBean {
 
-		<ja>@Path</ja> 
+		<ja>@Path</ja> <jc>// {petId} inferred.</jc>
 		<jk>int</jk> getPetId();
 
 		<ja>@Query</ja>(<js>"verbose"</js>)
@@ -62,11 +54,11 @@
 </p>
 <p class='bpcode w800'>
 	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
-	<jk>public void</jk> putPet(
+	<jk>public void</jk> addPet(
 		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>petId</jv>,
 		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> <jv>debug</jv>,
 		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>allHeaders</jv>,
-		<ja>@Body</ja> Pet <jv>pet</jv>
+		<ja>@Body</ja> UpdatePetBean <jv>pet</jv>
 	) 
 	{...}
 </p>
@@ -75,13 +67,15 @@
 	Schema-based serialization and parsing is used just as if used as individual parameter types.
 	Annotations used are the exact same used on REST parameters and have all the
 	same feature support including automatic Swagger validation and documentation.  
+	Part names can either be explicitly specified or automatically inferred from the getter names.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@Request</ja>
-	<jk>public interface</jk> Request {
+	<jk>public interface</jk> MyRequest {
 
-		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
+		<jc>// Schema-based query parameter "pipedCdlInts":  
+		// Pipe-delimited list of comma-delimited lists of integers.</jc>
 		<ja>@Query</ja>
 		<ja>@Schema</ja>(
 			collectionFormat=<js>"pipes"</js>
@@ -104,8 +98,10 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
-	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet <jv>updatePet</jv>) {...}
+	<jk>public void</jk> addPet(<ja>@Request</ja> UpdatePetBean <jv>updatePet</jv>) {...}
 
 	<ja>@Request</ja>
-	<jk>public interface</jk> UpdatePet {...}
+	<jk>public interface</jk> UpdatePetBean {...}
 </p>
+
+<p>

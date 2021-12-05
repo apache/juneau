@@ -25,7 +25,7 @@
 	<jk>public</jk> String doGetExample1(
 		<ja>@Path</ja>(<js>"a1"</js>) String <jv>a1</jv>,
 		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
-		<ja>@HasQuery</ja>(<js>"p2"</js>) boolean <jv>hasP3</jv>,
+		<ja>@HasQuery</ja>(<js>"p2"</js>) <jk>boolean</jk> <jv>hasP3</jv>,
 		<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>,
 		<ja>@Header</ja>(<js>"Accept-Language"</js>) String <jv>lang</jv>
 	) {
@@ -71,14 +71,4 @@
 	<li class='note'>When defined on types, annotations are aggregated from parent to child with child values
 		taking precedence.  When defined on both, annotations are aggregated with values on parameters
 		taking precedence.
-</ul>
-<p>
-	Request HTTP parts can also be retrieved programmatically through the following classes that
-	can be passed in as parameters or access through {@link oajr.RestRequest} bean:
-</p>
-<ul class='javatreec'>
-	<li class='jc'>{@link oajr.RequestHeaders}
-	<li class='jc'>{@link oajr.RequestQueryParams}
-	<li class='jc'>{@link oajr.RequestFormParams}
-	<li class='jc'>{@link oajr.RequestPathParams}
 </ul>
