@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server does not support the HTTP protocol version used in the request.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class HttpVersionNotSupported extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

@@ -51,7 +51,7 @@ public class ResponseBeanMeta {
 		Builder b = new Builder(annotations);
 		b.apply(ci.innerType());
 		ci.getAnnotations(Response.class).forEach(x -> b.apply(x));
-		ci.getAnnotations(ResponseCode.class).forEach(x -> b.apply(x));
+		ci.getAnnotations(StatusCode.class).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -68,7 +68,7 @@ public class ResponseBeanMeta {
 		Builder b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
 		m.getAnnotations(Response.class).forEach(x -> b.apply(x));
-		m.getAnnotations(ResponseCode.class).forEach(x -> b.apply(x));
+		m.getAnnotations(StatusCode.class).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -85,7 +85,7 @@ public class ResponseBeanMeta {
 		Builder b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
 		mpi.getAnnotations(Response.class).forEach(x -> b.apply(x));
-		mpi.getAnnotations(ResponseCode.class).forEach(x -> b.apply(x));
+		mpi.getAnnotations(StatusCode.class).forEach(x -> b.apply(x));
 		return b.build();
 	}
 
@@ -152,21 +152,21 @@ public class ResponseBeanMeta {
 			ClassInfo ci = cm.getInfo();
 			for (MethodInfo m : ci.getAllMethods()) {
 				if (m.isPublic()) {
-					assertNoInvalidAnnotations(m, Header.class, Query.class, FormData.class, Path.class, Schema.class);
-					if (m.hasAnnotation(ResponseHeader.class)) {
-						assertNoArgs(m, ResponseHeader.class);
-						assertReturnNotVoid(m, ResponseHeader.class);
-						HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(ResponseHeader.class), m.getPropertyName());
+					assertNoInvalidAnnotations(m, Query.class, FormData.class);
+					if (m.hasAnnotation(Header.class)) {
+						assertNoArgs(m, Header.class);
+						assertReturnNotVoid(m, Header.class);
+						HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(Header.class), m.getPropertyName());
 						headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
-					} else if (m.hasAnnotation(ResponseCode.class)) {
-						assertNoArgs(m, ResponseHeader.class);
-						assertReturnType(m, ResponseHeader.class, int.class, Integer.class);
+					} else if (m.hasAnnotation(StatusCode.class)) {
+						assertNoArgs(m, Header.class);
+						assertReturnType(m, Header.class, int.class, Integer.class);
 						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
-					} else if (m.hasAnnotation(ResponseBody.class)) {
+					} else if (m.hasAnnotation(Body.class)) {
 						if (m.getParamCount() == 0)
-							assertReturnNotVoid(m, ResponseHeader.class);
+							assertReturnNotVoid(m, Header.class);
 						else
-							assertArgType(m, ResponseHeader.class, OutputStream.class, Writer.class);
+							assertArgType(m, Header.class, OutputStream.class, Writer.class);
 						bodyMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, m);
 					}
 				}
@@ -185,7 +185,7 @@ public class ResponseBeanMeta {
 			return this;
 		}
 
-		Builder apply(ResponseCode a) {
+		Builder apply(StatusCode a) {
 			if (a != null) {
 				if (a.value().length > 0)
 					code = a.value()[0];
@@ -217,27 +217,27 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns metadata about the <ja>@ResponseHeader</ja>-annotated methods.
+	 * Returns metadata about the <ja>@Header</ja>-annotated methods.
 	 *
-	 * @return Metadata about the <ja>@ResponseHeader</ja>-annotated methods, or an empty collection if none exist.
+	 * @return Metadata about the <ja>@Header</ja>-annotated methods, or an empty collection if none exist.
 	 */
 	public Collection<ResponseBeanPropertyMeta> getHeaderMethods() {
 		return headerMethods.values();
 	}
 
 	/**
-	 * Returns the <ja>@ResponseBody</ja>-annotated method.
+	 * Returns the <ja>@Body</ja>-annotated method.
 	 *
-	 * @return The <ja>@ResponseBody</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 * @return The <ja>@Body</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseBeanPropertyMeta getBodyMethod() {
 		return bodyMethod;
 	}
 
 	/**
-	 * Returns the <ja>@ResponseCode</ja>-annotated method.
+	 * Returns the <ja>@StatusCode</ja>-annotated method.
 	 *
-	 * @return The <ja>@ResponseCode</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 * @return The <ja>@StatusCode</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseBeanPropertyMeta getStatusMethod() {
 		return statusMethod;

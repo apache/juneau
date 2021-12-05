@@ -14,7 +14,6 @@ package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.httppart.bean.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.annotation.InvalidAnnotationException.*;
 
 import java.util.*;
 
@@ -96,7 +95,6 @@ public class RequestBeanMeta {
 			for (MethodInfo m : cm.getInfo().getAllMethods()) {
 
 				if (m.isPublic()) {
-					assertNoInvalidAnnotations(m, ResponseHeader.class, ResponseBody.class, ResponseCode.class);
 					String n = m.getSimpleName();
 					if (m.hasAnnotation(Header.class)) {
 						assertNoArgs(m, Header.class);

@@ -45,13 +45,13 @@ public class Response_Test {
 		}
 	}
 
-	@Response @ResponseCode(201)
+	@Response @StatusCode(201)
 	public static class A1 {
 		@Override
 		public String toString() {return "foo";}
 	}
 
-	@Response @ResponseCode(501)
+	@Response @StatusCode(501)
 	public static class A2 extends Exception {
 		@Override
 		public String toString() {return "foo";}

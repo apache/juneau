@@ -163,8 +163,8 @@
 </p>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.4.png'> 
 <p>
-	These can be auto-generated from {@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotations defined on either
-	method parameters or type classes.
+	These can be auto-generated from {@link oaj.http.annotation.Header @Header} annotations defined on method 
+	parameters or when the parameter type is the mutable {@link oaj.Value} object.
 	The example above shows one of each:
 </p>
 <p class='bpcode w800'>
@@ -190,7 +190,7 @@
 				example=<js>"abc123"</js>
 			)
 			String <jv>password</jv>,
-			<ja>@ResponseHeader</ja>(
+			<ja>@Header</ja>(
 				name=<js>"X-Rate-Limit"</js>,
 				type=<js>"integer"</js>,
 				format=<js>"int32"</js>,
@@ -214,7 +214,7 @@
 	}
 </p>
 <p class='bpcode w800'>	
-	<ja>@ResponseHeader</ja>(
+	<ja>@Header</ja>(
 		name=<js>"X-Expires-After"</js>,
 		type=<js>"string"</js>,
 		format=<js>"date-time"</js>,

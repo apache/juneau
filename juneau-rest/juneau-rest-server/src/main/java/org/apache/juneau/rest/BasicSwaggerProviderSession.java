@@ -371,7 +371,7 @@ public class BasicSwaggerProviderSession {
 			for (ClassInfo eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
 					List<Response> la = eci.getAnnotations(Response.class);
-					List<ResponseCode> la2 = eci.getAnnotations(ResponseCode.class);
+					List<StatusCode> la2 = eci.getAnnotations(StatusCode.class);
 					Set<Integer> codes = getCodes(la2, 500);
 					for (Response a : la) {
 						for (Integer code : codes) {
@@ -384,9 +384,9 @@ public class BasicSwaggerProviderSession {
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
-						ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
+						Header a = ecmi.getLastAnnotation(Header.class);
 						if (a == null)
-							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(ResponseHeader.class);
+							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(Header.class);
 						if (a != null && ! isMulti(a)) {
 							String ha = a.name();
 							for (Integer code : codes) {
@@ -402,7 +402,7 @@ public class BasicSwaggerProviderSession {
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)) {
 				List<Response> la = mi.getAnnotations(Response.class);
-				List<ResponseCode> la2 = mi.getAnnotations(ResponseCode.class);
+				List<StatusCode> la2 = mi.getAnnotations(StatusCode.class);
 				Set<Integer> codes = getCodes(la2, 200);
 				for (Response a : la) {
 					for (Integer code : codes) {
@@ -417,8 +417,8 @@ public class BasicSwaggerProviderSession {
 				}
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
 					for (MethodInfo ecmi : mi.getReturnType().getAllMethodsParentFirst()) {
-						if (ecmi.hasAnnotation(ResponseHeader.class)) {
-							ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
+						if (ecmi.hasAnnotation(Header.class)) {
+							Header a = ecmi.getLastAnnotation(Header.class);
 							String ha = a.name();
 							if (! isMulti(a)) {
 								for (Integer code : codes) {
@@ -442,18 +442,18 @@ public class BasicSwaggerProviderSession {
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 			}
 
-			// Finally, look for @ResponseHeader parameters defined on method.
+			// Finally, look for Value @Header parameters defined on method.
 			for (ParamInfo mpi : mi.getParams()) {
 
 				ClassInfo pt = mpi.getParameterType();
 
-				if (mpi.hasAnnotation(ResponseHeader.class) || pt.hasAnnotation(ResponseHeader.class)) {
-					List<ResponseHeader> la = AList.of(mpi.getAnnotations(ResponseHeader.class)).a(pt.getAnnotations(ResponseHeader.class));
-					List<ResponseCode> la2 = AList.of(mpi.getAnnotations(ResponseCode.class)).a(pt.getAnnotations(ResponseCode.class));
+				if (pt.is(Value.class) && (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class))) {
+					List<Header> la = AList.of(mpi.getAnnotations(Header.class)).a(pt.getAnnotations(Header.class));
+					List<StatusCode> la2 = AList.of(mpi.getAnnotations(StatusCode.class)).a(pt.getAnnotations(StatusCode.class));
 					Set<Integer> codes = getCodes(la2, 200);
-					String name = ResponseHeaderAnnotation.findName(la).orElse(null);
+					String name = HeaderAnnotation.findName(la).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
-					for (ResponseHeader a : la) {
+					for (Header a : la) {
 						if (! isMulti(a)) {
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
@@ -467,7 +467,7 @@ public class BasicSwaggerProviderSession {
 
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
 					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).a(pt.getAnnotations(Response.class));
-					List<ResponseCode> la2 = AList.of(mpi.getAnnotations(ResponseCode.class)).a(pt.getAnnotations(ResponseCode.class));
+					List<StatusCode> la2 = AList.of(mpi.getAnnotations(StatusCode.class)).a(pt.getAnnotations(StatusCode.class));
 					Set<Integer> codes = getCodes(la2, 200);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (Response a : la) {
@@ -545,7 +545,7 @@ public class BasicSwaggerProviderSession {
 	// Utility methods
 	//=================================================================================================================
 
-	private boolean isMulti(ResponseHeader h) {
+	private boolean isMulti(Header h) {
 		if ("*".equals(h.name()) || "*".equals(h.value()))
 			return true;
 		return false;
@@ -1013,14 +1013,14 @@ public class BasicSwaggerProviderSession {
 		;
 	}
 
-	private OMap merge(OMap om, ResponseHeader[] a) {
+	private OMap merge(OMap om, Header[] a) {
 		if (a.length == 0)
 			return om;
 		om = newMap(om);
-		for (ResponseHeader aa : a) {
+		for (Header aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
-				throw runtimeException("@ResponseHeader used without name or value.");
+				throw runtimeException("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}
 		return om;
@@ -1092,9 +1092,9 @@ public class BasicSwaggerProviderSession {
 		return "";
 	}
 
-	private static Set<Integer> getCodes(List<ResponseCode> la, Integer def) {
+	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
 		Set<Integer> codes = new TreeSet<>();
-		for (ResponseCode a : la) {
+		for (StatusCode a : la) {
 			for (int i : a.value())
 				codes.add(i);
 		}

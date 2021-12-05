@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Found extends BasicHttpResponse {
 

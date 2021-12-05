@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class NotImplemented extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

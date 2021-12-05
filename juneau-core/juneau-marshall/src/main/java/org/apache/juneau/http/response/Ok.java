@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * In a POST request, the response will contain an entity describing or containing the result of the action.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Ok extends BasicHttpResponse {
 

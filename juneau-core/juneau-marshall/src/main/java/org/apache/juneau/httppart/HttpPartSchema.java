@@ -507,8 +507,6 @@ public class HttpPartSchema {
 	 * 		<li>{@link FormData}
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
-	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseBody}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -540,7 +538,6 @@ public class HttpPartSchema {
 	 * 		<li>{@link FormData}
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
-	 * 		<li>{@link ResponseHeader}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -568,7 +565,6 @@ public class HttpPartSchema {
 	 * 		<li>{@link FormData}
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
-	 * 		<li>{@link ResponseHeader}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -720,10 +716,8 @@ public class HttpPartSchema {
 				apply((Path)a);
 			else if (a instanceof Response)
 				apply((Response)a);
-			else if (a instanceof ResponseCode)
-				apply((ResponseCode)a);
-			else if (a instanceof ResponseHeader)
-				apply((ResponseHeader)a);
+			else if (a instanceof StatusCode)
+				apply((StatusCode)a);
 			else if (a instanceof HasQuery)
 				apply((HasQuery)a);
 			else if (a instanceof HasFormData)
@@ -746,15 +740,6 @@ public class HttpPartSchema {
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
 			parser(a.parser());
-			serializer(a.serializer());
-			return this;
-		}
-
-		Builder apply(ResponseHeader a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			allowEmptyValue(false);
-			name(firstNonEmpty(a.name(), a.value()));
 			serializer(a.serializer());
 			return this;
 		}
@@ -804,7 +789,7 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(ResponseCode a) {
+		Builder apply(StatusCode a) {
 			codes(a.value());
 			return this;
 		}

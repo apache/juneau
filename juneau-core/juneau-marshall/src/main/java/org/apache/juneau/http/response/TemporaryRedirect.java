@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * For example, a POST request should be repeated using another POST request.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class TemporaryRedirect extends BasicHttpResponse {
 

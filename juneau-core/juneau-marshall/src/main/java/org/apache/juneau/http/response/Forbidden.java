@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Forbidden extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

@@ -37,7 +37,7 @@ public class Swagger_Response_Test {
 
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
-			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			headers=@Header(name="foo",schema=@Schema(type="string")),
 			examples=" {foo:'a'} "
 		)
 		public static class A1 {
@@ -50,7 +50,7 @@ public class Swagger_Response_Test {
 
 		@Response(
 			schema=@Schema(description="a\nb",type="string"),
-			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			headers=@Header(name="foo",schema=@Schema(type="string")),
 			examples=" {foo:'a'} "
 		)
 		public static class A2 {
@@ -63,7 +63,7 @@ public class Swagger_Response_Test {
 
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
-			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			headers=@Header(name="foo",schema=@Schema(type="string")),
 			examples=" {foo:'a'} "
 		)
 		public static class A3 {
@@ -74,21 +74,21 @@ public class Swagger_Response_Test {
 		@RestOp
 		public A3 f() {return null;}
 
-		@Response @ResponseCode(100)
+		@Response @StatusCode(100)
 		public static class A4 {}
 		@RestOp
 		public void g(Value<A4> r) {}
 		@RestOp
 		public A4 h() {return null;}
 
-		@Response @ResponseCode(100)
+		@Response @StatusCode(100)
 		public static class A5 {}
 		@RestOp
 		public void i(Value<A5> r) {}
 		@RestOp
 		public A5 j() {return null;}
 
-		@Response(headers=@ResponseHeader(name="foo",schema=@Schema(type="object")))
+		@Response(headers=@Header(name="foo",schema=@Schema(type="object")))
 		public static class A6 {}
 		@RestOp
 		public void k(Value<A6> r) {}
@@ -264,7 +264,7 @@ public class Swagger_Response_Test {
 
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
-			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			headers=@Header(name="foo",schema=@Schema(type="string")),
 			examples=" {foo:'a'} "
 		)
 		public static class D1 extends Throwable {}
@@ -273,7 +273,7 @@ public class Swagger_Response_Test {
 
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
-			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			headers=@Header(name="foo",schema=@Schema(type="string")),
 			examples=" {foo:'a'} "
 		)
 		public static class D2 extends Throwable {}
@@ -282,24 +282,24 @@ public class Swagger_Response_Test {
 
 		@Response(
 			schema=@Schema(description={"a","b"},type="string"),
-			headers=@ResponseHeader(name="foo",schema=@Schema(type="string")),
+			headers=@Header(name="foo",schema=@Schema(type="string")),
 			examples=" {foo:'a'} "
 		)
 		public static class D3 extends Throwable {}
 		@RestPost
 		public void c() throws D3 {}
 
-		@Response @ResponseCode(100)
+		@Response @StatusCode(100)
 		public static class D4 extends Throwable {}
 		@RestDelete
 		public void d() throws D4 {}
 
-		@Response @ResponseCode(100)
+		@Response @StatusCode(100)
 		public static class D5 extends Throwable {}
 		@RestOp
 		public void e() throws D5 {}
 
-		@Response(headers=@ResponseHeader(name="foo", schema=@Schema(type="number")))
+		@Response(headers=@Header(name="foo", schema=@Schema(type="number")))
 		public static class D6 extends Throwable {}
 		@RestOp
 		public void f() throws D6 {}

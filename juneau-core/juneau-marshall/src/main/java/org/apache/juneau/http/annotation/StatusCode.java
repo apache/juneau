@@ -41,7 +41,7 @@ import org.apache.juneau.annotation.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestPost</ja>
- * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>, <ja>@ResponseCode</ja> Value&lt;Integer&gt; <jv>status</jv>) {
+ * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>, <ja>@StatusCode</ja> Value&lt;Integer&gt; <jv>status</jv>) {
  * 		<jsm>addPet</jsm>(<jv>pet</jv>);
  * 		<jv>status</jv>.set(200);
  * 	}
@@ -69,7 +69,7 @@ import org.apache.juneau.annotation.*;
  * 	<ja>@Response</ja>
  * 	<jk>public class</jk> Success {
  *
- * 		<ja>@ResponseCode</ja>
+ * 		<ja>@StatusCode</ja>
  * 		<jk>public int</jk> getStatus() {
  * 			<jk>return</jk> 201;
  * 		}
@@ -99,9 +99,9 @@ import org.apache.juneau.annotation.*;
 @Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ResponseCodeAnnotation.Array.class)
-@ContextApply(ResponseCodeAnnotation.Applier.class)
-public @interface ResponseCode {
+@Repeatable(StatusCodeAnnotation.Array.class)
+@ContextApply(StatusCodeAnnotation.Applier.class)
+public @interface StatusCode {
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.

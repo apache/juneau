@@ -2233,7 +2233,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	private final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
-	private final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	private final ResponseBeanMeta responseMeta;
 	private final int hierarchyDepth;
 	private final DebugEnablement debug;
@@ -2388,10 +2387,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns metadata about the specified response object if it's annotated with {@link ResponseHeader @ResponseHeader}.
+	 * Returns metadata about the specified response object if it's annotated with {@link Header @Header}.
 	 *
  	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Header @Header}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
 		if (o == null)
@@ -2399,7 +2398,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		Class<?> c = o.getClass();
 		ResponsePartMeta pm = headerPartMetas.get(c);
 		if (pm == null) {
-			ResponseHeader a = c.getAnnotation(ResponseHeader.class);
+			Header a = c.getAnnotation(Header.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
 				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), partSerializer);
@@ -2408,33 +2407,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (pm == null)
 				pm = ResponsePartMeta.NULL;
 			headerPartMetas.put(c, pm);
-		}
-		if (pm == ResponsePartMeta.NULL)
-			return null;
-		return pm;
-	}
-
-	/**
-	 * Returns metadata about the specified response object if it's annotated with {@link ResponseBody @ResponseBody}.
-	 *
- 	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
-	 */
-	public ResponsePartMeta getResponseBodyMeta(Object o) {
-		if (o == null)
-			return null;
-		Class<?> c = o.getClass();
-		ResponsePartMeta pm = bodyPartMetas.get(c);
-		if (pm == null) {
-			ResponseBody a = c.getAnnotation(ResponseBody.class);
-			if (a != null) {
-				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), partSerializer);
-				pm = new ResponsePartMeta(BODY, schema, serializer);
-			}
-			if (pm == null)
-				pm = ResponsePartMeta.NULL;
-			bodyPartMetas.put(c, pm);
 		}
 		if (pm == ResponsePartMeta.NULL)
 			return null;

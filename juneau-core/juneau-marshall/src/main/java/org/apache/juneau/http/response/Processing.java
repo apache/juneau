@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * This prevents the client from timing out and assuming the request was lost.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Processing extends BasicHttpResponse {
 

@@ -24,16 +24,16 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link ResponseCode @ResponseCode} annotation.
+ * Utility classes and methods for the {@link StatusCode @StatusCode} annotation.
  */
-public class ResponseCodeAnnotation {
+public class StatusCodeAnnotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
-	public static final ResponseCode DEFAULT = create().build();
+	public static final StatusCode DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -83,20 +83,20 @@ public class ResponseCodeAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(ResponseCode.class);
+			super(StatusCode.class);
 		}
 
 		/**
-		 * Instantiates a new {@link ResponseCode @ResponseCode} object initialized with this builder.
+		 * Instantiates a new {@link StatusCode @StatusCode} object initialized with this builder.
 		 *
-		 * @return A new {@link ResponseCode @ResponseCode} object.
+		 * @return A new {@link StatusCode @StatusCode} object.
 		 */
-		public ResponseCode build() {
+		public StatusCode build() {
 			return new Impl(this);
 		}
 
 		/**
-		 * Sets the {@link ResponseCode#value} property on this annotation.
+		 * Sets the {@link StatusCode#value} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -139,7 +139,7 @@ public class ResponseCodeAnnotation {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static class Impl extends TargetedAnnotationTImpl implements ResponseCode {
+	private static class Impl extends TargetedAnnotationTImpl implements StatusCode {
 
 		private final int[] value;
 
@@ -160,9 +160,9 @@ public class ResponseCodeAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link ResponseCode} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Applies targeted {@link StatusCode} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<ResponseCode,BeanContext.Builder> {
+	public static class Applier extends AnnotationApplier<StatusCode,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -170,12 +170,12 @@ public class ResponseCodeAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(ResponseCode.class, BeanContext.Builder.class, vr);
+			super(StatusCode.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseCode> ai, BeanContext.Builder b) {
-			ResponseCode a = ai.getAnnotation();
+		public void apply(AnnotationInfo<StatusCode> ai, BeanContext.Builder b) {
+			StatusCode a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
@@ -189,7 +189,7 @@ public class ResponseCodeAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A collection of {@link ResponseCode @ResponseCode annotations}.
+	 * A collection of {@link StatusCode @StatusCode annotations}.
 	 */
 	@Documented
 	@Target({METHOD,TYPE})
@@ -200,6 +200,6 @@ public class ResponseCodeAnnotation {
 		/**
 		 * The child annotations.
 		 */
-		ResponseCode[] value();
+		StatusCode[] value();
 	}
 }

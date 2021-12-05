@@ -1812,7 +1812,7 @@
 		<ul>
 			<li>Typically a POJO serialized based on {@link org.apache.juneau.http.header.Accept} request header.
 			<li>Support for raw values such as <c>Readers</c> and <c>InputStreams</c> (among others).
-			<li>Support for response beans annotated with {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode}.
+			<li>Support for response beans annotated with {@link org.apache.juneau.http.annotation.Response @Response} / {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} / {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} / {@link org.apache.juneau.http.annotation.StatusCode @ResponseCode}.
 			<li>Support for Apache Http Core interfaces: {@link org.apache.http.HttpEntity} / {@link org.apache.http.HttpResponse} / {@link org.apache.juneau.http.resource.HttpResource}.
 			<li>Standard HTTP responses such as {@link org.apache.juneau.http.response.Ok} and {@link org.apache.juneau.http.response.TemporaryRedirect} provided in {@link org.apache.juneau.http.response} package.
 			<li>Extensible API for defining custom return types.
@@ -15138,7 +15138,7 @@
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode}
 		</ul>
 </ul>
 <p>
@@ -15609,7 +15609,7 @@
 	<ul class='javatreec'>
 		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	</ul>
 	<li>Sub-annotations:
@@ -15757,11 +15757,11 @@
 			<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()}
 			<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()}
 		</ul>
-		<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode}
 		<ul class='javatreec'>
-			<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseCode#on() on()}
-			<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseCode#onClass() onClass()}
-			<li class='jm'>{@link org.apache.juneau.http.annotation.ResponseCode#value() value()}
+			<li class='jm'>{@link org.apache.juneau.http.annotation.StatusCode#on() on()}
+			<li class='jm'>{@link org.apache.juneau.http.annotation.StatusCode#onClass() onClass()}
+			<li class='jm'>{@link org.apache.juneau.http.annotation.StatusCode#value() value()}
 		</ul>
 	</ul>
 	<li><b>Common schema annotation:</b>
@@ -15953,7 +15953,7 @@
 		Any {@link java.util.Optional} of anything on this list.
 </ol>
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseCode @ResponseCode}/{@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotations 
+	The {@link org.apache.juneau.http.annotation.StatusCode @ResponseCode}/{@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotations 
 	can be used on parameters and parameter types of {@link org.apache.juneau.rest.annotation.RestOp @RestOp}-annotated methods to 
 	to define to response codes and headers.  These are used in combination with the mutable {@link org.apache.juneau.Value} object.
 </p>
@@ -16233,7 +16233,7 @@
 	parts via annotations and methods.  They are used in combination with the following annotations:
 </p>
 <ul class='javatreec'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode} 
+	<li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema} 
@@ -23455,7 +23455,7 @@ Resource bundles are searched using the following base name patterns:
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode}
 </ul>
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
@@ -28321,7 +28321,7 @@ Resource bundles are searched using the following base name patterns:
 		<td>Denotes a method as an HTTP response header on a <ja>@Response</ja>-annotated bean.</td>
 	</tr>
 	<tr>
-		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.ResponseCode}</ul></td>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode}</ul></td>
 		<td><ul><li>Methods<li>Parameters</ul></td>
 		<td>Denotes a method as an HTTP response status code on a <ja>@Response</ja>-annotated bean.</td>
 	</tr>

@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class NotModified extends BasicHttpResponse {
 

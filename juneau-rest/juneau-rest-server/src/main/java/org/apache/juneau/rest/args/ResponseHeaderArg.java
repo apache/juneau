@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.args;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.http.annotation.ResponseHeaderAnnotation.*;
+import static org.apache.juneau.http.annotation.HeaderAnnotation.*;
 
 import java.lang.reflect.*;
 
@@ -26,7 +26,8 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link ResponseHeader} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters annotated with {@link Header} of type {@link Value} representing response headers
+ * on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value must be of type {@link Value} that accepts a value that is then set via:
@@ -46,10 +47,10 @@ public class ResponseHeaderArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
-	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link ResponseHeader}.
+	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static ResponseHeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.hasAnnotation(ResponseHeader.class) || paramInfo.getParameterType().hasAnnotation(ResponseHeader.class))
+		if (paramInfo.getParameterType().is(Value.class) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
 	}
@@ -63,14 +64,14 @@ public class ResponseHeaderArg implements RestOpArg {
 	protected ResponseHeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
 		ClassInfo pt = pi.getParameterType();
 
-		this.name = findName(pi.getAnnotations(ResponseHeader.class), pt.getAnnotations(ResponseHeader.class)).orElseThrow(() -> new ArgException(pi, "@ResponseHeader used without name or value"));
+		this.name = findName(pi.getAnnotations(Header.class), pt.getAnnotations(Header.class)).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 		this.type = pi.getParameterType().innerType();
-		HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, pi);
+		HttpPartSchema schema = HttpPartSchema.create(Header.class, pi);
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ofNullable(schema.getSerializer()).map(x -> HttpPartSerializer.creator().type(x).apply(annotations).create()).orElse(null));
 
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
-			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @ResponseHeader annotation");
+			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @Header annotation");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

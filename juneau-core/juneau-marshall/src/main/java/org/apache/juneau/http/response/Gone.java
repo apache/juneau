@@ -31,7 +31,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Gone extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

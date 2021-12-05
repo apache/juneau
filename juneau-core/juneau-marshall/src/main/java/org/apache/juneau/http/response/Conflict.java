@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Conflict extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

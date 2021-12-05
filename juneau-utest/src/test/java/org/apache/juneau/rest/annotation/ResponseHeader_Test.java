@@ -19,7 +19,6 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.ResponseHeader;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -28,7 +27,7 @@ import org.junit.*;
 public class ResponseHeader_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @ResponseHeader on method parameters
+	// @Header on method parameters
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -38,16 +37,16 @@ public class ResponseHeader_Test {
 			h.set(new A1());
 		}
 		@RestGet
-		public void b(@ResponseHeader(name="Foo") Value<String> h) {
+		public void b(@Header(name="Foo") Value<String> h) {
 			h.set("foo");
 		}
 		@RestGet
-		public void c(@ResponseHeader(name="Bar") Value<A1> h) {
+		public void c(@Header(name="Bar") Value<A1> h) {
 			h.set(new A1());
 		}
 	}
 
-	@ResponseHeader(name="Foo")
+	@Header(name="Foo")
 	public static class A1 {
 		@Override
 		public String toString() {return "foo";}
@@ -71,13 +70,13 @@ public class ResponseHeader_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @ResponseHeader swagger on POJOs
+	// @Header swagger on POJOs
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class B {
 
-		@ResponseHeader(
+		@Header(
 			name="H"
 		)
 		@Schema(
@@ -88,7 +87,7 @@ public class ResponseHeader_Test {
 		@RestGet
 		public void a(Value<B1> h) {}
 
-		@ResponseHeader(
+		@Header(
 			name="H",
 			schema=@Schema(description="a",type="string")
 		)
@@ -96,7 +95,7 @@ public class ResponseHeader_Test {
 		@RestGet
 		public void b(Value<B2> h) {}
 
-		@ResponseHeader(
+		@Header(
 			name="H",
 			schema=@Schema(description="b",type="number")
 		)
@@ -108,22 +107,22 @@ public class ResponseHeader_Test {
 		@RestGet
 		public void c(Value<B3> h) {}
 
-		@ResponseHeader(name="H") @ResponseCode(100)
+		@Header(name="H") @StatusCode(100)
 		public static class B4 {}
 		@RestGet
 		public void d(Value<B4> h) {}
 
-		@ResponseHeader(name="H") @ResponseCode({100,101})
+		@Header(name="H") @StatusCode({100,101})
 		public static class B5 {}
 		@RestGet
 		public void e(Value<B5> h) {}
 
-		@ResponseHeader(name="H") @Schema(description="a")
+		@Header(name="H") @Schema(description="a")
 		public static class B6 {}
 		@RestGet
 		public void f(Value<B6> h) {}
 
-		@ResponseHeader("H")
+		@Header("H")
 		public static class B7 {}
 		@RestGet
 		public void g(Value<B7> h) {}
@@ -161,7 +160,7 @@ public class ResponseHeader_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @ResponseHeader swagger on method parameters
+	// @Header swagger on method parameters
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -170,7 +169,7 @@ public class ResponseHeader_Test {
 		public static class C1 {}
 		@RestGet
 		public void a(
-			@ResponseHeader(
+			@Header(
 				name="H"
 			)
 			@Schema(
@@ -182,7 +181,7 @@ public class ResponseHeader_Test {
 		public static class C2 {}
 		@RestGet
 		public void b(
-			@ResponseHeader(
+			@Header(
 				name="H",
 				schema=@Schema(description="a",type="string")
 			)
@@ -191,7 +190,7 @@ public class ResponseHeader_Test {
 		public static class C3 {}
 		@RestGet
 		public void c(
-			@ResponseHeader(
+			@Header(
 				name="H",
 				schema=@Schema(description="b",type="number")
 			)
@@ -203,19 +202,19 @@ public class ResponseHeader_Test {
 
 		public static class C4 {}
 		@RestGet
-		public void d(@ResponseHeader(name="H") @ResponseCode(100) Value<C4> h) {}
+		public void d(@Header(name="H") @StatusCode(100) Value<C4> h) {}
 
 		public static class C5 {}
 		@RestGet
-		public void e(@ResponseHeader(name="H") @ResponseCode({100,101}) Value<C5> h) {}
+		public void e(@Header(name="H") @StatusCode({100,101}) Value<C5> h) {}
 
 		public static class C6 {}
 		@RestGet
-		public void f(@ResponseHeader(name="H") @Schema(description="a") Value<C6> h) {}
+		public void f(@Header(name="H") @Schema(description="a") Value<C6> h) {}
 
 		public static class C7 {}
 		@RestGet
-		public void g(@ResponseHeader("H") Value<C7> h) {}
+		public void g(@Header("H") Value<C7> h) {}
 	}
 
 	@Test

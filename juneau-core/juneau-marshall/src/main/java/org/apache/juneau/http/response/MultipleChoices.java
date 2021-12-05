@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class MultipleChoices extends BasicHttpResponse {
 

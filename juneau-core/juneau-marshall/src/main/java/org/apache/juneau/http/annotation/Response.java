@@ -99,7 +99,7 @@ public @interface Response {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 */
-	ResponseHeader[] headers() default {};
+	Header[] headers() default {};
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.

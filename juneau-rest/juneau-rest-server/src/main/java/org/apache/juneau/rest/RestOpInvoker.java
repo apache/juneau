@@ -84,7 +84,7 @@ public class RestOpInvoker extends MethodInvoker {
 			Throwable e2 = e.getTargetException();
 			res.setStatus(500);  // May be overridden later.
 			Class<?> c = e2.getClass();
-			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(ResponseBody.class) != null) {
+			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(Body.class) != null) {
 				res.setOutput(e2);
 			} else {
 				throw toHttpException(e2, InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());

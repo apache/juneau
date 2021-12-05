@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class UriTooLong extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

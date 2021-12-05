@@ -284,9 +284,9 @@
 		Any {@link java.util.Optional} of anything on this list.
 </ol>
 <p>
-	The {@link oaj.http.annotation.ResponseCode @ResponseCode}/{@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotations 
-	can be used on parameters and parameter types of {@link oajr.annotation.RestOp @RestOp}-annotated methods to 
-	to define to response codes and headers.  These are used in combination with the mutable {@link oaj.Value} object.
+	When used in combincation with  the mutable {@link oaj.Value} object, the {@link oaj.http.annotation.StatusCode @StatusCode} and {@link oaj.http.annotation.Header @Header} annotations 
+	can be used on parameters {@link oajr.annotation.RestOp @RestOp}-annotated methods to 
+	to define to response codes and headers.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -294,12 +294,12 @@
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
 		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
-		<ja>@ResponseCode</ja> Value&lt;Integer&gt; <jv>status</jv>,
-		<ja>@ResponseHeader</ja>(<js>"My-Message"</js>) Value&lt;String&gt; <jv>myMessage</jv>
+		<ja>@StatusCode</ja> Value&lt;Integer&gt; <jv>status</jv>,
+		<ja>@Header</ja>(<js>"My-Response-Header"</js>) Value&lt;String&gt; <jv>myResponseHeader</jv>
 	) {
 		<jk>if</jk> (<jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>)) {
 			<jv>status</jv>.set(200);
-			<jv>myMessage</jv>.set(<js>"Welcome "</js> + <jv>username</jv> + <js>"!"</js>);
+			<jv>myResponseHeader</jv>.set(<js>"Welcome "</js> + <jv>username</jv> + <js>"!"</js>);
 		} <jk>else</jk> {
 			<jv>status</jv>.set(401);
 		}
@@ -316,7 +316,7 @@
 		String <jv>password</jv> = <jv>form</jv>.get(<js>"password"</js>).orElse(<jk>null</jk>);
 		<jk>if</jk> (<jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>) {
 			<jv>res</jv>.setStatus(200);
-			<jv>res</jv>.setHeader(<js>"My-Message"</js>, <js>"Welcome "</js> + <jv>username</jv> + <js>"!"</js>);
+			<jv>res</jv>.setHeader(<js>"My-Response-Header"</js>, <js>"Welcome "</js> + <jv>username</jv> + <js>"!"</js>);
 		} else {
 			<jv>res</jv>.setStatus(401);
 		}

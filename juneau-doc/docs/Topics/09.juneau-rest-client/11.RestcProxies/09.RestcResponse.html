@@ -40,13 +40,13 @@
 	<ja>@Response</ja> 
 	<jk>public interface</jk> CreatePetResponse {
 	
-		<ja>@ResponseBody</ja>
+		<ja>@Body</ja>
 		Pet getBody();
 	
-		<ja>@ResponseHeader</ja>(<js>"E-Tag"</js>)
+		<ja>@Header</ja>(<js>"E-Tag"</js>)
 		UUID getUUID();
 		
-		<ja>@ResponseCode</ja>
+		<ja>@StatusCode</ja>
 		<jk>int</jk> getStatus();
 	}
 </p>
@@ -66,9 +66,9 @@
 	Any of the following annotations can be used on the methods:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oaj.http.annotation.ResponseBody}
-	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
-	<li class='ja'>{@link oaj.http.annotation.ResponseCode}
+	<li class='ja'>{@del oaj.http.annotation.ResponseBody}
+	<li class='ja'>{@del oaj.http.annotation.ResponseHeader}
+	<li class='ja'>{@del oaj.http.annotation.ResponseCode}
 </ul>
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.

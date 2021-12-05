@@ -33,7 +33,7 @@ public class ResponseAnnotation_Test {
 
 	Response a1 = ResponseAnnotation.create()
 		.examples("examples")
-		.headers(ResponseHeaderAnnotation.DEFAULT)
+		.headers(HeaderAnnotation.DEFAULT)
 		.on("on")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
@@ -43,7 +43,7 @@ public class ResponseAnnotation_Test {
 
 	Response a2 = ResponseAnnotation.create()
 		.examples("examples")
-		.headers(ResponseHeaderAnnotation.DEFAULT)
+		.headers(HeaderAnnotation.DEFAULT)
 		.on("on")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
@@ -113,7 +113,7 @@ public class ResponseAnnotation_Test {
 
 	@Response(
 		examples="examples",
-		headers=@ResponseHeader,
+		headers=@Header,
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
@@ -125,7 +125,7 @@ public class ResponseAnnotation_Test {
 
 	@Response(
 		examples="examples",
-		headers=@ResponseHeader,
+		headers=@Header,
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,

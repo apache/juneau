@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The server successfully processed the request and is not returning any content.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class NoContent extends BasicHttpResponse {
 

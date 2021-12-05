@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server does not meet one of the preconditions that the requester put on the request.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class PreconditionFailed extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

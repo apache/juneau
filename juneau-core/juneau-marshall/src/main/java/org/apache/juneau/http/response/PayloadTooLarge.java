@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The request is larger than the server is willing or able to process.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class PayloadTooLarge extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

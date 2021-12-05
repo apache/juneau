@@ -44,7 +44,7 @@ public class AnnotationUtils_Test {
 
 	@Body
 	@Response
-	@ResponseHeader
+	@Header
 	@X1
 	public static class A1 {
 		@Query @Header @FormData @Path @Schema
@@ -200,32 +200,15 @@ public class AnnotationUtils_Test {
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
-		assertFalse(ResponseAnnotation.empty(response().headers(new ResponseHeader[]{responseHeader().name("foo").build()}).build()));
+		assertFalse(ResponseAnnotation.empty(response().headers(new Header[]{header().name("foo").build()}).build()));
 		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));
 		assertFalse(ResponseAnnotation.empty(response().schema(schema().$ref("foo").build()).build()));
 		assertFalse(ResponseAnnotation.empty(response().serializer(OpenApiSerializer.class).build()));
 	}
 
 	@Test
-	public void a12_ResponseBody() throws Exception {
-		assertObject(responseBody().build().annotationType()).asJson().contains("ResponseBody");
-	}
-
-	@Test
-	public void a13_ResponseHeader() throws Exception {
-		assertObject(responseHeader().build().annotationType()).asJson().contains("ResponseHeader");
-
-		assertTrue(ResponseHeaderAnnotation.empty(A1.class.getAnnotation(ResponseHeader.class)));
-		assertTrue(ResponseHeaderAnnotation.empty(A2.class.getAnnotation(ResponseHeader.class)));
-
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().name("foo").build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().serializer(OpenApiSerializer.class).build()));
-		assertFalse(ResponseHeaderAnnotation.empty(responseHeader().value("foo").build()));
-	}
-
-	@Test
 	public void a14_ResponseStatus() throws Exception {
-		assertObject(responseCode().build().annotationType()).asJson().contains("ResponseCode");
+		assertObject(responseCode().build().annotationType()).asJson().contains("StatusCode");
 	}
 
 	@Test
@@ -450,16 +433,8 @@ public class AnnotationUtils_Test {
 		return ResponseAnnotation.create();
 	}
 
-	private static ResponseBodyAnnotation.Builder responseBody() {
-		return ResponseBodyAnnotation.create();
-	}
-
-	private static ResponseHeaderAnnotation.Builder responseHeader() {
-		return ResponseHeaderAnnotation.create();
-	}
-
-	private static ResponseCodeAnnotation.Builder responseCode() {
-		return ResponseCodeAnnotation.create();
+	private static StatusCodeAnnotation.Builder responseCode() {
+		return StatusCodeAnnotation.create();
 	}
 
 	private static TagAnnotation.Builder tag() {

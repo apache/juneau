@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Subsequent requests by the client are permissible.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class NotFound extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

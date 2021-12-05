@@ -102,7 +102,7 @@ public class HeaderArg implements RestOpArg {
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static HeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class))
+		if ((!paramInfo.getParameterType().is(Value.class)) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
 			return new HeaderArg(paramInfo, annotations);
 		return null;
 	}

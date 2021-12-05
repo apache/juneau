@@ -62,9 +62,9 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Response
 	public interface A1a {
-		@ResponseBody Reader getBody();
-		@ResponseHeader("X") String getHeader();
-		@ResponseCode int getStatus();
+		@Body Reader getBody();
+		@Header("X") String getHeader();
+		@StatusCode int getStatus();
 	}
 
 	@Remote
@@ -82,7 +82,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Response
 	public interface A2a {
-		@ResponseBody Reader getBody();
+		@Body Reader getBody();
 	}
 
 	@Remote
@@ -106,7 +106,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Response
 	public interface A3a {
-		@ResponseBody ABean getBody();
+		@Body ABean getBody();
 	}
 
 	@Remote

@@ -21,7 +21,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link ResponseCode} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters annotated with {@link StatusCode} on {@link RestOp}-annotated Java methods.
  */
 public class ResponseCodeArg implements RestOpArg {
 
@@ -31,10 +31,10 @@ public class ResponseCodeArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link ResponseCodeArg}, or <jk>null</jk> if the parameter is not annotated with {@link ResponseCode}.
+	 * @return A new {@link ResponseCodeArg}, or <jk>null</jk> if the parameter is not annotated with {@link StatusCode}.
 	 */
 	public static ResponseCodeArg create(ParamInfo paramInfo) {
-		if (paramInfo.hasAnnotation(ResponseCode.class) || paramInfo.getParameterType().hasAnnotation(ResponseCode.class))
+		if (paramInfo.hasAnnotation(StatusCode.class) || paramInfo.getParameterType().hasAnnotation(StatusCode.class))
 			return new ResponseCodeArg(paramInfo);
 		return null;
 	}
@@ -48,7 +48,7 @@ public class ResponseCodeArg implements RestOpArg {
 		this.type = paramInfo.getParameterType().innerType();
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class || Value.getParameterType(type) != Integer.class)
-			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @ResponseCode annotation");
+			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @StatusCode annotation");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

@@ -91,7 +91,7 @@ public class ResponseAnnotation {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
-		ResponseHeader[] headers={};
+		Header[] headers={};
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String[] examples={};
 
@@ -128,7 +128,7 @@ public class ResponseAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder headers(ResponseHeader...value) {
+		public Builder headers(Header...value) {
 			this.headers = value;
 			return this;
 		}
@@ -203,7 +203,7 @@ public class ResponseAnnotation {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final ResponseHeader[] headers;
+		private final Header[] headers;
 		private final Schema schema;
 		private final String[] examples;
 
@@ -223,7 +223,7 @@ public class ResponseAnnotation {
 		}
 
 		@Override /* Response */
-		public ResponseHeader[] headers() {
+		public Header[] headers() {
 			return headers;
 		}
 

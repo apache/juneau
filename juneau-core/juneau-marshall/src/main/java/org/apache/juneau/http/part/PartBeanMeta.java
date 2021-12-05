@@ -102,8 +102,6 @@ public class PartBeanMeta<T> {
 			this.schema = HttpPartSchema.create(FormData.class, type);
 		else if (ci.hasAnnotation(Path.class))
 			this.schema = HttpPartSchema.create(Path.class, type);
-		else if (ci.hasAnnotation(ResponseHeader.class))
-			this.schema = HttpPartSchema.create(ResponseHeader.class, type);
 		else
 			this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
 	}

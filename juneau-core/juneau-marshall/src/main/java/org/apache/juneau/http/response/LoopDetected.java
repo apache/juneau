@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class LoopDetected extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Generally, this is a temporary state.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class ServiceUnavailable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

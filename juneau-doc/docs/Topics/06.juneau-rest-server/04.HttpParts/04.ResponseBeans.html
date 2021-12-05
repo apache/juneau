@@ -20,9 +20,9 @@
 	parts via annotations and methods.  They are used in combination with the following annotations:
 </p>
 <ul class='javatreec'>
-	<li class='ja'>{@link oaj.http.annotation.ResponseCode} 
-	<li class='ja'>{@link oaj.http.annotation.ResponseHeader} 
-	<li class='ja'>{@link oaj.http.annotation.ResponseBody} 
+	<li class='ja'>{@link oaj.http.annotation.StatusCode} 
+	<li class='ja'>{@link oaj.http.annotation.Header} 
+	<li class='ja'>{@link oaj.http.annotation.Body} 
 	<li class='ja'>{@link oaj.http.annotation.Schema} 
 </ul>
 
@@ -40,7 +40,7 @@
 <p class='bpcode w800'>
 	<jc>// Our annotated normal response.</jc>
 	<ja>@Response</ja>
-	<ja>@ResponseCode</ja>(200)
+	<ja>@StatusCode</ja>(200)
 	<ja>@Schema</ja>(
 		description=<js>"User was good."</js> <jc>// Description show in Swagger</jc>
 	)
@@ -50,7 +50,7 @@
 		}
 		
 		<jc>// Response bean converted to output based on Accept header.</jc>
-		<ja>@ResponseBody</ja>
+		<ja>@Body</ja>
 		<jk>public</jk> WelcomeMessageBean getBody() {
 			<jk>return new </jk> WelcomeMessageBean();
 		}
@@ -59,7 +59,7 @@
 <p class='bpcode w800'>
 	<jc>// Our annotated exception.</jc>
 	<ja>@Response</ja>
-	<ja>@ResponseCode</ja>(401)
+	<ja>@StatusCode</ja>(401)
 	<ja>@Schema</ja>(
 		description=<js>"Invalid username or password provided"</js> <jc>// Description show in Swagger</jc>
 	)
@@ -68,7 +68,7 @@
 			<jk>super</jk>(<js>"Invalid username or password."</js>);  <jc>// Message sent in response</jc>
 		}
 		
-		<ja>@ResponseHeader</ja>(<js>"My-Message"</js>)
+		<ja>@Header</ja>(<js>"My-Message"</js>)
 		<jk>public</jk> String getMyMessage() {
 			<jk>return</jk> <js>"Nope!"</js>;
 		}
@@ -105,7 +105,7 @@
 
 	<jc>// Parent predefined exception class.</jc>
 	<ja>@Response</ja>
-	<ja>@ResponseCode(401)</ja>
+	<ja>@StatusCode(401)</ja>
 	<ja>@Schema</ja>(
 		description=<js>"Unauthorized"</js>
 	)

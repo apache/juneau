@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class SwitchingProtocols extends BasicHttpResponse {
 

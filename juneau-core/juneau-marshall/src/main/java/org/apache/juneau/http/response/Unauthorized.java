@@ -30,7 +30,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Unauthorized extends BasicHttpException {
 	private static final long serialVersionUID = 1L;

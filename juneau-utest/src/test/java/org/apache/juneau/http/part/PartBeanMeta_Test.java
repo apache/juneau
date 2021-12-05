@@ -73,7 +73,7 @@ public class PartBeanMeta_Test {
 		}
 	}
 
-	@ResponseHeader(name="A7")
+	@Header(name="A7")
 	public static class A7 {}
 
 	@Test

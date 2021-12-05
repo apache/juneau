@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class PermanentRedirect extends BasicHttpResponse {
 

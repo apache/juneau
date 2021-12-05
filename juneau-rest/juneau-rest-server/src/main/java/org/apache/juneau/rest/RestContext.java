@@ -7089,7 +7089,7 @@ public class RestContext extends Context {
 		int code = 500;
 
 		ClassInfo ci = ClassInfo.ofc(e);
-		ResponseCode r = ci.getLastAnnotation(ResponseCode.class);
+		StatusCode r = ci.getLastAnnotation(StatusCode.class);
 		if (r != null)
 			if (r.value().length > 0)
 				code = r.value()[0];

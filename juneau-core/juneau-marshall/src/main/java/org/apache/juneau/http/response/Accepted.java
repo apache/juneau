@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  */
 @Response
-@ResponseCode(STATUS_CODE)
+@StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
 public class Accepted extends BasicHttpResponse {
 
