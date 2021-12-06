@@ -26,14 +26,12 @@
 			<li class='jm'>{@link oaj.http.annotation.Request#on() on()}
 			<li class='jm'>{@link oaj.http.annotation.Request#onClass() onClass()}
 			<li class='jm'>{@link oaj.http.annotation.Request#parser() parser()}
-			<li class='jm'>{@link oaj.http.annotation.Request#serializer() serializer()}
 		</ul>
 		<li class='ja'>{@link oaj.http.annotation.Header}
 		<ul class='javatreec'>
 			<li class='jm'>{@link oaj.http.annotation.Header#name() name()}
 			<li class='jm'>{@link oaj.http.annotation.Header#parser() parser()}
 			<li class='jm'>{@link oaj.http.annotation.Header#schema() schema()}
-			<li class='jm'>{@link oaj.http.annotation.Header#serializer() serializer()}
 			<li class='jm'>{@link oaj.http.annotation.Header#value() value()}
 		</ul>
 		<li class='ja'>{@link oaj.http.annotation.Query}
@@ -41,7 +39,6 @@
 			<li class='jm'>{@link oaj.http.annotation.Query#name() name()}
 			<li class='jm'>{@link oaj.http.annotation.Query#parser() parser()}
 			<li class='jm'>{@link oaj.http.annotation.Query#schema() schema()}
-			<li class='jm'>{@link oaj.http.annotation.Query#serializer() serializer()}
 			<li class='jm'>{@link oaj.http.annotation.Query#value() value()}
 		</ul>
 		<li class='ja'>{@link oaj.http.annotation.FormData}
@@ -49,7 +46,6 @@
 			<li class='jm'>{@link oaj.http.annotation.FormData#name() name()}
 			<li class='jm'>{@link oaj.http.annotation.FormData#parser() parser()}
 			<li class='jm'>{@link oaj.http.annotation.FormData#schema() schema()}
-			<li class='jm'>{@link oaj.http.annotation.FormData#serializer() serializer()}
 			<li class='jm'>{@link oaj.http.annotation.FormData#value() value()}
 		</ul>
 		<li class='ja'>{@link oaj.http.annotation.Path}
@@ -57,13 +53,10 @@
 			<li class='jm'>{@link oaj.http.annotation.Path#name() name()}
 			<li class='jm'>{@link oaj.http.annotation.Path#parser() parser()}
 			<li class='jm'>{@link oaj.http.annotation.Path#schema() schema()}
-			<li class='jm'>{@link oaj.http.annotation.Path#serializer() serializer()}
 			<li class='jm'>{@link oaj.http.annotation.Path#value() value()}
 		</ul>
 		<li class='ja'>{@link oaj.http.annotation.Body}
 		<ul class='javatreec'>
-			<li class='jm'>{@link oaj.http.annotation.Body#on() on()}
-			<li class='jm'>{@link oaj.http.annotation.Body#onClass() onClass()}
 			<li class='jm'>{@link oaj.http.annotation.Body#schema() schema()}
 		</ul>
 	</ul>
@@ -75,24 +68,23 @@
 			<li class='jm'>{@link oaj.http.annotation.Response#headers() headers()}
 			<li class='jm'>{@link oaj.http.annotation.Response#on() on()}
 			<li class='jm'>{@link oaj.http.annotation.Response#onClass() onClass()}
-			<li class='jm'>{@link oaj.http.annotation.Response#parser() parser()}
 			<li class='jm'>{@link oaj.http.annotation.Response#schema() schema()}
 			<li class='jm'>{@link oaj.http.annotation.Response#serializer() serializer()}
 		</ul>
-		<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
+		<li class='ja'>{@link oaj.http.annotation.Header}
 		<ul class='javatreec'>
-			<li class='jm'>{@link oaj.http.annotation.ResponseHeader#name() name()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseHeader#on() on()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseHeader#onClass() onClass()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseHeader#schema() schema()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseHeader#serializer() serializer()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseHeader#value() value()}
+			<li class='jm'>{@link oaj.http.annotation.Header#name() name()}
+			<li class='jm'>{@link oaj.http.annotation.Header#schema() schema()}
+			<li class='jm'>{@link oaj.http.annotation.Header#serializer() serializer()}
+			<li class='jm'>{@link oaj.http.annotation.Header#value() value()}
 		</ul>
-		<li class='ja'>{@link oaj.http.annotation.ResponseCode}
+		<li class='ja'>{@link oaj.http.annotation.Body}
 		<ul class='javatreec'>
-			<li class='jm'>{@link oaj.http.annotation.ResponseCode#on() on()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseCode#onClass() onClass()}
-			<li class='jm'>{@link oaj.http.annotation.ResponseCode#value() value()}
+			<li class='jm'>{@link oaj.http.annotation.Body#schema() schema()}
+		</ul>
+		<li class='ja'>{@link oaj.http.annotation.StatusCode}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oaj.http.annotation.StatusCode#value() value()}
 		</ul>
 	</ul>
 	<li><b>Common schema annotation:</b>
