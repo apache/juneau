@@ -16,7 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.ext.*;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.soap.*;
@@ -63,8 +62,7 @@ import org.apache.juneau.xml.*;
 		UrlEncodingSerializer.class,
 		SoapXmlSerializer.class,
 		HtmlSerializer.class,
-		UonSerializer.class,
-		JsoSerializer.class
+		UonSerializer.class
 	},
 	parsers={
 		JsonParser.class,

@@ -20,7 +20,6 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
@@ -126,11 +125,6 @@ import org.apache.juneau.xml.*;
  * 		<td>{@link PlainTextParser}</td>
  * 	</tr>
  * </table>
- *
- * <p>
- * It should be noted that we do NOT add {@link JsoParser} to the list of parsers since this could cause security
- * issues.
- * Use caution when using this particular parser as it could inadvertently cause code execution security holes.
  *
  * <p>
  * The list of serializers and parsers can be appended to using the

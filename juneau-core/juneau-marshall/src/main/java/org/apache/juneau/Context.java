@@ -34,7 +34,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jso.annotation.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.annotation.*;
@@ -354,7 +353,6 @@ public abstract class Context implements MetaProvider {
 		 * 	<li class ='ja'>{@link CsvConfig}
 		 * 	<li class ='ja'>{@link HtmlConfig}
 		 * 	<li class ='ja'>{@link HtmlDocConfig}
-		 * 	<li class ='ja'>{@link JsoConfig}
 		 * 	<li class ='ja'>{@link JsonConfig}
 		 * 	<li class ='ja'>{@link JsonSchemaConfig}
 		 * 	<li class ='ja'>{@link MsgPackConfig}
@@ -419,7 +417,6 @@ public abstract class Context implements MetaProvider {
 		 * 	<li class ='ja'>{@link CsvConfig}
 		 * 	<li class ='ja'>{@link HtmlConfig}
 		 * 	<li class ='ja'>{@link HtmlDocConfig}
-		 * 	<li class ='ja'>{@link JsoConfig}
 		 * 	<li class ='ja'>{@link JsonConfig}
 		 * 	<li class ='ja'>{@link JsonSchemaConfig}
 		 * 	<li class ='ja'>{@link MsgPackConfig}
@@ -537,7 +534,6 @@ public abstract class Context implements MetaProvider {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.SchemaAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
