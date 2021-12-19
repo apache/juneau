@@ -31,6 +31,38 @@ import org.apache.juneau.xml.*;
  * Basic configuration for a REST resource that supports all languages.
  *
  * <p>
+ * Registers the following parsers for request bodies based on matching <c>Content-Type</c> header:
+ * <ul class='javatreec'>
+ * 	<li class='jc'>{@link JsonParser}
+ * 	<li class='jc'>{@link SimpleJsonParser}
+ * 	<li class='jc'>{@link XmlParser}
+ * 	<li class='jc'>{@link HtmlParser}
+ * 	<li class='jc'>{@link UonParser}
+ * 	<li class='jc'>{@link UrlEncodingParser}
+ * 	<li class='jc'>{@link OpenApiParser}
+ * 	<li class='jc'>{@link MsgPackParser}
+ * 	<li class='jc'>{@link PlainTextParser}
+ * </ul>
+ *
+* <p>
+ * Registers the following serializers for response bodies based on matching <c>Accept</c> header:
+ * <ul class='javatreec'>
+ * 	<li class='jc'>{@link HtmlDocSerializer}
+ * 	<li class='jc'>{@link HtmlStrippedDocSerializer}
+ * 	<li class='jc'>{@link HtmlSchemaDocSerializer}
+ * 	<li class='jc'>{@link JsonSerializer}
+ * 	<li class='jc'>{@link SimpleJsonSerializer}
+ * 	<li class='jc'>{@link JsonSchemaSerializer}
+ * 	<li class='jc'>{@link XmlDocSerializer}
+ * 	<li class='jc'>{@link UonSerializer}
+ * 	<li class='jc'>{@link UrlEncodingSerializer}
+ * 	<li class='jc'>{@link OpenApiSerializer}
+ * 	<li class='jc'>{@link MsgPackSerializer}
+ * 	<li class='jc'>{@link SoapXmlSerializer}
+ * 	<li class='jc'>{@link PlainTextSerializer}
+ * </ul>
+ *
+ * <p>
  * Classes that don't extend from {@link BasicRestServlet} can implement this interface to
  * be configured with the same serializers/parsers/etc... as {@link BasicRestServlet}.
  */

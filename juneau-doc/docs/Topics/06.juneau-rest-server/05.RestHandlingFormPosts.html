@@ -88,7 +88,7 @@
 		path=<js>"/tempDir"</js>
 	)
 	<jk>public class</jk> TempDirResource <jk>extends</jk> DirectoryResource {
-	
+
 		<ja>@RestPost</ja>(path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
 		<jk>public</jk> Redirect uploadFile(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			ServletFileUpload <jv>upload</jv> = <jk>new</jk> ServletFileUpload();
@@ -102,10 +102,10 @@
 			}
 			<jk>return new</jk> Redirect(); <jc>// Redirect to the servlet root.</jc>
 		}
-	
+
 		<jd>/** Causes a 404 if POST isn't multipart/form-data */</jd>
 		<jk>public static class</jk> MultipartFormDataMatcher <jk>extends</jk> RestMatcher {
-		
+
 			<ja>@Override</ja> <jc>/* RestMatcher */</jc>
 			<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
 				String <jv>contentType</jv> = <jv>req</jv>.getContentType();
@@ -120,11 +120,11 @@
 <p class='bpcode w800'>
 	<ja>@RestPost</ja>
 	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
-    	
+
 		<jc>// Required for Jetty.</jc>
 		MultipartConfigElement <jv>mce</jv> = <jk>new</jk> MultipartConfigElement((String)<jk>null</jk>);
 		<jv>req</jv>.setAttribute(<js>"org.eclipse.jetty.multipartConfig"</js>, <jv>mce</jv>);  
-       
+
 		String <jv>id</jv> = UUID.<jsm>randomUUID</jsm>().toString();
 		BufferedImage <jv>img</jv> = <jk>null</jk>;
 		<jk>for</jk> (Part <jv>part</jv> : <jv>req</jv>.getParts()) {
