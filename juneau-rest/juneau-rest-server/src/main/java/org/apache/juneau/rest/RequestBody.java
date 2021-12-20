@@ -192,7 +192,7 @@ public class RequestBody {
 	 * </table>
 	 *
 	 * <p>
-	 * Refer to {@doc PojoCategories} for a complete definition of supported POJOs.
+	 * Refer to {@doc jm.PojoCategories} for a complete definition of supported POJOs.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>

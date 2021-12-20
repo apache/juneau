@@ -57,8 +57,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
@@ -67,13 +67,13 @@ import org.apache.juneau.oapi.*;
  * header value.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcHeader}
+ * 	<li class='link'>{@doc jrc.Header}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcRequest}
+ * 	<li class='link'>{@doc jrc.Request}
  * </ul>
  */
 @Documented
@@ -147,7 +147,7 @@ public @interface Header {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -159,7 +159,7 @@ public @interface Header {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
@@ -173,7 +173,7 @@ public @interface Header {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The schema defining the type used for parameter.

@@ -231,7 +231,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	<li>
 		 * 		Format: HTML
 		 * 	<li>
-		 * 		Supports {@doc RestSvlVariables}
+		 * 		Supports {@doc jrs.SvlVariables}
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * 	<li>
 		 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -770,7 +770,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc RestHtmlWidgets}
+		 * 	<li class='link'>{@doc jrs.HtmlWidgets}
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.

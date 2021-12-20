@@ -28,7 +28,7 @@ import java.util.function.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
 */
 public class BasicMediaRangeArrayHeader extends BasicStringHeader {

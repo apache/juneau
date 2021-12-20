@@ -31,7 +31,7 @@ import org.apache.juneau.encoders.*;
  * Identifies a REST operation Java method on a {@link RestServlet} implementation class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestOpAnnotatedMethods}
+ * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
  * </ul>
  */
 @Target(METHOD)
@@ -112,7 +112,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -166,7 +166,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -195,7 +195,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -240,7 +240,7 @@ public @interface RestOp {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -267,7 +267,7 @@ public @interface RestOp {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -301,7 +301,7 @@ public @interface RestOp {
 	 * </ul>
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -327,7 +327,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -352,7 +352,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -380,7 +380,7 @@ public @interface RestOp {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -427,7 +427,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestEncoders}
+	 * 	<li class='link'>{@doc jrs.Encoders}
 	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
@@ -476,7 +476,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -541,7 +541,7 @@ public @interface RestOp {
 	 * Dynamically apply this annotation to the specified methods.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -594,7 +594,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestParsers}
+	 * 	<li class='link'>{@doc jrs.Marshalling}
 	 * </ul>
 	 */
 	Class<?>[] parsers() default {};
@@ -671,7 +671,7 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -723,7 +723,7 @@ public @interface RestOp {
 	 * 	<li>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
@@ -813,7 +813,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
+	 * 	<li class='link'>{@doc jrs.Marshalling}
 	 * </ul>
 	 */
 	Class<? extends Serializer>[] serializers() default {};
@@ -836,7 +836,7 @@ public @interface RestOp {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -874,14 +874,14 @@ public @interface RestOp {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is {@doc SimplifiedJson}.
+	 * 		The format is {@doc jd.Swagger}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 * 	<li>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

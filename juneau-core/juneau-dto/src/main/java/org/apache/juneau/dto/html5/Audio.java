@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-audio-element <audio>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-audio-element <audio>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="audio")
@@ -44,7 +44,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-autoplay autoplay}
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-autoplay autoplay}
 	 * attribute.
 	 *
 	 * <p>
@@ -61,7 +61,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-controls controls}
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-controls controls}
 	 * attribute.
 	 *
 	 * <p>
@@ -78,7 +78,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-crossorigin crossorigin}
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -93,7 +93,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-loop loop} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-loop loop} attribute.
 	 *
 	 * <p>
 	 * Whether to loop the media resource.
@@ -109,7 +109,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-mediagroup mediagroup}
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-mediagroup mediagroup}
 	 * attribute.
 	 *
 	 * <p>
@@ -124,7 +124,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-muted muted}
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-muted muted}
 	 * attribute.
 	 *
 	 * <p>
@@ -141,7 +141,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-preload preload}
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-preload preload}
 	 * attribute.
 	 *
 	 * <p>
@@ -156,7 +156,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-media-src src} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-media-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.

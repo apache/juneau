@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * This annotation allows you to identify other classes that return URIs via <c>toString()</c> as URI objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc MarshallingUris}
+ * 	<li class='link'>{@doc jm.MarshallingUris}
  * </ul>
  */
 @Documented
@@ -123,7 +123,7 @@ public @interface Uri {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -135,7 +135,7 @@ public @interface Uri {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};

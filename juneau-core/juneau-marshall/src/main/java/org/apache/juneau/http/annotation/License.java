@@ -38,8 +38,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerLicenseObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerLicenseObject}
  * </ul>
  */
 @Documented
@@ -47,25 +47,25 @@ import java.lang.annotation.*;
 public @interface License {
 
 	/**
-	 * <mk>name</mk> field of the {@doc ExtSwaggerLicenseObject}.
+	 * <mk>name</mk> field of the {@doc ext.SwaggerLicenseObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String name() default "";
 
 	/**
-	 * <mk>url</mk> field of the {@doc ExtSwaggerLicenseObject}.
+	 * <mk>url</mk> field of the {@doc ext.SwaggerLicenseObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String url() default "";

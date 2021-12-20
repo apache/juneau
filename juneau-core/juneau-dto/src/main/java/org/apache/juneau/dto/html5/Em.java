@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.text-level-semantics#the-em-element <em>}
+ * DTO for an HTML {@doc ext.HTML5.text-level-semantics#the-em-element <em>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="em")

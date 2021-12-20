@@ -22,7 +22,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Allows adding meta data to a single tag that is used by the {@doc ExtSwaggerOperationObject Operation Object}.
+ * Allows adding meta data to a single tag that is used by the {@doc ext.SwaggerOperationObject Operation Object}.
  *
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
@@ -49,7 +49,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoSwagger}
+ * 	<li class='link'>{@doc jd.Swagger}
  * </ul>
  */
 @Bean(properties="name,description,externalDocs,*")
@@ -111,7 +111,7 @@ public class Tag extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
+	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setDescription(String value) {

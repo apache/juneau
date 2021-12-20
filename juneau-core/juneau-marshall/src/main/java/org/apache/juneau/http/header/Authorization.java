@@ -68,7 +68,7 @@ import org.apache.juneau.http.annotation.*;
  * </ol>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Authorization")

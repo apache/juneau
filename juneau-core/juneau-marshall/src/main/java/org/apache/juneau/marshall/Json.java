@@ -34,7 +34,7 @@ import org.apache.juneau.json.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc Marshalls}
+ * 	<li class='link'>{@doc jm.Marshalls}
  * </ul>
  */
 public class Json extends CharMarshall {

@@ -39,7 +39,7 @@ import java.util.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoAtom}
+ * 	<li class='link'>{@doc jd.Atom}
  * 	<li class='jp'>{@doc package-summary.html#TOC}
  * </ul>
  */

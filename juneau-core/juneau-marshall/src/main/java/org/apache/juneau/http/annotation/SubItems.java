@@ -27,8 +27,8 @@ import java.lang.annotation.*;
  * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerItemsObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
  * </ul>
  */
 @Documented
@@ -36,7 +36,7 @@ import java.lang.annotation.*;
 public @interface SubItems {
 
 	/**
-	 * <mk>default</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>default</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -46,7 +46,7 @@ public @interface SubItems {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>enum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -56,7 +56,7 @@ public @interface SubItems {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>$ref</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -71,7 +71,7 @@ public @interface SubItems {
 	String cf() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>collectionFormat</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -101,7 +101,7 @@ public @interface SubItems {
 	boolean emin() default false;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -111,7 +111,7 @@ public @interface SubItems {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -126,7 +126,7 @@ public @interface SubItems {
 	String f() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>format</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -136,13 +136,13 @@ public @interface SubItems {
 	String format() default "";
 
 	/**
-	 * <mk>items</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>items</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
 	 *
 	 * <p>
-	 * This is a {@doc SimplifiedJson} object.
+	 * This is a {@doc jd.Swagger} object.
 	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
 	 */
 	String[] items() default {};
@@ -158,7 +158,7 @@ public @interface SubItems {
 	long maxi() default -1;
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>maximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -168,7 +168,7 @@ public @interface SubItems {
 	String maximum() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -183,7 +183,7 @@ public @interface SubItems {
 	long maxl() default -1;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -203,7 +203,7 @@ public @interface SubItems {
 	long mini() default -1;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>minimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -213,7 +213,7 @@ public @interface SubItems {
 	String minimum() default "";
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>minItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -228,7 +228,7 @@ public @interface SubItems {
 	long minl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>minLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -243,7 +243,7 @@ public @interface SubItems {
 	String mo() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -258,7 +258,7 @@ public @interface SubItems {
 	String p() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>pattern</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -273,7 +273,7 @@ public @interface SubItems {
 	String t() default "";
 
 	/**
-	 * <mk>type</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>type</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -288,7 +288,7 @@ public @interface SubItems {
 	boolean ui() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc OpenApiSerializers}
+ * 	<li class='link'>{@doc jm.OpenApiSerializers}
  * </ul>
  */
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {

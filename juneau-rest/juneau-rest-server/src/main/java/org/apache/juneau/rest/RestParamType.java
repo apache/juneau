@@ -16,7 +16,7 @@ package org.apache.juneau.rest;
  * Represents the possible parameter types as defined by the Swagger 2.0 specification.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='link'>{@doc jrs.Swagger}
  * </ul>
  */
 public enum RestParamType {

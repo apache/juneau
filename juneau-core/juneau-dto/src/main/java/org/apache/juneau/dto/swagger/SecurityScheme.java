@@ -58,7 +58,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoSwagger}
+ * 	<li class='link'>{@doc jd.Swagger}
  * </ul>
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")

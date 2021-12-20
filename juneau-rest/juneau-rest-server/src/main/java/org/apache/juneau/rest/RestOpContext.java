@@ -877,7 +877,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
 		 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
 		 * 	<li class='ja'>{@link Rest#converters()}
-		 * 	<li class='link'>{@doc RestConverters}
+		 * 	<li class='link'>{@doc jrs.Converters}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -983,7 +983,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestGuard[0]</c>.
@@ -1133,7 +1133,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
@@ -2084,7 +2084,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li>
 		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
 		 * 	<li>
-		 * 		Supports {@doc RestSvlVariables}
+		 * 		Supports {@doc jrs.SvlVariables}
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * </ul>
 		 *

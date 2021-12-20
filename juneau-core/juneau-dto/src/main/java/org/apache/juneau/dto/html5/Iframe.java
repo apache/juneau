@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-iframe-element <iframe>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-iframe-element <iframe>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="iframe")
@@ -44,7 +44,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-height height}
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -61,7 +61,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-iframe-name name} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-iframe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of nested browsing context.
@@ -75,7 +75,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-iframe-sandbox sandbox}
+	 * {@doc ext.HTML5.embedded-content-0#attr-iframe-sandbox sandbox}
 	 * attribute.
 	 *
 	 * <p>
@@ -90,7 +90,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-iframe-src src} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-iframe-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -113,7 +113,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-iframe-srcdoc srcdoc}
+	 * {@doc ext.HTML5.embedded-content-0#attr-iframe-srcdoc srcdoc}
 	 * attribute.
 	 *
 	 * <p>
@@ -128,7 +128,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

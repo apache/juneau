@@ -1,0 +1,238 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Parameter Examples', updated:'8.1.0', flags: 'todo'}
+
+<div class='topic'>
+	<p>
+		The <c>model</c> select box in the parameters can be expanded to show examples:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Parameters.1.png'>
+	<p>
+		The examples for query/form-data/path/header parameters can be defined using the <c>example</c> attribute on your annotated parameters as shown here:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@RestGet</ja>
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets(
+		|			<ja>@Query</ja>(
+		|				name=<js>"s"</js>,
+		|				description={
+		|					<js>"Search."</js>,
+		|					<js>"Key/value pairs representing column names and search tokens."</js>,
+		|					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
+		|					<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
+		|					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
+		|				},
+		|				type=<js>"array"</js>,
+		|				collectionFormat=<js>"csv"</js>,
+		|				example=<js>"Bill*,birthDate>2000"</js>
+		|			) 
+		|			String[] <jv>query</jv>,
+		|			...
+		|		) <jk>throws</jk> NotAcceptable {
+		|		...
+		|	}
+	</p>
+	<p>
+		This value gets converted to an <c>x-examples</c> attribute in your parameter information:
+	</p>
+	<p class='bcode w800'>
+		|	{
+		|		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		|		<jok>"paths"</jok>: {
+		|			<jok>"/pet"</jok>: {
+		|				<jok>"get"</jok>: {
+		|					<jok>"operationId"</jok>: <jov>"getPets"</jov>,
+		|					<jok>"summary"</jok>: <jov>"All pets in the store"</jov>,
+		|					<jok>"parameters"</jok>: [
+		|						{
+		|							<jok>"in"</jok>: <jov>"query"</jov>,
+		|							<jok>"name"</jok>: <jov>"s"</jov>,
+		|							...
+		|							<jok>"x-examples"</jok>: {
+		|								<jok>"example"</jok>: <jov>"?s=Bill*,birthDate>2000"</jov>
+		|							}
+		|						},
+		|	...
+	</p>
+	<p>
+		Examples for request bodies includes all supported <c>Content-Type</c> values: 
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Parameters.3.png'> 
+	<p>
+		These are based on the parsers registered on your servlet or method.
+	</p>
+	<p>
+		Selecting any of the content types shows you a representative example for the POJO:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Parameters.4.png'> 
+	<p>
+		There are several options for defining examples for request bodies:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			{@del oaj.http.annotation.Body#example() @Body(example)} annotation.
+		<li>
+			{@del oaj.http.annotation.Body#examples() @Body(examples)} annotation.
+		<li>
+			Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <c><ja>@Swagger</ja>(value)</c>/<c><ja>@OpSwagger</ja>(value)</c>).
+		<li>
+			Defining an <js>"x-examples"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
+		<li>
+			Allowing Juneau to auto-generate a code example.
+	</ul>
+	<p>
+		When using {@del oaj.http.annotation.Body#example() @Body(example)}, you specify a Simple JSON representation of your POJO.
+		The Swagger generator will then convert that JSON into a POJO using the registered serializers on the REST method to produce examples for all
+	 	supported language types.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// A JSON representation of a PetCreate object.</jc>
+		|	<ja>@Body</ja>(
+		|		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+		|	)
+	</p>
+	
+	<p>
+		The {@del oaj.http.annotation.Body#examples() @Body(examples)} annotation allows you to specify raw output values per media type.
+		This field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// A JSON representation of a PetCreate object.</jc>
+		|	<ja>@Body</ja>(
+		|		examples={
+		|			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
+		|			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
+		|		}
+		|	)
+	</p>
+	<p>
+		The Swagger generator uses these to create an <c>x-examples</c> entry in your generated Swagger:
+	</p>
+	<p class='bcode w800'>
+		|	<jok>"/pet"</jok>: {
+		|		<jok>"post"</jok>: {
+		|			<jok>"operationId"</jok>: <jov>"postPet"</jov>,
+		|			<jok>"summary"</jok>: <jov>"Add a new pet to the store"</jov>,
+		|			<jok>"parameters"</jok>: [
+		|				{
+		|					<jok>"in"</jok>: <jov>"body"</jov>,
+		|					<jok>"description"</jok>: <jov>"Pet object to add to the store"</jov>,
+		|					<jok>"required"</jok>: <jov>true</jov>,
+		|					<jok>"schema"</jok>: {
+		|						<jok>"$ref"</jok>: <jov>"#/definitions/PetCreate"</jov>
+		|					},
+		|					<jok>"x-examples"</jok>: {
+		|						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n..."</jov>,
+		|						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly..."</jov>,
+		|						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&amp;..."</jov>,
+		|						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/t..."</jov>,
+		|						<jok>"text/uon"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
+		|						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&amp;species=Dog\n&amp;price=9.99\n&amp;tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
+		|						<jok>"text/openapi"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
+		|						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 6..."</jov>,
+		|						<jok>"text/plain"</jok>: <jov>"{name:'Doggie',species:'Dog',price:9.99,tags:['friendly','cute']}"</jov>,
+		|						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"ht..."</jov>,
+		|						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.a..."</jov>,
+		|						<jok>"text/n-triple"</jok>: <jov>"_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/name&gt; \"Doggie..."</jov>,
+		|						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apach..."</jov>
+		|					}
+		|				}
+		|			],
+	</p>
+	<p>
+		Another option is to define these directly in your resource Swagger JSON file, or via {@link oajr.annotation.Rest#swagger() @Rest(swagger)}/{@link oajr.annotation.RestOp#swagger() @RestOp(swagger)}. 
+	</p>
+	<p>
+		Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
+		By default, the generated swagger uses to the {@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+		setting to automatically add examples to beans, collections, arrays, and maps:
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+		|
+		|		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+		|			...
+		|		)
+		|		<ja>@JsonSchemaConfig</ja>(
+		|			<jc>// Add x-example to the following types:</jc>
+		|			addExamplesTo=<js>"bean,collection,array,map"</js>,
+		|			...
+		|		)
+		|		<jk>public</jk> Swagger getOptions(RestRequest req) {...}
+	</p>
+	<p>
+		Examples can be defined via static methods, fields, and annotations on the classes themselves.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Annotation on class.</jc>
+		|	<ja>@Example</ja>(<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
+		|	<jk>public class</jk> PetCreate {
+		|		...
+		|	}
+	</p>
+	<p class='bcode w800'>
+		<jc>// Annotation on static method.</jc>
+		<jk>public class</jk> PetCreate {
+			<ja>@Example</ja>
+			<jk>public static</jk> PetCreate <jsm>sample</jsm>() {
+				<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+			}
+		}
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Static method with specific name 'example'.</jc>
+		|	<jk>public class</jk> PetCreate {
+		|		<jk>public static</jk> PetCreate <jsm>example</jsm>() {
+		|			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		|		}
+		|	}
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Static field.</jc>
+		|	<jk>public class</jk> PetCreate {
+		|		<ja>@Example</ja>
+		|		<jk>public static</jk> PetCreate <jsf>EXAMPLE</jsf> = <jk>new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		|	}
+	</p>
+	<p>
+		Examples can also be specified via generic properties as well using the {@link oaj.BeanContext.Builder#example(Class,Object)} setting or {@del oaj.annotation.BeanConfig#examples() @BeanConfig(examples)} annotation at either the class or method level.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Examples defined at class level.</jc>
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@BeanConfig</ja>(
+		|		examples=<js>"{PetCreate: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
+		|	)
+	</p>
+	<ul class='seealso'>
+		<li class='ja'>{@link oaj.annotation.Example}
+		<li class='jc'>{@link oaj.BeanContext.Builder}
+		<ul>
+			<li class='jf'>{@link oaj.BeanContext.Builder#example(Class,Object) example(Class,Object)}
+		</ul>
+		<li class='jc'>{@link oaj.jsonschema.JsonSchemaGenerator}
+		<ul>
+			<li class='jf'>{@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
+			<li class='jf'>{@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
+		</ul>
+	</ul>
+</div>

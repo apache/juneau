@@ -151,7 +151,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BeanContexts}
+ * 	<li class='link'>{@doc jm.BeanContexts}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

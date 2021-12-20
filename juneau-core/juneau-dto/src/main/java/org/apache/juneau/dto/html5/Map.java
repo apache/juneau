@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-map-element <map>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-map-element <map>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="map")
@@ -40,7 +40,7 @@ public class Map extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-map-name name} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-map-name name} attribute.
 	 *
 	 * <p>
 	 * Name of image map to reference from the usemap attribute.

@@ -34,7 +34,7 @@ import org.apache.juneau.plaintext.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc Marshalls}
+ * 	<li class='link'>{@doc jm.Marshalls}
  * </ul>
  */
 public class PlainText extends CharMarshall {

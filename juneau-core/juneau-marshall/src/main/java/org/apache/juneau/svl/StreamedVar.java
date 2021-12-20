@@ -30,7 +30,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc SvlVariables}
+ * 	<li class='link'>{@doc jm.SvlVariables}
  * </ul>
  */
 public abstract class StreamedVar extends Var {

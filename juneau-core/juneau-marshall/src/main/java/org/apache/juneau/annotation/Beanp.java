@@ -34,7 +34,7 @@ import org.apache.juneau.*;
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BeanpAnnotation}
+ * 	<li class='link'>{@doc jm.BeanpAnnotation}
  * </ul>
  */
 @Documented
@@ -269,7 +269,7 @@ public @interface Beanp {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};

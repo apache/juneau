@@ -88,7 +88,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoSwagger}
+ * 	<li class='link'>{@doc jd.Swagger}
  * </ul>
  */
 @Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,*")
@@ -506,7 +506,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
+	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setDescription(String value) {
@@ -533,7 +533,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
+	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -1362,7 +1362,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
 	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the {@doc ExtSwaggerPathsObject Paths Object}.
+	 * 		from the <c>path</c> field in the {@doc ext.SwaggerPathsObject Paths Object}.
 	 * 	<li>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>

@@ -39,8 +39,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerContactObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerContactObject}
  * </ul>
  */
 @Documented
@@ -48,7 +48,7 @@ import java.lang.annotation.*;
 public @interface Contact {
 
 	/**
-	 * <mk>email</mk> field of the {@doc ExtSwaggerContactObject}.
+	 * <mk>email</mk> field of the {@doc ext.SwaggerContactObject}.
 	 *
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
@@ -57,13 +57,13 @@ public @interface Contact {
 	 * 	<li>
 	 * 		The format is an email string.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String email() default "";
 
 	/**
-	 * <mk>name</mk> field of the {@doc ExtSwaggerContactObject}.
+	 * <mk>name</mk> field of the {@doc ext.SwaggerContactObject}.
 	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
@@ -72,13 +72,13 @@ public @interface Contact {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String name() default "";
 
 	/**
-	 * <mk>url</mk> field of the {@doc ExtSwaggerContactObject}.
+	 * <mk>url</mk> field of the {@doc ext.SwaggerContactObject}.
 	 *
 	 * <p>
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
@@ -87,7 +87,7 @@ public @interface Contact {
 	 * 	<li>
 	 * 		The format is a URL string.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */

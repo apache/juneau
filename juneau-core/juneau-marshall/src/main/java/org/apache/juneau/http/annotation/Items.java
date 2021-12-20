@@ -60,8 +60,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerItemsObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
  * </ul>
  */
 @Documented
@@ -69,7 +69,7 @@ import org.apache.juneau.oapi.*;
 public @interface Items {
 
 	/**
-	 * <mk>default</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>default</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -79,7 +79,7 @@ public @interface Items {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>enum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -89,7 +89,7 @@ public @interface Items {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>$ref</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -104,7 +104,7 @@ public @interface Items {
 	String cf() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>collectionFormat</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -134,7 +134,7 @@ public @interface Items {
 	boolean emin() default false;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -144,7 +144,7 @@ public @interface Items {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -159,7 +159,7 @@ public @interface Items {
 	String f() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>format</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -169,7 +169,7 @@ public @interface Items {
 	String format() default "";
 
 	/**
-	 * <mk>items</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>items</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -187,7 +187,7 @@ public @interface Items {
 	long maxi() default -1;
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>maximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -197,7 +197,7 @@ public @interface Items {
 	String maximum() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -212,7 +212,7 @@ public @interface Items {
 	long maxl() default -1;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -232,7 +232,7 @@ public @interface Items {
 	long mini() default -1;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>minimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -242,7 +242,7 @@ public @interface Items {
 	String minimum() default "";
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>minItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -257,7 +257,7 @@ public @interface Items {
 	long minl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>minLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -272,7 +272,7 @@ public @interface Items {
 	String mo() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -287,7 +287,7 @@ public @interface Items {
 	String p() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>pattern</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -302,7 +302,7 @@ public @interface Items {
 	String t() default "";
 
 	/**
-	 * <mk>type</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>type</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -317,7 +317,7 @@ public @interface Items {
 	boolean ui() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

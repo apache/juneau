@@ -86,13 +86,13 @@ import org.apache.juneau.annotation.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='link'>{@doc jrs.Swagger}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcResponse}
+ * 	<li class='link'>{@doc jrc.Response}
  * </ul>
  */
 @Documented
@@ -107,7 +107,7 @@ public @interface StatusCode {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -119,7 +119,7 @@ public @interface StatusCode {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};

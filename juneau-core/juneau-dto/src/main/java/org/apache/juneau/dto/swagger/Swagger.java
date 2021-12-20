@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  * This is the root document object for the API specification.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoSwagger}
+ * 	<li class='link'>{@doc jd.Swagger}
  * </ul>
  */
 @Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,*")
@@ -189,7 +189,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
+	 * 	<br>The <c>basePath</c> does not support {@doc ext.SwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setBasePath(String value) {
@@ -218,7 +218,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
+	 * 	<br>The <c>basePath</c> does not support {@doc ext.SwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -251,7 +251,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setConsumes(Collection<MediaType> value) {
@@ -266,7 +266,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Values MUST be as described under {@doc ext.SwaggerMimeTypes}.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
@@ -540,7 +540,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
-	 * 	<br>The host does not support {@doc ExtSwaggerPathTemplating path templating}
+	 * 	<br>The host does not support {@doc ext.SwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setHost(String value) {
@@ -570,7 +570,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
-	 * 	<br>The host does not support {@doc ExtSwaggerPathTemplating path templating}
+	 * 	<br>The host does not support {@doc ext.SwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -893,7 +893,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setProduces(Collection<MediaType> value) {
@@ -908,7 +908,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -1473,7 +1473,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
+	 * 	<br>Not all tags that are used by the {@doc ext.SwaggerOperationObject Operation Object} must be declared.
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -1491,7 +1491,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
+	 * 	<br>Not all tags that are used by the {@doc ext.SwaggerOperationObject Operation Object} must be declared.
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Ignored if <jk>null</jk>.

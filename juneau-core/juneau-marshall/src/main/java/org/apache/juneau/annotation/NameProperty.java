@@ -33,7 +33,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc NamePropertyAnnotation}
+ * 	<li class='link'>{@doc jm.NamePropertyAnnotation}
  * </ul>
  */
 @Target({METHOD,FIELD,TYPE})
@@ -102,7 +102,7 @@ public @interface NameProperty {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};

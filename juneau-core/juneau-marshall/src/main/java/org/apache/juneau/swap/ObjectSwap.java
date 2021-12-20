@@ -90,8 +90,8 @@ import org.apache.juneau.serializer.*;
  * The normal object representation of an object.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc Swaps}
- * 	<li class='link'>{@doc SwapAnnotation}
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='link'>{@doc jm.SwapAnnotation}
  * </ul>
  *
  * @param <T> The normal form of the class.
@@ -153,7 +153,7 @@ public abstract class ObjectSwap<T,S> {
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc PerMediaTypeSwaps}
+	 * 	<li class='link'>{@doc jm.PerMediaTypeSwaps}
 	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
 	 */
@@ -174,7 +174,7 @@ public abstract class ObjectSwap<T,S> {
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc TemplatedSwaps}
+	 * 	<li class='link'>{@doc jm.TemplatedSwaps}
 	 * </ul>
 	 *
 	 * @return Additional context information, or <jk>null</jk> if not specified.
@@ -187,7 +187,7 @@ public abstract class ObjectSwap<T,S> {
 	 * Sets the media types that this swap is associated with.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc PerMediaTypeSwaps}
+	 * 	<li class='link'>{@doc jm.PerMediaTypeSwaps}
 	 * </ul>
 	 *
 	 * @param mediaTypes The media types that this swap is associated with.
@@ -202,7 +202,7 @@ public abstract class ObjectSwap<T,S> {
 	 * Sets the template string on this swap.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc TemplatedSwaps}
+	 * 	<li class='link'>{@doc jm.TemplatedSwaps}
 	 * </ul>
 	 *
 	 * @param template The template string on this swap.

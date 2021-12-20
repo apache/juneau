@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.scripting-1#the-canvas-element <canvas>}
+ * DTO for an HTML {@doc ext.HTML5.scripting-1#the-canvas-element <canvas>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="canvas")
@@ -42,7 +42,7 @@ public class Canvas extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.scripting-1#attr-canvas-height height} attribute.
+	 * {@doc ext.HTML5.scripting-1#attr-canvas-height height} attribute.
 	 *
 	 * <p>
 	 * Vertical dimension.
@@ -58,7 +58,7 @@ public class Canvas extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.scripting-1#attr-canvas-width width} attribute.
+	 * {@doc ext.HTML5.scripting-1#attr-canvas-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

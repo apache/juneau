@@ -20,7 +20,7 @@ import java.lang.annotation.*;
  * Swagger tag annotation.
  *
  * <p>
- * Allows adding meta data to a single tag that is used by the {@doc ExtSwaggerOperationObject}.
+ * Allows adding meta data to a single tag that is used by the {@doc ext.SwaggerOperationObject}.
  * It is not mandatory to have a Tag Object per tag used there.
  *
  * <p>
@@ -42,8 +42,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerTagObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerTagObject}
  * </ul>
  */
 @Documented
@@ -51,31 +51,31 @@ import java.lang.annotation.*;
 public @interface Tag {
 
 	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerTagObject}.
+	 * <mk>description</mk> field of the {@doc ext.SwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String[] description() default {};
 
 	/**
-	 * <mk>externalDocs</mk> field of the {@doc ExtSwaggerTagObject}.
+	 * <mk>externalDocs</mk> field of the {@doc ext.SwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * <mk>name</mk> field of the {@doc ExtSwaggerTagObject}.
+	 * <mk>name</mk> field of the {@doc ext.SwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

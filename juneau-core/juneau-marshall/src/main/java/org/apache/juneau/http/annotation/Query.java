@@ -68,20 +68,20 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcQuery}
+ * 	<li class='link'>{@doc jrc.Query}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcRequest}
+ * 	<li class='link'>{@doc jrc.Request}
  * </ul>
  */
 @Documented
@@ -158,7 +158,7 @@ public @interface Query {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -170,7 +170,7 @@ public @interface Query {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
@@ -184,7 +184,7 @@ public @interface Query {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The {@link Schema @Schema} annotation can also be used standalone on the parameter or type.

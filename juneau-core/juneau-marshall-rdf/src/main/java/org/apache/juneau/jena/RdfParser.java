@@ -223,13 +223,13 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li>
-		 * 		{@doc ExtARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+		 * 		{@doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 		 * 	<li>
-		 * 		{@doc ExtARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+		 * 		{@doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
 		 * 	<li>
-		 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+		 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
 		 * 	<li>
-		 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+		 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -249,7 +249,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li>
-		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * 		{@doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -267,7 +267,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li>
-		 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * 		{@doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
 		 * @param value

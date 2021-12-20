@@ -81,7 +81,7 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugOn(String)}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
- * 	<li class='link'>{@doc RestLoggingAndDebugging}
+ * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
  * </ul>
  */
 public class BasicRestLogger implements RestLogger {

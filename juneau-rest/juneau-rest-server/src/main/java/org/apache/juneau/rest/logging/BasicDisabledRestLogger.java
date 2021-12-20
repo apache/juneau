@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
  * Default implementation of a {@link RestLogger} that never logs REST calls.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestLoggingAndDebugging}
+ * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
  * </ul>
  */
 public class BasicDisabledRestLogger extends BasicRestLogger {

@@ -218,7 +218,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * 	Specifies the accept media types that the serializer can handle.
 		 *
 		 * 	<p>
-		 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
+		 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ext.RFC2616.section14.1}
 		 * 	<p>
 		 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 		 * 	<p>
@@ -724,7 +724,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc MarshallingUris}
+		 * 	<li class='link'>{@doc jm.MarshallingUris}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -760,7 +760,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc MarshallingUris}
+		 * 	<li class='link'>{@doc jm.MarshallingUris}
 		 * </ul>
 		 *
 		 * @param value
@@ -800,7 +800,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc MarshallingUris}
+		 * 	<li class='link'>{@doc jm.MarshallingUris}
 		 * </ul>
 		 *
 		 * @param value

@@ -50,7 +50,7 @@ import org.apache.juneau.*;
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BeancAnnotation}
+ * 	<li class='link'>{@doc jm.BeancAnnotation}
  * </ul>
  */
 @Documented
@@ -132,7 +132,7 @@ public @interface Beanc {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};

@@ -44,7 +44,7 @@ import org.apache.juneau.svl.*;
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc SvlVariables}
+ * 	<li class='link'>{@doc jm.SvlVariables}
  * </ul>
  */
 public class PatternExtractVar extends MultipartVar {

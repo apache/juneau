@@ -59,7 +59,7 @@ import org.apache.juneau.http.annotation.*;
  * ...to advise the client not to attempt a range request.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Accept-Ranges")

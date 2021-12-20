@@ -95,7 +95,7 @@ import org.apache.juneau.rest.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestLifecycleHooks}
+ * 	<li class='link'>{@doc jrs.LifecycleHooks}
  * </ul>
  */
 @Target({METHOD,TYPE})
@@ -108,7 +108,7 @@ public @interface RestHook {
 	 * Dynamically apply this annotation to the specified methods.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};

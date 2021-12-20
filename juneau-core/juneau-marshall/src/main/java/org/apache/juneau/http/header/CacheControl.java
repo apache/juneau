@@ -92,7 +92,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Cache-Control")

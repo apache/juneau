@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.forms#the-progress-element <progress>}
+ * DTO for an HTML {@doc ext.HTML5.forms#the-progress-element <progress>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="progress")
@@ -40,7 +40,7 @@ public class Progress extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-progress-max max} attribute.
+	 * {@doc ext.HTML5.forms#attr-progress-max max} attribute.
 	 *
 	 * <p>
 	 * Upper bound of range.
@@ -56,7 +56,7 @@ public class Progress extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-progress-value value} attribute.
+	 * {@doc ext.HTML5.forms#attr-progress-value value} attribute.
 	 *
 	 * <p>
 	 * Current value of the element.

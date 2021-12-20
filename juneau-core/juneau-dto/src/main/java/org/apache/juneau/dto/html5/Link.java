@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.document-metadata#the-link-element <link>}
+ * DTO for an HTML {@doc ext.HTML5.document-metadata#the-link-element <link>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="link")
@@ -44,7 +44,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-link-crossorigin crossorigin}
+	 * {@doc ext.HTML5.document-metadata#attr-link-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -59,7 +59,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-link-href href} attribute.
+	 * {@doc ext.HTML5.document-metadata#attr-link-href href} attribute.
 	 *
 	 * <p>
 	 * Address of the hyperlink.
@@ -82,7 +82,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-link-hreflang hreflang}
+	 * {@doc ext.HTML5.document-metadata#attr-link-hreflang hreflang}
 	 * attribute.
 	 *
 	 * <p>
@@ -97,7 +97,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-link-media media} attribute.
+	 * {@doc ext.HTML5.document-metadata#attr-link-media media} attribute.
 	 *
 	 * <p>
 	 * Applicable media.
@@ -111,7 +111,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-link-rel rel} attribute.
+	 * {@doc ext.HTML5.document-metadata#attr-link-rel rel} attribute.
 	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
@@ -125,7 +125,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-link-sizes sizes} attribute.
+	 * {@doc ext.HTML5.links#attr-link-sizes sizes} attribute.
 	 *
 	 * <p>
 	 * Sizes of the icons (for rel="icon").
@@ -139,7 +139,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-link-type type} attribute.
+	 * {@doc ext.HTML5.document-metadata#attr-link-type type} attribute.
 	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.

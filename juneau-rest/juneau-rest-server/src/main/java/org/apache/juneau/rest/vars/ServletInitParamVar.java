@@ -33,7 +33,7 @@ import org.apache.juneau.svl.*;
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSvlVariables}
+ * 	<li class='link'>{@doc jrs.SvlVariables}
  * </ul>
  */
 public class ServletInitParamVar extends DefaultingVar {

@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.forms#the-meter-element <meter>}
+ * DTO for an HTML {@doc ext.HTML5.forms#the-meter-element <meter>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="meter")
@@ -40,7 +40,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-meter-high high} attribute.
+	 * {@doc ext.HTML5.forms#attr-meter-high high} attribute.
 	 *
 	 * <p>
 	 * Low limit of high range.
@@ -56,7 +56,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-meter-low low} attribute.
+	 * {@doc ext.HTML5.forms#attr-meter-low low} attribute.
 	 *
 	 * <p>
 	 * High limit of low range.
@@ -72,7 +72,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-meter-max max} attribute.
+	 * {@doc ext.HTML5.forms#attr-meter-max max} attribute.
 	 *
 	 * <p>
 	 * Upper bound of range.
@@ -88,7 +88,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-meter-min min} attribute.
+	 * {@doc ext.HTML5.forms#attr-meter-min min} attribute.
 	 *
 	 * <p>
 	 * Lower bound of range.
@@ -104,7 +104,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-meter-optimum optimum} attribute.
+	 * {@doc ext.HTML5.forms#attr-meter-optimum optimum} attribute.
 	 *
 	 * <p>
 	 * Optimum value in gauge.
@@ -120,7 +120,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-meter-value value} attribute.
+	 * {@doc ext.HTML5.forms#attr-meter-value value} attribute.
 	 *
 	 * <p>
 	 * Current value of the element.

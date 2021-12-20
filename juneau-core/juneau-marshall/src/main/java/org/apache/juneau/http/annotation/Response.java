@@ -39,9 +39,9 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcResponse}
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerResponseObject}
+ * 	<li class='link'>{@doc jrc.Response}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerResponseObject}
  * </ul>
  */
 @Documented
@@ -56,7 +56,7 @@ public @interface Response {
 	 * Serialized examples of the body of a response.
 	 *
 	 * <p>
-	 * This is a {@doc SimplifiedJson} object whose keys are media types and values are string representations of that value.
+	 * This is a {@doc jd.Swagger} object whose keys are media types and values are string representations of that value.
 	 *
 	 * <p class='bcode w800'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
@@ -76,13 +76,13 @@ public @interface Response {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
+	 * 		The format is a {@doc jd.Swagger} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * 	<li>
 	 * 		Resolution of variables is delayed until request time and occurs before parsing.
 	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
@@ -91,7 +91,7 @@ public @interface Response {
 	String[] examples() default {};
 
 	/**
-	 * <mk>headers</mk> field of the {@doc ExtSwaggerResponseObject}.
+	 * <mk>headers</mk> field of the {@doc ext.SwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -105,7 +105,7 @@ public @interface Response {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -117,7 +117,7 @@ public @interface Response {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
@@ -131,7 +131,7 @@ public @interface Response {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ExtSwaggerResponseObject}.
+	 * <mk>schema</mk> field of the {@doc ext.SwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>

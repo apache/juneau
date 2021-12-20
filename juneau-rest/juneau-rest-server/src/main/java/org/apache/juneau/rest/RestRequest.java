@@ -426,7 +426,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc HttpParts}
+	 * 	<li class='link'>{@doc jrs.HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -653,7 +653,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc HttpParts}
+	 * 	<li class='link'>{@doc jrs.HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -718,7 +718,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc HttpParts}
+	 * 	<li class='link'>{@doc jrs.HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -804,7 +804,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc HttpParts}
+	 * 	<li class='link'>{@doc jrs.HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -960,7 +960,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc HttpParts}
+	 * 	<li class='link'>{@doc jrs.HttpParts}
 	 * </ul>
 	 *
 	 * @return
@@ -1208,7 +1208,7 @@ public final class RestRequest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
-	 * 	<li class='link'>{@doc RestSwagger}
+	 * 	<li class='link'>{@doc jrs.Swagger}
 	 * </ul>
 	 *
 	 * @return
@@ -1295,7 +1295,7 @@ public final class RestRequest {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
-	 * 	<li class='link'>{@doc RestMessages}
+	 * 	<li class='link'>{@doc jrs.Messages}
 	 * </ul>
 	 *
 	 * @return
@@ -1449,7 +1449,7 @@ public final class RestRequest {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'>{@doc RestSvlVariables}
+	 * 	<li class='link'>{@doc jrs.SvlVariables}
 	 * </ul>
 	 *
 	 * @return The variable resolver for this request.
@@ -1522,7 +1522,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestConfigurationFiles}
+	 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
 	 * </ul>
 	 *
 	 * @return

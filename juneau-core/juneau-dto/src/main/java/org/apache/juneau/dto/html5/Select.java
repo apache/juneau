@@ -17,11 +17,11 @@ import static org.apache.juneau.internal.StringUtils.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.forms#the-select-element <select>}
+ * DTO for an HTML {@doc ext.HTML5.forms#the-select-element <select>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="select")
@@ -43,7 +43,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -59,7 +59,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-disabled disabled} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -75,7 +75,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -89,7 +89,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-select-multiple multiple} attribute.
+	 * {@doc ext.HTML5.forms#attr-select-multiple multiple} attribute.
 	 *
 	 * <p>
 	 * Whether to allow multiple values.
@@ -105,7 +105,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -119,7 +119,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-select-required required} attribute.
+	 * {@doc ext.HTML5.forms#attr-select-required required} attribute.
 	 *
 	 * <p>
 	 * Whether the control is required for form submission.
@@ -135,7 +135,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-select-size size} attribute.
+	 * {@doc ext.HTML5.forms#attr-select-size size} attribute.
 	 *
 	 * <p>
 	 * Size of the control.

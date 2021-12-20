@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-area-element <area>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-area-element <area>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="area")
@@ -47,7 +47,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-area-alt alt} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-area-alt alt} attribute.
 	 *
 	 * <p>
 	 * Replacement text for use when images are not available.
@@ -61,7 +61,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-area-coords coords}
+	 * {@doc ext.HTML5.embedded-content-0#attr-area-coords coords}
 	 * attribute.
 	 *
 	 * <p>
@@ -76,7 +76,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-hyperlink-download download} attribute.
+	 * {@doc ext.HTML5.links#attr-hyperlink-download download} attribute.
 	 *
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
@@ -92,7 +92,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-hyperlink-href href} attribute.
+	 * {@doc ext.HTML5.links#attr-hyperlink-href href} attribute.
 	 *
 	 * <p>
 	 * Address of the hyperlink.
@@ -115,7 +115,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-hyperlink-hreflang hreflang} attribute.
+	 * {@doc ext.HTML5.links#attr-hyperlink-hreflang hreflang} attribute.
 	 *
 	 * <p>
 	 * Language of the linked resource.
@@ -129,7 +129,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-hyperlink-rel rel} attribute.
+	 * {@doc ext.HTML5.links#attr-hyperlink-rel rel} attribute.
 	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
@@ -143,7 +143,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-area-shape shape} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-area-shape shape} attribute.
 	 *
 	 * <p>
 	 * The kind of shape to be created in an image map.
@@ -157,7 +157,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-hyperlink-target target} attribute.
+	 * {@doc ext.HTML5.links#attr-hyperlink-target target} attribute.
 	 *
 	 * <p>
 	 * Browsing context for hyperlink navigation.
@@ -171,7 +171,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.links#attr-hyperlink-type type} attribute.
+	 * {@doc ext.HTML5.links#attr-hyperlink-type type} attribute.
 	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.

@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-img-element <img>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-img-element <img>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="img")
@@ -44,7 +44,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-img-alt alt} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-img-alt alt} attribute.
 	 *
 	 * <p>
 	 * Replacement text for use when images are not available.
@@ -58,7 +58,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-img-crossorigin crossorigin}
+	 * {@doc ext.HTML5.embedded-content-0#attr-img-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -73,7 +73,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-height height}
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -90,7 +90,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-img-ismap ismap} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-img-ismap ismap} attribute.
 	 *
 	 * <p>
 	 * Whether the image is a server-side image map.
@@ -106,7 +106,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-img-src src} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-img-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -129,7 +129,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-hyperlink-usemap usemap}
+	 * {@doc ext.HTML5.embedded-content-0#attr-hyperlink-usemap usemap}
 	 * attribute.
 	 *
 	 * <p>
@@ -144,7 +144,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

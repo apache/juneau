@@ -1,0 +1,149 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Java Method Return Types', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The return type of the Java method can be any serializable POJO as defined in {@doc jm.PojoCategories POJO Categories}.
+		It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
+		setting the output using the {@link oajr.RestResponse#setOutput(Object)} method.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<ja>@RestGet</ja>
+		|	<jk>public</jk> String doGet() {
+		|		<jk>return</jk> <js>"Hello World!"</js>;
+		|	}
+	</p>
+	<p>
+		In addition to POJOs, the following return types are also supported:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			<b>Parameters based on class types:</b>
+			<ul class='spaced-list'>
+				<li>Direct streams:
+					<ul class='javatreec'>
+						<li class='jc'>{@link java.io.InputStream}
+						<li class='jc'>{@link java.io.Reader}
+					</ul>
+				<li>Apache HttpComponent beans:
+					<ul class='javatreec'>
+						<li class='jic'>{@link org.apache.http.HttpEntity}
+						<li class='jic'>{@link oaj.http.resource.HttpResource}
+						<li class='jic'>{@link org.apache.http.HttpResponse}
+					</ul>
+				<li>Standard HTTP response beans:
+					<ul class='javatreec'>
+						<li class='jc'>{@link oaj.http.response.Accepted}
+						<li class='jc'>{@link oaj.http.response.AlreadyReported}
+						<li class='jc'>{@link oaj.http.response.BadRequest}
+						<li class='jc'>{@link oaj.http.response.Conflict}
+						<li class='jc'>{@link oaj.http.response.Continue}
+						<li class='jc'>{@link oaj.http.response.Created}
+						<li class='jc'>{@link oaj.http.response.EarlyHints}
+						<li class='jc'>{@link oaj.http.response.ExpectationFailed}
+						<li class='jc'>{@link oaj.http.response.FailedDependency}
+						<li class='jc'>{@link oaj.http.response.Forbidden}
+						<li class='jc'>{@link oaj.http.response.Found}
+						<li class='jc'>{@link oaj.http.response.Gone}
+						<li class='jc'>{@link oaj.http.response.HttpVersionNotSupported}
+						<li class='jc'>{@link oaj.http.response.IMUsed}
+						<li class='jc'>{@link oaj.http.response.InsufficientStorage}
+						<li class='jc'>{@link oaj.http.response.InternalServerError}
+						<li class='jc'>{@link oaj.http.response.LengthRequired}
+						<li class='jc'>{@link oaj.http.response.Locked}
+						<li class='jc'>{@link oaj.http.response.LoopDetected}
+						<li class='jc'>{@link oaj.http.response.MethodNotAllowed}
+						<li class='jc'>{@link oaj.http.response.MisdirectedRequest}
+						<li class='jc'>{@link oaj.http.response.MovedPermanently}
+						<li class='jc'>{@link oaj.http.response.MultipleChoices}
+						<li class='jc'>{@link oaj.http.response.MultiStatus}
+						<li class='jc'>{@link oaj.http.response.NetworkAuthenticationRequired}
+						<li class='jc'>{@link oaj.http.response.NoContent}
+						<li class='jc'>{@link oaj.http.response.NonAuthoritiveInformation}
+						<li class='jc'>{@link oaj.http.response.NotAcceptable}
+						<li class='jc'>{@link oaj.http.response.NotExtended}
+						<li class='jc'>{@link oaj.http.response.NotFound}
+						<li class='jc'>{@link oaj.http.response.NotImplemented}
+						<li class='jc'>{@link oaj.http.response.NotModified}
+						<li class='jc'>{@link oaj.http.response.Ok}
+						<li class='jc'>{@link oaj.http.response.PartialContent}
+						<li class='jc'>{@link oaj.http.response.PayloadTooLarge}
+						<li class='jc'>{@link oaj.http.response.PermanentRedirect}
+						<li class='jc'>{@link oaj.http.response.PreconditionFailed}
+						<li class='jc'>{@link oaj.http.response.PreconditionRequired}
+						<li class='jc'>{@link oaj.http.response.Processing}
+						<li class='jc'>{@link oaj.http.response.RangeNotSatisfiable}
+						<li class='jc'>{@link oaj.http.response.RequestHeaderFieldsTooLarge}
+						<li class='jc'>{@link oaj.http.response.ResetContent}
+						<li class='jc'>{@link oaj.http.response.SeeOther}
+						<li class='jc'>{@link oaj.http.response.ServiceUnavailable}
+						<li class='jc'>{@link oaj.http.response.SwitchingProtocols}
+						<li class='jc'>{@link oaj.http.response.TemporaryRedirect}
+						<li class='jc'>{@link oaj.http.response.TooManyRequests}
+						<li class='jc'>{@link oaj.http.response.Unauthorized}
+						<li class='jc'>{@link oaj.http.response.UnavailableForLegalReasons}
+						<li class='jc'>{@link oaj.http.response.UnprocessableEntity}
+						<li class='jc'>{@link oaj.http.response.UnsupportedMediaType}
+						<li class='jc'>{@link oaj.http.response.UpgradeRequired}
+						<li class='jc'>{@link oaj.http.response.UriTooLong}
+						<li class='jc'>{@link oaj.http.response.UseProxy}
+						<li class='jc'>{@link oaj.http.response.VariantAlsoNegotiates}
+					</ul>
+				<li>Other:
+					<ul class='javatreec'>
+						<li class='jc'>{@link oajr.beans.ChildResourceDescriptions}
+						<li class='jc'>{@link oajr.beans.ResourceDescriptions}
+						<li class='jc'>{@link oajr.beans.SeeOtherRoot}
+						<li class='jc'>{@link java.lang.Throwable}
+					</ul>
+			</ul>		
+		<li><b>Annotated parameters (either on the parameter or parameter type):</b>
+			<ul class='javatreec'>
+				<li class='ja'>{@link oaj.http.annotation.Response}
+			</ul>
+	</ul>		
+	<p>
+		REST Java methods can also generate a response via the following:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			By calling {@link oajr.RestResponse#setOutput(Object)} with any of the types above.
+		<li>
+			By accessing the {@link java.io.Writer} directly by calling 
+			{@link oajr.RestResponse#getNegotiatedWriter()} and writing the output yourself.
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Equivalent method 1</jc>
+		|	<ja>@RestGet</ja>(<js>"/example1/{personId}"</js>)
+		|	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID <jv>personId</jv>) {
+		|		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
+		|		<jk>return</jk> <jv>person</jv>;
+		|	}
+		|
+		|	<jc>// Equivalent method 2</jc>
+		|	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
+		|	<jk>public void</jk> doGet2(RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		|		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
+		|		<jv>res</jv>.setOutput(<jv>person</jv>);
+		|	}
+	</p>
+	<p>
+		Additional parameter types can be defined by overriding {@link oajr.RestContext.Builder#createResponseProcessors(BeanStore,Supplier)}.
+	</p>
+</div>

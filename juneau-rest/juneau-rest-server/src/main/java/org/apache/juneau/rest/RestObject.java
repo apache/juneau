@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * but you want this resource to be deployed as a child instead.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BasicRestObject}
+ * 	<li class='link'>{@doc jrs.BasicRestObject}
  * </ul>
  */
 public abstract class RestObject {

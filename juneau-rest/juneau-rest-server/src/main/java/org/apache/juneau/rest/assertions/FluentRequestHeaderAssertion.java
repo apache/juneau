@@ -102,7 +102,7 @@ import org.apache.juneau.serializer.*;
 </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc FluentAssertions}
+ * 	<li class='link'>{@doc jm.FluentAssertions}
  * </ul>
  *
  * @param <R> The return type.
@@ -212,7 +212,7 @@ public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 	 * Converts the parameter value to a type using {@link RequestHeader#as(Type,Type...)} and then returns the value as an any-object assertion.
 	 *
 	 * <p>
-	 * See {@doc ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See {@doc jm.ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param type The object type to create.
 	 * @param args Optional type arguments.

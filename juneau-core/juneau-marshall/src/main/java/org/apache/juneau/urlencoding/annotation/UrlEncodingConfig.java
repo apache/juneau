@@ -72,7 +72,7 @@ public @interface UrlEncodingConfig {
 	 * 	<li>
 	 * 		This option only applies to beans.
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

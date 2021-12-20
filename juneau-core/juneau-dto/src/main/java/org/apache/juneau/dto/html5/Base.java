@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.document-metadata#the-base-element <base>}
+ * DTO for an HTML {@doc ext.HTML5.document-metadata#the-base-element <base>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="base")
@@ -44,7 +44,7 @@ public class Base extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-base-href href} attribute.
+	 * {@doc ext.HTML5.document-metadata#attr-base-href href} attribute.
 	 *
 	 * <p>
 	 * Document base URL.
@@ -67,7 +67,7 @@ public class Base extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.document-metadata#attr-base-target target}
+	 * {@doc ext.HTML5.document-metadata#attr-base-target target}
 	 * attribute.
 	 *
 	 * <p>

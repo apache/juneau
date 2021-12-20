@@ -63,7 +63,7 @@ import org.apache.juneau.http.annotation.*;
  * provide a reliable replacement for "Cache-Control: no-cache" in a response.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Pragma")

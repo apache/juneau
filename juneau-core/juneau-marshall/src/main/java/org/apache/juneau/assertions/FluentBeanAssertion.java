@@ -72,7 +72,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc FluentAssertions}
+ * 	<li class='link'>{@doc jm.FluentAssertions}
  * </ul>
  *
  * @param <T> The bean type.

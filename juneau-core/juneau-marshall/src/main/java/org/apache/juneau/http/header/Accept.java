@@ -136,7 +136,7 @@ import org.apache.juneau.internal.*;
  * set ought to be configurable by the user.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Accept")

@@ -76,7 +76,7 @@ import org.apache.juneau.http.annotation.*;
  * value.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Date")

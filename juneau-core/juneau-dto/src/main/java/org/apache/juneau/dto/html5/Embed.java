@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-embed-element <embed>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-embed-element <embed>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="embed")
@@ -44,7 +44,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-height height}
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -61,7 +61,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-embed-src src} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-embed-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -84,7 +84,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-embed-type type} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-embed-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.
@@ -98,7 +98,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

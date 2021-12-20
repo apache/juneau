@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-object-element <object>}
+ * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-object-element <object>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="object")
@@ -40,7 +40,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-object-data data} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-object-data data} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -54,7 +54,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -68,7 +68,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-height height}
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -85,7 +85,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-object-name name} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-object-name name} attribute.
 	 *
 	 * <p>
 	 * Name of nested browsing context.
@@ -99,7 +99,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-object-type type} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-object-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.
@@ -113,7 +113,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-object-typemustmatch typemustmatch}
+	 * {@doc ext.HTML5.embedded-content-0#attr-object-typemustmatch typemustmatch}
 	 * attribute.
 	 *
 	 * <p>
@@ -130,7 +130,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-hyperlink-usemap usemap}
+	 * {@doc ext.HTML5.embedded-content-0#attr-hyperlink-usemap usemap}
 	 * attribute.
 	 *
 	 * <p>
@@ -145,7 +145,7 @@ public class Object_ extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * {@doc ext.HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

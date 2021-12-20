@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
  * Various useful static methods for creating Swagger elements.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoSwagger}
+ * 	<li class='link'>{@doc jd.Swagger}
  * </ul>
  */
 public class SwaggerBuilder {

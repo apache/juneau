@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestOpAnnotatedMethods}
+ * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
  * </ul>
  */
 public final class InputStreamProcessor implements ResponseProcessor {

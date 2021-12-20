@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.sections#the-body-element <body>}
+ * DTO for an HTML {@doc ext.HTML5.sections#the-body-element <body>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="body")
@@ -40,7 +40,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.webappapis#handler-window-onafterprint onafterprint}
+	 * {@doc ext.HTML5.webappapis#handler-window-onafterprint onafterprint}
 	 * attribute.
 	 *
 	 * @param onafterprint The new value for this attribute.
@@ -52,7 +52,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.webappapis#handler-window-onbeforeunload onbeforeunload}
+	 * {@doc ext.HTML5.webappapis#handler-window-onbeforeunload onbeforeunload}
 	 * attribute.
 	 *
 	 * @param onbeforeunload The new value for this attribute.
@@ -64,7 +64,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.webappapis#handler-window-onmessage onmessage}
+	 * {@doc ext.HTML5.webappapis#handler-window-onmessage onmessage}
 	 * attribute.
 	 *
 	 * @param onmessage The new value for this attribute.
@@ -76,7 +76,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.webappapis#handler-window-ononline ononline}
+	 * {@doc ext.HTML5.webappapis#handler-window-ononline ononline}
 	 * attribute.
 	 *
 	 * @param ononline The new value for this attribute.
@@ -88,7 +88,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.webappapis#handler-window-onpageshow onpageshow}
+	 * {@doc ext.HTML5.webappapis#handler-window-onpageshow onpageshow}
 	 * attribute.
 	 *
 	 * @param onpageshow The new value for this attribute.
@@ -100,7 +100,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.webappapis#handler-window-onstorage onstorage}
+	 * {@doc ext.HTML5.webappapis#handler-window-onstorage onstorage}
 	 * attribute.
 	 *
 	 * @param onstorage The new value for this attribute.

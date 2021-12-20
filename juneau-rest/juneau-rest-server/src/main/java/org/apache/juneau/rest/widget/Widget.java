@@ -34,7 +34,7 @@ import org.apache.juneau.http.response.*;
  * Widgets can be defined as inner classes of REST resource classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestHtmlWidgets}
+ * 	<li class='link'>{@doc jrs.HtmlWidgets}
  * </ul>
  */
 public abstract class Widget implements HtmlWidget {
@@ -159,7 +159,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'>{@doc RestSvlVariables}
+	 * 	<li class='link'>{@doc jrs.SvlVariables}
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
@@ -195,7 +195,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'>{@doc RestSvlVariables}
+	 * 	<li class='link'>{@doc jrs.SvlVariables}
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
@@ -231,7 +231,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'>{@doc RestSvlVariables}
+	 * 	<li class='link'>{@doc jrs.SvlVariables}
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.

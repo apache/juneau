@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
  * Parsers HTTP plain text request bodies into Group 5 POJOs.
  *
  * <p>
- * See {@doc PojoCategories}.
+ * See {@doc jm.PojoCategories}.
  *
  * <h5 class='topic'>Media types</h5>
  *

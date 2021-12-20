@@ -47,7 +47,7 @@ import org.apache.juneau.reflect.*;
  * This class is thread safe and reusable.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='link'>{@doc jm.OpenApiDetails}
  * </ul>
  */
 public class HttpPartSchema {
@@ -910,8 +910,8 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -941,7 +941,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerResponsesObject Responses}
+		 * 	<li>{@doc ext.SwaggerResponsesObject Responses}
 		 * </ul>
 		 *
 		 * @param value
@@ -962,7 +962,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerResponsesObject Responses}
+		 * 	<li>{@doc ext.SwaggerResponsesObject Responses}
 		 * </ul>
 		 *
 		 * @param value
@@ -988,8 +988,8 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value
@@ -1108,14 +1108,14 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerSecuritySchemeObject SecurityScheme}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerSecuritySchemeObject SecurityScheme}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+		 * 	<li class='extlink'>{@doc ext.SwaggerDataTypes}
 		 * </ul>
 		 *
 		 * @param value
@@ -1271,14 +1271,14 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerSecuritySchemeObject SecurityScheme}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerSecuritySchemeObject SecurityScheme}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+		 * 	<li class='extlink'>{@doc ext.SwaggerDataTypes}
 		 * </ul>
 		 *
 		 * @param value
@@ -1305,7 +1305,7 @@ public class HttpPartSchema {
 		 * <mk>format</mk> field.
 		 *
 		 * <p>
-		 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
+		 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
 		 *
 		 * <p>
 		 * The possible values are:
@@ -1352,14 +1352,14 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+		 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
 		 * </ul>
 		 *
 		 * @param value
@@ -1392,7 +1392,7 @@ public class HttpPartSchema {
 		 * <mk>format</mk> field.
 		 *
 		 * <p>
-		 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
+		 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
 		 *
 		 * <p>
 		 * The possible values are:
@@ -1442,14 +1442,14 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+		 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
 		 * </ul>
 		 *
 		 * @param value
@@ -1603,7 +1603,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
 		 * </ul>
 		 *
 		 * @param value
@@ -1687,10 +1687,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -1727,10 +1727,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -1801,9 +1801,9 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * <p>
@@ -1864,9 +1864,9 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * <p>
@@ -1965,10 +1965,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2005,10 +2005,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2046,10 +2046,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2133,10 +2133,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2174,10 +2174,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2262,10 +2262,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2329,10 +2329,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2395,10 +2395,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2439,10 +2439,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2505,10 +2505,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2575,10 +2575,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2734,10 +2734,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2800,10 +2800,10 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
-		 * 	<li>{@doc ExtSwaggerItemsObject Items}
-		 * 	<li>{@doc ExtSwaggerHeaderObject Header}
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * @param value
@@ -2834,7 +2834,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value
@@ -2891,7 +2891,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value
@@ -2948,7 +2948,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param key
@@ -2973,7 +2973,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param key
@@ -2998,7 +2998,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param key
@@ -3018,7 +3018,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param key
@@ -3045,7 +3045,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value
@@ -3065,7 +3065,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value
@@ -3085,7 +3085,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value
@@ -3103,7 +3103,7 @@ public class HttpPartSchema {
 		 * <p>
 		 * Applicable to the following Swagger schema objects:
 		 * <ul>
-		 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
 		 * </ul>
 		 *
 		 * @param value

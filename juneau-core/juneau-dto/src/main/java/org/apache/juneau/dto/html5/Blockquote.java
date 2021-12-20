@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.grouping-content#the-blockquote-element <blockquote>}
+ * DTO for an HTML {@doc ext.HTML5.grouping-content#the-blockquote-element <blockquote>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="blockquote")
@@ -40,7 +40,7 @@ public class Blockquote extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.grouping-content#attr-blockquote-cite cite}
+	 * {@doc ext.HTML5.grouping-content#attr-blockquote-cite cite}
 	 * attribute.
 	 *
 	 * <p>

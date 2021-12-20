@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
  * Specialized matcher for matching client versions.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestClientVersioning}
+ * 	<li class='link'>{@doc jrs.ClientVersioning}
  * </ul>
  */
 public class ClientVersionMatcher extends RestMatcher {

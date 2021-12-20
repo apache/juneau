@@ -27,7 +27,7 @@ import org.apache.juneau.dto.html5.*;
  * present in the stylesheet for the document.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestHtmlPredefinedWidgets}
+ * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
  * </ul>
  */
 public class Tooltip {

@@ -122,7 +122,7 @@ import org.apache.juneau.http.annotation.*;
  * If all of the warning-values are deleted for this reason, the Warning header MUST be deleted as well.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Warning")

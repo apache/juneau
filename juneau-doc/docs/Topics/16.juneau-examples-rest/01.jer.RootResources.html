@@ -1,0 +1,157 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'RootResources', updated:'8.0.0,8.1.0', flags:'todo'}
+
+<div class='topic'>
+	<p>
+		The <l>RootResources</l> class is the main page for the REST microservice.
+		It serves as the jumping-off point for the other resources.
+	</p>
+	<p>
+		The class hierarchy for this class is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>
+			{@link oajr.RestServlet} - Contains all the REST servlet logic.
+			<ul>
+				<li class='jac'>
+					{@link oajr.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
+					<ul>
+						<li class='jac'>
+							{@link oajr.BasicRestServletGroup} - Specialized subclass for grouping other resources.
+							<ul>
+								<li class='jac'>
+									{@link oaj.rest.BasicRestServletJenaGroup} - Group resource with added RDF support.
+									<ul>
+										<li class='jc'>
+											<c>RootResources</c>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Pointing a browser to the resource shows the following:
+	</p>
+	<p class='bcode w800'>
+		|	http://localhost:10000
+	</p>			
+	<img class='bordered w800' src='doc-files/jer.RootResources.1.png'>
+	<p>
+		The <l>RootResources</l> class can also be defined as a servlet in a <l>web.xml</l> file:
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>'3.0'</xs><xt>&gt;</xt>
+		|		<xt>&lt;servlet&gt;</xt>
+		|			<xt>&lt;servlet-name&gt;</xt>RootResources<xt>&lt;/servlet-name&gt;</xt>
+		|			<xt>&lt;servlet-class&gt;</xt>org.apache.juneau.examples.rest.RootResources<xt>&lt;/servlet-class&gt;</xt>
+		|		<xt>&lt;/servlet&gt;</xt>
+		|		<xt>&lt;servlet-mapping&gt;</xt>
+		|			<xt>&lt;servlet-name&gt;</xt>RootResources<xt>&lt;/servlet-name&gt;</xt>
+		|			<xt>&lt;url-pattern&gt;</xt>/*<xt>&lt;/url-pattern&gt;</xt>
+		|		<xt>&lt;/servlet-mapping&gt;</xt>
+		|	<xt>&lt;/web-app&gt;</xt>
+	</p>
+	<p>
+		The <l>RootResources</l> class consists entirely of annotations:
+	</p>
+	
+	<h5 class='figure'>RootResources.java</h5>
+	<p class='bcode w800'>
+		|	<jd>/**
+		|	 * Sample REST resource showing how to implement a "router" resource page.
+		|	 */</jd>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/"</js>,
+		|		title=<js>"Root resources"</js>,
+		|		description=<js>"Example of a router resource page."</js>,
+		|		htmldoc=<ja>@HtmlDoc</ja>(
+		|			widgets={
+		|				ContentTypeMenuItem.<jk>class</jk>,
+		|				StyleMenuItem.<jk>class</jk>
+		|			},
+		|			navlinks={
+		|				<js>"options: ?method=OPTIONS"</js>,
+		|				<js>"$W{ContentTypeMenuItem}"</js>,
+		|				<js>"$W{StyleMenuItem}"</js>,
+		|				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		|			},
+		|			aside={
+		|				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|				<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+		|				<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+		|				<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;options&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+		|				<js><js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;sources&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+		|				"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+		|				<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+		|				<js>"&lt;/div&gt;"</js>
+		|			}
+		|		),
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>,
+		|			PetStoreResource.<jk>class</jk>,
+		|			DtoExamples.<jk>class</jk>,
+		|			ConfigResource.<jk>class</jk>,
+		|			LogsResource.<jk>class</jk>,
+		|			DebugResource.<jk>class</jk>,
+		|			ShutdownResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<ja>@SerializerConfig</ja>(
+		|		<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+		|		// String comparisons.</jc>
+		|		quoteChar=<js>"'"</js>
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		|		<jc>// No code!</jc>
+		|	}
+	</p>
+	<p>
+		The <l>children</l> annotation defines the child resources of this router resource.
+		These are resources whose paths are direct descendants to the parent resource.			
+	</p>
+	<p>
+		Child resources must be annotated with the {@link oajr.annotation.Rest#path() @Rest(path)} annotation to 
+		identify the subpath of the child.
+		Children CAN extend from {@link oajr.BasicRestServlet} but it is not a requirement.
+	</p>
+	<p>
+		Note that these router pages can be arbitrarily nested deep.  
+		You can define many levels of router pages for arbitrarily hierarchical REST interfaces. 
+	</p>
+	<p>
+		Let's step back and describe what's going on here:
+	</p>
+	<p>
+		During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
+		<l>@Rest(children)</l> annotation.  
+		If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
+		on them.  
+		It then associates the child resource with the parent by the name specified by the 
+		<l>@Rest(path)</l> annotation on the child class.  
+	</p>
+	<p>
+		When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
+		gets the request and sees that the URL remainder matches one of its child resources.  
+		It then forwards the request to the child resource for processing.  
+		The request passed to the child resource is the same as if the child resource had been deployed 
+		independently (e.g. path-info, resource-URI, and so forth).
+	</p>
+</div>

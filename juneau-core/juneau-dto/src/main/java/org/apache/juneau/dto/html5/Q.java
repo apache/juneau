@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.text-level-semantics#the-q-element <q>}
+ * DTO for an HTML {@doc ext.HTML5.text-level-semantics#the-q-element <q>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="q")
@@ -40,7 +40,7 @@ public class Q extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.text-level-semantics#attr-q-cite cite} attribute.
+	 * {@doc ext.HTML5.text-level-semantics#attr-q-cite cite} attribute.
 	 *
 	 * <p>
 	 * Link to the source of the quotation or more information about the edit.

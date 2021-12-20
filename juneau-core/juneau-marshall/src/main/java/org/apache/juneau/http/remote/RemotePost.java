@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * Note that this annotation is optional if you do not need to override any of the values.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcProxies}
+ * 	<li class='link'>{@doc jrc.Proxies}
  * </ul>
  */
 @Documented

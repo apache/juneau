@@ -360,7 +360,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * 	<li class='link'>{@doc jm.XmlNamespaces}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -407,7 +407,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * 	<li class='link'>{@doc jm.XmlNamespaces}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -436,7 +436,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Specifies the default namespace URI for this document.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * 	<li class='link'>{@doc jm.XmlNamespaces}
 		 * </ul>
 		 *
 		 * @param value
@@ -457,7 +457,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc XmlNamespaces}
+		 * 	<li class='link'>{@doc jm.XmlNamespaces}
 		 * </ul>
 		 *
 		 * @return This object.

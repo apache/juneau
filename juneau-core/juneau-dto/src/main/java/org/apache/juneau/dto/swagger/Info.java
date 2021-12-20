@@ -67,7 +67,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoSwagger}
+ * 	<li class='link'>{@doc jd.Swagger}
  * </ul>
  */
 @Bean(properties="siteName,title,description,version,contact,license,termsOfService,*")
@@ -216,7 +216,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
+	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setDescription(String value) {
@@ -243,7 +243,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
+	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */

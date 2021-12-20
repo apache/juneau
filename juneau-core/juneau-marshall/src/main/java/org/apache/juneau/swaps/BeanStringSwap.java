@@ -26,7 +26,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * This is usually a one-way transform.
  * Beans serialized as strings cannot be reconstituted using a parser unless it is a
- * {@doc PojoCategories parsable POJO}.
+ * {@doc jm.PojoCategories parsable POJO}.
  *
  * @param <T> The class type of the bean.
  */

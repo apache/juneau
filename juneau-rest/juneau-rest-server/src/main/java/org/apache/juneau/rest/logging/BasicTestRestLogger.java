@@ -44,7 +44,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestLoggingAndDebugging}
+ * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
  * </ul>
  */
 public class BasicTestRestLogger extends BasicRestLogger {

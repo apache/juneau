@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.forms#the-keygen-element <keygen>}
+ * DTO for an HTML {@doc ext.HTML5.forms#the-keygen-element <keygen>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="keygen")
@@ -31,7 +31,7 @@ public class Keygen extends HtmlElementVoid {
 	public Keygen() {}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -47,7 +47,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-keygen-challenge challenge} attribute.
+	 * {@doc ext.HTML5.forms#attr-keygen-challenge challenge} attribute.
 	 *
 	 * <p>
 	 * String to package with the generated and signed public key.
@@ -61,7 +61,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-disabled disabled} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -77,7 +77,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -91,7 +91,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-keygen-keytype keytype} attribute.
+	 * {@doc ext.HTML5.forms#attr-keygen-keytype keytype} attribute.
 	 *
 	 * <p>
 	 * The type of cryptographic key to generate.
@@ -105,7 +105,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.

@@ -38,8 +38,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerExternalDocumentationObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerExternalDocumentationObject}
  * </ul>
  */
 @Documented
@@ -47,7 +47,7 @@ import java.lang.annotation.*;
 public @interface ExternalDocs {
 
 	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerExternalDocumentationObject}.
+	 * <mk>description</mk> field of the {@doc ext.SwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * A short description of the target documentation.
@@ -57,13 +57,13 @@ public @interface ExternalDocs {
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String[] description() default {};
 
 	/**
-	 * <mk>url</mk> field of the {@doc ExtSwaggerExternalDocumentationObject}.
+	 * <mk>url</mk> field of the {@doc ext.SwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
@@ -74,7 +74,7 @@ public @interface ExternalDocs {
 	 * 	<li>
 	 * 		The format is a URL string.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String url() default "";

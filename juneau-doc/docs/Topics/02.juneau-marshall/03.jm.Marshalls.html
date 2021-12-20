@@ -1,0 +1,56 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Marshalls'}
+
+<div class='topic'>
+	<p>
+		{@link oaj.marshall.Marshall Marshalls} are simple pairings of a {@link oaj.serializer.Serializer}
+		and {@link oaj.parser.Parser} with convenience methods for serializing and parsing POJOs.
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.marshall.Marshall}
+		<ul>
+			<li class='jm'>{@link oaj.marshall.Marshall#read(Object,Class) read(Object,Class)}
+			<li class='jm'>{@link oaj.marshall.Marshall#read(Object,Type,Type...) read(Object,Type,Type...)}
+			<li class='jm'>{@link oaj.marshall.Marshall#write(Object) write(Object)} 
+			<li class='jm'>{@link oaj.marshall.Marshall#write(Object,Object) write(Object,Object)}
+			<li class='jm'>{@link oaj.marshall.Marshall#toString(Object) toString(Object)}
+			<li class='jm'>{@link oaj.marshall.Marshall#println(Object) println(Object)}
+		</ul>
+	</ul>
+	<p>
+		Marshalls are often cleaner to use on-the-fly since they have simplified names.
+	</p>
+	<p>
+		The following shows the {@link oaj.marshall.Json} marshall in action:
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Using instance.</jc>
+		|	Json <jv>json</jv> = <jk>new</jk> Json();
+		|	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+		|	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Using DEFAULT instance.</jc>
+		|	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+		|	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+	</p>
+	
+	<ul class='seealso'>
+		<li class='doclink'>{@doc g.LanguageSupport Language Support} - Glossary of all supported languages.
+	</ul>
+</div>

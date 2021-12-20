@@ -22,7 +22,7 @@ import org.apache.juneau.svl.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc SvlVariables}
+ * 	<li class='link'>{@doc jm.SvlVariables}
  * </ul>
  */
 public class CoalesceVar extends MultipartResolvingVar {

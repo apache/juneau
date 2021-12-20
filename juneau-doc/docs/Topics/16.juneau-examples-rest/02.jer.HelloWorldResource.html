@@ -1,0 +1,82 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HelloWorldResource', updated:'8.0.0', flags:'todo'}
+
+<div class='topic'>
+	<p>
+		The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
+	</p>
+	
+	<h5 class='figure'>HelloWorldResource.java</h5>
+	<p class='bcode w800'>
+		|	<jd>/** 
+		|	* Sample REST resource that prints out a simple "Hello world!" message. 
+		|	*/</jd> 
+		|	<ja>@Rest</ja>( 
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>,
+		|		path=<js>"/helloWorld"</js>,
+		|		htmldoc=<ja>@HtmlDoc</ja>(
+		|			aside={
+		|				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|				<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|				<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|				<js>"&lt;/div&gt;"</js>
+		|			}
+		|		)
+		|	) 
+		|	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
+		|		
+		|		<jd>/** GET request handler */</jd> 
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
+		|		<jk>public</jk> String sayHello() { 
+		|			<jk>return</jk> <js>"Hello world!"</js>; 
+		|		} 
+		|	}
+	</p>
+	<p>
+		Notice that in this case we're not extending from {@link oajr.RestServlet}.  
+		We are however implementing {@del oajr.BasicRestConfig} which is a no-op
+		interface that defines a default <ja>@Rest</ja> annotation with all the serializers, parsers, 
+		and configuration defined on the {@link oajr.BasicRestServlet} class.
+	</p>
+	<p>
+		The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>
+		is that the latter provides the following additional features:
+	</p>
+	<ul class='spaced-list'>
+		<li>A default OPTIONS method.
+		<li>It can be deployed like any servlet.
+	</ul>
+	<p>
+		All other examples in this project extend from <l>BasicRestServlet</l> so that they provide automatic OPTIONS page support.
+	</p>
+	<p>
+		Pointing a browser to the resource shows the following:
+	</p>
+	<p class='bcode w800'>
+		|	http://localhost:10000/helloWorld
+	</p>			
+	<img class='bordered w800' src='doc-files/jer.HelloWorldResource.1.png'>
+	<p>
+		Using the special <l>&amp;Accept=text/json</l> and <l>&amp;plainText=true</l> parameters
+			allows us to see this page rendered as JSON:
+	</p>		
+	<p class='bcode w800'>
+		|	http://localhost:10000/helloWorld?Accept=text/json&amp;plainText=true
+	</p>			
+	<img class='bordered w800' src='doc-files/jer.HelloWorldResource.2.png'>
+</div>

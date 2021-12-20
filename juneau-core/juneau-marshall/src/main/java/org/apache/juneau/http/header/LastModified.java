@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * HTTP/1.1 servers SHOULD send Last-Modified whenever feasible.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc ExtRFC2616}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @Header("Last-Modified")

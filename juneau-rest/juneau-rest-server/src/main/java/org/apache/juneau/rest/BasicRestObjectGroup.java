@@ -26,7 +26,7 @@ import org.apache.juneau.rest.config.*;
  * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BasicRestServletGroup}
+ * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
  * </ul>
  */
 @Rest

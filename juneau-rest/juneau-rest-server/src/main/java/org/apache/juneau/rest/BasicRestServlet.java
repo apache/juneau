@@ -129,7 +129,7 @@ import org.apache.juneau.xml.*;
  * </table>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BasicRestServlet}
+ * 	<li class='link'>{@doc jrs.BasicRestServlet}
  * </ul>
  */
 @Rest

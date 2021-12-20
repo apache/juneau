@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * The variable it resolves is <js>"$W{ThemeMenuItem}"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestHtmlPredefinedWidgets}
+ * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
  * </ul>
  */
 public class ThemeMenuItem extends MenuItemWidget {

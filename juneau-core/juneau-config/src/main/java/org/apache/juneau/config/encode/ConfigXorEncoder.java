@@ -23,7 +23,7 @@ import static org.apache.juneau.internal.IOUtils.*;
  * This is not intended to be used as strong encryption.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ConfigEncodedEntries}
+ * 	<li class='link'>{@doc jc.EncodedEntries}
  * </ul>
  */
 public final class ConfigXorEncoder implements ConfigEncoder {

@@ -20,11 +20,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.grouping-content#the-pre-element <pre>}
+ * DTO for an HTML {@doc ext.HTML5.grouping-content#the-pre-element <pre>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="pre")

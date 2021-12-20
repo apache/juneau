@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  * Parent class of {@link Entry}, {@link Feed}, and {@link Source}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoAtom}
+ * 	<li class='link'>{@doc jd.Atom}
  * 	<li class='jp'>{@doc package-summary.html#TOC}
  * </ul>
  */

@@ -27,7 +27,7 @@ import org.apache.juneau.rest.beans.*;
  * Child resources are specified using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc BasicRestServletGroup}
+ * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
  * </ul>
  */
 @Rest

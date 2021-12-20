@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  * OpenAPI part parser.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc OpenApiParsers}
+ * 	<li class='link'>{@doc jm.OpenApiParsers}
  * </ul>
  */
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {

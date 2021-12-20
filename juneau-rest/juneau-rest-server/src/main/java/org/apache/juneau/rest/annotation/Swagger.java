@@ -22,7 +22,7 @@ import org.apache.juneau.http.annotation.*;
  * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='link'>{@doc jrs.Swagger}
  * </ul>
  */
 @Retention(RUNTIME)
@@ -32,7 +32,7 @@ public @interface Swagger {
 	 * Defines the swagger field <c>/info/contact</c>.
 	 *
 	 * <p>
-	 * A {@doc SimplifiedJson} string with the following fields:
+	 * A {@doc jd.Swagger} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
@@ -57,10 +57,10 @@ public @interface Swagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -94,7 +94,7 @@ public @interface Swagger {
 	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
 	 * 		</ol>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -129,7 +129,7 @@ public @interface Swagger {
 	 * It is used to populate the Swagger license field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A {@doc SimplifiedJson} string with the following fields:
+	 * A {@doc jd.Swagger} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
@@ -153,10 +153,10 @@ public @interface Swagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -172,7 +172,7 @@ public @interface Swagger {
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A {@doc SimplifiedJson} string with the following fields:
+	 * A {@doc jd.Swagger} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	[
 	 * 		{
@@ -202,10 +202,10 @@ public @interface Swagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} array.
+	 * 		The format is a {@doc jd.Swagger} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -229,7 +229,7 @@ public @interface Swagger {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -260,7 +260,7 @@ public @interface Swagger {
 	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
 	 * 		</ol>
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -270,7 +270,7 @@ public @interface Swagger {
 	 * Free-form value for the swagger of a resource.
 	 *
 	 * <p>
-	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this resource.
+	 * This is a {@doc jd.Swagger} object that makes up the swagger information for this resource.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
@@ -359,7 +359,7 @@ public @interface Swagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -372,7 +372,7 @@ public @interface Swagger {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
@@ -398,7 +398,7 @@ public @interface Swagger {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
+	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */

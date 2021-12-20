@@ -31,7 +31,7 @@ import org.apache.juneau.swap.*;
  * </ul>
 
  * <ul class='seealso'>
- * 	<li class='link'>{@doc SwapAnnotation}
+ * 	<li class='link'>{@doc jm.SwapAnnotation}
  * </ul>
  */
 @Documented
@@ -68,7 +68,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc PerMediaTypeSwaps}
+	 * 	<li class='link'>{@doc jm.PerMediaTypeSwaps}
 	 * </ul>
 	 */
 	String[] mediaTypes() default {};
@@ -153,7 +153,7 @@ public @interface Swap {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -165,7 +165,7 @@ public @interface Swap {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
@@ -201,7 +201,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc TemplatedSwaps}
+	 * 	<li class='link'>{@doc jm.TemplatedSwaps}
 	 * </ul>
 	 */
 	String template() default "";

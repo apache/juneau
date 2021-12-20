@@ -23,7 +23,7 @@ import org.apache.juneau.http.header.*;
  * Identifies a proxy against a REST interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcProxies}
+ * 	<li class='link'>{@doc jrc.Proxies}
  * </ul>
  */
 @Documented
@@ -45,7 +45,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver}
+	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -59,7 +59,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver}
+	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -107,7 +107,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver}
+	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -121,7 +121,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver}
+	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 */

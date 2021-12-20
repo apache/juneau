@@ -73,7 +73,7 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='jm'>{@link RestOpContext.Builder#converters()}
- * 	<li class='link'>{@doc RestConverters}
+ * 	<li class='link'>{@doc jrs.Converters}
  * </ul>
  */
 public interface RestConverter {

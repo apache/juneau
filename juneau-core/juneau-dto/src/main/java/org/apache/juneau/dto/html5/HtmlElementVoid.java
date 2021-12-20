@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  * See <a href="https://www.w3.org/TR/html51/syntax.html#void-elements">void elements</a>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Xml(format=VOID)

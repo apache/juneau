@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.forms#the-textarea-element <textarea>}
+ * DTO for an HTML {@doc ext.HTML5.forms#the-textarea-element <textarea>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="textarea")
@@ -42,7 +42,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-autocomplete autocomplete} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-autocomplete autocomplete} attribute.
 	 *
 	 * <p>
 	 * Hint for form auto-fill feature.
@@ -56,7 +56,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -72,7 +72,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-cols cols} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-cols cols} attribute.
 	 *
 	 * <p>
 	 * Maximum number of characters per line.
@@ -88,7 +88,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-dirname dirname} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-dirname dirname} attribute.
 	 *
 	 * <p>
 	 * Name of form field to use for sending the element's directionality in form submission.
@@ -102,7 +102,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-disabled disabled} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -118,7 +118,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -132,7 +132,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#inputmode inputmode} attribute.
+	 * {@doc ext.HTML5.forms#inputmode inputmode} attribute.
 	 *
 	 * <p>
 	 * Hint for selecting an input modality.
@@ -146,7 +146,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-maxlength maxlength} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-maxlength maxlength} attribute.
 	 *
 	 * <p>
 	 * Maximum length of value.
@@ -162,7 +162,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-minlength minlength} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-minlength minlength} attribute.
 	 *
 	 * <p>
 	 * Minimum length of value.
@@ -178,7 +178,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -192,7 +192,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-placeholder placeholder}
+	 * {@doc ext.HTML5.forms#attr-textarea-placeholder placeholder}
 	 * attribute.
 	 *
 	 * <p>
@@ -207,7 +207,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-readonly readonly} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-readonly readonly} attribute.
 	 *
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
@@ -223,7 +223,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-required required} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-required required} attribute.
 	 *
 	 * <p>
 	 * Whether the control is required for form submission.
@@ -239,7 +239,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-rows rows} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-rows rows} attribute.
 	 *
 	 * <p>
 	 * Number of lines to show.
@@ -255,7 +255,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-textarea-wrap wrap} attribute.
+	 * {@doc ext.HTML5.forms#attr-textarea-wrap wrap} attribute.
 	 *
 	 * <p>
 	 * How the value of the form control is to be wrapped for form submission.

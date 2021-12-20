@@ -19,7 +19,7 @@ import org.apache.juneau.xml.annotation.*;
  * A subclass of HTML elements that contain text only.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 public class HtmlElementText extends HtmlElement {

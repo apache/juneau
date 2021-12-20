@@ -33,7 +33,7 @@ import org.apache.juneau.reflect.*;
  * Captures the information in {@link RemoteOp @RemoteOp} annotations for caching and reuse.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcProxies}
+ * 	<li class='link'>{@doc jrc.Proxies}
  * </ul>
  */
 public class RemoteOperationMeta {

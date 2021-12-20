@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc ExtHTML5.forms#the-button-element <button>}
+ * DTO for an HTML {@doc ext.HTML5.forms#the-button-element <button>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc DtoHtml5}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="button")
@@ -55,7 +55,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -71,7 +71,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-disabled disabled} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -87,7 +87,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -101,7 +101,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fs-formaction formaction} attribute.
+	 * {@doc ext.HTML5.forms#attr-fs-formaction formaction} attribute.
 	 *
 	 * <p>
 	 * URL to use for form submission.
@@ -122,7 +122,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fs-formenctype formenctype} attribute.
+	 * {@doc ext.HTML5.forms#attr-fs-formenctype formenctype} attribute.
 	 *
 	 * <p>
 	 * Form data set encoding type to use for form submission.
@@ -136,7 +136,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fs-formmethod formmethod} attribute.
+	 * {@doc ext.HTML5.forms#attr-fs-formmethod formmethod} attribute.
 	 *
 	 * <p>
 	 * HTTP method to use for form submission.
@@ -150,7 +150,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fs-formnovalidate formnovalidate}
+	 * {@doc ext.HTML5.forms#attr-fs-formnovalidate formnovalidate}
 	 * attribute.
 	 *
 	 * <p>
@@ -165,7 +165,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fs-formtarget formtarget} attribute.
+	 * {@doc ext.HTML5.forms#attr-fs-formtarget formtarget} attribute.
 	 *
 	 * <p>
 	 * Browsing context for form submission.
@@ -179,7 +179,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fs-menu menu} attribute.
+	 * {@doc ext.HTML5.forms#attr-fs-menu menu} attribute.
 	 *
 	 * <p>
 	 * Specifies the element's designated pop-up menu.
@@ -193,7 +193,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -207,7 +207,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-button-type type} attribute.
+	 * {@doc ext.HTML5.forms#attr-button-type type} attribute.
 	 *
 	 * <p>
 	 * Type of button.
@@ -221,7 +221,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ExtHTML5.forms#attr-button-value value} attribute.
+	 * {@doc ext.HTML5.forms#attr-button-value value} attribute.
 	 *
 	 * <p>
 	 * Value to be used for form submission.

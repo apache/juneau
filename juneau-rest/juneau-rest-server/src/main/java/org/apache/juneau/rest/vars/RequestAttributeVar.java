@@ -42,7 +42,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSvlVariables}
+ * 	<li class='link'>{@doc jrs.SvlVariables}
  * </ul>
  */
 public class RequestAttributeVar extends MultipartResolvingVar {

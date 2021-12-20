@@ -80,7 +80,7 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -135,7 +135,7 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -167,7 +167,7 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -192,12 +192,12 @@ public @interface XmlConfig {
 	 * 	<li>
 	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
-	 * 	<li class='link'>{@doc XmlNamespaces}
+	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
 	 */
 	String addNamespaceUrisToRoot() default "";
@@ -231,12 +231,12 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
-	 * 	<li class='link'>{@doc XmlNamespaces}
+	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
 	 */
 	String disableAutoDetectNamespaces() default "";
@@ -249,12 +249,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
-	 * 	<li class='link'>{@doc XmlNamespaces}
+	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
 	 */
 	String defaultNamespace() default "";
@@ -273,12 +273,12 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
-	 * 	<li class='link'>{@doc XmlNamespaces}
+	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
 	 */
 	String enableNamespaces() default "";
@@ -291,12 +291,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
-	 * 	<li class='link'>{@doc XmlNamespaces}
+	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
 	 */
 	String[] namespaces() default {};

@@ -19,7 +19,7 @@ import org.apache.juneau.serializer.*;
  * A subclass of {@link Marshall} for character-based serializers and parsers.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc Marshalls}
+ * 	<li class='link'>{@doc jm.Marshalls}
  * </ul>
  */
 public class CharMarshall extends Marshall {

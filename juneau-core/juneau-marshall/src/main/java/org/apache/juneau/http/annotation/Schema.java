@@ -63,8 +63,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerSchemaObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerSchemaObject}
  * </ul>
  */
 @Documented
@@ -75,7 +75,7 @@ import org.apache.juneau.oapi.*;
 public @interface Schema {
 
 	/**
-	 * <mk>default</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>default</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
@@ -111,7 +111,7 @@ public @interface Schema {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>enum</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
@@ -148,7 +148,7 @@ public @interface Schema {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>$ref</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * 	A JSON reference to the schema definition.
@@ -161,22 +161,22 @@ public @interface Schema {
 	String $ref() default "";
 
 	/**
-	 * <mk>additionalProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>additionalProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
 	String[] additionalProperties() default {};
 
 	/**
-	 * <mk>allOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>allOf</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
@@ -188,7 +188,7 @@ public @interface Schema {
 	boolean aev() default false;
 
 	/**
-	 * <mk>allowEmptyValue</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 * <mk>allowEmptyValue</mk> field of the {@doc ext.SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued heaver values.
@@ -267,7 +267,7 @@ public @interface Schema {
 	String[] d() default {};
 
 	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>description</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -294,7 +294,7 @@ public @interface Schema {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 */
 	String[] description() default {};
@@ -305,11 +305,11 @@ public @interface Schema {
 	String[] df() default {};
 
 	/**
-	 * <mk>discriminator</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>discriminator</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
@@ -331,7 +331,7 @@ public @interface Schema {
 	boolean emin() default false;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Defines whether the maximum is matched exclusively.
@@ -358,7 +358,7 @@ public @interface Schema {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Defines whether the minimum is matched exclusively.
@@ -385,11 +385,11 @@ public @interface Schema {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>externalDocs</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>externalDocs</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
@@ -401,10 +401,10 @@ public @interface Schema {
 	String f() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>format</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
+	 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -467,7 +467,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
 	 * </ul>
 
 	 * <ul class='notes'>
@@ -476,7 +476,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
@@ -487,7 +487,7 @@ public @interface Schema {
 	boolean ignore() default false;
 
 	/**
-	 * <mk>items</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>items</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -519,7 +519,7 @@ public @interface Schema {
 	long maxi() default -1;
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>maximum</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Defines the maximum value for a parameter of numeric types.
@@ -546,7 +546,7 @@ public @interface Schema {
 	String maximum() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
@@ -577,7 +577,7 @@ public @interface Schema {
 	long maxl() default -1;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
@@ -610,11 +610,11 @@ public @interface Schema {
 	long maxp() default -1;
 
 	/**
-	 * <mk>maxProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>maxProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
@@ -631,7 +631,7 @@ public @interface Schema {
 	long mini() default -1;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>minimum</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Defines the minimum value for a parameter of numeric types.
@@ -658,7 +658,7 @@ public @interface Schema {
 	String minimum() default "";
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>minItems</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
@@ -689,7 +689,7 @@ public @interface Schema {
 	long minl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>minLength</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -722,11 +722,11 @@ public @interface Schema {
 	long minp() default -1;
 
 	/**
-	 * <mk>minProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>minProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
@@ -738,7 +738,7 @@ public @interface Schema {
 	String mo() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
@@ -844,7 +844,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -856,7 +856,7 @@ public @interface Schema {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
@@ -867,7 +867,7 @@ public @interface Schema {
 	String p() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>pattern</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A string input is valid if it matches the specified regular expression pattern.
@@ -899,11 +899,11 @@ public @interface Schema {
 	String pattern() default "";
 
 	/**
-	 * <mk>properties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>properties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
@@ -915,18 +915,18 @@ public @interface Schema {
 	boolean r() default false;
 
 	/**
-	 * <mk>readOnly</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>readOnly</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */
 	boolean readOnly() default false;
 
 	/**
-	 * <mk>required</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>required</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * Determines whether the parameter is mandatory.
@@ -995,7 +995,7 @@ public @interface Schema {
 	String t() default "";
 
 	/**
-	 * <mk>title</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>title</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -1005,7 +1005,7 @@ public @interface Schema {
 	String title() default "";
 
 	/**
-	 * <mk>type</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>type</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -1073,7 +1073,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypes}
 	 * </ul>
 	 */
 	String type() default "";
@@ -1084,7 +1084,7 @@ public @interface Schema {
 	boolean ui() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
@@ -1114,11 +1114,11 @@ public @interface Schema {
 	boolean uniqueItems() default false;
 
 	/**
-	 * <mk>xml</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>xml</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 */

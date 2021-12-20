@@ -18,7 +18,7 @@ import org.apache.juneau.config.*;
  * API for defining a string encoding/decoding mechanism for entries in {@link Config}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ConfigEncodedEntries}
+ * 	<li class='link'>{@doc jc.EncodedEntries}
  * </ul>
  */
 public interface ConfigEncoder {

@@ -110,7 +110,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestContext}
+ * 	<li class='link'>{@doc jrs.RestContext}
  * </ul>
  */
 public class RestContext extends Context {
@@ -976,7 +976,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
@@ -1059,7 +1059,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Returns {@link ThrownStore#GLOBAL}.
@@ -1173,7 +1173,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>Encoder[0]</c>.
@@ -1605,7 +1605,7 @@ public class RestContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jc'>{@link Messages}
-		 * 	<li class='link'>{@doc RestMessages}
+		 * 	<li class='link'>{@doc jrs.Messages}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -1783,7 +1783,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
@@ -1902,7 +1902,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc RestLoggingAndDebugging}
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
 		 * 	<li class='ja'>{@link Rest#callLogger()}
 		 * </ul>
 		 *
@@ -1955,7 +1955,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
 		 * 			<li>{@link BasicFileFinder}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a {@link BasicFileFinder}.
@@ -2092,7 +2092,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates an {@link OpenApiSerializer}.
@@ -2193,7 +2193,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates an {@link OpenApiSerializer}.
@@ -2305,7 +2305,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates an {@link OpenApiParser}.
@@ -2411,7 +2411,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a new {@link JsonSchemaGenerator} using the property store of this context..
@@ -2613,7 +2613,7 @@ public class RestContext extends Context {
 		 * 	<li>{@link FileFinder} - The file finder that would have been returned by this method.
 		 * 	<li>{@link RestContext} - This REST context.
 		 * 	<li>{@link BeanStore} - The bean store of this REST context.
-		 * 	<li>Any {@doc RestInjection injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
+		 * 	<li>Any {@doc jrs.Injection injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2815,7 +2815,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
 		 * 			<li>{@link BasicFileFinder}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Looks for value in default static files setting.
@@ -4399,7 +4399,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc RestInjection injected beans}.
+		 * 			<li>Any {@doc jrs.Injection injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
@@ -4590,7 +4590,7 @@ public class RestContext extends Context {
 		 * pages.
 		 *
 		 * <p>
-		 * Note that per the {@doc ExtRFC2616.section9 HTTP specification}, special care should
+		 * Note that per the {@doc ext.RFC2616.section9 HTTP specification}, special care should
 		 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -5198,7 +5198,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc RestSerializers}
+		 * 	<li class='link'>{@doc jrs.Marshalling}
 		 * </ul>
 		 *
 		 * @return The serializer group builder for this context builder.
@@ -5224,7 +5224,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc RestParsers}
+		 * 	<li class='link'>{@doc jrs.Marshalling}
 		 * </ul>
 		 *
 		 * @return The parser group builder for this context builder.
@@ -5244,7 +5244,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc RestEncoders}
+		 * 	<li class='link'>{@doc jrs.Encoders}
 		 * </ul>
 		 *
 		 * @return The encoder group builder for this context builder.
@@ -6243,7 +6243,7 @@ public class RestContext extends Context {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSvlVariables}
+	 * 	<li class='link'>{@doc jrs.SvlVariables}
 	 * </ul>
 	 *
 	 * @return The var resolver in use by this resource.

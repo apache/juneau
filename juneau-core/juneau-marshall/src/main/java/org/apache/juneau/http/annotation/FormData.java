@@ -62,8 +62,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestSwagger}
- * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
@@ -82,14 +82,14 @@ import org.apache.juneau.oapi.*;
  * request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcFormData}
- * 	<li class='link'>{@doc RestcRequest}
+ * 	<li class='link'>{@doc jrc.FormData}
+ * 	<li class='link'>{@doc jrc.Request}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestcRequest}
+ * 	<li class='link'>{@doc jrc.Request}
  * </ul>
  *
  * <div class='warn'>
@@ -186,7 +186,7 @@ public @interface FormData {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String[] on() default {};
@@ -198,7 +198,7 @@ public @interface FormData {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
@@ -212,7 +212,7 @@ public @interface FormData {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The schema defining the type used for parameter.
