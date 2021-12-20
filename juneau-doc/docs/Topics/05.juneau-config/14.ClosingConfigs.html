@@ -15,17 +15,19 @@
 
 {title:'Closing Configs'}
 
-<p>
-	In general, it's good practice to close Config if you're only creating them temporarily so that
-	their listeners get unregistered from the underlying storage APIs.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a transient config.</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	
-	<jc>// Do stuff with it.</jc>
-	
-	<jc>// Then close the config to unregister the listeners.</jc>
-	<jv>config</jv>.close();
-</p>
+<div class='topic'>
+	<p>
+		In general, it's good practice to close Config if you're only creating them temporarily so that
+		their listeners get unregistered from the underlying storage APIs.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a transient config.</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+		|	
+		|	<jc>// Do stuff with it.</jc>
+		|	
+		|	<jc>// Then close the config to unregister the listeners.</jc>
+		|	<jv>config</jv>.close();
+	</p>
+</div>

@@ -15,50 +15,52 @@
 
 {title:'@Json Annotation'}
 
-<p>
-	The {@link oaj.json.annotation.Json @Json} annotation
-	is used to override the behavior of {@link oaj.json.JsonSerializer} on individual bean classes or properties.
-</p>
-<p>
-	The annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link oaj.json.annotation.Json}
-	<ul>
-		<li class='jf'>{@link oaj.json.annotation.Json#wrapperAttr() wrapperAttr}
-	</ul>
-</ul>		
-<p>
-	The {@link oaj.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
-	can be used to wrap beans inside a JSON object with a specified attribute name.
-</p>		
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@Json</ja>(wrapperAttr=<js>"personBean"</js>)
-	<jk>public class</jk> Person {
-		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
-	}
-</p>
-<p>
-	The following shows the JSON representation with and without the annotation present:
-</p>
-<table class='styled w800'>
-	<tr>
-		<th>Without annotation</th>
-		<th>With annotation</th>
-	</tr>
-	<tr>
-		<td class='code'>
-	{
-		<jok>name</jok>: <jov>'John Smith'</jov>
-	}
-		</td>
-		<td class='code'>
-	{
-		<jok>personBean</jok>: {
-			<jok>name</jok>: <jov>'John Smith'</jov>
-		}
-	}
-		</td>
-	</tr>
-</table>
+<div class='topic'>
+	<p>
+		The {@link oaj.json.annotation.Json @Json} annotation
+		is used to override the behavior of {@link oaj.json.JsonSerializer} on individual bean classes or properties.
+	</p>
+	<p>
+		The annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.json.annotation.Json}
+		<ul>
+			<li class='jf'>{@link oaj.json.annotation.Json#wrapperAttr() wrapperAttr}
+		</ul>
+	</ul>		
+	<p>
+		The {@link oaj.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
+		can be used to wrap beans inside a JSON object with a specified attribute name.
+	</p>		
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<ja>@Json</ja>(wrapperAttr=<js>"personBean"</js>)
+		|	<jk>public class</jk> Person {
+		|		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
+		|	}
+	</p>
+	<p>
+		The following shows the JSON representation with and without the annotation present:
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	{
+				|		<jok>name</jok>: <jov>'John Smith'</jov>
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		<jok>personBean</jok>: {
+				|			<jok>name</jok>: <jov>'John Smith'</jov>
+				|		}
+				|	}
+			</td>
+		</tr>
+	</table>
+</div>

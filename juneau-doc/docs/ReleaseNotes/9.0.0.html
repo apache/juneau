@@ -15,85 +15,87 @@
 
 9.0.0 (TBD)
 
-<p>
-Juneau 9.0.0 is a major release. 
-</p>
-
-<h5 class='topic w800'>General changes</h5>
-<ul class='spaced-list'>
-	<li>Configuration property names that are enabled by default have been replaced with disabler properties.
-		<br>For example, <jsf>BEAN_useInterfaceProxies</jsf> which was enabled by default has been replaced with <jsf>BEAN_disableUseInterfaceProxies</jsf>.
-</ul>
-
-<h5 class='topic w800'>juneau-marshall</h5>
-<ul class='spaced-list'>
-	<li>
-		New {@del oaj.annotation.Marshalled @Marshalled} annotation for non-bean classes.
-	<li>
-		New {@link oaj.annotation.Bean#example() @Bean(example)} annotation.
-	<li>
-		Changes to {@link oaj.annotation.Bean @Bean} annotation.
-		<ul>
-			<li><c>@Bean(bpi|bpx|bpro|bpwo)</c> replaced with <c>@Bean(properties|propertiesExclude|propertiesReadOnly|propertiesWriteOnly|p|xp|ro|o)</c>
-			<li>New {@link oaj.annotation.Bean#example() @Bean(example)} annotation.
-		</ul>
-	<li>
-		Eliminated the various <c><ja>@XConfig</ja>(applyX={...})</c> annotations and replaced them with the ability
-		to apply targeted annotations directly to configuration classes and methods (such as REST classes/methods).
-		<p class='bpcode w800'>
-	<ja>@Rest</ja>(...)
-	<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>true</jk>)
-	<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>true</jk>)
-	<jk>public class</jk> MyRestClass {
-		
-		<ja>@RestMethod</ja>(...)
-		<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>false</jk>)
-		<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>false</jk>)
-		<jk>public</jk> Object myRestMethod() { ... }
-	}
-		</p>
-	<li>
-		New shortened form {@link oaj.http.remote.RemoteOp#value()} for specifying http method name and path.
-		<p class='bpcode w800'>
-	<jc>// Normal form</jc>
-	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
+<div class='topic'>
+	<p>
+		Juneau 9.0.0 is a major release. 
+	</p>
 	
-	<jc>// Shortened form</jc>
-	<ja>@RemoteOp</ja>(<js>"PUT /foo"</js>)
-		</p>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		Removed deprecated APIs.
-	<li>
-		Removed the <c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
-	<li>
-		New shortened form {@del oajr.annotation.RestMethod#value()} for specifying http method name and path.
-		<p class='bpcode w800'>
-	<jc>// Normal form</jc>
-	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
+	<h5 class='topic w800'>General changes</h5>
+	<ul class='spaced-list'>
+		<li>Configuration property names that are enabled by default have been replaced with disabler properties.
+			<br>For example, <jsf>BEAN_useInterfaceProxies</jsf> which was enabled by default has been replaced with <jsf>BEAN_disableUseInterfaceProxies</jsf>.
+	</ul>
 	
-	<jc>// Shortened form</jc>
-	<ja>@RestMethod</ja>(<js>"PUT /{propertyName}"</js>)
-		</p>
-	<li>
-		<c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server-springboot</h5>
-<ul class='spaced-list'>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-client</h5>
-<ul class='spaced-list'>
-	<li>
-		Replaced deprecated APIs with new RestClient API introduced in 8.2.0.
-</ul>
-
-<h5 class='topic w800'>juneau-rest-mock</h5>
-<ul class='spaced-list'>
-	<li>
-		Replaced deprecated APIs with new RestClient API introduced in 8.2.0.
-</ui>
+	<h5 class='topic w800'>juneau-marshall</h5>
+	<ul class='spaced-list'>
+		<li>
+			New {@del oaj.annotation.Marshalled @Marshalled} annotation for non-bean classes.
+		<li>
+			New {@link oaj.annotation.Bean#example() @Bean(example)} annotation.
+		<li>
+			Changes to {@link oaj.annotation.Bean @Bean} annotation.
+			<ul>
+				<li><c>@Bean(bpi|bpx|bpro|bpwo)</c> replaced with <c>@Bean(properties|propertiesExclude|propertiesReadOnly|propertiesWriteOnly|p|xp|ro|o)</c>
+				<li>New {@link oaj.annotation.Bean#example() @Bean(example)} annotation.
+			</ul>
+		<li>
+			Eliminated the various <c><ja>@XConfig</ja>(applyX={...})</c> annotations and replaced them with the ability
+			to apply targeted annotations directly to configuration classes and methods (such as REST classes/methods).
+			<p class='bcode w800'>
+				|	<ja>@Rest</ja>(...)
+				|	<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>true</jk>)
+				|	<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>true</jk>)
+				|	<jk>public class</jk> MyRestClass {
+				|		
+				|		<ja>@RestMethod</ja>(...)
+				|		<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>false</jk>)
+				|		<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>false</jk>)
+				|		<jk>public</jk> Object myRestMethod() { ... }
+				|	}
+			</p>
+		<li>
+			New shortened form {@link oaj.http.remote.RemoteOp#value()} for specifying http method name and path.
+			<p class='bcode w800'>
+				|	<jc>// Normal form</jc>
+				|	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
+				|	
+				|	<jc>// Shortened form</jc>
+				|	<ja>@RemoteOp</ja>(<js>"PUT /foo"</js>)
+			</p>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			Removed deprecated APIs.
+		<li>
+			Removed the <c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
+		<li>
+			New shortened form {@del oajr.annotation.RestMethod#value()} for specifying http method name and path.
+			<p class='bcode w800'>
+				|	<jc>// Normal form</jc>
+				|	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
+				|	
+				|	<jc>// Shortened form</jc>
+				|	<ja>@RestMethod</ja>(<js>"PUT /{propertyName}"</js>)
+			</p>
+		<li>
+			<c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server-springboot</h5>
+	<ul class='spaced-list'>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-client</h5>
+	<ul class='spaced-list'>
+		<li>
+			Replaced deprecated APIs with new RestClient API introduced in 8.2.0.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-mock</h5>
+	<ul class='spaced-list'>
+		<li>
+			Replaced deprecated APIs with new RestClient API introduced in 8.2.0.
+	</ul>
+</div>

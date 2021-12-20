@@ -15,490 +15,492 @@
 
 6.4.0 (Oct 5, 2017)
 
-<p>
-	The major change in this release is the project structure.
-</p>
-<p>
-	The library now consists of the following artifacts found in the Maven group <c>"org.apache.juneau"</c>:
-</p>
-<table class='styled w800'>
-	<tr>
-		<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
-	</tr>
-	<tr class='dark bb'>
-		<td rowspan='5' style='text-align:center;font-weight:bold;padding:20px;'>Juneau Core</td>
-		<td class='code'>juneau-marshall</td>
-		<td>Serializers and parsers for:
-			<ul style='margin:0px 10px;'>
-				<li>JSON
-				<li>XML
-				<li>HTML
-				<li>UON
-				<li>URL-Encoding
-				<li>MessagePack
-				<li>SOAP/XML
-				<li>CSV
-				<li>BSON (coming soon)
-				<li>YAML (coming soon)
-				<li>Protobuf (coming soon)
-			</ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 6
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-marshall-rdf</td>
-		<td>
-			Serializers and parsers for:
-			<ul style='margin:0px 10px;'>
-				<li>RDF/XML
-				<li>RDF/XML-Abbrev 
-				<li>N-Triple
-				<li>Turtle
-				<li>N3
-			</ul>				
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 6
-				<li>Apache Jena 2.7.1
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-dto</td>
-		<td>
-			Data Transfer Objects for:
-			<ul style='margin:0px 10px;'>
-				<li>HTML5
-				<li>Atom
-				<li>Cognos
-				<li>JSON-Schema
-				<li>Swagger 2.0
-			</ul>				
-		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-svl</td>
-		<td>
-			Simple Variable Language API
-		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-config</td>
-		<td>
-			Configuration file API
-		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
-	</tr>
-	<tr class='light bb'>
-		<td rowspan='3' style='text-align:center;font-weight:bold;padding:20px;'>Juneau REST</td>
-		<td class='code'>juneau-rest-server</td>
-		<td>
-			REST Servlet API
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 6
-				<li>Servlet 3.1
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'>juneau-rest-server-jaxrs</td>
-		<td>
-			Optional JAX-RS support
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 6
-				<li>JAX-RS 2.0
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'>juneau-rest-client</td>
-		<td>
-			REST Client API
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 6
-				<li>Apache HttpClient 4.5
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td rowspan='2' style='text-align:center;font-weight:bold;padding:20px;'>Juneau Microservice</td>
-		<td class='code'>juneau-microservice-server</td>
-		<td>
-			REST Microservice Server API
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Eclipse Jetty 9.4.3
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-microservice-template</td>
-		<td>
-			Developer template project
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Eclipse Jetty 9.4.3
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td rowspan='2' style='text-align:center;font-weight:bold;padding:20px;'>Examples</td>
-		<td class='code'><c>juneau-examples-core</c></td>
-		<td>
-			Core code examples
-		</td>
-		<td></td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><c>juneau-examples-rest</c></td>
-		<td>
-			REST code examples
-		</td>
-		<td></td>
-	</tr>
-	<tr class='dark bb'>
-		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;'>Juneau All</td>
-		<td class='code'><c>juneau-all</c></td>
-		<td>
-			Combination of the following:
-			<ul style='margin:0px 10px;'>
-				<li>juneau-marshall
-				<li>juneau-dto
-				<li>juneau-svl
-				<li>juneau-config
-				<li>juneau-rest-server
-				<li>juneau-rest-client
-			</ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 6
-				<li>Servlet 3.1
-				<li>Apache HttpClient 4.5
-			</ul>
-		</td>
-	</tr>
-</table>
-
-<h5 class='topic w800'>juneau-marshall</h5>
-<ul class='spaced-list'>
-	<li>
-		Improvements to swap support.
-		<ul>
-			<li>New {@link oaj.annotation.Swap @Swap} annotation.
-				<br>Replaces the <c>@Pojo</c> and {@del @BeanProperty(swap)} annotations.
-			<li>Support for per-media-type swaps.
-				<br>Programmatic example:
-				<p class='bcode w800'>
-	<ja>@Swap</ja>(MyJsonOnlySwap.<jk>class</jk>)			
-	<jk>public class</jk> MyPojo {}
-
-	<jk>public class</jk> MyJsonOnlySwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
-
-			<jk>public</jk> MediaType[] forMediaTypes() {
-				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
-			}
-
-			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
-				<jk>return</jk> <js>"It's JSON!"</js>;
- 		}
-				</p>
-				<br>Annotated example:
-				<p class='bcode w800'>
-	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
-	<jk>public class</jk> MyBean { ... }
-
-	<jk>public class</jk> ToStringSwap <jk>extends</jk> PojoSwap&lt;Object,String&gt; {
-		<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
-			<jk>return</jk> o.toString();
-		}
-	}
-				</p>
-			<li>Support for templated swaps which provide additional context information for a swap.
-				<br>The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
-				<p class='bcode w800'>
-	<jc>// Our abstracted templated swap class.</jc>
-	<jk>public abstract class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
-
-		<jk>public</jk> MediaType[] forMediaTypes() {
-			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
-		}
-
-		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
-			<jk>return</jk> getFreeMarkerReader(template, o);  <jc>// Some method that creates raw HTML.</jc>
-		}
-	}
-				</p>
-				<p class='bcode w800'>
-		<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
+<div class='topic'>
+	<p>
+		The major change in this release is the project structure.
+	</p>
+	<p>
+		The library now consists of the following artifacts found in the Maven group <c>"org.apache.juneau"</c>:
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan='5' style='text-align:center;font-weight:bold;padding:20px;'>Juneau Core</td>
+			<td class='code'>juneau-marshall</td>
+			<td>Serializers and parsers for:
+				<ul style='margin:0px 10px;'>
+					<li>JSON
+					<li>XML
+					<li>HTML
+					<li>UON
+					<li>URL-Encoding
+					<li>MessagePack
+					<li>SOAP/XML
+					<li>CSV
+					<li>BSON (coming soon)
+					<li>YAML (coming soon)
+					<li>Protobuf (coming soon)
+				</ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 6
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'>juneau-marshall-rdf</td>
+			<td>
+				Serializers and parsers for:
+				<ul style='margin:0px 10px;'>
+					<li>RDF/XML
+					<li>RDF/XML-Abbrev 
+					<li>N-Triple
+					<li>Turtle
+					<li>N3
+				</ul>				
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 6
+					<li>Apache Jena 2.7.1
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'>juneau-dto</td>
+			<td>
+				Data Transfer Objects for:
+				<ul style='margin:0px 10px;'>
+					<li>HTML5
+					<li>Atom
+					<li>Cognos
+					<li>JSON-Schema
+					<li>Swagger 2.0
+				</ul>				
+			</td>
+			<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'>juneau-svl</td>
+			<td>
+				Simple Variable Language API
+			</td>
+			<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'>juneau-config</td>
+			<td>
+				Configuration file API
+			</td>
+			<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan='3' style='text-align:center;font-weight:bold;padding:20px;'>Juneau REST</td>
+			<td class='code'>juneau-rest-server</td>
+			<td>
+				REST Servlet API
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 6
+					<li>Servlet 3.1
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'>juneau-rest-server-jaxrs</td>
+			<td>
+				Optional JAX-RS support
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 6
+					<li>JAX-RS 2.0
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'>juneau-rest-client</td>
+			<td>
+				REST Client API
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 6
+					<li>Apache HttpClient 4.5
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan='2' style='text-align:center;font-weight:bold;padding:20px;'>Juneau Microservice</td>
+			<td class='code'>juneau-microservice-server</td>
+			<td>
+				REST Microservice Server API
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8
+					<li>Eclipse Jetty 9.4.3
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'>juneau-microservice-template</td>
+			<td>
+				Developer template project
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8
+					<li>Eclipse Jetty 9.4.3
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan='2' style='text-align:center;font-weight:bold;padding:20px;'>Examples</td>
+			<td class='code'><c>juneau-examples-core</c></td>
+			<td>
+				Core code examples
+			</td>
+			<td></td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'><c>juneau-examples-rest</c></td>
+			<td>
+				REST code examples
+			</td>
+			<td></td>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;'>Juneau All</td>
+			<td class='code'><c>juneau-all</c></td>
+			<td>
+				Combination of the following:
+				<ul style='margin:0px 10px;'>
+					<li>juneau-marshall
+					<li>juneau-dto
+					<li>juneau-svl
+					<li>juneau-config
+					<li>juneau-rest-server
+					<li>juneau-rest-client
+				</ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 6
+					<li>Servlet 3.1
+					<li>Apache HttpClient 4.5
+				</ul>
+			</td>
+		</tr>
+	</table>
+	
+	<h5 class='topic w800'>juneau-marshall</h5>
+	<ul class='spaced-list'>
+		<li>
+			Improvements to swap support.
+			<ul>
+				<li>New {@link oaj.annotation.Swap @Swap} annotation.
+					<br>Replaces the <c>@Pojo</c> and {@del @BeanProperty(swap)} annotations.
+				<li>Support for per-media-type swaps.
+					<br>Programmatic example:
+					<p class='bcode w800'>
+		<ja>@Swap</ja>(MyJsonOnlySwap.<jk>class</jk>)			
 		<jk>public class</jk> MyPojo {}
-				</p>
-			<li>New {@del oaj.annotation.Swaps @Swaps} annotation for defining multiple swaps
-				against the same POJO when they're differentiated by media types:
-				<p class='bcode w800'>
-	<ja>@Swaps</ja>(
-		{
-			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+	
+		<jk>public class</jk> MyJsonOnlySwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+	
+				<jk>public</jk> MediaType[] forMediaTypes() {
+					<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+				}
+	
+				<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+					<jk>return</jk> <js>"It's JSON!"</js>;
+	 		}
+					</p>
+					<br>Annotated example:
+					<p class='bcode w800'>
+		<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
+		<jk>public class</jk> MyBean { ... }
+	
+		<jk>public class</jk> ToStringSwap <jk>extends</jk> PojoSwap&lt;Object,String&gt; {
+			<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
+				<jk>return</jk> o.toString();
+			}
 		}
-	)
-	<jk>public class</jk> MyPojo {}
-				</p>
-		</ul>
-	<li>
-		New {@del oaj.transform.Surrogate} interface for identifying surrogate classes.
-	<li>
-		Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
-	<li>
-		Serializers now serialize the contents of {@link java.io.Reader Readers} and {@link java.io.InputStream InputStreams}
-		directly to the output stream or writer.
-		<br>When used with conjunction with <c>PojoSwaps</c>, this can be used to provide customized
-		output for specific content types.
-		<p class='bcode w800'>
-	<ja>@Pojo</ja>(swap=MyBeanSwap.<jk>class</jk>)
-	<jk>public class</jk> MyBean {...}
+					</p>
+				<li>Support for templated swaps which provide additional context information for a swap.
+					<br>The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
+					<p class='bcode w800'>
+		<jc>// Our abstracted templated swap class.</jc>
+		<jk>public abstract class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
 	
-	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
-		<jk>public</jk> Object swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
-			MediaType mt = session.getMediaType();
-			<jk>if</jk> (mt.hasSubType(<js>"json"</js>))
-				<jk>return new</jk> StringReader(<js>"{foo:'bar'}"</js>);  <jc>// Custom JSON output</jc>
-			<jk>return</jk> o; <jc>// Otherwise treat as normal bean</jc>
+			<jk>public</jk> MediaType[] forMediaTypes() {
+				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
+			}
+	
+			<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
+				<jk>return</jk> getFreeMarkerReader(template, o);  <jc>// Some method that creates raw HTML.</jc>
+			}
 		}
-	}
+					</p>
+					<p class='bcode w800'>
+			<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
+			<jk>public class</jk> MyPojo {}
+					</p>
+				<li>New {@del oaj.annotation.Swaps @Swaps} annotation for defining multiple swaps
+					against the same POJO when they're differentiated by media types:
+					<p class='bcode w800'>
+		<ja>@Swaps</ja>(
+			{
+				<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
+				<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
+				<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+			}
+		)
+		<jk>public class</jk> MyPojo {}
+					</p>
+			</ul>
+		<li>
+			New {@del oaj.transform.Surrogate} interface for identifying surrogate classes.
+		<li>
+			Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
+		<li>
+			Serializers now serialize the contents of {@link java.io.Reader Readers} and {@link java.io.InputStream InputStreams}
+			directly to the output stream or writer.
+			<br>When used with conjunction with <c>PojoSwaps</c>, this can be used to provide customized
+			output for specific content types.
+			<p class='bcode w800'>
+		<ja>@Pojo</ja>(swap=MyBeanSwap.<jk>class</jk>)
+		<jk>public class</jk> MyBean {...}
+		
+		<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
+			<jk>public</jk> Object swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+				MediaType mt = session.getMediaType();
+				<jk>if</jk> (mt.hasSubType(<js>"json"</js>))
+					<jk>return new</jk> StringReader(<js>"{foo:'bar'}"</js>);  <jc>// Custom JSON output</jc>
+				<jk>return</jk> o; <jc>// Otherwise treat as normal bean</jc>
+			}
+		}
+		
+		<jc>// Produces "{foo:'bar'}"</jc>
+		String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+	.toString(<jk>new</jk> MyBean());
+			</p>
+			<br>This feature helps with the implementation of language-agnostic template support such as for
+			using FreeMaker to serialize POJOs to HTML.
+		<li>
+			{@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
+			objects are now reusable if used within the same thread.
+			<p class='bcode w800'>
+		<jc>// Old way (still works)</jc>
+		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer1, pojo1);
+		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer2, pojo2);
+		
+		<jc>// Same, but using a session object</jc>
+		SerializerSession session = JsonSerializer.<jsf>DEFAULT</jsf>.createSession();
+		<jk>try</jk> {
+			session.serialize(writer1, pojo1);
+			session.serialize(writer2, pojo2);
+		} <jk>finally</jk> {
+			session.close();
+		}  			
+			</p>
+			This is mostly an internal change and doesn't affect the existing APIs.
+		<li>
+			{@del oaj.transform.PojoSwap#swap(BeanSession,Object)} and {@del oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
+			can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
+		<li>
+			New {@del oaj.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del oaj.transforms.CalendarSwap} and 
+			{@del oaj.transforms.DateSwap}.
+		<li>
+			New annotation {@link oaj.html.annotation.Html#anchorText}.
+		<li>
+			New methods on {@del oaj.ObjectList}:
+			<ul>
+				<li>{@del oaj.ObjectList#get(int,Class) get(int,Class)}
+				<li>{@del oaj.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
+				<li>{@del oaj.ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)}
+				<li>{@del oaj.ObjectList#getList(int,Class) getList(int,Class)}
+			</ul>
+		<li>
+			New methods on {@del oaj.ObjectMap}:
+			<ul>
+				<li>{@del oaj.ObjectMap#get(String,Class) get(String,Class)}
+				<li>{@del oaj.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
+				<li>{@del oaj.ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)}
+				<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+				<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+				<li>{@del oaj.ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)}
+				<li>{@del oaj.ObjectMap#getAt(String,Class) getAt(String,Class)}
+				<li>{@del oaj.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
+				<li>{@del oaj.ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)}
+				<li>{@del oaj.ObjectMap#getList(String,Class,List) getList(String,Class,List)}
+			</ul>
+		<li>
+			New methods on {@link oaj.utils.PojoRest}:
+			<ul>
+				<li>{@link oaj.utils.PojoRest#get(String,Class) get(String,Class)}
+				<li>{@link oaj.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
+				<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)}
+				<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+				<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+			</ul>
+		<li>
+			Fixed bug where {@link oaj.BeanSession#getMediaType()} wasn't returning a value.
+		<li>
+			Eliminated the <ja>@Consumes</ja> and <ja>@Produces</ja> annotations.
+			<br>The supported media types are now passed in through the constructors.
+			<br>This was changed to eliminate a performance issue where a field could not be set as final because
+			the call to <c>getClass()</c> to retrieve the annotation value could not be called before calling
+			the <c><jk>super</jk>()</c> method.
+		<li>
+			New class: {@link oaj.utils.PojoMerge}
+		<li>
+			New doc: <dc>2.6.2 - @Pojo annotation</dc>
+		<li>
+			New doc: <dc>2.6.5 - Serializing Readers and InputStreams</dc>
+	</ul>
 	
-	<jc>// Produces "{foo:'bar'}"</jc>
-	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
-.toString(<jk>new</jk> MyBean());
-		</p>
-		<br>This feature helps with the implementation of language-agnostic template support such as for
-		using FreeMaker to serialize POJOs to HTML.
-	<li>
-		{@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
-		objects are now reusable if used within the same thread.
-		<p class='bcode w800'>
-	<jc>// Old way (still works)</jc>
-	JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer1, pojo1);
-	JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer2, pojo2);
+	<h5 class='topic w800'>juneau-dto</h5>
+	<ul class='spaced-list'>
+		<li>
+			{@link oaj.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
+			of objects.
+		<li>
+			The DTO beans can now be serialized to strings of their typical language by calling the <c>toString()</c> method.
+			<br>For example, <c>Swagger.toString()</c> produces JSON and the HTML5 <c>Form.toString()</c>
+			produces HTML.
+	</ul>
 	
-	<jc>// Same, but using a session object</jc>
-	SerializerSession session = JsonSerializer.<jsf>DEFAULT</jsf>.createSession();
-	<jk>try</jk> {
-		session.serialize(writer1, pojo1);
-		session.serialize(writer2, pojo2);
-	} <jk>finally</jk> {
-		session.close();
-	}  			
-		</p>
-		This is mostly an internal change and doesn't affect the existing APIs.
-	<li>
-		{@del oaj.transform.PojoSwap#swap(BeanSession,Object)} and {@del oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
-		can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
-	<li>
-		New {@del oaj.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del oaj.transforms.CalendarSwap} and 
-		{@del oaj.transforms.DateSwap}.
-	<li>
-		New annotation {@link oaj.html.annotation.Html#anchorText}.
-	<li>
-		New methods on {@del oaj.ObjectList}:
-		<ul>
-			<li>{@del oaj.ObjectList#get(int,Class) get(int,Class)}
-			<li>{@del oaj.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
-			<li>{@del oaj.ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)}
-			<li>{@del oaj.ObjectList#getList(int,Class) getList(int,Class)}
-		</ul>
-	<li>
-		New methods on {@del oaj.ObjectMap}:
-		<ul>
-			<li>{@del oaj.ObjectMap#get(String,Class) get(String,Class)}
-			<li>{@del oaj.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
-			<li>{@del oaj.ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)}
-			<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
-			<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
-			<li>{@del oaj.ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)}
-			<li>{@del oaj.ObjectMap#getAt(String,Class) getAt(String,Class)}
-			<li>{@del oaj.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
-			<li>{@del oaj.ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)}
-			<li>{@del oaj.ObjectMap#getList(String,Class,List) getList(String,Class,List)}
-		</ul>
-	<li>
-		New methods on {@link oaj.utils.PojoRest}:
-		<ul>
-			<li>{@link oaj.utils.PojoRest#get(String,Class) get(String,Class)}
-			<li>{@link oaj.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
-			<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)}
-			<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
-			<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
-		</ul>
-	<li>
-		Fixed bug where {@link oaj.BeanSession#getMediaType()} wasn't returning a value.
-	<li>
-		Eliminated the <ja>@Consumes</ja> and <ja>@Produces</ja> annotations.
-		<br>The supported media types are now passed in through the constructors.
-		<br>This was changed to eliminate a performance issue where a field could not be set as final because
-		the call to <c>getClass()</c> to retrieve the annotation value could not be called before calling
-		the <c><jk>super</jk>()</c> method.
-	<li>
-		New class: {@link oaj.utils.PojoMerge}
-	<li>
-		New doc: <dc>2.6.2 - @Pojo annotation</dc>
-	<li>
-		New doc: <dc>2.6.5 - Serializing Readers and InputStreams</dc>
-</ul>
-
-<h5 class='topic w800'>juneau-dto</h5>
-<ul class='spaced-list'>
-	<li>
-		{@link oaj.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
-		of objects.
-	<li>
-		The DTO beans can now be serialized to strings of their typical language by calling the <c>toString()</c> method.
-		<br>For example, <c>Swagger.toString()</c> produces JSON and the HTML5 <c>Form.toString()</c>
-		produces HTML.
-</ul>
-
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		Revamped and simplified servlet and REST-call lifecycle handling through new
-		{@link oajr.annotation.RestHook @RestHook} annotation.
-		<ul>
-			<li>The {@link oajr.RestServlet#init(ServletConfig)} method is now final and can
-				no longer be extended.
-				<br>Instead, use {@link oajr.annotation.HookEvent#INIT} or 
-				{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
-			<li>The following methods on {@link oajr.RestServlet} have been removed:
-				<ul>
-					<li><c>init(RestConfig)</c> 
-						- Use {@link oajr.annotation.HookEvent#INIT} instead.
-					<li><c>onSuccess(RestRequest, RestResponse, long)</c>
-						- Use {@link oajr.annotation.HookEvent#END_CALL} instead.
-					<li><c>onPreCall(RestRequest)</c>
-						- Use {@link oajr.annotation.HookEvent#PRE_CALL} instead.
-					<li><c>onPostCall(RestRequest, RestResponse)</c>
-						- Use {@link oajr.annotation.HookEvent#POST_CALL} instead.
-				</ul> 	
-		</ul>
-	<li>
-		Simplified {@link oajr.widget.MenuItemWidget}.
-		<br>Exposes an abstract method {@del getContent(RestRequest)} that
-		can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
-		get converted to HTML using {@link oaj.html.HtmlSerializer#DEFAULT}.
-	<li>
-		{@del oajr.RestResourceResolver} instances are now inherited from parent resources to child resources
-		unless explicitly overridden at the child level.
-		<br>It's also been changed to an interface.
-	<li>New annotations on {@del @RestResource}:
-		<ul>
-			<li>{@del resourceResolver()}
-				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
-				dependency injection frameworks.
-			<li>{@del contextPath()} - 
-				<br>Allows you to override the context path value inherited from the servlet container.
-			<li>{@del allowHeaderParams()} - 
-				<br>Replaces the <c>RestContext.REST_allowHeaderParams</c> setting.
-			<li>{@del allowMethodParam()} - 
-				<br>Replaces the <c>RestContext.REST_allowMethodParam</c> setting.
-			<li>{@del allowBodyParam()} - 
-				<br>Replaces the <c>RestContext.REST_allowBodyParam</c> setting.
-			<li>{@del renderResponseStackTraces()} - 
-				<br>Replaces the <c>RestContext.REST_xxx</c> setting.
-			<li>{@del useStackTraceHashes()} - 
-				<br>Replaces the <c>RestContext.REST_useStackTraceHashes</c> setting.
-			<li>{@del defaultCharset()} - 
-				<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-			<li>{@del paramFormat()} - 
-				<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
-		</ul>
-	<li>New annotations on {@del oajr.annotation.RestMethod @RestMethod}:
-		<ul>
-			<li>{@del oajr.annotation.RestMethod#defaultCharset() defaultCharset()} - 
-				<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-			<li>{@del RestMethod#paramFormat()} - 
-				<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
-		</ul>
-	<li>
-		The following implementation classes can now be defined as non-static inner classes of servlets/resources:
-		<ul>
-			<li>{@link oajr.widget.Widget}
-			<li>{@link oajr.RestConverter}
-			<li>{@link oajr.RestGuard}
-			<li>{@link oajr.ResponseHandler}
-			<li>{@del oajr.RestCallHandler}
-			<li>{@del oajr.RestInfoProvider}
-			<li>{@del oajr.RestResourceResolver}
-			<li>{@del oajr.RestLogger}
-			<li>{@link oaj.html.HtmlDocTemplate}
-		</ul>
-	<li>
-		New tooltip template: {@link oajr.widget.Tooltip}
-	<li>
-		New dark theme:
-		<br><img src='doc-files/ReleaseNotes.632.DarkStyle.png'>
-	<li>
-		Stylesheet selection now stored in HTTP session when passed in via <c>?stylesheet</c> query parameter.
-	<li>
-		New doc: <dc>Lifecycle Hooks</dc>
-	<li>
-		Eliminated the <c>RestServletJenaDefault</c> class to remove the Jena dependency class on 
-		the <c>juneau-rest-server</c> artifact. 
-		<br>It's simple enough to simply extend <c>BasicRestServlet</c> and add the RDF serializers and
-		parsers.
-</ul>
-
-<h5 class='topic w800'>juneau-microservice</h5>
-<ul class='spaced-list'>
-	<li>
-		The microservice has been significantly modified to be configured via a <c>jetty.xml</c> file
-		for maximum flexibility instead of the hodge-podge of support in the config file.
-		<br>Top-level servlets should now be defined in the provided <c>jetty.xml</c> file.
-	<li>
-		New methods on {@del RestMicroservice}:
-		<ul>
-			<li>{@del addServlet(Servlet,String)}
-			<li>{@del addServletAttribute(String,Object)}
-			<li>{@del getServer()}
-			<li>{@del getInstance()}
-			<li>{@del getPort()}
-			<li>{@del getContextPath()}
-			<li>{@del getProtocol()}
-			<li>{@del getHostName()}
-		</ul>
-	<li>
-		New methods on {@link oaj.microservice.Microservice}:
-		<ul>
-			<li>{@link oaj.microservice.Microservice#getInstance() getInstance()}
-		</ul>
-	<li>
-		New class {@del JettyLogger} for directing Jetty logging to the
-		java.util.logging framework.
-	<li>
-		New class {@del DebugResource} for viewing and generating
-		Jetty thread dumps through REST calls.
-</ul>
-
-<h5 class='topic w800'>org.apache.juneau.rest.examples</h5>
-<ul class='spaced-list'>
-	<li>
-		New example of adding a menu-item widget to the Pet Store resource (including tooltips):
-		<br><img src='doc-files/ReleaseNotes.632.PetStoreAdd.png'>
-</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			Revamped and simplified servlet and REST-call lifecycle handling through new
+			{@link oajr.annotation.RestHook @RestHook} annotation.
+			<ul>
+				<li>The {@link oajr.RestServlet#init(ServletConfig)} method is now final and can
+					no longer be extended.
+					<br>Instead, use {@link oajr.annotation.HookEvent#INIT} or 
+					{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
+				<li>The following methods on {@link oajr.RestServlet} have been removed:
+					<ul>
+						<li><c>init(RestConfig)</c> 
+							- Use {@link oajr.annotation.HookEvent#INIT} instead.
+						<li><c>onSuccess(RestRequest, RestResponse, long)</c>
+							- Use {@link oajr.annotation.HookEvent#END_CALL} instead.
+						<li><c>onPreCall(RestRequest)</c>
+							- Use {@link oajr.annotation.HookEvent#PRE_CALL} instead.
+						<li><c>onPostCall(RestRequest, RestResponse)</c>
+							- Use {@link oajr.annotation.HookEvent#POST_CALL} instead.
+					</ul> 	
+			</ul>
+		<li>
+			Simplified {@link oajr.widget.MenuItemWidget}.
+			<br>Exposes an abstract method {@del getContent(RestRequest)} that
+			can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
+			get converted to HTML using {@link oaj.html.HtmlSerializer#DEFAULT}.
+		<li>
+			{@del oajr.RestResourceResolver} instances are now inherited from parent resources to child resources
+			unless explicitly overridden at the child level.
+			<br>It's also been changed to an interface.
+		<li>New annotations on {@del @RestResource}:
+			<ul>
+				<li>{@del resourceResolver()}
+					<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
+					dependency injection frameworks.
+				<li>{@del contextPath()} - 
+					<br>Allows you to override the context path value inherited from the servlet container.
+				<li>{@del allowHeaderParams()} - 
+					<br>Replaces the <c>RestContext.REST_allowHeaderParams</c> setting.
+				<li>{@del allowMethodParam()} - 
+					<br>Replaces the <c>RestContext.REST_allowMethodParam</c> setting.
+				<li>{@del allowBodyParam()} - 
+					<br>Replaces the <c>RestContext.REST_allowBodyParam</c> setting.
+				<li>{@del renderResponseStackTraces()} - 
+					<br>Replaces the <c>RestContext.REST_xxx</c> setting.
+				<li>{@del useStackTraceHashes()} - 
+					<br>Replaces the <c>RestContext.REST_useStackTraceHashes</c> setting.
+				<li>{@del defaultCharset()} - 
+					<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
+				<li>{@del paramFormat()} - 
+					<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
+			</ul>
+		<li>New annotations on {@del oajr.annotation.RestMethod @RestMethod}:
+			<ul>
+				<li>{@del oajr.annotation.RestMethod#defaultCharset() defaultCharset()} - 
+					<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
+				<li>{@del RestMethod#paramFormat()} - 
+					<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
+			</ul>
+		<li>
+			The following implementation classes can now be defined as non-static inner classes of servlets/resources:
+			<ul>
+				<li>{@link oajr.widget.Widget}
+				<li>{@link oajr.RestConverter}
+				<li>{@link oajr.RestGuard}
+				<li>{@link oajr.ResponseHandler}
+				<li>{@del oajr.RestCallHandler}
+				<li>{@del oajr.RestInfoProvider}
+				<li>{@del oajr.RestResourceResolver}
+				<li>{@del oajr.RestLogger}
+				<li>{@link oaj.html.HtmlDocTemplate}
+			</ul>
+		<li>
+			New tooltip template: {@link oajr.widget.Tooltip}
+		<li>
+			New dark theme:
+			<br><img src='doc-files/ReleaseNotes.632.DarkStyle.png'>
+		<li>
+			Stylesheet selection now stored in HTTP session when passed in via <c>?stylesheet</c> query parameter.
+		<li>
+			New doc: <dc>Lifecycle Hooks</dc>
+		<li>
+			Eliminated the <c>RestServletJenaDefault</c> class to remove the Jena dependency class on 
+			the <c>juneau-rest-server</c> artifact. 
+			<br>It's simple enough to simply extend <c>BasicRestServlet</c> and add the RDF serializers and
+			parsers.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-microservice</h5>
+	<ul class='spaced-list'>
+		<li>
+			The microservice has been significantly modified to be configured via a <c>jetty.xml</c> file
+			for maximum flexibility instead of the hodge-podge of support in the config file.
+			<br>Top-level servlets should now be defined in the provided <c>jetty.xml</c> file.
+		<li>
+			New methods on {@del RestMicroservice}:
+			<ul>
+				<li>{@del addServlet(Servlet,String)}
+				<li>{@del addServletAttribute(String,Object)}
+				<li>{@del getServer()}
+				<li>{@del getInstance()}
+				<li>{@del getPort()}
+				<li>{@del getContextPath()}
+				<li>{@del getProtocol()}
+				<li>{@del getHostName()}
+			</ul>
+		<li>
+			New methods on {@link oaj.microservice.Microservice}:
+			<ul>
+				<li>{@link oaj.microservice.Microservice#getInstance() getInstance()}
+			</ul>
+		<li>
+			New class {@del JettyLogger} for directing Jetty logging to the
+			java.util.logging framework.
+		<li>
+			New class {@del DebugResource} for viewing and generating
+			Jetty thread dumps through REST calls.
+	</ul>
+	
+	<h5 class='topic w800'>org.apache.juneau.rest.examples</h5>
+	<ul class='spaced-list'>
+		<li>
+			New example of adding a menu-item widget to the Pet Store resource (including tooltips):
+			<br><img src='doc-files/ReleaseNotes.632.PetStoreAdd.png'>
+	</ul>
+</div>

@@ -15,61 +15,63 @@
 
 {title:'Response Status', created:'8.1.0', flags:'todo'}
 
-<p>
-	After execution using {@del oajr.client2.RestRequest#run()} or {@del oajr.client2.RestRequest#complete()}, the following methods can be used
-	to get the response status:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestResponse}
-	<ul>
-		<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
-		<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
-		<li class='jm'><c>{@del oajr.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
-		<li class='jm'><c>{@del oajr.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@del oajr.client2.RestResponseStatusLineAssertion}</c>
+<div class='topic'>
+	<p>
+		After execution using {@del oajr.client2.RestRequest#run()} or {@del oajr.client2.RestRequest#complete()}, the following methods can be used
+		to get the response status:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestResponse}
+		<ul>
+			<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
+			<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
+			<li class='jm'><c>{@del oajr.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
+			<li class='jm'><c>{@del oajr.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@del oajr.client2.RestResponseStatusLineAssertion}</c>
+		</ul>
 	</ul>
-</ul>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Only interested in status code.</jc>
-	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
-</p>
-
-<p>
-	Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Interested in multiple values.</jc>
-	Mutable&lt;Integer&gt; <jv>statusCode</jv> = Mutable.<jsm>create</jsm>();
-	Mutable&lt;String&gt; <jv>reasonPhrase</jv> = Mutable.<jsm>create</jsm>();
 	
-	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
-	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
-</p>
-
-<ul class='notes'>
-	<li>If you are only interested in the response status and not the response body, be sure to use {@del oajr.client2.RestRequest#complete()} instead
-		of {@del oajr.client2.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
-		consume the response yourself.
-</ul>
-
-<p>
-	The assertion method is provided for quickly asserting status codes in fluent calls.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Status assertion using a static value.</jc>
-	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
-		.run()
-		.assertStatus().code().isBetween(200,399)
-		.getBody().asString();
-
-	<jc>// Status assertion using a predicate.</jc>
-	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
-		.run()
-		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
-		.getBody().asString();
-</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Only interested in status code.</jc>
+		|	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
+	</p>
+	
+	<p>
+		Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Interested in multiple values.</jc>
+		|	Mutable&lt;Integer&gt; <jv>statusCode</jv> = Mutable.<jsm>create</jsm>();
+		|	Mutable&lt;String&gt; <jv>reasonPhrase</jv> = Mutable.<jsm>create</jsm>();
+		|	
+		|	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
+		|	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
+	</p>
+	
+	<ul class='notes'>
+		<li>If you are only interested in the response status and not the response body, be sure to use {@del oajr.client2.RestRequest#complete()} instead
+			of {@del oajr.client2.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
+			consume the response yourself.
+	</ul>
+	
+	<p>
+		The assertion method is provided for quickly asserting status codes in fluent calls.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Status assertion using a static value.</jc>
+		|	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.assertStatus().code().isBetween(200,399)
+		|		.getBody().asString();
+		|
+		|	<jc>// Status assertion using a predicate.</jc>
+		|	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
+		|		.getBody().asString();
+	</p>
+</div>

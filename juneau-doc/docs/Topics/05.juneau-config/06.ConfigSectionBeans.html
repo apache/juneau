@@ -15,31 +15,33 @@
 
 {title:'Section Beans'}
 
-<p>
-	Config files can also be used to directly populate beans using 
-	{@link oaj.config.Config#getSectionAsBean(String,Class,boolean)}.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Example config file</jc>
-	<cs>[MyAddress]</cs>
-	<ck>street</ck> = <cv>123 Main Street</cv>
-	<ck>city</ck> = <cv>Anywhere</cv>
-	<ck>state</ck> = <cv>NY</cv>
-	<ck>zip</ck> = <cv>12345</cv>
-</p>
-<p class='bpcode w800'>
-	<jc>// Example bean</jc>
-	<jk>public class</jk> Address {
-		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
-		<jk>public</jk> StateEnum <jf>state</jf>;
-		<jk>public int</jk> <jf>zip</jf>;
-	}
-
-	<jc>// Example usage</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	Address <jv>myAddress</jv> = <jv>config</jv>.getSectionAsBean(<js>"MyAddress"</js>, Address.<jk>class</jk>);
-</p>
-<p>
-	Like maps, beans created this way are snapshot copies of the section at the time of the method call.
-</p>
+<div class='topic'>
+	<p>
+		Config files can also be used to directly populate beans using 
+		{@link oaj.config.Config#getSectionAsBean(String,Class,boolean)}.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Example config file</jc>
+		|	<cs>[MyAddress]</cs>
+		|	<ck>street</ck> = <cv>123 Main Street</cv>
+		|	<ck>city</ck> = <cv>Anywhere</cv>
+		|	<ck>state</ck> = <cv>NY</cv>
+		|	<ck>zip</ck> = <cv>12345</cv>
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Example bean</jc>
+		|	<jk>public class</jk> Address {
+		|		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
+		|		<jk>public</jk> StateEnum <jf>state</jf>;
+		|		<jk>public int</jk> <jf>zip</jf>;
+		|	}
+		|
+		|	<jc>// Example usage</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.getSectionAsBean(<js>"MyAddress"</js>, Address.<jk>class</jk>);
+	</p>
+	<p>
+		Like maps, beans created this way are snapshot copies of the section at the time of the method call.
+	</p>
+</div>

@@ -27,6 +27,10 @@ import org.apache.juneau.http.response.*;
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}.
  *
  * <p>
+ * 	Implements basic configuration settings from {@link BasicUniversalRest} and
+ * 	basic endpoint methods from {@link BasicRestOperations}.
+ *
+ * <p>
  * This is particularly useful in Spring Boot environments that auto-detect servlets to deploy in servlet containers,
  * but you want this resource to be deployed as a child instead.
  *

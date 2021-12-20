@@ -15,35 +15,37 @@
 
 5.0.0.29 (Aug 2, 2013)
 
-<p>
-	Juno 5.0.0.29 is a moderate update.
-</p>
-<ul class='spaced-list'>
-	<li>
-		Revamped the API for filter support:
-		<ul>
-			<li>Updated {@del oaj.transform.BeanFilter} class to mirror the {@link oaj.annotation.Bean @Bean} annotation.</li>
-			<li>Introduced support for bean {@del Bean#subTypeProperty() subtypes}. </li>
-			<li>Replaced <c><ja>@Bean</ja>(filter=xxx)</c> with new {@del @Transform} annotation.</li>
-		</ul>
-	</li>
-	<li>
-		Revamped URL-Encoding support.<br>
-		The old URL-Encoding serializer and parser simply used the JSON serializer/parser with a thin URL-encoding top layer.<br>
-		The new URL-Encoding serialize and parser was written from scratch and is considerably more consistent in design and output.
-	</li>
-	<li>	
-		Improved number parsing.<br> 
-		The new number parser should handle any valid numeric syntax for decimals and floats that Java itself supports.
-	</li>
-	<li>
-		{@link oaj.json.JsonSerializer} LAX mode now quotes reserved word attributes.
-	</li>
-	<li>
-		New predefined DateFilters with millisecond precision:
-		<ul>
-			<li><c>org.apache.juneau.swaps.DateSwap.ISO8601DTP</c></li>
-			<li><c>org.apache.juneau.swaps.DateSwap.ISO8601DTZP</c></li>
-		</ul>
-	</li>
-</ul>		
+<div class='topic'>
+	<p>
+		Juno 5.0.0.29 is a moderate update.
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Revamped the API for filter support:
+			<ul>
+				<li>Updated {@del oaj.transform.BeanFilter} class to mirror the {@link oaj.annotation.Bean @Bean} annotation.</li>
+				<li>Introduced support for bean {@del Bean#subTypeProperty() subtypes}. </li>
+				<li>Replaced <c><ja>@Bean</ja>(filter=xxx)</c> with new {@del @Transform} annotation.</li>
+			</ul>
+		</li>
+		<li>
+			Revamped URL-Encoding support.<br>
+			The old URL-Encoding serializer and parser simply used the JSON serializer/parser with a thin URL-encoding top layer.<br>
+			The new URL-Encoding serialize and parser was written from scratch and is considerably more consistent in design and output.
+		</li>
+		<li>	
+			Improved number parsing.<br> 
+			The new number parser should handle any valid numeric syntax for decimals and floats that Java itself supports.
+		</li>
+		<li>
+			{@link oaj.json.JsonSerializer} LAX mode now quotes reserved word attributes.
+		</li>
+		<li>
+			New predefined DateFilters with millisecond precision:
+			<ul>
+				<li><c>org.apache.juneau.swaps.DateSwap.ISO8601DTP</c></li>
+				<li><c>org.apache.juneau.swaps.DateSwap.ISO8601DTZP</c></li>
+			</ul>
+		</li>
+	</ul>		
+</div>

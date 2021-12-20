@@ -13,16 +13,18 @@
  ***************************************************************************************************************************/
  -->
 
-juneau-rest-server
+{title:'juneau-rest-server', created:'8.2.0'} 
 
-<p>
-	Denial of service attacks can be alleviated through the {@link oajr.annotation.Rest#maxInput() maxInput()}
-	setting.  Arbitrarily-large input will trigger an exception before causing out-of-memory errors.
-	The default value for this setting is 100MB.  
-</p>
-<p>
-	Since the parsers do not use intermediate DOMs and instead parse directly into Java objects,  
-	deeply nested data structures will almost always trigger stack overflow errors long before memory consumption
-	becomes an issue.  However, this is NOT true of the RDF parsers that use an intermediate DOM.  If parsing 
-	RDF, you may want to consider lowering the max-input value above.
-</p>
+<div class='topic'>
+	<p>
+		Denial of service attacks can be alleviated through the {@link oajr.annotation.Rest#maxInput() maxInput()}
+		setting.  Arbitrarily-large input will trigger an exception before causing out-of-memory errors.
+		The default value for this setting is 100MB.  
+	</p>
+	<p>
+		Since the parsers do not use intermediate DOMs and instead parse directly into Java objects,  
+		deeply nested data structures will almost always trigger stack overflow errors long before memory consumption
+		becomes an issue.  However, this is NOT true of the RDF parsers that use an intermediate DOM.  If parsing 
+		RDF, you may want to consider lowering the max-input value above.
+	</p>
+</div>

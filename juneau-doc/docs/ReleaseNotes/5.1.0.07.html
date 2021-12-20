@@ -15,26 +15,28 @@
 
 5.1.0.7 (Oct 5, 2014)
 
-<p>
-	Juno 5.1.0.7 is a moderate update.
-</p>
-<ul class='spaced-list'>
-	<li>Improved error handling.  
-	<li>New {@del ParserContext#PARSER_debug} and {@del SerializerContext#SERIALIZER_debug}.
-		settings for logging additional information for debugging problems.
-	<li>New {@del SERIALIZER_ignoreRecursions} setting for explicitly ignoring recursions when 
-		serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
-		and throws exceptions when they occur.
-	<li>Improved handling of <c>StackOverflowErrors</c>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
-		is displayed showing the exact chain of objects that resulted in the stack overflow.
-	<li>Bug fixes in {@link oaj.dto.ResultSetList} for Oracle and SQL Server.
-	<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <c>SerializerContext.getProperties()</c> and
-		<c>ParserContext.getProperties()</c>.		
-	<li>Removed media-type and encoding attributes from {@del SerializerContext} and {@del ParserContext}	
-		since these are now available through context properties, and are typically not used.
-	<li>{@link oaj.xml.XmlParser} now accepts <c>application/xml</c>.		
-	<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
-	<li>Improved concurrency on BeanContext class.
-	<li>Fixed bug in {@link oajr.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
-	<li>Fixed bug in {@link oajr.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.1.0.7 is a moderate update.
+	</p>
+	<ul class='spaced-list'>
+		<li>Improved error handling.  
+		<li>New {@del ParserContext#PARSER_debug} and {@del SerializerContext#SERIALIZER_debug}.
+			settings for logging additional information for debugging problems.
+		<li>New {@del SERIALIZER_ignoreRecursions} setting for explicitly ignoring recursions when 
+			serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
+			and throws exceptions when they occur.
+		<li>Improved handling of <c>StackOverflowErrors</c>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
+			is displayed showing the exact chain of objects that resulted in the stack overflow.
+		<li>Bug fixes in {@link oaj.dto.ResultSetList} for Oracle and SQL Server.
+		<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <c>SerializerContext.getProperties()</c> and
+			<c>ParserContext.getProperties()</c>.		
+		<li>Removed media-type and encoding attributes from {@del SerializerContext} and {@del ParserContext}	
+			since these are now available through context properties, and are typically not used.
+		<li>{@link oaj.xml.XmlParser} now accepts <c>application/xml</c>.		
+		<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
+		<li>Improved concurrency on BeanContext class.
+		<li>Fixed bug in {@link oajr.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
+		<li>Fixed bug in {@link oajr.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
+	</ul>
+</div>

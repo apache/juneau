@@ -15,47 +15,49 @@
 
 {title:'Overview', created:'8.0.0', deprecated:'8.1.2'}
 
-<p>
-	The Jetty Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
-	Eclipse Jetty Servlet Container.  
-</p>
-<p>
-	The API builds upon the {@doc juneau-microservice-core Core Microservice} classes to produce easy-to-create and
-	easy-to-use microservices in a standard Java 1.8+ environment.
-</p>
-<p>
-	The <c>juneau-microservice-jetty</c> library consists of the following classes:
-</p>
-<ul class='javatree'>
-	<li class='jp'>{@link oaj.microservice.jetty}
-	<ul>
-		<li class='jc'>{@link oaj.microservice.jetty.JettyMicroservice} - The Jetty microservice class.
-		<li class='jc'>{@link oaj.microservice.jetty.JettyMicroservice.Builder} - Builder for the microservice class.
-		<li class='jic'>{@link oaj.microservice.jetty.JettyMicroserviceListener} - Interface for hooking into lifecyle events of the microservice.
+<div class='topic'>
+	<p>
+		The Jetty Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
+		Eclipse Jetty Servlet Container.  
+	</p>
+	<p>
+		The API builds upon the {@doc juneau-microservice-core Core Microservice} classes to produce easy-to-create and
+		easy-to-use microservices in a standard Java 1.8+ environment.
+	</p>
+	<p>
+		The <c>juneau-microservice-jetty</c> library consists of the following classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jp'>{@link oaj.microservice.jetty}
 		<ul>
-			<li class='jc'>{@link oaj.microservice.jetty.BasicJettyMicroserviceListener} - Adapter for JettyMicroserviceListener class.
+			<li class='jc'>{@link oaj.microservice.jetty.JettyMicroservice} - The Jetty microservice class.
+			<li class='jc'>{@link oaj.microservice.jetty.JettyMicroservice.Builder} - Builder for the microservice class.
+			<li class='jic'>{@link oaj.microservice.jetty.JettyMicroserviceListener} - Interface for hooking into lifecyle events of the microservice.
+			<ul>
+				<li class='jc'>{@link oaj.microservice.jetty.BasicJettyMicroserviceListener} - Adapter for JettyMicroserviceListener class.
+			</ul>
+			<li class='jic'>{@link oaj.microservice.jetty.JettyServerFactory} - Interface for defining custom Jetty servers.
+			<ul>
+				<li class='jc'>{@link oaj.microservice.jetty.BasicJettyServerFactory} - Adapter for JettyServerFactory class.
+			</ul>
+			 
 		</ul>
-		<li class='jic'>{@link oaj.microservice.jetty.JettyServerFactory} - Interface for defining custom Jetty servers.
-		<ul>
-			<li class='jc'>{@link oaj.microservice.jetty.BasicJettyServerFactory} - Adapter for JettyServerFactory class.
-		</ul>
-		 
 	</ul>
-</ul>
-
-<p>
-	The most-basic creation of a Jetty microservice from an entry-point method is shown below:
-</p>	
-<p class='bpcode w800'>
-	<jk>public class</jk> App {
-		<jk>public static void</jk> main(String[] args) {
-			JettyMicroservice
-				.<jsm>create</jsm>()                     <jc>// Create builder.</jc>
-				.args(args)                   <jc>// Pass in args.</jc>
-				.servlets(RootResource.<jk>class</jk>) <jc>// A Juneau RestServlet class.</jc>
-				.build()                      <jc>// Create microservice.</jc>
-				.start()                      <jc>// Start microservice.</jc>
-			;
-		}
-	}
-</p>
+	
+	<p>
+		The most-basic creation of a Jetty microservice from an entry-point method is shown below:
+	</p>	
+	<p class='bcode w800'>
+		|	<jk>public class</jk> App {
+		|		<jk>public static void</jk> main(String[] args) {
+		|			JettyMicroservice
+		|				.<jsm>create</jsm>()                     <jc>// Create builder.</jc>
+		|				.args(args)                   <jc>// Pass in args.</jc>
+		|				.servlets(RootResource.<jk>class</jk>) <jc>// A Juneau RestServlet class.</jc>
+		|				.build()                      <jc>// Create microservice.</jc>
+		|				.start()                      <jc>// Start microservice.</jc>
+		|			;
+		|		}
+		|	}
+	</p>
+</div>

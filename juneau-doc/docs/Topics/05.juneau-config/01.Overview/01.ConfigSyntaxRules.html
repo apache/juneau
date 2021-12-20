@@ -15,85 +15,87 @@
 
 {title:'Syntax Rules'}
 
-<ul class='spaced-list'>
-	<li>
-		Each config file contains zero or more sections containing zero or more entries:
-		<p class='bcode w800'>
-	<cs>[Section1]</cs>
-	<ck>key1</ck> = <cv>1</cv>
-
-	<cs>[Section2]</cs>
-	<ck>key1</ck> = <cv>2</cv>
-		</p>
-	<li>
-		Unicode escapes can be used in values.
-		<p class='bcode w800'>
-	<ck>key1</ck> = <cv>\u0070\u0075\u0062\u006c\u0069\u0063</cv>
-		</p>
-	<li>
-		Comment lines start with the <js>'#'</js> character and can be placed on lines before sections and entries:
-		<p class='bcode w800'>
-	<cc># A comment about this section</cc>
-	<cs>[Section1]</cs>
-	
-	<cc># A comment about this entry</cc>
-	<ck>key1</ck> = <cv>1</cv>
-		</p>
-	<li>
-		Comments can also be placed on the same line as entries:
-		<p class='bcode w800'>
-	<ck>key1</ck> = <cv>1</cv>  <cc># A comment about this entry</cc>
-		</p>
-	<li>
-		Values containing <js>'#'</js> must be escaped to prevent identification as a comment character:
-		<p class='bcode w800'>
-	<ck>valueContainingPound</ck> = <cv>Value containing \u0023 character</cv>
-		</p>
-		<br>Likewise, <js>'\'</js> should be escaped to prevent confusion with unicode escapes.
-	<li>
-		Values containing newlines can span multiple lines.
-		<br>Subsequent lines start with a tab character.
-		<p class='bcode w800'>
-	<ck>multiLineValue</ck> = 
-		<cv>line 1,</cv>
-		<cv>line 2,</cv>
-		<cv>line 3</cv>
-		</p>
-		<br>When retrieved, the above translates to <js>"line1,\nline2,\nline3"</js>.
-	<li>
-		Leading and trailing whitespace on values are ignored.
-	<li>
-		Whitespace is not ignored within multi-line values (except for the leading tab character on each line).
-	<li>
-		Blank lines can be used anywhere in the file.
-		<p class='bcode w800'>
-	<cc># A comment line</cc>
-	
-	<cc># Another comment line</cc>
-	<cs>[Section1]</cs>
-	...
-		</p>
-	<li>
-		Values located before any sections are considered part of the no-name section, meaning
-		they are accessed simply by key and not section/key.
-		<p class='bcode w800'>
-	<cc># Top of file</cc>
-	
-	<cc># Use config.getString("key1") to retrieve.</cc>
-	<ck>key1</ck> = <cv>val1</cv>
-	
-	<cc># The first section</cc>
-	<cs>[Section1]</cs>
-
-	<cc># Use config.getString("Section1/key2") to retrieve.</cc>
-	<ck>key2</ck> = <cv>val2</cv>
-		</p>
-	<li>
-		Section and key names must be at least one character long and not consist of any of the following
-		characters:
-		<p class='bcode w800'>
-	/ \ [ ] = #
-		</p>
-	<li>
-		Whitespace in section and key names is technically allowed but discouraged.
-</ul>
+<div class='topic'>
+	<ul class='spaced-list'>
+		<li>
+			Each config file contains zero or more sections containing zero or more entries:
+			<p class='bcode w800'>
+				|	<cs>[Section1]</cs>
+				|	<ck>key1</ck> = <cv>1</cv>
+				|
+				|	<cs>[Section2]</cs>
+				|	<ck>key1</ck> = <cv>2</cv>
+			</p>
+		<li>
+			Unicode escapes can be used in values.
+			<p class='bcode w800'>
+				|	<ck>key1</ck> = <cv>\u0070\u0075\u0062\u006c\u0069\u0063</cv>
+			</p>
+		<li>
+			Comment lines start with the <js>'#'</js> character and can be placed on lines before sections and entries:
+			<p class='bcode w800'>
+				|	<cc># A comment about this section</cc>
+				|	<cs>[Section1]</cs>
+				|	
+				|	<cc># A comment about this entry</cc>
+				|	<ck>key1</ck> = <cv>1</cv>
+			</p>
+		<li>
+			Comments can also be placed on the same line as entries:
+			<p class='bcode w800'>
+				|	<ck>key1</ck> = <cv>1</cv>  <cc># A comment about this entry</cc>
+			</p>
+		<li>
+			Values containing <js>'#'</js> must be escaped to prevent identification as a comment character:
+			<p class='bcode w800'>
+		<ck>valueContainingPound</ck> = <cv>Value containing \u0023 character</cv>
+			</p>
+			<br>Likewise, <js>'\'</js> should be escaped to prevent confusion with unicode escapes.
+		<li>
+			Values containing newlines can span multiple lines.
+			<br>Subsequent lines start with a tab character.
+			<p class='bcode w800'>
+				|	<ck>multiLineValue</ck> = 
+				|		<cv>line 1,</cv>
+				|		<cv>line 2,</cv>
+				|		<cv>line 3</cv>
+			</p>
+			<br>When retrieved, the above translates to <js>"line1,\nline2,\nline3"</js>.
+		<li>
+			Leading and trailing whitespace on values are ignored.
+		<li>
+			Whitespace is not ignored within multi-line values (except for the leading tab character on each line).
+		<li>
+			Blank lines can be used anywhere in the file.
+			<p class='bcode w800'>
+				|	<cc># A comment line</cc>
+				|	
+				|	<cc># Another comment line</cc>
+				|	<cs>[Section1]</cs>
+				|	...
+			</p>
+		<li>
+			Values located before any sections are considered part of the no-name section, meaning
+			they are accessed simply by key and not section/key.
+			<p class='bcode w800'>
+				|	<cc># Top of file</cc>
+				|	
+				|	<cc># Use config.getString("key1") to retrieve.</cc>
+				|	<ck>key1</ck> = <cv>val1</cv>
+				|	
+				|	<cc># The first section</cc>
+				|	<cs>[Section1]</cs>
+				|
+				|	<cc># Use config.getString("Section1/key2") to retrieve.</cc>
+				|	<ck>key2</ck> = <cv>val2</cv>
+			</p>
+		<li>
+			Section and key names must be at least one character long and not consist of any of the following
+			characters:
+			<p class='bcode w800'>
+				|	/ \ [ ] = #
+			</p>
+		<li>
+			Whitespace in section and key names is technically allowed but discouraged.
+	</ul>
+</div>

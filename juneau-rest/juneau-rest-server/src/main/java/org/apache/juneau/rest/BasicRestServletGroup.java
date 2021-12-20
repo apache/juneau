@@ -14,9 +14,14 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.config.*;
 
 /**
  * Specialized subclass of {@link BasicRestServlet} for showing "group" pages.
+ *
+ * <p>
+ * 	Implements basic configuration settings from {@link BasicUniversalRest} and
+ * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <p>
  * Group pages consist of simple lists of child resource URLs and their labels.

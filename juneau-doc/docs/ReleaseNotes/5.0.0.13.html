@@ -15,45 +15,47 @@
 
 5.0.0.13 (Mar 14, 2013)
 
-<p>
-	Juno 5.0.0.13 is a minor update.
-</p>
-<h5 class='topic w800'>Core API changes</h5>
-<ul class='spaced-list'>
-	<li>		
-		New support for relative URIs.
-		<ul>
-			<li>URIs of the form <js>"foo/bar"</js> are interpreted as relative to the context root of the web application.</li>
-			<li>URIs of the form <js>"/foo/bar"</js> are interpreted as relative to the HTTP authority (e.g. <js>"http://myhost:9080"</js>).</li>
-		</ul>
-	</li>
-	<li>
-		New <c>SerializerContext.SERIALIZER_uriContext</c> and <c>SerializerContext.SERIALIZER_uriAuthority</c> serializer properties for specifying values for relative URIs.
-   		</li>
-   		<li>
-		New {@del oaj.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <c>java.net.URI</c> or <c>java.net.URL</c>.
-	</li>
-	<li>
-		New {@del oaj.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
-	</li>
-	<li>
-		Renamed <c>BeanProperty#uri</c> annotation to <c>BeanProperty#beanUri</c> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
-   		</li>
-   		<li>
-		Removed <c>BeanProperty#id</c> annotation.
-	</li>
-</ul>
-<h5 class='topic w800'>REST server API changes</h5>
-<ul class='spaced-list'>
-	<li>
-		Improvements to {@link oajr.RestServlet} to automatically handle relative URIs in POJOs.
-		<ul>
-      			<li><c>SerializerContext.SERIALIZER_uriContext</c> property set by default to web app context root.</li>
-			<li><c>SerializerContext.SERIALIZER_uriAuthority</c> property set by default to the request scheme+hostname+port.</li>
-       		</ul>
-       	</li>
-       	<li>
-		Fixed bug involving <c>Accept-Charset</c> header in Chrome that prevented HTML output from rendering correctly in that browser.<br>
-		<c>Accept-Charset</c> handling should now be fully W3C compliant.
-	</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.13 is a minor update.
+	</p>
+	<h5 class='topic w800'>Core API changes</h5>
+	<ul class='spaced-list'>
+		<li>		
+			New support for relative URIs.
+			<ul>
+				<li>URIs of the form <js>"foo/bar"</js> are interpreted as relative to the context root of the web application.</li>
+				<li>URIs of the form <js>"/foo/bar"</js> are interpreted as relative to the HTTP authority (e.g. <js>"http://myhost:9080"</js>).</li>
+			</ul>
+		</li>
+		<li>
+			New <c>SerializerContext.SERIALIZER_uriContext</c> and <c>SerializerContext.SERIALIZER_uriAuthority</c> serializer properties for specifying values for relative URIs.
+		</li>
+		<li>
+			New {@del oaj.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <c>java.net.URI</c> or <c>java.net.URL</c>.
+		</li>
+		<li>
+			New {@del oaj.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
+		</li>
+		<li>
+			Renamed <c>BeanProperty#uri</c> annotation to <c>BeanProperty#beanUri</c> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
+		</li>
+		<li>
+			Removed <c>BeanProperty#id</c> annotation.
+		</li>
+	</ul>
+	<h5 class='topic w800'>REST server API changes</h5>
+	<ul class='spaced-list'>
+		<li>
+			Improvements to {@link oajr.RestServlet} to automatically handle relative URIs in POJOs.
+			<ul>
+				<li><c>SerializerContext.SERIALIZER_uriContext</c> property set by default to web app context root.</li>
+				<li><c>SerializerContext.SERIALIZER_uriAuthority</c> property set by default to the request scheme+hostname+port.</li>
+			</ul>
+		</li>
+		<li>
+			Fixed bug involving <c>Accept-Charset</c> header in Chrome that prevented HTML output from rendering correctly in that browser.<br>
+			<c>Accept-Charset</c> handling should now be fully W3C compliant.
+		</li>
+	</ul>
+</div>

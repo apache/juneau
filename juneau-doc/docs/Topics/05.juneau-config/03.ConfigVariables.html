@@ -15,57 +15,59 @@
 
 {title:'Variables', updated:'9.0.0'}
 
-<p>
-	Config files can contain variables that get resolved dynamically using the previously-described {@link oaj.svl.VarResolver} API.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<cc>#--------------------------</cc>
-	<cc># My section</cc>
-	<cc>#--------------------------</cc>
-	<cs>[MySection]</cs>
-	
-	<cc># A system property</cc>
-	<ck>locale</ck> = <cv>$S{java.locale, en_US}</cv>
-	
-	<cc># An environment variable</cc>
-	<ck>path</ck> = <cv>$E{PATH, unknown}</cv>
-	
-	<cc># Another value in this config file</cc>
-	<ck>anotherLocale</ck> = <cv>$C{MySection/locale}</cv>
-	
-	<cc># Look for system property, or env var if that doesn't exist, or a default value if that doesn't exist.</cc>
-	<ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$C{MySection/anotherLocale}}}</cv>
-
-	<cc># A POJO with embedded variables</cc>
-	<ck>aBean</ck> = <cv>{foo:'$S{foo}',baz:$C{MySection/anInt}}</cv>
-</p>
-<p class='bpcode w800'>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>().build();
-	
-	Locale <jv>locale</jv> = <jv>config</jv>.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 
-	String <jv>path</jv> = <jv>config</jv>.getString(<js>"MySection/path"</js>); 
-	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.getInt(<js>"MySection/sameAsAnInt"</js>); 
-	ABean <jv>bean</jv> = <jv>config</jv>.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
-</p>
-<p>
-	By default, <c>Configs</c> use the {@link oaj.svl.VarResolver#DEFAULT} variable resolver
-	which provides support for the following variables and constructs:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
-	<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
-	<li class='jc'>{@link oaj.config.vars.ConfigVar} - <c>$C{key[,default]}</c>
-</ul>
-<p>
-	The variable resolver is controlled via the following setting:
-</p>
-<ul class='javatree'>
-	<li class='jm'>{@link oaj.config.Config.Builder#varResolver(VarResolver)}
-</ul>
-<p>
-	Additionally, the following method can be used to retrieve a <c>Config</c> with a different variable resolver:
-</p>
-<ul class='javatree'>
-	<li class='jm'>{@link oaj.config.Config#resolving(VarResolverSession)}
-</ul>
+<div class='topic'>
+	<p>
+		Config files can contain variables that get resolved dynamically using the previously-described {@link oaj.svl.VarResolver} API.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<cc>#--------------------------</cc>
+		|	<cc># My section</cc>
+		|	<cc>#--------------------------</cc>
+		|	<cs>[MySection]</cs>
+		|	
+		|	<cc># A system property</cc>
+		|	<ck>locale</ck> = <cv>$S{java.locale, en_US}</cv>
+		|	
+		|	<cc># An environment variable</cc>
+		|	<ck>path</ck> = <cv>$E{PATH, unknown}</cv>
+		|	
+		|	<cc># Another value in this config file</cc>
+		|	<ck>anotherLocale</ck> = <cv>$C{MySection/locale}</cv>
+		|	
+		|	<cc># Look for system property, or env var if that doesn't exist, or a default value if that doesn't exist.</cc>
+		|	<ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$C{MySection/anotherLocale}}}</cv>
+		|
+		|	<cc># A POJO with embedded variables</cc>
+		|	<ck>aBean</ck> = <cv>{foo:'$S{foo}',baz:$C{MySection/anInt}}</cv>
+	</p>
+	<p class='bcode w800'>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>().build();
+		|	
+		|	Locale <jv>locale</jv> = <jv>config</jv>.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 
+		|	String <jv>path</jv> = <jv>config</jv>.getString(<js>"MySection/path"</js>); 
+		|	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.getInt(<js>"MySection/sameAsAnInt"</js>); 
+		|	ABean <jv>bean</jv> = <jv>config</jv>.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
+	</p>
+	<p>
+		By default, <c>Configs</c> use the {@link oaj.svl.VarResolver#DEFAULT} variable resolver
+		which provides support for the following variables and constructs:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
+		<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
+		<li class='jc'>{@link oaj.config.vars.ConfigVar} - <c>$C{key[,default]}</c>
+	</ul>
+	<p>
+		The variable resolver is controlled via the following setting:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.config.Config.Builder#varResolver(VarResolver)}
+	</ul>
+	<p>
+		Additionally, the following method can be used to retrieve a <c>Config</c> with a different variable resolver:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.config.Config#resolving(VarResolverSession)}
+	</ul>
+</div>

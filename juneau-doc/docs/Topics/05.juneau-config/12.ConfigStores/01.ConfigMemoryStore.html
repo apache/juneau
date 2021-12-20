@@ -15,50 +15,52 @@
 
 {title:'ConfigMemoryStore'}
 
-<p>
-	The {@link oaj.config.store.ConfigMemoryStore} class is simply an in-memory storage
-	location for configuration files.
-	There is no hard persistence and is used primarily for testing purposes.
-</p>
-<p>
-	However, the implementation provides a good idea on how stores work (especially the write method):
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> ConfigMemoryStore <jk>extends</jk> ConfigStore {
-	
-		<jc>// Some methods ommitted.</jc>
-		
-		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
-		
-		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> String read(String <jv>name</jv>) {
-			<jk>return</jk> <jsm>emptyIfNull</jsm>(<jf>cache</jf>.get(<jv>name</jv>));
-		}
-	
-		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> String write(String <jv>name</jv>, String <jv>expectedContents</jv>, String <jv>newContents</jv>) {
-	
-			<jc>// This is a no-op.</jc>
-			<jk>if</jk> (<jsm>isEquals</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
-				<jk>return null</jk>;
-			
-			String <jv>currentContents</jv> = read(<jv>name</jv>);
-			
-			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>)) 
-				<jk>return</jk> currentContents;
-			
-			update(<jv>name</jv>, <jv>newContents</jv>);
-			
-			<jc>// Success!</jc>
-			<jk>return null</jk>;
-		}
-	
-		
-		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> ConfigMemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
-			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
-			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
-			<jk>return this</jk>;
-		}
-	}
-</p>
+<div class='topic'>
+	<p>
+		The {@link oaj.config.store.ConfigMemoryStore} class is simply an in-memory storage
+		location for configuration files.
+		There is no hard persistence and is used primarily for testing purposes.
+	</p>
+	<p>
+		However, the implementation provides a good idea on how stores work (especially the write method):
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> ConfigMemoryStore <jk>extends</jk> ConfigStore {
+		|	
+		|		<jc>// Some methods ommitted.</jc>
+		|		
+		|		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
+		|		
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public synchronized</jk> String read(String <jv>name</jv>) {
+		|			<jk>return</jk> <jsm>emptyIfNull</jsm>(<jf>cache</jf>.get(<jv>name</jv>));
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public synchronized</jk> String write(String <jv>name</jv>, String <jv>expectedContents</jv>, String <jv>newContents</jv>) {
+		|	
+		|			<jc>// This is a no-op.</jc>
+		|			<jk>if</jk> (<jsm>isEquals</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
+		|				<jk>return null</jk>;
+		|			
+		|			String <jv>currentContents</jv> = read(<jv>name</jv>);
+		|			
+		|			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>)) 
+		|				<jk>return</jk> currentContents;
+		|			
+		|			update(<jv>name</jv>, <jv>newContents</jv>);
+		|			
+		|			<jc>// Success!</jc>
+		|			<jk>return null</jk>;
+		|		}
+		|	
+		|		
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public synchronized</jk> ConfigMemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		|			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
+		|			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
+		|			<jk>return this</jk>;
+		|		}
+		|	}
+	</p>
+</div>

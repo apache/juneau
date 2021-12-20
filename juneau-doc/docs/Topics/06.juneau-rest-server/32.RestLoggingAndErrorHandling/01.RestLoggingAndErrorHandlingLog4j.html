@@ -15,20 +15,22 @@
 
 {title:'Using LOG4J for logging', flags:'todo'}
 
-<p>
-	The REST API uses Java logging by default.  If you wish to use LOG4J logging, you simple need to add the following
-	to your JVM arguments and maven dependencies:
-</p>
-
-<h5 class='figure'>Command-line argument</h5>
-<p class='bpcode'>
-	-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
-</p>
-
-<h5 class='figure'>Maven dependency</h5>
-<p class='bpcode'>
-	<xt>&lt;dependency&gt;</xt>
-	    <xt>&lt;groupId&gt;</xt>org.apache.logging.log4j<xt>&lt;/groupId&gt;</xt>
-	    <xt>&lt;artifactId&gt;</xt>log4j-jul<xt>&lt;/artifactId&gt;</xt>
-	<xt>&lt;/dependency&gt;</xt>
-</p>
+<div class='topic'>
+	<p>
+		The REST API uses Java logging by default.  If you wish to use LOG4J logging, you simple need to add the following
+		to your JVM arguments and maven dependencies:
+	</p>
+	
+	<h5 class='figure'>Command-line argument</h5>
+	<p class='bcode'>
+		|	-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
+	</p>
+	
+	<h5 class='figure'>Maven dependency</h5>
+	<p class='bcode'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.logging.log4j<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>log4j-jul<xt>&lt;/artifactId&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>
+</div>

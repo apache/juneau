@@ -70,7 +70,7 @@ public @interface Beanc {
 	 *
 	 * <p>
 	 * The following example shows this annotation in use:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 *		<jc>// Our read-only bean.</jc>
 	 *		<jk>public class</jk> Person {
 	 *			<jk>private final</jk> String <jf>name</jf>;
@@ -97,7 +97,7 @@ public @interface Beanc {
 	 *		<ja>@Beanc</ja>(on=<js>"Person(String,int)"</js>, properties=<js>"name,age"</js>))
 	 *		<jk>public static class</jk> MyConfig {}
 	 * </p>
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
 	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
 	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.copy().applyAnnotations(MyConfig.<jk>class</jk>).build().parse(<jv>json</jv>);
@@ -148,7 +148,7 @@ public @interface Beanc {
 	 *
 	 * <p>
 	 * The definition of a read-only bean is a bean with properties with only getters, like shown below:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 *		<jc>// Our read-only bean.</jc>
 	 *		<jk>public class</jk> Person {
 	 *			<jk>private final</jk> String <jf>name</jf>;
@@ -172,7 +172,7 @@ public @interface Beanc {
 	 *			}
 	 *		}
 	 * </p>
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
 	 *		String json = <js>"{name:'John Smith',age:45}"</js>;
 	 *		Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json);

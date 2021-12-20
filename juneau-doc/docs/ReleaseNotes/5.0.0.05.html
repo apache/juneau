@@ -15,27 +15,29 @@
 
 5.0.0.5 (Oct 29, 2012)
 
-<p>
-	Juno 5.0.0.5 is a major update.
-</p>
-<ul class='spaced-list'>
-	<li>New <c><ja>@RestChild</ja></c> annotation for identifying child resources.</li>
-	<li>
-		New <c>traversable</c> and <c>filterable</c> attributes added to {@del oajr.annotation.RestMethod @RestMethod} annotation.<br>
-		Eliminates the need for {@del PojoResource} and {@del FilteredRestResource} classes.
-	</li>
-	<li>Simplified client API.  Easier to use when making multiple connections to the same server.</li>
-	<li>Support for pluggable authentication in the client API.</li>
-	<li>Support for authenticating against Jazz Team Servers.</li>
-	<li>Support for rendering package-level Javadocs in REST resources.</li>
-	<li>Support for parsing of header values into specific object types.</li>
-	<li>Changed default XML representation to not include JSON-type attributes.  Produces cleaner XML.</li>
-	<li>
-		New <c>resourceUri</c> attributed added to <ja>@Bean</ja> annotation to associate beans with resource URIs.
-		<ul>
-			<li>Used for automatically creating hyperlinks in {@link oaj.html.HtmlSerializer}.</li>
-			<li>Used for automatically creating <xa>uri</xa> attributes in {@link oaj.xml.XmlSerializer}.</li>
-			<li>Used for automatically creating <xa>rdf:about</xa> attributes in <c>RdfXmlSerializer</c>.</li>
-		</ul>
-	</li>	
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.5 is a major update.
+	</p>
+	<ul class='spaced-list'>
+		<li>New <c><ja>@RestChild</ja></c> annotation for identifying child resources.</li>
+		<li>
+			New <c>traversable</c> and <c>filterable</c> attributes added to {@del oajr.annotation.RestMethod @RestMethod} annotation.<br>
+			Eliminates the need for {@del PojoResource} and {@del FilteredRestResource} classes.
+		</li>
+		<li>Simplified client API.  Easier to use when making multiple connections to the same server.</li>
+		<li>Support for pluggable authentication in the client API.</li>
+		<li>Support for authenticating against Jazz Team Servers.</li>
+		<li>Support for rendering package-level Javadocs in REST resources.</li>
+		<li>Support for parsing of header values into specific object types.</li>
+		<li>Changed default XML representation to not include JSON-type attributes.  Produces cleaner XML.</li>
+		<li>
+			New <c>resourceUri</c> attributed added to <ja>@Bean</ja> annotation to associate beans with resource URIs.
+			<ul>
+				<li>Used for automatically creating hyperlinks in {@link oaj.html.HtmlSerializer}.</li>
+				<li>Used for automatically creating <xa>uri</xa> attributes in {@link oaj.xml.XmlSerializer}.</li>
+				<li>Used for automatically creating <xa>rdf:about</xa> attributes in <c>RdfXmlSerializer</c>.</li>
+			</ul>
+		</li>	
+	</ul>
+</div>

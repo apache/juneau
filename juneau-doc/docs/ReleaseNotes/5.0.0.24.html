@@ -15,49 +15,51 @@
 
 5.0.0.24 (May 9, 2013)
 
-<p>
-	Juno 5.0.0.24 is a major update.
-</p>
-<h5 class='topic w800'>Core API updates</h5>
-<ul class='spaced-list'>
-	<li>
-		New support for {@link oaj.dto.atom ATOM}.
-		<ul>
-			<li>New <c>AtomFeedResource</c> class added to sample war.
-		</ul>
-	</li>
-	<li>
-		New {@del XmlFormat#CONTENT} enum value.<br>
-		Allows bean properties to be persisted as XML element text.
-	</li>
-	<li>
-		New {@del XmlContentHandler} class and {@del @Xml#contentHandler} annotation.<br>
-		Allows customized serialization and parsing of beans to XML element text.<br>
-		Added for support of ATOM text content that must support both plain text and embedded XHTML.
-	</li>
-	<li>
-		New {@link oaj.xml.annotation.XmlSchema @XmlSchema} and updated {@link oaj.xml.annotation.XmlNs @XmlNs} annotations to better mimic JAXB.
-	</li>
-	<li>
-		Removed <c><ja>@Xml</ja>.valAttr</c> annotation since it's now redundant with <c><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</c>.
+<div class='topic'>
+	<p>
+		Juno 5.0.0.24 is a major update.
+	</p>
+	<h5 class='topic w800'>Core API updates</h5>
+	<ul class='spaced-list'>
+		<li>
+			New support for {@link oaj.dto.atom ATOM}.
+			<ul>
+				<li>New <c>AtomFeedResource</c> class added to sample war.
+			</ul>
 		</li>
 		<li>
-		Fixed timezone bug in {@del oaj.transforms.CalendarSwap}.
-	</li>
+			New {@del XmlFormat#CONTENT} enum value.<br>
+			Allows bean properties to be persisted as XML element text.
+		</li>
 		<li>
-		Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
-	</li>
-	<li>
-		Fixed bug where lists returned by {@del oaj.ObjectMap#getObjectList(String)} were not updatable.
-	</li>
-	<li>
-		Eliminated old RDF/XML serializer.
-	</li>
-</ul>	
-<h5 class='topic w800'>Documentation updates</h5>
-<ul>
-	<li>New {@link oaj.json JSON Support Overview} document.</li>
-	<li>New {@link oaj.xml XML Support Overview} document.</li>
-	<li>New {@link oaj.jena RDF Languages Support Overview} document.</li>
-	<li>New {@link oaj.dto.atom ATOM Support Overview} document.</li>
-</ul>
+			New {@del XmlContentHandler} class and {@del @Xml#contentHandler} annotation.<br>
+			Allows customized serialization and parsing of beans to XML element text.<br>
+			Added for support of ATOM text content that must support both plain text and embedded XHTML.
+		</li>
+		<li>
+			New {@link oaj.xml.annotation.XmlSchema @XmlSchema} and updated {@link oaj.xml.annotation.XmlNs @XmlNs} annotations to better mimic JAXB.
+		</li>
+		<li>
+			Removed <c><ja>@Xml</ja>.valAttr</c> annotation since it's now redundant with <c><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</c>.
+			</li>
+			<li>
+			Fixed timezone bug in {@del oaj.transforms.CalendarSwap}.
+		</li>
+			<li>
+			Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
+		</li>
+		<li>
+			Fixed bug where lists returned by {@del oaj.ObjectMap#getObjectList(String)} were not updatable.
+		</li>
+		<li>
+			Eliminated old RDF/XML serializer.
+		</li>
+	</ul>	
+	<h5 class='topic w800'>Documentation updates</h5>
+	<ul>
+		<li>New {@link oaj.json JSON Support Overview} document.</li>
+		<li>New {@link oaj.xml XML Support Overview} document.</li>
+		<li>New {@link oaj.jena RDF Languages Support Overview} document.</li>
+		<li>New {@link oaj.dto.atom ATOM Support Overview} document.</li>
+	</ul>
+</div>

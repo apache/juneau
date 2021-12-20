@@ -15,54 +15,56 @@
 
 {title:'Microservice Overview', created:'8.0.0', deprecated:'8.1.2'}
 
-<p>
-	The Microservice API consists of a base class for defining executable microservices.
-</p>
-<p>
-	Features include:
-</p>
-<ul class='spaced-list'>
-	<li>
-		A builder-based API for defining and starting microservices.
-	<li>
-		An extensible API that allows you to hook into various lifecycle events.
-	<li>
-		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
-		file properties.
-</ul>
-<p>
-	The Microservice API consists of the following packages and classes:
-</p>
-<ul class='javatree'>
-	<li class='jp'>{@link oaj.microservice}
-		<ul>
-			<li class='jc'>{@link oaj.microservice.Microservice} - The base microservice class.
-			<li class='jc'>{@link oaj.microservice.Microservice.Builder} - Builder for the microservice class.
-			<li class='jic'>{@link oaj.microservice.MicroserviceListener} - Interface for hooking into lifecyle events of the microservice.
+<div class='topic'>
+	<p>
+		The Microservice API consists of a base class for defining executable microservices.
+	</p>
+	<p>
+		Features include:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			A builder-based API for defining and starting microservices.
+		<li>
+			An extensible API that allows you to hook into various lifecycle events.
+		<li>
+			Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
+			file properties.
+	</ul>
+	<p>
+		The Microservice API consists of the following packages and classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jp'>{@link oaj.microservice}
 			<ul>
-				<li class='jc'>{@link oaj.microservice.BasicMicroserviceListener} - Adapter for MicroserviceListener class.
+				<li class='jc'>{@link oaj.microservice.Microservice} - The base microservice class.
+				<li class='jc'>{@link oaj.microservice.Microservice.Builder} - Builder for the microservice class.
+				<li class='jic'>{@link oaj.microservice.MicroserviceListener} - Interface for hooking into lifecyle events of the microservice.
+				<ul>
+					<li class='jc'>{@link oaj.microservice.BasicMicroserviceListener} - Adapter for MicroserviceListener class.
+				</ul>
 			</ul>
-		</ul>
-	<li class='jp'>{@link oaj.microservice.console}
-		<ul>
-			<li class='jac'>{@link oaj.microservice.console.ConsoleCommand} - Abstract class for defining console commands.
-		</ul>
-</ul>
-<p>
-	By itself the Microservice API doesn't provided much functionality, but it does provide the basis for the {@doc juneau-microservice-jetty Jetty Microservice} described later.
-</p> 
-<p>
-	The most-basic creation of a microservice from an entry-point method is shown below:
-</p>	
-<p class='bpcode w800'>
-	<jk>public class</jk> App {
-		<jk>public static void</jk> main(String[] args) {
-			Microservice
-				.<jsm>create</jsm>()   <jc>// Create builder.</jc>
-				.args(args) <jc>// Pass in args.</jc>
-				.build()    <jc>// Create microservice.</jc>
-				.start()    <jc>// Start microservice.</jc>
-			;
-		}
-	}
-</p>
+		<li class='jp'>{@link oaj.microservice.console}
+			<ul>
+				<li class='jac'>{@link oaj.microservice.console.ConsoleCommand} - Abstract class for defining console commands.
+			</ul>
+	</ul>
+	<p>
+		By itself the Microservice API doesn't provided much functionality, but it does provide the basis for the {@doc juneau-microservice-jetty Jetty Microservice} described later.
+	</p> 
+	<p>
+		The most-basic creation of a microservice from an entry-point method is shown below:
+	</p>	
+	<p class='bcode w800'>
+		|	<jk>public class</jk> App {
+		|		<jk>public static void</jk> main(String[] args) {
+		|			Microservice
+		|				.<jsm>create</jsm>()   <jc>// Create builder.</jc>
+		|				.args(args) <jc>// Pass in args.</jc>
+		|				.build()    <jc>// Create microservice.</jc>
+		|				.start()    <jc>// Start microservice.</jc>
+		|			;
+		|		}
+		|	}
+	</p>
+</div>

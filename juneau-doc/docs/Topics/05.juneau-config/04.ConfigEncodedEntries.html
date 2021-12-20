@@ -15,46 +15,48 @@
 
 {title:'Encoded Entries', updated:'9.0.0'}
 
-<p>
-	Encoded entries allow for sensitive information such as passwords to be obfuscated.
-</p>
-<p>
-	Encoded entries are denoted with a <js>'*'</js> character at the end of the key name.
-</p>
-<p>
-	For example, the following password is marked for encoding:
-</p>
-<p class='bpcode w800'>
-	<cs>[MyHost]</cs>
-	<ck>url</ck> = <cv>http://localhost:9080/foo</cv>
-	<ck>user</ck> = <cv>me</cv>
-	<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
-</p>
-<p>
-	The default encoder is {@link oaj.config.encode.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
-</p>
-<p>
-	Custom encoders can be used to provide your own encoding support by implementing the {@link oaj.config.encode.ConfigEncoder} interface.
-</p>
-<ul class='javatree'>
-	<li class='jic'>{@link oaj.config.encode.ConfigEncoder}
-	<ul>
-		<li class='jm'>{@link oaj.config.encode.ConfigEncoder#encode(String,String) encode(String,String)}
-		<li class='jm'>{@link oaj.config.encode.ConfigEncoder#decode(String,String) decode(String,String)}
-		<li class='jm'>{@link oaj.config.encode.ConfigEncoder#isEncoded(String) isEncoded(String)}
+<div class='topic'>
+	<p>
+		Encoded entries allow for sensitive information such as passwords to be obfuscated.
+	</p>
+	<p>
+		Encoded entries are denoted with a <js>'*'</js> character at the end of the key name.
+	</p>
+	<p>
+		For example, the following password is marked for encoding:
+	</p>
+	<p class='bcode w800'>
+		|	<cs>[MyHost]</cs>
+		|	<ck>url</ck> = <cv>http://localhost:9080/foo</cv>
+		|	<ck>user</ck> = <cv>me</cv>
+		|	<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
+	</p>
+	<p>
+		The default encoder is {@link oaj.config.encode.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
+	</p>
+	<p>
+		Custom encoders can be used to provide your own encoding support by implementing the {@link oaj.config.encode.ConfigEncoder} interface.
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@link oaj.config.encode.ConfigEncoder}
+		<ul>
+			<li class='jm'>{@link oaj.config.encode.ConfigEncoder#encode(String,String) encode(String,String)}
+			<li class='jm'>{@link oaj.config.encode.ConfigEncoder#decode(String,String) decode(String,String)}
+			<li class='jm'>{@link oaj.config.encode.ConfigEncoder#isEncoded(String) isEncoded(String)}
+		</ul>
 	</ul>
-</ul>
-<p>
-	Encoders are controlled via the following setting:
-</p>
-<ul class='javatree'>
-	<li class='jm'>{@link oaj.config.Config.Builder#encoder(ConfigEncoder)}
-</ul>
-<p>
-	Encoded values can be set to plain-text values.  
-	The curly brackets around the value identify whether the value has been encoded or not. 
-</p>
-<p>
-	Unencoded values are encoded when the file is saved using the {@link oaj.config.Config#commit()} method.
-	They can also be encoded immediately by calling {@link oaj.config.Config#encodeEntries()}.
-</p>
+	<p>
+		Encoders are controlled via the following setting:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.config.Config.Builder#encoder(ConfigEncoder)}
+	</ul>
+	<p>
+		Encoded values can be set to plain-text values.  
+		The curly brackets around the value identify whether the value has been encoded or not. 
+	</p>
+	<p>
+		Unencoded values are encoded when the file is saved using the {@link oaj.config.Config#commit()} method.
+		They can also be encoded immediately by calling {@link oaj.config.Config#encodeEntries()}.
+	</p>
+</div>

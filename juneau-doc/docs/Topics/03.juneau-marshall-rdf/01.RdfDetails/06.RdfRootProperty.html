@@ -15,68 +15,70 @@
 
 {title:'Root Property', updated:'9.0.0'}
 
-<p>
-	For all RDF languages, the POJO objects get broken down into simple triplets.
-	Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
-	to become lost.
-	There is no easy way to identify that <c>person/1</c> is the root node in our tree once in triplet 
-	form, and in some cases it's impossible.
-</p>
-<p>
-	By default, the {@link oaj.jena.RdfParser} class handles this by scanning all the nodes and 
-	identifying the nodes without incoming references.
-	However, this is inefficient, especially for large models.
-	And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
-	locate the root at all.
-</p>
-<p>
-	To resolve this issue, the property {@del oaj.jena.RdfSerializer#RDF_addRootProperty} 
-	was introduced.
-	When enabled, this adds a special <c>root</c> attribute to the root node to make it easy to locate 
-	by the parser.
-</p>
-<p>
-	To enable, set the <jsf>RDF_addRootProperty</jsf> property to <jk>true</jk> on the serializer:
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a new serializer.</jc>
-	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
-		.xmlabbrev()
-		.rdfxml_tab(3),
-		.addRootProperty()
-		.build();
-</p>	
-<p>
-	Now when we rerun the sample code, we'll see the added <c>root</c> attribute on the root resource.
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;rdf:RDF</xt>
-	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
-	    <xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs>
-	    <xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs><xt>&gt;</xt>
-	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
-  	      <b><xt>&lt;j:root&gt;</xt>true<xt>&lt;/j:root&gt;</xt></b>
-  	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
-	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-	      <xt>&lt;per:addresses&gt;</xt>
-	         <xt>&lt;rdf:Seq&gt;</xt>
-	            <xt>&lt;rdf:li&gt;</xt>
-	               <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
-	                  <xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
-	                  <xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
-	                  <xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
-	                  <xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
-	                  <xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
-	                  <xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
-	                  <xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
-	               <xt>&lt;/rdf:Description&gt;</xt>
-	            <xt>&lt;/rdf:li&gt;</xt>
-	         <xt>&lt;/rdf:Seq&gt;</xt>
-	      <xt>&lt;/per:addresses&gt;</xt>
-	   <xt>&lt;/rdf:Description&gt;</xt>
-	<xt>&lt;/rdf:RDF&gt;</xt>
-</p>
+<div class='topic'>
+	<p>
+		For all RDF languages, the POJO objects get broken down into simple triplets.
+		Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
+		to become lost.
+		There is no easy way to identify that <c>person/1</c> is the root node in our tree once in triplet 
+		form, and in some cases it's impossible.
+	</p>
+	<p>
+		By default, the {@link oaj.jena.RdfParser} class handles this by scanning all the nodes and 
+		identifying the nodes without incoming references.
+		However, this is inefficient, especially for large models.
+		And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
+		locate the root at all.
+	</p>
+	<p>
+		To resolve this issue, the property {@del oaj.jena.RdfSerializer#RDF_addRootProperty} 
+		was introduced.
+		When enabled, this adds a special <c>root</c> attribute to the root node to make it easy to locate 
+		by the parser.
+	</p>
+	<p>
+		To enable, set the <jsf>RDF_addRootProperty</jsf> property to <jk>true</jk> on the serializer:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Create a new serializer.</jc>
+		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
+		|		.xmlabbrev()
+		|		.rdfxml_tab(3),
+		|		.addRootProperty()
+		|		.build();
+	</p>	
+	<p>
+		Now when we rerun the sample code, we'll see the added <c>root</c> attribute on the root resource.
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;rdf:RDF</xt>
+		|		<xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+		|		<xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+		|		<xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+		|		<xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
+		|		<xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs>
+		|		<xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs><xt>&gt;</xt>
+		|		<xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+		|			<b><xt>&lt;j:root&gt;</xt>true<xt>&lt;/j:root&gt;</xt></b>
+		|			<xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+		|			<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+		|			<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		|			<xt>&lt;per:addresses&gt;</xt>
+		|			<xt>&lt;rdf:Seq&gt;</xt>
+		|				<xt>&lt;rdf:li&gt;</xt>
+		|					<xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
+		|						<xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
+		|						<xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+		|						<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+		|						<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+		|						<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+		|						<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+		|						<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+		|					<xt>&lt;/rdf:Description&gt;</xt>
+		|				<xt>&lt;/rdf:li&gt;</xt>
+		|			<xt>&lt;/rdf:Seq&gt;</xt>
+		|			<xt>&lt;/per:addresses&gt;</xt>
+		|		<xt>&lt;/rdf:Description&gt;</xt>
+		|	<xt>&lt;/rdf:RDF&gt;</xt>
+	</p>
+</div>

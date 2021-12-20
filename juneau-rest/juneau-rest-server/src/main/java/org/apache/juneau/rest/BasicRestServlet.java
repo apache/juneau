@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
@@ -30,7 +29,11 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Subclass of {@link RestServlet} with default serializers and parsers defined.
+ * Subclass of {@link RestServlet} with default settings and standard methods defined.
+ *
+ * <p>
+ * 	Implements basic configuration settings from {@link BasicUniversalRest} and
+ * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <p>
  * Supports the following request <c>Accept</c> header values with the resulting response <c>Content-Type</c>:
@@ -124,24 +127,6 @@ import org.apache.juneau.xml.*;
  * 		<td>{@link PlainTextParser}</td>
  * 	</tr>
  * </table>
- *
- * <p>
- * The list of serializers and parsers can be appended to using the
- * {@link Rest#serializers() @Rest(serializers)} and
- * {@link Rest#parsers() @Rest(parsers)} annotations on subclasses.
- *
- * <p>
- * This subclass also provides a default OPTIONS page by implementing a {@link #getSwagger(RestRequest)} that returns a
- * POJO consisting of beans describing the class.
- *
- * <p>
- * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
- *
- * <ul class='notes'>
- * 	<li>
- * 		Provides a default HTML stylesheet by setting {@link HtmlDocConfig#stylesheet() HtmlDocConfig(stylesheet)}
- * 		to <js>"styles/juneau.css"</js>.
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc BasicRestServlet}

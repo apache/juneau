@@ -15,622 +15,624 @@
 
 7.2.0 (Sept 25, 2018)
 
-<p>
-	7.2.0 is a major release that introduces several significant new features:
-</p>
-<ul class='spaced-list'>
-	<li>OpenAPI part serializing and parsing with full support for OpenAPI validation of input and output in the REST servlet and client APIs.
-	<li>Swagger UI.
-	<li>New HTTP-Part annotations that are applicable to both the servlet and client APIs.
-	<li>Serverless servlet and client unit testing.
-	<li>Simplified UI customization.
-	<li>Marshalls that combines serializers and parsers into a single API.
-</ul>
-
-<h5 class='topic w800'>juneau-marshall</h5>
-<ul class='spaced-list'>
-	<li>
-		The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
-		in separate packages in the client and server projects have been combined into a single set of annotations in 
-		the {@link oaj.http.annotation} package.
-		<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
-		<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
-		<ul class='doctree'>
-			<li class='ja'>{@link oaj.http.annotation.Body}
-			<li class='ja'>{@link oaj.http.annotation.FormData}
-			<li class='ja'>{@link oaj.http.annotation.Header}
-			<li class='ja'>{@link oaj.http.annotation.Path}
-			<li class='ja'>{@link oaj.http.annotation.Query}
-			<li class='ja'>{@link oaj.http.annotation.HasFormData}
-			<li class='ja'>{@link oaj.http.annotation.HasQuery}
-			<li class='ja'>{@link oaj.http.annotation.Request}
-		</ul>
-		<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
-			and auto-generated Swagger documentation:
-		<ul class='doctree'>
-			<li class='ja'>{@link oaj.http.annotation.Contact}
-			<li class='ja'>{@del ExternalDocs}
-			<li class='ja'>{@del Items}
-			<li class='ja'>{@link oaj.http.annotation.License}
-			<li class='ja'>{@del Schema}
-			<li class='ja'>{@del SubItems}
-			<li class='ja'>{@del oaj.http.annotation.Tag}
-		</ul>
-		<br>Additionally, the <ja>@Remoteable</ja> annotation has been split into the following two annotations:
-		<ul class='doctree'>
-			<li class='ja'>{@del oaj.remote.RemoteInterface} 
-				- Used for remote proxy interfaces served up through 
-				{@del RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
-				<br>Defaults to <js>"POST"</js> with method signatures as paths.
-			<li class='ja'>{@del RemoteResource} 
-				- Used for 3rd-party REST interfaces.
-				<br>Defaults to <js>"GET"</js> with standardized naming conventions for paths.
-		</ul>
-	<li>
-		Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
-		<c><ja>@Query</ja>(<js>"*"</js>)</c>, <c><ja>@FormData</ja>(<js>"*"</js>)</c>, <c><ja>@Header</ja>(<js>"*"</js>)</c>, <c><ja>@Path</ja>(<js>"*"</js>)</c>
-	<li>
-		Support for server-side use of <ja>@Request</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link oajr.RestRequest#getRequest(RequestBeanMeta)} method.
-	<li>
-		Fixed bug where <c><ja>@Bean</ja>(typeName)</c> was not being detected on non-bean POJO classes.
-	<li>
-		Fixed bug where HTML-Schema was not being rendered correctly.
-	<li>
-		Support for POJO examples:
-		<ul class='doctree'>
-			<li class='jf'>{@del BeanContext#BEAN_examples}
-			<li class='ja'>{@link oaj.annotation.Example}
-		</ul>
-	<li>
-		Fixed bug where parsers could report the wrong line number when an error occurred.
-	<li>
-		A runtime exception is now thrown if you define a {@del @BeanProperty(name)} but forget to
-		add it to your <c><ja>@Bean</ja>(properties)</c> annotation.
-	<li>
-		<c><ja>@Html</ja>(asXml)</c> and <c><ja>@Html</ja>(asPlainText)</c> replaced with
-		{@link oaj.html.annotation.Html#format() @Html(format)}.
-	<li>
-		HTML serializer will now serializers beans and maps as HTML even when those objects are embedded
-		within an object with <c><ja>@Html</ja>(format=<jsf>XML</jsf>)</c>.
-		<br>The previous behavior was to serialize it as XML.
-	<li>
-		New settings for binary-based serializers and parsers:
-		<ul class='doctree'>
-			<li class='jf'>{@del oaj.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-			<li class='jf'>{@del oaj.parser.InputStreamParser#ISPARSER_binaryFormat}
-		</ul>
-	<li>
-		Added support for auto-detection of fluent-style setters:
-		<ul class='doctree'>
-			<li class='jf'>{@del oaj.BeanContext#BEAN_fluentSetters}
-			<li class='ja'>{@del oaj.annotation.Bean#fluentSetters()}
-		</ul>
-	<li>
-		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
-	<li>
-		The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
-		and is disabled by default.
-	<li>
-		Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
-		<p class='bcode w800' style='color:red'>
-	org.apache.juneau.parser.ParseException: Expected '[' at beginning of JSON array.
-		At line 80, column 20.
-		While parsing into: 
-			currentClass: List&lt;String&gt;
-			currentProperty: required: java.util.List, field=[null], getter=[public java.util.List org.apache.juneau.dto.swagger.SchemaInfo.getRequired()], setter=[public org.apache.juneau.dto.swagger.SchemaInfo org.apache.juneau.dto.swagger.SchemaInfo.setRequired(java.util.Collection)]
-	---start--
-	0075: 						"name": "body",
-	0076: 						"description": "Pet object that needs to be added to the store",
-	0077: 						"required": true,
-	0078: 						"schema": {
-	0079: 							"required": true,
-	0080: 						}
-	0081: 					}
-	0082: 				],
-	0083: 				"responses": {
-	0084: 					"405": {
-	0085: 						"description": "Invalid input"
-	---end---
-		</p>
-	<li>
-		New property {@del oaj.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
-	<li>
-		New property {@del oaj.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
-		using their name or the <c>toString()</c> method.
-	<li>
-		New property {@del BeanContext#BEAN_examples} for defining examples of POJOs.
-	<li>
-		New {@link oaj.annotation.Example @Example} annotation for defining examples of POJOs.
-		<br>Used heavily in JSON-Schema support.
-	<li>
-		If a bean has both a <c>getX()</c> and <c>isX()</c> method, the <c>getX()</c> method takes precedence.
-		<br>The previous behavior was arbitrary.
-	<li>
-		Significant improvements to JSON-Schema serialization support.
-		<ul>
-			<li>New {@del @JsonSchema} annotation.
-		</ul>
-	<li>
-		Fixed <c>NullPointerException</c> when serializing beans with a dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>)
-		which returns a <jk>null</jk> value.
-	<li>
-		New option for dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>) using a method that returns a collection of extra keys.
-		<br>See new options #4 on {@del oaj.annotation.BeanProperty#name()}
-	<li>
-		New formats for the {@link oaj.html.annotation.Html#format() @Html(format)} annotation:
-		<ul class='doctree'>
-			<li class='jf'>{@del oaj.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
-			<li class='jf'>{@del oaj.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
-		</ul> 
-	<li>
-		Serializers now allow for q-values on the media types they handle.
-		<br>For example, the accept media type on <c>JsonSerializer.Simple</c> is <js>"application/json+simple,application/json;q=0.9"</js>.
-		<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
-	<li>
-		New methods for creating unmodifiable {@del oaj.ObjectMap ObjectMaps} and {@del oaj.ObjectList ObjectLists}.
-		<ul class='doctree'>
-			<li class='jc'>{@del oaj.ObjectMap}
-			<ul>
-				<li class='jm'>{@del oaj.ObjectMap#isUnmodifiable() isUnmodifable()}
-				<li class='jm'>{@del oaj.ObjectMap#unmodifiable() unmodifiable()}
-				<li class='jm'>{@del oaj.ObjectMap#modifiable() modifiable()}
-			</ul>
-			<li class='jp'>{@del oaj.ObjectList}
-			<ul>
-				<li class='jm'>{@del oaj.ObjectList#isUnmodifiable() isUnmodifable()}
-				<li class='jm'>{@del oaj.ObjectList#unmodifiable() unmodifiable()}
-				<li class='jm'>{@del oaj.ObjectList#modifiable() modifiable()}
-			</ul>
-		</ul>
-	<li>
-		The <c>JsonSerializer.Simple</c> class has been moved into the top-level {@link oaj.json.SimpleJsonSerializer} class.
-	<li>
-		RDF serializer subclasses have been moved into top-level classes:
-		<ul>
-			<li><c>RdfSerializer.Xml</c> -&gt; {@link oaj.jena.RdfXmlSerializer}
-			<li><c>RdfSerializer.XmlAbbrev</c> -&gt; {@link oaj.jena.RdfXmlAbbrevSerializer}
-			<li><c>RdfSerializer.N3</c> -&gt; {@link oaj.jena.N3Serializer}
-			<li><c>RdfSerializer.NTriple</c> -&gt; {@link oaj.jena.NTripleSerializer}
-			<li><c>RdfSerializer.Turtle</c> -&gt; {@link oaj.jena.TurtleSerializer}
-			<li><c>RdfParser.Xml</c> -&gt; {@link oaj.jena.RdfXmlParser}
-			<li><c>RdfParser.N3</c> -&gt; {@link oaj.jena.N3Parser}
-			<li><c>RdfParser.NTriple</c> -&gt; {@link oaj.jena.NTripleParser}
-			<li><c>RdfParser.Turtle</c> -&gt; {@link oaj.jena.TurtleParser}
-		</ul>
-	<li>
-		New API for pairing serializers and parsers for simplified syntax:
-		<h5 class='figure'>Examples:</h5>
-		<p class='bcode w800'>
-	<jc>// Using instance.</jc>
-	Json json = <jk>new</jk> Json();
-	MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
-	String string = json.write(myPojo);
-		</p>
-		<p class='bcode w800'>
-	<jc>// Using DEFAULT instance.</jc>
-	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
-	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
-		</p>
-		<ul class='doctree'>
-			<li class='jac'>{@link oaj.marshall.Marshall}
-			<ul>
-				<li class='jac'>{@link oaj.marshall.CharMarshall}
-				<ul>
-					<li class='jc'>{@link oaj.marshall.Html}
-					<li class='jc'>{@link oaj.marshall.Json}
-					<li class='jc'>{@link oaj.marshall.PlainText}
-					<li class='jc'>{@link oaj.marshall.SimpleJson}
-					<li class='jc'>{@link oaj.marshall.Uon}
-					<li class='jc'>{@link oaj.marshall.UrlEncoding}
-					<li class='jc'>{@link oaj.marshall.Xml}
-					<li class='jc'>{@link oaj.marshall.N3}
-					<li class='jc'>{@link oaj.marshall.NTriple}
-					<li class='jc'>{@link oaj.marshall.RdfXml}
-					<li class='jc'>{@link oaj.marshall.RdfXmlAbbrev}
-					<li class='jc'>{@link oaj.marshall.Turtle}	
-				</ul>
-				<li class='jac'>{@link oaj.marshall.StreamMarshall}
-				<ul>
-					<li class='jc'>{@link oaj.marshall.Jso}
-					<li class='jc'>{@link oaj.marshall.MsgPack}
-				</ul>
-			</ul>
-		</ul>
-	<li>
-		New/updated documentation:
-		<ul>
-			<li><a href='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-dto</h5>
-<ul class='spaced-list'>
-	<li>
-		Fixed bug where Swagger {@del oaj.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
-		instead of a list of strings.
-	<li>
-		Boolean attributes are now handled correctly for HTML5.
-		<br>For example, calling <c><jk>new</jk> Select().disabled(<jk>true</jk>)</c> will produce <c>&lt;select disabled='disabled'&gt;</c>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		Auto-generated {@doc RestSwagger Swagger UI}.
-	<li>
-		Simplified {@del @RestResource(swagger)}
-		and {@del oajr.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
-	<li>
-		Fixed bug in <c>UriResolver</c> when request path info had special characters.
-	<li>
-		Fixed bug where incorrect media type was being set on responses (e.g. <c>text/html+schema</c> instead of <c>text/html</c> for schema documents).
-	<li>
-		The <c>RemoteableServlet</c> class has been moved and renamed to {@del RemoteInterfaceServlet}.
-	<li>
-		{@del RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
-	<li>
-		Newlines were being stripped from <c><ja>@HtmlDoc</ja>(script)</c> when serialized which could cause script lines to become commented out.
-	<li>
-		New {@link oaj.http.annotation.Response @Response} annotation that can be applied to
-		throwables thrown from REST methods and POJOs returned by REST methods to specify non-200 status return codes and descriptions in Swagger documentation.
-	<li>
-		Swagger fields added to the following annotations:
-		<ul class='doctree'>
-			<li class='ja'>{@link oaj.http.annotation.Body}
-			<li class='ja'>{@link oaj.http.annotation.FormData}
-			<li class='ja'>{@link oaj.http.annotation.Header}
-			<li class='ja'>{@link oaj.http.annotation.Path}
-			<li class='ja'>{@link oaj.http.annotation.Query}
-		</ul>
-	<li>
-		The <ja>@PathRemainder</ja> annotation has been removed entirely.  
-		<br>Use <c><ja>@Path</ja>(<js>"/*"</js>)</c> to access the path remainder which includes all the new OpenAPI parsing support.
-	<li>
-		"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
-		<ul class='doctree'>
-			<li class='jp'>{@del oajr.helper}
-			<ul>
-				<li class='jc'>{@del oajr.helper.BeanDescription}
-				<li class='jc'>{@del oajr.helper.ChildResourceDescriptions}
-				<li class='jc'>{@del ReaderResource}
-				<li class='jc'>{@del ReaderResourceBuilder}
-				<li class='jc'>{@del oajr.helper.SeeOtherRoot}
-				<li class='jc'>{@del oajr.helper.ResourceDescription}
-				<li class='jc'>{@del StreamResource}
-				<li class='jc'>{@del StreamResourceBuilder}
-			</ul>
-		</ul>
-	<li>
-		Predefined HTTP responses.
-		<ul class='doctree'>
-			<li class='jp'>{@del oajr.response}
-			<ul>
-				<li class='jc'>{@del oajr.response.Accepted}
-				<li class='jc'>{@del oajr.response.AlreadyReported}
-				<li class='jc'>{@del oajr.response.Continue}
-				<li class='jc'>{@del oajr.response.Created}
-				<li class='jc'>{@del oajr.response.EarlyHints}
-				<li class='jc'>{@del oajr.response.Found}
-				<li class='jc'>{@del oajr.response.IMUsed}
-				<li class='jc'>{@del oajr.response.MovedPermanently}
-				<li class='jc'>{@del oajr.response.MultipleChoices}
-				<li class='jc'>{@del oajr.response.MultiStatus}
-				<li class='jc'>{@del oajr.response.NoContent}
-				<li class='jc'>{@del oajr.response.NonAuthoritiveInformation}
-				<li class='jc'>{@del oajr.response.NotModified}
-				<li class='jc'>{@del oajr.response.Ok}
-				<li class='jc'>{@del oajr.response.PartialContent}
-				<li class='jc'>{@del oajr.response.PermanentRedirect}
-				<li class='jc'>{@del oajr.response.Processing}
-				<li class='jc'>{@del oajr.response.ResetContent}
-				<li class='jc'>{@del oajr.response.SeeOther}
-				<li class='jc'>{@del oajr.response.SwitchingProtocols}
-				<li class='jc'>{@del oajr.response.TemporaryRedirect}
-				<li class='jc'>{@del oajr.response.UseProxy}			
-			</ul>
-		</ul>
-	<li>
-		Predefined HTTP error throwables.
-		<br>When added to REST Java methods, reflected in generated Swagger documentation.
-		<ul class='doctree'>
-			<li class='jp'>{@del oajr.exception}
-			<ul>
-				<li class='jc'>{@del oajr.exception.BadRequest}
-				<li class='jc'>{@del oajr.exception.Conflict}
-				<li class='jc'>{@del oajr.exception.ExpectationFailed}
-				<li class='jc'>{@del oajr.exception.FailedDependency}
-				<li class='jc'>{@del oajr.exception.Forbidden}
-				<li class='jc'>{@del oajr.exception.Gone}
-				<li class='jc'>{@del oajr.exception.HttpVersionNotSupported}
-				<li class='jc'>{@del oajr.exception.InsufficientStorage}
-				<li class='jc'>{@del oajr.exception.InternalServerError}
-				<li class='jc'>{@del oajr.exception.LengthRequired}
-				<li class='jc'>{@del oajr.exception.Locked}
-				<li class='jc'>{@del oajr.exception.LoopDetected}
-				<li class='jc'>{@del oajr.exception.MethodNotAllowed}
-				<li class='jc'>{@del oajr.exception.MisdirectedRequest}
-				<li class='jc'>{@del oajr.exception.NetworkAuthenticationRequired}
-				<li class='jc'>{@del oajr.exception.NotAcceptable}
-				<li class='jc'>{@del oajr.exception.NotExtended}
-				<li class='jc'>{@del oajr.exception.NotFound}
-				<li class='jc'>{@del oajr.exception.NotImplemented}
-				<li class='jc'>{@del oajr.exception.PayloadTooLarge}
-				<li class='jc'>{@del oajr.exception.PreconditionFailed}
-				<li class='jc'>{@del oajr.exception.PreconditionRequired}
-				<li class='jc'>{@del oajr.exception.RangeNotSatisfiable}
-				<li class='jc'>{@del oajr.exception.RequestHeaderFieldsTooLarge}
-				<li class='jc'>{@del oajr.exception.ServiceUnavailable}
-				<li class='jc'>{@del oajr.exception.TooManyRequests}
-				<li class='jc'>{@del oajr.exception.Unauthorized}
-				<li class='jc'>{@del oajr.exception.UnavailableForLegalReasons}
-				<li class='jc'>{@del oajr.exception.UnprocessableEntity}
-				<li class='jc'>{@del oajr.exception.UnsupportedMediaType}
-				<li class='jc'>{@del oajr.exception.UpgradeRequired}
-				<li class='jc'>{@del oajr.exception.UriTooLong}
-				<li class='jc'>{@del oajr.exception.VariantAlsoNegotiates}
-			</ul>
-		</ul>	
-	<li>
-		The {@del oajr.annotation.HtmlDoc#nav() @HtmlDoc(nav)} and {@del oajr.annotation.HtmlDoc#navlinks() @HtmlDoc(navlinks)}
-		can now both be used on the same annotation.
-		<br>The contents of <c>nav()</c> are free-form HTML that gets rendered immediately after the navigation links.
-	<li>
-		The following new parameter types can be used on REST methods:
-		<ul class='doctree'>
-			<li class='jc'>{@link oaj.parser.ReaderParser} - The reader parser matching the request content type.
-			<li class='jc'>{@link oaj.parser.InputStreamParser} - The input stream parser matching the request content type.
-		</ul>
-	<li>
-		The <c>$F</c> variable can now be used as a initialization time variable.
-		<br>For example, the <c>AtomFeedResource</c> example pulls a bean example from a file on the classpath:
-		<p class='bcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/atom"</js>,
-		title=<js>"Sample ATOM feed resource"</js>,
-		properties={
-			<ja>@Property</ja>(name=<jsf>BEAN_examples</jsf>, value=<js>"{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}"</js>)
-		},
-		...
-	)
-		</p>
-		<br>It should be noted that you cannot use the <c>$F</c> variable to retrieve localized versions of files (since you're not within
-		the scope of a client request.
-	<li>
-		The {@del RestResource#nowrap()} annotation has been changed to a string with a default value of <js>"true"</js>.
-		<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
-	<li>
-		The {@link oaj.http.annotation.Path#name()} annotation parameter is now required.
-	<li>
-		New class for mock unit testing of REST resources:
-		<ul class='doctree'>
-			<li class='jc'>{@del MockRest}
-		</ul>
-	<li>
-		<c><ja>@RestMethod</ja>(inherit)</c> annotation has been removed and replaced with the following classes:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajr.Inherit}
-			<li class='jc'>{@link oajr.None}
-		</ul>
-		<br>These can be used in the following locations:
-		<ul class='doctree'>
-			<li class='ja'>{@del RestResource#serializers()}
-			<li class='ja'>{@del RestResource#parsers()}
-			<li class='ja'>{@del RestResource#beanFilters()}
-			<li class='ja'>{@del RestResource#pojoSwaps()}
-			<li class='ja'>{@del oajr.annotation.RestMethod#serializers()}
-			<li class='ja'>{@del oajr.annotation.RestMethod#parsers()}
-			<li class='ja'>{@del RestMethod#beanFilters()}
-			<li class='ja'>{@del oajr.annotation.RestMethod#pojoSwaps()}
-		</ul>
-		<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <c>Inherit</c> class. 
-	<li>
-		<c>RequestPathMatch</c> class has been renamed to {@link oajr.RequestPath}.
-	<li>
-		{@link oaj.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
-		<br>Includes new methods on {@link oajr.RestRequest}:
-		<ul class='doctree'>
-			<li class='jm'>{@link oajr.RestRequest#getRequest(Class) getRequest(Class)}
-			<li class='jm'>{@link oajr.RestRequest#getRequest(RequestBeanMeta) getRequest(RequestBeanMeta)}
-		</ul>
-	<li>
-		New methods added to {@link oajr.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajr.widget.MenuItemWidget}
-			<ul>
-				<li class='jm'>{@del getBeforeShowScript(RestRequest)}
-				<li class='jm'>{@del getAfterShowScript(RestRequest)}
-			</ul>
-		</ul>
-	<li>
-		New methods added to {@link oajr.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajr.widget.Widget}
-			<ul>
-				<li class='jm'>{@del loadHtmlWithVars(RestRequest,String)}
-				<li class='jm'>{@del loadScriptWithVars(RestRequest,String)}
-				<li class='jm'>{@del loadStyleWithVars(RestRequest,String)}
-			</ul>
-		</ul>
-	<li>
-		New/updated documentation: 
-		<br><dc>juneau-rest-server.UnitTesting</dc>
-	<li>
-		The behavior of the default values for {@del oajr.annotation.RestMethod#name()} and {@del oajr.annotation.RestMethod#path()}
-		have changed.
-		<br>If not specified, the values are inferred from the Java method name.
-		<br>See Also: {@doc RestMethod}
-	<li>
-		<c>RedirectToServletRoot</c> class has been renamed to {@del oajr.helper.SeeOtherRoot}.
-	<li>
-		New REST context settings:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajr.RestContext}
-			<ul>
-				<li class='jf'>{@del oajr.RestContext#REST_uriAuthority REST_uriAuthority}
-				<li class='jf'>{@del oajr.RestContext#REST_uriContext REST_uriContext}
-				<li class='jf'>{@del oajr.RestContext#REST_uriRelativity REST_uriRelativity}
-				<li class='jf'>{@del oajr.RestContext#REST_uriResolution REST_uriResolution}
-			</ul>
-		</ul>
-	<li>
-		New convenience annotations for specifying default <c>Accept</c> and <c>Content-Type</c> headers:
-		<ul class='doctree'>	
-			<li class='jc'>{@del RestResource}
-			<ul>
-				<li class='jf'>{@del defaultAccept}
-				<li class='jf'>{@del defaultContentType}
-			</ul>	
-			<li class='jc'>{@del oajr.annotation.RestMethod}
-			<ul>
-				<li class='jf'>{@del oajr.annotation.RestMethod#defaultAccept defaultAccept}
-				<li class='jf'>{@del oajr.annotation.RestMethod#defaultContentType defaultContentType}
-			</ul>	
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-client</h5>
-<ul class='spaced-list'>
-	<li>
-		Remote Resource interfaces support OpenAPI annotations.
-	<li>
-		Made improvements to the builder API for defining SSL support.
-		<br>New methods added:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClient.Builder}
-			<ul>
-				<li class='jf'>{@del oajrc.RestClient.Builder#sslProtocols(String...) sslProtocols(String...)}
-				<li class='jf'>{@del oajrc.RestClient.Builder#cipherSuites(String...) cipherSuites(String...)}
-				<li class='jf'>{@del oajrc.RestClient.Builder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
-				<li class='jf'>{@del oajrc.RestClient.Builder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-				<li class='jf'>{@del oajrc.RestClient.Builder#trustManagers(TrustManager...)}
-				<li class='jf'>{@del oajrc.RestClient.Builder#secureRandom(SecureRandom)}
-				<li class='jf'>{@del oajrc.RestClient.Builder#httpClientConnectionManager(HttpClientConnectionManager)}
-			</ul>
-		</ul>
-	<li>
-		Clients no longer have JSON defined as the default serializer and parser.
-		<br>Instead, the clients can now be used with no serializer/parser if you're working with InputStreams/Readers or
-		POJOs that can be converted to Strings and converted from Strings/InputStreams/Readers.
-	<li>
-		Methods added to client builder to make it easy to define the transport language:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClient.Builder}
-			<ul>
-				<li class='jf'>{@link oajrc.RestClient.Builder#json() json()}
-				<li class='jf'>{@link oajrc.RestClient.Builder#xml() xml()}
-				<li class='jf'>{@link oajrc.RestClient.Builder#html() html()}
-				<li class='jf'>{@link oajrc.RestClient.Builder#uon() uon()}
-				<li class='jf'>{@link oajrc.RestClient.Builder#urlEnc() urlEnc()}
-				<li class='jf'>{@link oajrc.RestClient.Builder#msgPack() msgPack()}
-				<li class='jf'>{@link oajrc.RestClient.Builder#plainText() plainText()}
-			</ul>
-		</ul>
-	<li>
-		New method added for allowing serverless client testing against REST interfaces.
-		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClient.Builder}
-			<ul>
-				<li class='jf'>{@del mockHttpConnection(MockHttpConnection)}
-			</ul>
-		</ul>
-	<li>
-		Removed the deprecated <c>RestCall.execute()</c> method.
-		<br>Use {@del oajrc.RestCall#run()}.
-	<li>
-		<c>RestCall.input(Object)</c> method renamed to {@del oajrc.RestCall#body(Object)} to match OpenAPI terminology.
-	<li>
-		Made constructors on <c>RestClient</c> and <c>RestClient.Builder</c> protected so that they can be subclassed.
-	<li>
-		The <c>RestClient.getRemoteableProxy()</c> methods have been split into separate methods for Remote Interfaces and Remote Resources:
-		<ul class='doctree'>
-			<li class='jc'>{@link oajrc.RestClient}
-			<ul>
-				<li class='jm'>{@del RestClient#getRemoteInterface(Class)}
-				<li class='jm'>{@del RestClient#getRemoteInterface(Class,Object)}
-				<li class='jm'>{@del RestClient#getRemoteInterface(Class,Object,Serializer,Parser)}
-				<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class)}
-				<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class,Object)}
-				<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
-			</ul>
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-microservice</h5>
-<ul class='spaced-list'>
-	<li>
-		The look-and-feel of an application is now controlled through the external configuration file and access to
-		CSS stylesheets in the working directory in a new folder called <c>files</c>:
-		<br><img class='bordered' style='width:170px' src='doc-files/ReleaseNotes.711.1.png'>
-		<br><br>
-		The default configuration is this: 
-		<p class='bcode w800'>
-	<cc>#=======================================================================================================================
-	# REST settings
-	#=======================================================================================================================</cc>
-	<cs>[REST]</cs>
+<div class='topic'>
+	<p>
+		7.2.0 is a major release that introduces several significant new features:
+	</p>
+	<ul class='spaced-list'>
+		<li>OpenAPI part serializing and parsing with full support for OpenAPI validation of input and output in the REST servlet and client APIs.
+		<li>Swagger UI.
+		<li>New HTTP-Part annotations that are applicable to both the servlet and client APIs.
+		<li>Serverless servlet and client unit testing.
+		<li>Simplified UI customization.
+		<li>Marshalls that combines serializers and parsers into a single API.
+	</ul>
 	
-	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
-	
-	<cc># Stylesheet to use for HTML views.</cc>
-	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
-	
-	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
-	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
-	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
-	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
-	
-	<ck>icon</ck> = <cv>$C{REST/headerIcon}</cv>
-	<ck>header</ck> = <cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;</cv>
-	<ck>footer</ck> = <cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='$U{$C{REST/footerIcon}}'&gt;</cv>	
-		</p>				
-		<br><br>
-		Note that static files can now be served up from the <c>files</c> directory in the working directory, 
-		and you have access to modify the CSS theme files.
-		<br>The <c>SwaggerUI.css</c> file controls the look-and-feel of the Swagger UI, so you can make
-		modification there as well.
-		<br><br>
-		The <c>BasicRestConfig</c> interface (which defines the default settings for the <c>BasicRestServlet</c> class)
-		now looks like this...
-		<p class='bcode w800'>
-	<ja>@RestResource</ja>(
-		...
-		htmldoc=<ja>@HtmlDoc</ja>(
-			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
-				<js>"$C{REST/header}"</js>
-			},
-			navlinks={
-				<js>"up: request:/.."</js>
-			},
-			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-			head={
-				<js>"&lt;link rel='icon' href='$U{$C{REST/icon}}'/&gt;"</js>
-			},
-			footer=<js>"$C{REST/footer}"</js>
-		),
-	
-		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
-		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"</jc>
-		staticFiles={<js>"$C{REST/staticFiles}"</js>}
-	)
-	<jk>public interface</jk> BasicRestConfig {}			
-			</p>	
-			<br><br>
-			The <c>PoweredByApache</c> widget which used to serve as a page footer has been eliminated.
-			<br><br>
-			If you're testing out changes in the theme stylesheets, you may want to set the following system property
-			that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
-			<p class='bcode w800'>
-	<cc>#=======================================================================================================================
-	# System properties
-	#=======================================================================================================================</cc>
-	<cs>[SystemProperties]</cs>
-	
-	<cc># Disable classpath resource caching.
-	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
-	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
+	<h5 class='topic w800'>juneau-marshall</h5>
+	<ul class='spaced-list'>
+		<li>
+			The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
+			in separate packages in the client and server projects have been combined into a single set of annotations in 
+			the {@link oaj.http.annotation} package.
+			<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
+			<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
+			<ul class='doctree'>
+				<li class='ja'>{@link oaj.http.annotation.Body}
+				<li class='ja'>{@link oaj.http.annotation.FormData}
+				<li class='ja'>{@link oaj.http.annotation.Header}
+				<li class='ja'>{@link oaj.http.annotation.Path}
+				<li class='ja'>{@link oaj.http.annotation.Query}
+				<li class='ja'>{@link oaj.http.annotation.HasFormData}
+				<li class='ja'>{@link oaj.http.annotation.HasQuery}
+				<li class='ja'>{@link oaj.http.annotation.Request}
+			</ul>
+			<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
+				and auto-generated Swagger documentation:
+			<ul class='doctree'>
+				<li class='ja'>{@link oaj.http.annotation.Contact}
+				<li class='ja'>{@del ExternalDocs}
+				<li class='ja'>{@del Items}
+				<li class='ja'>{@link oaj.http.annotation.License}
+				<li class='ja'>{@del Schema}
+				<li class='ja'>{@del SubItems}
+				<li class='ja'>{@del oaj.http.annotation.Tag}
+			</ul>
+			<br>Additionally, the <ja>@Remoteable</ja> annotation has been split into the following two annotations:
+			<ul class='doctree'>
+				<li class='ja'>{@del oaj.remote.RemoteInterface} 
+					- Used for remote proxy interfaces served up through 
+					{@del RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
+					<br>Defaults to <js>"POST"</js> with method signatures as paths.
+				<li class='ja'>{@del RemoteResource} 
+					- Used for 3rd-party REST interfaces.
+					<br>Defaults to <js>"GET"</js> with standardized naming conventions for paths.
+			</ul>
+		<li>
+			Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
+			<c><ja>@Query</ja>(<js>"*"</js>)</c>, <c><ja>@FormData</ja>(<js>"*"</js>)</c>, <c><ja>@Header</ja>(<js>"*"</js>)</c>, <c><ja>@Path</ja>(<js>"*"</js>)</c>
+		<li>
+			Support for server-side use of <ja>@Request</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link oajr.RestRequest#getRequest(RequestBeanMeta)} method.
+		<li>
+			Fixed bug where <c><ja>@Bean</ja>(typeName)</c> was not being detected on non-bean POJO classes.
+		<li>
+			Fixed bug where HTML-Schema was not being rendered correctly.
+		<li>
+			Support for POJO examples:
+			<ul class='doctree'>
+				<li class='jf'>{@del BeanContext#BEAN_examples}
+				<li class='ja'>{@link oaj.annotation.Example}
+			</ul>
+		<li>
+			Fixed bug where parsers could report the wrong line number when an error occurred.
+		<li>
+			A runtime exception is now thrown if you define a {@del @BeanProperty(name)} but forget to
+			add it to your <c><ja>@Bean</ja>(properties)</c> annotation.
+		<li>
+			<c><ja>@Html</ja>(asXml)</c> and <c><ja>@Html</ja>(asPlainText)</c> replaced with
+			{@link oaj.html.annotation.Html#format() @Html(format)}.
+		<li>
+			HTML serializer will now serializers beans and maps as HTML even when those objects are embedded
+			within an object with <c><ja>@Html</ja>(format=<jsf>XML</jsf>)</c>.
+			<br>The previous behavior was to serialize it as XML.
+		<li>
+			New settings for binary-based serializers and parsers:
+			<ul class='doctree'>
+				<li class='jf'>{@del oaj.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+				<li class='jf'>{@del oaj.parser.InputStreamParser#ISPARSER_binaryFormat}
+			</ul>
+		<li>
+			Added support for auto-detection of fluent-style setters:
+			<ul class='doctree'>
+				<li class='jf'>{@del oaj.BeanContext#BEAN_fluentSetters}
+				<li class='ja'>{@del oaj.annotation.Bean#fluentSetters()}
+			</ul>
+		<li>
+			The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+		<li>
+			The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@del oaj.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+			and is disabled by default.
+		<li>
+			Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
+			<p class='bcode w800' style='color:red'>
+		org.apache.juneau.parser.ParseException: Expected '[' at beginning of JSON array.
+			At line 80, column 20.
+			While parsing into: 
+				currentClass: List&lt;String&gt;
+				currentProperty: required: java.util.List, field=[null], getter=[public java.util.List org.apache.juneau.dto.swagger.SchemaInfo.getRequired()], setter=[public org.apache.juneau.dto.swagger.SchemaInfo org.apache.juneau.dto.swagger.SchemaInfo.setRequired(java.util.Collection)]
+		---start--
+		0075: 						"name": "body",
+		0076: 						"description": "Pet object that needs to be added to the store",
+		0077: 						"required": true,
+		0078: 						"schema": {
+		0079: 							"required": true,
+		0080: 						}
+		0081: 					}
+		0082: 				],
+		0083: 				"responses": {
+		0084: 					"405": {
+		0085: 						"description": "Invalid input"
+		---end---
 			</p>
 		<li>
-			Upgraded to Jetty 9.4.12.
-</ul>
+			New property {@del oaj.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
+		<li>
+			New property {@del oaj.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
+			using their name or the <c>toString()</c> method.
+		<li>
+			New property {@del BeanContext#BEAN_examples} for defining examples of POJOs.
+		<li>
+			New {@link oaj.annotation.Example @Example} annotation for defining examples of POJOs.
+			<br>Used heavily in JSON-Schema support.
+		<li>
+			If a bean has both a <c>getX()</c> and <c>isX()</c> method, the <c>getX()</c> method takes precedence.
+			<br>The previous behavior was arbitrary.
+		<li>
+			Significant improvements to JSON-Schema serialization support.
+			<ul>
+				<li>New {@del @JsonSchema} annotation.
+			</ul>
+		<li>
+			Fixed <c>NullPointerException</c> when serializing beans with a dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>)
+			which returns a <jk>null</jk> value.
+		<li>
+			New option for dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>) using a method that returns a collection of extra keys.
+			<br>See new options #4 on {@del oaj.annotation.BeanProperty#name()}
+		<li>
+			New formats for the {@link oaj.html.annotation.Html#format() @Html(format)} annotation:
+			<ul class='doctree'>
+				<li class='jf'>{@del oaj.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
+				<li class='jf'>{@del oaj.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
+			</ul> 
+		<li>
+			Serializers now allow for q-values on the media types they handle.
+			<br>For example, the accept media type on <c>JsonSerializer.Simple</c> is <js>"application/json+simple,application/json;q=0.9"</js>.
+			<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
+		<li>
+			New methods for creating unmodifiable {@del oaj.ObjectMap ObjectMaps} and {@del oaj.ObjectList ObjectLists}.
+			<ul class='doctree'>
+				<li class='jc'>{@del oaj.ObjectMap}
+				<ul>
+					<li class='jm'>{@del oaj.ObjectMap#isUnmodifiable() isUnmodifable()}
+					<li class='jm'>{@del oaj.ObjectMap#unmodifiable() unmodifiable()}
+					<li class='jm'>{@del oaj.ObjectMap#modifiable() modifiable()}
+				</ul>
+				<li class='jp'>{@del oaj.ObjectList}
+				<ul>
+					<li class='jm'>{@del oaj.ObjectList#isUnmodifiable() isUnmodifable()}
+					<li class='jm'>{@del oaj.ObjectList#unmodifiable() unmodifiable()}
+					<li class='jm'>{@del oaj.ObjectList#modifiable() modifiable()}
+				</ul>
+			</ul>
+		<li>
+			The <c>JsonSerializer.Simple</c> class has been moved into the top-level {@link oaj.json.SimpleJsonSerializer} class.
+		<li>
+			RDF serializer subclasses have been moved into top-level classes:
+			<ul>
+				<li><c>RdfSerializer.Xml</c> -&gt; {@link oaj.jena.RdfXmlSerializer}
+				<li><c>RdfSerializer.XmlAbbrev</c> -&gt; {@link oaj.jena.RdfXmlAbbrevSerializer}
+				<li><c>RdfSerializer.N3</c> -&gt; {@link oaj.jena.N3Serializer}
+				<li><c>RdfSerializer.NTriple</c> -&gt; {@link oaj.jena.NTripleSerializer}
+				<li><c>RdfSerializer.Turtle</c> -&gt; {@link oaj.jena.TurtleSerializer}
+				<li><c>RdfParser.Xml</c> -&gt; {@link oaj.jena.RdfXmlParser}
+				<li><c>RdfParser.N3</c> -&gt; {@link oaj.jena.N3Parser}
+				<li><c>RdfParser.NTriple</c> -&gt; {@link oaj.jena.NTripleParser}
+				<li><c>RdfParser.Turtle</c> -&gt; {@link oaj.jena.TurtleParser}
+			</ul>
+		<li>
+			New API for pairing serializers and parsers for simplified syntax:
+			<h5 class='figure'>Examples:</h5>
+			<p class='bcode w800'>
+		<jc>// Using instance.</jc>
+		Json json = <jk>new</jk> Json();
+		MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
+		String string = json.write(myPojo);
+			</p>
+			<p class='bcode w800'>
+		<jc>// Using DEFAULT instance.</jc>
+		MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
+		String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
+			</p>
+			<ul class='doctree'>
+				<li class='jac'>{@link oaj.marshall.Marshall}
+				<ul>
+					<li class='jac'>{@link oaj.marshall.CharMarshall}
+					<ul>
+						<li class='jc'>{@link oaj.marshall.Html}
+						<li class='jc'>{@link oaj.marshall.Json}
+						<li class='jc'>{@link oaj.marshall.PlainText}
+						<li class='jc'>{@link oaj.marshall.SimpleJson}
+						<li class='jc'>{@link oaj.marshall.Uon}
+						<li class='jc'>{@link oaj.marshall.UrlEncoding}
+						<li class='jc'>{@link oaj.marshall.Xml}
+						<li class='jc'>{@link oaj.marshall.N3}
+						<li class='jc'>{@link oaj.marshall.NTriple}
+						<li class='jc'>{@link oaj.marshall.RdfXml}
+						<li class='jc'>{@link oaj.marshall.RdfXmlAbbrev}
+						<li class='jc'>{@link oaj.marshall.Turtle}	
+					</ul>
+					<li class='jac'>{@link oaj.marshall.StreamMarshall}
+					<ul>
+						<li class='jc'>{@link oaj.marshall.Jso}
+						<li class='jc'>{@link oaj.marshall.MsgPack}
+					</ul>
+				</ul>
+			</ul>
+		<li>
+			New/updated documentation:
+			<ul>
+				<li><a href='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-dto</h5>
+	<ul class='spaced-list'>
+		<li>
+			Fixed bug where Swagger {@del oaj.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
+			instead of a list of strings.
+		<li>
+			Boolean attributes are now handled correctly for HTML5.
+			<br>For example, calling <c><jk>new</jk> Select().disabled(<jk>true</jk>)</c> will produce <c>&lt;select disabled='disabled'&gt;</c>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			Auto-generated {@doc RestSwagger Swagger UI}.
+		<li>
+			Simplified {@del @RestResource(swagger)}
+			and {@del oajr.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
+		<li>
+			Fixed bug in <c>UriResolver</c> when request path info had special characters.
+		<li>
+			Fixed bug where incorrect media type was being set on responses (e.g. <c>text/html+schema</c> instead of <c>text/html</c> for schema documents).
+		<li>
+			The <c>RemoteableServlet</c> class has been moved and renamed to {@del RemoteInterfaceServlet}.
+		<li>
+			{@del RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
+		<li>
+			Newlines were being stripped from <c><ja>@HtmlDoc</ja>(script)</c> when serialized which could cause script lines to become commented out.
+		<li>
+			New {@link oaj.http.annotation.Response @Response} annotation that can be applied to
+			throwables thrown from REST methods and POJOs returned by REST methods to specify non-200 status return codes and descriptions in Swagger documentation.
+		<li>
+			Swagger fields added to the following annotations:
+			<ul class='doctree'>
+				<li class='ja'>{@link oaj.http.annotation.Body}
+				<li class='ja'>{@link oaj.http.annotation.FormData}
+				<li class='ja'>{@link oaj.http.annotation.Header}
+				<li class='ja'>{@link oaj.http.annotation.Path}
+				<li class='ja'>{@link oaj.http.annotation.Query}
+			</ul>
+		<li>
+			The <ja>@PathRemainder</ja> annotation has been removed entirely.  
+			<br>Use <c><ja>@Path</ja>(<js>"/*"</js>)</c> to access the path remainder which includes all the new OpenAPI parsing support.
+		<li>
+			"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
+			<ul class='doctree'>
+				<li class='jp'>{@del oajr.helper}
+				<ul>
+					<li class='jc'>{@del oajr.helper.BeanDescription}
+					<li class='jc'>{@del oajr.helper.ChildResourceDescriptions}
+					<li class='jc'>{@del ReaderResource}
+					<li class='jc'>{@del ReaderResourceBuilder}
+					<li class='jc'>{@del oajr.helper.SeeOtherRoot}
+					<li class='jc'>{@del oajr.helper.ResourceDescription}
+					<li class='jc'>{@del StreamResource}
+					<li class='jc'>{@del StreamResourceBuilder}
+				</ul>
+			</ul>
+		<li>
+			Predefined HTTP responses.
+			<ul class='doctree'>
+				<li class='jp'>{@del oajr.response}
+				<ul>
+					<li class='jc'>{@del oajr.response.Accepted}
+					<li class='jc'>{@del oajr.response.AlreadyReported}
+					<li class='jc'>{@del oajr.response.Continue}
+					<li class='jc'>{@del oajr.response.Created}
+					<li class='jc'>{@del oajr.response.EarlyHints}
+					<li class='jc'>{@del oajr.response.Found}
+					<li class='jc'>{@del oajr.response.IMUsed}
+					<li class='jc'>{@del oajr.response.MovedPermanently}
+					<li class='jc'>{@del oajr.response.MultipleChoices}
+					<li class='jc'>{@del oajr.response.MultiStatus}
+					<li class='jc'>{@del oajr.response.NoContent}
+					<li class='jc'>{@del oajr.response.NonAuthoritiveInformation}
+					<li class='jc'>{@del oajr.response.NotModified}
+					<li class='jc'>{@del oajr.response.Ok}
+					<li class='jc'>{@del oajr.response.PartialContent}
+					<li class='jc'>{@del oajr.response.PermanentRedirect}
+					<li class='jc'>{@del oajr.response.Processing}
+					<li class='jc'>{@del oajr.response.ResetContent}
+					<li class='jc'>{@del oajr.response.SeeOther}
+					<li class='jc'>{@del oajr.response.SwitchingProtocols}
+					<li class='jc'>{@del oajr.response.TemporaryRedirect}
+					<li class='jc'>{@del oajr.response.UseProxy}			
+				</ul>
+			</ul>
+		<li>
+			Predefined HTTP error throwables.
+			<br>When added to REST Java methods, reflected in generated Swagger documentation.
+			<ul class='doctree'>
+				<li class='jp'>{@del oajr.exception}
+				<ul>
+					<li class='jc'>{@del oajr.exception.BadRequest}
+					<li class='jc'>{@del oajr.exception.Conflict}
+					<li class='jc'>{@del oajr.exception.ExpectationFailed}
+					<li class='jc'>{@del oajr.exception.FailedDependency}
+					<li class='jc'>{@del oajr.exception.Forbidden}
+					<li class='jc'>{@del oajr.exception.Gone}
+					<li class='jc'>{@del oajr.exception.HttpVersionNotSupported}
+					<li class='jc'>{@del oajr.exception.InsufficientStorage}
+					<li class='jc'>{@del oajr.exception.InternalServerError}
+					<li class='jc'>{@del oajr.exception.LengthRequired}
+					<li class='jc'>{@del oajr.exception.Locked}
+					<li class='jc'>{@del oajr.exception.LoopDetected}
+					<li class='jc'>{@del oajr.exception.MethodNotAllowed}
+					<li class='jc'>{@del oajr.exception.MisdirectedRequest}
+					<li class='jc'>{@del oajr.exception.NetworkAuthenticationRequired}
+					<li class='jc'>{@del oajr.exception.NotAcceptable}
+					<li class='jc'>{@del oajr.exception.NotExtended}
+					<li class='jc'>{@del oajr.exception.NotFound}
+					<li class='jc'>{@del oajr.exception.NotImplemented}
+					<li class='jc'>{@del oajr.exception.PayloadTooLarge}
+					<li class='jc'>{@del oajr.exception.PreconditionFailed}
+					<li class='jc'>{@del oajr.exception.PreconditionRequired}
+					<li class='jc'>{@del oajr.exception.RangeNotSatisfiable}
+					<li class='jc'>{@del oajr.exception.RequestHeaderFieldsTooLarge}
+					<li class='jc'>{@del oajr.exception.ServiceUnavailable}
+					<li class='jc'>{@del oajr.exception.TooManyRequests}
+					<li class='jc'>{@del oajr.exception.Unauthorized}
+					<li class='jc'>{@del oajr.exception.UnavailableForLegalReasons}
+					<li class='jc'>{@del oajr.exception.UnprocessableEntity}
+					<li class='jc'>{@del oajr.exception.UnsupportedMediaType}
+					<li class='jc'>{@del oajr.exception.UpgradeRequired}
+					<li class='jc'>{@del oajr.exception.UriTooLong}
+					<li class='jc'>{@del oajr.exception.VariantAlsoNegotiates}
+				</ul>
+			</ul>	
+		<li>
+			The {@del oajr.annotation.HtmlDoc#nav() @HtmlDoc(nav)} and {@del oajr.annotation.HtmlDoc#navlinks() @HtmlDoc(navlinks)}
+			can now both be used on the same annotation.
+			<br>The contents of <c>nav()</c> are free-form HTML that gets rendered immediately after the navigation links.
+		<li>
+			The following new parameter types can be used on REST methods:
+			<ul class='doctree'>
+				<li class='jc'>{@link oaj.parser.ReaderParser} - The reader parser matching the request content type.
+				<li class='jc'>{@link oaj.parser.InputStreamParser} - The input stream parser matching the request content type.
+			</ul>
+		<li>
+			The <c>$F</c> variable can now be used as a initialization time variable.
+			<br>For example, the <c>AtomFeedResource</c> example pulls a bean example from a file on the classpath:
+			<p class='bcode w800'>
+		<ja>@RestResource</ja>(
+			path=<js>"/atom"</js>,
+			title=<js>"Sample ATOM feed resource"</js>,
+			properties={
+				<ja>@Property</ja>(name=<jsf>BEAN_examples</jsf>, value=<js>"{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}"</js>)
+			},
+			...
+		)
+			</p>
+			<br>It should be noted that you cannot use the <c>$F</c> variable to retrieve localized versions of files (since you're not within
+			the scope of a client request.
+		<li>
+			The {@del RestResource#nowrap()} annotation has been changed to a string with a default value of <js>"true"</js>.
+			<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
+		<li>
+			The {@link oaj.http.annotation.Path#name()} annotation parameter is now required.
+		<li>
+			New class for mock unit testing of REST resources:
+			<ul class='doctree'>
+				<li class='jc'>{@del MockRest}
+			</ul>
+		<li>
+			<c><ja>@RestMethod</ja>(inherit)</c> annotation has been removed and replaced with the following classes:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajr.Inherit}
+				<li class='jc'>{@link oajr.None}
+			</ul>
+			<br>These can be used in the following locations:
+			<ul class='doctree'>
+				<li class='ja'>{@del RestResource#serializers()}
+				<li class='ja'>{@del RestResource#parsers()}
+				<li class='ja'>{@del RestResource#beanFilters()}
+				<li class='ja'>{@del RestResource#pojoSwaps()}
+				<li class='ja'>{@del oajr.annotation.RestMethod#serializers()}
+				<li class='ja'>{@del oajr.annotation.RestMethod#parsers()}
+				<li class='ja'>{@del RestMethod#beanFilters()}
+				<li class='ja'>{@del oajr.annotation.RestMethod#pojoSwaps()}
+			</ul>
+			<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <c>Inherit</c> class. 
+		<li>
+			<c>RequestPathMatch</c> class has been renamed to {@link oajr.RequestPath}.
+		<li>
+			{@link oaj.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
+			<br>Includes new methods on {@link oajr.RestRequest}:
+			<ul class='doctree'>
+				<li class='jm'>{@link oajr.RestRequest#getRequest(Class) getRequest(Class)}
+				<li class='jm'>{@link oajr.RestRequest#getRequest(RequestBeanMeta) getRequest(RequestBeanMeta)}
+			</ul>
+		<li>
+			New methods added to {@link oajr.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajr.widget.MenuItemWidget}
+				<ul>
+					<li class='jm'>{@del getBeforeShowScript(RestRequest)}
+					<li class='jm'>{@del getAfterShowScript(RestRequest)}
+				</ul>
+			</ul>
+		<li>
+			New methods added to {@link oajr.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajr.widget.Widget}
+				<ul>
+					<li class='jm'>{@del loadHtmlWithVars(RestRequest,String)}
+					<li class='jm'>{@del loadScriptWithVars(RestRequest,String)}
+					<li class='jm'>{@del loadStyleWithVars(RestRequest,String)}
+				</ul>
+			</ul>
+		<li>
+			New/updated documentation: 
+			<br><dc>juneau-rest-server.UnitTesting</dc>
+		<li>
+			The behavior of the default values for {@del oajr.annotation.RestMethod#name()} and {@del oajr.annotation.RestMethod#path()}
+			have changed.
+			<br>If not specified, the values are inferred from the Java method name.
+			<br>See Also: {@doc RestMethod}
+		<li>
+			<c>RedirectToServletRoot</c> class has been renamed to {@del oajr.helper.SeeOtherRoot}.
+		<li>
+			New REST context settings:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajr.RestContext}
+				<ul>
+					<li class='jf'>{@del oajr.RestContext#REST_uriAuthority REST_uriAuthority}
+					<li class='jf'>{@del oajr.RestContext#REST_uriContext REST_uriContext}
+					<li class='jf'>{@del oajr.RestContext#REST_uriRelativity REST_uriRelativity}
+					<li class='jf'>{@del oajr.RestContext#REST_uriResolution REST_uriResolution}
+				</ul>
+			</ul>
+		<li>
+			New convenience annotations for specifying default <c>Accept</c> and <c>Content-Type</c> headers:
+			<ul class='doctree'>	
+				<li class='jc'>{@del RestResource}
+				<ul>
+					<li class='jf'>{@del defaultAccept}
+					<li class='jf'>{@del defaultContentType}
+				</ul>	
+				<li class='jc'>{@del oajr.annotation.RestMethod}
+				<ul>
+					<li class='jf'>{@del oajr.annotation.RestMethod#defaultAccept defaultAccept}
+					<li class='jf'>{@del oajr.annotation.RestMethod#defaultContentType defaultContentType}
+				</ul>	
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-client</h5>
+	<ul class='spaced-list'>
+		<li>
+			Remote Resource interfaces support OpenAPI annotations.
+		<li>
+			Made improvements to the builder API for defining SSL support.
+			<br>New methods added:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajrc.RestClient.Builder}
+				<ul>
+					<li class='jf'>{@del oajrc.RestClient.Builder#sslProtocols(String...) sslProtocols(String...)}
+					<li class='jf'>{@del oajrc.RestClient.Builder#cipherSuites(String...) cipherSuites(String...)}
+					<li class='jf'>{@del oajrc.RestClient.Builder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+					<li class='jf'>{@del oajrc.RestClient.Builder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+					<li class='jf'>{@del oajrc.RestClient.Builder#trustManagers(TrustManager...)}
+					<li class='jf'>{@del oajrc.RestClient.Builder#secureRandom(SecureRandom)}
+					<li class='jf'>{@del oajrc.RestClient.Builder#httpClientConnectionManager(HttpClientConnectionManager)}
+				</ul>
+			</ul>
+		<li>
+			Clients no longer have JSON defined as the default serializer and parser.
+			<br>Instead, the clients can now be used with no serializer/parser if you're working with InputStreams/Readers or
+			POJOs that can be converted to Strings and converted from Strings/InputStreams/Readers.
+		<li>
+			Methods added to client builder to make it easy to define the transport language:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajrc.RestClient.Builder}
+				<ul>
+					<li class='jf'>{@link oajrc.RestClient.Builder#json() json()}
+					<li class='jf'>{@link oajrc.RestClient.Builder#xml() xml()}
+					<li class='jf'>{@link oajrc.RestClient.Builder#html() html()}
+					<li class='jf'>{@link oajrc.RestClient.Builder#uon() uon()}
+					<li class='jf'>{@link oajrc.RestClient.Builder#urlEnc() urlEnc()}
+					<li class='jf'>{@link oajrc.RestClient.Builder#msgPack() msgPack()}
+					<li class='jf'>{@link oajrc.RestClient.Builder#plainText() plainText()}
+				</ul>
+			</ul>
+		<li>
+			New method added for allowing serverless client testing against REST interfaces.
+			<ul class='doctree'>
+				<li class='jc'>{@link oajrc.RestClient.Builder}
+				<ul>
+					<li class='jf'>{@del mockHttpConnection(MockHttpConnection)}
+				</ul>
+			</ul>
+		<li>
+			Removed the deprecated <c>RestCall.execute()</c> method.
+			<br>Use {@del oajrc.RestCall#run()}.
+		<li>
+			<c>RestCall.input(Object)</c> method renamed to {@del oajrc.RestCall#body(Object)} to match OpenAPI terminology.
+		<li>
+			Made constructors on <c>RestClient</c> and <c>RestClient.Builder</c> protected so that they can be subclassed.
+		<li>
+			The <c>RestClient.getRemoteableProxy()</c> methods have been split into separate methods for Remote Interfaces and Remote Resources:
+			<ul class='doctree'>
+				<li class='jc'>{@link oajrc.RestClient}
+				<ul>
+					<li class='jm'>{@del RestClient#getRemoteInterface(Class)}
+					<li class='jm'>{@del RestClient#getRemoteInterface(Class,Object)}
+					<li class='jm'>{@del RestClient#getRemoteInterface(Class,Object,Serializer,Parser)}
+					<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class)}
+					<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class,Object)}
+					<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
+				</ul>
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-microservice</h5>
+	<ul class='spaced-list'>
+		<li>
+			The look-and-feel of an application is now controlled through the external configuration file and access to
+			CSS stylesheets in the working directory in a new folder called <c>files</c>:
+			<br><img class='bordered' style='width:170px' src='doc-files/ReleaseNotes.711.1.png'>
+			<br><br>
+			The default configuration is this: 
+			<p class='bcode w800'>
+		<cc>#=======================================================================================================================
+		# REST settings
+		#=======================================================================================================================</cc>
+		<cs>[REST]</cs>
+		
+		<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+		
+		<cc># Stylesheet to use for HTML views.</cc>
+		<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+		
+		<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+		<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+		<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+		<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+		
+		<ck>icon</ck> = <cv>$C{REST/headerIcon}</cv>
+		<ck>header</ck> = <cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;</cv>
+		<ck>footer</ck> = <cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='$U{$C{REST/footerIcon}}'&gt;</cv>	
+			</p>				
+			<br><br>
+			Note that static files can now be served up from the <c>files</c> directory in the working directory, 
+			and you have access to modify the CSS theme files.
+			<br>The <c>SwaggerUI.css</c> file controls the look-and-feel of the Swagger UI, so you can make
+			modification there as well.
+			<br><br>
+			The <c>BasicRestConfig</c> interface (which defines the default settings for the <c>BasicRestServlet</c> class)
+			now looks like this...
+			<p class='bcode w800'>
+		<ja>@RestResource</ja>(
+			...
+			htmldoc=<ja>@HtmlDoc</ja>(
+				header={
+					<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+					<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+					<js>"$C{REST/header}"</js>
+				},
+				navlinks={
+					<js>"up: request:/.."</js>
+				},
+				stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+				head={
+					<js>"&lt;link rel='icon' href='$U{$C{REST/icon}}'/&gt;"</js>
+				},
+				footer=<js>"$C{REST/footer}"</js>
+			),
+		
+			<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+			// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"</jc>
+			staticFiles={<js>"$C{REST/staticFiles}"</js>}
+		)
+		<jk>public interface</jk> BasicRestConfig {}			
+				</p>	
+				<br><br>
+				The <c>PoweredByApache</c> widget which used to serve as a page footer has been eliminated.
+				<br><br>
+				If you're testing out changes in the theme stylesheets, you may want to set the following system property
+				that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
+				<p class='bcode w800'>
+		<cc>#=======================================================================================================================
+		# System properties
+		#=======================================================================================================================</cc>
+		<cs>[SystemProperties]</cs>
+		
+		<cc># Disable classpath resource caching.
+		# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
+		<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
+				</p>
+			<li>
+				Upgraded to Jetty 9.4.12.
+	</ul>
+</div>

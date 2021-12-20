@@ -15,35 +15,37 @@
 
 {title:'Customizing HttpClient', created:'8.2.0', flags:'todo'}
 
-<p>
-	Several methods are provided for customizing the underlying HTTP client and client builder classes:
-</p>
-
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#httpClientBuilder(HttpClientBuilder) httpClientBuilder(HttpClientBuilder)} - Set the client builder yourself.
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#createHttpClientBuilder() createHttpClientBuilder()} - Override to create the client builder.
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#createHttpClient() createHttpClient()} - Override to create the client.
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#createConnectionManager() createConnectionManager()} - Override to create the connection management.
+<div class='topic'>
+	<p>
+		Several methods are provided for customizing the underlying HTTP client and client builder classes:
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#httpClientBuilder(HttpClientBuilder) httpClientBuilder(HttpClientBuilder)} - Set the client builder yourself.
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#createHttpClientBuilder() createHttpClientBuilder()} - Override to create the client builder.
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#createHttpClient() createHttpClient()} - Override to create the client.
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#createConnectionManager() createConnectionManager()} - Override to create the connection management.
+		</ul>
 	</ul>
-</ul>
-
-<p>
-	Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a client with customized HttpClient settings.</jc>
-	MyBean <jv>bean</jv> = RestClient
-		.<jsm>create</jsm>()
-		.disableRedirectHandling()
-		.connectionManager(<jv>myConnectionManager</jv>)
-		.addInterceptorFirst(<jv>myHttpRequestInterceptor</jv>)
-		.build();
-</p>
-
-<p>
-	Refer to the {@del org.apache.http.client.impl.HttpClientBuilder HttpClientBuilder} docs for more information.
-</p>
+	
+	<p>
+		Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a client with customized HttpClient settings.</jc>
+		|	MyBean <jv>bean</jv> = RestClient
+		|		.<jsm>create</jsm>()
+		|		.disableRedirectHandling()
+		|		.connectionManager(<jv>myConnectionManager</jv>)
+		|		.addInterceptorFirst(<jv>myHttpRequestInterceptor</jv>)
+		|		.build();
+	</p>
+	
+	<p>
+		Refer to the {@del org.apache.http.client.impl.HttpClientBuilder HttpClientBuilder} docs for more information.
+	</p>
+</div>

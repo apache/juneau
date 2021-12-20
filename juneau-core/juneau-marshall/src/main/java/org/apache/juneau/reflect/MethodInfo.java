@@ -543,7 +543,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * Returns <jk>true</jk> if the parameters on the method only consist of the types specified in the list.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 *
 	 *  <jc>// Example method:</jc>
 	 * 	<jk>public void</jk> foo(String bar, Integer baz);

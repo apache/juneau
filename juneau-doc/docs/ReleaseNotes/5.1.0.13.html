@@ -15,34 +15,36 @@
 
 5.1.0.13 (Apr 24, 2015)
 
-<p>
-	Juno 5.1.0.13 is a minor update.
-</p>
-
-<h5 class='topic w800'>Core</h5>		
-<ul class='spaced-list'>
-	<li>{@link oaj.ClassMeta#newInstance()} method can now create new instances of arrays.
-	<li>Arguments passed to {@del Link} are now serialized using {@link oaj.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
-	<li>New date filters:  <c>org.apache.juneau.swaps.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.swaps.Datefilter.SimpleP</c>.
-	<li>New {@del HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link oaj.html.HtmlDocSerializer} class.  
-		Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
-	<li>Fixed bug in {@link oaj.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <c>ClassCastException</c>.  
-		New behavior creates an empty array or <c>Collection</c>.
-	<li>Improved implementation of {@del UrlEncodingSerializer#serializeUrlPart(Object)} method.
-</ul>
-
-<h5 class='topic w800'>Server</h5>		
-<ul class='spaced-list'>
-	<li>{@link oajr.RestConverter} API fixed to handle the existence of POJO filters.
-		{@link oajr.converters.Introspectable}/{@link oajr.converters.Queryable}/{@link oajr.converters.Traversable} classes can now work with filtered POJOs.  
-	<li>{@del @RestResource(messages)} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
-	<li>Performance improvements in <c>RestServletNls</c> class. 
-	<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
-</ul>
-
-<h5 class='topic w800'>Client</h5>		
-<ul class='spaced-list'>	
-	<li>New {@del RestCall#setRedirectMaxAttempts(int)} method to prevent endless redirection loops.
-	<li>New {@del RestCall#setRetryable(int,long,RetryOn)} method to automatically retry on failed connection attempts.
-	<li>New <c>RestCallInterceptor.onRetry(RestCall,int,HttpRequest,HttpResponse)</c> method for listening in on retry attempts.		
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.1.0.13 is a minor update.
+	</p>
+	
+	<h5 class='topic w800'>Core</h5>		
+	<ul class='spaced-list'>
+		<li>{@link oaj.ClassMeta#newInstance()} method can now create new instances of arrays.
+		<li>Arguments passed to {@del Link} are now serialized using {@link oaj.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
+		<li>New date filters:  <c>org.apache.juneau.swaps.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.swaps.Datefilter.SimpleP</c>.
+		<li>New {@del HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link oaj.html.HtmlDocSerializer} class.  
+			Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
+		<li>Fixed bug in {@link oaj.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <c>ClassCastException</c>.  
+			New behavior creates an empty array or <c>Collection</c>.
+		<li>Improved implementation of {@del UrlEncodingSerializer#serializeUrlPart(Object)} method.
+	</ul>
+	
+	<h5 class='topic w800'>Server</h5>		
+	<ul class='spaced-list'>
+		<li>{@link oajr.RestConverter} API fixed to handle the existence of POJO filters.
+			{@link oajr.converters.Introspectable}/{@link oajr.converters.Queryable}/{@link oajr.converters.Traversable} classes can now work with filtered POJOs.  
+		<li>{@del @RestResource(messages)} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
+		<li>Performance improvements in <c>RestServletNls</c> class. 
+		<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
+	</ul>
+	
+	<h5 class='topic w800'>Client</h5>		
+	<ul class='spaced-list'>	
+		<li>New {@del RestCall#setRedirectMaxAttempts(int)} method to prevent endless redirection loops.
+		<li>New {@del RestCall#setRetryable(int,long,RetryOn)} method to automatically retry on failed connection attempts.
+		<li>New <c>RestCallInterceptor.onRetry(RestCall,int,HttpRequest,HttpResponse)</c> method for listening in on retry attempts.		
+	</ul>
+</div>

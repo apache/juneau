@@ -15,49 +15,51 @@
 
 {title:'Reading Continuous Streams', updated:'9.0.0'}
 
-<p>
-	The following parsers can be configured to read continuous streams of objects from the same input stream:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.json.JsonParser}
-	<li class='jc'>{@link oaj.uon.UonParser}
-	<li class='jc'>{@link oaj.msgpack.MsgPackParser}
-</ul>
-<p>
-	The {@link oaj.json.JsonParser} and {@link oaj.uon.UonParser}
-	classes can read continuous streams by using the {@link oaj.parser.Parser.Builder#unbuffered()}
-	setting.
-	This prevents the parsers from using an internal buffer that would read past the end of the currently
-	parsed POJO.
-</p>
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
-	ReaderParserSession <jv>session</jv> = JsonParser.<jsm>create</jsm>().unbuffered().build().createSession();
-	Object <jv>pojo</jv>;
-	Reader <jv>reader</jv>;
-
-	<jv>reader</jv> = <jk>new</jk> StringReader(<js>"{foo:'bar'}{baz:'qux'}"</js>);
-	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
-	<jv>pojo</jv> = p.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
-
-	<jv>reader</jv> = <jk>new</jk> StringReader(<js>"[123][456]"</js>);
-	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, <jk>int</jk>[].<jk>class</jk>);  <jc>// [123]</jc>
-	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, <jk>int</jk>[].<jk>class</jk>);  <jc>// [456]</jc>
-</p>
-<p>
-	Note that this isn't perfect in all cases since you can't combine two JSON numbers into a single
-	reader (e.g. <c>"123" + "456" = "123456"</c>).
-</p>
-<p>
-	For obvious reasons, do not use the following properties when reading continuous streams:
-</p>
-<ul class='javatree'>
-	<li class='jm'>{@link oaj.json.JsonParser.Builder#validateEnd()}
-	<li class='jm'>{@link oaj.uon.UonParser.Builder#validateEnd()}
-	<li class='jm'>{@link oaj.parser.Parser.Builder#autoCloseStreams()}
-</ul>
-<p>
-	The {@link oaj.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with
-	continuous streams without any special properties.
-</p>
+<div class='topic'>
+	<p>
+		The following parsers can be configured to read continuous streams of objects from the same input stream:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.json.JsonParser}
+		<li class='jc'>{@link oaj.uon.UonParser}
+		<li class='jc'>{@link oaj.msgpack.MsgPackParser}
+	</ul>
+	<p>
+		The {@link oaj.json.JsonParser} and {@link oaj.uon.UonParser}
+		classes can read continuous streams by using the {@link oaj.parser.Parser.Builder#unbuffered()}
+		setting.
+		This prevents the parsers from using an internal buffer that would read past the end of the currently
+		parsed POJO.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bcode w800'>
+		|	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
+		|	ReaderParserSession <jv>session</jv> = JsonParser.<jsm>create</jsm>().unbuffered().build().createSession();
+		|	Object <jv>pojo</jv>;
+		|	Reader <jv>reader</jv>;
+		|
+		|	<jv>reader</jv> = <jk>new</jk> StringReader(<js>"{foo:'bar'}{baz:'qux'}"</js>);
+		|	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
+		|	<jv>pojo</jv> = p.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
+		|
+		|	<jv>reader</jv> = <jk>new</jk> StringReader(<js>"[123][456]"</js>);
+		|	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, <jk>int</jk>[].<jk>class</jk>);  <jc>// [123]</jc>
+		|	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, <jk>int</jk>[].<jk>class</jk>);  <jc>// [456]</jc>
+	</p>
+	<p>
+		Note that this isn't perfect in all cases since you can't combine two JSON numbers into a single
+		reader (e.g. <c>"123" + "456" = "123456"</c>).
+	</p>
+	<p>
+		For obvious reasons, do not use the following properties when reading continuous streams:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.json.JsonParser.Builder#validateEnd()}
+		<li class='jm'>{@link oaj.uon.UonParser.Builder#validateEnd()}
+		<li class='jm'>{@link oaj.parser.Parser.Builder#autoCloseStreams()}
+	</ul>
+	<p>
+		The {@link oaj.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with
+		continuous streams without any special properties.
+	</p>
+</div>

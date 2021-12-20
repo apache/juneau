@@ -60,7 +60,6 @@
 /* Monospaced font size */
 .code,
 .bcode,
-.bpcode,
 jc,jd,jt,jk,js,jf,jsf,jsm,ja,jp,jv 
 xt,xa,xc,xs,
 mc,mk,mv,
@@ -86,9 +85,7 @@ bc {
 
 /*--- Bordered code ---*/
 p.bcode,
-p.bpcode,
-div.bcode,
-div.bpcode {
+div.bcode {
 	border: 1px solid black;
 	margin: 0px 20px;
 	border-radius: 10px;
@@ -96,11 +93,6 @@ div.bpcode {
 	background-color: #f8f8f8;
 	border-color: #cccccc;
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
-}
-
-p.bpcode,
-div.bpcode {
-	padding-bottom: 15px;
 }
 
 /*--- Bordered code in a section of a method doc ---*/

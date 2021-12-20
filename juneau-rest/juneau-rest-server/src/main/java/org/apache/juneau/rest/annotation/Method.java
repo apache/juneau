@@ -46,7 +46,6 @@ import java.lang.annotation.*;
  * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
-@Documented
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited

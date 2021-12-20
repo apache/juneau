@@ -15,81 +15,83 @@
 
 {title:'Namespaces', updated:'9.0.0'}
 
-<p>
-	You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
-	These are used by default when namespaces are not explicitly specified.
-</p>
-<p>
-	The <c>juneau</c> namespace is used for generic names for objects that don't have namespaces 
-	associated with them.
-</p>
-<p>
-	The <c>juneaubp</c> namespace is used on bean properties that don't have namespaces associated with 
-	them.
-</p>
-<p>
-	The easiest way to specify namespaces is through annotations.
-	In this example, we're going to associate the prefix <c>'per'</c> to our bean class and all properties 
-	of this class.
-	We do this by adding the following annotation to our class:
-</p>
-<p class='bpcode w800'>
-	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
-	<jk>public class</jk> Person {
-</p>
-<p>
-	In general, the best approach is to define the namespace URIs at the package level using a 
-	<c>package-info.java</c> class, like so:
-</p>
-<p class='bpcode w800'>
-	<jc>// RDF namespaces used in this package</jc>
-	<ja>@RdfSchema</ja>(
-		prefix=<js>"ab"</js>,
-		rdfNs={
-			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
-			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
-			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
-			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
-		}
-	)
-	<jk>package</jk> org.apache.juneau.sample.addressbook;
-	<jk>import</jk> org.apache.juneau.xml.annotation.*;
-</p>
-<p>
-	This assigns a default prefix of <js>"ab"</js> for all classes and properties within the project, and 
-	specifies various other prefixes used within this project.
-</p>
-<p>
-	Now when we rerun the sample code, we'll get the following:
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;rdf:RDF</xt>
-	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
-	   <xt>&lt;rdf:Description&gt;</xt>
-	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-	   <xt>&lt;/rdf:Description&gt;</xt>
-	<xt>&lt;/rdf:RDF&gt;</xt>
-</p>
-<p>
-	Namespace auto-detection is enabled on serializers by default.
-	This causes the serializer to make a first-pass over the data structure to look for namespaces.
-	In high-performance environments, you may want to consider disabling auto-detection and providing an 
-	explicit list of namespaces to the serializer to avoid this scanning step using {@link oaj.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
-	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
-		.xmlabbrev()
-		.rdfxml_tab(3)
-		.disableAutoDetectNamespaces()
-		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
-		.build();
-</p>
-<p>
-	This code change will produce the same output as before, but will perform slightly better since it doesn't 
-	have to crawl the POJO tree before serializing the result.
-</p>
+<div class='topic'>
+	<p>
+		You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
+		These are used by default when namespaces are not explicitly specified.
+	</p>
+	<p>
+		The <c>juneau</c> namespace is used for generic names for objects that don't have namespaces 
+		associated with them.
+	</p>
+	<p>
+		The <c>juneaubp</c> namespace is used on bean properties that don't have namespaces associated with 
+		them.
+	</p>
+	<p>
+		The easiest way to specify namespaces is through annotations.
+		In this example, we're going to associate the prefix <c>'per'</c> to our bean class and all properties 
+		of this class.
+		We do this by adding the following annotation to our class:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
+		|	<jk>public class</jk> Person {
+	</p>
+	<p>
+		In general, the best approach is to define the namespace URIs at the package level using a 
+		<c>package-info.java</c> class, like so:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// RDF namespaces used in this package</jc>
+		|	<ja>@RdfSchema</ja>(
+		|		prefix=<js>"ab"</js>,
+		|		rdfNs={
+		|			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+		|			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+		|			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+		|			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
+		|		}
+		|	)
+		|	<jk>package</jk> org.apache.juneau.sample.addressbook;
+		|	<jk>import</jk> org.apache.juneau.xml.annotation.*;
+	</p>
+	<p>
+		This assigns a default prefix of <js>"ab"</js> for all classes and properties within the project, and 
+		specifies various other prefixes used within this project.
+	</p>
+	<p>
+		Now when we rerun the sample code, we'll get the following:
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;rdf:RDF</xt>
+		|		<xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+		|		<xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+		|		<xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+		|		<xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
+		|		<xt>&lt;rdf:Description&gt;</xt>
+		|			<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+		|			<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		|		<xt>&lt;/rdf:Description&gt;</xt>
+		|	<xt>&lt;/rdf:RDF&gt;</xt>
+	</p>
+	<p>
+		Namespace auto-detection is enabled on serializers by default.
+		This causes the serializer to make a first-pass over the data structure to look for namespaces.
+		In high-performance environments, you may want to consider disabling auto-detection and providing an 
+		explicit list of namespaces to the serializer to avoid this scanning step using {@link oaj.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
+		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
+		|		.xmlabbrev()
+		|		.rdfxml_tab(3)
+		|		.disableAutoDetectNamespaces()
+		|		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
+		|		.build();
+	</p>
+	<p>
+		This code change will produce the same output as before, but will perform slightly better since it doesn't 
+		have to crawl the POJO tree before serializing the result.
+	</p>
+</div>

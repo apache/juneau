@@ -1,0 +1,236 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Response Examples', flags:'todo'}
+
+<div class='topic'>
+	<p>
+		The <c>model</c> select box in the responses can be expanded to show examples:
+	</p>
+	<h5 class='figure'>PetStoreResource.getPet()</h5>
+	<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.1.png'> 
+	<p>
+		Examples are provided for any supported <c>Accept</c> type based on the serializers defined on your
+		servlet/method.
+	</p>
+	<h5 class='figure'>application/json+simple</h5>
+	<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.2.png'> 
+	<h5 class='figure'>text/uon</h5>
+	<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.3.png'> 
+	<p>
+		Examples are pulled from the <c>examples</c> attribute in the response object of the generated Swagger JSON:
+	</p>
+	<p class='bcode w800'>
+		|	<jok>"/pet/{petId}"</jok>: {
+		|		<jok>"get"</jok>: {
+		|			<jok>"operationId"</jok>: <jov>"getPet"</jov>,
+		|			<jok>"summary"</jok>: <jov>"Find pet by ID"</jov>,
+		|			<jok>"description"</jok>: <jov>"Returns a single pet"</jov>,
+		|			<jok>"responses"</jok>: {
+		|				<jok>"200"</jok>: {
+		|					<jok>"description"</jok>: <jov>"OK"</jov>,
+		|					<jok>"schema"</jok>: {
+		|						<jok>"$ref"</jok>: <jov>"#/definitions/Pet"</jov>
+		|					},
+		|					<jok>"examples"</jok>: {
+		|						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;id&lt;/td&gt;\n\t\t&lt;td&gt;\t\t\t&lt;a href=\"..."</jov>,
+		|						<jok>"text/html+schema"</jok>: <jov>"&lt;html&gt;\n\t&lt;head&gt;\n\t\t&lt;link rel='icon' href='$U{servlet:/htdocs/cat.png}'/&gt;..."</jov>,
+		|						<jok>"application/json"</jok>: <jov>"{\n\t\"id\": 123,\n\t\"species\": {\n\t\t\"name\": \"Dog\",\n\t\t\"id\": 123\n\t},\n\t\"name\..."</jov>,
+		|						<jok>"application/json+simple"</jok>: <jov>"{\n\tid: 123,\n\tspecies: {\n\t\tname: 'Dog',\n\t\tid: 123\n\t},\n\tname: 'Doggie',\n\..."</jov>,
+		|						<jok>"application/json+schema"</jok>: <jov>"{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"id\": {\n\t\t\t\"type\": \"inte..."</jov>,
+		|						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Pet&gt;\n\t&lt;id&gt;123&lt;/id&gt;\n\t&lt;spec..."</jov>,
+		|						<jok>"text/xml+schema"</jok>: <jov>"&lt;schema xmlns=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.apache.org/..."</jov>,
+		|						<jok>"text/uon"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\t\tn..."</jov>,
+		|						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"id=123\n&amp;species=(\n\tname=Dog,\n\tid=123\n)\n&amp;name=Doggie\n&amp;tags=@(\n\t(\n\..."</jov>,
+		|						<jok>"text/openapi"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\..."</jov>,
+		|						<jok>"octal/msgpack"</jok>: <jov>"86 A2 69 64 7B A7 73 70 65 63 69 65 73 82 A4 6E 61 6D 65 A3 44 6F 67 A2 69 64 7B A4 6E 61 6D 65 ..."</jov>,
+		|						<jok>"text/xml+soap"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Envelope soap=\"http://www.w3.org/2003/05/..."</jov>,
+		|						<jok>"text/plain"</jok>: <jov>"{id:123,species:{name:'Dog',id:123},name:'Doggie',tags:[{name:'MyTag',id:123}],price:0.0,status:'AV..."</jov>,
+		|						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://..."</jov>,
+		|						<jok>"text/xml+rdf+abbrev"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"..."</jov>,
+		|						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache..."</jov>,
+		|						<jok>"text/n-triple"</jok>: <jov>"_:A720f0f4fX3aX165d4974933X3aXX2dX7f93 &lt;http://www.apache.org/juneaubp/name&gt; \"Dog\" .\n_:..."</jov>,
+		|						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org..."</jov>
+	</p>
+	<p>
+		There are several options for defining examples for response bodies:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			{@del oaj.http.annotation.Response#example() @Response(example)} annotation.
+		<li>
+			{@link oaj.http.annotation.Response#examples() @Response(examples)} annotation.
+		<li>
+			Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <c><ja>@Swagger</ja>(value)</c>/<c><ja>@OpSwagger</ja>(value)</c>).
+		<li>
+			Defining an <js>"examples"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
+		<li>
+			Allowing Juneau to auto-generate a code example.
+	</ul>
+	
+	<p>
+		The {@del oaj.http.annotation.Response#example @Response(example)} annotation can be used on either your <ja>@RestOp</ja>-annotated
+		method or return class to define the example of the body.
+	</p>	
+	<p class='bcode w800'>
+		|	<jc>// A JSON representation of a Pet object.</jc>
+		|	<ja>@Response</ja>(
+		|		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+		|	)
+	</p>
+	<p>
+		This is a Simple JSON representation of the body that is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
+		supported language types.
+		These values are then used to automatically populate the <c>examples</c> field.
+	</p>
+	<p>
+		Direct per-media-type examples can also be defined using the {@link oaj.http.annotation.Response#examples @Response(examples)} annotation:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// A JSON representation of a PetCreate object.</jc>
+		|	<ja>@Response</ja>(
+		|		examples={
+		|			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
+		|			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
+		|		}
+		|	)
+	</p>
+	
+	<p>
+		Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
+		By default, the generated swagger uses to the {@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+		setting to automatically add examples to beans, collections, arrays, and maps:
+	</p>
+	<p>
+		In particular, examples can be defined via static methods, fields, and annotations on the classes themselves.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Annotation on class.</jc>
+		|	<ja>@Example</ja>(<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
+		|	<jk>public class</jk> PetCreate {
+		|		...
+		|	}
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Annotation on static method.</jc>
+		|	<jk>public class</jk> PetCreate {
+		|		<ja>@Example</ja>
+		|		<jk>public static</jk> PetCreate <jsm>sample</jsm>() {
+		|			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		|		}
+		|	}
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Static method with specific name 'example'.</jc>
+		|	<jk>public class</jk> PetCreate {
+		|		<jk>public static</jk> PetCreate <jsm>example</jsm>() {
+		|			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		|		}
+		|	}
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Static field.</jc>
+		|	<jk>public class</jk> PetCreate {
+		|		<ja>@Example</ja>
+		|		<jk>public static</jk> PetCreate <jsf>EXAMPLE</jsf> = <jk>new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		|	}
+	</p>
+	<p>
+		Examples can also be specified via generic properties as well using the {@del oaj.BeanContext.Builder#example(String,Object)} setting 
+		or {@link oaj.annotation.Bean#example @Bean(example)} annotation at either the class or method level.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Examples defined at class level.</jc>
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@Bean</ja>(
+		|		onClass=PetCreate.<jk>class</jk>,
+		|		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+		|	)
+	</p>
+	<p>
+		Response headers are also rendered in the Swagger UI:
+	</p>
+	<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.4.png'> 
+	<p>
+		These can be auto-generated from {@link oaj.http.annotation.Header @Header} annotations defined on method 
+		parameters or when the parameter type is the mutable {@link oaj.Value} object.
+		The example above shows one of each:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/user/login"</js>,
+		|		summary=<js>"Logs user into the system"</js>,
+		|		swagger=<ja>@OpSwagger</ja>(
+		|			tags=<js>"user"</js>
+		|		)
+		|	)
+		|	<jk>public</jk> Ok login(
+		|			<ja>@Query</ja>(
+		|				name=<js>"username"</js>,
+		|				description=<js>"The username for login"</js>,
+		|				required=<jk>true</jk>,
+		|				example=<js>"myuser"</js>
+		|			)
+		|			String <jv>username</jv>,
+		|			<ja>@Query</ja>(
+		|				name=<js>"password"</js>,
+		|				description=<js>"The password for login in clear text"</js>,
+		|				required=<jk>true</jk>,
+		|				example=<js>"abc123"</js>
+		|			)
+		|			String <jv>password</jv>,
+		|			<ja>@Header</ja>(
+		|				name=<js>"X-Rate-Limit"</js>,
+		|				type=<js>"integer"</js>,
+		|				format=<js>"int32"</js>,
+		|				description=<js>"Calls per hour allowed by the user."</js>,
+		|				example=<js>"123"</js>
+		|			)
+		|			Value&lt;Integer&gt; <jv>rateLimit</jv>,
+		|			Value&lt;ExpiresAfter&gt; <jv>expiresAfter</jv>,
+		|			RestRequest <jv>req</jv>,
+		|			RestResponse <jv>res</jv>
+		|		) <jk>throws</jk> InvalidLogin, NotAcceptable {
+		|
+		|		<jk>if</jk> (! <jf>store</jf>.isValid(<jv>username</jv>, <jv>password</jv>))
+		|			<jk>throw new</jk> InvalidLogin();
+		|
+		|		Date <jv>d</jv> = <jk>new</jk> Date(System.<jsm>currentTimeMillis</jsm>() + 30 * 60 * 1000);
+		|		<jv>req</jv>.getSession().setAttribute(<js>"login-expires"</js>, d);
+		|		<jv>rateLimit</jv>.set(1000);
+		|		<jv>expiresAfter</jv>.set(<jk>new</jk> ExpiresAfter(<jv>d</jv>));
+		|		<jk>return</jk> <jsf>OK</jsf>;
+		|	}
+	</p>
+	<p class='bcode w800'>	
+		|	<ja>@Header</ja>(
+		|		name=<js>"X-Expires-After"</js>,
+		|		type=<js>"string"</js>,
+		|		format=<js>"date-time"</js>,
+		|		description=<js>"Date in UTC when token expires"</js>,
+		|		example=<js>"2012-10-21"</js>
+		|	)
+		|	<jk>public static class</jk> ExpiresAfter {
+		|		<jk>private final</jk> Calendar <jf>c</jf>;
+		|		<jk>public</jk> ExpiresAfter(Date <jv>d</jv>) {
+		|			<jk>this</jk>.<jf>c</jf> = <jk>new</jk> GregorianCalendar();
+		|			<jf>c</jf>.setTime(<jv>d</jv>);
+		|		}
+		|		<jk>public</jk> Calendar toCalendar() {
+		|			<jk>return</jk> <jf>c</jf>;
+		|		}
+		|	}
+	</p>	
+</div>

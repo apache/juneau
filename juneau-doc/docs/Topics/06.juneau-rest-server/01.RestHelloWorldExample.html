@@ -15,78 +15,80 @@
 
 {title:'Hello World Example', updated:'9.0.0'}
 
-<p>
-	A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
-	The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
-	extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
-</p>
-<p>
-	In this example, we define a resource called <l>HelloWorldResource</l>.  
-	This example is located in the <l>juneau-examples-rest</l> project.
-	It's assumed the reader is familiar with defining servlets in web applications.
-</p>
-<p>
-	Like any servlet, we could define our resource in the <l>web.xml</l> file of the web application like so...
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>"1.0"</xs> <xa>encoding</xa>=<xs>"UTF-8"</xs><xt>?&gt;</xt>
-	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
-		<xt>&lt;servlet&gt;</xt>
-			<xt>&lt;servlet-name&gt;</xt>HelloWorldResource<xt>&lt;/servlet-name&gt;</xt>
-			<xt>&lt;servlet-class&gt;</xt>com.foo.sample.HelloWorldResource<xt>&lt;/servlet-class&gt;</xt>
-		<xt>&lt;/servlet&gt;</xt>
-		<xt>&lt;servlet-mapping&gt;</xt>
-			<xt>&lt;servlet-name&gt;</xt>HelloWorldResource<xt>&lt;/servlet-name&gt;</xt>
-			<xt>&lt;url-pattern&gt;</xt>/*<xt>&lt;/url-pattern&gt;</xt>
-		<xt>&lt;/servlet-mapping&gt;</xt>
-	<xt>&lt;/web-app&gt;</xt>
-</p>
-<p>
-	Our servlet code is shown below:
-</p>
-<p class='bpcode w800'>
-	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
-	<ja>@Rest</ja>(
-		path=<js>"/helloWorld"</js>,
-		title=<js>"Hello World"</js>,
-		description=<js>"An example of the simplest-possible resource"</js>
-	)
-	<ja>@HtmlDoc</ja>(
-		navlinks={
-			<js>"up: request:/.."</js>,
-			<js>"options: servlet:/?method=OPTIONS"</js>
-		},
-		aside={
-			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
-			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
-			<js>"&lt;/div&gt;"</js>
-		}
-	)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
-	
-		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
-		<jk>public</jk> String sayHello() {
-			<jk>return</jk> <js>"Hello world!"</js>;
-		}
-	}
-</p>
-<p>
-	This is what it looks like in a browser:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/helloWorld
-</p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.HelloWorldExample.1.png'>
-<p>
-	It doesn't much simpler than that.  
-	In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
-	JSON, XML, HTML, ...).
-	However, we could have returned any POJO consisting of beans, maps, collections, etc...
-</p>
-<p>
-	The {@link oajr.BasicRestServlet} class that we're using here is a subclass of 
-	{@link oajr.RestServlet} that provides default support for a variety of content types.  
-	Implementers can choose to use this class, or create their own subclass of 
-	{@link oajr.RestServlet} with their own specialized serializers and parsers.
-</p>
+<div class='topic'>
+	<p>
+		A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
+		The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
+		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
+	</p>
+	<p>
+		In this example, we define a resource called <l>HelloWorldResource</l>.  
+		This example is located in the <l>juneau-examples-rest</l> project.
+		It's assumed the reader is familiar with defining servlets in web applications.
+	</p>
+	<p>
+		Like any servlet, we could define our resource in the <l>web.xml</l> file of the web application like so...
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>"1.0"</xs> <xa>encoding</xa>=<xs>"UTF-8"</xs><xt>?&gt;</xt>
+		|	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
+		|		<xt>&lt;servlet&gt;</xt>
+		|			<xt>&lt;servlet-name&gt;</xt>HelloWorldResource<xt>&lt;/servlet-name&gt;</xt>
+		|			<xt>&lt;servlet-class&gt;</xt>com.foo.sample.HelloWorldResource<xt>&lt;/servlet-class&gt;</xt>
+		|		<xt>&lt;/servlet&gt;</xt>
+		|		<xt>&lt;servlet-mapping&gt;</xt>
+		|			<xt>&lt;servlet-name&gt;</xt>HelloWorldResource<xt>&lt;/servlet-name&gt;</xt>
+		|			<xt>&lt;url-pattern&gt;</xt>/*<xt>&lt;/url-pattern&gt;</xt>
+		|		<xt>&lt;/servlet-mapping&gt;</xt>
+		|	<xt>&lt;/web-app&gt;</xt>
+	</p>
+	<p>
+		Our servlet code is shown below:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/helloWorld"</js>,
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>
+		|	)
+		|	<ja>@HtmlDoc</ja>(
+		|		navlinks={
+		|			<js>"up: request:/.."</js>,
+		|			<js>"options: servlet:/?method=OPTIONS"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+		|	
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
+		|		<jk>public</jk> String sayHello() {
+		|			<jk>return</jk> <js>"Hello world!"</js>;
+		|		}
+		|	}
+	</p>
+	<p>
+		This is what it looks like in a browser:
+	</p>
+	<p class='bcode w800'>
+		|	http://localhost:10000/helloWorld
+	</p>
+	<img class='bordered w800' src='doc-files/juneau-rest-server.HelloWorldExample.1.png'>
+	<p>
+		It doesn't much simpler than that.  
+		In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
+		JSON, XML, HTML, ...).
+		However, we could have returned any POJO consisting of beans, maps, collections, etc...
+	</p>
+	<p>
+		The {@link oajr.BasicRestServlet} class that we're using here is a subclass of 
+		{@link oajr.RestServlet} that provides default support for a variety of content types.  
+		Implementers can choose to use this class, or create their own subclass of 
+		{@link oajr.RestServlet} with their own specialized serializers and parsers.
+	</p>
+</div>

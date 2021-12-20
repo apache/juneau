@@ -28,43 +28,97 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Basic configuration for a REST resource that supports all languages.
+ * Basic configuration for a REST resource that supports all languages and provides common default configuration values.
  *
  * <p>
- * Registers the following parsers for request bodies based on matching <c>Content-Type</c> header:
- * <ul class='javatreec'>
- * 	<li class='jc'>{@link JsonParser}
- * 	<li class='jc'>{@link SimpleJsonParser}
- * 	<li class='jc'>{@link XmlParser}
- * 	<li class='jc'>{@link HtmlParser}
- * 	<li class='jc'>{@link UonParser}
- * 	<li class='jc'>{@link UrlEncodingParser}
- * 	<li class='jc'>{@link OpenApiParser}
- * 	<li class='jc'>{@link MsgPackParser}
- * 	<li class='jc'>{@link PlainTextParser}
- * </ul>
- *
-* <p>
- * Registers the following serializers for response bodies based on matching <c>Accept</c> header:
- * <ul class='javatreec'>
- * 	<li class='jc'>{@link HtmlDocSerializer}
- * 	<li class='jc'>{@link HtmlStrippedDocSerializer}
- * 	<li class='jc'>{@link HtmlSchemaDocSerializer}
- * 	<li class='jc'>{@link JsonSerializer}
- * 	<li class='jc'>{@link SimpleJsonSerializer}
- * 	<li class='jc'>{@link JsonSchemaSerializer}
- * 	<li class='jc'>{@link XmlDocSerializer}
- * 	<li class='jc'>{@link UonSerializer}
- * 	<li class='jc'>{@link UrlEncodingSerializer}
- * 	<li class='jc'>{@link OpenApiSerializer}
- * 	<li class='jc'>{@link MsgPackSerializer}
- * 	<li class='jc'>{@link SoapXmlSerializer}
- * 	<li class='jc'>{@link PlainTextSerializer}
+ * 	Default settings defined:
+ * </p>
+ * <ul class='spaced-list'>
+ * 	<li>{@link Rest @Rest}:
+ * 		<ul>
+ * 			<li><c>{@link Rest#serializers() serializers}=</c>
+ * 				<ul class='javatreec'>
+ * 					<li class='jc'>{@link HtmlDocSerializer}
+ * 					<li class='jc'>{@link HtmlStrippedDocSerializer}
+ * 					<li class='jc'>{@link HtmlSchemaDocSerializer}
+ * 					<li class='jc'>{@link JsonSerializer}
+ * 					<li class='jc'>{@link SimpleJsonSerializer}
+ * 					<li class='jc'>{@link JsonSchemaSerializer}
+ * 					<li class='jc'>{@link XmlDocSerializer}
+ * 					<li class='jc'>{@link UonSerializer}
+ * 					<li class='jc'>{@link UrlEncodingSerializer}
+ * 					<li class='jc'>{@link OpenApiSerializer}
+ * 					<li class='jc'>{@link MsgPackSerializer}
+ * 					<li class='jc'>{@link SoapXmlSerializer}
+ * 					<li class='jc'>{@link PlainTextSerializer}
+ * 				</ul>
+ * 			</li>
+ * 			<li><c>{@link Rest#parsers() parsers}=</c>
+ * 				<ul class='javatreec'>
+ * 					<li class='jc'>{@link JsonParser}
+ * 					<li class='jc'>{@link SimpleJsonParser}
+ * 					<li class='jc'>{@link XmlParser}
+ * 					<li class='jc'>{@link HtmlParser}
+ * 					<li class='jc'>{@link UonParser}
+ * 					<li class='jc'>{@link UrlEncodingParser}
+ * 					<li class='jc'>{@link OpenApiParser}
+ * 					<li class='jc'>{@link MsgPackParser}
+ * 					<li class='jc'>{@link PlainTextParser}
+ * 				</ul>
+ * 			</li>
+ * 			<li><c>{@link Rest#config() config}=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}</js>"</c></li>
+ *		</ul>
+ *	</li>
+ * 	<li>{@link BeanConfig @BeanConfig}:
+ * 		<ul>
+ * 			<li><c>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}=<js>"true"</js></c></li>
+ * 		</ul>
+ * 	</li>
+ * 	<li>{@link SerializerConfig @SerializerConfig}:
+ * 		<ul>
+ * 			<li><c>{@link SerializerConfig#uriResolution() uriResolution}=<js>"ROOT_RELATIVE"</js></c></li>
+ * 		</ul>
+ * 	</li>
+ * 	<li>{@link HtmlDocConfig @HtmlDocConfig}:
+ * 		<ul>
+ * 			<li><c>{@link HtmlDocConfig#header() header}=<js>"&lt;h1>$RS{title}&lt;/h1>&lt;h2>$RS{operationSummary,description}&lt;/h2>$C{REST/header}"</js></c></li>
+ * 			<li><c>{@link HtmlDocConfig#navlinks() navlinks}=<js>"up: request:/.."</js></c></li>
+ * 			<li><c>{@link HtmlDocConfig#stylesheet() stylesheet}=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js></c></li>
+ * 			<li><c>{@link HtmlDocConfig#head() head}=<js>"$C{REST/head}"</js></c></li>
+ * 			<li><c>{@link HtmlDocConfig#footer() footer}=<js>"$C{REST/footer}"</js></c></li>
+ * 			<li><c>{@link HtmlDocConfig#nowrap() nowrap}=<js>"true"</js></c></li>
+ * 		</ul>
+ * 	</li>
  * </ul>
  *
  * <p>
- * Classes that don't extend from {@link BasicRestServlet} can implement this interface to
- * be configured with the same serializers/parsers/etc... as {@link BasicRestServlet}.
+ * 	This annotation can be applied to REST resource classes to define common default configurations:
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Used on a top-level resource.</jc>
+ * 	<ja>@Rest</ja>
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicUniversalRest { ... }
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Used on a child resource.</jc>
+ * 	<ja>@Rest</ja>
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicUniversalRest { ... }
+ * </p>
+ *
+ * <p>
+ * 	Note that the framework will aggregate annotations defined on all classes in the class hierarchy with
+ * 	values defined on child classes overriding values defined on parent classes.  That allows any values defined
+ * 	on this interface to be overridden by annotations defined on the implemented class.
+ * </p>
+ *
+ * <ul class='seealso'>
+ * 	<ul class='javatreec'>
+ * 		<li class='jc'>{@link BasicRestServlet}
+ * 		<li class='jc'>{@link BasicRestServletGroup}
+ * 		<li class='jc'>{@link BasicRestObject}
+ * 		<li class='jc'>{@link BasicRestObjectGroup}
+ *	</ul>
+ * </ul>
  */
 @Rest(
 
@@ -101,6 +155,10 @@ import org.apache.juneau.xml.*;
 	// Optional external configuration file.
 	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
 )
+@BeanConfig(
+	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
+	ignoreUnknownBeanProperties="true"
+)
 @SerializerConfig(
 	// Enable automatic resolution of URI objects to root-relative values.
 	uriResolution="ROOT_RELATIVE"
@@ -134,9 +192,5 @@ import org.apache.juneau.xml.*;
 
 	// By default, table cell contents should not wrap.
 	nowrap="true"
-)
-@BeanConfig(
-	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true"
 )
 public interface BasicUniversalRest {}

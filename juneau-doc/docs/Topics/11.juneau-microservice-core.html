@@ -15,45 +15,46 @@
 
 {title:'juneau-microservice-core', created:'8.1.0', deprecated:'8.1.2'}
 
-<div class='warn'>
-	The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
-	framework for creating microservices and the ability for Juneau to be used within Spring Boot.
+<div class='topic'>
+	<div class='warn'>
+		The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
+		framework for creating microservices and the ability for Juneau to be used within Spring Boot.
+	</div>
+	
+	<h5 class='figure'>Maven Dependency</h5>
+	<p class='bcode w500'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>juneau-microservice-core<xt>&lt;/artifactId&gt;</xt>
+		|		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	
+	<h5 class='figure'>Java Library</h5>
+	<p class='bcode w500'>
+		|	juneau-microservice-core-{@property juneauVersion}.jar 
+	</p>	
+	
+	<h5 class='figure'>OSGi Module</h5>
+	<p class='bcode w500'>
+		|	org.apache.juneau.microservice.core_{@property juneauVersion}.jar 
+	</p>	
+	
+	<p>
+		Juneau Microservice is an API for creating stand-alone executable jars with automatic support for
+		Juneau configurations and console commands.
+	</p>
+	
+	<p>
+		Features include:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			A builder-based API for defining and starting microservices.
+		<li>
+			An extensible API that allows you to hook into various lifecycle events.
+		<li>
+			Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
+			file properties.
+	</ul>
 </div>
-
-<h5 class='figure'>Maven Dependency</h5>
-<p class='bpcode w500'>
-	<xt>&lt;dependency&gt;</xt>
-		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
-		<xt>&lt;artifactId&gt;</xt>juneau-microservice-core<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
-	<xt>&lt;/dependency&gt;</xt>
-</p>	
-
-<h5 class='figure'>Java Library</h5>
-<p class='bpcode w500'>
-	juneau-microservice-core-{@property juneauVersion}.jar 
-</p>	
-
-<h5 class='figure'>OSGi Module</h5>
-<p class='bpcode w500'>
-	org.apache.juneau.microservice.core_{@property juneauVersion}.jar 
-</p>	
-
-<p>
-	Juneau Microservice is an API for creating stand-alone executable jars with automatic support for
-	Juneau configurations and console commands.
-</p>
-
-<p>
-	Features include:
-</p>
-<ul class='spaced-list'>
-	<li>
-		A builder-based API for defining and starting microservices.
-	<li>
-		An extensible API that allows you to hook into various lifecycle events.
-	<li>
-		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
-		file properties.
-</ul>
-

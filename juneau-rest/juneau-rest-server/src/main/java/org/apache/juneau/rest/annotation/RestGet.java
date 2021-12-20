@@ -35,7 +35,6 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
-@Documented
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited

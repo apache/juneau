@@ -15,104 +15,106 @@
 
 {title:'URI Properties', updated:'9.0.0'}
 
-<p>
-	Bean properties of type <c>java.net.URI</c> or <c>java.net.URL</c> have special meaning to the 
-	RDF serializer.
-	They are interpreted as resource identifiers.
-</p>
-<p>
-	In the following code, we're adding 2 new properties.
-	The first property is annotated with <ja>@Beanp</ja> to identify that this property is the resource 
-	identifier for this bean.
-	The second un-annotated property is interpreted as a reference to another resource.
-</p>
-<p class='bpcode w800'>	
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
-		<jk>public</jk> URI <jf>uri</jf>;
-		
-		<jk>public</jk> URI <jf>addressBookUri</jf>;
-	
-		...
-		
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> <jv>id</jv>, String <jv>name</jv>, String <jv>uri</jv>, String <jv>addressBookUri</jv>) <jk>throws</jk> URISyntaxException {
-			<jk>this</jk>.<jf>id</jf> = <jv>id</jv>;
-			<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
-			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(<jv>uri</jv>);
-			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(<jv>addressBookUri</jv>);
-		}
-	}
-</p>
-<p>
-	We alter our code to pass in values for these new properties.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create our bean.</jc>
-	Person <jv>person</jv> = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
-		<js>"http://sample/addressBook"</js>);
-</p>
-<p>
-	Now when we run the sample code, we get the following:
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;rdf:RDF</xt>
-	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
-	   <xt>&lt;rdf:Description <b><xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs></b>&gt;</xt>
-	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
-	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-	   <xt>&lt;/rdf:Description&gt;</xt>
-	<xt>&lt;/rdf:RDF&gt;</xt>
-</p>
-<p>
-	The {@link oaj.annotation.Uri @Uri} annotation can also be used on classes and properties 
-	to identify them as URLs when they're not instances of <c>java.net.URI</c> or <c>java.net.URL</c> 
-	(not needed if <c><ja>@Rdf</ja>(beanUri=<jk>true</jk>)</c> is already specified).
-</p>
-<p>
-	The following properties would have produced the same output as before.  
-	Note that the <ja>@URI</ja> annotation is only needed on the second property.
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) <jk>public</jk> String <jf>uri</jf>;
-		
-		<ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
-</p>
-<p>
-	Also take note of the {@link oaj.serializer.Serializer.Builder#uriResolution(UriResolution)},
-	{@link oaj.serializer.Serializer.Builder#uriRelativity(UriRelativity)}, and 
-	and {@link oaj.serializer.Serializer.Builder#uriContext(UriContext)}
-	settings that can be specified on the serializer to resolve relative and context-root-relative URIs to 
-	fully-qualified URIs.
-</p>
-<p>
-	This can be useful if you want to keep the URI authority and context root information out of the bean logic 
-	layer.
-</p>
-<p>
-	The following code produces the same output as before, but the URIs on the beans are relative.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
-		.xmlabbrev()
-		.rdfxml_tab(3);
-		.relativeUriBase(<js>"http://myhost/sample"</js>);
-		.absolutePathUriBase(<js>"http://myhost"</js>)
-		.build();
-		
-	<jc>// Create our bean.</jc>
-	Person <jv>person</jv> = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"person/1"</js>, <js>"/"</js>);
-
-	<jc>// Serialize the bean to RDF/XML.</jc>
-	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>person</jv>);
-</p>		
+<div class='topic'>
+	<p>
+		Bean properties of type <c>java.net.URI</c> or <c>java.net.URL</c> have special meaning to the 
+		RDF serializer.
+		They are interpreted as resource identifiers.
+	</p>
+	<p>
+		In the following code, we're adding 2 new properties.
+		The first property is annotated with <ja>@Beanp</ja> to identify that this property is the resource 
+		identifier for this bean.
+		The second un-annotated property is interpreted as a reference to another resource.
+	</p>
+	<p class='bcode w800'>	
+		|	<jk>public class</jk> Person {
+		|		
+		|		<jc>// Bean properties</jc>
+		|		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
+		|		<jk>public</jk> URI <jf>uri</jf>;
+		|		
+		|		<jk>public</jk> URI <jf>addressBookUri</jf>;
+		|	
+		|		...
+		|		
+		|		<jc>// Normal constructor</jc>
+		|		<jk>public</jk> Person(<jk>int</jk> <jv>id</jv>, String <jv>name</jv>, String <jv>uri</jv>, String <jv>addressBookUri</jv>) <jk>throws</jk> URISyntaxException {
+		|			<jk>this</jk>.<jf>id</jf> = <jv>id</jv>;
+		|			<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
+		|			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(<jv>uri</jv>);
+		|			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(<jv>addressBookUri</jv>);
+		|		}
+		|	}
+	</p>
+	<p>
+		We alter our code to pass in values for these new properties.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Create our bean.</jc>
+		|	Person <jv>person</jv> = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
+		|		<js>"http://sample/addressBook"</js>);
+	</p>
+	<p>
+		Now when we run the sample code, we get the following:
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;rdf:RDF</xt>
+		|		<xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+		|		<xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+		|		<xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+		|		<xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
+		|		<xt>&lt;rdf:Description <b><xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs></b>&gt;</xt>
+		|			<xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+		|			<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+		|			<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		|		<xt>&lt;/rdf:Description&gt;</xt>
+		|	<xt>&lt;/rdf:RDF&gt;</xt>
+	</p>
+	<p>
+		The {@link oaj.annotation.Uri @Uri} annotation can also be used on classes and properties 
+		to identify them as URLs when they're not instances of <c>java.net.URI</c> or <c>java.net.URL</c> 
+		(not needed if <c><ja>@Rdf</ja>(beanUri=<jk>true</jk>)</c> is already specified).
+	</p>
+	<p>
+		The following properties would have produced the same output as before.  
+		Note that the <ja>@URI</ja> annotation is only needed on the second property.
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> Person {
+		|		
+		|		<jc>// Bean properties</jc>
+		|		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) <jk>public</jk> String <jf>uri</jf>;
+		|		
+		|		<ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
+	</p>
+	<p>
+		Also take note of the {@link oaj.serializer.Serializer.Builder#uriResolution(UriResolution)},
+		{@link oaj.serializer.Serializer.Builder#uriRelativity(UriRelativity)}, and 
+		and {@link oaj.serializer.Serializer.Builder#uriContext(UriContext)}
+		settings that can be specified on the serializer to resolve relative and context-root-relative URIs to 
+		fully-qualified URIs.
+	</p>
+	<p>
+		This can be useful if you want to keep the URI authority and context root information out of the bean logic 
+		layer.
+	</p>
+	<p>
+		The following code produces the same output as before, but the URIs on the beans are relative.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Create a new serializer with readable output.</jc>
+		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
+		|		.xmlabbrev()
+		|		.rdfxml_tab(3);
+		|		.relativeUriBase(<js>"http://myhost/sample"</js>);
+		|		.absolutePathUriBase(<js>"http://myhost"</js>)
+		|		.build();
+		|		
+		|	<jc>// Create our bean.</jc>
+		|	Person <jv>person</jv> = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"person/1"</js>, <js>"/"</js>);
+		|
+		|	<jc>// Serialize the bean to RDF/XML.</jc>
+		|	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>person</jv>);
+	</p>		
+</div>

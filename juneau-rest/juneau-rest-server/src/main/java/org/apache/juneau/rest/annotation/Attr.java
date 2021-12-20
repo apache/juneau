@@ -45,7 +45,6 @@ import org.apache.juneau.oapi.*;
  * 	}
  * </p>
  */
-@Documented
 @Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited

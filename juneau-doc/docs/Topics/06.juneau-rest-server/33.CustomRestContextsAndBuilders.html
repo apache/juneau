@@ -1,0 +1,50 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Custom REST Context and Builders', created:'9.0.0', flags:'todo'}
+
+<div class='topic'>
+	<p>
+		They can also be defined programmatically:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Rest</ja>(
+		|		contextClass=MyRestContextBuilder
+		|	)
+		|	<jk>public class</jk> MyResource {
+		|		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+		|		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		|			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+		|		}
+		|
+		|		<jc>// Override at the method level.</jc>
+		|		<ja>@RestPost</ja>(parsers={HtmlParser.<jk>class</jk>})
+		|		<jk>public</jk> Object myMethod(<ja>@Body</ja> MyPojo <jv>myPojo</jv>) {
+		|			<jc>// Do something with your parsed POJO.</jc>
+		|		}
+		|	}
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Rest</ja>
+		|	<jk>public class</jk> MyResource {
+		|		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+		|		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		|			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+		|		}
+		|	}
+	</p>
+</div>

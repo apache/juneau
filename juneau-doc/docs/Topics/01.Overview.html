@@ -15,233 +15,227 @@
 
 {title:'Overview'}
 
-<!-- =========================================================================================================== -->
-<!-- === ABOUT ================================================================================================= -->
-<!-- =========================================================================================================== -->
-
 <h5 class='topic'>About</h5>
-<p>
-	Apache Juneau™ is a single cohesive Java ecosystem for marshalling Java objects to a wide variety of 
-	language types and creating annotation-based REST server and client APIs.
-</p>
-<p>
-	The Juneau ecosystem consists of the following parts:
-</p>
-<table class='styled w800'>
-	<tr>
-		<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
-	</tr>
-	<tr class='dark bb'>
-		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
-		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
-		<td>
-			<ul>
-				<li>Serializers and parsers for various languages.
-				<li>Marshalling support for HTTP headers/parts/requests/responses.
-				<li>Marshall-based assertions for simplified unit testing.
-			</ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Apache HttpCore 4.4.13
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
-		<td>
-			<ul>
-				<li>Serializers and parsers for various RDF languages.
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Apache Jena 2.7.1
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
-		<td>
-			<ul>
-				<li>Data Transfer Objects for HTML5, Atom, Cognos, JSON-Schema, and Swagger
-			</ul>
-		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
-		<td>
-			<ul>
-				<li>Configuration File API
-			</ul>
-		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
-	</tr>
-	<tr class='light bb'>
-		<td rowspan="6" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
-		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
-		<td>
-			<ul>
-				<li>REST Servlet API
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Servlet 3.1+
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
-		<td>
-			<ul>
-				<li>REST Spring Boot integration
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Spring Boot 2.0+
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
-		<td>
-			<ul>
-				<li>REST JAX-RS integration
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>JAX-RS 2.0
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
-		<td>
-			<ul>
-				<li>REST Client API
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Apache HttpClient 4.5+
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-mock</a></td>
-		<td>
-			<ul>
-				<li>REST Testing API
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Apache HttpClient 4.5+
-			</ul>
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
-		<td>
-			<ul>
-				<li>Spring Boot developer template
-			<ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Spring Boot 2.0+
-			</ul>
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
-		<td class='code'><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></td>
-		<td>
-			<ul>
-				<li>Core code examples
-			<ul>
-		</td>
-		<td></td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></td>
-		<td>
-			<ul>
-				<li>REST code examples
-			<ul>
-		</td>
-		<td></td>
-	</tr>
-	<tr class='light bb'>
-		<td rowspan="1" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-all</td>
-		<td class='code'><c>juneau-all</c></td>
-		<td>
-			Combination of the following:
-			<ul style='margin:0px 10px;'>
-				<li>juneau-marshall
-				<li>juneau-dto
-				<li>juneau-config
-				<li>juneau-rest-server
-				<li>juneau-rest-client
-			</ul>
-		</td>
-		<td>
-			<ul style='margin:0px 10px;'>
-				<li>Java 8+
-				<li>Servlet 3.1+
-				<li>Apache HttpCore 4.4.13
-				<li>Apache HttpClient 4.5+
-			</ul>
-		</td>
-	</tr>
-</table>
-
-<p>
-	The current version of Juneau is <c>{@property juneauVersion}</c>.
-	The easiest way to pull in the library is through the following maven dependency:
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;dependency&gt;</xt>
-		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
-		<xt>&lt;artifactId&gt;</xt>juneau-all<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
-	<xt>&lt;/dependency&gt;</xt>
-</p>	
-<p>
-	If you would like to work with the bleeding-edge code, you can access the <c>{@property juneauVersionNext}-SNAPSHOT</c>
-	version through the following repository:
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;pluginRepositories&gt;
-		&lt;pluginRepository&gt;
-			&lt;id&gt;<xv>apache.snapshots</xv>&lt;/id&gt;
-			&lt;url&gt;<xv>http://repository.apache.org/snapshots/</xv>&lt;/url&gt;
-			&lt;snapshots&gt;
-				&lt;enabled&gt;<xv>true</xv>&lt;/enabled&gt;
-				&lt;updatePolicy&gt;<xv>always</xv>&lt;/updatePolicy&gt;
-			&lt;/snapshots&gt;
-		&lt;/pluginRepository&gt;
-	&lt;/pluginRepositories&gt;</xt>
-</p>	
-<p>
-	Each of the components are also packaged as stand-alone OSGi modules.
-</p>
-
-<!-- =========================================================================================================== -->
-<!-- === FEATURES ============================================================================================== -->
-<!-- =========================================================================================================== -->
+<div class='topic'>
+	<p>
+		Apache Juneau™ is a single cohesive Java ecosystem for marshalling Java objects to a wide variety of 
+		language types and creating annotation-based REST server and client APIs.
+	</p>
+	<p>
+		The Juneau ecosystem consists of the following parts:
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
+			<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
+			<td>
+				<ul>
+					<li>Serializers and parsers for various languages.
+					<li>Marshalling support for HTTP headers/parts/requests/responses.
+					<li>Marshall-based assertions for simplified unit testing.
+				</ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8
+					<li>Apache HttpCore 4.4.13
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
+			<td>
+				<ul>
+					<li>Serializers and parsers for various RDF languages.
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8
+					<li>Apache Jena 2.7.1
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
+			<td>
+				<ul>
+					<li>Data Transfer Objects for HTML5, Atom, Cognos, JSON-Schema, and Swagger
+				</ul>
+			</td>
+			<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
+			<td>
+				<ul>
+					<li>Configuration File API
+				</ul>
+			</td>
+			<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan="6" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+			<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
+			<td>
+				<ul>
+					<li>REST Servlet API
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8
+					<li>Servlet 3.1+
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
+			<td>
+				<ul>
+					<li>REST Spring Boot integration
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8+
+					<li>Spring Boot 2.0+
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
+			<td>
+				<ul>
+					<li>REST JAX-RS integration
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8+
+					<li>JAX-RS 2.0
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
+			<td>
+				<ul>
+					<li>REST Client API
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8+
+					<li>Apache HttpClient 4.5+
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-mock</a></td>
+			<td>
+				<ul>
+					<li>REST Testing API
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8+
+					<li>Apache HttpClient 4.5+
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
+			<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
+			<td>
+				<ul>
+					<li>Spring Boot developer template
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8+
+					<li>Spring Boot 2.0+
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
+			<td class='code'><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></td>
+			<td>
+				<ul>
+					<li>Core code examples
+				<ul>
+			</td>
+			<td></td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></td>
+			<td>
+				<ul>
+					<li>REST code examples
+				<ul>
+			</td>
+			<td></td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan="1" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-all</td>
+			<td class='code'><c>juneau-all</c></td>
+			<td>
+				Combination of the following:
+				<ul style='margin:0px 10px;'>
+					<li>juneau-marshall
+					<li>juneau-dto
+					<li>juneau-config
+					<li>juneau-rest-server
+					<li>juneau-rest-client
+				</ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Java 8+
+					<li>Servlet 3.1+
+					<li>Apache HttpCore 4.4.13
+					<li>Apache HttpClient 4.5+
+				</ul>
+			</td>
+		</tr>
+	</table>
+	
+	<p>
+		The current version of Juneau is <c>{@property juneauVersion}</c>.
+		The easiest way to pull in the library is through the following maven dependency:
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>juneau-all<xt>&lt;/artifactId&gt;</xt>
+		|		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	<p>
+		If you would like to work with the bleeding-edge code, you can access the <c>{@property juneauVersionNext}-SNAPSHOT</c>
+		version through the following repository:
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;pluginRepositories&gt;
+		|		&lt;pluginRepository&gt;
+		|			&lt;id&gt;<xv>apache.snapshots</xv>&lt;/id&gt;
+		|			&lt;url&gt;<xv>http://repository.apache.org/snapshots/</xv>&lt;/url&gt;
+		|			&lt;snapshots&gt;
+		|				&lt;enabled&gt;<xv>true</xv>&lt;/enabled&gt;
+		|				&lt;updatePolicy&gt;<xv>always</xv>&lt;/updatePolicy&gt;
+		|			&lt;/snapshots&gt;
+		|		&lt;/pluginRepository&gt;
+		|	&lt;/pluginRepositories&gt;</xt>
+	</p>	
+	<p>
+		Each of the components are also packaged as stand-alone OSGi modules.
+	</p>
+</div>
 
 <h5 class='topic'>Features</h5>
 <div class='topic'>

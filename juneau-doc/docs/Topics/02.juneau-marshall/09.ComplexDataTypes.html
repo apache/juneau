@@ -15,46 +15,48 @@
 
 {title:'Complex Data Types', created:'9.0.0'}
 
-<p>
-	The Juneau parsers have the ability to parse into complex data types that consist of multidimensional arrays and nested maps and collections
-	using the methods below:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.parser.Parser}
-	<ul>
-		<li class='jm'>{@link oaj.parser.Parser#parse(Object,Class) parse(Object,Class)}
-		<li class='jm'>{@link oaj.parser.Parser#parse(Object,Type,Type...) parse(Object,Type,Type...)}
-	</ul>
-</ul>	
-<p>
-	Arrays are simple enough and can be constructed using the first method:
-</p>
-<p class='bpcode w800'>
-	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
-	String <jv>json</jv> = <js>"[1,2,3]"</js>;
-	<jk>int</jk>[] <jv>array</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>int</jk>[].<jk>class</jk>);
-</p>
-<p>
-	For data types consisting of nested collections an maps such as <c>Map&lt;String,List&lt;MyBean&gt;&gt;</c>, you need to
-	use the second parse method that allows you to define the parameter types of the collections classes.
-	For example:
-</p>
-<p class='bpcode w800'>
-	String <jv>json</jv> = <js>"{foo:[{bar:'baz'}]}"</js>;
-	TreeMap&lt;String,List&lt;MyBean&gt;&gt; <jv>map</jv> = <jv>parser</jv>.parse(
-		<jv>json</jv>,             <jc>// Input being parsed.</jc>
-		TreeMap.<jk>class</jk>,    <jc>// Top-level data type.</jc>
-		String.<jk>class</jk>,     <jc>// Key type of map.</jc>
-		LinkedList.<jk>class</jk>, <jc>// Value type of map.</jc>
-		MyBean.<jk>class</jk>      <jc>// Value type of list.v
-	);
-</p>
-<p>
-	<c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
-	<br><c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	<br>The arguments can be arbitrarily long to indicate arbitrarily complex data structures.
-</p>
-<p>
-	Similar methods for converting to complex types can be found on the {@link oajr.RequestBody} and {@link oajr.RequestHttpPart} classes,
-	and the {@link oaj.BeanSession#convertToType(Object,Type,Type...)} method.
-</p>
+<div class='topic'>
+	<p>
+		The Juneau parsers have the ability to parse into complex data types that consist of multidimensional arrays and nested maps and collections
+		using the methods below:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.parser.Parser}
+		<ul>
+			<li class='jm'>{@link oaj.parser.Parser#parse(Object,Class) parse(Object,Class)}
+			<li class='jm'>{@link oaj.parser.Parser#parse(Object,Type,Type...) parse(Object,Type,Type...)}
+		</ul>
+	</ul>	
+	<p>
+		Arrays are simple enough and can be constructed using the first method:
+	</p>
+	<p class='bcode w800'>
+		|	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
+		|	String <jv>json</jv> = <js>"[1,2,3]"</js>;
+		|	<jk>int</jk>[] <jv>array</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>int</jk>[].<jk>class</jk>);
+	</p>
+	<p>
+		For data types consisting of nested collections an maps such as <c>Map&lt;String,List&lt;MyBean&gt;&gt;</c>, you need to
+		use the second parse method that allows you to define the parameter types of the collections classes.
+		For example:
+	</p>
+	<p class='bcode w800'>
+		|	String <jv>json</jv> = <js>"{foo:[{bar:'baz'}]}"</js>;
+		|	TreeMap&lt;String,List&lt;MyBean&gt;&gt; <jv>map</jv> = <jv>parser</jv>.parse(
+		|		<jv>json</jv>,             <jc>// Input being parsed.</jc>
+		|		TreeMap.<jk>class</jk>,    <jc>// Top-level data type.</jc>
+		|		String.<jk>class</jk>,     <jc>// Key type of map.</jc>
+		|		LinkedList.<jk>class</jk>, <jc>// Value type of map.</jc>
+		|		MyBean.<jk>class</jk>      <jc>// Value type of list.v
+		|	);
+	</p>
+	<p>
+		<c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
+		<br><c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+		<br>The arguments can be arbitrarily long to indicate arbitrarily complex data structures.
+	</p>
+	<p>
+		Similar methods for converting to complex types can be found on the {@link oajr.RequestBody} and {@link oajr.RequestHttpPart} classes,
+		and the {@link oaj.BeanSession#convertToType(Object,Type,Type...)} method.
+	</p>
+</div>

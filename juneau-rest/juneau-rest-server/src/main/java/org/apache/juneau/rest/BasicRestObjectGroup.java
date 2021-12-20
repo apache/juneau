@@ -16,9 +16,14 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.config.*;
 
 /**
  * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.
+ *
+ * <p>
+ * 	Implements basic configuration settings from {@link BasicUniversalRest} and
+ * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc BasicRestServletGroup}

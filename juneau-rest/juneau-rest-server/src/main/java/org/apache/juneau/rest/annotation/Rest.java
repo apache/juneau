@@ -45,7 +45,6 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'>{@doc RestAnnotatedClasses}
  * </ul>
  */
-@Documented
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited

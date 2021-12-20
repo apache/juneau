@@ -15,60 +15,62 @@
 
 {title:'URL-Encoding Methodology'}
 
-<h5 class='figure'>General methodology:</h5>
-<table class='styled w800' style='border-collapse:collapse'>
-	<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
-	<tr>
-		<td>Maps/beans</td>
-		<td>OBJECT</td>
-		<td class='code'>
-	<ua>a1</ua>=(<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>)
-	<ua>a1</ua>=(<ua>b1</ua>=(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
-		</td>
-	</tr>
-	<tr>
-		<td>Collections/arrays</td>
-		<td>ARRAY</td>
-		<td class='code'>
-	<ua>a1</ua>=@(<us>x1</us>,<us>x2</us>)
-	<ua>a1</ua>=@(@(<us>x1</us>,<us>x2</us>),@(<us>x3</us>,<us>x4</us>))
-	<ua>a1</ua>=@((<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>),(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
-		</td>
-	</tr>
-	<tr>
-		<td>Booleans</td>
-		<td>BOOLEAN</td>
-		<td class='code'>
-	<ua>a1</ua>=<uk>true</uk>&amp;<ua>a2</ua>=<uk>false</uk>
-		</td>
-	</tr>
-	<tr>
-		<td>int/float/double/...</td>
-		<td>NUMBER</td>
-		<td class='code'>
-	<ua>a1</ua>=<un>123</un>&amp;<ua>a2</ua>=<un>1.23e1</un>
-		</td>
-	</tr>
-	<tr>
-		<td>null</td>
-		<td>NULL</td>
-		<td class='code'>
-	<ua>a1</ua>=<uk>null</uk>
-		</td>
-	</tr>
-	<tr>
-		<td>String</td>
-		<td>STRING</td>
-		<td class='code'>
-	<ua>a1</ua>=<us>foobar</us>
-	<ua>a1</ua>=<us>'true'</us>
-	<ua>a1</ua>=<us>'null'</us>
-	<ua>a1</ua>=<us>'123'</us>
-	<ua>a1</ua>=<us>' string with whitespace '</us>
-	<ua>a1</ua>=<us>'string with ~'escaped~' quotes'</us>
-		</td>
-	</tr>
-</table>
-<p>
-	Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
-</p>
+<div class='topic'>
+	<h5 class='figure'>General methodology:</h5>
+	<table class='styled w800' style='border-collapse:collapse'>
+		<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
+		<tr>
+			<td>Maps/beans</td>
+			<td>OBJECT</td>
+			<td class='code'>
+				|	<ua>a1</ua>=(<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>)
+				|	<ua>a1</ua>=(<ua>b1</ua>=(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+			</td>
+		</tr>
+		<tr>
+			<td>Collections/arrays</td>
+			<td>ARRAY</td>
+			<td class='code'>
+				|	<ua>a1</ua>=@(<us>x1</us>,<us>x2</us>)
+				|	<ua>a1</ua>=@(@(<us>x1</us>,<us>x2</us>),@(<us>x3</us>,<us>x4</us>))
+				|	<ua>a1</ua>=@((<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>),(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+			</td>
+		</tr>
+		<tr>
+			<td>Booleans</td>
+			<td>BOOLEAN</td>
+			<td class='code'>
+				|	<ua>a1</ua>=<uk>true</uk>&amp;<ua>a2</ua>=<uk>false</uk>
+			</td>
+		</tr>
+		<tr>
+			<td>int/float/double/...</td>
+			<td>NUMBER</td>
+			<td class='code'>
+				|	<ua>a1</ua>=<un>123</un>&amp;<ua>a2</ua>=<un>1.23e1</un>
+			</td>
+		</tr>
+		<tr>
+			<td>null</td>
+			<td>NULL</td>
+			<td class='code'>
+				|	<ua>a1</ua>=<uk>null</uk>
+			</td>
+		</tr>
+		<tr>
+			<td>String</td>
+			<td>STRING</td>
+			<td class='code'>
+				|	<ua>a1</ua>=<us>foobar</us>
+				|	<ua>a1</ua>=<us>'true'</us>
+				|	<ua>a1</ua>=<us>'null'</us>
+				|	<ua>a1</ua>=<us>'123'</us>
+				|	<ua>a1</ua>=<us>' string with whitespace '</us>
+				|	<ua>a1</ua>=<us>'string with ~'escaped~' quotes'</us>
+			</td>
+		</tr>
+	</table>
+	<p>
+		Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
+	</p>
+</div>

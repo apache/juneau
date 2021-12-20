@@ -15,31 +15,33 @@
 
 {title:'HtmlDocSerializer', updated:'9.0.0'}
 
-<p>
-	{@link oaj.html.HtmlDocSerializer} is an extension of {@link oaj.html.HtmlSerializer}
-	that wraps serialized POJOs in a complete HTML document. 
-</p>
-<p>
-	The class hierarchy for the builder of this serializer is:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.Context.Builder}
-	<ul>
-		<li class='jac'>{@link oaj.BeanContextable.Builder}
+<div class='topic'>
+	<p>
+		{@link oaj.html.HtmlDocSerializer} is an extension of {@link oaj.html.HtmlSerializer}
+		that wraps serialized POJOs in a complete HTML document. 
+	</p>
+	<p>
+		The class hierarchy for the builder of this serializer is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.Context.Builder}
 		<ul>
-			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
 				<ul>
-					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.xml.XmlSerializer.Builder}
+						<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
 						<ul>
-							<li class='jc'>{@link oaj.html.HtmlSerializer.Builder}
+							<li class='jc'>{@link oaj.xml.XmlSerializer.Builder}
 							<ul>
-								<li class='jc'>{@link oaj.html.HtmlStrippedDocSerializer.Builder}
+								<li class='jc'>{@link oaj.html.HtmlSerializer.Builder}
 								<ul>
-									<li class='jc'>{@link oaj.html.HtmlDocSerializer.Builder}
+									<li class='jc'>{@link oaj.html.HtmlStrippedDocSerializer.Builder}
+									<ul>
+										<li class='jc'>{@link oaj.html.HtmlDocSerializer.Builder}
+									</ul>
 								</ul>
 							</ul>
 						</ul>
@@ -48,35 +50,35 @@
 			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Refer to the builder javadocs for configurable settings.
-</p>
-<p>
-	This class is used extensively in the creation of POJO-based user interfaces in the REST API.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jd>/** 
-	 * Sample REST resource that prints out a simple "Hello world!" message.
-	 */</jd>
-	<ja>@Rest</ja>(path=<js>"/helloWorld"</js>)
-	<ja>@HtmlDocConfig</ja>(
-		navlinks={
-			<js>"up: request:/.."</js>,
-			<js>"options: servlet:/?method=OPTIONS"</js>
-		},
-		aside={
-			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
-			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
-			<js>"&lt;/div&gt;"</js>
-		}
-	)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {...}
-</p>
-<p>
-	The {@link oaj.html.HtmlDocSerializer.Builder#template(Class)} setting defines
-	a template for the HTML page being generated.
-	The default template is described next.
-</p>
+	<p>
+		Refer to the builder javadocs for configurable settings.
+	</p>
+	<p>
+		This class is used extensively in the creation of POJO-based user interfaces in the REST API.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jd>/** 
+		|	 * Sample REST resource that prints out a simple "Hello world!" message.
+		|	 */</jd>
+		|	<ja>@Rest</ja>(path=<js>"/helloWorld"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		navlinks={
+		|			<js>"up: request:/.."</js>,
+		|			<js>"options: servlet:/?method=OPTIONS"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {...}
+	</p>
+	<p>
+		The {@link oaj.html.HtmlDocSerializer.Builder#template(Class)} setting defines
+		a template for the HTML page being generated.
+		The default template is described next.
+	</p>
+</div>

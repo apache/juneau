@@ -15,63 +15,64 @@
 
 {title:'Overview', created:'8.0.0', flags:'todo'}
 
-<p>
-	The Juneau integration component for Spring Boot consists of the following classes:
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link oajr.springboot.annotation.JuneauRestRoot}
-	<li class='jc'>{@del oajr.springboot.JuneauRestInitializer}
-	<li class='jc'>{@del oajr.springboot.SpringRestResourceResolver}
-</ul>
-<p>
-	A typical Spring Boot application can use the {@del oajr.springboot.JuneauRestInitializer} to find
-	and register Juneau REST servlets via the {@link oajr.springboot.annotation.JuneauRestRoot} annotation.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@SpringBootApplication</ja>
-	<ja>@Controller</ja>
-	<jk>public class</jk> App {
-	
-		<jk>public static void</jk> main(String[] args) {
-			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
-				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-				.run(args);
-		}
-	
-		<jd>/** Our root resource */</jd>
-		<ja>@Bean @JuneauRestRoot</ja>
-		<jk>public</jk> RootResource getRootResource() {
-			<jk>return new</jk> RootResource();  <jc>// A subclass of RestServlet.</jc>
-		}
-	}
-</p>
-<p>
-	The initializer will search for Spring beans annotated with the <ja>@JuneauRestRoot</ja> annotation identifying it
-	as a top-level servlet to be deployed in the Spring Boot web container.
-</p>
-<p>
-	Another option is to use the <ja>@JuneauRestRoot</ja> annotation on your Spring Boot source class like so:  
-</p>
-<p class='bpcode w800'>
-	<ja>@SpringBootApplication</ja>
-	<ja>@Controller</ja>
-	<ja>@JuneauRestRoot</ja>(servlets=RootResource.<jk>class</jk>)
-	<jk>public class</jk> App {
-	
-		<jk>public static void</jk> main(String[] args) {
-			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
-				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-				.run(args);
-		}
-	}
-</p>
-<p>
-	The root servlets are given an instance of {@del oajr.springboot.SpringRestResourceResolver} which allows
-	for child resources to be defined as injectable Spring beans.  
-</p>
-<p>
-	 The {@doc juneau-examples-rest-springboot} section describes how the Examples REST application is deployed
-	 using Spring Boot and quickly deployable as an online application using Heroku.
-</p>
-
+<div class='topic'>
+	<p>
+		The Juneau integration component for Spring Boot consists of the following classes:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.springboot.annotation.JuneauRestRoot}
+		<li class='jc'>{@del oajr.springboot.JuneauRestInitializer}
+		<li class='jc'>{@del oajr.springboot.SpringRestResourceResolver}
+	</ul>
+	<p>
+		A typical Spring Boot application can use the {@del oajr.springboot.JuneauRestInitializer} to find
+		and register Juneau REST servlets via the {@link oajr.springboot.annotation.JuneauRestRoot} annotation.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<ja>@SpringBootApplication</ja>
+		|	<ja>@Controller</ja>
+		|	<jk>public class</jk> App {
+		|	
+		|		<jk>public static void</jk> main(String[] args) {
+		|			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+		|				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+		|				.run(args);
+		|		}
+		|	
+		|		<jd>/** Our root resource */</jd>
+		|		<ja>@Bean @JuneauRestRoot</ja>
+		|		<jk>public</jk> RootResource getRootResource() {
+		|			<jk>return new</jk> RootResource();  <jc>// A subclass of RestServlet.</jc>
+		|		}
+		|	}
+	</p>
+	<p>
+		The initializer will search for Spring beans annotated with the <ja>@JuneauRestRoot</ja> annotation identifying it
+		as a top-level servlet to be deployed in the Spring Boot web container.
+	</p>
+	<p>
+		Another option is to use the <ja>@JuneauRestRoot</ja> annotation on your Spring Boot source class like so:  
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@SpringBootApplication</ja>
+		|	<ja>@Controller</ja>
+		|	<ja>@JuneauRestRoot</ja>(servlets=RootResource.<jk>class</jk>)
+		|	<jk>public class</jk> App {
+		|	
+		|		<jk>public static void</jk> main(String[] args) {
+		|			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+		|				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+		|				.run(args);
+		|		}
+		|	}
+	</p>
+	<p>
+		The root servlets are given an instance of {@del oajr.springboot.SpringRestResourceResolver} which allows
+		for child resources to be defined as injectable Spring beans.  
+	</p>
+	<p>
+		 The {@doc juneau-examples-rest-springboot} section describes how the Examples REST application is deployed
+		 using Spring Boot and quickly deployable as an online application using Heroku.
+	</p>
+</div>

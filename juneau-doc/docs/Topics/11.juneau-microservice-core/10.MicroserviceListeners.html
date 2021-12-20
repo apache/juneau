@@ -15,54 +15,56 @@
 
 {title:'Listeners', created:'8.0.0', deprecated:'8.1.2'}
 
-<p>
-	As mentioned previously, the lifecycle methods for the {@link oaj.microservice.Microservice} class are explicitly
-	defined as non-final so that they can be overridden by subclasses.
-</p>
-<p>
-	In addition to this support, an interface for defining event listeners for your microservice:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.microservice.Microservice.Builder}
-	<ul>
-		<li class='jm'>{@link oaj.microservice.Microservice.Builder#listener(MicroserviceListener) listener(MicroserviceListener)} 
+<div class='topic'>
+	<p>
+		As mentioned previously, the lifecycle methods for the {@link oaj.microservice.Microservice} class are explicitly
+		defined as non-final so that they can be overridden by subclasses.
+	</p>
+	<p>
+		In addition to this support, an interface for defining event listeners for your microservice:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.microservice.Microservice.Builder}
+		<ul>
+			<li class='jm'>{@link oaj.microservice.Microservice.Builder#listener(MicroserviceListener) listener(MicroserviceListener)} 
+		</ul>
+		<li class='jic'>{@link oaj.microservice.MicroserviceListener}
+		<ul>
+			<li class='jm'>{@link oaj.microservice.MicroserviceListener#onStart(Microservice) onStart(Microservice)} 
+			<li class='jm'>{@link oaj.microservice.MicroserviceListener#onStop(Microservice) onStop(Microservice)} 
+			<li class='jm'>{@link oaj.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents) onConfigChange(Microservice,ConfigEvents)} 
+		</ul>
+		<li class='jac'>{@link oaj.microservice.BasicMicroserviceListener}
 	</ul>
-	<li class='jic'>{@link oaj.microservice.MicroserviceListener}
-	<ul>
-		<li class='jm'>{@link oaj.microservice.MicroserviceListener#onStart(Microservice) onStart(Microservice)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceListener#onStop(Microservice) onStop(Microservice)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents) onConfigChange(Microservice,ConfigEvents)} 
-	</ul>
-	<li class='jac'>{@link oaj.microservice.BasicMicroserviceListener}
-</ul>
-<p>
-	This listener API can be used for listening for and reacting to configuration changes on the file system.
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyMicroserviceListener <jk>extends</jk> BasicMicroserviceListener {
-	
-		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
-		<jk>public void</jk> onConfigChange(Microservice microservice, ConfigEvents events) {
-			
-			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
-			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
-				microservice.stop().start();
-		}
-	}
-</p>
-<p>
-	Note that the {@link oaj.microservice.Microservice#onConfigChange(ConfigEvents)} method can also be overridden
-	to react to configuration changes as well:
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyMicroservice <jk>extends</jk> Microservice {
-	
-		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
-		<jk>public void</jk> onConfigChange(ConfigEvents events) {
-			
-			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
-			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
-				<jk>this</jk>.stop().start();
-		}
-	}
-</p>
+	<p>
+		This listener API can be used for listening for and reacting to configuration changes on the file system.
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> MyMicroserviceListener <jk>extends</jk> BasicMicroserviceListener {
+		|	
+		|		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
+		|		<jk>public void</jk> onConfigChange(Microservice microservice, ConfigEvents events) {
+		|			
+		|			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
+		|			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
+		|				microservice.stop().start();
+		|		}
+		|	}
+	</p>
+	<p>
+		Note that the {@link oaj.microservice.Microservice#onConfigChange(ConfigEvents)} method can also be overridden
+		to react to configuration changes as well:
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> MyMicroservice <jk>extends</jk> Microservice {
+		|	
+		|		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
+		|		<jk>public void</jk> onConfigChange(ConfigEvents events) {
+		|			
+		|			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
+		|			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
+		|				<jk>this</jk>.stop().start();
+		|		}
+		|	}
+	</p>
+</div>

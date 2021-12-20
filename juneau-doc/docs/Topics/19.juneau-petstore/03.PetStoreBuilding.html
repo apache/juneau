@@ -15,16 +15,17 @@
 
 {title:'Building and Running from Command-Line (Using Dockerfiles)', created:'8.2.0', flags:'todo'} 
 
-<p>
-		How to build and run Petstore using Docker: <br>
-	<ol>
-	<li>Go to the folder "juneau-petstore" and run this command: 
-			<br> 
-		docker build . -t petstore && docker run -p 5000:5000 petstore</li>
-	<br>
-	<li>Go to the folder "pets" and run this command:  
-			<br>
-		docker run --rm -it -p 3000:3000 -v $(pwd):/usr/src/app pets </li>
-	
-	</ol>
+<div class='topic'>
+	<p>
+			How to build and run Petstore using Docker: <br>
+		<ol>
+		<li>Go to the folder "juneau-petstore" and run this command: 
+				<br> 
+			docker build . -t petstore && docker run -p 5000:5000 petstore</li>
+		<br>
+		<li>Go to the folder "pets" and run this command:  
+				<br>
+			docker run --rm -it -p 3000:3000 -v $(pwd):/usr/src/app pets </li>
+		</ol>
 	</p>
+</div>

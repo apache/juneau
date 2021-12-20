@@ -24,15 +24,15 @@
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
-	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
-		.build()
-		.get(<jsf>URI</jsf>)
-		.run()
-		.assertStatus().code().is(200)
-		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
-		.getBody().as(MyBean.<jk>class</jk>);
+		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
+		|		.simpleJson()
+		|		.build()
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.assertStatus().code().is(200)
+		|		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
+		|		.getBody().as(MyBean.<jk>class</jk>);
 	</p>
 	<ul class='seealso'>
 		<li class='link'>{@doc TODO} for more information.
@@ -47,48 +47,46 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-	<jk>public class</jk> MockTest {
-
-		<jc>// A simple bean with one field.</jc>
-		<jk>public static class</jk> MyBean {
-			<jk>public int</jk> <jf>foo</jf> = 1;
-		}
-
-		<jc>// Our REST resource to test.</jc>
-		<jc>// Simply echos the response.</jc>
-		<ja>@Rest</ja>
-		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicJsonRest {
-
-			<ja>@RestPut</ja>
-			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
-				<jk>return</jk> <jv>bean</jv>;
-			}
-		}
-
-		<jc>// Our JUnit test.</jc>
-		<ja>@Test</ja>
-		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-
-			MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
-
-			<jc>// Do a round-trip on the bean through the REST interface</jc>
-			<jv>myBean</jv> = MockRestClient
-				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-				.simpleJson()
-				.build()
-				.put(<js>"/echo"</js>, <jv>myBean</jv>)
-				.run()
-				.assertStatus().is(200)
-				.assertBody().is(<js>"{foo:1}"</js>)
-				.getBody().as(MyBean.<jk>class</jk>);
-
-			<jsm>assertEquals</jsm>(1, <jv>myBean</jv>.<jf>foo</jf>);
-		}
-	}
+		|	<jk>public class</jk> MockTest {
+		|
+		|		<jc>// A simple bean with one field.</jc>
+		|		<jk>public static class</jk> MyBean {
+		|			<jk>public int</jk> <jf>foo</jf> = 1;
+		|		}
+		|
+		|		<jc>// Our REST resource to test.</jc>
+		|		<jc>// Simply echos the response.</jc>
+		|		<ja>@Rest</ja>
+		|		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicJsonRest {
+		|
+		|			<ja>@RestPut</ja>
+		|			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
+		|				<jk>return</jk> <jv>bean</jv>;
+		|			}
+		|		}
+		|
+		|		<jc>// Our JUnit test.</jc>
+		|		<ja>@Test</ja>
+		|		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+		|
+		|			MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+		|
+		|			<jc>// Do a round-trip on the bean through the REST interface</jc>
+		|			<jv>myBean</jv> = MockRestClient
+		|				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
+		|				.simpleJson()
+		|				.build()
+		|				.put(<js>"/echo"</js>, <jv>myBean</jv>)
+		|				.run()
+		|				.assertStatus().is(200)
+		|				.assertBody().is(<js>"{foo:1}"</js>)
+		|				.getBody().as(MyBean.<jk>class</jk>);
+		|
+		|			<jsm>assertEquals</jsm>(1, <jv>myBean</jv>.<jf>foo</jf>);
+		|		}
+		|	}
 	</p>
 	<ul class='seealso'>
 		<li class='link'>{@doc TODO} for more information.
 	</ul>
 </div>
-
-	

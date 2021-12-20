@@ -15,76 +15,78 @@
 
 {title:'Extending JettyMicroservice', created:'8.0.0', deprecated:'8.1.2'}
 
-<p>
-	This example shows how the {@link oaj.microservice.jetty.JettyMicroservice} class
-	can be extended to implement lifecycle listener methods or override existing methods.
-	We'll create a new class <l>com.foo.MyJettyMicroservice</l>.
-</p>
-<p class='bpcode w800'>
-	<jd>/**
-	 * Sample subclass of a JettyMicroservice that provides customized behavior.
-	 */</jd>
-	<jk>public class</jk> MyJettyMicroservice <jk>extends</jk> JettyMicroservice {
-	
-		<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
-			JettyMicroservice.Builder builder = JettyMicroservice.<jsm>create</jsm>();
-			<jk>new</jk> MyJettyMicroservice(builder).start().join();
-		}
-	
-		<jk>public</jk> MyJettyMicroservice(JettyMicroservice.Builder builder) <jk>throws</jk> Exception {
-			<jk>super</jk>(builder);
-		}
-		
-		<jc>// Customized code here.</jc>
-</p>
-<p>
-	Optionally, you can extend the {@link oaj.microservice.jetty.JettyMicroservice.Builder} class as well:
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyJettyMicroservice.Builder <jk>extends</jk> JettyMicroservice.Builder {
-	
-		<jk>int</jk> <jf>extraField</jf>;
-
-		<jd>/**
-		 * Constructor (required).
-		 */</jd>
-		<jk>protected</jk> MyJettyMicroservice.Builder() {}
-	
-		<jd>/**
-		 * Copy constructor (required).
-		 *
-		 * <ja>@param</ja> copyFrom The builder to copy settings from.
-		 */</jd>
-		<jk>protected</jk> MyJettyMicroservice.Builder(MyJettyMicroservice.Builder copyFrom) {
-			<jk>super</jk>(copyFrom);
-		}
-	
-		<jc>// Additional setters</jc>
-	
-		<jk>public</jk> MyJettyMicroservice.Builder extraField(<jk>int</jk> extraField) {
-			<jk>this</jk>.<jf>extraField</jf> = extraField;
-			<jk>return this</jk>;
-		}
-	
-		<jc>// Overridden methods</jc>
-	
-		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
-		<jk>public</jk> MyJettyMicroservice.Builder copy() {
-			<jk>return new</jk> MyJettyMicroservice.Builder(<jk>this</jk>);
-		}
-	
-		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
-		<jk>public</jk> MyJettyMicroservice.Builder ports(<jk>int</jk>...ports) {
-			<jk>super</jk>.ports(ports);
-			<jk>return this</jk>;
-		}
-	
-		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
-		<jk>public</jk> MyJettyMicroservice.Builder servlet(Class&lt;? <jk>extends</jk> RestServlet&gt; c) <jk>throws</jk> InstantiationException, IllegalAccessException {
-			<jk>super</jk>.servlet(c);
-			<jk>return this</jk>;
-		}
-	
-		...
-	}
-</p>
+<div class='topic'>
+	<p>
+		This example shows how the {@link oaj.microservice.jetty.JettyMicroservice} class
+		can be extended to implement lifecycle listener methods or override existing methods.
+		We'll create a new class <l>com.foo.MyJettyMicroservice</l>.
+	</p>
+	<p class='bcode w800'>
+		|	<jd>/**
+		|	 * Sample subclass of a JettyMicroservice that provides customized behavior.
+		|	 */</jd>
+		|	<jk>public class</jk> MyJettyMicroservice <jk>extends</jk> JettyMicroservice {
+		|	
+		|		<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
+		|			JettyMicroservice.Builder builder = JettyMicroservice.<jsm>create</jsm>();
+		|			<jk>new</jk> MyJettyMicroservice(builder).start().join();
+		|		}
+		|	
+		|		<jk>public</jk> MyJettyMicroservice(JettyMicroservice.Builder builder) <jk>throws</jk> Exception {
+		|			<jk>super</jk>(builder);
+		|		}
+		|		
+		|		<jc>// Customized code here.</jc>
+	</p>
+	<p>
+		Optionally, you can extend the {@link oaj.microservice.jetty.JettyMicroservice.Builder} class as well:
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> MyJettyMicroservice.Builder <jk>extends</jk> JettyMicroservice.Builder {
+		|	
+		|		<jk>int</jk> <jf>extraField</jf>;
+		|
+		|		<jd>/**
+		|		 * Constructor (required).
+		|		 */</jd>
+		|		<jk>protected</jk> MyJettyMicroservice.Builder() {}
+		|	
+		|		<jd>/**
+		|		 * Copy constructor (required).
+		|		 *
+		|		 * <ja>@param</ja> copyFrom The builder to copy settings from.
+		|		 */</jd>
+		|		<jk>protected</jk> MyJettyMicroservice.Builder(MyJettyMicroservice.Builder copyFrom) {
+		|			<jk>super</jk>(copyFrom);
+		|		}
+		|	
+		|		<jc>// Additional setters</jc>
+		|	
+		|		<jk>public</jk> MyJettyMicroservice.Builder extraField(<jk>int</jk> extraField) {
+		|			<jk>this</jk>.<jf>extraField</jf> = extraField;
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		<jc>// Overridden methods</jc>
+		|	
+		|		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
+		|		<jk>public</jk> MyJettyMicroservice.Builder copy() {
+		|			<jk>return new</jk> MyJettyMicroservice.Builder(<jk>this</jk>);
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
+		|		<jk>public</jk> MyJettyMicroservice.Builder ports(<jk>int</jk>...ports) {
+		|			<jk>super</jk>.ports(ports);
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
+		|		<jk>public</jk> MyJettyMicroservice.Builder servlet(Class&lt;? <jk>extends</jk> RestServlet&gt; c) <jk>throws</jk> InstantiationException, IllegalAccessException {
+		|			<jk>super</jk>.servlet(c);
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		...
+		|	}
+	</p>
+</div>

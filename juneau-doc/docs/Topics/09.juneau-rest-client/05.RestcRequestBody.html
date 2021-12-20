@@ -15,65 +15,67 @@
 
 {title:'Request Body', created:'8.2.0', flags:'todo'}
 
-<p>
-	The request body can either be passed in with the client creator method (e.g. {@del oajr.client2.RestClient#post(Object,Object) post(uri,body)}),
-	or can be specified via the following methods:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestRequest}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestRequest#body(Object) body(Object)}
-		<li class='jm'>{@del oajr.client2.RestRequest#body(Object,HttpPartSchema) body(Object,HttpPartSchema)}
+<div class='topic'>
+	<p>
+		The request body can either be passed in with the client creator method (e.g. {@del oajr.client2.RestClient#post(Object,Object) post(uri,body)}),
+		or can be specified via the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestRequest}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestRequest#body(Object) body(Object)}
+			<li class='jm'>{@del oajr.client2.RestRequest#body(Object,HttpPartSchema) body(Object,HttpPartSchema)}
+		</ul>
 	</ul>
-</ul>
-
-<p>
-	The request body can be any of the following types:
-</p>
-<ul class='javatree'>
-	<li class='jc'>
-		{@link java.lang.Object} - POJO to be converted to text using the {@link oaj.serializer.Serializer} defined on the client or request.
-	<li class='jc'>
-		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	<li class='jc'>
-		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	<li class='jc'>
-		{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	<li class='jc'>
-		{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
-	<li class='jc'>
-		{@link java.util.function.Supplier} - A supplier of anything on this list.
-</ul>
-
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a client with Simple-JSON support.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 	
-	<jc>// Post a JSON-serialized bean.</jc>
-	<jv>client</jv>
-		.post(<jsf>URI</jsf>)
-		.body(<jv>bean</jv>)
-		.complete()
-		.assertStatus().code().is(200);
+	<p>
+		The request body can be any of the following types:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>
+			{@link java.lang.Object} - POJO to be converted to text using the {@link oaj.serializer.Serializer} defined on the client or request.
+		<li class='jc'>
+			{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+		<li class='jc'>
+			{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+		<li class='jc'>
+			{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+		<li class='jc'>
+			{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
+		<li class='jc'>
+			{@link java.util.function.Supplier} - A supplier of anything on this list.
+	</ul>
 	
-	<jc>// Post contents from a reader.</jc>
-	<jv>client</jv>
-		.post(<jsf>URI</jsf>)
-		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
-		.complete()
-		.assertStatus().code().is(200);
+	<h5 class='figure'>Examples:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a client with Simple-JSON support.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+		|	
+		|	<jc>// Post a JSON-serialized bean.</jc>
+		|	<jv>client</jv>
+		|		.post(<jsf>URI</jsf>)
+		|		.body(<jv>bean</jv>)
+		|		.complete()
+		|		.assertStatus().code().is(200);
+		|	
+		|	<jc>// Post contents from a reader.</jc>
+		|	<jv>client</jv>
+		|		.post(<jsf>URI</jsf>)
+		|		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
+		|		.complete()
+		|		.assertStatus().code().is(200);
+		|	
+		|	<jc>// Post contents from an Apache HttpEntity object.</jc>
+		|	<jv>client</jv>
+		|		.post(<jsf>URI</jsf>)
+		|		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
+		|		.complete()
+		|		.assertStatus().code().is(200);
+	</p>
 	
-	<jc>// Post contents from an Apache HttpEntity object.</jc>
-	<jv>client</jv>
-		.post(<jsf>URI</jsf>)
-		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
-		.complete()
-		.assertStatus().code().is(200);
-</p>
-
-<ul class='notes'>
-	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
-		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
-		POJOs will be converted to strings using {@link oaj.ClassMeta#toString(Object)} which typically just calls {@link java.lang.Object#toString()}.
-</ul>
+	<ul class='notes'>
+		<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
+			using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
+			POJOs will be converted to strings using {@link oaj.ClassMeta#toString(Object)} which typically just calls {@link java.lang.Object#toString()}.
+	</ul>
+</div>

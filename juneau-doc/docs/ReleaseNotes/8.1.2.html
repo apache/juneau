@@ -15,59 +15,61 @@
 
 8.1.2 (Dec 01, 2019)
 
-<p>
-	Juneau 8.1.2 is a moderate release.
-</p>
-
-<h5 class='topic w800'>juneau-marshall</h5>
-<ul class='spaced-list'>
-	<li>
-		Support for read-only and write-only properties.
-		<ul>
-			<li class='ja'>{@del oaj.annotation.Bean#bpro()}
-			<li class='ja'>{@del oaj.annotation.Bean#bpwo()}
-			<li class='ja'>{@link oaj.annotation.Beanp#ro()}
-			<li class='ja'>{@link oaj.annotation.Beanp#wo()}
-			<li class='jf'>{@del BEAN_bpro}
-			<li class='jf'>{@del BEAN_bpwo}
-			<li class='jm'>{@del oaj.BeanContext.Builder#bpro(Map)}
-			<li class='jm'>{@del oaj.BeanContext.Builder#bpwo(Map)}
-		</ul>
-	<li>
-		New convenience methods:
-		<ul>	
-			<li class='jm'>{@del oaj.ObjectMap#parse(CharSequence)}
-			<li class='jm'>{@del oaj.ObjectList#parse(CharSequence)}
-		</ul>
-	<li>
-		{@link oaj.marshall.CharMarshall} and {@link oaj.marshall.StreamMarshall} now have public constructors.
-	<li>
-		{@link oaj.annotation.Beanp @Beanp} replaces {@del oaj.annotation.BeanProperty @BeanProperty}.
-	<li>
-		{@link oaj.annotation.Beanc @Beanc} replaces {@del oaj.annotation.BeanConstructor @BeanConstructor}.
-	<li>
-		{@link oaj.http.remote.Remote @Remote} replaces {@del oaj.http.remote.RemoteResource @RemoteResource}.
-	<li>
-		Shortened names for {@link oaj.annotation.Bean#dictionary @Bean(dictionary)} and {@link oaj.BeanContext.Builder#beanDictionary(Class...)}.
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		{@link oajr.annotation.Rest @Rest} replaces {@del oajr.annotation.RestResource @RestResource} with shorter syntax.
-	<li>
-		New method {@del oajr.RestResponse#setHeaderSafe(String,String)} to strip invalid characters from header values.
-	<li>
-		Fixed issues related to invalid characters being set on HTTP header values.
-</ul>
-
-<h5 class='topic w800'>juneau-rest-client</h5>
-<ul class='spaced-list'>
-	<li>
-		{@link oajrc.RestClient} is now extendible.  The constructor has been made public and simplified to:
-		{@del oajrc.RestClient#RestClient(RestClient.Builder)}.
-	<li>
-		Duplicate methods between {@link oajrc.RestClient.Builder} and {@link org.apache.http.impl.client.HttpClientBuilder}
-		have been made deprecated on the former.  This eliminates the need to try to keep the two builder classes in
-		sync.
-</ul>
+<div class='topic'>
+	<p>
+		Juneau 8.1.2 is a moderate release.
+	</p>
+	
+	<h5 class='topic w800'>juneau-marshall</h5>
+	<ul class='spaced-list'>
+		<li>
+			Support for read-only and write-only properties.
+			<ul>
+				<li class='ja'>{@del oaj.annotation.Bean#bpro()}
+				<li class='ja'>{@del oaj.annotation.Bean#bpwo()}
+				<li class='ja'>{@link oaj.annotation.Beanp#ro()}
+				<li class='ja'>{@link oaj.annotation.Beanp#wo()}
+				<li class='jf'>{@del BEAN_bpro}
+				<li class='jf'>{@del BEAN_bpwo}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpro(Map)}
+				<li class='jm'>{@del oaj.BeanContext.Builder#bpwo(Map)}
+			</ul>
+		<li>
+			New convenience methods:
+			<ul>	
+				<li class='jm'>{@del oaj.ObjectMap#parse(CharSequence)}
+				<li class='jm'>{@del oaj.ObjectList#parse(CharSequence)}
+			</ul>
+		<li>
+			{@link oaj.marshall.CharMarshall} and {@link oaj.marshall.StreamMarshall} now have public constructors.
+		<li>
+			{@link oaj.annotation.Beanp @Beanp} replaces {@del oaj.annotation.BeanProperty @BeanProperty}.
+		<li>
+			{@link oaj.annotation.Beanc @Beanc} replaces {@del oaj.annotation.BeanConstructor @BeanConstructor}.
+		<li>
+			{@link oaj.http.remote.Remote @Remote} replaces {@del oaj.http.remote.RemoteResource @RemoteResource}.
+		<li>
+			Shortened names for {@link oaj.annotation.Bean#dictionary @Bean(dictionary)} and {@link oaj.BeanContext.Builder#beanDictionary(Class...)}.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			{@link oajr.annotation.Rest @Rest} replaces {@del oajr.annotation.RestResource @RestResource} with shorter syntax.
+		<li>
+			New method {@del oajr.RestResponse#setHeaderSafe(String,String)} to strip invalid characters from header values.
+		<li>
+			Fixed issues related to invalid characters being set on HTTP header values.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-client</h5>
+	<ul class='spaced-list'>
+		<li>
+			{@link oajrc.RestClient} is now extendible.  The constructor has been made public and simplified to:
+			{@del oajrc.RestClient#RestClient(RestClient.Builder)}.
+		<li>
+			Duplicate methods between {@link oajrc.RestClient.Builder} and {@link org.apache.http.impl.client.HttpClientBuilder}
+			have been made deprecated on the former.  This eliminates the need to try to keep the two builder classes in
+			sync.
+	</ul>
+</div>

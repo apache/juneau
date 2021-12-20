@@ -41,7 +41,7 @@ import org.apache.juneau.internal.*;
  * Objects are designed to be lightweight to create and threadsafe.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bpcode w800'>
+ * <p class='bcode w800'>
  * 	<jc>// Wrap our class inside a ClassInfo.</jc>
  * 	ClassInfo ci = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
  *

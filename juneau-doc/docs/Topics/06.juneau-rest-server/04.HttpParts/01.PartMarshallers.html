@@ -15,50 +15,51 @@
 
 {title:'Part Marshallers', updated:'8.1.0,9.0.0'} 
 
-<p>
-	Juneau comes with three basic marshall types for serializing and parsing Header, Query, Form, and Path parts:
-</p>
-<ul class='javatree'>
-	<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
-	<ul>
-		<li class='jc'>{@link oaj.httppart.SimplePartSerializer} - Serializes directly to strings.
-		<li class='jc'>{@link oaj.uon.UonSerializer} - Serializes to UON notation.
+<div class='topic'>
+	<p>
+		Juneau comes with three basic marshall types for serializing and parsing Header, Query, Form, and Path parts:
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
 		<ul>
-			<li class='jc'>{@link oaj.oapi.OpenApiSerializer} - Serializes using Open-API schema rules.
+			<li class='jc'>{@link oaj.httppart.SimplePartSerializer} - Serializes directly to strings.
+			<li class='jc'>{@link oaj.uon.UonSerializer} - Serializes to UON notation.
+			<ul>
+				<li class='jc'>{@link oaj.oapi.OpenApiSerializer} - Serializes using Open-API schema rules.
+			</ul>
+		</ul>
+		<li class='jic'>{@link oaj.httppart.HttpPartParser}
+		<ul>
+			<li class='jc'>{@link oaj.httppart.SimplePartParser} - Parses directly from strings.
+			<li class='jc'>{@link oaj.uon.UonParser} - Parses from UON notation.
+			<ul>
+				<li class='jc'>{@link oaj.oapi.OpenApiParser} - Parses using Open-API schema rules.
+			</ul>
 		</ul>
 	</ul>
-	<li class='jic'>{@link oaj.httppart.HttpPartParser}
-	<ul>
-		<li class='jc'>{@link oaj.httppart.SimplePartParser} - Parses directly from strings.
-		<li class='jc'>{@link oaj.uon.UonParser} - Parses from UON notation.
-		<ul>
-			<li class='jc'>{@link oaj.oapi.OpenApiParser} - Parses using Open-API schema rules.
+	<p>
+		By default, the REST API uses the OpenAPI serializer and parser which allows for schema-based
+		marshalling.  You also have the option to use UON marshalling which is schema-less but allows
+		for JSON-equivalent data structures (object/array/primitives/...) using URL-encoding notation.  
+		This can be done by overriding the part marshallers through the following APIs:
+	</p>
+	<ul class='spaced-list'>
+		<li class='ja'>{@link oajr.annotation.Rest}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oajr.annotation.Rest#partSerializer() partSerializer()}
+			<li class='jm'>{@link oajr.annotation.Rest#partParser() partParser()}
+		</ul>
+		<li class='jc'>{@link oajr.RestContext.Builder}
+		<ul class='javatreec'>
+			<li class='jmp'>{@link oajr.RestContext.Builder#createPartSerializer(BeanStore,Supplier) createPartSerializer(BeanStore,Supplier)}
+			<li class='jmp'>{@link oajr.RestContext.Builder#createPartParser(BeanStore,Supplier) createPartParser(BeanStore,Supplier)}
 		</ul>
 	</ul>
-</ul>
-<p>
-	By default, the REST API uses the OpenAPI serializer and parser which allows for schema-based
-	marshalling.  You also have the option to use UON marshalling which is schema-less but allows
-	for JSON-equivalent data structures (object/array/primitives/...) using URL-encoding notation.  
-	This can be done by overriding the part marshallers through the following APIs:
-</p>
-<ul class='spaced-list'>
-	<li class='ja'>{@link oajr.annotation.Rest}
-	<ul class='javatreec'>
-		<li class='jm'>{@link oajr.annotation.Rest#partSerializer() partSerializer()}
-		<li class='jm'>{@link oajr.annotation.Rest#partParser() partParser()}
-	</ul>
-	<li class='jc'>{@link oajr.RestContext.Builder}
-	<ul class='javatreec'>
-		<li class='jmp'>{@link oajr.RestContext.Builder#createPartSerializer(BeanStore,Supplier) createPartSerializer(BeanStore,Supplier)}
-		<li class='jmp'>{@link oajr.RestContext.Builder#createPartParser(BeanStore,Supplier) createPartParser(BeanStore,Supplier)}
-	</ul>
-</ul>
-<p>
-	The OpenAPI marshallers themselves also have the ability to support UON notation for individual
-	parts via the schema itself:
-</p>
-<p class='bpcode w800'>
-	<ja>@Query</ja>(..., schema=<ja>@Schema</ja>(format=<js>"uon"</js>)) Map&lt;Integer,MyBean> <jv>myMap</jv>
-</p>
-
+	<p>
+		The OpenAPI marshallers themselves also have the ability to support UON notation for individual
+		parts via the schema itself:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Query</ja>(..., schema=<ja>@Schema</ja>(format=<js>"uon"</js>)) Map&lt;Integer,MyBean> <jv>myMap</jv>
+	</p>
+</div>

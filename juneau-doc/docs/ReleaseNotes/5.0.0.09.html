@@ -15,37 +15,39 @@
 
 5.0.0.9 (Feb 26, 2013)
 
-<p>
-	Juno 5.0.0.9 is a moderate update.
-</p>
-<h5 class='topic w800'>Core API changes</h5>
-<ul class='spaced-list'>
-	<li>
-		{@link oaj.config INI config file support}:
-		<ul>
-			<li>A convenient API for reading, writing, and manipulating INI files.</li>
-			<li>Ability to convert INI files to batch and shell environment variables.</li>
-			<li>Command-line interface for updating INI files.</li>
-			<li>Support for encoded INI file values.</li>
-		</ul>
-	</li>
-	<li>Support for fluent-style bean setters (setters that return the bean itself).</li>
-	<li>Ability to use {@link oaj.annotation.Bean @Bean} annotation to override bean identification settings.</li>
-	<li>New {@del oaj.ObjectMap#cast(Class)} method to convert <c>ObjectMaps</c> directly to beans.</li>
-</ul>
-<h5 class='topic w800'>REST server API changes</h5>
-<ul class='spaced-list'>
-	<li>Build-in default <c>OPTIONS</c> pages.</li>
-	<li>New {@del @RestResource#defaultRequestHeaders} and {@del @RestResource#defaultResponseHeaders} annotations.</li>
-	<li>New {@del oajr.annotation.RestMethod#serializers() @RestMethod(serializers)} and {@del oajr.annotation.RestMethod#parsers() @RestMethod(parsers)} annotations.</li>
-	<li>New {@del oajr.annotation.RestMethod#properties() @RestMethod(properties)} annotation.</li>
-	<li>New {@del @RestMethod(defaultRequestHeaders)} annotation.</li>
-	<li>New {@del oajr.annotation.RestMethod#matchers() @RestMethod(matchers)} annotation and {@link oajr.RestMatcher} class.</li>
-	<li><c>Readers</c> and <c>InputStreams</c> can be specified on {@del @Content} annotated parameters.</li>
-	<li>New {@del @HasParam} annotation.</li>
-	<li>Full RFC2616 support for matching <c>Accept</c> headers to serializers.</li>		
-</ul>
-<h5 class='topic w800'>Other notes</h5>
-<ul class='spaced-list'>
-	<li>Smaller library size (460kB).</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.9 is a moderate update.
+	</p>
+	<h5 class='topic w800'>Core API changes</h5>
+	<ul class='spaced-list'>
+		<li>
+			{@link oaj.config INI config file support}:
+			<ul>
+				<li>A convenient API for reading, writing, and manipulating INI files.</li>
+				<li>Ability to convert INI files to batch and shell environment variables.</li>
+				<li>Command-line interface for updating INI files.</li>
+				<li>Support for encoded INI file values.</li>
+			</ul>
+		</li>
+		<li>Support for fluent-style bean setters (setters that return the bean itself).</li>
+		<li>Ability to use {@link oaj.annotation.Bean @Bean} annotation to override bean identification settings.</li>
+		<li>New {@del oaj.ObjectMap#cast(Class)} method to convert <c>ObjectMaps</c> directly to beans.</li>
+	</ul>
+	<h5 class='topic w800'>REST server API changes</h5>
+	<ul class='spaced-list'>
+		<li>Build-in default <c>OPTIONS</c> pages.</li>
+		<li>New {@del @RestResource#defaultRequestHeaders} and {@del @RestResource#defaultResponseHeaders} annotations.</li>
+		<li>New {@del oajr.annotation.RestMethod#serializers() @RestMethod(serializers)} and {@del oajr.annotation.RestMethod#parsers() @RestMethod(parsers)} annotations.</li>
+		<li>New {@del oajr.annotation.RestMethod#properties() @RestMethod(properties)} annotation.</li>
+		<li>New {@del @RestMethod(defaultRequestHeaders)} annotation.</li>
+		<li>New {@del oajr.annotation.RestMethod#matchers() @RestMethod(matchers)} annotation and {@link oajr.RestMatcher} class.</li>
+		<li><c>Readers</c> and <c>InputStreams</c> can be specified on {@del @Content} annotated parameters.</li>
+		<li>New {@del @HasParam} annotation.</li>
+		<li>Full RFC2616 support for matching <c>Accept</c> headers to serializers.</li>		
+	</ul>
+	<h5 class='topic w800'>Other notes</h5>
+	<ul class='spaced-list'>
+		<li>Smaller library size (460kB).</li>
+	</ul>
+</div>

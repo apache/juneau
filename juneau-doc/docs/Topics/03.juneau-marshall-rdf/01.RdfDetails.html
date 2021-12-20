@@ -15,53 +15,55 @@
 
 {title:'RDF Details'}
 
-<p>
-	Juneau supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
-</p>
-<ul>
-	<li>RDF/XML
-	<li>Abbreviated RDF/XML
-	<li>N-Triple
-	<li>Turtle
-	<li>N3
-</ul>
-
-<p>
-	The serializers and parsers work identically to those in <c>juneau-marshall</c>, but are
-	packaged separately so that you don't need to pull in the Jena dependency unless you need it.
-</p>
-
-<p class='bpcode w800'>
-	<jc>// A simple bean</jc>
-	<jk>public class</jk> Person {
-		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
-		<jk>public int</jk> <jf>age</jf> = 21;
-	}
+<div class='topic'>
+	<p>
+		Juneau supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
+	</p>
+	<ul>
+		<li>RDF/XML
+		<li>Abbreviated RDF/XML
+		<li>N-Triple
+		<li>Turtle
+		<li>N3
+	</ul>
 	
-	<jc>// Serialize a bean to JSON, XML, or HTML</jc>
-	Person <jv>person</jv> = <jk>new</jk> Person();
-
-	<jc>// Produces:
-	// &lt;rdf:RDF
-	//  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	//  xmlns:jp="http://www.apache.org/juneaubp/"
-	//  xmlns:j="http://www.apache.org/juneau/"&gt;
-	// 	&lt;rdf:Description&gt;
-	// 		&lt;jp:name&gt;John Smith&lt;/jp:name&gt;
-	// 		&lt;jp:age&gt;21&lt;/jp:age&gt;
-	// 	&lt;/rdf:Description&gt;
-	// &lt;/rdf:RDF&gt;</jc>
-	String <jv>rdfXml</jv> = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.serialize(<jv>person</jv>);
+	<p>
+		The serializers and parsers work identically to those in <c>juneau-marshall</c>, but are
+		packaged separately so that you don't need to pull in the Jena dependency unless you need it.
+	</p>
 	
-	<jc>// Produces:
-	// @prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .
-	// @prefix j:       &lt;http://www.apache.org/juneau/&gt; .
-	//	[]    jp:age  "21" ;
-	//	      jp:name "John Smith" .</jc>
-	String <jv>rdfN3</jv> = N3Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
-
-	<jc>// Produces:
-	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
-	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/age&gt; "21" .</jc>
-	String <jv>rdfNTriple</jv> = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(<jv>person</jv>);
-</p>
+	<p class='bcode w800'>
+		|	<jc>// A simple bean</jc>
+		|	<jk>public class</jk> Person {
+		|		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
+		|		<jk>public int</jk> <jf>age</jf> = 21;
+		|	}
+		|	
+		|	<jc>// Serialize a bean to JSON, XML, or HTML</jc>
+		|	Person <jv>person</jv> = <jk>new</jk> Person();
+		|
+		|	<jc>// Produces:
+		|	// &lt;rdf:RDF
+		|	//  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		|	//  xmlns:jp="http://www.apache.org/juneaubp/"
+		|	//  xmlns:j="http://www.apache.org/juneau/"&gt;
+		|	// 	&lt;rdf:Description&gt;
+		|	// 		&lt;jp:name&gt;John Smith&lt;/jp:name&gt;
+		|	// 		&lt;jp:age&gt;21&lt;/jp:age&gt;
+		|	// 	&lt;/rdf:Description&gt;
+		|	// &lt;/rdf:RDF&gt;</jc>
+		|	String <jv>rdfXml</jv> = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.serialize(<jv>person</jv>);
+		|	
+		|	<jc>// Produces:
+		|	// @prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .
+		|	// @prefix j:       &lt;http://www.apache.org/juneau/&gt; .
+		|	//	[]    jp:age  "21" ;
+		|	//	      jp:name "John Smith" .</jc>
+		|	String <jv>rdfN3</jv> = N3Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+		|
+		|	<jc>// Produces:
+		|	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
+		|	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/age&gt; "21" .</jc>
+		|	String <jv>rdfNTriple</jv> = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(<jv>person</jv>);
+	</p>
+</div>

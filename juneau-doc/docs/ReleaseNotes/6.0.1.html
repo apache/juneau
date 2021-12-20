@@ -15,22 +15,24 @@
 
 6.0.1 (Jan 3, 2017)
 
-<p>
-	Juneau 6.0.1 is a minor update.
-</p>
-
-<h5 class='topic w800'>org.apache.juneau</h5>
-<ul class='spaced-list'>
-	<li>General improvements to JSON parser.
-		<ul>
-			<li>Several fixes to handle obscure edge cases.
-		</ul>
-	<li>New properties in {@del ParserContext}.
-		<ul>
-			<li>{@del ParserContext#PARSER_strict}
-			<li>{@del ParserContext#PARSER_inputStreamCharset}
-			<li>{@del ParserContext#PARSER_fileCharset}
-		</ul>
-	<li>Removed <c>JsonParserContext.JSON_strictMode</c>.  Replaced by <c>PARSER_strict</c>.		
-	<li><c><jk>byte[]</jk></c> arrays can now be passed to {@link oaj.parser.Parser#parse(Object,Class)} for reader-based parsers.	
-</ul>			
+<div class='topic'>
+	<p>
+		Juneau 6.0.1 is a minor update.
+	</p>
+	
+	<h5 class='topic w800'>org.apache.juneau</h5>
+	<ul class='spaced-list'>
+		<li>General improvements to JSON parser.
+			<ul>
+				<li>Several fixes to handle obscure edge cases.
+			</ul>
+		<li>New properties in {@del ParserContext}.
+			<ul>
+				<li>{@del ParserContext#PARSER_strict}
+				<li>{@del ParserContext#PARSER_inputStreamCharset}
+				<li>{@del ParserContext#PARSER_fileCharset}
+			</ul>
+		<li>Removed <c>JsonParserContext.JSON_strictMode</c>.  Replaced by <c>PARSER_strict</c>.		
+		<li><c><jk>byte[]</jk></c> arrays can now be passed to {@link oaj.parser.Parser#parse(Object,Class)} for reader-based parsers.	
+	</ul>			
+</div>

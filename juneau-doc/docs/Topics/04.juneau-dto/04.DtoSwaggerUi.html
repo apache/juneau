@@ -15,82 +15,84 @@
 
 {title:'Swagger UI'}
 
-<p>
-	The {@link oaj.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
-	from {@link oaj.dto.swagger.Swagger} beans.
-</p>
-<p>
-	The <c>PetStore</c> example described later provides an example of auto-generated Swagger JSON:
-</p>
-<img class='bordered w900' src='doc-files/SwaggerUI.json.png'>
-<p>
-	Using {@link oaj.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
-	when the request is asking for HTML:
-</p>
-<img class='bordered w900' src='doc-files/SwaggerUI.html.png'>
-
-<p>
-	The class itself is nothing more than a POJO swap that swaps out {@link oaj.dto.swagger.Swagger} beans
-	with {@link oaj.dto.html5.Div} elements:
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> SwaggerUI <jk>extends</jk> ObjectSwap&lt;Swagger,Div&gt; {
+<div class='topic'>
+	<p>
+		The {@link oaj.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
+		from {@link oaj.dto.swagger.Swagger} beans.
+	</p>
+	<p>
+		The <c>PetStore</c> example described later provides an example of auto-generated Swagger JSON:
+	</p>
+	<img class='bordered w900' src='doc-files/SwaggerUI.json.png'>
+	<p>
+		Using {@link oaj.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
+		when the request is asking for HTML:
+	</p>
+	<img class='bordered w900' src='doc-files/SwaggerUI.html.png'>
 	
-		<ja>@Override</ja>
-		<jk>public</jk> MediaType[] forMediaTypes() {
-			<jc>// Only use this swap when the Accept type is HTML.</jc>
-			<jk>return new</jk> MediaType[] {MediaType.<jsf>HTML</jsf>};
-		}
-	
-		<ja>@Override</ja>
-		<jk>public</jk> Div swap(BeanSession <jv>beanSession</jv>, Swagger <jv>swagger</jv>) <jk>throws</jk> Exception {
-			...
-		}
-	}
-</p>
-<p>
-	The {@link oajr.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
-	generate the Swagger UI shown above:
-</p>
-<p class='bpcode w800'>
-	<ja>@Rest</ja>(
-	
-		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
-		allowedMethodParams=<js>"OPTIONS"</js>,
-	
-	
-		...
-	)
-	<ja>@BeanConfig</ja>(
-		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
-		swaps={
-			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
-			SwaggerUI.<jk>class</jk>
-		}
-	)
-	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
-	
-		<jd>/**
-		 * [OPTIONS /*] - Show resource options.
-		 */</jd>
-		<ja>@RestOp</ja>(
-			method=<jsf>OPTIONS</jsf>, 
-			path=<js>"/*"</js>,
-			summary=<js>"Swagger documentation"</js>,
-			description=<js>"Swagger documentation for this resource."</js>
-		)
-		<ja>@HtmlDocConfig</ja>(
-			<jc>// Override the nav links for the swagger page.</jc>
-			navlinks={
-				<js>"back: servlet:/"</js>,
-				<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
-			},
-			<jc>// Never show aside contents of page inherited from class.</jc>
-			aside="<js>NONE"</js>
-		)
-		<jk>public</jk> Swagger getOptions(RestRequest req) {
-			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
-			<jk>return</jk> req.getSwagger();
-		}
-	}
-</p>
+	<p>
+		The class itself is nothing more than a POJO swap that swaps out {@link oaj.dto.swagger.Swagger} beans
+		with {@link oaj.dto.html5.Div} elements:
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> SwaggerUI <jk>extends</jk> ObjectSwap&lt;Swagger,Div&gt; {
+		|	
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> MediaType[] forMediaTypes() {
+		|			<jc>// Only use this swap when the Accept type is HTML.</jc>
+		|			<jk>return new</jk> MediaType[] {MediaType.<jsf>HTML</jsf>};
+		|		}
+		|	
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> Div swap(BeanSession <jv>beanSession</jv>, Swagger <jv>swagger</jv>) <jk>throws</jk> Exception {
+		|			...
+		|		}
+		|	}
+	</p>
+	<p>
+		The {@link oajr.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
+		generate the Swagger UI shown above:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Rest</ja>(
+		|	
+		|		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
+		|		allowedMethodParams=<js>"OPTIONS"</js>,
+		|	
+		|	
+		|		...
+		|	)
+		|	<ja>@BeanConfig</ja>(
+		|		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+		|		swaps={
+		|			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+		|			SwaggerUI.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+		|	
+		|		<jd>/**
+		|		 * [OPTIONS /*] - Show resource options.
+		|		 */</jd>
+		|		<ja>@RestOp</ja>(
+		|			method=<jsf>OPTIONS</jsf>, 
+		|			path=<js>"/*"</js>,
+		|			summary=<js>"Swagger documentation"</js>,
+		|			description=<js>"Swagger documentation for this resource."</js>
+		|		)
+		|		<ja>@HtmlDocConfig</ja>(
+		|			<jc>// Override the nav links for the swagger page.</jc>
+		|			navlinks={
+		|				<js>"back: servlet:/"</js>,
+		|				<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
+		|			},
+		|			<jc>// Never show aside contents of page inherited from class.</jc>
+		|			aside="<js>NONE"</js>
+		|		)
+		|		<jk>public</jk> Swagger getOptions(RestRequest req) {
+		|			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
+		|			<jk>return</jk> req.getSwagger();
+		|		}
+		|	}
+	</p>
+</div>

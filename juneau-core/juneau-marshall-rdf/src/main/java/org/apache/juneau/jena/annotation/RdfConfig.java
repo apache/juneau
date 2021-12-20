@@ -29,7 +29,6 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
-@Documented
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited

@@ -27,6 +27,27 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Basic REST operation methods.
+ *
+ * <p>
+ * 	Defines 5 special use REST operation endpoints:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li><c><jk>public</jk> {@link Swagger} {@link #getSwagger(RestRequest) getSwagger}(@link RestRequest} <jv>req</jv>);</c>
+ * 	<li><c><jk>public</jk> {@link HttpResource} {@link #getHtdoc(String,Locale) getHtdoc}(<ja>@Path</ja> String <jv>path</jv>, Locale <jv>locale</jv>);</c>
+ * 	<li><c><jk>public</jk> {@link HttpResource} {@link #getFavIcon() getFavIcon}();</c>
+ * 	<li><c><jk>public</jk> {@link RestContextStats} {@link #getStats(RestRequest) getStats}({@link RestRequest} <jv>req</jv>);</c>
+ * 	<li><c><jk>public void</jk> {@link #error() error}();</c>
+ * </ul>
+ *
+ * <p>
+ * 	Implementations provided by the following classes:
+ * </p>
+ * <ul class='javatreec'>
+ * 	<li class='jc'>{@link BasicRestServlet}
+ * 	<li class='jc'>{@link BasicRestServletGroup}
+ * 	<li class='jc'>{@link BasicRestObject}
+ * 	<li class='jc'>{@link BasicRestObjectGroup}
+ * </ul>
  */
 @HtmlDocConfig(
 	// Basic page navigation links.

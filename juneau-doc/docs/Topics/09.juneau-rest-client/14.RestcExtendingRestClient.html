@@ -15,32 +15,33 @@
 
 {title:'Extending RestClient', created:'8.2.0', flags:'todo'}
 
-<p>
-	The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
-	The following example that overrides the primary run method shows how this can be done.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
-
-		<jc>// Must provide this constructor!</jc>
-		<jk>public</jk> MyRestClient(ContextProperties <jv>ps</jv>) {
-			<jk>super</jk>(<jv>ps</jv>);
-		}
-
-		<ja>@Override</ja>
-		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
-			<jc>// Perform special handling of requests.</jc>
-		}
-	}
-
-	<jc>// Instantiate your client.</jc>
-	MyRestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
-</p>
-
-<p>
-	The {@del oajr.client2.RestRequest} and {@del oajr.client2.RestResponse} objects can also be extended and integrated by overriding the
-	{@del oajr.client2.RestClient#createRequest(URI, String, boolean)} and {@del oajr.client2.RestClient#createResponse(RestRequest, HttpResponse, Parser)} methods.
-</p>
+<div class='topic'>
+	<p>
+		The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
+		The following example that overrides the primary run method shows how this can be done.
+	</p>
 	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
+		|
+		|		<jc>// Must provide this constructor!</jc>
+		|		<jk>public</jk> MyRestClient(ContextProperties <jv>ps</jv>) {
+		|			<jk>super</jk>(<jv>ps</jv>);
+		|		}
+		|
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+		|			<jc>// Perform special handling of requests.</jc>
+		|		}
+		|	}
+		|
+		|	<jc>// Instantiate your client.</jc>
+		|	MyRestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
+	</p>
+	
+	<p>
+		The {@del oajr.client2.RestRequest} and {@del oajr.client2.RestResponse} objects can also be extended and integrated by overriding the
+		{@del oajr.client2.RestClient#createRequest(URI, String, boolean)} and {@del oajr.client2.RestClient#createResponse(RestRequest, HttpResponse, Parser)} methods.
+	</p>
+</div>

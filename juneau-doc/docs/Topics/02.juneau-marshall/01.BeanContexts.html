@@ -15,26 +15,28 @@
 
 {title:'Bean Contexts', updated:'9.0.0'}
 
-<p>
-	At the heart of the marshalling APIs is the {@link oaj.BeanContext Bean Context} API that provides a common
-	framework for marshalling beans and POJOs across all serializers and parsers. 
-	All serializers and parsers (and their builders) extend from the bean context API classes.
-</p>
-<p>
-	One important feature of the bean context API is the ability to wrap Java beans inside maps to allow
-	properties to be accessed through a Map layer.  Although this is used internally by all the serializers and parsers,
-	it's often useful to use this feature by itself.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Wrap a bean in a map and do some simple get/set calls.</jc>
-	BeanMap&lt;MyBean&gt; <jv>myBeanMap</jv> = BeanContext.<jsf>DEFAULT_SESSION</jsf>.toBeanMap(<jv>myBean</jv>);
-	<jv>myBeanMap</jv>.put(<js>"myProperty"</js>, 123);
-	<jk>int</jk> <jv>myProperty</jv> = <jv>myBeanMap</jv>.get(<js>"myProperty"</js>, <jk>int</jk>.<jk>class</jk>);
-</p>
-<p>
-	The bean context API provides many settings that fine-tune how POJOs should be handled during marshalling.
-</p>
-<ul class='seealso'>
-	<li class='jc'>{@link oaj.BeanContext.Builder}
-</ul>
+<div class='topic'>
+	<p>
+		At the heart of the marshalling APIs is the {@link oaj.BeanContext Bean Context} API that provides a common
+		framework for marshalling beans and POJOs across all serializers and parsers. 
+		All serializers and parsers (and their builders) extend from the bean context API classes.
+	</p>
+	<p>
+		One important feature of the bean context API is the ability to wrap Java beans inside maps to allow
+		properties to be accessed through a Map layer.  Although this is used internally by all the serializers and parsers,
+		it's often useful to use this feature by itself.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Wrap a bean in a map and do some simple get/set calls.</jc>
+		|	BeanMap&lt;MyBean&gt; <jv>myBeanMap</jv> = BeanContext.<jsf>DEFAULT_SESSION</jsf>.toBeanMap(<jv>myBean</jv>);
+		|	<jv>myBeanMap</jv>.put(<js>"myProperty"</js>, 123);
+		|	<jk>int</jk> <jv>myProperty</jv> = <jv>myBeanMap</jv>.get(<js>"myProperty"</js>, <jk>int</jk>.<jk>class</jk>);
+	</p>
+	<p>
+		The bean context API provides many settings that fine-tune how POJOs should be handled during marshalling.
+	</p>
+	<ul class='seealso'>
+		<li class='jc'>{@link oaj.BeanContext.Builder}
+	</ul>
+</div>

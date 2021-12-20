@@ -15,134 +15,136 @@
 
 8.0.0 (Jan 01, 2019)
 
-<p>
-	This release cleans up deprecated APIs from the 7.2.0 release and makes significant modifications
-	to the Microservice APIs.
-</p>
-
-<p>
-	The project structures of the REST, Microservice, and Examples have been modified to fit new Spring Boot
-	integration support.
-	The structure is now as follows:
-</p>
-<ul>
-	<li><c>juneau-rest</c>
+<div class='topic'>
+	<p>
+		This release cleans up deprecated APIs from the 7.2.0 release and makes significant modifications
+		to the Microservice APIs.
+	</p>
+	
+	<p>
+		The project structures of the REST, Microservice, and Examples have been modified to fit new Spring Boot
+		integration support.
+		The structure is now as follows:
+	</p>
 	<ul>
-		<li><c>juneau-rest-client</c>
-		<li><c>juneau-rest-server</c>
-		<li><c>juneau-rest-server-jaxrs</c>
-		<li><c>juneau-rest-server-rdf</c>
-		<li><b><c>juneau-rest-server-springboot</c></b> - New Spring Boot integration support classes. 
-	</ul>
-	<li><c>juneau-microservice</c>
-	<ul>
-		<li><b><c>juneau-microservice-core</c></b> - New.  Contains base {@link oaj.microservice.Microservice} class.
-		<li><b><c>juneau-microservice-jetty</c></b> - New.  Contains new {@link oaj.microservice.jetty.JettyMicroservice} class.
-		<li><b><c>juneau-my-jetty-microservice</c></b> - New.  Template starter project for Jetty-based microservices.
-		<li><b><c>juneau-my-springboot-microservice</c></b> - New.  Template starter project for Spring-Boot-based microservices.
-	</ul>
-	<li><c>juneau-examples</c>
-	<ul>
-		<li><c>juneau-core</c>
-		<li><b><c>juneau-microservice-rest</c></b> - Now contains only servlet example classes.  No Jetty configuration.
-		<li><b><c>juneau-microservice-rest-jetty</c></b> - Servlet examples deployed using Jetty.
-		<li><b><c>juneau-microservice-rest-springboot</c></b> - Servlet examples deployed using Spring Boot.
-	</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-svl</h5>
-<ul class='spaced-list'>
-	<li>
-		New SVL variables:
-		<ul class='javatree'>
-			<li class='jc'>{@link oaj.svl.vars.SubstringVar}
-			<li class='jc'>{@link oaj.svl.vars.PatternExtractVar}
-			<li class='jc'>{@link oaj.svl.vars.PatternReplaceVar}
-			<li class='jc'>{@link oaj.svl.vars.LenVar}
+		<li><c>juneau-rest</c>
+		<ul>
+			<li><c>juneau-rest-client</c>
+			<li><c>juneau-rest-server</c>
+			<li><c>juneau-rest-server-jaxrs</c>
+			<li><c>juneau-rest-server-rdf</c>
+			<li><b><c>juneau-rest-server-springboot</c></b> - New Spring Boot integration support classes. 
 		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-config</h5>
-<ul class='spaced-list'>
-	<li>
-		New methods for setting a system default configuration:
-		<ul class='javatree'>
-			<li class='jc'>{@link oaj.config.Config}
-			<ul>
-				<li class='jm'>{@link oaj.config.Config#getSystemDefault() getSystemDefault()}
-				<li class='jm'>{@link oaj.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+		<li><c>juneau-microservice</c>
+		<ul>
+			<li><b><c>juneau-microservice-core</c></b> - New.  Contains base {@link oaj.microservice.Microservice} class.
+			<li><b><c>juneau-microservice-jetty</c></b> - New.  Contains new {@link oaj.microservice.jetty.JettyMicroservice} class.
+			<li><b><c>juneau-my-jetty-microservice</c></b> - New.  Template starter project for Jetty-based microservices.
+			<li><b><c>juneau-my-springboot-microservice</c></b> - New.  Template starter project for Spring-Boot-based microservices.
+		</ul>
+		<li><c>juneau-examples</c>
+		<ul>
+			<li><c>juneau-core</c>
+			<li><b><c>juneau-microservice-rest</c></b> - Now contains only servlet example classes.  No Jetty configuration.
+			<li><b><c>juneau-microservice-rest-jetty</c></b> - Servlet examples deployed using Jetty.
+			<li><b><c>juneau-microservice-rest-springboot</c></b> - Servlet examples deployed using Spring Boot.
+		</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-svl</h5>
+	<ul class='spaced-list'>
+		<li>
+			New SVL variables:
+			<ul class='javatree'>
+				<li class='jc'>{@link oaj.svl.vars.SubstringVar}
+				<li class='jc'>{@link oaj.svl.vars.PatternExtractVar}
+				<li class='jc'>{@link oaj.svl.vars.PatternReplaceVar}
+				<li class='jc'>{@link oaj.svl.vars.LenVar}
 			</ul>
-		</ul>
-	<li>
-		New classpath store.
-		<ul class='javatree'>
-			<li class='jc'>{@link oaj.config.store.ConfigClasspathStore}
-		</ul>
-	<li>
-		New API method:
-		<ul class='javatree'>
-			<li class='jc'>{@link oaj.config.store.ConfigStore}
-			<ul>
-				<li class='jm'>{@link oaj.config.store.ConfigStore#exists(String) exists(String)}
+	</ul>
+	
+	<h5 class='topic w800'>juneau-config</h5>
+	<ul class='spaced-list'>
+		<li>
+			New methods for setting a system default configuration:
+			<ul class='javatree'>
+				<li class='jc'>{@link oaj.config.Config}
+				<ul>
+					<li class='jm'>{@link oaj.config.Config#getSystemDefault() getSystemDefault()}
+					<li class='jm'>{@link oaj.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+				</ul>
 			</ul>
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		New methods on {@link oajr.RestServlet}:
-		<ul class='javatree'>
-			<li class='jm'>{@del oajr.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
-			<li class='jm'>{@link oajr.RestServlet#getPath() getPath()}
-		</ul>
-	<li>
-		The registered resource resolver is now used to instantiate objects of classes defined via {@del @RestResource}.
-		<br>This allows for any of those instance to be injectable beans.
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server-springboot</h5>
-<ul class='spaced-list'>
-	<li>
-		New project containing classes for making it easy to use Juneau with Spring Boot.
-</ul>
-
-<h5 class='topic w800'>juneau-microservice-core</h5>
-<ul class='spaced-list'>
-	<li>
-		New project that consist of just the core {@link oaj.microservice.Microservice} class and console support.
-	<li>
-		The Microservice API has been revamped to use a builder-based approach to creating microservices.
-		<br>The new API is considerably more flexible in design and allows for the configuration and external
-		files to be located in either the home directory or inside the jar classpath.
-	<li>
-		If the microservice cannot find a config file in the home directory with the same name as the jar and
-		the <js>"juneau.configFile"</js> system property is not found, it will try to find any file in the home
-		directory that ends with <js>".cfg"</js>.
-	<li>
-		New {@link oaj.microservice.MicroserviceListener} API for defining lifecycle event listeners.
-	<li>
-		New {@link oaj.microservice.console.ConfigCommand} class for performing config queries and updates through 
-		the microservice console.
-</ul>
-
-<h5 class='topic w800'>juneau-microservice-jetty</h5>
-<ul class='spaced-list'>
-	<li>
-		New {@link oaj.microservice.jetty.JettyMicroservice} class replaces the previous <c>RestMicroservice</c>.
-</ul>
-
-<h5 class='topic w800'>juneau-my-jetty-microservice</h5>
-<ul class='spaced-list'>
-	<li>
-		New template starter project for Jetty-based microservices.
-</ul>
-
-<h5 class='topic w800'>juneau-my-springboot-microservice</h5>
-<ul class='spaced-list'>
-	<li>
-		Template starter project for Spring-Boot-based microservices.
-	<li>
-		<c>app.json</c> and <c>Procfile</c> files for deploying examples into Heroku.
-		<br>Includes instructions.
-</ul>
+		<li>
+			New classpath store.
+			<ul class='javatree'>
+				<li class='jc'>{@link oaj.config.store.ConfigClasspathStore}
+			</ul>
+		<li>
+			New API method:
+			<ul class='javatree'>
+				<li class='jc'>{@link oaj.config.store.ConfigStore}
+				<ul>
+					<li class='jm'>{@link oaj.config.store.ConfigStore#exists(String) exists(String)}
+				</ul>
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			New methods on {@link oajr.RestServlet}:
+			<ul class='javatree'>
+				<li class='jm'>{@del oajr.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
+				<li class='jm'>{@link oajr.RestServlet#getPath() getPath()}
+			</ul>
+		<li>
+			The registered resource resolver is now used to instantiate objects of classes defined via {@del @RestResource}.
+			<br>This allows for any of those instance to be injectable beans.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server-springboot</h5>
+	<ul class='spaced-list'>
+		<li>
+			New project containing classes for making it easy to use Juneau with Spring Boot.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-microservice-core</h5>
+	<ul class='spaced-list'>
+		<li>
+			New project that consist of just the core {@link oaj.microservice.Microservice} class and console support.
+		<li>
+			The Microservice API has been revamped to use a builder-based approach to creating microservices.
+			<br>The new API is considerably more flexible in design and allows for the configuration and external
+			files to be located in either the home directory or inside the jar classpath.
+		<li>
+			If the microservice cannot find a config file in the home directory with the same name as the jar and
+			the <js>"juneau.configFile"</js> system property is not found, it will try to find any file in the home
+			directory that ends with <js>".cfg"</js>.
+		<li>
+			New {@link oaj.microservice.MicroserviceListener} API for defining lifecycle event listeners.
+		<li>
+			New {@link oaj.microservice.console.ConfigCommand} class for performing config queries and updates through 
+			the microservice console.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-microservice-jetty</h5>
+	<ul class='spaced-list'>
+		<li>
+			New {@link oaj.microservice.jetty.JettyMicroservice} class replaces the previous <c>RestMicroservice</c>.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-my-jetty-microservice</h5>
+	<ul class='spaced-list'>
+		<li>
+			New template starter project for Jetty-based microservices.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-my-springboot-microservice</h5>
+	<ul class='spaced-list'>
+		<li>
+			Template starter project for Spring-Boot-based microservices.
+		<li>
+			<c>app.json</c> and <c>Procfile</c> files for deploying examples into Heroku.
+			<br>Includes instructions.
+	</ul>
+</div>

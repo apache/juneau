@@ -15,56 +15,58 @@
 
 {title:'System Default Config', created:'8.0.0', updated:'8.1.0'} 
 
-<p>
-	Each JVM has a system default config.  This is a configuration file that serves as the default
-	configuration for the system.  It's accessed using the following static methods:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.config.Config}
-	<ul>
-		<li class='jm'>{@link oaj.config.Config#getSystemDefault() getSystemDefault()}
-		<li class='jm'>{@link oaj.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+<div class='topic'>
+	<p>
+		Each JVM has a system default config.  This is a configuration file that serves as the default
+		configuration for the system.  It's accessed using the following static methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.config.Config}
+		<ul>
+			<li class='jm'>{@link oaj.config.Config#getSystemDefault() getSystemDefault()}
+			<li class='jm'>{@link oaj.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+		</ul>
 	</ul>
-</ul>
-<p>
-	If you do not specify a system default config, one will be automatically searched for.
-	The search is done in the following order:
-</p>
-<ol class='spaced-list'>
-	<li>
-		If the system property <js>"juneau.configFile"</js> is set, we search for this file in first the home
-		directory and then the classpath.
-	<li>
-		In the home directory:
-		<ol>
-			<li><c>&lt;jar-name&gt;.cfg</c>
-			<li>Any file that end with <c>.cfg</c>.  First one matched alphabetically is used.
-		</ol>
-	<li>
-		In the context classpath root package (i.e. inside the jar itself):
-		<ol>
-			<li><c>&lt;jar-name&gt;.cfg</c>
-			<li><c>juneau.cfg</c>
-			<li><c>default.cfg</c>
-			<li><c>application.cfg</c>
-			<li><c>app.cfg</c>
-			<li><c>settings.cfg</c>
-			<li><c>application.properties</c>
-		</ol>
-</ol>
-<p>
-	Later in the section on REST resources, we describe how to associate configurations with REST resources
-	using the {@link oajr.annotation.Rest#config() @Rest(config)} annotation.
-	The system default configuration can be referenced with the keyword <c>SYSTEM_DEFAULT</c> like so:
-</p>
-<p class='bpcode w800'>
-	<jc>// Always use system default.</jc>
-	<ja>@Rest</ja>(config=<js>"SYSTEM_DEFAULT"</js>)
-
-	<jc>// Use system property if set or the system default if not.</jc>
-	<ja>@Rest</ja>(config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>)
-</p>
-<p>
-	By default, all properties in the system default configuration are automatically set as system properties.
-	This can be disabled by setting the system property <js>"juneau.disableAutoSystemProps"</js> to <js>"true"</js>.
-</p>
+	<p>
+		If you do not specify a system default config, one will be automatically searched for.
+		The search is done in the following order:
+	</p>
+	<ol class='spaced-list'>
+		<li>
+			If the system property <js>"juneau.configFile"</js> is set, we search for this file in first the home
+			directory and then the classpath.
+		<li>
+			In the home directory:
+			<ol>
+				<li><c>&lt;jar-name&gt;.cfg</c>
+				<li>Any file that end with <c>.cfg</c>.  First one matched alphabetically is used.
+			</ol>
+		<li>
+			In the context classpath root package (i.e. inside the jar itself):
+			<ol>
+				<li><c>&lt;jar-name&gt;.cfg</c>
+				<li><c>juneau.cfg</c>
+				<li><c>default.cfg</c>
+				<li><c>application.cfg</c>
+				<li><c>app.cfg</c>
+				<li><c>settings.cfg</c>
+				<li><c>application.properties</c>
+			</ol>
+	</ol>
+	<p>
+		Later in the section on REST resources, we describe how to associate configurations with REST resources
+		using the {@link oajr.annotation.Rest#config() @Rest(config)} annotation.
+		The system default configuration can be referenced with the keyword <c>SYSTEM_DEFAULT</c> like so:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Always use system default.</jc>
+		|	<ja>@Rest</ja>(config=<js>"SYSTEM_DEFAULT"</js>)
+		|
+		|	<jc>// Use system property if set or the system default if not.</jc>
+		|	<ja>@Rest</ja>(config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>)
+	</p>
+	<p>
+		By default, all properties in the system default configuration are automatically set as system properties.
+		This can be disabled by setting the system property <js>"juneau.disableAutoSystemProps"</js> to <js>"true"</js>.
+	</p>
+</div>

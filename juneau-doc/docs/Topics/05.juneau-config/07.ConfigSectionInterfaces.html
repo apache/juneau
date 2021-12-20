@@ -15,59 +15,61 @@
 
 {title:'Section Interfaces'}
 
-<p>
-	Config sections can also be accessed via interface proxies using 
-	{@link oaj.config.Config#getSectionAsInterface(String,Class)}.
-</p>
-<p>
-	While section maps and beans retrieve copies of the configuration data at the time of the method
-	call, section interfaces can also be use to set values in the underlying configuration.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Example config file</jc>
-	<cs>[MySection]</cs>
-	<ck>string</ck> = <cv>foo</cv>
-	<ck>int</ck> = <cv>123</cv>
-	<ck>enum</ck> = <cv>ONE</cv>
-	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
-	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
-	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
-</p>
-<p class='bpcode w800'>
-	<jc>// Example interface.</jc>
-	<jc>// Setters are optional.</jc>
-	<jk>public interface</jk> MyConfigInterface {
-
-		String getString();
-		<jk>void</jk> setString(String <jv>value</jv>);
-
-		<jk>int</jk> getInt();
-		<jk>void</jk> setInt(<jk>int</jk> <jv>value</jv>);
-
-		MyEnum getEnum();
-		<jk>void</jk> setEnum(MyEnum <jv>value</jv>);
-
-		MyBean getBean();
-		<jk>void</jk> setBean(MyBean <jv>value</jv>);
-
-		<jk>int</jk>[][][] getInt3dArray();
-		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] <jv>value</jv>);
-		
-		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
-		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; <jv>value</jv>);
-	}
-	
-	<jc>// Example usage.</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	MyConfigInterface <jv>intf</jv> = <jv>config</jv>.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
-	
-	<jc>// Read a value.</jc>
-	<jk>int</jk> <jv>myInt</jv> = <jv>intf</jv>.getInt();
-
-	<jc>// Write a value.</jc>
-	<jv>intf</jv>.setBean(<jk>new</jk> MyBean());
-
-	<jc>// Commit your changes to the store.</jc>
-	<jv>config</jv>.commit();
-</p>
+<div class='topic'>
+	<p>
+		Config sections can also be accessed via interface proxies using 
+		{@link oaj.config.Config#getSectionAsInterface(String,Class)}.
+	</p>
+	<p>
+		While section maps and beans retrieve copies of the configuration data at the time of the method
+		call, section interfaces can also be use to set values in the underlying configuration.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Example config file</jc>
+		|	<cs>[MySection]</cs>
+		|	<ck>string</ck> = <cv>foo</cv>
+		|	<ck>int</ck> = <cv>123</cv>
+		|	<ck>enum</ck> = <cv>ONE</cv>
+		|	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
+		|	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
+		|	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Example interface.</jc>
+		|	<jc>// Setters are optional.</jc>
+		|	<jk>public interface</jk> MyConfigInterface {
+		|
+		|		String getString();
+		|		<jk>void</jk> setString(String <jv>value</jv>);
+		|
+		|		<jk>int</jk> getInt();
+		|		<jk>void</jk> setInt(<jk>int</jk> <jv>value</jv>);
+		|
+		|		MyEnum getEnum();
+		|		<jk>void</jk> setEnum(MyEnum <jv>value</jv>);
+		|
+		|		MyBean getBean();
+		|		<jk>void</jk> setBean(MyBean <jv>value</jv>);
+		|
+		|		<jk>int</jk>[][][] getInt3dArray();
+		|		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] <jv>value</jv>);
+		|		
+		|		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
+		|		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; <jv>value</jv>);
+		|	}
+		|	
+		|	<jc>// Example usage.</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+		|	MyConfigInterface <jv>intf</jv> = <jv>config</jv>.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
+		|	
+		|	<jc>// Read a value.</jc>
+		|	<jk>int</jk> <jv>myInt</jv> = <jv>intf</jv>.getInt();
+		|
+		|	<jc>// Write a value.</jc>
+		|	<jv>intf</jv>.setBean(<jk>new</jk> MyBean());
+		|
+		|	<jc>// Commit your changes to the store.</jc>
+		|	<jv>config</jv>.commit();
+	</p>
+</div>

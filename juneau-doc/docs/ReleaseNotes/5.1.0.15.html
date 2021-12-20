@@ -15,55 +15,57 @@
 
 5.1.0.15 (May 24, 2015)
 
-<p>
-	Juno 5.1.0.15 is a minor update.
-</p>
-
-<h5 class='topic w800'>Core</h5>
-<ul class='spaced-list'>
-	<li>New properties in {@del SerializerContext}:
-		<ol>
-			<li>{@del SerializerContext#SERIALIZER_relativeUriBase}
-			<li>{@del SerializerContext#SERIALIZER_absolutePathUriBase}
-		</ol>
-		These replace the <c>SERIALIZER_uriAuthority</c> and <c>SERIALIZER_uriContext</c> properties.
-	</li>
-	<li>Improvements in {@link oaj.csv.CsvSerializer}.
-</ul>
-
-<h5 class='topic w800'>Server</h5>
-<ul class='spaced-list'>
-	<li>New properties in <c>RestServletProperties</c>:
-		<ol>
-			<li><c>REST_defaultCharset</c>
-			<li><c>REST_servletURI</c>
-			<li><c>REST_relativeServletURI</c>
-		</ol>
-	<li>Improvements involving path calculations when servlets deployed outside of a war file with a context root.
-</ul>
-
-<h5 class='topic w800'>Client</h5>
-<ul class='spaced-list'>
-	<li>New methods in {@del oajrc.RestCall}:
-		<ol>
-			<li>{@del RestRequest#getHeader(String,Class)}
-			<li>{@del RestRequest#getHeader(String,Object,Class)}
-			<li>{@del RestRequest#getHeader(String,Type,Type...)}
-			<li>{@del RestRequest#getQueryParameter(String,Class)}
-			<li>{@del RestRequest#getQueryParameter(String,Object,Class)}
-			<li>{@del RestRequest#getQueryParameter(String,Type,Type...)}
-			<li>{@del RestRequest#getQueryParameter(String,Object,Type,Type...)}
-			<li>{@del RestRequest#getQueryParameters(String,Class)}
-			<li>{@del RestRequest#getQueryParameters(String,Type,Type...)}
-			<li>{@del RestRequest#getFormDataParameter(String,Class)}
-			<li>{@del RestRequest#getFormDataParameter(String,Object,Class)}
-			<li>{@del RestRequest#getFormDataParameters(String,Class)}
-			<li>{@del RestRequest#getFormDataParameter(String,Type,Type...)}
-			<li>{@del RestRequest#getFormDataParameters(String,Type,Type...)}
-			<li>{@del RestRequest#getPathParameter(String,Class)}
-			<li>{@del RestRequest#getPathParameter(String,Type,Type...)}
-			<li>{@del RestRequest#getBody(Class)}
-			<li>{@del RestRequest#getBody(Type,Type...)}
-		</ol>
-	</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.1.0.15 is a minor update.
+	</p>
+	
+	<h5 class='topic w800'>Core</h5>
+	<ul class='spaced-list'>
+		<li>New properties in {@del SerializerContext}:
+			<ol>
+				<li>{@del SerializerContext#SERIALIZER_relativeUriBase}
+				<li>{@del SerializerContext#SERIALIZER_absolutePathUriBase}
+			</ol>
+			These replace the <c>SERIALIZER_uriAuthority</c> and <c>SERIALIZER_uriContext</c> properties.
+		</li>
+		<li>Improvements in {@link oaj.csv.CsvSerializer}.
+	</ul>
+	
+	<h5 class='topic w800'>Server</h5>
+	<ul class='spaced-list'>
+		<li>New properties in <c>RestServletProperties</c>:
+			<ol>
+				<li><c>REST_defaultCharset</c>
+				<li><c>REST_servletURI</c>
+				<li><c>REST_relativeServletURI</c>
+			</ol>
+		<li>Improvements involving path calculations when servlets deployed outside of a war file with a context root.
+	</ul>
+	
+	<h5 class='topic w800'>Client</h5>
+	<ul class='spaced-list'>
+		<li>New methods in {@del oajrc.RestCall}:
+			<ol>
+				<li>{@del RestRequest#getHeader(String,Class)}
+				<li>{@del RestRequest#getHeader(String,Object,Class)}
+				<li>{@del RestRequest#getHeader(String,Type,Type...)}
+				<li>{@del RestRequest#getQueryParameter(String,Class)}
+				<li>{@del RestRequest#getQueryParameter(String,Object,Class)}
+				<li>{@del RestRequest#getQueryParameter(String,Type,Type...)}
+				<li>{@del RestRequest#getQueryParameter(String,Object,Type,Type...)}
+				<li>{@del RestRequest#getQueryParameters(String,Class)}
+				<li>{@del RestRequest#getQueryParameters(String,Type,Type...)}
+				<li>{@del RestRequest#getFormDataParameter(String,Class)}
+				<li>{@del RestRequest#getFormDataParameter(String,Object,Class)}
+				<li>{@del RestRequest#getFormDataParameters(String,Class)}
+				<li>{@del RestRequest#getFormDataParameter(String,Type,Type...)}
+				<li>{@del RestRequest#getFormDataParameters(String,Type,Type...)}
+				<li>{@del RestRequest#getPathParameter(String,Class)}
+				<li>{@del RestRequest#getPathParameter(String,Type,Type...)}
+				<li>{@del RestRequest#getBody(Class)}
+				<li>{@del RestRequest#getBody(Type,Type...)}
+			</ol>
+		</li>
+	</ul>
+</div>

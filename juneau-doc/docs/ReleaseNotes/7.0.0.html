@@ -15,40 +15,42 @@
 
 7.0.0 (Oct 25, 2017)
 
-<p>
-	This release ups the Java prerequisite to Java 7.
-</p>
-
-<h5 class='topic w800'>juneau-marshall</h5>
-<ul class='spaced-list'>
-	<li>
-		New class {@del oaj.http.HttpMethodName} with valid static string HTTP method names.
-</ul>
-
-<h5 class='topic w800'>juneau-dto</h5>
-<ul class='spaced-list'>
-	<li>
-		Class <c>org.apache.juneau.dto.Link</c> renamed to {@link oaj.dto.LinkString}.
-		Helps avoid confusion since there are other Link classes in the library.
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		Annotation <c><ja>@HtmlDoc</ja>(links)</c> renamed to {@del oajr.annotation.HtmlDoc#navlinks() navlinks}.
-	<li>
-		New annotation {@del oajr.annotation.HtmlDoc#head() @HtmlDoc(head)}.
-		<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
-	<li>
-		Removed annotation <c><ja>@HtmlDoc</ja>(favIcon)</c>.
-		<br>This was a discouraged way of defining fav-icons anyway, and with the addition of 
-		<c><ja>@HtmlDoc</ja>(head)</c>, you can define them using:
-		<p class='bcode w800'>
-	head={
-		<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
-	}
-		</p>
-	<li>
-		Removed several of the HTMLDOC-related methods from the <c>RestResponse/RestConfig/RestContext</c>
-		classes and moved it into the new {@del oajr.HtmlDocBuilder} class.
-</ul>
+<div class='topic'>
+	<p>
+		This release ups the Java prerequisite to Java 7.
+	</p>
+	
+	<h5 class='topic w800'>juneau-marshall</h5>
+	<ul class='spaced-list'>
+		<li>
+			New class {@del oaj.http.HttpMethodName} with valid static string HTTP method names.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-dto</h5>
+	<ul class='spaced-list'>
+		<li>
+			Class <c>org.apache.juneau.dto.Link</c> renamed to {@link oaj.dto.LinkString}.
+			Helps avoid confusion since there are other Link classes in the library.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			Annotation <c><ja>@HtmlDoc</ja>(links)</c> renamed to {@del oajr.annotation.HtmlDoc#navlinks() navlinks}.
+		<li>
+			New annotation {@del oajr.annotation.HtmlDoc#head() @HtmlDoc(head)}.
+			<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
+		<li>
+			Removed annotation <c><ja>@HtmlDoc</ja>(favIcon)</c>.
+			<br>This was a discouraged way of defining fav-icons anyway, and with the addition of 
+			<c><ja>@HtmlDoc</ja>(head)</c>, you can define them using:
+			<p class='bcode w800'>
+		head={
+			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+		}
+			</p>
+		<li>
+			Removed several of the HTMLDOC-related methods from the <c>RestResponse/RestConfig/RestContext</c>
+			classes and moved it into the new {@del oajr.HtmlDocBuilder} class.
+	</ul>
+</div>

@@ -284,6 +284,8 @@ public class DocGenerator {
 					.replaceAll("oaj\\.", "org.apache.juneau.")
 					.replaceAll("oajr\\.", "org.apache.juneau.rest.")
 					.replaceAll("oajrc\\.", "org.apache.juneau.rest.client.")
+					.replaceAll("(?m)^\\s*\\|", "")
+
 				;
 			} catch (Exception e) {
 				WARNINGS.add("Problem with file " + f.getAbsolutePath() +", " + e.getMessage());
@@ -366,6 +368,7 @@ public class DocGenerator {
 				.replaceAll("oaj\\.", "org.apache.juneau.")
 				.replaceAll("oajr\\.", "org.apache.juneau.rest.")
 				.replaceAll("oajrc\\.", "org.apache.juneau.rest.client.")
+				.replaceAll("(?m)^\\s*\\|", "")
 			;
 		}
 

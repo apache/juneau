@@ -15,66 +15,68 @@
 
 {title:'HelloWorldResource', updated:'8.0.0', flags:'todo'}
 
-<p>
-	The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
-</p>
-
-<h5 class='figure'>HelloWorldResource.java</h5>
-<p class='bpcode w800'>
-	<jd>/** 
-	* Sample REST resource that prints out a simple "Hello world!" message. 
-	*/</jd> 
-	<ja>@Rest</ja>( 
-		title=<js>"Hello World"</js>,
-		description=<js>"An example of the simplest-possible resource"</js>,
-		path=<js>"/helloWorld"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			aside={
-				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		)
-	) 
-	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
-		
-		<jd>/** GET request handler */</jd> 
-		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
-		<jk>public</jk> String sayHello() { 
-			<jk>return</jk> <js>"Hello world!"</js>; 
-		} 
-	}
-</p>
-<p>
-	Notice that in this case we're not extending from {@link oajr.RestServlet}.  
-	We are however implementing {@del oajr.BasicRestConfig} which is a no-op
-	interface that defines a default <ja>@Rest</ja> annotation with all the serializers, parsers, 
-	and configuration defined on the {@link oajr.BasicRestServlet} class.
-</p>
-<p>
-	The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>
-	is that the latter provides the following additional features:
-</p>
-<ul class='spaced-list'>
-	<li>A default OPTIONS method.
-	<li>It can be deployed like any servlet.
-</ul>
-<p>
-	All other examples in this project extend from <l>BasicRestServlet</l> so that they provide automatic OPTIONS page support.
-</p>
-<p>
-	Pointing a browser to the resource shows the following:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/helloWorld
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.HelloWorldResource.1.png'>
-<p>
-	Using the special <l>&amp;Accept=text/json</l> and <l>&amp;plainText=true</l> parameters
-		allows us to see this page rendered as JSON:
-</p>		
-<p class='bpcode w800'>
-	http://localhost:10000/helloWorld?Accept=text/json&amp;plainText=true
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.HelloWorldResource.2.png'>
+<div class='topic'>
+	<p>
+		The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
+	</p>
+	
+	<h5 class='figure'>HelloWorldResource.java</h5>
+	<p class='bcode w800'>
+		|	<jd>/** 
+		|	* Sample REST resource that prints out a simple "Hello world!" message. 
+		|	*/</jd> 
+		|	<ja>@Rest</ja>( 
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>,
+		|		path=<js>"/helloWorld"</js>,
+		|		htmldoc=<ja>@HtmlDoc</ja>(
+		|			aside={
+		|				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|				<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|				<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|				<js>"&lt;/div&gt;"</js>
+		|			}
+		|		)
+		|	) 
+		|	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
+		|		
+		|		<jd>/** GET request handler */</jd> 
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
+		|		<jk>public</jk> String sayHello() { 
+		|			<jk>return</jk> <js>"Hello world!"</js>; 
+		|		} 
+		|	}
+	</p>
+	<p>
+		Notice that in this case we're not extending from {@link oajr.RestServlet}.  
+		We are however implementing {@del oajr.BasicRestConfig} which is a no-op
+		interface that defines a default <ja>@Rest</ja> annotation with all the serializers, parsers, 
+		and configuration defined on the {@link oajr.BasicRestServlet} class.
+	</p>
+	<p>
+		The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>
+		is that the latter provides the following additional features:
+	</p>
+	<ul class='spaced-list'>
+		<li>A default OPTIONS method.
+		<li>It can be deployed like any servlet.
+	</ul>
+	<p>
+		All other examples in this project extend from <l>BasicRestServlet</l> so that they provide automatic OPTIONS page support.
+	</p>
+	<p>
+		Pointing a browser to the resource shows the following:
+	</p>
+	<p class='bcode w800'>
+		|	http://localhost:10000/helloWorld
+	</p>			
+	<img class='bordered w800' src='doc-files/juneau-examples-rest.HelloWorldResource.1.png'>
+	<p>
+		Using the special <l>&amp;Accept=text/json</l> and <l>&amp;plainText=true</l> parameters
+			allows us to see this page rendered as JSON:
+	</p>		
+	<p class='bcode w800'>
+		|	http://localhost:10000/helloWorld?Accept=text/json&amp;plainText=true
+	</p>			
+	<img class='bordered w800' src='doc-files/juneau-examples-rest.HelloWorldResource.2.png'>
+</div>

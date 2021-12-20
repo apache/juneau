@@ -15,44 +15,46 @@
 
 {title:'Building and Running from Command-Line', created:'8.0.0', deprecated:'8.1.2'}
 
-<p>
-	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
-	as an executable uber-jar.
-</p>
-<p>
-	The easiest way to build your microservice is to run the following from the project root.
-</p>
-<p class='bpcode w800'>
-	mvn clean install
-</p>
-<p>
-	Your <c>target</c> directory should now contain the following files:
-</p>
-<ul>
-	<li><c>my-jetty-microservice-1.0.jar</c>
-	<li><c>my-jetty-microservice.cfg</c>
-</ul>
-<p>
-	To start from a command line, run the following command from inside your <c>target</c> directory:
-</p>
-<p class='bpcode w800'>
-	java -jar my-jetty-microservice-1.0.jar
-</p>
-<p>
-	You should see the following console output:
-</p>
-<p class='bpcode w800 console'>
-	Running class 'JettyMicroservice' using config file 'my-jetty-microservice.cfg'.
-	Server started on port 10000
-	
-	List of available commands:
-		exit -- Shut down service
-		restart -- Restarts service
-		help -- Commands help
-	
-	> 			
-</p>
-<p>
-	If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
-	then this microservice is already running elsewhere and so it cannot bind to port 10000.
-</p>
+<div class='topic'>
+	<p>
+		The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
+		as an executable uber-jar.
+	</p>
+	<p>
+		The easiest way to build your microservice is to run the following from the project root.
+	</p>
+	<p class='bcode w800'>
+		|	mvn clean install
+	</p>
+	<p>
+		Your <c>target</c> directory should now contain the following files:
+	</p>
+	<ul>
+		<li><c>my-jetty-microservice-1.0.jar</c>
+		<li><c>my-jetty-microservice.cfg</c>
+	</ul>
+	<p>
+		To start from a command line, run the following command from inside your <c>target</c> directory:
+	</p>
+	<p class='bcode w800'>
+		|	java -jar my-jetty-microservice-1.0.jar
+	</p>
+	<p>
+		You should see the following console output:
+	</p>
+	<p class='bcode w800 console'>
+		|	Running class 'JettyMicroservice' using config file 'my-jetty-microservice.cfg'.
+		|	Server started on port 10000
+		|	
+		|	List of available commands:
+		|		exit -- Shut down service
+		|		restart -- Restarts service
+		|		help -- Commands help
+		|	
+		|	> 			
+	</p>
+	<p>
+		If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
+		then this microservice is already running elsewhere and so it cannot bind to port 10000.
+	</p>
+</div>

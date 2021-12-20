@@ -15,73 +15,75 @@
 
 {title:'RDF Serializers', updated:'9.0.0'}
 
-<p>
-	The {@link oaj.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
-	Language-specific serializers are defined as inner subclasses of the <c>RdfSerializer</c> class:
-</p>	
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.jena.RdfSerializer}
-	<ul>
-		<li class='jc'>{@link oaj.jena.RdfXmlSerializer}
-		<li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}
-		<li class='jc'>{@link oaj.jena.N3Serializer}
-		<li class='jc'>{@link oaj.jena.NTripleSerializer}
-		<li class='jc'>{@link oaj.jena.TurtleSerializer}
-	</ul>
-</ul>
-<p>
-	The class hierarchy for the builder of this serializer is:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.Context.Builder}
-	<ul>
-		<li class='jac'>{@link oaj.BeanContextable.Builder}
+<div class='topic'>
+	<p>
+		The {@link oaj.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
+		Language-specific serializers are defined as inner subclasses of the <c>RdfSerializer</c> class:
+	</p>	
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.jena.RdfSerializer}
 		<ul>
-			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<li class='jc'>{@link oaj.jena.RdfXmlSerializer}
+			<li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}
+			<li class='jc'>{@link oaj.jena.N3Serializer}
+			<li class='jc'>{@link oaj.jena.NTripleSerializer}
+			<li class='jc'>{@link oaj.jena.TurtleSerializer}
+		</ul>
+	</ul>
+	<p>
+		The class hierarchy for the builder of this serializer is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.Context.Builder}
+		<ul>
+			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
 				<ul>
-					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.jena.RdfSerializer.Builder}
+						<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+						<ul>
+							<li class='jc'>{@link oaj.jena.RdfSerializer.Builder}
+						</ul>
 					</ul>
 				</ul>
 			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Refer to the builder javadocs for configurable settings.
-</p>
-<p>
-	The following pre-configured serializers are provided for convenience:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.jena.RdfSerializer}
-	<ul>
-		<li class='jc'>{@link oaj.jena.RdfXmlSerializer}
+	<p>
+		Refer to the builder javadocs for configurable settings.
+	</p>
+	<p>
+		The following pre-configured serializers are provided for convenience:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.jena.RdfSerializer}
 		<ul>
-			<li class='jf'>{@link oaj.jena.RdfXmlSerializer#DEFAULT DEFAULT}
-		</ul>
-		<li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}
-		<ul>
-			<li class='jf'>{@link oaj.jena.RdfXmlAbbrevSerializer#DEFAULT DEFAULT}
-		</ul>
-		<li class='jc'>{@link oaj.jena.N3Serializer}
-		<ul>
-			<li class='jf'>{@link oaj.jena.N3Serializer#DEFAULT DEFAULT}
-		</ul>
-		<li class='jc'>{@link oaj.jena.NTripleSerializer}
-		<ul>
-			<li class='jf'>{@link oaj.jena.NTripleSerializer#DEFAULT DEFAULT}
-		</ul>
-		<li class='jc'>{@link oaj.jena.TurtleSerializer}
-		<ul>
-			<li class='jf'>{@link oaj.jena.TurtleSerializer#DEFAULT DEFAULT}
+			<li class='jc'>{@link oaj.jena.RdfXmlSerializer}
+			<ul>
+				<li class='jf'>{@link oaj.jena.RdfXmlSerializer#DEFAULT DEFAULT}
+			</ul>
+			<li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}
+			<ul>
+				<li class='jf'>{@link oaj.jena.RdfXmlAbbrevSerializer#DEFAULT DEFAULT}
+			</ul>
+			<li class='jc'>{@link oaj.jena.N3Serializer}
+			<ul>
+				<li class='jf'>{@link oaj.jena.N3Serializer#DEFAULT DEFAULT}
+			</ul>
+			<li class='jc'>{@link oaj.jena.NTripleSerializer}
+			<ul>
+				<li class='jf'>{@link oaj.jena.NTripleSerializer#DEFAULT DEFAULT}
+			</ul>
+			<li class='jc'>{@link oaj.jena.TurtleSerializer}
+			<ul>
+				<li class='jf'>{@link oaj.jena.TurtleSerializer#DEFAULT DEFAULT}
+			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Abbreviated RDF/XML is currently the most widely accepted and readable RDF syntax, so the examples shown here 
-	will use that format.
-</p>
+	<p>
+		Abbreviated RDF/XML is currently the most widely accepted and readable RDF syntax, so the examples shown here 
+		will use that format.
+	</p>
+</div>

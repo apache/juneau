@@ -35,14 +35,14 @@ import java.lang.annotation.*;
 </ul>
 
 <h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
+<p class='bcode w800'>
 	<ja>@RestPost</ja>
 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
-<p class='bpcode w800'>
+<p class='bcode w800'>
 	<ja>@RestPost</ja>
 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.hasFormData(<js>"p1"</js>);

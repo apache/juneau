@@ -15,53 +15,54 @@ specific language governing permissions and limitations under the License.
 
 {title:'Interceptors', created:'8.2.0', flags:'todo'}
 
-<p>
-	The {@del oajr.client2.RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
-	the existing {@link org.apache.http.protocol.HttpRequestInterceptor} and {@link org.apache.http.protocol.HttpResponseInterceptor} APIs.
-</p>
-
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#interceptors(Object...) interceptors(Object...)}
+<div class='topic'>
+	<p>
+		The {@del oajr.client2.RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
+		the existing {@link org.apache.http.protocol.HttpRequestInterceptor} and {@link org.apache.http.protocol.HttpResponseInterceptor} APIs.
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#interceptors(Object...) interceptors(Object...)}
+		</ul>
+		<li class='jc'>{@del oajr.client2.RestRequest}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
+		</ul>
+		<li class='jic'>{@del oajr.client2.RestCallInterceptor}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
+			<li class='jm'>{@del oajr.client2.RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
+			<li class='jm'>{@del oajr.client2.RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
+		</ul>
 	</ul>
-	<li class='jc'>{@del oajr.client2.RestRequest}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
-	</ul>
-	<li class='jic'>{@del oajr.client2.RestCallInterceptor}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
-		<li class='jm'>{@del oajr.client2.RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
-		<li class='jm'>{@del oajr.client2.RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
-	</ul>
-</ul>
-
-<h5 class='section'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a client with a customized interceptor.</jc>
-	RestClient <jv>client</jv> = RestClient
-		.<jsm>create</jsm>()
-		.interceptors(
-			<jk>new</jk> RestCallInterceptor() {
-
-				<ja>@Override</ja>
-				<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
-					<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
-					// set on the request from the client.</jc>
-				}
-
-				<ja>@Override</ja>
-				<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
-					<jc>// Intercept immediately after an HTTP response has been received.</jc>
-				}
-
-				<ja>@Override</ja>
-				<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
-					<jc>// Intercept when the response body is consumed.</jc>
-				}
-			}
-		)
-		.build();
-</p>
-
+	
+	<h5 class='section'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a client with a customized interceptor.</jc>
+		|	RestClient <jv>client</jv> = RestClient
+		|		.<jsm>create</jsm>()
+		|		.interceptors(
+		|			<jk>new</jk> RestCallInterceptor() {
+		|
+		|				<ja>@Override</ja>
+		|				<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|					<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
+		|					// set on the request from the client.</jc>
+		|				}
+		|
+		|				<ja>@Override</ja>
+		|				<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+		|					<jc>// Intercept immediately after an HTTP response has been received.</jc>
+		|				}
+		|
+		|				<ja>@Override</ja>
+		|				<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+		|					<jc>// Intercept when the response body is consumed.</jc>
+		|				}
+		|			}
+		|		)
+		|		.build();
+	</p>
+</div>

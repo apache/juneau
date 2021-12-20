@@ -15,112 +15,114 @@
 
 {title:'POJO Marshalling', created:'8.2.0', flags:'todo'}
 
-<p>
-	By default, JSON support is provided for HTTP request and response bodies.
-	Other languages can be specified using any of the following builder methods:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#json() json()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#simpleJson() simpleJson()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#xml() xml()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#html() html()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#plainText() plainText()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#msgPack() msgPack()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#uon() uon()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#urlEnc() urlEnc()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#openApi() openApi()}
+<div class='topic'>
+	<p>
+		By default, JSON support is provided for HTTP request and response bodies.
+		Other languages can be specified using any of the following builder methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#json() json()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#simpleJson() simpleJson()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#xml() xml()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#html() html()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#plainText() plainText()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#msgPack() msgPack()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#uon() uon()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#urlEnc() urlEnc()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#openApi() openApi()}
+		</ul>
 	</ul>
-</ul>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
-	<jc>// Typically easier to use when performing unit tests.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
-</p>
-
-<p>
-	Clients can also support multiple languages:
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a REST client with support for multiple languages.</jc>
-	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
-
-	<jc>// Create a REST client with support for all supported languages.</jc>
-	RestClient <jv>client2</jv> = RestClient.<jsm>create</jsm>().universal().build();
-</p>
-
-<p>
-	When using clients with multiple language support, the request language is selected by setting the <c>Content-Type</c> 
-	request header.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a REST client with support for multiple languages.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
-
-	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
-		.contentType(<js>"application/json"</js>)
-		.complete()
-		.assertStatus().code().is(200);
-</p>
-
-<p>
-	Languages can also be specified per-request.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a REST client with no default languages supported.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
-
-	<jc>// Use JSON for this request.</jc>
-	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
-		.json()
-		.complete()
-		.assertStatus().code().is(200);
-</p>
-
-<p>
-	The {@del oajr.client2.RestClient.Builder} class provides convenience methods for setting common serializer and parser
-	settings.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a basic REST client with JSON support.</jc>
-	<jc>// Use single-quotes and whitespace.</jc>
-	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
-
-	<jc>// Same, but using properties.</jc>
-	RestClient <jv>client2</jv> = RestClient
-		.<jsm>create</jsm>()
-		.json()
-		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
-		.build();
-</p>
-
-<p>
-	Other methods are also provided for specifying the serializers and parsers used for lower-level marshalling support:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#serializer(Serializer) serializer(Serializer)}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#parser(Parser) parser(Parser)}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#marshall(Marshall) marshall(Marshall)}
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
+		|	<jc>// Typically easier to use when performing unit tests.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	</p>
+	
+	<p>
+		Clients can also support multiple languages:
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a REST client with support for multiple languages.</jc>
+		|	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
+		|
+		|	<jc>// Create a REST client with support for all supported languages.</jc>
+		|	RestClient <jv>client2</jv> = RestClient.<jsm>create</jsm>().universal().build();
+	</p>
+	
+	<p>
+		When using clients with multiple language support, the request language is selected by setting the <c>Content-Type</c> 
+		request header.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Create a REST client with support for multiple languages.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
+		|
+		|	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
+		|		.contentType(<js>"application/json"</js>)
+		|		.complete()
+		|		.assertStatus().code().is(200);
+	</p>
+	
+	<p>
+		Languages can also be specified per-request.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Create a REST client with no default languages supported.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
+		|
+		|	<jc>// Use JSON for this request.</jc>
+		|	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
+		|		.json()
+		|		.complete()
+		|		.assertStatus().code().is(200);
+	</p>
+	
+	<p>
+		The {@del oajr.client2.RestClient.Builder} class provides convenience methods for setting common serializer and parser
+		settings.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a basic REST client with JSON support.</jc>
+		|	<jc>// Use single-quotes and whitespace.</jc>
+		|	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
+		|
+		|	<jc>// Same, but using properties.</jc>
+		|	RestClient <jv>client2</jv> = RestClient
+		|		.<jsm>create</jsm>()
+		|		.json()
+		|		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
+		|		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
+		|		.build();
+	</p>
+	
+	<p>
+		Other methods are also provided for specifying the serializers and parsers used for lower-level marshalling support:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#serializer(Serializer) serializer(Serializer)}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#parser(Parser) parser(Parser)}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#marshall(Marshall) marshall(Marshall)}
+		</ul>
 	</ul>
-</ul>
-
-<p>
-	HTTP parts (headers, query parameters, form data...) are serialized and parsed using the {@link oaj.httppart.HttpPartSerializer}
-	and {@link oaj.httppart.HttpPartParser} APIs.  By default, clients are configured to use {@link oaj.oapi.OpenApiSerializer} and
-	{@link oaj.oapi.OpenApiParser}.  These can be overridden using the following methods:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#partSerializer(Class) partSerializer(Class&lt;? extends HttpPartSerializer>)}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#partParser(Class) partParser(Class&lt;? extends HttpPartParser>)}
+	
+	<p>
+		HTTP parts (headers, query parameters, form data...) are serialized and parsed using the {@link oaj.httppart.HttpPartSerializer}
+		and {@link oaj.httppart.HttpPartParser} APIs.  By default, clients are configured to use {@link oaj.oapi.OpenApiSerializer} and
+		{@link oaj.oapi.OpenApiParser}.  These can be overridden using the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#partSerializer(Class) partSerializer(Class&lt;? extends HttpPartSerializer>)}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#partParser(Class) partParser(Class&lt;? extends HttpPartParser>)}
+		</ul>
 	</ul>
-</ul>
+</div>

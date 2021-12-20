@@ -15,18 +15,20 @@
 
 5.1.0.1 (Jan 25, 2014)
 
-<p>
-	Juno 5.1.0.1 is a minor update.
-</p>
-<ul class='spaced-list'>
-	<li>Addressed some behavioral differences between Tomcat and WAS.  
-	<ul>
-		<li>Query parameter lookup is now always case-insensitive (per WAS behavior).
-		<li>Consistent handling of redirect requests (Tomcat and WAS handle relative redirect paths differently).
-	</ul>
-	<li>Fixed bug involving incorrect resolution of overlapping URL match patterns.
-	<li>Overall improvements in HTTP request parameter and header value resolution.  
-	<li>Made workspace changes so as not to be dependent on the WAS test environment being loaded.
-	<li>Renamed <ja>@Remainder</ja> annotation to {@del @PathRemainder}.
-	<li>Fixed bug involving incorrect calculation of <c>pathInfo</c> on child resources.
-</ul>	
+<div class='topic'>
+	<p>
+		Juno 5.1.0.1 is a minor update.
+	</p>
+	<ul class='spaced-list'>
+		<li>Addressed some behavioral differences between Tomcat and WAS.  
+		<ul>
+			<li>Query parameter lookup is now always case-insensitive (per WAS behavior).
+			<li>Consistent handling of redirect requests (Tomcat and WAS handle relative redirect paths differently).
+		</ul>
+		<li>Fixed bug involving incorrect resolution of overlapping URL match patterns.
+		<li>Overall improvements in HTTP request parameter and header value resolution.  
+		<li>Made workspace changes so as not to be dependent on the WAS test environment being loaded.
+		<li>Renamed <ja>@Remainder</ja> annotation to {@del @PathRemainder}.
+		<li>Fixed bug involving incorrect calculation of <c>pathInfo</c> on child resources.
+	</ul>	
+</div>

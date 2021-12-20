@@ -2597,7 +2597,7 @@ public class RestContext extends Context {
 		 * file finder.
 		 *
 		 * <h5 class='figure'>Example:</h5>
-		 * <p class='bpcode w800'>
+		 * <p class='bcode w800'>
 		 * 	<ja>@Rest</ja>
 		 * 	<jk>public class</jk> MyRestClass {
 		 *

@@ -98,7 +98,6 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'>{@doc RestLifecycleHooks}
  * </ul>
  */
-@Documented
 @Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited

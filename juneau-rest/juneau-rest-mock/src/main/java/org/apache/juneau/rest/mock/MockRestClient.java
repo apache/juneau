@@ -206,7 +206,7 @@ import org.apache.juneau.utils.*;
  * 	The class can also be used for testing of {@link Remote @Remote}-annotated interfaces against {@link Rest @Rest}-annotated resources.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bpcode w800'>
+ * <p class='bcode w800'>
  * 	<jc>// Our remote resource to test.</jc>
  * 	<ja>@Remote</ja>
  * 	<jk>public interface</jk> MyRemoteInterface {

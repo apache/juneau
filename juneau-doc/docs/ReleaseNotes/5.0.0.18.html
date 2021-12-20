@@ -15,24 +15,26 @@
 
 5.0.0.18 (Mar 27, 2013)
 
-<p>
-	Juno 5.0.0.18 is a moderate update.
-</p>
-<p>
-	The biggest change is the introduction of the {@link oaj.jena.RdfSerializer} class that uses Jena to generate RDF/XML, RDF/XML-ABBREV, N-Tuple, N3, and Turtle output.
-</p>
-<p>
-	This code should be considered prototype-quality, and subject to change in the future.<br>  
-	There are plans of adding an equivalent <c>RdfParser</c> class in the future, so the serializer logic may need to be tweaked to allow POJOs to be reconstituted correctly in the parser.
-</p>
-<p>
-	The <c>RdfXmlSerializer</c> class should be considered deprecated for now.<br>  
-	However, I'm keeping it around, since it's considerably faster and uses far less memory than the Jena-based serializer since it serializes directly from POJOs to RDF/XML.<br> 
-	It may or may not be removed in the future depending on demand.
-</p>
-<h5 class='topic w800'>Other changes</h5>
-<ul class='spaced-list'>
-	<li>
-		New {@link oaj.jso.JsoParser} class.  
-	</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.18 is a moderate update.
+	</p>
+	<p>
+		The biggest change is the introduction of the {@link oaj.jena.RdfSerializer} class that uses Jena to generate RDF/XML, RDF/XML-ABBREV, N-Tuple, N3, and Turtle output.
+	</p>
+	<p>
+		This code should be considered prototype-quality, and subject to change in the future.<br>  
+		There are plans of adding an equivalent <c>RdfParser</c> class in the future, so the serializer logic may need to be tweaked to allow POJOs to be reconstituted correctly in the parser.
+	</p>
+	<p>
+		The <c>RdfXmlSerializer</c> class should be considered deprecated for now.<br>  
+		However, I'm keeping it around, since it's considerably faster and uses far less memory than the Jena-based serializer since it serializes directly from POJOs to RDF/XML.<br> 
+		It may or may not be removed in the future depending on demand.
+	</p>
+	<h5 class='topic w800'>Other changes</h5>
+	<ul class='spaced-list'>
+		<li>
+			New {@link oaj.jso.JsoParser} class.  
+		</li>
+	</ul>
+</div>

@@ -15,18 +15,20 @@
 
 {title:'Read-only Configs', updated:'9.0.0'}
 
-<p>
-	The following settings can be used to create read-only <c>Config</c> objects:
-</p>
-<ul class='javatree'>
-	<li class='jm'>{@link oaj.config.Config.Builder#readOnly()}
-</ul>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Create a read-only config</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).readOnly().build();
-</p>
-<p>
-	This causes all methods that make modifications to throw {@link java.lang.UnsupportedOperationException}.
-</p>
+<div class='topic'>
+	<p>
+		The following settings can be used to create read-only <c>Config</c> objects:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.config.Config.Builder#readOnly()}
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Create a read-only config</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).readOnly().build();
+	</p>
+	<p>
+		This causes all methods that make modifications to throw {@link java.lang.UnsupportedOperationException}.
+	</p>
+</div>

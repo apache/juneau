@@ -15,37 +15,39 @@
 
 5.1.0.14 (May 10, 2015)
 
-<p>
-	Juno 5.1.0.14 is a moderate update.
-</p>
-<p>
-	The major addition is support for <dc>Remoteable Services</dc>, the ability
-		to invoke server-side POJO methods through client-side proxy interfaces.
-</p>
-
-<h5 class='topic w800'>Core</h5>		
-<ul class='spaced-list'>
-	<li>Simplified {@link oaj.utils.PojoIntrospector} class.
-	<li>New {@del ClassUtils#getMethodSignature(Method)} method.
-</ul>
-
-<h5 class='topic w800'>Client</h5>		
-<ul class='spaced-list'>
-	<li>New methods in {@link oajrc.RestClient} for working with remoteable services:
-	<ul>
-		<li>{@del RestClient#setRemoteableServletUri(String)}
-		<li>{@del RestClient#getRemoteableProxy(Class)}
+<div class='topic'>
+	<p>
+		Juno 5.1.0.14 is a moderate update.
+	</p>
+	<p>
+		The major addition is support for <dc>Remoteable Services</dc>, the ability
+			to invoke server-side POJO methods through client-side proxy interfaces.
+	</p>
+	
+	<h5 class='topic w800'>Core</h5>		
+	<ul class='spaced-list'>
+		<li>Simplified {@link oaj.utils.PojoIntrospector} class.
+		<li>New {@del ClassUtils#getMethodSignature(Method)} method.
 	</ul>
-</ul>
-
-<h5 class='topic w800'>Server</h5>		
-<ul class='spaced-list'>
-	<li>Added a default OPTIONS page to {@link oajr.BasicRestServlet} and {@del RestServletJenaDefault}.
-	<li><c>RestServletProperties.REST_allowMethodParam</c> has been enhanced to allow you to
-		explicitly specify which HTTP methods can be used in the <c>&amp;method</c> parameter.
-	<li>New methods added to {@link oajr.RestRequest}:
-	<ul>
-		<li>{@del RestRequest#getParser()}
-		<li>{@del RestRequest#getReaderParser()}
+	
+	<h5 class='topic w800'>Client</h5>		
+	<ul class='spaced-list'>
+		<li>New methods in {@link oajrc.RestClient} for working with remoteable services:
+		<ul>
+			<li>{@del RestClient#setRemoteableServletUri(String)}
+			<li>{@del RestClient#getRemoteableProxy(Class)}
+		</ul>
 	</ul>
-</ul>
+	
+	<h5 class='topic w800'>Server</h5>		
+	<ul class='spaced-list'>
+		<li>Added a default OPTIONS page to {@link oajr.BasicRestServlet} and {@del RestServletJenaDefault}.
+		<li><c>RestServletProperties.REST_allowMethodParam</c> has been enhanced to allow you to
+			explicitly specify which HTTP methods can be used in the <c>&amp;method</c> parameter.
+		<li>New methods added to {@link oajr.RestRequest}:
+		<ul>
+			<li>{@del RestRequest#getParser()}
+			<li>{@del RestRequest#getReaderParser()}
+		</ul>
+	</ul>
+</div>

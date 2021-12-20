@@ -15,52 +15,54 @@
 
 {title:'HTML Serializers', updated:'9.0.0'}
 
-<p>
-	The {@link oaj.html.HtmlSerializer} class is used to serialize POJOs into HTML.
-</p>	
-<p>
-	The {@link oaj.html.HtmlDocSerializer} class is the same, but wraps the serialized POJO
-	inside a document template consisting of header, nav, aside, and footer sections.
-</p>
-<p>
-	The class hierarchy for the builder of this serializer is:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.Context.Builder}
-	<ul>
-		<li class='jac'>{@link oaj.BeanContextable.Builder}
+<div class='topic'>
+	<p>
+		The {@link oaj.html.HtmlSerializer} class is used to serialize POJOs into HTML.
+	</p>	
+	<p>
+		The {@link oaj.html.HtmlDocSerializer} class is the same, but wraps the serialized POJO
+		inside a document template consisting of header, nav, aside, and footer sections.
+	</p>
+	<p>
+		The class hierarchy for the builder of this serializer is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.Context.Builder}
 		<ul>
-			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
 				<ul>
-					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.xml.XmlSerializer.Builder}
+						<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
 						<ul>
-							<li class='jc'>{@link oaj.html.HtmlSerializer.Builder}
+							<li class='jc'>{@link oaj.xml.XmlSerializer.Builder}
+							<ul>
+								<li class='jc'>{@link oaj.html.HtmlSerializer.Builder}
+							</ul>
 						</ul>
 					</ul>
 				</ul>
 			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Refer to the builder javadocs for configurable settings.
-</p>
-<p>
-	The following pre-configured serializers are provided for convenience:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.html.HtmlSerializer}
-	<ul>
-		<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT }
-		<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT_SQ }
-		<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT_SQ_READABLE }
+	<p>
+		Refer to the builder javadocs for configurable settings.
+	</p>
+	<p>
+		The following pre-configured serializers are provided for convenience:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.html.HtmlSerializer}
+		<ul>
+			<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT }
+			<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT_SQ }
+			<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT_SQ_READABLE }
+		</ul>
+		<li class='jc'>{@link oaj.html.HtmlDocSerializer}
+		<ul>
+			<li class='jf'>{@link oaj.html.HtmlDocSerializer#DEFAULT }
+		</ul>
 	</ul>
-	<li class='jc'>{@link oaj.html.HtmlDocSerializer}
-	<ul>
-		<li class='jf'>{@link oaj.html.HtmlDocSerializer#DEFAULT }
-	</ul>
-</ul>
+</div>

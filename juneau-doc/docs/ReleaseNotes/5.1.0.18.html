@@ -15,25 +15,27 @@
 
 5.1.0.18 (Aug 5, 2015)
 
-<p>
-	Juno 5.1.0.18 is a minor update affecting the server component only.
-</p>
-
-<h5 class='topic w800'>Server</h5>
-<ul class='spaced-list'>
-	<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
-	<li>Servlet and method labels and descriptions can now contain embedded string variables.
-	<li>New {@del RestMethod#input()} and {@del RestMethod#responses()}
-		annotations.
-		These replace the various <c>description</c> annotations added 2 days ago with a simpler design.
-	<li>New methods on {@link oajr.RestServlet}:
-		<ul>
-			<li>{@del RestServlet#getMethodDescription(String,RestRequest)} so that subclasses
-				can override the method description in the OPTIONS page.
-			<li>{@del RestServlet#createRequestVarResolver(RestRequest)} so that subclasses
-				can override and augment the variable resolver.
-			<li>{@del RestServlet#resolveChild(Class)} and {@del RestServlet#replaceChild(RestServlet)}
-				classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
-		</ul> 
-	<li>Reverted the {@del MethodDescription} back to 5.1.0.16 since it was being used by someone.
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.1.0.18 is a minor update affecting the server component only.
+	</p>
+	
+	<h5 class='topic w800'>Server</h5>
+	<ul class='spaced-list'>
+		<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
+		<li>Servlet and method labels and descriptions can now contain embedded string variables.
+		<li>New {@del RestMethod#input()} and {@del RestMethod#responses()}
+			annotations.
+			These replace the various <c>description</c> annotations added 2 days ago with a simpler design.
+		<li>New methods on {@link oajr.RestServlet}:
+			<ul>
+				<li>{@del RestServlet#getMethodDescription(String,RestRequest)} so that subclasses
+					can override the method description in the OPTIONS page.
+				<li>{@del RestServlet#createRequestVarResolver(RestRequest)} so that subclasses
+					can override and augment the variable resolver.
+				<li>{@del RestServlet#resolveChild(Class)} and {@del RestServlet#replaceChild(RestServlet)}
+					classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
+			</ul> 
+		<li>Reverted the {@del MethodDescription} back to 5.1.0.16 since it was being used by someone.
+	</ul>
+</div>

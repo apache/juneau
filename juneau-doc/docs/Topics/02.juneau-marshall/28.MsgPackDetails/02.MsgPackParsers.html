@@ -15,36 +15,38 @@
 
 {title:'MessagePack Parsers', updated:'9.0.0'}
 
-<p>
-	The {@link oaj.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
-</p>	
-<p>
-	The class hierarchy for the builder of this parser is:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.Context.Builder}
-	<ul>
-		<li class='jac'>{@link oaj.BeanContextable.Builder}
+<div class='topic'>
+	<p>
+		The {@link oaj.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
+	</p>	
+	<p>
+		The class hierarchy for the builder of this parser is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.Context.Builder}
 		<ul>
-			<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.parser.InputStreamParser.Builder}
+				<li class='jac'>{@link oaj.parser.Parser.Builder}
 				<ul>
-					<li class='jc'>{@link oaj.msgpack.MsgPackParser.Builder}
+					<li class='jac'>{@link oaj.parser.InputStreamParser.Builder}
+					<ul>
+						<li class='jc'>{@link oaj.msgpack.MsgPackParser.Builder}
+					</ul>
 				</ul>
 			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Refer to the builder javadocs for configurable settings.
-</p>
-<p>
-	The following pre-configured parsers are provided for convenience:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.msgpack.MsgPackParser}
-	<ul>
-		<li class='jf'>{@link oaj.msgpack.MsgPackParser#DEFAULT DEFAULT}
+	<p>
+		Refer to the builder javadocs for configurable settings.
+	</p>
+	<p>
+		The following pre-configured parsers are provided for convenience:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.msgpack.MsgPackParser}
+		<ul>
+			<li class='jf'>{@link oaj.msgpack.MsgPackParser#DEFAULT DEFAULT}
+		</ul>
 	</ul>
-</ul>
+</div>

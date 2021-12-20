@@ -15,144 +15,146 @@
 
 5.0.0.7 (Jan 20, 2013)
 
-<p>
-	Juno 5.0.0.7 is a major update.
-</p>
-<h5 class='topic w800'>Core API updates</h5>
-<ul class='spaced-list'>
-	<li>Combined previous 3 libraries into a single library.</li>
-	<li>
-		New {@link oaj.parser.ParserListener} class.<br>
-		Adds ability to find and process unknown bean properties during parsing.
-	</li>
-	<li>
-		Enhancements to {@link oaj.xml.XmlParser}:
-		<ul>
-			<li>Coalescing support</li>
-			<li>Validations support</li>
-			<li>Support for replacing entity references</li>
-			<li>Resolver support</li>
-			<li>Event allocator support</li>
-			<li>Trim-whitespace support</li>
-		</ul>
-	</li>
-	<li>	
-		Enhanced XML support:
-		<ul>
-			<li>
-				New {@link oaj.xml.annotation.Xml#format() @Xml.format} annotation.<br>
-				Controls how POJOs get serialized to XML.<br>
-				Also allows you to collapse collections and arrays.
-			</li>
-			<li>
-				New <c>@Xml.namespaces</c> annotation.<br>
-				Namespaces can be defined at package, class, method, or field levels.
-			</li>
-			<li>
-				New <c>@Xml.nsUri</c> annotation.<br>
-				Shortcut for specifying namespace URIs.
-			</li>
-			<li>
-				New <c>@Xml.valAttr</c> annotation.<br>
-			Serializes a bean property value as an attribute.
-			</li>
-			<li>Ability to override XS and XSI namespaces on XML and RDF/XML serializers.</li>
-			<li>Ability to override RDF namespace on RDF/XML serializer.</li>
-			<li>New more-efficient namespace resolution.</li>	
-		</ul>
-	</li>
-	<li>
-		New configurable property classes for everything are now structured better and easier to locate and identify through the following new classes:
-		<ul>
-			<li>{@link oaj.BeanContext}</li>
-			<li>{@del SerializerContext}</li>
-			<li>{@del ParserContext}</li>
-		</ul>		
-	</li>
-	<li>
-		Enhancements to {@link oaj.BeanContext}:
-		<ul>
-			<li>
-				Ability to mark bean properties as hidden using {@del @BeanProperty(hidden)} so that they don't get serialized.
-			</li>
-			<li>
-				Simplified <c>ClassType</c> {@link oaj.ClassMeta} API.<br>
-				Combined 4 classes into a single class.
-			</li>
-			<li>
-				New {@del @Bean#filter} and {@del @BeanProperty#filter} annotations.<br>
-				Used for defining filters on bean classes and bean properties instead of just globally through <c>BeanContext.addTransforms(Class[])</c>.
-			</li>
-			<li>
-				New {@link oaj.PropertyNamer} API / {@link oaj.annotation.Bean#propertyNamer() @Bean.propertyNamer} annotation.<br>
-				Used for customizing bean property names.
-			</li>
-			<li>
-				New {@del @BeanProperty#beanUri} and {@del @BeanProperty#id} annotations.<br>
-				Used for associating beans with URLs and IDs.<br>
-				Used by XML serializer to add a url attribute on a bean element.<br>
-				Used by RDF/XML serializer to construct <c>rdf:resource</c> attributes.
-			</li>
-			<li>
-				New {@del BeanProperty#properties()} annotation.
-				Used for limiting properties on child elements.
-			</li>	
-		</ul>
-	</li>
-	<li>
-		Automatic support for {@link java.net.URL} and {@link java.net.URI} objects.
-		<ul>
-			<li>Converted to hrefs in HTML.</li>
-			<li>Converted to url attributes in XML.</li>
-			<li>Converted to resource:about attributes in RDF/XML.</li>
-		</ul>				
-	</li>
-	<li>
-		Improvements to Javadocs.
-	</li>
-	<li>
-		Improved {@link oaj.utils.PojoQuery} support.
-	</li>
-</ul>
-<h5 class='topic w800'>REST client updates</h5>
-<ul class='spaced-list'>
-	<li>GZIP compression support.</li>
-	<li>Bug fixes.</li>
-</ul>
-<h5 class='topic w800'>REST server updates</h5>
-<ul class='spaced-list'>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.7 is a major update.
+	</p>
+	<h5 class='topic w800'>Core API updates</h5>
+	<ul class='spaced-list'>
+		<li>Combined previous 3 libraries into a single library.</li>
 		<li>
-		Support for overriding bean context and serializer properties in a REST method call through new {@del RestResponse#setProperty(String,Object)} method.<br>
-		For example, allows you to control whitespace options on a per-request basis.
-	</li>
-	<li>
-		Several new annotations on REST servlets:
-		<ul>
-			<li>{@del @RestResource#filters} - Associate post-formatting filters on a resource level.</li>
-			<li>{@del @RestResource#guards} - Associate resource-level guards.</li>
-			<li>{@del @RestResource#messages} - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
-			<li>{@del @RestResource#properties} - Override default bean context, serializer, and parser properties though an annotation.</li>
-		</ul> 
-	</li>
-	<li>
-		Several new annotations on REST methods:
-		<ul>
-			<li><c>@RestMethod(filters)</c> - Associate post-formatting filters on a method level.</li>
-			<li>{@del oajr.annotation.RestMethod#guards() @RestMethod(guards)} - Associate method-level guards.</li>
-		</ul>
-	</li>
-	<li>				
-		New annotations on REST method parameters with automatic conversion:
-		<ul>
-			<li>{@del @Attr} - A parameter or URL variable value as a parsed POJO.</li>
-			<li>{@del @Param} - A query parameter value as a parsed POJO.</li>
-			<li>{@del @PathRemainder}- The remainder after a URL pattern match as a String.</li>
-			<li>{@del @Header} - An HTTP header value as a parsed POJO.</li>
-			<li>{@del @Content} - The HTTP content as a parsed POJO.</li>
-			<li>{@link oajr.annotation.Method @Method} - The HTTP method name as a String.</li>
-		</ul>
-	</li>
-	<li>
-		HTTP response content POJOs can now simply be returned from methods instead of calling {@link oajr.RestResponse#setOutput(Object)}.		
-	</li>	
-</ul>
+			New {@link oaj.parser.ParserListener} class.<br>
+			Adds ability to find and process unknown bean properties during parsing.
+		</li>
+		<li>
+			Enhancements to {@link oaj.xml.XmlParser}:
+			<ul>
+				<li>Coalescing support</li>
+				<li>Validations support</li>
+				<li>Support for replacing entity references</li>
+				<li>Resolver support</li>
+				<li>Event allocator support</li>
+				<li>Trim-whitespace support</li>
+			</ul>
+		</li>
+		<li>	
+			Enhanced XML support:
+			<ul>
+				<li>
+					New {@link oaj.xml.annotation.Xml#format() @Xml.format} annotation.<br>
+					Controls how POJOs get serialized to XML.<br>
+					Also allows you to collapse collections and arrays.
+				</li>
+				<li>
+					New <c>@Xml.namespaces</c> annotation.<br>
+					Namespaces can be defined at package, class, method, or field levels.
+				</li>
+				<li>
+					New <c>@Xml.nsUri</c> annotation.<br>
+					Shortcut for specifying namespace URIs.
+				</li>
+				<li>
+					New <c>@Xml.valAttr</c> annotation.<br>
+				Serializes a bean property value as an attribute.
+				</li>
+				<li>Ability to override XS and XSI namespaces on XML and RDF/XML serializers.</li>
+				<li>Ability to override RDF namespace on RDF/XML serializer.</li>
+				<li>New more-efficient namespace resolution.</li>	
+			</ul>
+		</li>
+		<li>
+			New configurable property classes for everything are now structured better and easier to locate and identify through the following new classes:
+			<ul>
+				<li>{@link oaj.BeanContext}</li>
+				<li>{@del SerializerContext}</li>
+				<li>{@del ParserContext}</li>
+			</ul>		
+		</li>
+		<li>
+			Enhancements to {@link oaj.BeanContext}:
+			<ul>
+				<li>
+					Ability to mark bean properties as hidden using {@del @BeanProperty(hidden)} so that they don't get serialized.
+				</li>
+				<li>
+					Simplified <c>ClassType</c> {@link oaj.ClassMeta} API.<br>
+					Combined 4 classes into a single class.
+				</li>
+				<li>
+					New {@del @Bean#filter} and {@del @BeanProperty#filter} annotations.<br>
+					Used for defining filters on bean classes and bean properties instead of just globally through <c>BeanContext.addTransforms(Class[])</c>.
+				</li>
+				<li>
+					New {@link oaj.PropertyNamer} API / {@link oaj.annotation.Bean#propertyNamer() @Bean.propertyNamer} annotation.<br>
+					Used for customizing bean property names.
+				</li>
+				<li>
+					New {@del @BeanProperty#beanUri} and {@del @BeanProperty#id} annotations.<br>
+					Used for associating beans with URLs and IDs.<br>
+					Used by XML serializer to add a url attribute on a bean element.<br>
+					Used by RDF/XML serializer to construct <c>rdf:resource</c> attributes.
+				</li>
+				<li>
+					New {@del BeanProperty#properties()} annotation.
+					Used for limiting properties on child elements.
+				</li>	
+			</ul>
+		</li>
+		<li>
+			Automatic support for {@link java.net.URL} and {@link java.net.URI} objects.
+			<ul>
+				<li>Converted to hrefs in HTML.</li>
+				<li>Converted to url attributes in XML.</li>
+				<li>Converted to resource:about attributes in RDF/XML.</li>
+			</ul>				
+		</li>
+		<li>
+			Improvements to Javadocs.
+		</li>
+		<li>
+			Improved {@link oaj.utils.PojoQuery} support.
+		</li>
+	</ul>
+	<h5 class='topic w800'>REST client updates</h5>
+	<ul class='spaced-list'>
+		<li>GZIP compression support.</li>
+		<li>Bug fixes.</li>
+	</ul>
+	<h5 class='topic w800'>REST server updates</h5>
+	<ul class='spaced-list'>
+			<li>
+			Support for overriding bean context and serializer properties in a REST method call through new {@del RestResponse#setProperty(String,Object)} method.<br>
+			For example, allows you to control whitespace options on a per-request basis.
+		</li>
+		<li>
+			Several new annotations on REST servlets:
+			<ul>
+				<li>{@del @RestResource#filters} - Associate post-formatting filters on a resource level.</li>
+				<li>{@del @RestResource#guards} - Associate resource-level guards.</li>
+				<li>{@del @RestResource#messages} - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
+				<li>{@del @RestResource#properties} - Override default bean context, serializer, and parser properties though an annotation.</li>
+			</ul> 
+		</li>
+		<li>
+			Several new annotations on REST methods:
+			<ul>
+				<li><c>@RestMethod(filters)</c> - Associate post-formatting filters on a method level.</li>
+				<li>{@del oajr.annotation.RestMethod#guards() @RestMethod(guards)} - Associate method-level guards.</li>
+			</ul>
+		</li>
+		<li>				
+			New annotations on REST method parameters with automatic conversion:
+			<ul>
+				<li>{@del @Attr} - A parameter or URL variable value as a parsed POJO.</li>
+				<li>{@del @Param} - A query parameter value as a parsed POJO.</li>
+				<li>{@del @PathRemainder}- The remainder after a URL pattern match as a String.</li>
+				<li>{@del @Header} - An HTTP header value as a parsed POJO.</li>
+				<li>{@del @Content} - The HTTP content as a parsed POJO.</li>
+				<li>{@link oajr.annotation.Method @Method} - The HTTP method name as a String.</li>
+			</ul>
+		</li>
+		<li>
+			HTTP response content POJOs can now simply be returned from methods instead of calling {@link oajr.RestResponse#setOutput(Object)}.		
+		</li>	
+	</ul>
+</div>

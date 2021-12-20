@@ -15,60 +15,62 @@
 
 5.0.0.33 (Oct 20, 2013)
 
-<p>
-	Juno 5.0.0.33 is a moderate update.
-</p>
-<ul class='spaced-list'>
-	<li>
-		Removed generic parameter from {@link oaj.serializer.WriterSerializer} class. 
-		<ul>
-			<li>
-				Many of the examples in the documentation were written as follows, which resulted in "unchecked" compile warnings:<br>
-				<c>WriterSerializer s = <jk>new</jk> JsonSerializer();</c><br>
-				These compile warnings will now go away.
-			</li>
-		</ul>
-	</li>	
-	<li>
-		New settings in BeanContext.  These can be applied to all serializers/parsers.
-		<ul>
-			<li>{@del BEAN_ignoreInvocationExceptionsOnGetters}
-			<li>{@del BEAN_ignoreInvocationExceptionsOnSetters}
-			<li>{@del BEAN_notBeanPackages_add}
-			<li>{@del BEAN_notBeanPackages_remove}
-		</ul>
-	</li>
-	<li>
-		Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@del BEAN_notBeanPackages_add} / {@del BEAN_notBeanPackages_remove} properties.
-	</li>
-	<li>
-		New settings in <c>RestServletProperties</c>.
-		<ul>
-			<li><c>RestServletProperties.REST_trimTrailingUriSlashes</c><br>
-				Also removed <c>RestRequest.getRequestURI(boolean trimTrailingSlashes)</c> method which is now redundant with this property.
-			<li><c>RestServletProperties.REST_pathInfoBlankForNull</c><br>
-				Also removed <c>RestRequest.getPathInfo(boolean returnBlankForNull)</c> method which is now redundant with this property.
-		</ul>
-	</li>
-	<li>
-		New JSON-Schema {@link oaj.dto.jsonschema.JsonSchemaMap} class for supporting linked schemas.
-	</li>
-	<li>
-		Serializers will no longer throw an exception when <c>maxDepth</c> setting is reached, and will instead simply ignore content below the specified depth.<br>
-		While the old behavior was as-designed, the new behavior is more in-line with expected behavior.
-	</li>
-	<li>
-		Added support for HTTP header <js>"X-Response-Headers"</js> to {@link oajr.RestServlet}. <br>
-		Allows you to specify one or more headers that should be returned on the response from the servlet.<br>
-		For example, to get a page to automatically refresh every 1 second, you can append the following to a URL:  <c>?x-response-headers={Refresh=1}</c>
-	</li>
-	<li>
-		Removed <c>HtmlDocSerializerContext.<jsf>HTML_REFRESH</jsf></c> setting that added a Refresh meta tag to HTML documents, since this can now be controlled through <c>X-Response-Headers</c>.
-	</li>
-	<li>
-		Small improvements to samples.
-		<ul>
-			<li><c>PhotosResource</c> now includes a default entry.
-		</ul>
-	</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.33 is a moderate update.
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Removed generic parameter from {@link oaj.serializer.WriterSerializer} class. 
+			<ul>
+				<li>
+					Many of the examples in the documentation were written as follows, which resulted in "unchecked" compile warnings:<br>
+					<c>WriterSerializer s = <jk>new</jk> JsonSerializer();</c><br>
+					These compile warnings will now go away.
+				</li>
+			</ul>
+		</li>	
+		<li>
+			New settings in BeanContext.  These can be applied to all serializers/parsers.
+			<ul>
+				<li>{@del BEAN_ignoreInvocationExceptionsOnGetters}
+				<li>{@del BEAN_ignoreInvocationExceptionsOnSetters}
+				<li>{@del BEAN_notBeanPackages_add}
+				<li>{@del BEAN_notBeanPackages_remove}
+			</ul>
+		</li>
+		<li>
+			Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@del BEAN_notBeanPackages_add} / {@del BEAN_notBeanPackages_remove} properties.
+		</li>
+		<li>
+			New settings in <c>RestServletProperties</c>.
+			<ul>
+				<li><c>RestServletProperties.REST_trimTrailingUriSlashes</c><br>
+					Also removed <c>RestRequest.getRequestURI(boolean trimTrailingSlashes)</c> method which is now redundant with this property.
+				<li><c>RestServletProperties.REST_pathInfoBlankForNull</c><br>
+					Also removed <c>RestRequest.getPathInfo(boolean returnBlankForNull)</c> method which is now redundant with this property.
+			</ul>
+		</li>
+		<li>
+			New JSON-Schema {@link oaj.dto.jsonschema.JsonSchemaMap} class for supporting linked schemas.
+		</li>
+		<li>
+			Serializers will no longer throw an exception when <c>maxDepth</c> setting is reached, and will instead simply ignore content below the specified depth.<br>
+			While the old behavior was as-designed, the new behavior is more in-line with expected behavior.
+		</li>
+		<li>
+			Added support for HTTP header <js>"X-Response-Headers"</js> to {@link oajr.RestServlet}. <br>
+			Allows you to specify one or more headers that should be returned on the response from the servlet.<br>
+			For example, to get a page to automatically refresh every 1 second, you can append the following to a URL:  <c>?x-response-headers={Refresh=1}</c>
+		</li>
+		<li>
+			Removed <c>HtmlDocSerializerContext.<jsf>HTML_REFRESH</jsf></c> setting that added a Refresh meta tag to HTML documents, since this can now be controlled through <c>X-Response-Headers</c>.
+		</li>
+		<li>
+			Small improvements to samples.
+			<ul>
+				<li><c>PhotosResource</c> now includes a default entry.
+			</ul>
+		</li>
+	</ul>
+</div>

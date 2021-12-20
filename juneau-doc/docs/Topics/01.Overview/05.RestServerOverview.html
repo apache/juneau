@@ -23,38 +23,38 @@
 		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p class='bcode w800'>
-	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
-	<ja>@Rest</ja>(
-		path=<js>"/helloWorld"</js>,
-		title=<js>"Hello World"</js>,
-		description=<js>"An example of the simplest-possible resource"</js>
-	)
-	<ja>@HtmlDoc</ja>(
-		navlinks={
-			<js>"up: request:/.."</js>,
-			<js>"options: servlet:/?method=OPTIONS"</js>
-		},
-		aside={
-			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
-			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
-			<js>"&lt;/div&gt;"</js>
-		}
-	)
-	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
-	
-		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
-		<jk>public</jk> String sayHello() {
-			<jk>return</jk> <js>"Hello world!"</js>;
-		}
-	}
+		|	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/helloWorld"</js>,
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>
+		|	)
+		|	<ja>@HtmlDoc</ja>(
+		|		navlinks={
+		|			<js>"up: request:/.."</js>,
+		|			<js>"options: servlet:/?method=OPTIONS"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+		|	
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
+		|		<jk>public</jk> String sayHello() {
+		|			<jk>return</jk> <js>"Hello world!"</js>;
+		|		}
+		|	}
 	</p>
 	<p>
 		This is what it looks like in a browser.
 	</p>
 	<p class='bcode w800'>
-	http://localhost:10000/helloWorld
+		|	http://localhost:10000/helloWorld
 	</p>
 	<img class='bordered w800' src='doc-files/juneau-rest-server.HelloWorldExample.1.png'>
 	<ul>
@@ -80,21 +80,21 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-	<jd>/** Parent Resource */</jd>
-	<ja>@Rest</ja>(
-		path=<js>"/parent"</js>,
-		children={
-			MyChildResource.<jk>class</jk>
-		}
-	)
-	<jk>public</jk> MyParentResource <jk>extends</jk> BasicRestServlet {...}
+		|	<jd>/** Parent Resource */</jd>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/parent"</js>,
+		|		children={
+		|			MyChildResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public</jk> MyParentResource <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p class='bcode w800'>
-	<jd>/** Child Resource */</jd>
- 	<ja>@Rest</ja>(
-		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
-	)
-	<jk>public</jk> MyChildResource {...} <jc>// Note that we don't need to extend from RestServlet.</jc>
+		|	<jd>/** Child Resource */</jd>
+		| 	<ja>@Rest</ja>(
+		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
+		|	)
+		|	<jk>public</jk> MyChildResource {...} <jc>// Note that we don't need to extend from RestServlet.</jc>
 	</p>
 	<p>
 		The path of the child resource gets appended to the path of the parent resource. 
@@ -121,32 +121,32 @@
 		The <l>RootResources</l> class in the Samples project is an example of a router page:
 	</p>
 	<p class='bcode w800'>		
-	<jd>/**
-	 * Sample REST resource showing how to implement a "router" resource page.
-	 */</jd>
-	<ja>@Rest</ja>(
-		path=<js>"/"</js>,
-		title=<js>"Root resources"</js>,
-		description=<js>"Example of a router resource page."</js>,
-		children={
-			HelloWorldResource.<jk>class</jk>,
-			PetStoreResource.<jk>class</jk>,
-			DtoExamples.<jk>class</jk>,
-			ConfigResource.<jk>class</jk>,
-			LogsResource.<jk>class</jk>,
-			ShutdownResource.<jk>class</jk>
-		}
-	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
-		<jc>// NO CODE!!!</jc>
-	}
+		|	<jd>/**
+		|	 * Sample REST resource showing how to implement a "router" resource page.
+		|	 */</jd>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/"</js>,
+		|		title=<js>"Root resources"</js>,
+		|		description=<js>"Example of a router resource page."</js>,
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>,
+		|			PetStoreResource.<jk>class</jk>,
+		|			DtoExamples.<jk>class</jk>,
+		|			ConfigResource.<jk>class</jk>,
+		|			LogsResource.<jk>class</jk>,
+		|			ShutdownResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
+		|		<jc>// NO CODE!!!</jc>
+		|	}
 	</p>
 	<p>
 		When you bring up this resource in a browser, you see the following that provides a list
 		of navigable links to your child resources:
 	</p>
 	<p class='bcode w800'>
-	http://localhost:10000
+		|	http://localhost:10000
 	</p>
 	<img class='bordered w800' src='doc-files/juneau-rest-server.RouterPages.1.png'/>
 	<ul class='seealso'>
@@ -161,25 +161,25 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
-		<jk>public</jk> Ok addPet(
-			<ja>@Body</ja> CreatePet <jv>createPetBean</jv>, 
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
-		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
-			<jc>// Process request.</jc>
-			<jk>return</jk> Ok.<jsf>OK</jsf>;
-		}
+		|	<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
+		|	<jk>public</jk> Ok addPet(
+		|		<ja>@Body</ja> CreatePet <jv>createPetBean</jv>, 
+		|		<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+		|		<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|	) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
+		|		<jc>// Process request.</jc>
+		|		<jk>return</jk> Ok.<jsf>OK</jsf>;
+		|	}
 	</p>
 	<p>
 		Java methods on {@link oajr.annotation.Rest @Rest}-annotated classes have the following format:
 	</p>
 	<p class='bcode w800'>
-	<ja>@RestOp</ja>(method=<js>"..."</js>, path=<js>"..."</js>)
-	<ja><i>&lt;config-annotations&gt;</i></ja>
-	<jk>public</jk> <i>&lt;return-type&gt;</i> method(<i>&lt;args&gt;</i>) <jk>throws</jk> <i>&lt;throwables&gt;</i> {
-		...
-	}
+		|	<ja>@RestOp</ja>(method=<js>"..."</js>, path=<js>"..."</js>)
+		|	<ja><i>&lt;config-annotations&gt;</i></ja>
+		|	<jk>public</jk> <i>&lt;return-type&gt;</i> method(<i>&lt;args&gt;</i>) <jk>throws</jk> <i>&lt;throwables&gt;</i> {
+		|		...
+		|	}
 	</p>
 	<p>
 		The various parts require their own topics to fully appreciate the scope of abilities, but the following is a summary:
@@ -272,50 +272,48 @@
 	</p>
 	<h5 class='figure'>Example configuration file:</h5>
 	<p class='bcode w800'>
-	<ja>@Configuration</ja>
-	<jk>public class</jk> MySpringConfiguration {
-		
-		<jd>/**
-		 * Our root REST bean.
-		 * Note that this must extend from SpringRestServlet so that child resources can be 
-		 * resolved as Spring beans.
-		 * All REST objects are attached to this bean using the {@link oajr.annotation.Rest#children()} annotation.
-		 */</jd>
-		<ja>@Bean</ja>
-		<jk>public</jk> RootResources getRootResources() {
-			<jk>return new</jk> RootResources();
-		}
-	
-		<jd>/**
-		 * Optionally return the HelloWorldResource object as an injectable bean.
-		 */</jd>
-		<ja>@Bean</ja>
-		<jk>public</jk> HelloWorldResource getHelloWorldResource() {
-			<jk>return new</jk> HelloWorldResource();
-		}
-	
-		<jd>/**
-		 * Map our servlet to a path.
-		 */</jd>
-		<ja>@Bean</ja>
-		<jk>public</jk> ServletRegistrationBean&lt;Servlet&gt; getRootServlet(RootResources <jv>rootResources</jv>) {
-			<jk>return new</jk> ServletRegistrationBean<>(<jv>rootResources</jv>, <js>"/*"</js>);
-		}
-	}
+		|	<ja>@Configuration</ja>
+		|	<jk>public class</jk> MySpringConfiguration {
+		|		
+		|		<jd>/**
+		|		 * Our root REST bean.
+		|		 * Note that this must extend from SpringRestServlet so that child resources can be 
+		|		 * resolved as Spring beans.
+		|		 * All REST objects are attached to this bean using the {@link oajr.annotation.Rest#children()} annotation.
+		|		 */</jd>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> RootResources getRootResources() {
+		|			<jk>return new</jk> RootResources();
+		|		}
+		|	
+		|		<jd>/**
+		|		 * Optionally return the HelloWorldResource object as an injectable bean.
+		|		 */</jd>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> HelloWorldResource getHelloWorldResource() {
+		|			<jk>return new</jk> HelloWorldResource();
+		|		}
+		|	
+		|		<jd>/**
+		|		 * Map our servlet to a path.
+		|		 */</jd>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> ServletRegistrationBean&lt;Servlet&gt; getRootServlet(RootResources <jv>rootResources</jv>) {
+		|			<jk>return new</jk> ServletRegistrationBean<>(<jv>rootResources</jv>, <js>"/*"</js>);
+		|		}
+		|	}
 	</p>
 	<p class='bcode w800'>
-	<ja>@Rest</ja>(
-		children={
-			HelloWorldResource.<jk>class</jk>
-		}
-	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
-		<jc>// No code!</jc>
-	}
+		|	<ja>@Rest</ja>(
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
+		|		<jc>// No code!</jc>
+		|	}
 	</p>
 	<ul class='seealso'>
 		<li class='link'>{@doc TODO} for more information.
 	</ul>
 </div>
-
-	

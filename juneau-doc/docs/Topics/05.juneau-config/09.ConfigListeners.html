@@ -15,75 +15,77 @@
 
 {title:'Listeners'}
 
-<p>
-	Configuration change events can be listened for using the following methods:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.config.Config}
-	<ul>
-		<li class='jm'>{@link oaj.config.Config#addListener(ConfigEventListener) addListener(ConfigEventListener)}
-		<li class='jm'>{@link oaj.config.Config#removeListener(ConfigEventListener) removeListener(ConfigEventListener)}
+<div class='topic'>
+	<p>
+		Configuration change events can be listened for using the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.config.Config}
+		<ul>
+			<li class='jm'>{@link oaj.config.Config#addListener(ConfigEventListener) addListener(ConfigEventListener)}
+			<li class='jm'>{@link oaj.config.Config#removeListener(ConfigEventListener) removeListener(ConfigEventListener)}
+		</ul>
 	</ul>
-</ul>
-<p>
-	The {@link oaj.config.event.ConfigEventListener} interface consists of the following method:
-</p>		
-<ul class='javatree'>
-	<li class='jic'>{@link oaj.config.event.ConfigEventListener}
-	<ul>
-		<li class='jm'>{@link oaj.config.event.ConfigEventListener#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)}
+	<p>
+		The {@link oaj.config.event.ConfigEventListener} interface consists of the following method:
+	</p>		
+	<ul class='javatree'>
+		<li class='jic'>{@link oaj.config.event.ConfigEventListener}
+		<ul>
+			<li class='jm'>{@link oaj.config.event.ConfigEventListener#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)}
+		</ul>
 	</ul>
-</ul>
-<p>
-	The {@link oaj.config.event.ConfigEvent} class provides access to all the information about the updated entry:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.config.event.ConfigEvent}
-	<ul>
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getType() getType()}
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getSection() getSection()}
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getKey() getKey()}
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getValue() getValue()}
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getModifiers() getModifiers()}
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getComment() getComment()}
-		<li class='jm'>{@link oaj.config.event.ConfigEvent#getPreLines() getPreLines}
+	<p>
+		The {@link oaj.config.event.ConfigEvent} class provides access to all the information about the updated entry:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.config.event.ConfigEvent}
+		<ul>
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getType() getType()}
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getSection() getSection()}
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getKey() getKey()}
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getValue() getValue()}
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getModifiers() getModifiers()}
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getComment() getComment()}
+			<li class='jm'>{@link oaj.config.event.ConfigEvent#getPreLines() getPreLines}
+		</ul>
 	</ul>
-</ul>
-<p>
-	The listener method is triggered:
-</p>
-<ul class='spaced-list'>
-	<li>After {@link oaj.config.Config#commit()} is called.
-	<li>When the file changes on the file system. 
-</ul>
-<p>
-	In both cases, the listener is triggered after the changes have been committed.
-</p>
-<p class='bpcode w800'>
-	<jk>final</jk> Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	
-	<jc>// Add a listener for changes to MySection/key1</jc>
-	<jv>config</jv>.addListener(
-		<jk>new</jk> ConfigEventListener() {
-			<ja>@Override</ja>
-			<jk>public void</jk> onConfigChange(ConfigEvents <jv>events</jv>) {
-				<jk>for</jk> (ConfigEvent <jv>event</jv> : <jv>events</jv>) {
-					<jk>if</jk> (<jv>event</jv>.getType() == <jsf>SET_ENTRY</jsf>) {
-						
-						String <jv>section</jv> = <jv>event</jv>.getSection();
-						String <jv>key</jv> = <jv>event</jv>.getKey();
-					
-						<jk>if</jk> (<jv>section</jv>.equals(<js>"MySection"</js>) &amp;&amp; <jv>key</jv>.equals(<js>"key1"</js>)) {
-		
-							<jc>// Get the new value from the event.</jc>
-							String <jv>newVal</jv> = <jv>event</jv>.getValue();
-							
-							<jc>// Or get the new value from the config (since the change has already been committed).</jc>
-							<jv>newVal</jv> = <jv>config</jv>.getString(<js>"MySection/key1"</js>);
-						}
-					}
-				}
-			}
-		}
-	)
-</p>
+	<p>
+		The listener method is triggered:
+	</p>
+	<ul class='spaced-list'>
+		<li>After {@link oaj.config.Config#commit()} is called.
+		<li>When the file changes on the file system. 
+	</ul>
+	<p>
+		In both cases, the listener is triggered after the changes have been committed.
+	</p>
+	<p class='bcode w800'>
+		|	<jk>final</jk> Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+		|	
+		|	<jc>// Add a listener for changes to MySection/key1</jc>
+		|	<jv>config</jv>.addListener(
+		|		<jk>new</jk> ConfigEventListener() {
+		|			<ja>@Override</ja>
+		|			<jk>public void</jk> onConfigChange(ConfigEvents <jv>events</jv>) {
+		|				<jk>for</jk> (ConfigEvent <jv>event</jv> : <jv>events</jv>) {
+		|					<jk>if</jk> (<jv>event</jv>.getType() == <jsf>SET_ENTRY</jsf>) {
+		|						
+		|						String <jv>section</jv> = <jv>event</jv>.getSection();
+		|						String <jv>key</jv> = <jv>event</jv>.getKey();
+		|					
+		|						<jk>if</jk> (<jv>section</jv>.equals(<js>"MySection"</js>) &amp;&amp; <jv>key</jv>.equals(<js>"key1"</js>)) {
+		|		
+		|							<jc>// Get the new value from the event.</jc>
+		|							String <jv>newVal</jv> = <jv>event</jv>.getValue();
+		|							
+		|							<jc>// Or get the new value from the config (since the change has already been committed).</jc>
+		|							<jv>newVal</jv> = <jv>config</jv>.getString(<js>"MySection/key1"</js>);
+		|						}
+		|					}
+		|				}
+		|			}
+		|		}
+		|	)
+	</p>
+</div>

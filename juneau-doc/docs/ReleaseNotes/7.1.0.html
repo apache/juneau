@@ -15,444 +15,446 @@
 
 7.1.0 (Mar 08, 2018)
 
-<p>
-	Version 7.1.0 is a major update with major implementation refactoring across all aspects of the product.
-</p>
-
-<h5 class='topic w800'>juneau-marshall</h5>
-<ul class='spaced-list'>
-	<li>
-		Significant improvements made to the internals of the Serializer and Parser classes.
-		<ul>
-			<li>
-				Caching improvements on serializers and parsers have reduced execution time of the core
-				JUnits by approximately 1/3.
-				<br>The 17000+ JUnit tests now execute in less than 10 seconds and have a cache-reuse hit rate
-				of 98% (164104 serializers/parsers/bean-contexts retrieved, but only 1801 created from scratch).
-			<li>
-				All the various separate <c>Context</c> classes (e.g. <c>JsonSerializerContext</c>) have been folded into
-				their respective serializer or parser classes (e.g. <c>JsonSerializer</c>).
-				<br>Additionally, these classes are their own bean contexts.
-				<br>For example, the class hierarchy of <c>JsonSerializer</c> is now:
-				<ul class='doctree'>
-					<li class='jac'>{@link oaj.Context}
-					<ul>
-						<li class='jc'>{@link oaj.BeanContext}
-						<ul>
-							<li class='jac'>{@link oaj.serializer.Serializer}
-							<ul>
-								<li class='jac'>{@link oaj.serializer.WriterSerializer}
-								<ul>
-									<li class='jc'>{@link oaj.json.JsonSerializer}
-								</ul>
-							</ul>
-						</ul>
-					</ul>
-				</ul>
-				All <c>Context</c> objects are thread-safe and read-only.
-			<li>
-				Session objects also now have a consistent class hierarchy.
-				<br>For example, the class hierarchy of <c>JsonSerializerSession</c> is now:
-				<ul class='doctree'>
-					<li class='jac'>{@link oaj.Session}
-					<ul>
-						<li class='jc'>{@link oaj.BeanSession}
-						<ul>
-							<li class='jac'>{@link oaj.serializer.SerializerSession}
-							<ul>
-								<li class='jac'>{@link oaj.serializer.WriterSerializerSession}
-								<ul>
-									<li class='jc'>{@link oaj.json.JsonSerializerSession}
-								</ul>
-							</ul>
-						</ul>
-					</ul>
-				</ul>
-				Session objects are transient objects that live for the duration of a single parse.
-			<li>
-				Builder objects also now have a consistent class hierarchy.
-				<br>For example, the class hierarchy of <c>JsonSerializer.Builder</c> is now:
-				<ul class='doctree'>
-					<li class='jac'>{@link oaj.Context.Builder}
-					<ul>
-						<li class='jc'>{@link oaj.BeanContext.Builder}
-						<ul>
-							<li class='jac'>{@link oaj.serializer.Serializer.Builder}
-							<ul>
-								<li class='jc'>{@link oaj.json.JsonSerializer.Builder}
-							</ul>
-						</ul>
-					</ul>
-				</ul>
-				Builder objects are used for building up and creating <c>Context</c> objects.
-			<li>
-				The {@link oaj.PropertyStore} class has been completely rewritten.
-				It is now a read-only configuration store build using the {@link oaj.PropertyStoreBuilder}
-				class.
-				<br>The previous <c>PropertyStore</c> class was overly-complicated with many read/write
-				locks to ensure thread-safety. 
-				<br>The new design shifts to a builder-based model with read-only <c>PropertyStore</c> objects
-				that can be used as hash keys.
-		</ul>
-	<li>
-		Improvements to the HTTP-Part APIs.
-		<br>The existing <c>PartSerializer</c>/<c>PartParser</c> classes
-		have been replaced with the following all located in the new <c>org.apache.juneau.httppart</c> package:
-		<ul class='doctree'>
-			<li class='jp'>{@link oaj.httppart}
+<div class='topic'>
+	<p>
+		Version 7.1.0 is a major update with major implementation refactoring across all aspects of the product.
+	</p>
+	
+	<h5 class='topic w800'>juneau-marshall</h5>
+	<ul class='spaced-list'>
+		<li>
+			Significant improvements made to the internals of the Serializer and Parser classes.
 			<ul>
-				<li class='jc'>{@link oaj.httppart.HttpPartType}
-				<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
+				<li>
+					Caching improvements on serializers and parsers have reduced execution time of the core
+					JUnits by approximately 1/3.
+					<br>The 17000+ JUnit tests now execute in less than 10 seconds and have a cache-reuse hit rate
+					of 98% (164104 serializers/parsers/bean-contexts retrieved, but only 1801 created from scratch).
+				<li>
+					All the various separate <c>Context</c> classes (e.g. <c>JsonSerializerContext</c>) have been folded into
+					their respective serializer or parser classes (e.g. <c>JsonSerializer</c>).
+					<br>Additionally, these classes are their own bean contexts.
+					<br>For example, the class hierarchy of <c>JsonSerializer</c> is now:
+					<ul class='doctree'>
+						<li class='jac'>{@link oaj.Context}
+						<ul>
+							<li class='jc'>{@link oaj.BeanContext}
+							<ul>
+								<li class='jac'>{@link oaj.serializer.Serializer}
+								<ul>
+									<li class='jac'>{@link oaj.serializer.WriterSerializer}
+									<ul>
+										<li class='jc'>{@link oaj.json.JsonSerializer}
+									</ul>
+								</ul>
+							</ul>
+						</ul>
+					</ul>
+					All <c>Context</c> objects are thread-safe and read-only.
+				<li>
+					Session objects also now have a consistent class hierarchy.
+					<br>For example, the class hierarchy of <c>JsonSerializerSession</c> is now:
+					<ul class='doctree'>
+						<li class='jac'>{@link oaj.Session}
+						<ul>
+							<li class='jc'>{@link oaj.BeanSession}
+							<ul>
+								<li class='jac'>{@link oaj.serializer.SerializerSession}
+								<ul>
+									<li class='jac'>{@link oaj.serializer.WriterSerializerSession}
+									<ul>
+										<li class='jc'>{@link oaj.json.JsonSerializerSession}
+									</ul>
+								</ul>
+							</ul>
+						</ul>
+					</ul>
+					Session objects are transient objects that live for the duration of a single parse.
+				<li>
+					Builder objects also now have a consistent class hierarchy.
+					<br>For example, the class hierarchy of <c>JsonSerializer.Builder</c> is now:
+					<ul class='doctree'>
+						<li class='jac'>{@link oaj.Context.Builder}
+						<ul>
+							<li class='jc'>{@link oaj.BeanContext.Builder}
+							<ul>
+								<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+								<ul>
+									<li class='jc'>{@link oaj.json.JsonSerializer.Builder}
+								</ul>
+							</ul>
+						</ul>
+					</ul>
+					Builder objects are used for building up and creating <c>Context</c> objects.
+				<li>
+					The {@link oaj.PropertyStore} class has been completely rewritten.
+					It is now a read-only configuration store build using the {@link oaj.PropertyStoreBuilder}
+					class.
+					<br>The previous <c>PropertyStore</c> class was overly-complicated with many read/write
+					locks to ensure thread-safety. 
+					<br>The new design shifts to a builder-based model with read-only <c>PropertyStore</c> objects
+					that can be used as hash keys.
+			</ul>
+		<li>
+			Improvements to the HTTP-Part APIs.
+			<br>The existing <c>PartSerializer</c>/<c>PartParser</c> classes
+			have been replaced with the following all located in the new <c>org.apache.juneau.httppart</c> package:
+			<ul class='doctree'>
+				<li class='jp'>{@link oaj.httppart}
 				<ul>
-					<li class='jc'>{@del UonPartSerializer}
-					<li class='jc'>{@del SimpleUonPartSerializer}
-					<li class='jc'>{@link oaj.httppart.SimplePartSerializer}
-				</ul>
-				<li class='jic'>{@link oaj.httppart.HttpPartParser}
-				<ul>
-					<li class='jc'>{@del UonPartParser}
-					<li class='jc'>{@del SimplePartParser}
+					<li class='jc'>{@link oaj.httppart.HttpPartType}
+					<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
+					<ul>
+						<li class='jc'>{@del UonPartSerializer}
+						<li class='jc'>{@del SimpleUonPartSerializer}
+						<li class='jc'>{@link oaj.httppart.SimplePartSerializer}
+					</ul>
+					<li class='jic'>{@link oaj.httppart.HttpPartParser}
+					<ul>
+						<li class='jc'>{@del UonPartParser}
+						<li class='jc'>{@del SimplePartParser}
+					</ul>
 				</ul>
 			</ul>
-		</ul>
-		Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
-	<li>	
-		<c>Context.Builder.property(String,Object)</c> renamed to {@del oaj.Context.Builder#set(String,Object)}.
-	<li>
-		<c>ResourceFinder</c> class has been replaced with the following:
-		<ul>
-			<li>{@del oaj.utils.ClasspathResourceFinder}
-			<li>{@del oaj.utils.ClasspathResourceFinderSimple}
-			<li>{@del oaj.utils.ClasspathResourceFinderBasic}
-			<li>{@del oaj.utils.ClasspathResourceFinderRecursive}
-			<li>{@del oaj.utils.ClasspathResourceManager}
-		</ul>
-	<li>
-		New methods on {@link oaj.serializer.SerializerSession}:
-		<ul>
-			<li>{@link oaj.serializer.SerializerSession#getListener() getListener()}
-			<li>{@link oaj.serializer.SerializerSession#getListener(Class) getListener(Class)}
-		</ul>
-	<li>
-		New methods on {@link oaj.parser.ParserSession}:
-		<ul>
-			<li>{@link oaj.parser.ParserSession#getListener() getListener()}
-			<li>{@link oaj.parser.ParserSession#getListener(Class) getListener(Class)}
-		</ul>
-	<li>
-		New {@del oaj.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
-		buffering on the JSON and UON parsers so that they can be used to read continous streams of objects.
-	<li>
-		New {@del oaj.json.JsonParser#JSON_validateEnd} and {@del oaj.uon.UonParser#UON_validateEnd} 
-		settings allow you to control whether we validate that there is no garbage at the end of the parsed input.
-	<li>
-		New {@del oaj.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
-		readers passed into parsers to be automatically closed after parsing.
-	<li>
-		Syntax changed on unswap method on {@del oaj.transform.Surrogate} classes.
-		<br>It's now a regular method instead of a static method.
-	<li>
-		{@link oaj.annotation.Swap @Swap} annotation can now be used with 
-		{@del oaj.transform.Surrogate} classes.
-	<li>
-		New support for {@doc PojoBuilders POJO Builders}.	
-</ul>
-
-<h5 class='topic w800'>juneau-svl</h5>
-<ul class='spaced-list'>
-	<li>
-		New variables:
-		<ul>
-			<li>{@link oaj.svl.vars.CoalesceVar}
-			<li>{@link oaj.svl.vars.PatternMatchVar}
-			<li>{@link oaj.svl.vars.NotEmptyVar}
-			<li>{@link oaj.svl.vars.UpperCaseVar}
-			<li>{@link oaj.svl.vars.LowerCaseVar}
-		</ul>
-	<li>
-		Variables moved from <l>juneau-microservice</l>:
-		<ul>
-			<li>{@link oaj.svl.vars.ArgsVar}
-			<li>{@link oaj.svl.vars.ManifestFileVar}
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-config</h5>
-<ul class='spaced-list'>
-	<li>
-		The Config API has been completely revamped.
-		<br>New features include:
-		<ul>
-			<li>Support for pluggable storage.
-			<li>File-system watcher integration support.
-				<br>Changes made to file system files now automatically reflected in configurations
-				and interface proxies.
-			<li>New builder-based design.
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-dto</h5>
-<ul class='spaced-list'>
-	<li>
-		Enhancements to Swagger DTO:
-		<ul>
-			<li>New methods for setting and retrieving properties via name:
-				<ul>
-					<li>{@link oaj.dto.swagger.SwaggerElement#get(String,Class)}
-					<li>{@link oaj.dto.swagger.SwaggerElement#set(String,Object)}
-				</ul>
-			<li>
-				Support for setting non-standard fields such as <js>"$ref"</js> via getter and setter
-				above.
-			<li>
-				Setter methods that take in beans and collections of beans can now take in 
-				JSON strings.
-		</ul>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-server</h5>
-<ul class='spaced-list'>
-	<li>
-		<c>RestServletDefault</c> renamed to {@link oajr.BasicRestServlet}.
-	<li>
-		<c>RestServletGroupDefault</c> renamed to {@link oajr.BasicRestServletGroup}.
-	<li>
-		The <js>"$R{...}"</js> variable has been split into the following:
-		<ul>
-			<li><js>"$RA{key1[,key2...]}"</js> - {@link oajr.vars.RequestAttributeVar}, first non-null value returned by <c>HttpServletRequest.getAttribute(String)</c>.
-			<li><js>"$RF{key1[,key2...]}"</js> - {@link oajr.vars.RequestFormDataVar}, first non-null value returned by {@del oajr.RestRequest#getFormData(String)}.
-			<li><js>"$RH{key1[,key2...]}"</js> - {@link oajr.vars.RequestHeaderVar}, first non-null value returned by {@link oajr.RestRequest#getHeader(String)}.
-			<li><js>"$RI{key1[,key2...]}"</js> - {@del oajr.vars.RestInfoVar}, first non-null value returned by {@del oajr.RestRequest#getInfoProvider()}.
-				<br>The possible values are:
-				<ul>
-					<li><js>"contact"</js> - Value returned by {@link oaj.dto.swagger.Info#getContact()}
-					<li><js>"description"</js> - Value returned by {@del oajr.RestInfoProvider#getDescription(RestRequest)}
-					<li><js>"externalDocs"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getExternalDocs()}
-					<li><js>"license"</js> - Value returned by {@link oaj.dto.swagger.Info#getLicense()}
-					<li><js>"methodDescription"</js> - Value returned by {@del RestInfoProvider#getMethodDescription(Method,RestRequest)}
-					<li><js>"methodSummary"</js> - Value returned by {@del RestInfoProvider#getMethodSummary(Method,RestRequest)}
-					<li><js>"siteName"</js> - Value returned by {@del RestInfoProvider#getSiteName(RestRequest)}
-					<li><js>"tags"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getTags()}
-					<li><js>"termsOfService"</js> - Value returned by {@link oaj.dto.swagger.Info#getTermsOfService()}
-					<li><js>"title"</js> - See {@del oajr.RestInfoProvider#getTitle(RestRequest)}
-					<li><js>"version"</js> - See {@link oaj.dto.swagger.Info#getVersion()}
-				</ul>					
-			<li><js>"$RP{key1[,key2...]}"</js> - {@link oajr.vars.RequestPathVar}, first non-null value returned by {@del oajr.RestRequest#getPath(String)}.
-			<li><js>"$RQ{key1[,key2...]}"</js> - {@link oajr.vars.RequestQueryVar}, first non-null value returned by {@del RestRequest#getQuery(String)}.
-			<li><js>"$R{key1[,key2...]}"</js> - {@link oajr.vars.RequestVar}, first non-null other request variable.
-				<br>The possible values are:
-				<ul>
-					<li><js>"contextPath"</js> - Value returned by {@link oajr.RestRequest#getContextPath()}
-					<li><js>"method"</js> - Value returned by {@link oajr.RestRequest#getMethod()}
-					<li><js>"methodDescription"</js> - Value returned by {@del oajr.RestRequest#getMethodDescription()}
-					<li><js>"methodSummary"</js> - Value returned by {@del oajr.RestRequest#getMethodSummary()}
-					<li><js>"pathInfo"</js> - Value returned by {@link oajr.RestRequest#getPathInfo()}
-					<li><js>"requestParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativePathInfoParent()}
-					<li><js>"requestURI"</js> - Value returned by {@link oajr.RestRequest#getRequestURI()}
-					<li><js>"resourceDescription"</js> - Value returned by {@del oajr.RestRequest#getResourceDescription()}
-					<li><js>"resourceTitle"</js> - See {@del oajr.RestRequest#getResourceTitle()}
-					<li><js>"servletParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativeServletPathParent()}
-					<li><js>"servletPath"</js> - See {@link oajr.RestRequest#getServletPath()}
-					<li><js>"servletURI"</js> - See {@link oaj.UriContext#getRootRelativeServletPath()}
-					<li><js>"siteName"</js> - See {@del RestRequest#getSiteName()}
-				</ul>
-		</ul>
-	<li>
-		Refactored the <c>RestConfig</c> class into {@link oajr.RestContext.Builder}.
-		<br>Settings on {@link oajr.RestContext} objects can now be set declaratively through the 
-			following new properties:
-		<ul>
-			<li>{@del RestContext#REST_allowHeaderParams}
-			<li>{@del RestContext#REST_allowBodyParam}
-			<li>{@del oajr.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
-			<li>{@del oajr.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
-			<li>{@del RestContext#REST_useStackTraceHashes}
-			<li>{@del oajr.RestContext#REST_defaultCharset REST_defaultCharset}
-			<li>{@del oajr.RestContext#REST_maxInput REST_maxInput}
-			<li>{@del RestContext#REST_paramResolvers}
-			<li>{@del oajr.RestContext#REST_converters REST_converters}
-			<li>{@del oajr.RestContext#REST_guards REST_guards}
-			<li>{@del RestContext#REST_responseHandlers}
-			<li>{@del RestContext#REST_defaultRequestHeaders}
-			<li>{@del RestContext#REST_defaultResponseHeaders}
-			<li>{@del oajr.RestContext#REST_produces REST_produces}
-			<li>{@del oajr.RestContext#REST_consumes REST_consumes}
-			<li>{@del oajr.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
-			<li>{@del RestContext#REST_resourceResolver}
-			<li>{@del RestContext#REST_logger}
-			<li>{@del RestContext#REST_callHandler}
-			<li>{@del RestContext#REST_infoProvider}
-			<li>{@del oajr.RestContext#REST_path REST_path}
-			<li>{@del RestContext#REST_contextPath}
-			<li>{@del oajr.RestContext#REST_staticFiles REST_staticFiles}
-			<li>{@del RestContext#REST_staticFileResponseHeaders}
-			<li>{@del RestContext#REST_classpathResourceFinder}
-			<li>{@del RestContext#REST_useClasspathResourceCaching}
-			<li>{@del RestContext#REST_widgets}
-			<li>{@del RestContext#REST_mimeTypes}
-		</ul>
-	<li>
-		Support for static files has been simplified and improved.
-		<ul>
-			<li>Syntax on {@del @RestResource(staticFiles)} has been simplified, and
-				now allows you to specify response headers in the strings.
-			<li>Response headers for static files can also be configured through 
-				{@del RestContext#REST_staticFileResponseHeaders}
-			<li>Static file in-memory caching now configurable through 
-				{@del RestContext#REST_useClasspathResourceCaching}
-			<li>Static file retrieval can be customized through 
-				{@del RestContext#REST_classpathResourceFinder}
-		</ul>
-	<li>
-		Eliminated the <c>RestMatcherReflecting</c> class.
-		<br>You can now simply create a {@link oajr.RestMatcher} that has a public constructor that 
-		takes in the server and method arguments.
-	<li>
-		{@del @RestResource#allowMethodParam} renamed to {@del RestResource#allowedMethodParams}.
-	<li>
-		<c>@RestMethod.serializersInherit</c> and <c>@RestMethod.parsersInherit</c> replaced with
-		simplified {@del @RestMethod(inherit)}. 
-	<li>
-		Changes to {@link oajr.RequestFormData}:
-		<ul>
-			<li>{@del oajr.RequestFormData#addDefault(Map) addDefault(Map)} takes in a 
-				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-		</ul>
-	<li>
-		Changes to {@link oajr.RequestHeaders}:
-		<ul>
-			<li>{@del oajr.RequestHeaders#addDefault(Map) addDefault(Map)} takes in a 
-				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-		</ul>
-	<li>
-		Changes to {@link oajr.RequestQuery}:
-		<ul>
-			<li>{@del oajr.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
-				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-		</ul>
-	<li>
-		Changes to {@link oajr.RestContext}:
-		<ul>
-			<li><c>getResource(String,Locale)</c> renamed to {@del getClasspathResource(String,Locale)}
-			<li><c>getResourceAsString(String,Locale)</c> renamed to {@del getClasspathResourceAsString(String,Locale)}
-			<li><c>getResource(Class,MediaType,String,Locale)</c> renamed to {@del getClasspathResourceAsString(Class,MediaType,String,Locale)}
-			<li>New method {@del getClasspathResource(Class,String,Locale)}.
-			<li>New method {@del getClasspathResourceAsString(Class,String,Locale)}.
-			<li>New method {@del getClasspathResource(Class,Class,MediaType,String,Locale)}.
-			<li>{@del RestContext#getDefaultRequestHeaders()} returns a 
-				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-			<li>{@del RestContext#getDefaultResponseHeaders()} returns a 
-				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-		</ul>
-	<li>
-		Changes to {@link oajr.RestRequest}:
-		<ul>	
-			<li><c>getSupportedMediaTypes()</c> replaced with
-				{@del oajr.RestRequest#getConsumes() getConsumes()} and
-				{@del oajr.RestRequest#getProduces() getProduces()}.
-			<li><c>getReaderResource(String,boolean,MediaType)</c> renamed to 
-				{@del getClasspathReaderResource(String,boolean,MediaType)}
-			<li><c>getReaderResource(String,boolean)</c> renamed to 
-				{@del getClasspathHttpResource(String,boolean)}
-			<li><c>getReaderResource(String)</c> renamed to 
-				{@del getClasspathHttpResource(String)}
-		</ul>
-	<li>
-		Changes to {@del @RestResource}
-		<ul>
-			<li>New {@del mimeTypes()} annotation.
-		</ul>
-	<li>
-		Changes to {@del oajr.annotation.RestMethod @RestMethod}:
-		<ul>
-			<li>New {@del oajr.annotation.RestMethod#consumes() consumes()} and
-				{@del oajr.annotation.RestMethod#produces() produces()}
-				for overriding the supported media types inferred from the serializers and parsers.
-		</ul>
-	<li>
-		<c>RestCallHandler</c> split up into {@del oajr.RestCallHandler} and 
-		{@del BasicRestCallHandler}
-	<li>
-		<c>RestInfoProvider</c> split up into {@del oajr.RestInfoProvider} and 
-		{@del oajr.BasicRestInfoProvider}
-	<li>
-		<c>RestLogger</c> split up into {@del oajr.RestLogger}, 
-		{@del oajr.BasicRestLogger} and {@del oajr.NoOpRestLogger}
-	<li>
-		<c>RestResourceResolverSimple</c> renamed to {@del oajr.BasicRestResourceResolver}
-	<li>
-		Introduced the following classes that helps make the code more understandable:
-		<ul>
-			<li>{@del oajr.RestContextProperties}
-			<li>{@del oajr.RestMethodProperties}
-			<li>{@del oajr.RequestProperties}
-		</ul>
-	<li>
-		Eliminated the <c>@Messages</c> and <c>@Properties</c> REST java method parameter
-		annotations.
-		<br>These aren't needed anymore since you can just pass in <c>MessageBundle</c> and
-		<c>RestRequestProperties</c> as unannotated parameters.
-	<li>
-		Revamped the {@del oajr.RestInfoProvider} class.
-	<li>
-		New builder classes:
-		<ul>
-			<li>{@del ReaderResourceBuilder}
-			<li>{@del StreamResourceBuilder}
-		</ul>
-	<li>
-		{@link oajr.RestResponse#getNegotiatedOutputStream()} now returns a 
-		{@del FinishableServletOutputStream} and {@link oajr.RestResponse#getNegotiatedWriter()}
-		now returns a {@del FinishablePrintWriter} that allows you to finish the output
-		without closing the stream.
-		<br>The {@del oajr.reshandlers.DefaultHandler} class now calls <c>finish()</c>
-		instead of <c>close()</c> on the stream.
-	<li>
-		Added the following annotations to the {@link oajr.BasicRestServlet} class
-		(which were previously defined on the {@del Resource} class):
-		<p class='bcode w800'>
-	<ja>@RestResource</ja>(
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			},
-			stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>
-		),
-		
-		<jc>// Optional external configuration file.</jc>
-		config=<js>"$S{juneau.configFile}"</js>
-	)
-		</p>
-</ul>
-
-<h5 class='topic w800'>juneau-rest-client</h5>
-<ul class='spaced-list'>
-	<li>
-		New configuration property {@del oajrc.RestClient#RESTCLIENT_query} and
-		builder method {@del oajrc.RestClient.Builder#query(String,Object)}.
-	<li>
-		API changes to replace <c>PartSerializer</c> with {@link oaj.httppart.HttpPartSerializer}.
-		<br>The default value is now {@del SimpleUonPartSerializer} which will
-		serialize strings as plain-text and collections/arrays as comma-delimited lists.
-		<br>We decided to change the default behavior in favor of practicality over purity.
-	<li>
-		New methods on {@del oajrc.RestCall} class:
-		<ul>
-			<li>{@del oajrc.RestCall#getResponseHeader(String) getResponseHeader(String)}
-			<li>{@del oajrc.RestCall#getResponseCode() getResponseCode()}
-		</ul>
-	<li>
-		{@del oajrc.RestCall} and {@link oajrc.RestClient}
-		now implement the <c>Closeable</c> interface.
-</ul>
-
-<h5 class='topic w800'>juneau-microservice</h5>
-<ul class='spaced-list'>
-	<li>
-		<c>Resource</c> and <c>ResourceGroup</c> classes removed.
-		<br>{@link oajr.BasicRestServlet} and {@link oajr.BasicRestServletGroup} can be used instead.
-	<li>
-		<c>ResourceJena</c> and <c>ResourceJenaGroup</c> classes renamed to
-		{@del BasicRestServletJena} and {@del BasicRestServletJenaGroup}.
-</ul>
+			Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
+		<li>	
+			<c>Context.Builder.property(String,Object)</c> renamed to {@del oaj.Context.Builder#set(String,Object)}.
+		<li>
+			<c>ResourceFinder</c> class has been replaced with the following:
+			<ul>
+				<li>{@del oaj.utils.ClasspathResourceFinder}
+				<li>{@del oaj.utils.ClasspathResourceFinderSimple}
+				<li>{@del oaj.utils.ClasspathResourceFinderBasic}
+				<li>{@del oaj.utils.ClasspathResourceFinderRecursive}
+				<li>{@del oaj.utils.ClasspathResourceManager}
+			</ul>
+		<li>
+			New methods on {@link oaj.serializer.SerializerSession}:
+			<ul>
+				<li>{@link oaj.serializer.SerializerSession#getListener() getListener()}
+				<li>{@link oaj.serializer.SerializerSession#getListener(Class) getListener(Class)}
+			</ul>
+		<li>
+			New methods on {@link oaj.parser.ParserSession}:
+			<ul>
+				<li>{@link oaj.parser.ParserSession#getListener() getListener()}
+				<li>{@link oaj.parser.ParserSession#getListener(Class) getListener(Class)}
+			</ul>
+		<li>
+			New {@del oaj.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
+			buffering on the JSON and UON parsers so that they can be used to read continous streams of objects.
+		<li>
+			New {@del oaj.json.JsonParser#JSON_validateEnd} and {@del oaj.uon.UonParser#UON_validateEnd} 
+			settings allow you to control whether we validate that there is no garbage at the end of the parsed input.
+		<li>
+			New {@del oaj.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
+			readers passed into parsers to be automatically closed after parsing.
+		<li>
+			Syntax changed on unswap method on {@del oaj.transform.Surrogate} classes.
+			<br>It's now a regular method instead of a static method.
+		<li>
+			{@link oaj.annotation.Swap @Swap} annotation can now be used with 
+			{@del oaj.transform.Surrogate} classes.
+		<li>
+			New support for {@doc PojoBuilders POJO Builders}.	
+	</ul>
+	
+	<h5 class='topic w800'>juneau-svl</h5>
+	<ul class='spaced-list'>
+		<li>
+			New variables:
+			<ul>
+				<li>{@link oaj.svl.vars.CoalesceVar}
+				<li>{@link oaj.svl.vars.PatternMatchVar}
+				<li>{@link oaj.svl.vars.NotEmptyVar}
+				<li>{@link oaj.svl.vars.UpperCaseVar}
+				<li>{@link oaj.svl.vars.LowerCaseVar}
+			</ul>
+		<li>
+			Variables moved from <l>juneau-microservice</l>:
+			<ul>
+				<li>{@link oaj.svl.vars.ArgsVar}
+				<li>{@link oaj.svl.vars.ManifestFileVar}
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-config</h5>
+	<ul class='spaced-list'>
+		<li>
+			The Config API has been completely revamped.
+			<br>New features include:
+			<ul>
+				<li>Support for pluggable storage.
+				<li>File-system watcher integration support.
+					<br>Changes made to file system files now automatically reflected in configurations
+					and interface proxies.
+				<li>New builder-based design.
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-dto</h5>
+	<ul class='spaced-list'>
+		<li>
+			Enhancements to Swagger DTO:
+			<ul>
+				<li>New methods for setting and retrieving properties via name:
+					<ul>
+						<li>{@link oaj.dto.swagger.SwaggerElement#get(String,Class)}
+						<li>{@link oaj.dto.swagger.SwaggerElement#set(String,Object)}
+					</ul>
+				<li>
+					Support for setting non-standard fields such as <js>"$ref"</js> via getter and setter
+					above.
+				<li>
+					Setter methods that take in beans and collections of beans can now take in 
+					JSON strings.
+			</ul>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-server</h5>
+	<ul class='spaced-list'>
+		<li>
+			<c>RestServletDefault</c> renamed to {@link oajr.BasicRestServlet}.
+		<li>
+			<c>RestServletGroupDefault</c> renamed to {@link oajr.BasicRestServletGroup}.
+		<li>
+			The <js>"$R{...}"</js> variable has been split into the following:
+			<ul>
+				<li><js>"$RA{key1[,key2...]}"</js> - {@link oajr.vars.RequestAttributeVar}, first non-null value returned by <c>HttpServletRequest.getAttribute(String)</c>.
+				<li><js>"$RF{key1[,key2...]}"</js> - {@link oajr.vars.RequestFormDataVar}, first non-null value returned by {@del oajr.RestRequest#getFormData(String)}.
+				<li><js>"$RH{key1[,key2...]}"</js> - {@link oajr.vars.RequestHeaderVar}, first non-null value returned by {@link oajr.RestRequest#getHeader(String)}.
+				<li><js>"$RI{key1[,key2...]}"</js> - {@del oajr.vars.RestInfoVar}, first non-null value returned by {@del oajr.RestRequest#getInfoProvider()}.
+					<br>The possible values are:
+					<ul>
+						<li><js>"contact"</js> - Value returned by {@link oaj.dto.swagger.Info#getContact()}
+						<li><js>"description"</js> - Value returned by {@del oajr.RestInfoProvider#getDescription(RestRequest)}
+						<li><js>"externalDocs"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getExternalDocs()}
+						<li><js>"license"</js> - Value returned by {@link oaj.dto.swagger.Info#getLicense()}
+						<li><js>"methodDescription"</js> - Value returned by {@del RestInfoProvider#getMethodDescription(Method,RestRequest)}
+						<li><js>"methodSummary"</js> - Value returned by {@del RestInfoProvider#getMethodSummary(Method,RestRequest)}
+						<li><js>"siteName"</js> - Value returned by {@del RestInfoProvider#getSiteName(RestRequest)}
+						<li><js>"tags"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getTags()}
+						<li><js>"termsOfService"</js> - Value returned by {@link oaj.dto.swagger.Info#getTermsOfService()}
+						<li><js>"title"</js> - See {@del oajr.RestInfoProvider#getTitle(RestRequest)}
+						<li><js>"version"</js> - See {@link oaj.dto.swagger.Info#getVersion()}
+					</ul>					
+				<li><js>"$RP{key1[,key2...]}"</js> - {@link oajr.vars.RequestPathVar}, first non-null value returned by {@del oajr.RestRequest#getPath(String)}.
+				<li><js>"$RQ{key1[,key2...]}"</js> - {@link oajr.vars.RequestQueryVar}, first non-null value returned by {@del RestRequest#getQuery(String)}.
+				<li><js>"$R{key1[,key2...]}"</js> - {@link oajr.vars.RequestVar}, first non-null other request variable.
+					<br>The possible values are:
+					<ul>
+						<li><js>"contextPath"</js> - Value returned by {@link oajr.RestRequest#getContextPath()}
+						<li><js>"method"</js> - Value returned by {@link oajr.RestRequest#getMethod()}
+						<li><js>"methodDescription"</js> - Value returned by {@del oajr.RestRequest#getMethodDescription()}
+						<li><js>"methodSummary"</js> - Value returned by {@del oajr.RestRequest#getMethodSummary()}
+						<li><js>"pathInfo"</js> - Value returned by {@link oajr.RestRequest#getPathInfo()}
+						<li><js>"requestParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativePathInfoParent()}
+						<li><js>"requestURI"</js> - Value returned by {@link oajr.RestRequest#getRequestURI()}
+						<li><js>"resourceDescription"</js> - Value returned by {@del oajr.RestRequest#getResourceDescription()}
+						<li><js>"resourceTitle"</js> - See {@del oajr.RestRequest#getResourceTitle()}
+						<li><js>"servletParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativeServletPathParent()}
+						<li><js>"servletPath"</js> - See {@link oajr.RestRequest#getServletPath()}
+						<li><js>"servletURI"</js> - See {@link oaj.UriContext#getRootRelativeServletPath()}
+						<li><js>"siteName"</js> - See {@del RestRequest#getSiteName()}
+					</ul>
+			</ul>
+		<li>
+			Refactored the <c>RestConfig</c> class into {@link oajr.RestContext.Builder}.
+			<br>Settings on {@link oajr.RestContext} objects can now be set declaratively through the 
+				following new properties:
+			<ul>
+				<li>{@del RestContext#REST_allowHeaderParams}
+				<li>{@del RestContext#REST_allowBodyParam}
+				<li>{@del oajr.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
+				<li>{@del oajr.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
+				<li>{@del RestContext#REST_useStackTraceHashes}
+				<li>{@del oajr.RestContext#REST_defaultCharset REST_defaultCharset}
+				<li>{@del oajr.RestContext#REST_maxInput REST_maxInput}
+				<li>{@del RestContext#REST_paramResolvers}
+				<li>{@del oajr.RestContext#REST_converters REST_converters}
+				<li>{@del oajr.RestContext#REST_guards REST_guards}
+				<li>{@del RestContext#REST_responseHandlers}
+				<li>{@del RestContext#REST_defaultRequestHeaders}
+				<li>{@del RestContext#REST_defaultResponseHeaders}
+				<li>{@del oajr.RestContext#REST_produces REST_produces}
+				<li>{@del oajr.RestContext#REST_consumes REST_consumes}
+				<li>{@del oajr.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
+				<li>{@del RestContext#REST_resourceResolver}
+				<li>{@del RestContext#REST_logger}
+				<li>{@del RestContext#REST_callHandler}
+				<li>{@del RestContext#REST_infoProvider}
+				<li>{@del oajr.RestContext#REST_path REST_path}
+				<li>{@del RestContext#REST_contextPath}
+				<li>{@del oajr.RestContext#REST_staticFiles REST_staticFiles}
+				<li>{@del RestContext#REST_staticFileResponseHeaders}
+				<li>{@del RestContext#REST_classpathResourceFinder}
+				<li>{@del RestContext#REST_useClasspathResourceCaching}
+				<li>{@del RestContext#REST_widgets}
+				<li>{@del RestContext#REST_mimeTypes}
+			</ul>
+		<li>
+			Support for static files has been simplified and improved.
+			<ul>
+				<li>Syntax on {@del @RestResource(staticFiles)} has been simplified, and
+					now allows you to specify response headers in the strings.
+				<li>Response headers for static files can also be configured through 
+					{@del RestContext#REST_staticFileResponseHeaders}
+				<li>Static file in-memory caching now configurable through 
+					{@del RestContext#REST_useClasspathResourceCaching}
+				<li>Static file retrieval can be customized through 
+					{@del RestContext#REST_classpathResourceFinder}
+			</ul>
+		<li>
+			Eliminated the <c>RestMatcherReflecting</c> class.
+			<br>You can now simply create a {@link oajr.RestMatcher} that has a public constructor that 
+			takes in the server and method arguments.
+		<li>
+			{@del @RestResource#allowMethodParam} renamed to {@del RestResource#allowedMethodParams}.
+		<li>
+			<c>@RestMethod.serializersInherit</c> and <c>@RestMethod.parsersInherit</c> replaced with
+			simplified {@del @RestMethod(inherit)}. 
+		<li>
+			Changes to {@link oajr.RequestFormData}:
+			<ul>
+				<li>{@del oajr.RequestFormData#addDefault(Map) addDefault(Map)} takes in a 
+					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
+			</ul>
+		<li>
+			Changes to {@link oajr.RequestHeaders}:
+			<ul>
+				<li>{@del oajr.RequestHeaders#addDefault(Map) addDefault(Map)} takes in a 
+					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
+			</ul>
+		<li>
+			Changes to {@link oajr.RequestQuery}:
+			<ul>
+				<li>{@del oajr.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
+					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
+			</ul>
+		<li>
+			Changes to {@link oajr.RestContext}:
+			<ul>
+				<li><c>getResource(String,Locale)</c> renamed to {@del getClasspathResource(String,Locale)}
+				<li><c>getResourceAsString(String,Locale)</c> renamed to {@del getClasspathResourceAsString(String,Locale)}
+				<li><c>getResource(Class,MediaType,String,Locale)</c> renamed to {@del getClasspathResourceAsString(Class,MediaType,String,Locale)}
+				<li>New method {@del getClasspathResource(Class,String,Locale)}.
+				<li>New method {@del getClasspathResourceAsString(Class,String,Locale)}.
+				<li>New method {@del getClasspathResource(Class,Class,MediaType,String,Locale)}.
+				<li>{@del RestContext#getDefaultRequestHeaders()} returns a 
+					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
+				<li>{@del RestContext#getDefaultResponseHeaders()} returns a 
+					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
+			</ul>
+		<li>
+			Changes to {@link oajr.RestRequest}:
+			<ul>	
+				<li><c>getSupportedMediaTypes()</c> replaced with
+					{@del oajr.RestRequest#getConsumes() getConsumes()} and
+					{@del oajr.RestRequest#getProduces() getProduces()}.
+				<li><c>getReaderResource(String,boolean,MediaType)</c> renamed to 
+					{@del getClasspathReaderResource(String,boolean,MediaType)}
+				<li><c>getReaderResource(String,boolean)</c> renamed to 
+					{@del getClasspathHttpResource(String,boolean)}
+				<li><c>getReaderResource(String)</c> renamed to 
+					{@del getClasspathHttpResource(String)}
+			</ul>
+		<li>
+			Changes to {@del @RestResource}
+			<ul>
+				<li>New {@del mimeTypes()} annotation.
+			</ul>
+		<li>
+			Changes to {@del oajr.annotation.RestMethod @RestMethod}:
+			<ul>
+				<li>New {@del oajr.annotation.RestMethod#consumes() consumes()} and
+					{@del oajr.annotation.RestMethod#produces() produces()}
+					for overriding the supported media types inferred from the serializers and parsers.
+			</ul>
+		<li>
+			<c>RestCallHandler</c> split up into {@del oajr.RestCallHandler} and 
+			{@del BasicRestCallHandler}
+		<li>
+			<c>RestInfoProvider</c> split up into {@del oajr.RestInfoProvider} and 
+			{@del oajr.BasicRestInfoProvider}
+		<li>
+			<c>RestLogger</c> split up into {@del oajr.RestLogger}, 
+			{@del oajr.BasicRestLogger} and {@del oajr.NoOpRestLogger}
+		<li>
+			<c>RestResourceResolverSimple</c> renamed to {@del oajr.BasicRestResourceResolver}
+		<li>
+			Introduced the following classes that helps make the code more understandable:
+			<ul>
+				<li>{@del oajr.RestContextProperties}
+				<li>{@del oajr.RestMethodProperties}
+				<li>{@del oajr.RequestProperties}
+			</ul>
+		<li>
+			Eliminated the <c>@Messages</c> and <c>@Properties</c> REST java method parameter
+			annotations.
+			<br>These aren't needed anymore since you can just pass in <c>MessageBundle</c> and
+			<c>RestRequestProperties</c> as unannotated parameters.
+		<li>
+			Revamped the {@del oajr.RestInfoProvider} class.
+		<li>
+			New builder classes:
+			<ul>
+				<li>{@del ReaderResourceBuilder}
+				<li>{@del StreamResourceBuilder}
+			</ul>
+		<li>
+			{@link oajr.RestResponse#getNegotiatedOutputStream()} now returns a 
+			{@del FinishableServletOutputStream} and {@link oajr.RestResponse#getNegotiatedWriter()}
+			now returns a {@del FinishablePrintWriter} that allows you to finish the output
+			without closing the stream.
+			<br>The {@del oajr.reshandlers.DefaultHandler} class now calls <c>finish()</c>
+			instead of <c>close()</c> on the stream.
+		<li>
+			Added the following annotations to the {@link oajr.BasicRestServlet} class
+			(which were previously defined on the {@del Resource} class):
+			<p class='bcode w800'>
+		<ja>@RestResource</ja>(
+			htmldoc=<ja>@HtmlDoc</ja>(
+				navlinks={
+					<js>"up: request:/.."</js>,
+					<js>"options: servlet:/?method=OPTIONS"</js>
+				},
+				stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>
+			),
+			
+			<jc>// Optional external configuration file.</jc>
+			config=<js>"$S{juneau.configFile}"</js>
+		)
+			</p>
+	</ul>
+	
+	<h5 class='topic w800'>juneau-rest-client</h5>
+	<ul class='spaced-list'>
+		<li>
+			New configuration property {@del oajrc.RestClient#RESTCLIENT_query} and
+			builder method {@del oajrc.RestClient.Builder#query(String,Object)}.
+		<li>
+			API changes to replace <c>PartSerializer</c> with {@link oaj.httppart.HttpPartSerializer}.
+			<br>The default value is now {@del SimpleUonPartSerializer} which will
+			serialize strings as plain-text and collections/arrays as comma-delimited lists.
+			<br>We decided to change the default behavior in favor of practicality over purity.
+		<li>
+			New methods on {@del oajrc.RestCall} class:
+			<ul>
+				<li>{@del oajrc.RestCall#getResponseHeader(String) getResponseHeader(String)}
+				<li>{@del oajrc.RestCall#getResponseCode() getResponseCode()}
+			</ul>
+		<li>
+			{@del oajrc.RestCall} and {@link oajrc.RestClient}
+			now implement the <c>Closeable</c> interface.
+	</ul>
+	
+	<h5 class='topic w800'>juneau-microservice</h5>
+	<ul class='spaced-list'>
+		<li>
+			<c>Resource</c> and <c>ResourceGroup</c> classes removed.
+			<br>{@link oajr.BasicRestServlet} and {@link oajr.BasicRestServletGroup} can be used instead.
+		<li>
+			<c>ResourceJena</c> and <c>ResourceJenaGroup</c> classes renamed to
+			{@del BasicRestServletJena} and {@del BasicRestServletJenaGroup}.
+	</ul>
+</div>

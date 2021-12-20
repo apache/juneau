@@ -27,34 +27,34 @@
 		A typical pattern is to define a REST API on the server side:
 	</p>
 	<p class='bcode w800'>	
-	<ja>@Rest</ja>(path=<js>"/petstore"</js>)
-	<jk>public class</jk> PetStore {
-		
-		<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
-		<jk>public</jk> Ok addPet(
-			<ja>@Body</ja> CreatePet <jv>createPetBean</jv>, 
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
-		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
-			<jc>// Process request.</jc>
-			<jk>return</jk> Ok.<jsf>OK</jsf>;  <jc>// Standard 400-OK response.</jc>
-		}
-	}
+		|	<ja>@Rest</ja>(path=<js>"/petstore"</js>)
+		|	<jk>public class</jk> PetStore {
+		|		
+		|		<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
+		|		<jk>public</jk> Ok addPet(
+		|			<ja>@Body</ja> CreatePet <jv>createPetBean</jv>, 
+		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
+		|			<jc>// Process request.</jc>
+		|			<jk>return</jk> Ok.<jsf>OK</jsf>;  <jc>// Standard 400-OK response.</jc>
+		|		}
+		|	}
 	</p>	
 	<p>
 		Then define a Java interface that can be provided to consumers of your API to access your REST API:
 	</p>
 	<p class='bcode w800'>	
-	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
-	<jk>public interface</jk> PetStoreService {
-		
-		<ja>@RemotePost</ja>(<js>"/pets"</js>)
-		Ok addPet(
-			<ja>@Body</ja> CreatePet <jv>createPet</jv>, 
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
-		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError;
-	}
+		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+		|	<jk>public interface</jk> PetStoreService {
+		|		
+		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
+		|		Ok addPet(
+		|			<ja>@Body</ja> CreatePet <jv>createPet</jv>, 
+		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError;
+		|	}
 	</p>
 	<p>
 		Note that you may choose to have your service class implement your interface.  The REST libraries will
@@ -64,34 +64,33 @@
 	<p>
 		Finally, the {@link oajrc.RestClient} class is used to construct a remote proxy to our REST service:
 	<p class='bcode w800'>	
-	<jc>// Use a RestClient with default Simple JSON support and BASIC auth.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().basicAuth(...).build();
-	
-	<jc>// Instantiate our proxy interface.</jc>
-	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-	
-	<jc>// Use it to create a pet.</jc>
-	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
-	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+		|	<jc>// Use a RestClient with default Simple JSON support and BASIC auth.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().basicAuth(...).build();
+		|	
+		|	<jc>// Instantiate our proxy interface.</jc>
+		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		|	
+		|	<jc>// Use it to create a pet.</jc>
+		|	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+		|	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 	</p>
 	<p>
 		The call above translates to the following REST call:
 	</p>
 	<p class='bcode w800'>
-	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
-	Accept: application/json
-	Content-Type: application/json
-	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-	E-Tag: 475588d4-0b27-4f56-9296-cc683251d314
-	
-	{
-		name: 'Fluffy',
-		price: 9.99 
-	}
+		|	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
+		|	Accept: application/json
+		|	Content-Type: application/json
+		|	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+		|	E-Tag: 475588d4-0b27-4f56-9296-cc683251d314
+		|	
+		|	{
+		|		name: 'Fluffy',
+		|		price: 9.99 
+		|	}
 	</p>
 	<p>
 		It looks simplistic, but the server and client APIs are highly sophisticated libraries that allow you
 		to perform complex tasks using very little code.
 	</p>
 </div>
-	

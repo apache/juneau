@@ -104,7 +104,7 @@ public @interface Marshalled {
 	 *
 	 * <p>
 	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation to REST methods:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Class with explicit annotation.</jc>
 	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public class</jk> A {...}

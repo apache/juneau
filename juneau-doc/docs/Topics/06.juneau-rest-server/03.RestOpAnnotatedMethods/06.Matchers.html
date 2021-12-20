@@ -15,56 +15,58 @@
 
 {title:'Matchers', updated:'9.0.0'}
 
-<p>
-	{@link oajr.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
-	tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
-	header value.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// GET method that gets invoked for administrators</jc>
-	<ja>@RestGet</ja>(path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
-	<jk>public</jk> Object doGetForAdmin() {
-		...
-	}
-
-	<jc>// GET method that gets invoked for everyone else</jc>
-	<ja>@RestGet</ja>(<js>"/*"</js>)
-	<jk>public</jk> Object doGetForEveryoneElse() {
-		...
-	}
-</p>
-<p>
-	The interface for matchers is simple:
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> IsAdminMatcher <jk>extends</jk> RestMatcher {
-
-		<ja>@Override</ja> <jc>/* RestMatcher */</jc>
-		<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
-			<jk>return</jk> <jv>req</jv>.isUserInRole(<js>"ADMINS_GROUP"</js>);
-		}
-	}
-</p>
-
-<ul class='notes'>
-	<li class='note'>
-		If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
-	<li class='note'>
-		If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the 
-		method to be invoked.
-	<li class='note'>
-		Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
-		<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and 
-		<l>"/foo/{baz}"</l>).
-		<br>If you try to do so, a <l>ServletException</l> will be thrown on startup.
-	<li class='note'>
-		Methods with matchers take precedence over methods without.
-		<br>Otherwise, methods are attempted in the order they appear in the class.
-</ul>
-
-<ul class='seealso'>
-	<li class='ja'>{@link oajr.annotation.RestOp#matchers RestOp(matchers)}
-	<li class='jc'>{@link oajr.matchers.MultipartFormDataMatcher}
-	<li class='jc'>{@link oajr.matchers.UrlEncodedFormMatcher}
-</ul>
+<div class='topic'>
+	<p>
+		{@link oajr.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
+		tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
+		header value.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// GET method that gets invoked for administrators</jc>
+		|	<ja>@RestGet</ja>(path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
+		|	<jk>public</jk> Object doGetForAdmin() {
+		|		...
+		|	}
+		|
+		|	<jc>// GET method that gets invoked for everyone else</jc>
+		|	<ja>@RestGet</ja>(<js>"/*"</js>)
+		|	<jk>public</jk> Object doGetForEveryoneElse() {
+		|		...
+		|	}
+	</p>
+	<p>
+		The interface for matchers is simple:
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> IsAdminMatcher <jk>extends</jk> RestMatcher {
+		|
+		|		<ja>@Override</ja> <jc>/* RestMatcher */</jc>
+		|		<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
+		|			<jk>return</jk> <jv>req</jv>.isUserInRole(<js>"ADMINS_GROUP"</js>);
+		|		}
+		|	}
+	</p>
+	
+	<ul class='notes'>
+		<li class='note'>
+			If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
+		<li class='note'>
+			If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the 
+			method to be invoked.
+		<li class='note'>
+			Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
+			<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and 
+			<l>"/foo/{baz}"</l>).
+			<br>If you try to do so, a <l>ServletException</l> will be thrown on startup.
+		<li class='note'>
+			Methods with matchers take precedence over methods without.
+			<br>Otherwise, methods are attempted in the order they appear in the class.
+	</ul>
+	
+	<ul class='seealso'>
+		<li class='ja'>{@link oajr.annotation.RestOp#matchers RestOp(matchers)}
+		<li class='jc'>{@link oajr.matchers.MultipartFormDataMatcher}
+		<li class='jc'>{@link oajr.matchers.UrlEncodedFormMatcher}
+	</ul>
+</div>

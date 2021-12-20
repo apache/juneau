@@ -1,0 +1,93 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'BasicRestServlet', updated:'8.1.0', flags:'todo'}
+
+<div class='topic'>
+	<p>
+		Any subclass of {@link oajr.BasicRestServlet} gets an auto-generated Swagger UI when performing an <c>OPTIONS</c>
+		request with <c>Accept:text/html</c>.
+	</p>
+	<p>
+		The underlying mechanics are simple.  
+		The {@link oajr.BasicRestServlet#getSwagger(RestRequest)} method returns a {@link oaj.dto.swagger.Swagger} bean
+		consisting of information gathered from annotations and other sources.
+		Then that bean is swapped for a {@link oaj.dto.swagger.ui.SwaggerUI} bean when rendered as HTML.
+	</p>
+	<p>
+		Here's the class that defines the behavior:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Rest</ja>(
+		|	
+		|		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
+		|		allowedMethodParams=<js>"OPTIONS"</js>,
+		|	
+		|		...
+		|	)
+		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+		|	
+		|		<jd>/**
+		|		 * [OPTIONS /*] - Show resource options.
+		|		 *
+		|		 * <ja>@param</ja> req The HTTP request.
+		|		 * <ja>@return</ja> A bean containing the contents for the OPTIONS page.
+		|		 */</jd>
+		|		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+		|			
+		|			summary=<js>"Swagger documentation"</js>,
+		|			description=<js>"Swagger documentation for this resource."</js>,
+		|			
+		|			htmldoc=<ja>@HtmlDoc</ja>(
+		|				<jc>// Override the nav links for the swagger page.</jc>
+		|				navlinks={
+		|					<js>"back: servlet:/"</js>,
+		|					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
+		|				},
+		|				<jc>// Never show aside contents of page inherited from class.</jc>
+		|				aside=<js>"NONE"</js>
+		|			)
+		|		)
+		|		<ja>@JsonSchemaConfig</ja>(
+		|			<jc>// Add descriptions to the following types when not specified:</jc>
+		|			addDescriptionsTo=<js>"bean,collection,array,map,enum"</js>,
+		|			<jc>// Add x-example to the following types:</jc>
+		|			addExamplesTo=<js>"bean,collection,array,map"</js>,
+		|			<jc>// Don't generate schema information on the Swagger bean itself or HTML beans.</jc>
+		|			ignoreTypes=<js>"Swagger,org.apache.juneau.dto.html5.*"</js>,
+		|			<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
+		|			useBeanDefs=<js>"true"</js>
+		|		)
+		|		<ja>@BeanConfig</ja>(
+		|			<jc>// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</jc>
+		|			ignoreUnknownBeanProperties=<js>"true"</js>,
+		|			<jc>// POJO swaps to apply to all serializers/parsers on this method.</jc>
+		|			swaps={
+		|				<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+		|				<jc>// This is a per-media-type swap that only applies to text/html requests.</jc>
+		|				SwaggerUI.<jk>class</jk>
+		|			}
+		|		)
+		|		<jk>public</jk> Swagger getOptions(RestRequest <jv>req</jv>) {
+		|			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
+		|			<jk>return</jk> <jv>req</jv>.getSwagger();
+		|		}
+		|	}
+	</p>
+	<p>
+		Note that to have your resource create Swagger UI, you must either extend from {@link oajr.BasicRestServlet} or provide
+		your own <ja>@RestOp</ja>-annotated method that returns a {@link oaj.dto.swagger.Swagger} object and a {@link oaj.dto.swagger.ui.SwaggerUI} swap.
+	</p>
+</div>

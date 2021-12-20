@@ -19,6 +19,58 @@ import org.apache.juneau.serializer.annotation.*;
 
 /**
  * Basic configuration for a REST resource that supports OpenAPI transport.
+ *
+ * <p>
+ * 	Default settings defined:
+ * </p>
+ * <ul class='spaced-list'>
+ * 	<li>{@link Rest @Rest}:
+ * 		<ul>
+ * 			<li><c>{@link Rest#serializers() serializers}=</c>
+ * 				<ul class='javatreec'>
+ * 					<li class='jc'>{@link OpenApiSerializer}
+ * 				</ul>
+ * 			</li>
+ * 			<li><c>{@link Rest#parsers() parsers}=</c>
+ * 				<ul class='javatreec'>
+ * 					<li class='jc'>{@link OpenApiParser}
+ * 				</ul>
+ * 			</li>
+ * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/openapi"</c></li>
+ * 			<li><c>{@link Rest#config() config}=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}</js>"</c></li>
+ *		</ul>
+ *	</li>
+ * 	<li>{@link BeanConfig @BeanConfig}:
+ * 		<ul>
+ * 			<li><c>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}=<js>"true"</js></c></li>
+ * 		</ul>
+ * 	</li>
+ * 	<li>{@link SerializerConfig @SerializerConfig}:
+ * 		<ul>
+ * 			<li><c>{@link SerializerConfig#uriResolution() uriResolution}=<js>"ROOT_RELATIVE"</js></c></li>
+ * 		</ul>
+ * 	</li>
+ * </ul>
+ *
+ * <p>
+ * 	This annotation can be applied to REST resource classes to define common OpenAPI default configurations:
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Used on a top-level resource.</jc>
+ * 	<ja>@Rest</ja>
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicOpenApiRest { ... }
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Used on a child resource.</jc>
+ * 	<ja>@Rest</ja>
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicOpenApiRest { ... }
+ * </p>
+ *
+ * <p>
+ * 	Note that the framework will aggregate annotations defined on all classes in the class hierarchy with
+ * 	values defined on child classes overriding values defined on parent classes.  That allows any values defined
+ * 	on this interface to be overridden by annotations defined on the implemented class.
+ * </p>
  */
 @Rest(
 
@@ -37,12 +89,12 @@ import org.apache.juneau.serializer.annotation.*;
 	// Optional external configuration file.
 	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
 )
-@SerializerConfig(
-	// Enable automatic resolution of URI objects to root-relative values.
-	uriResolution="ROOT_RELATIVE"
-)
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
 	ignoreUnknownBeanProperties="true"
+)
+@SerializerConfig(
+	// Enable automatic resolution of URI objects to root-relative values.
+	uriResolution="ROOT_RELATIVE"
 )
 public interface BasicOpenApiRest {}

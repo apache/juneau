@@ -87,8 +87,8 @@ h3.topic { font-size:13pt; }
 h4.topic { font-size:12pt; }
 h5.topic { font-size:11pt; }
 .topic p { max-width:800px; }
-.topic ul li, .topic ol li { max-width:750px; }
-div.topic { margin-left:10px; }
+/*.topic ul li, .topic ol li { max-width:750px; }*/
+div.topic { margin-left:10px; max-width:950px; }
 
 h5.figure { color:#2c4557; margin-left:30px; margin-right:30px; margin-top:10px; margin-bottom:0px; font-style:italic; }
 

@@ -15,19 +15,21 @@
 
 5.0.0.11 (Mar 8, 2013)
 
-<p>
-	Juno 5.0.0.11 is a moderate update.
-</p>
-<h5 class='topic w800'>REST server API changes</h5>
-<ul class='spaced-list'>
-	<li>	
-		New <c>UrlEncodingRestSerializer</c> and <c>UrlEncodingRestParser</c> classes.<br>
-		Allows parsing form posts directly to POJOs.
-	</li>
-	<li>
-		Support for <c>Accept</c> and <c>Content-Type</c> <js>"application/x-www-form-urlencoded"</js> added by default on {@link oajr.BasicRestServlet}.
-	</li>
-	<li>
-		New {@del RestServlet#renderError(HttpServletRequest,HttpServletResponse,RestException)} method to allow customized handling of response errors.
-	</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.11 is a moderate update.
+	</p>
+	<h5 class='topic w800'>REST server API changes</h5>
+	<ul class='spaced-list'>
+		<li>	
+			New <c>UrlEncodingRestSerializer</c> and <c>UrlEncodingRestParser</c> classes.<br>
+			Allows parsing form posts directly to POJOs.
+		</li>
+		<li>
+			Support for <c>Accept</c> and <c>Content-Type</c> <js>"application/x-www-form-urlencoded"</js> added by default on {@link oajr.BasicRestServlet}.
+		</li>
+		<li>
+			New {@del RestServlet#renderError(HttpServletRequest,HttpServletResponse,RestException)} method to allow customized handling of response errors.
+		</li>
+	</ul>
+</div>

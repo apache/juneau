@@ -15,41 +15,43 @@
 
 {title:'UON Serializers', updated:'9.0.0'}
 
-<p>
-	The {@link oaj.uon.UonSerializer} class is used to serialize POJOs into UON.
-</p>	
-<p>
-	The class hierarchy for the builder of this serializer is:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.Context.Builder}
-	<ul>
-		<li class='jac'>{@link oaj.BeanContextable.Builder}
+<div class='topic'>
+	<p>
+		The {@link oaj.uon.UonSerializer} class is used to serialize POJOs into UON.
+	</p>	
+	<p>
+		The class hierarchy for the builder of this serializer is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.Context.Builder}
 		<ul>
-			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
 				<ul>
-					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
+						<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+						<ul>
+							<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
+						</ul>
 					</ul>
 				</ul>
 			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Refer to the builder javadocs for configurable settings.
-</p>
-<p>
-	The following pre-configured serializers are provided for convenience:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.uon.UonSerializer}
-	<ul>
-		<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_ENCODING DEFAULT_ENCODING}
-		<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+	<p>
+		Refer to the builder javadocs for configurable settings.
+	</p>
+	<p>
+		The following pre-configured serializers are provided for convenience:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.uon.UonSerializer}
+		<ul>
+			<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT DEFAULT}
+			<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_ENCODING DEFAULT_ENCODING}
+			<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+		</ul>
 	</ul>
-</ul>
+</div>

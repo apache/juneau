@@ -15,28 +15,29 @@
 
 {title:'System properties', created:'8.0.0', deprecated:'8.1.2'}
 
-<p>
-	As a convenience, the <c>SystemProperties</c> section of your configuration file can be used to define system
-	properties to set during initialization of your microservice:
-</p>
-<p class='bpcode w800'>
-	<cc>#=======================================================================================================================
-	# System properties
-	#-----------------------------------------------------------------------------------------------------------------------
-	# These are arbitrary system properties that are set during startup.
-	#=======================================================================================================================</cc>
-	<cs>[SystemProperties]</cs>
-	
-	<cc># Configure Jetty for StdErrLog Logging
-	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
-	
-	<cc># Configure Jetty to log using java-util logging</cc>
-	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.jetty.JettyLogger</cv>
-	
-	<cc># Jetty logging level
-	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
-	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>
-	
-	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>
-</p>
-
+<div class='topic'>
+	<p>
+		As a convenience, the <c>SystemProperties</c> section of your configuration file can be used to define system
+		properties to set during initialization of your microservice:
+	</p>
+	<p class='bcode w800'>
+		|	<cc>#=======================================================================================================================
+		|	# System properties
+		|	#-----------------------------------------------------------------------------------------------------------------------
+		|	# These are arbitrary system properties that are set during startup.
+		|	#=======================================================================================================================</cc>
+		|	<cs>[SystemProperties]</cs>
+		|	
+		|	<cc># Configure Jetty for StdErrLog Logging
+		|	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
+		|	
+		|	<cc># Configure Jetty to log using java-util logging</cc>
+		|	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.jetty.JettyLogger</cv>
+		|	
+		|	<cc># Jetty logging level
+		|	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
+		|	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>
+		|	
+		|	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>
+	</p>
+</div>

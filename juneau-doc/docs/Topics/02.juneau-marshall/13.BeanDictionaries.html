@@ -15,145 +15,147 @@
 
 {title:'Bean Names and Dictionaries', updated:'9.0.0'}
 
-<p>
-	While parsing into beans, Juneau attempts to determine the class types of bean properties through 
-	reflection on the bean property getter or setter.
-	Often this is insufficient if the property type is an interface or abstract class that cannot be 
-	instantiated.
-	This is where bean names and dictionaries come into play.
-</p>
-<p>
-	Bean names and dictionaries are used for identifying class types when they cannot be inferred through 
-	reflection.  
-</p>
-<p>
-	Bean classes are given names through the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} 
-	annotation.
-	These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
-	names in XML).
-</p>
-<p>
-	On the parsing side, these type names are resolved to classes through the use of bean dictionaries.
-</p>
-<p>
-	For example, if a bean property is of type <c>Object</c>, then the serializer will add 
-	<js>"_type"</js> attributes so that the class can be determined during parsing.
-</p>
-<p class='bpcode w800'>
- 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
- 	<jk>public class</jk> Foo {
- 		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
- 		<ja>@Beanp</ja>(dictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
- 		<jk>public</jk> Object[] <jf>x</jf> = <jk>new</jk> Object[]{<jk>new</jk> Bar(), <jk>new</jk> Baz()};
- 	}
- 		
- 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
- 	<jk>public class</jk> Bar {}
- 		
- 	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
- 	<jk>public class</jk> Baz {}
-</p>
-<p>
-	When serialized as JSON, <js>"_type"</js> attributes would be added when needed to infer the type during 
-	parsing:
-</p>
-<p class='bpcode w800'>
- 	{
-		x: [
-			{_type:<js>'bar'</js>},
-			{_type:<js>'baz'</js>}
-		]
-	}	 
-</p>
-<p>
-	Type names can be represented slightly differently in different languages.
-	For example, the dictionary name is used as element names when serialized to XML.
-	This allows the <c>typeName</c> annotation to be used as a shortcut for defining element names for 
-	beans.
-</p>
-<p>
-	When serialized as XML, the bean is rendered as:
-</p>
-<p class='bpcode w800'>
-	<xt>&lt;foo&gt;</xt>
-	   <xt>&lt;x&gt;</xt>
-	      <xt>&lt;bar/&gt;</xt>
-	      <xt>&lt;baz/&gt;</xt>
-	   <xt>&lt;/x&gt;</xt>
-	<xt>&lt;/foo&gt;</xt>
-</p>
-<p>
-	Bean dictionaries are registered through the following:
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link oaj.annotation.Beanp#dictionary() Beanp(dictionary)} 
-		- On individual bean properties through the annotation.
-	<li class='ja'>{@link oaj.annotation.Bean#dictionary() Bean(dictionary)} 
-		- On all properties on a bean and all subclasses.
-	<li class='jm'>{@link oaj.BeanContext.Builder#beanDictionary(Class...)}
-		- Builder method on serializers and parsers.
-</ul>
-<p>
-	The bean dictionary setting can consist of any of the following types:
-</p>
-<ul>
-	<li>Any bean class that specifies a value for {@link oaj.annotation.Bean#typeName() @Bean(typeName)}.
-	<li>Any subclass of {@link oaj.BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	<li>Any subclass of {@link oaj.BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
-	<li>Any array or collection of the objects above.
-</ul>
-<p class='bpcode w800'>
-	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
-	ReaderParser <jv>parser</jv> = JsonParser
-		.<jsm>create</jsm>()
-		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-		.build();
-	
-	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
-	ReaderParser <jv>parser</jv> = HtmlParser
-		.<jsm>create</jsm>()
-		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
-		.build();
-</p>
-<p>
-	The <js>"_type"</js> property name can be overridden through the following:
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link oaj.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
-		- On individual beans through the annotation.
-	<li class='jm'>{@link oaj.BeanContext.Builder#typePropertyName(String)} 
-		- Builder method on serializers and parsers.
-</ul>
-<p>
-	When using the annotation, you'll typically want to define it on an interface class so that it can
-	be inherited by all subclasses.
-</p>
-<p class='bpcode w800'>
-	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, dictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
-	<jk>public interface</jk> MyInterface {...}
-
-	<ja>@Bean</ja>(typeName=<js>"C1"</js>)
-	<jk>public class</jk> MyClass1 <jk>implements</jk> MyInterface {...}
-
-	<ja>@Bean</ja>(typeName=<js>"C2"</js>)
-	<jk>public class</jk> MyClass2 <jk>implements</jk> MyInterface {...}
-
-	MyInterface[] <jv>x</jv> = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
-
-	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
-	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>x</jv>);
-</p>
-<div class='info'>
-	Type names do not need to be universally unique.  
-	However, they must be unique within a dictionary.
-</div>
-<div class='info'>
-	The following reserved words cannot be used as type names:  
-	<c>object, array, number, boolean, null</c>.
-</div>
-<div class='info'>
-	Serialized type names are DISABLED by default.
-	They must be enabled on the serializer using the 
-	{@link oaj.serializer.Serializer.Builder#addBeanTypes()} 
-	setting.
+<div class='topic'>
+	<p>
+		While parsing into beans, Juneau attempts to determine the class types of bean properties through 
+		reflection on the bean property getter or setter.
+		Often this is insufficient if the property type is an interface or abstract class that cannot be 
+		instantiated.
+		This is where bean names and dictionaries come into play.
+	</p>
+	<p>
+		Bean names and dictionaries are used for identifying class types when they cannot be inferred through 
+		reflection.  
+	</p>
+	<p>
+		Bean classes are given names through the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} 
+		annotation.
+		These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
+		names in XML).
+	</p>
+	<p>
+		On the parsing side, these type names are resolved to classes through the use of bean dictionaries.
+	</p>
+	<p>
+		For example, if a bean property is of type <c>Object</c>, then the serializer will add 
+		<js>"_type"</js> attributes so that the class can be determined during parsing.
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		|	<jk>public class</jk> Foo {
+		|		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
+		|		<ja>@Beanp</ja>(dictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
+		|		<jk>public</jk> Object[] <jf>x</jf> = <jk>new</jk> Object[]{<jk>new</jk> Bar(), <jk>new</jk> Baz()};
+		|	}
+		|		
+		|	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		|	<jk>public class</jk> Bar {}
+		|		
+		|	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
+		|	<jk>public class</jk> Baz {}
+	</p>
+	<p>
+		When serialized as JSON, <js>"_type"</js> attributes would be added when needed to infer the type during 
+		parsing:
+	</p>
+	<p class='bcode w800'>
+		|	{
+		|		x: [
+		|			{_type:<js>'bar'</js>},
+		|			{_type:<js>'baz'</js>}
+		|		]
+		|	}
+	</p>
+	<p>
+		Type names can be represented slightly differently in different languages.
+		For example, the dictionary name is used as element names when serialized to XML.
+		This allows the <c>typeName</c> annotation to be used as a shortcut for defining element names for 
+		beans.
+	</p>
+	<p>
+		When serialized as XML, the bean is rendered as:
+	</p>
+	<p class='bcode w800'>
+		|	<xt>&lt;foo&gt;</xt>
+		|		<xt>&lt;x&gt;</xt>
+		|			<xt>&lt;bar/&gt;</xt>
+		|			<xt>&lt;baz/&gt;</xt>
+		|		<xt>&lt;/x&gt;</xt>
+		|	<xt>&lt;/foo&gt;</xt>
+	</p>
+	<p>
+		Bean dictionaries are registered through the following:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.annotation.Beanp#dictionary() Beanp(dictionary)} 
+			- On individual bean properties through the annotation.
+		<li class='ja'>{@link oaj.annotation.Bean#dictionary() Bean(dictionary)} 
+			- On all properties on a bean and all subclasses.
+		<li class='jm'>{@link oaj.BeanContext.Builder#beanDictionary(Class...)}
+			- Builder method on serializers and parsers.
+	</ul>
+	<p>
+		The bean dictionary setting can consist of any of the following types:
+	</p>
+	<ul>
+		<li>Any bean class that specifies a value for {@link oaj.annotation.Bean#typeName() @Bean(typeName)}.
+		<li>Any subclass of {@link oaj.BeanDictionaryList} containing a collection of bean classes with type name annotations.
+		<li>Any subclass of {@link oaj.BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+		<li>Any array or collection of the objects above.
+	</ul>
+	<p class='bcode w800'>
+		|	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
+		|	ReaderParser <jv>parser</jv> = JsonParser
+		|		.<jsm>create</jsm>()
+		|		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+		|		.build();
+		|	
+		|	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
+		|	ReaderParser <jv>parser</jv> = HtmlParser
+		|		.<jsm>create</jsm>()
+		|		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
+		|		.build();
+	</p>
+	<p>
+		The <js>"_type"</js> property name can be overridden through the following:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
+			- On individual beans through the annotation.
+		<li class='jm'>{@link oaj.BeanContext.Builder#typePropertyName(String)} 
+			- Builder method on serializers and parsers.
+	</ul>
+	<p>
+		When using the annotation, you'll typically want to define it on an interface class so that it can
+		be inherited by all subclasses.
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, dictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
+		|	<jk>public interface</jk> MyInterface {...}
+		|
+		|	<ja>@Bean</ja>(typeName=<js>"C1"</js>)
+		|	<jk>public class</jk> MyClass1 <jk>implements</jk> MyInterface {...}
+		|
+		|	<ja>@Bean</ja>(typeName=<js>"C2"</js>)
+		|	<jk>public class</jk> MyClass2 <jk>implements</jk> MyInterface {...}
+		|
+		|	MyInterface[] <jv>x</jv> = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
+		|
+		|	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
+		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>x</jv>);
+	</p>
+	<div class='info'>
+		Type names do not need to be universally unique.  
+		However, they must be unique within a dictionary.
+	</div>
+	<div class='info'>
+		The following reserved words cannot be used as type names:  
+		<c>object, array, number, boolean, null</c>.
+	</div>
+	<div class='info'>
+		Serialized type names are DISABLED by default.
+		They must be enabled on the serializer using the 
+		{@link oaj.serializer.Serializer.Builder#addBeanTypes()} 
+		setting.
+	</div>
 </div>

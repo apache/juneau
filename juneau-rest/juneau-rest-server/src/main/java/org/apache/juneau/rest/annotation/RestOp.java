@@ -34,7 +34,6 @@ import org.apache.juneau.encoders.*;
  * 	<li class='link'>{@doc RestOpAnnotatedMethods}
  * </ul>
  */
-@Documented
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited

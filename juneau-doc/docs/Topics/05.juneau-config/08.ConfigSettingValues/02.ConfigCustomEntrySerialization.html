@@ -15,26 +15,28 @@
 
 {title:'Custom Entry Serialization'}
 
-<p>
-	Setter methods that take in a <c>Serializer</c> can be used to provide custom serialization of entries
-	instead of using the predefined serializer.
-</p>
-<p class='bpcode w800'>
-	<jc>// Set an XML value instead of JSON.</jc>
-	<jv>config</jv>.set(<js>"key1"</js>, <jv>myAddress</jv>, XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>);
-</p>
-<p class='bpcode w800'>
-	<ck>key1</ck> = 
-		<cv>&lt;address&gt;	
-			&lt;street&gt;123 Main Street&lt;/street&gt;
-			&lt;city&gt;Anywhere&lt;/city&gt;
-			&lt;state&gt;NY&lt;/state&gt;
-			&lt;zip&gt;12345&lt;/zip&gt;
-		&lt;/address&gt;</cv>
-</p>		
-<p>
-	The value can then be retrieved using the equivalent parser:
-</p>
-<p class='bpcode w800'>
-	Address <jv>myAddress</jv> = <jv>config</jv>.getObject(<js>"key1"</js>, XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
-</p>
+<div class='topic'>
+	<p>
+		Setter methods that take in a <c>Serializer</c> can be used to provide custom serialization of entries
+		instead of using the predefined serializer.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Set an XML value instead of JSON.</jc>
+		|	<jv>config</jv>.set(<js>"key1"</js>, <jv>myAddress</jv>, XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>);
+	</p>
+	<p class='bcode w800'>
+		|	<ck>key1</ck> = 
+		|		<cv>&lt;address&gt;	
+		|			&lt;street&gt;123 Main Street&lt;/street&gt;
+		|			&lt;city&gt;Anywhere&lt;/city&gt;
+		|			&lt;state&gt;NY&lt;/state&gt;
+		|			&lt;zip&gt;12345&lt;/zip&gt;
+		|		&lt;/address&gt;</cv>
+	</p>		
+	<p>
+		The value can then be retrieved using the equivalent parser:
+	</p>
+	<p class='bcode w800'>
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.getObject(<js>"key1"</js>, XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
+	</p>
+</div>

@@ -15,21 +15,23 @@
 
 5.1.0.12 (Mar 28, 2015)
 
-<p>
-	Juno 5.1.0.12 is a minor update.
-</p>
-
-<h5 class='topic w800'>Core</h5>		
-<ul class='spaced-list'>
-	<li>Fixed {@del ConfigFile#isEmpty()} method.
-	<li>Changed behavior on {@link oaj.uon.UonParser} to not treat <js>'~'</js> characters as escapes
-		unless followed by one of the following characters:  <c>( ) , $ = ~</c>.
-</ul>
-
-<h5 class='topic w800'>Client</h5>		
-<ul class='spaced-list'>
-	<li>New class {@del oajrc.RestCallInterceptor}.  
-		Allows responses to be inspected and modified before being processed.  
-		Replaces <c>RestClientListener</c> class.
-	<li>Minor connection cleanup fixes.
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.1.0.12 is a minor update.
+	</p>
+	
+	<h5 class='topic w800'>Core</h5>		
+	<ul class='spaced-list'>
+		<li>Fixed {@del ConfigFile#isEmpty()} method.
+		<li>Changed behavior on {@link oaj.uon.UonParser} to not treat <js>'~'</js> characters as escapes
+			unless followed by one of the following characters:  <c>( ) , $ = ~</c>.
+	</ul>
+	
+	<h5 class='topic w800'>Client</h5>		
+	<ul class='spaced-list'>
+		<li>New class {@del oajrc.RestCallInterceptor}.  
+			Allows responses to be inspected and modified before being processed.  
+			Replaces <c>RestClientListener</c> class.
+		<li>Minor connection cleanup fixes.
+	</ul>
+</div>

@@ -15,29 +15,31 @@
 
 5.1.0.9 (Dec 1, 2014)
 
-<p>
-	Juno 5.1.0.9 is a major update.
-	There weren't very many code changes, but the source has been made a part of Jazz Foundation.
-	This required some restructuring of the project.
-	The project on Jazz Hub will eventually be discontinued.
-	However, the libraries on IBM Community Source will continue to be updated regularly.
-</p>
-<ul class='spaced-list'>
-	<li>Project split up into 3 separate bundles:
-		<ul>
-			<li><c>org.apache.juneau</c> - Core serializers and parsers.
-			<li><c>org.apache.juneau.rest</c> - REST server component.
-			<li><c>org.apache.juneau.rest.client</c> - REST client component.
-		</ul>
-	<li>Code changes to facilitate breaking up bundles:
-		<ul>
-			<li><c>org.apache.juneau.rest.labels.Link</c> class moved to {@del Link}.
-			<li>References to <c>org.apache.juneau.rest.RestException</c> in {@link oaj.encoders.Encoder} class changed to <c>IOException</c>.
-		</ul>
-	<li>Changed configuration names for consistency with Jazz Framework.
-	<li>{@del RestClient#execute(HttpUriRequest)} method that allows subclasses to handle their own HTTP request execution.
-	<li>Changes in <c>JazzRestClient</c> to handle introduction of SSO support in v6.
-	<li><c>&amp;plainText</c> debug feature was broken.
-	<li>Removed double-buffering in <c>RestRequest</c>.
-	<li>Metadata cleanup, Find Bug fixes.
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.1.0.9 is a major update.
+		There weren't very many code changes, but the source has been made a part of Jazz Foundation.
+		This required some restructuring of the project.
+		The project on Jazz Hub will eventually be discontinued.
+		However, the libraries on IBM Community Source will continue to be updated regularly.
+	</p>
+	<ul class='spaced-list'>
+		<li>Project split up into 3 separate bundles:
+			<ul>
+				<li><c>org.apache.juneau</c> - Core serializers and parsers.
+				<li><c>org.apache.juneau.rest</c> - REST server component.
+				<li><c>org.apache.juneau.rest.client</c> - REST client component.
+			</ul>
+		<li>Code changes to facilitate breaking up bundles:
+			<ul>
+				<li><c>org.apache.juneau.rest.labels.Link</c> class moved to {@del Link}.
+				<li>References to <c>org.apache.juneau.rest.RestException</c> in {@link oaj.encoders.Encoder} class changed to <c>IOException</c>.
+			</ul>
+		<li>Changed configuration names for consistency with Jazz Framework.
+		<li>{@del RestClient#execute(HttpUriRequest)} method that allows subclasses to handle their own HTTP request execution.
+		<li>Changes in <c>JazzRestClient</c> to handle introduction of SSO support in v6.
+		<li><c>&amp;plainText</c> debug feature was broken.
+		<li>Removed double-buffering in <c>RestRequest</c>.
+		<li>Metadata cleanup, Find Bug fixes.
+	</ul>
+</div>

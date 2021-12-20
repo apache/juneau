@@ -15,20 +15,22 @@
 
 5.0.0.19 (Apr 1, 2013)
 
-<p>
-	Juno 5.0.0.19 is a minor update.
-</p>
-<ul class='spaced-list'>
-	<li>
-		New methods on {@link oajr.RestServlet}:
-		<ul>
-			<li>{@del RestServlet#onPreCall(RestRequest)}</li>
-			<li>{@del RestServlet#onPostCall(RestRequest,RestResponse)}</li>
-		</ul>
-	</li>
-	<li>
-		<jsf>TRIM_NULLS</jsf> setting changed to {@del SerializerContext#SERIALIZER_trimNullProperties}.<br>
-		New property default is <jk>true</jk>. 
-		Only applies to bean properties, not map or collection entries.
-	</li>
-</ul>
+<div class='topic'>
+	<p>
+		Juno 5.0.0.19 is a minor update.
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			New methods on {@link oajr.RestServlet}:
+			<ul>
+				<li>{@del RestServlet#onPreCall(RestRequest)}</li>
+				<li>{@del RestServlet#onPostCall(RestRequest,RestResponse)}</li>
+			</ul>
+		</li>
+		<li>
+			<jsf>TRIM_NULLS</jsf> setting changed to {@del SerializerContext#SERIALIZER_trimNullProperties}.<br>
+			New property default is <jk>true</jk>. 
+			Only applies to bean properties, not map or collection entries.
+		</li>
+	</ul>
+</div>

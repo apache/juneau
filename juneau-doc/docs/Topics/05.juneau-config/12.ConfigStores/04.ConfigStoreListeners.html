@@ -15,27 +15,29 @@
 
 {title:'ConfigStore Listeners'}
 
-<p>
-	The <c>ConfigStore</c> class has the following listener methods:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.config.store.ConfigStore}
-	<ul>
-		<li class='jm'>{@link oaj.config.store.ConfigStore#register(String,ConfigStoreListener) register(String,ConfigStoreListener)} - Register a listener on the specified config name.
-		<li class='jm'>{@link oaj.config.store.ConfigStore#unregister(String,ConfigStoreListener) unregister(String,ConfigStoreListener)} - Unregister a listener on the specified config name.
+<div class='topic'>
+	<p>
+		The <c>ConfigStore</c> class has the following listener methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.config.store.ConfigStore}
+		<ul>
+			<li class='jm'>{@link oaj.config.store.ConfigStore#register(String,ConfigStoreListener) register(String,ConfigStoreListener)} - Register a listener on the specified config name.
+			<li class='jm'>{@link oaj.config.store.ConfigStore#unregister(String,ConfigStoreListener) unregister(String,ConfigStoreListener)} - Unregister a listener on the specified config name.
+		</ul>
 	</ul>
-</ul>
-<p>
-	Note that this is a different listener than {@link oaj.config.event.ConfigEventListener}.
-	In this case, we're just listening for changed files:
-</p>		
-<ul class='javatree'>
-	<li class='jic'>{@link oaj.config.store.ConfigStoreListener}
-	<ul>
-		<li class='jm'>{@link oaj.config.store.ConfigStoreListener#onChange(String)} - Called when file changes.  New contents are passed in.
+	<p>
+		Note that this is a different listener than {@link oaj.config.event.ConfigEventListener}.
+		In this case, we're just listening for changed files:
+	</p>		
+	<ul class='javatree'>
+		<li class='jic'>{@link oaj.config.store.ConfigStoreListener}
+		<ul>
+			<li class='jm'>{@link oaj.config.store.ConfigStoreListener#onChange(String)} - Called when file changes.  New contents are passed in.
+		</ul>
 	</ul>
-</ul>
-<p>
-	This listener is used by the <c>Config</c> class to listen for changes on the file system so that it can be
-	updated in real-time.
-</p>
+	<p>
+		This listener is used by the <c>Config</c> class to listen for changes on the file system so that it can be
+		updated in real-time.
+	</p>
+</div>

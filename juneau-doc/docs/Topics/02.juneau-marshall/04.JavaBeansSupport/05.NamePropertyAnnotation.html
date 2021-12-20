@@ -15,29 +15,31 @@
 
 {title:'@NameProperty Annotation'}
 
-<p>
-	The {@link oaj.annotation.NameProperty @NameProperty} annotation is used to
-	identify a setter as a method for setting the name of a POJO as it's known by its parent object.
-</p>
-<p>
-	A commonly-used case is when you're parsing a JSON map containing beans where one of the bean 
-	properties is the key used in the map.
-</p>
-<p class='bpcode w800'>
-	<jc>// JSON</jc> 
-	{
-		<jok>id1</jok>: {<jok>name</jok>: <jov>'John Smith'</jov>, <jok>sex</jok>: <jov>'M'</jov>},
-		<jok>id2</jok>: {<jok>name</jok>: <jov>'Jane Doe'</jov>, <jok>sex</jok>: <jov>'F'</jov>}
-	}
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> Person {
-		
-		<ja>@NameProperty</ja> 
-		<jk>public</jk> String <jf>id</jf>;  <jc>// Value gets assigned from object key</jc>
-		
-		<jk>public</jk> String <jf>name</jf>;
-		
-		<jk>public char</jk> <jf>sex</jf>;
-	}
-</p>
+<div class='topic'>
+	<p>
+		The {@link oaj.annotation.NameProperty @NameProperty} annotation is used to
+		identify a setter as a method for setting the name of a POJO as it's known by its parent object.
+	</p>
+	<p>
+		A commonly-used case is when you're parsing a JSON map containing beans where one of the bean 
+		properties is the key used in the map.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// JSON</jc> 
+		|	{
+		|		<jok>id1</jok>: {<jok>name</jok>: <jov>'John Smith'</jov>, <jok>sex</jok>: <jov>'M'</jov>},
+		|		<jok>id2</jok>: {<jok>name</jok>: <jov>'Jane Doe'</jov>, <jok>sex</jok>: <jov>'F'</jov>}
+		|	}
+	</p>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> Person {
+		|		
+		|		<ja>@NameProperty</ja> 
+		|		<jk>public</jk> String <jf>id</jf>;  <jc>// Value gets assigned from object key</jc>
+		|		
+		|		<jk>public</jk> String <jf>name</jf>;
+		|		
+		|		<jk>public char</jk> <jf>sex</jf>;
+		|	}
+	</p>
+</div>

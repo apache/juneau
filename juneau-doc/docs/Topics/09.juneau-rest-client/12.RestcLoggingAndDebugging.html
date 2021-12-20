@@ -15,84 +15,86 @@
 
 {title:'Logging and Debugging', created:'8.2.0', flags:'todo'}
 
-<p>
-	The following methods provide logging of requests and responses:
-</p>
-
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#logger(Logger) logger(Logger)}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#logToConsole() logToConsole()}
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#logRequests(DetailLevel,Level,BiPredicate) logRequests(DetailLevel,Level,BiPredicate)}
-	</ul>
-</ul>
-
-<p>
-	The following example shows the results of logging all requests that end with <c>/bean</c>.
-</p>
-
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// A simple bean we're going to round-trip.</jc>
-	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+<div class='topic'>
+	<p>
+		The following methods provide logging of requests and responses:
+	</p>
 	
-	<jv>bean</jv> = RestClient
-		.<jsm>create</jsm>()
-		.simpleJson()
-		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
-		.logToConsole()
-		.build()
-		.post(<js>"http://localhost/bean"</js>, <jv>bean</jv>)
-		.run()
-		.getBody().as(MyBean.<jk>class</jk>);
-</p>
-
-<p>
-	This produces the following console output:
-</p>
-
-<p class='bpcode w800 console'>
-	=== HTTP Call (outgoing) ======================================================
-	=== REQUEST ===
-	POST http://localhost/bean
-	---request headers---
-		Accept: application/json+simple
-	---request entity---
-	Content-Type: application/json+simple
-	---request content---
-	{f:1}
-	=== RESPONSE ===
-	HTTP/1.1 200
-	---response headers---
-		Content-Type: application/json
-	---response content---
-	{f:1}
-	=== END =======================================================================",
-</p>
-
-<p class='notes w900'>
-	It should be noted that if you enable request logging detail level {@link oaj.DetailLevel#FULL}, response bodies will be cached by default which may introduce
-	a performance penalty.
-</p>
-
-<p>
-	Additionally, the following method is also provided for enabling debug mode:
-</p>
-
-<ul class='javatree'>
-	<li class='jc'>{@del oajr.client2.RestClient.Builder}
-	<ul>
-		<li class='jm'>{@del oajr.client2.RestClient.Builder#debug() debug()}
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#logger(Logger) logger(Logger)}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#logToConsole() logToConsole()}
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#logRequests(DetailLevel,Level,BiPredicate) logRequests(DetailLevel,Level,BiPredicate)}
+		</ul>
 	</ul>
-</ul>
-
-<p>
-	Enabling debug mode has the following effects:
-</p>
-
-<ul>
-	<li>{@del oaj.Context#CONTEXT_debug} is enabled.
-	<li>{@del oajr.client2.RestClient#RESTCLIENT_leakDetection} is enabled.
-	<li>{@del oajr.client2.RestClient.Builder#logToConsole()} is called.
-</ul>
+	
+	<p>
+		The following example shows the results of logging all requests that end with <c>/bean</c>.
+	</p>
+	
+	<h5 class='figure'>Examples:</h5>
+	<p class='bcode w800'>
+		|	<jc>// A simple bean we're going to round-trip.</jc>
+		|	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+		|	
+		|	<jv>bean</jv> = RestClient
+		|		.<jsm>create</jsm>()
+		|		.simpleJson()
+		|		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
+		|		.logToConsole()
+		|		.build()
+		|		.post(<js>"http://localhost/bean"</js>, <jv>bean</jv>)
+		|		.run()
+		|		.getBody().as(MyBean.<jk>class</jk>);
+	</p>
+	
+	<p>
+		This produces the following console output:
+	</p>
+	
+	<p class='bcode w800 console'>
+		|	=== HTTP Call (outgoing) ======================================================
+		|	=== REQUEST ===
+		|	POST http://localhost/bean
+		|	---request headers---
+		|		Accept: application/json+simple
+		|	---request entity---
+		|	Content-Type: application/json+simple
+		|	---request content---
+		|	{f:1}
+		|	=== RESPONSE ===
+		|	HTTP/1.1 200
+		|	---response headers---
+		|		Content-Type: application/json
+		|	---response content---
+		|	{f:1}
+		|	=== END =======================================================================",
+	</p>
+	
+	<p class='notes w900'>
+		It should be noted that if you enable request logging detail level {@link oaj.DetailLevel#FULL}, response bodies will be cached by default which may introduce
+		a performance penalty.
+	</p>
+	
+	<p>
+		Additionally, the following method is also provided for enabling debug mode:
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<ul>
+			<li class='jm'>{@del oajr.client2.RestClient.Builder#debug() debug()}
+		</ul>
+	</ul>
+	
+	<p>
+		Enabling debug mode has the following effects:
+	</p>
+	
+	<ul>
+		<li>{@del oaj.Context#CONTEXT_debug} is enabled.
+		<li>{@del oajr.client2.RestClient#RESTCLIENT_leakDetection} is enabled.
+		<li>{@del oajr.client2.RestClient.Builder#logToConsole()} is called.
+	</ul>
+</div>

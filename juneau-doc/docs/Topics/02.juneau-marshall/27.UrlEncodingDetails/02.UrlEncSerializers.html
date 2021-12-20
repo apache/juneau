@@ -15,46 +15,48 @@
 
 {title:'URL-Encoding Serializers', updated:'9.0.0'}
 
-<p>
-	The {@link oaj.urlencoding.UrlEncodingSerializer} class is used to serialize POJOs into URL-Encoding.
-</p>	
-<p>
-	The class hierarchy for the builder of this serializer is:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.Context.Builder}
-	<ul>
-		<li class='jac'>{@link oaj.BeanContextable.Builder}
+<div class='topic'>
+	<p>
+		The {@link oaj.urlencoding.UrlEncodingSerializer} class is used to serialize POJOs into URL-Encoding.
+	</p>	
+	<p>
+		The class hierarchy for the builder of this serializer is:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.Context.Builder}
 		<ul>
-			<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
 				<ul>
-					<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+					<li class='jac'>{@link oaj.serializer.Serializer.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
+						<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
 						<ul>
-							<li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer.Builder}
+							<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
+							<ul>
+								<li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer.Builder}
+							</ul>
 						</ul>
 					</ul>
 				</ul>
 			</ul>
 		</ul>
 	</ul>
-</ul>
-<p>
-	Refer to the builder javadocs for configurable settings.
-</p>
-<p>
-	The following pre-configured serializers are provided for convenience:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer}
-	<ul>
-		<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT DEFAULT}
-		<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT_EXPANDED DEFAULT_EXPANDED}
-		<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT_PLAINTEXT DEFAULT_PLAINTEXT}
-		<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE DEFAULT_READABLE}		
-		
+	<p>
+		Refer to the builder javadocs for configurable settings.
+	</p>
+	<p>
+		The following pre-configured serializers are provided for convenience:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer}
+		<ul>
+			<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT DEFAULT}
+			<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT_EXPANDED DEFAULT_EXPANDED}
+			<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT_PLAINTEXT DEFAULT_PLAINTEXT}
+			<li class='jf'>{@link oaj.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE DEFAULT_READABLE}		
+			
+		</ul>
 	</ul>
-</ul>
+</div>
