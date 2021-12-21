@@ -27,6 +27,8 @@ import org.springframework.context.*;
  * 	<li class='link'>{@doc juneau-rest-server-springboot}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public abstract class SpringRestServlet extends RestServlet {
 

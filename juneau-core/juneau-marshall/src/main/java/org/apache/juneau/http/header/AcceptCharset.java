@@ -71,6 +71,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Accept-Charset")
 public class AcceptCharset extends BasicStringRangeArrayHeader {

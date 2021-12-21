@@ -23,6 +23,8 @@ import javax.servlet.http.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class CookieList extends ArrayList<Cookie> {
 

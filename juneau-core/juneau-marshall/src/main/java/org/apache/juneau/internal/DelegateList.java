@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
  * </ul>
  *
  * @param <T> The class type of the wrapped bean.
+ * @serial exclude
  */
 public class DelegateList<T extends Collection<?>> extends OList implements Delegate<T> {
 	private static final long serialVersionUID = 1L;

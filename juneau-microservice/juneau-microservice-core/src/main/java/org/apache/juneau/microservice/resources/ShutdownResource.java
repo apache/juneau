@@ -22,6 +22,8 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'>{@doc juneau-microservice-core}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest(
 	path="/shutdown",

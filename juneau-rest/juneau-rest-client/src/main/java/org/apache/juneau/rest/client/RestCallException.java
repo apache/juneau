@@ -27,6 +27,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class RestCallException extends HttpException {
 

@@ -27,6 +27,8 @@ import org.apache.juneau.serializer.annotation.*;
  * 	<li class='link'>{@doc juneau-examples-rest}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest(
 	path="/*",

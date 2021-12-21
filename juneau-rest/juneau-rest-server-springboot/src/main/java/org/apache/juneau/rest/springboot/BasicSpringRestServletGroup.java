@@ -30,6 +30,8 @@ import org.apache.juneau.rest.beans.*;
  * 	<li class='link'>{@doc juneau-rest-server-springboot}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest
 public abstract class BasicSpringRestServletGroup extends BasicSpringRestServlet {

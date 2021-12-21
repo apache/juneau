@@ -24,6 +24,8 @@ import org.apache.juneau.reflect.*;
  * 	<li class='link'>{@doc jrs.JavaMethodParameters}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ArgException extends InternalServerError {
 	private static final long serialVersionUID = 1L;

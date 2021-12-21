@@ -69,6 +69,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Content-Encoding")
 @Schema(_enum={"gzip","compress","deflate","identity","other"})

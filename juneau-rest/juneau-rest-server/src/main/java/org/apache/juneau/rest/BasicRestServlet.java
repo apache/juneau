@@ -132,6 +132,8 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc jrs.BasicRestServlet}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest
 public abstract class BasicRestServlet extends RestServlet implements BasicUniversalRest, BasicRestOperations {

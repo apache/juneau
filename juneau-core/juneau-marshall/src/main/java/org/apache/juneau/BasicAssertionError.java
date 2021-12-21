@@ -22,6 +22,8 @@ import java.text.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class BasicAssertionError extends AssertionError {
 

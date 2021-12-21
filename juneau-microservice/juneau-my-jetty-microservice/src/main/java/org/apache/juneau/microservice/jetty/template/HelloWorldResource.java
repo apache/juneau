@@ -22,6 +22,8 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'>{@doc my-jetty-microservice}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest(
 	title="Hello World example",

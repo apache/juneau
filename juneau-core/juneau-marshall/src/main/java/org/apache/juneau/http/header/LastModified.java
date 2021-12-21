@@ -71,6 +71,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Last-Modified")
 public class LastModified extends BasicDateHeader {

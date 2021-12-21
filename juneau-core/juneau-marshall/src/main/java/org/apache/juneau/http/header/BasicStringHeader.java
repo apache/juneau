@@ -35,7 +35,9 @@ import org.apache.juneau.assertions.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
-*/
+ *
+ * @serial exclude
+ */
 public class BasicStringHeader extends BasicHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------

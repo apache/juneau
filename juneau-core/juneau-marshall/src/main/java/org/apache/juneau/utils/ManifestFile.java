@@ -32,6 +32,8 @@ import org.apache.juneau.collections.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ManifestFile extends OMap {
 

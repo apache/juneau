@@ -59,6 +59,8 @@ import org.apache.juneau.annotation.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @SuppressWarnings("rawtypes")
 public class BeanDictionaryMap extends LinkedHashMap<String,Object> {

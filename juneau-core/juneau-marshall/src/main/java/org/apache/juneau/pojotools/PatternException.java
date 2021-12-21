@@ -22,6 +22,8 @@ import org.apache.juneau.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class PatternException extends BasicRuntimeException {
 

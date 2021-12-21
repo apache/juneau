@@ -51,6 +51,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <K> The key type.
  * @param <V> The value type.
+ * @serial exclude
  */
 public class AMap<K,V> extends LinkedHashMap<K,V> {
 

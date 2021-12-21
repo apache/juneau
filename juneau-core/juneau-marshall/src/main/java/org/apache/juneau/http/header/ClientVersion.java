@@ -42,6 +42,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Client-Version")
 public class ClientVersion extends BasicStringHeader {

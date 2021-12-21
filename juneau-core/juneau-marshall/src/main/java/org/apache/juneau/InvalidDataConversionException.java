@@ -29,6 +29,8 @@ import org.apache.juneau.reflect.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class InvalidDataConversionException extends BasicRuntimeException {
 

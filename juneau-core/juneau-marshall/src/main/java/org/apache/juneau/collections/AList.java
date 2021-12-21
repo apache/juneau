@@ -54,6 +54,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * @param <T> The entry type.
+ * @serial exclude
  */
 @SuppressWarnings({"unchecked"})
 public class AList<T> extends ArrayList<T> {

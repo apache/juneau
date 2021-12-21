@@ -148,6 +148,8 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-rest-server-springboot}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest
 public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalRest, BasicRestOperations {

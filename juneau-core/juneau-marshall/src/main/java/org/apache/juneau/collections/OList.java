@@ -95,12 +95,15 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <p>
- * This class is not thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class OList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;
@@ -110,6 +113,8 @@ public class OList extends LinkedList<Object> {
 
 	/**
 	 * An empty read-only OList.
+	 *
+	 * @serial exclude
 	 */
 	public static final OList EMPTY_LIST = new OList() {
 		private static final long serialVersionUID = 1L;

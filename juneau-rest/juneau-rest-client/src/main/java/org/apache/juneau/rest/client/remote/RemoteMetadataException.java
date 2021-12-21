@@ -25,6 +25,8 @@ import org.apache.juneau.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class RemoteMetadataException extends BasicRuntimeException {
 

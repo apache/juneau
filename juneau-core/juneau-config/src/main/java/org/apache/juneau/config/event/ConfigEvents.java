@@ -22,6 +22,8 @@ import java.util.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ConfigEvents extends ArrayList<ConfigEvent> {
 	private static final long serialVersionUID = 1L;

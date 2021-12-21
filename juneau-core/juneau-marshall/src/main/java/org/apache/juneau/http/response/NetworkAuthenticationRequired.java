@@ -31,6 +31,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Response
 @StatusCode(STATUS_CODE)

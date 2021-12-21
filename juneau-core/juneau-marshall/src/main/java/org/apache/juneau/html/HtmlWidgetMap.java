@@ -22,6 +22,8 @@ import org.apache.juneau.collections.*;
  * 	<li class='link'>{@doc jm.HtmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class HtmlWidgetMap extends AMap<String,HtmlWidget> {
 	private static final long serialVersionUID = 1L;

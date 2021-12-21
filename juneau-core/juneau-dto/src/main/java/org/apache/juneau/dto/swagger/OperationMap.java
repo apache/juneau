@@ -39,6 +39,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc jd.Swagger}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class OperationMap extends TreeMap<String,Operation> {
 	private static final long serialVersionUID = 1L;

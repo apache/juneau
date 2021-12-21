@@ -39,6 +39,8 @@ import org.apache.juneau.http.response.*;
  * 	<li class='link'>{@doc juneau-microservice-core}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest(
 	path="/logs",

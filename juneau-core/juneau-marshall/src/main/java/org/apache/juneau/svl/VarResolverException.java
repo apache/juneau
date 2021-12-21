@@ -23,6 +23,8 @@ import org.apache.juneau.*;
  * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class VarResolverException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;

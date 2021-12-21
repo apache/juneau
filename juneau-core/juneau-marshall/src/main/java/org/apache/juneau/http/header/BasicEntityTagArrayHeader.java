@@ -36,6 +36,8 @@ import java.util.function.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class BasicEntityTagArrayHeader extends BasicHeader {
 

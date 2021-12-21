@@ -71,6 +71,8 @@ import org.apache.juneau.http.response.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public abstract class RestServlet extends HttpServlet {
 

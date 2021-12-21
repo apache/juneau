@@ -59,6 +59,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Max-Forwards")
 public class MaxForwards extends BasicIntegerHeader {

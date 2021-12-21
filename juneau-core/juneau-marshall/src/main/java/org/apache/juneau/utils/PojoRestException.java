@@ -40,6 +40,8 @@ import org.apache.juneau.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class PojoRestException extends BasicRuntimeException {
 

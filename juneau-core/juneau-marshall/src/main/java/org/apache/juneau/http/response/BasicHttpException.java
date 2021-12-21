@@ -45,6 +45,8 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @BeanIgnore /* Use toString() to serialize */
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {

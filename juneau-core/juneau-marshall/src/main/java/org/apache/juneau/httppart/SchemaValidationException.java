@@ -23,6 +23,8 @@ import org.apache.juneau.parser.ParseException;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class SchemaValidationException extends ParseException {
 	private static final long serialVersionUID = 1L;

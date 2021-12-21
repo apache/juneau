@@ -28,6 +28,8 @@ import org.apache.juneau.json.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class SerializeException extends BasicException {
 

@@ -37,6 +37,8 @@ import org.apache.juneau.json.*;
  * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 

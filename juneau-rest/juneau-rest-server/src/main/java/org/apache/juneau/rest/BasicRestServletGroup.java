@@ -34,6 +34,8 @@ import org.apache.juneau.rest.config.*;
  * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest
 public abstract class BasicRestServletGroup extends BasicRestServlet {

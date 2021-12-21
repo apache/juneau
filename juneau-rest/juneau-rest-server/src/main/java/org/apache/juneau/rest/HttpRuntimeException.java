@@ -27,6 +27,8 @@ import org.apache.juneau.reflect.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class HttpRuntimeException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;

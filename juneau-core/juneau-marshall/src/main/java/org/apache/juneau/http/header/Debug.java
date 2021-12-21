@@ -35,6 +35,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Debug")
 public class Debug extends BasicBooleanHeader {

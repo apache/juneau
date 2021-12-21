@@ -24,6 +24,8 @@ import org.apache.juneau.internal.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public abstract class BasicException extends Exception {
 

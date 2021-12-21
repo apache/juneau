@@ -25,6 +25,8 @@ import org.apache.juneau.svl.vars.*;
  * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class VarList extends ArrayList<Object> {
 

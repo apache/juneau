@@ -27,6 +27,8 @@ import org.apache.juneau.svl.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;

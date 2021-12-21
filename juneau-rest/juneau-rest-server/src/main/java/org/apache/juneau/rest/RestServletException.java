@@ -27,6 +27,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class RestServletException extends ServletException {
 

@@ -21,6 +21,8 @@ import java.util.*;
  * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class JsonTypeArray extends LinkedList<JsonType> {
 

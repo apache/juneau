@@ -25,6 +25,7 @@ import java.util.concurrent.*;
  * @param <K1> Key part 1 type.
  * @param <K2> Key part 2 type.
  * @param <V> Value type.
+ * @serial exclude
  */
 public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConcurrentCache.Key<K1,K2>,V> {
 	private static final long serialVersionUID = 1L;

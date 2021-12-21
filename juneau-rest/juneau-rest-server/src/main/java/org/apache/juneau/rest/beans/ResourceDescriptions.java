@@ -21,6 +21,8 @@ import java.util.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 	private static final long serialVersionUID = 1L;

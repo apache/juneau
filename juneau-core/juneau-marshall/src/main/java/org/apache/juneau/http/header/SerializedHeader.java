@@ -39,6 +39,8 @@ import org.apache.juneau.urlencoding.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class SerializedHeader extends BasicHeader {
 

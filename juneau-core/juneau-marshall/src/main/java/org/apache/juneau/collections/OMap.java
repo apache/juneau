@@ -108,6 +108,8 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * An empty read-only OMap.
+	 *
+	 * @serial exclude
 	 */
 	public static final OMap EMPTY_MAP = new OMap() {
 

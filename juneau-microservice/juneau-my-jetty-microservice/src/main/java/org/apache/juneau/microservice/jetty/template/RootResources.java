@@ -28,6 +28,8 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
  * 	<li class='link'>{@doc my-jetty-microservice}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest(
 	path="/*",

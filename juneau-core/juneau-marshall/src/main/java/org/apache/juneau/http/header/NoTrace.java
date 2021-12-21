@@ -23,6 +23,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("No-Trace")
 public class NoTrace extends BasicBooleanHeader {

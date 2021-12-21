@@ -27,6 +27,8 @@ import org.apache.juneau.internal.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class ResultSetList extends LinkedList<Map<String,Object>> {
 

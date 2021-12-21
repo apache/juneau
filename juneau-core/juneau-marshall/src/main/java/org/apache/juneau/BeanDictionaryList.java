@@ -51,6 +51,8 @@ import org.apache.juneau.annotation.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class BeanDictionaryList extends ArrayList<Class<?>> {
 	private static final long serialVersionUID = 1L;

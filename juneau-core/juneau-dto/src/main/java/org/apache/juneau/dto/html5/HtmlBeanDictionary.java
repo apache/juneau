@@ -21,6 +21,8 @@ import org.apache.juneau.*;
  * 	<li class='link'>{@doc jd.Html5}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class HtmlBeanDictionary extends BeanDictionaryList {
 	private static final long serialVersionUID = 1L;

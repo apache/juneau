@@ -20,6 +20,8 @@ import java.text.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ConfigException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;

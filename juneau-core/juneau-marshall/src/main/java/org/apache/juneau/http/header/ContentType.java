@@ -48,6 +48,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Content-Type")
 public class ContentType extends BasicMediaTypeHeader {

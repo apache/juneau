@@ -30,6 +30,8 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ParseException extends BasicException {
 

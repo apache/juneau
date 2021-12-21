@@ -23,6 +23,8 @@ import org.apache.juneau.reflect.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private static final long serialVersionUID = 1L;

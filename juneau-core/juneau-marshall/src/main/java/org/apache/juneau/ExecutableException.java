@@ -21,6 +21,8 @@ import java.text.MessageFormat;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class ExecutableException extends BasicRuntimeException {
 

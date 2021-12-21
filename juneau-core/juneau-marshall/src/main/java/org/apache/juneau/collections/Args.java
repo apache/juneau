@@ -105,6 +105,8 @@ import org.apache.juneau.internal.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public final class Args extends OMap {
 

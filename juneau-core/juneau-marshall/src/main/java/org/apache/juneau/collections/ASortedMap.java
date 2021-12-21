@@ -50,6 +50,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <K> The key type.
  * @param <V> The value type.
+ * @serial exclude
  */
 public class ASortedMap<K,V> extends TreeMap<K,V> {
 

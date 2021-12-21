@@ -25,6 +25,7 @@ import org.apache.juneau.collections.*;
  * </ul>
  *
  * @param <T> The class type of the wrapped bean.
+ * @serial exclude
  */
 @SuppressWarnings("rawtypes")
 public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {

@@ -142,6 +142,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Header("Range")
 public class Range extends BasicStringHeader {

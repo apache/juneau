@@ -27,6 +27,8 @@ import org.apache.juneau.rest.beans.*;
  * 	<li class='link'>{@doc juneau-microservice-jetty}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 @Rest(
 	path="/debug",

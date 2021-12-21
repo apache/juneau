@@ -20,6 +20,8 @@ import org.apache.juneau.collections.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
 public class UrlPathMatcherList extends AList<UrlPathMatcher> {
 
