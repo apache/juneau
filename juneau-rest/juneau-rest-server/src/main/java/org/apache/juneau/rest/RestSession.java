@@ -27,6 +27,11 @@ import org.apache.juneau.rest.util.*;
 
 /**
  * Represents a single HTTP request.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestSession extends ContextSession {
 

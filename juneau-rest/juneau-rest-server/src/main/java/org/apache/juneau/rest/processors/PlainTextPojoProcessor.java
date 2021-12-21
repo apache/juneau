@@ -23,6 +23,11 @@ import org.apache.juneau.http.response.*;
 
 /**
  * Response handler for plain-old Java objects when a serializer match is not found and they're asking for plain/text or anything.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class PlainTextPojoProcessor implements ResponseProcessor {
 

@@ -29,6 +29,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents the parsed contents of a configuration.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ConfigMap implements ConfigStoreListener {
 

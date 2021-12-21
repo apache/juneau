@@ -20,7 +20,8 @@ import java.util.*;
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("rawtypes")

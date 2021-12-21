@@ -20,6 +20,11 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Simple list of variables that can consist of either variable classes or instances.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class VarList extends ArrayList<Object> {
 

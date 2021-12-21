@@ -43,6 +43,12 @@ import org.apache.juneau.internal.*;
  * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
  * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @BeanIgnore
 public class MediaRanges {

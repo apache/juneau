@@ -39,6 +39,11 @@ import org.apache.juneau.collections.*;
  * 	String json = s.serialize(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The normal form of the class.
  */
 public abstract class MapSwap<T> extends ObjectSwap<T,OMap> {

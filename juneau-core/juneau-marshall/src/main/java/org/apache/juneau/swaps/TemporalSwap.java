@@ -48,6 +48,11 @@ import org.apache.juneau.swap.*;
  * 	<li class='jc'>{@link YearMonth}
  * 	<li class='jc'>{@link ZonedDateTime}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class TemporalSwap extends StringSwap<Temporal> {
 

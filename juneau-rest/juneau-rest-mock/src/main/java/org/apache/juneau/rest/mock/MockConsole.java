@@ -72,6 +72,11 @@ import org.apache.juneau.assertions.*;
  * 		<js>""</js>
  * 	);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-mock}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MockConsole extends PrintStream {
 

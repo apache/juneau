@@ -18,6 +18,11 @@ import org.apache.juneau.json.annotation.*;
 /**
  * Metadata on bean properties specific to the JSON serializers and parsers pulled from the {@link Json @Json}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

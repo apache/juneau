@@ -17,6 +17,11 @@ import java.util.concurrent.*;
 
 /**
  * A hashmap that allows for two-part keys.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <K1> Key part 1 type.
  * @param <K2> Key part 2 type.
  * @param <V> Value type.

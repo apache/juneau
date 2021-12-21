@@ -21,6 +21,11 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Utility classes and methods for the {@link RestHook @RestHook} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.LifecycleHooks}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestHookAnnotation {
 

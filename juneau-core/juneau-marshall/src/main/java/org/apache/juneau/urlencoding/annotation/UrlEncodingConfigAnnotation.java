@@ -19,6 +19,11 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Utility classes and methods for the {@link UrlEncodingConfig @UrlEncodingConfig} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlEncodingConfigAnnotation {
 

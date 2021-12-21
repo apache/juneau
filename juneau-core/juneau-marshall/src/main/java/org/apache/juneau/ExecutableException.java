@@ -17,6 +17,10 @@ import java.text.MessageFormat;
 
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ExecutableException extends BasicRuntimeException {
 
@@ -53,7 +57,7 @@ public class ExecutableException extends BasicRuntimeException {
 	}
 
 	/**
-	 * If the thrown exception was an {@link InvocationTargetException} returns the target exception.  
+	 * If the thrown exception was an {@link InvocationTargetException} returns the target exception.
 	 * Otherwise returns the inner exception which is typically {@link IllegalArgumentException} or {@link IllegalAccessException}.
 	 *
 	 * @return The inner throwable.

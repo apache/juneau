@@ -27,6 +27,10 @@ import org.apache.juneau.reflect.*;
  * <p>
  * This object is not thread safe.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The value type.
  */
 public class Value<T> {

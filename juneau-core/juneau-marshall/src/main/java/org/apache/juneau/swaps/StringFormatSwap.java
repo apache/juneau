@@ -18,6 +18,11 @@ import org.apache.juneau.swap.*;
 
 /**
  * Built-in object swap implementation class for the {@link Beanp#format() @Beanp(format)} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class StringFormatSwap extends StringSwap<Object> {
 

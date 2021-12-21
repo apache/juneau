@@ -45,6 +45,7 @@ import org.apache.juneau.xml.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Atom}
  * 	<li class='jp'>{@doc package-summary.html#TOC}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Text extends Common {

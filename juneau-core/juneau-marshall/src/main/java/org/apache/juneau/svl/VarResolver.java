@@ -58,7 +58,8 @@ import org.apache.juneau.svl.vars.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.VarResolvers}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class VarResolver {

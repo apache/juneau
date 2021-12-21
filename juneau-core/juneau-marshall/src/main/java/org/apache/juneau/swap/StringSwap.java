@@ -38,6 +38,11 @@ import org.apache.juneau.*;
  * 	String json = s.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The normal form of the class.
  */
 public abstract class StringSwap<T> extends ObjectSwap<T,String> {

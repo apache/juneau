@@ -23,6 +23,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The server successfully processed the request and is not returning any content.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

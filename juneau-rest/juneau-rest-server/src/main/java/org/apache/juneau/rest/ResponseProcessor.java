@@ -71,6 +71,11 @@ import org.apache.juneau.rest.annotation.*;
  * 		}
  * 	}
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface ResponseProcessor {
 

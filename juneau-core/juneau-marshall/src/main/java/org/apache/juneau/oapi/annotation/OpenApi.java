@@ -31,6 +31,8 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

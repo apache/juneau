@@ -27,6 +27,11 @@ import org.apache.juneau.http.header.*;
 /**
  * Builder for {@link SerializedEntity} beans.
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type to create for this builder.
  */
 @FluentSetters(returns="SerializedEntityBuilder<T>")

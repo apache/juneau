@@ -35,6 +35,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Marshalls}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class UrlEncoding extends CharMarshall {

@@ -23,6 +23,10 @@ import org.apache.juneau.reflect.*;
  * 	<li>{@link AnnotationInfo} - The annotation being applied.
  * 	<li>{@link AnnotationApplier} - The applier for that annotation.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("rawtypes")
 public class AnnotationWork {

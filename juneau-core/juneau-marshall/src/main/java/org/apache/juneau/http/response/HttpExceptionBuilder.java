@@ -28,6 +28,11 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link BasicHttpException} beans.
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type to create for this builder.
  */
 @FluentSetters(returns="HttpExceptionBuilder<T>")

@@ -16,6 +16,10 @@ import java.text.*;
 
 /**
  * Exception that indicates that a recursion was detected while traversing a POJO model.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BeanRecursionException extends BasicException {
 

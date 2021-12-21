@@ -47,6 +47,11 @@ import org.apache.juneau.cp.*;
  * 	<jsm>assertObject<jsm>(<jv>myBean</jv>).passes(<jv>p</jv>);
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> the type of input being tested.
  */
 public class AssertionPredicate<T> implements Predicate<T> {

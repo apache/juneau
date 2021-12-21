@@ -86,6 +86,11 @@ import org.apache.juneau.httppart.*;
  * 			<li class='jm'>{@link RequestHeader#getValue() getValue()}
 * 		</ul>
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RequestHeader extends RequestHttpPart implements Header {
 

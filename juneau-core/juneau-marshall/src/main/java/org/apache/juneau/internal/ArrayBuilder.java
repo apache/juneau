@@ -22,6 +22,10 @@ import java.util.*;
  * Designed to create arrays without array copying.
  * Initial capacity cannot be exceeded without throwing a {@link ArrayIndexOutOfBoundsException}.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The array element type.
  */
 public class ArrayBuilder<T> {

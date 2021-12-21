@@ -25,6 +25,10 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Body @Body} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BodyAnnotation {
 

@@ -22,6 +22,7 @@ import static org.apache.juneau.dto.atom.AtomBuilder.person;
  * Atom feed example.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

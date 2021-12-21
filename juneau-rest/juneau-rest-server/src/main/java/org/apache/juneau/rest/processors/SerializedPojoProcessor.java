@@ -27,6 +27,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Response handler for plain-old Java objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class SerializedPojoProcessor implements ResponseProcessor {
 

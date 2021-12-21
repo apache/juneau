@@ -21,6 +21,10 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Utility classes and methods for the {@link HasQuery @HasQuery} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HasQueryAnnotation {
 

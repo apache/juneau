@@ -36,6 +36,8 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.BasicRestObject}
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class RestObject {

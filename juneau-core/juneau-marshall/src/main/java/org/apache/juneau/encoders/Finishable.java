@@ -16,6 +16,11 @@ import java.io.*;
 
 /**
  * Interface that identifies an output stream has having a <c>finish()</c> method.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Encoders}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface Finishable {
 

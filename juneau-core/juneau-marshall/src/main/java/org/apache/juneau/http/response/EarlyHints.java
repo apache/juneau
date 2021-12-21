@@ -22,6 +22,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Used to return some response headers before final HTTP message.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

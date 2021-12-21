@@ -19,6 +19,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link RestGuard} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestGuardList {
 

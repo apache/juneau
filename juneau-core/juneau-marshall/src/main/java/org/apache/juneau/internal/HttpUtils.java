@@ -16,7 +16,11 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 
 /**
- * Utilities.
+ * HTTP utilities.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HttpUtils {
 

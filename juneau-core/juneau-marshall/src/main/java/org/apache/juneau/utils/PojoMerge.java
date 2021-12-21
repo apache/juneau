@@ -73,6 +73,10 @@ import org.apache.juneau.ExecutableException;
  * 	<li>
  * 		For purposes of this interface, a getter is any method with zero arguments and a non-<c>void</c> return type.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class PojoMerge {
 

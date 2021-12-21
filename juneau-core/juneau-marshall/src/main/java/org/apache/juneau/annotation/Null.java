@@ -14,5 +14,9 @@ package org.apache.juneau.annotation;
 
 /**
  * Represents a null entry in a class annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Null {}

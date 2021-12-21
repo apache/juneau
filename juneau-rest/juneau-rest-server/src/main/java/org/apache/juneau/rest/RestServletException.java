@@ -22,6 +22,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * General exception thrown from {@link RestServlet} during construction or initialization.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestServletException extends ServletException {
 

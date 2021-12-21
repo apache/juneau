@@ -48,6 +48,11 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link Html} - Parses HTML text.
  * 	<li>{@link PlainText} - Parses plain text.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 

@@ -134,6 +134,11 @@ import org.apache.juneau.xml.*;
  * 	m.put(<js>"someSubMap"</js>, OMap.<jsm>ofJson</jsm>(<js>"{a:'b'}"</js>));
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 

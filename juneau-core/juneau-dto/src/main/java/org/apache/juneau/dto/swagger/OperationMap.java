@@ -34,6 +34,11 @@ import org.apache.juneau.internal.*;
  * 	<li><c>PATCH</c>
  * 	<li>Everything else.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class OperationMap extends TreeMap<String,Operation> {
 	private static final long serialVersionUID = 1L;

@@ -66,8 +66,10 @@ import org.apache.juneau.http.response.*;
  * 		<li class='jm'>{@link RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)} - Convenience logging method.
  * 	</ul>
  * </ul>
+ *
  * <ul class='seealso'>
- * 	<li class='doc'>{@doc juneau-rest-server}
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class RestServlet extends HttpServlet {

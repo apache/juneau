@@ -17,6 +17,11 @@ import java.util.zip.*;
 
 /**
  * Encoder for handling <js>"gzip"</js> encoding and decoding.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Encoders}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class GzipEncoder extends Encoder {
 

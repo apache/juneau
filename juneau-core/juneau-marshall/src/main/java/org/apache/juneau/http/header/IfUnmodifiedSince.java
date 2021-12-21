@@ -60,7 +60,9 @@ import org.apache.juneau.http.annotation.*;
  * If-Modified-Since header fields is undefined by this specification.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Header("If-Unmodified-Since")

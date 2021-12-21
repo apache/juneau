@@ -31,9 +31,10 @@ import java.io.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
- */
+09 */
 public abstract class SimpleVar extends Var {
 
 	/**

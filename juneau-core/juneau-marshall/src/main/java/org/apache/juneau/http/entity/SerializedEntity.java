@@ -25,6 +25,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * HttpEntity for serializing POJOs as the body of HTTP requests.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SerializedEntity extends BasicHttpEntity {
 	final Serializer serializer;

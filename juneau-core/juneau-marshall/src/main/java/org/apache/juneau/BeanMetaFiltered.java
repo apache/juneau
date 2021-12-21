@@ -19,6 +19,10 @@ import org.apache.juneau.annotation.*;
 /**
  * Same as {@link BeanMeta}, except the list of bean properties are limited by a  {@link Beanp#properties() @Beanp(bpi)} annotation.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The class type that this metadata applies to.
  */
 public final class BeanMetaFiltered<T> extends BeanMeta<T> {

@@ -29,6 +29,11 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link RestOpContext}
  * 	<li class='jc'>{@link SerializerSet}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestOpContextArgs extends SimpleRestOperationArg {
 

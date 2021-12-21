@@ -22,6 +22,10 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * Consists of a simple string-keyed map of arbitrary objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @NotThreadSafe
 public class DefaultSettingsMap {

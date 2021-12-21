@@ -16,6 +16,11 @@ import org.apache.juneau.*;
 
 /**
  * Interface for providing access to {@link OpenApiClassMeta} and {@link OpenApiBeanPropertyMeta} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface OpenApiMetaProvider extends MetaProvider {
 

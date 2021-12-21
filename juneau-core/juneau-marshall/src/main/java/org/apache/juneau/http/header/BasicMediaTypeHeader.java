@@ -31,7 +31,9 @@ import org.apache.juneau.json.*;
  * </p>
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
 */
 public class BasicMediaTypeHeader extends BasicStringHeader {

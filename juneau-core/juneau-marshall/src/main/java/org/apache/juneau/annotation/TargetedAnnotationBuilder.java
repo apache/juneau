@@ -18,6 +18,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * Builder for {@link TargetedAnnotationImpl} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @FluentSetters
 public class TargetedAnnotationBuilder extends AnnotationBuilder {

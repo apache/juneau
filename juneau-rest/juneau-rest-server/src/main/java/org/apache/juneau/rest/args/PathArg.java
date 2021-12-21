@@ -42,6 +42,11 @@ import org.apache.juneau.rest.util.*;
  *
  * <p>
  * {@link HttpPartSchema schema} is derived from the {@link Path} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class PathArg implements RestOpArg {
 	private final HttpPartParser partParser;

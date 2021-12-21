@@ -60,7 +60,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
@@ -68,6 +67,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.args.*;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.mstat.*;
 import org.apache.juneau.rest.processors.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -77,7 +77,6 @@ import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Defines the initial configuration of a <c>RestServlet</c> or <c>@Rest</c> annotated object.
@@ -111,6 +110,8 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestContext}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  * </ul>
  */
 public class RestContext extends Context {

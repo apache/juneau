@@ -93,6 +93,10 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * This class is not thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class OMap extends LinkedHashMap<String,Object> {
 

@@ -31,7 +31,9 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.SvlVariables}
+ * 	<li class='link'>{@doc jrs.HtmlWidgets}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HtmlWidgetVar extends SimpleVar {

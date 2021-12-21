@@ -97,6 +97,11 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Serialize a POJO to JSON</jc>
  * 	String json = serializer.serialize(someObject);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
 

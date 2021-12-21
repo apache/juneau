@@ -37,6 +37,11 @@ import org.apache.juneau.xml.*;
  * Produces the same output as {@link HtmlDocSerializer}, but without the header and body tags and page title and
  * description.
  * Used primarily for JUnit testing the {@link HtmlDocSerializer} class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlStrippedDocSerializer extends HtmlSerializer {
 

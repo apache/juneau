@@ -41,6 +41,11 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class XmlParserSession extends ReaderParserSession {

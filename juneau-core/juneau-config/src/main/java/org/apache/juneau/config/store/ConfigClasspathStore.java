@@ -31,6 +31,10 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Configuration files retrieved from the classpath can be modified but not persisted.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ConfigClasspathStore extends ConfigStore {
 

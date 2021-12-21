@@ -19,6 +19,11 @@ import org.apache.juneau.reflect.*;
  *
  * <p>
  * More precisely, uses the {@link Mutaters#toString(Object)} method to stringify objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SimplePartSerializer extends BaseHttpPartSerializer {
 

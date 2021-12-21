@@ -42,6 +42,10 @@ import org.apache.juneau.collections.*;
  * 	<jc>// Display differences.</jc>
  * 	System.<jsf>err</jsf>.println(bf);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Bean(properties="v1,v2")
 public class BeanDiff {

@@ -28,6 +28,11 @@ import org.apache.juneau.http.annotation.*;
  * <br>The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * <br>401 semantically means "unauthenticated",i.e. the user does not have the necessary credentials.
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

@@ -17,6 +17,7 @@ package org.apache.juneau.dto.html5;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HtmlBuilder {

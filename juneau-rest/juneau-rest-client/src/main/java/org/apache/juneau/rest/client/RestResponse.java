@@ -41,8 +41,8 @@ import org.apache.juneau.utils.*;
  * Instances of this class are created by calling the {@link RestRequest#run()} method.
  *
  * <ul class='seealso'>
- * 	<li class='jc'>{@link RestClient}
  * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestResponse implements HttpResponse {

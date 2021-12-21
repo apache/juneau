@@ -30,7 +30,8 @@ import org.apache.juneau.collections.*;
  * All other data types are left as-is.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"serial"})

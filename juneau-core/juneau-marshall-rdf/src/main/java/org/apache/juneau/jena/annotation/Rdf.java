@@ -35,6 +35,11 @@ import org.apache.juneau.jena.*;
  * <ul>
  * 	<li>Override the default behavior of how collections and arrays are serialized.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({PACKAGE,TYPE,FIELD,METHOD})

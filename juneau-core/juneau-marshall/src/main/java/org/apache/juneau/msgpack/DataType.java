@@ -14,6 +14,11 @@ package org.apache.juneau.msgpack;
 
 /**
  * Constants for the MessagePack format.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 enum DataType {
 	NULL, BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING, BIN, EXT, ARRAY, MAP, INVALID;

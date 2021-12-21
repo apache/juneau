@@ -72,8 +72,8 @@ import org.apache.juneau.xml.*;
  * Instances of this class are created by the various creator methods on the {@link RestClient} class.
  *
  * <ul class='seealso'>
- * 	<li class='jc'>{@link RestClient}
  * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable {

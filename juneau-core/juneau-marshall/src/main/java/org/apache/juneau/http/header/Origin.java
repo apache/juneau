@@ -18,6 +18,12 @@ import org.apache.juneau.http.annotation.*;
 
 /**
  * Represents a parsed <l>Origin</l> HTTP request header.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Header("Origin")
 public class Origin extends BasicStringHeader {

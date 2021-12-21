@@ -20,6 +20,10 @@ import org.apache.juneau.collections.*;
 /**
  * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The class type of the wrapped bean.
  */
 @SuppressWarnings("rawtypes")

@@ -19,6 +19,10 @@ import org.apache.juneau.internal.*;
 /**
  * Represents a simple tuple of 5 objects.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <A> Object 1 type.
  * @param <B> Object 2 type.
  * @param <C> Object 3 type.

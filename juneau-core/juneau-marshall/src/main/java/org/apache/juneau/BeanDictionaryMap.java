@@ -55,6 +55,10 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("rawtypes")
 public class BeanDictionaryMap extends LinkedHashMap<String,Object> {

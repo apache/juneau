@@ -71,6 +71,11 @@ import org.apache.juneau.serializer.*;
  * 	<li>Deprecated members/constructors.
  * </ul>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The normal class type.
  */
 public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {

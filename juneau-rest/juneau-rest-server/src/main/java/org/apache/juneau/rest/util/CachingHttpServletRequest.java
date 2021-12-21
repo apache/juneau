@@ -22,6 +22,10 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * Wraps an {@link HttpServletRequest} and preloads the body into memory for debugging purposes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 

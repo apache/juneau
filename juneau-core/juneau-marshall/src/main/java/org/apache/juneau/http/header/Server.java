@@ -55,7 +55,9 @@ import org.apache.juneau.http.annotation.*;
  * Server implementors are encouraged to make this field a configurable option.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Header("Server")

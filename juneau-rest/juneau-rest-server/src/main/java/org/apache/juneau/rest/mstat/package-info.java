@@ -15,4 +15,4 @@
 /**
  * Method exec stats utilities
  */
-package org.apache.juneau.mstat;
+package org.apache.juneau.rest.mstat;

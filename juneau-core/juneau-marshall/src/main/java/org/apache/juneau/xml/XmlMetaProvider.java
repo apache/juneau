@@ -16,6 +16,11 @@ import org.apache.juneau.*;
 
 /**
  * Interface for providing access to {@link XmlClassMeta}, {@link XmlBeanMeta}, and {@link XmlBeanPropertyMeta} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface XmlMetaProvider extends MetaProvider  {
 

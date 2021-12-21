@@ -44,6 +44,10 @@ import org.apache.juneau.swaps.*;
  * <p>
  * Developers will typically not need access to this class.  The information provided by it is already exposed through
  * several methods on the {@link BeanMap} API.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class BeanPropertyMeta {

@@ -22,6 +22,11 @@ import org.apache.juneau.reflect.*;
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SimplePartParserSession extends BaseHttpPartParserSession {
 

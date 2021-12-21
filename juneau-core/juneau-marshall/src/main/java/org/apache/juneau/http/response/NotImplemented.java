@@ -26,6 +26,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

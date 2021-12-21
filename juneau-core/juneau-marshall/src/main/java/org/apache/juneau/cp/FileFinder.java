@@ -81,6 +81,10 @@ import org.apache.juneau.internal.*;
  * 	<li>Any beans present in the registered {@link Builder#beanStore(BeanStore) bean store}.
  * 	<li>Any {@link Optional} beans optionally present in the registered {@link Builder#beanStore(BeanStore) bean store}.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface FileFinder {
 

@@ -47,6 +47,7 @@ import org.apache.juneau.http.response.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestRpc}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"serial","javadoc"})

@@ -28,6 +28,11 @@ import org.apache.juneau.utils.*;
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class OutputStreamSerializer extends Serializer {
 

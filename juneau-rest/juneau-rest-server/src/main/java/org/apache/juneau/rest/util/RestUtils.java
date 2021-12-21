@@ -30,6 +30,10 @@ import org.apache.juneau.uon.*;
 
 /**
  * Various reusable utility methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class RestUtils {
 

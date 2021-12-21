@@ -119,6 +119,10 @@ import org.apache.juneau.collections.*;
  * 	<li>A comma-delimited list of anything on this list.
  * </ul>
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <V> The type of object in this map.
  */
 public class ReflectionMap<V> {

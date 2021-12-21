@@ -27,6 +27,7 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestRpc}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RrpcInterfaceMeta {

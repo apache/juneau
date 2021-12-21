@@ -23,6 +23,10 @@ import static java.util.Optional.*;
  *
  * <p>
  * Used to compare version numbers.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Version implements Comparable<Version> {
 

@@ -26,6 +26,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The request entity has a media type which the server or resource does not support.
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

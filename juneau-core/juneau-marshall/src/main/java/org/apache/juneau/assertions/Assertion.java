@@ -48,6 +48,7 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

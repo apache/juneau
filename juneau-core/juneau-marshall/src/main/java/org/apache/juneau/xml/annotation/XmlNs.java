@@ -21,6 +21,11 @@ import java.lang.annotation.*;
  *
  * <p>
  * Used to identify a namespace/URI pair on a {@link XmlSchema#xmlNs() @XmlSchema(xmlNs)} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({})

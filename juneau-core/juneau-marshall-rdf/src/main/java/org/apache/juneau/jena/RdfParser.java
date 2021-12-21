@@ -52,7 +52,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall-rdf}
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RdfParser extends ReaderParser implements RdfMetaProvider {

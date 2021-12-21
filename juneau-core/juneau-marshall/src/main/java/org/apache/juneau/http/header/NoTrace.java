@@ -18,6 +18,11 @@ import org.apache.juneau.http.annotation.*;
 
 /**
  * Represents a parsed <l>No-Trace</l> HTTP request header.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Header("No-Trace")
 public class NoTrace extends BasicBooleanHeader {

@@ -24,8 +24,8 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.mstat.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mstat.*;
 import org.apache.juneau.rest.util.*;
 
 /**
@@ -82,6 +82,7 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicRestLogger implements RestLogger {

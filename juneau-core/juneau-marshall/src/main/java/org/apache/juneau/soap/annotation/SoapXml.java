@@ -31,6 +31,8 @@ import org.apache.juneau.soap.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SoapXmlDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

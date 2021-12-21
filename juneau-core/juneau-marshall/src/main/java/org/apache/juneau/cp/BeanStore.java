@@ -30,6 +30,10 @@ import org.apache.juneau.reflect.*;
  *
  * <p>
  * Used for bean injection.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BeanStore {
 

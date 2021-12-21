@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.rest.mstat;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.mstat.*;
 import org.apache.juneau.reflect.*;
 
 /**

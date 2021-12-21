@@ -28,6 +28,11 @@ import org.apache.juneau.swap.*;
  *
  * <p>
  * Strings are converted to objects using {@link DatatypeFactory#newXMLGregorianCalendar(String)}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 

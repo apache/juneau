@@ -14,6 +14,11 @@ package org.apache.juneau.jena;
 
 /**
  * Subclass of {@link RdfSerializer} for serializing RDF in N-Triple notation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class NTripleSerializer extends RdfSerializer {
 

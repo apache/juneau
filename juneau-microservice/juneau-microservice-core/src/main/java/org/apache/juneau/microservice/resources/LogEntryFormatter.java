@@ -41,6 +41,11 @@ import org.apache.juneau.collections.*;
  *
  * <p>
  * This class converts the format strings into a regular expression that can be used to parse the resulting log file.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class LogEntryFormatter extends Formatter {
 

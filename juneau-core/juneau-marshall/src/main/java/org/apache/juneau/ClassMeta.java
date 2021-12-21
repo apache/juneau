@@ -57,6 +57,10 @@ import org.apache.juneau.swap.*;
  * This class is tied to the {@link BeanContext} class because it's that class that makes the determination of what is
  * a bean.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")

@@ -67,6 +67,7 @@ import org.apache.juneau.cp.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Assertions {

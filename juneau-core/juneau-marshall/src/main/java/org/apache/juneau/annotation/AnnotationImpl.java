@@ -33,6 +33,10 @@ import org.apache.juneau.internal.*;
  * <p>
  * For performance reasons, the hashcode is calculated one time and cached at the end of object creation.
  * Constructors must call the {@link #postConstruct()} method after all fields have been set to trigger this calculation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AnnotationImpl implements Annotation {
 

@@ -23,6 +23,7 @@ import org.apache.juneau.oapi.*;
 
 /**
  * REST request header annotation.
+ * {@review}
  *
  * <p>
  * Identifies a POJO to be used as the header of an HTTP request.
@@ -74,6 +75,10 @@ import org.apache.juneau.oapi.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

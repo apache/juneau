@@ -21,6 +21,11 @@ import org.apache.juneau.xml.*;
 
 /**
  * Specialized writer for serializing HTML.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlWriter extends XmlWriter {
 

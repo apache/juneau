@@ -28,6 +28,8 @@ import org.apache.juneau.dto.html5.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
+ * 	<li class='link'>{@doc jrs.HtmlWidgets}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Tooltip {

@@ -25,6 +25,11 @@ import org.springframework.web.filter.*;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc my-springboot-microservice}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SpringBootApplication
 @Controller

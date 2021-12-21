@@ -35,6 +35,11 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * {@link HttpPartSchema schema} is derived from the {@link Body} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BodyArg implements RestOpArg {
 

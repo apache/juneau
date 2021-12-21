@@ -23,6 +23,11 @@ import org.apache.juneau.assertions.*;
 
 /**
  * A {@link NameValuePair} that consists of a single boolean value.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicBooleanPart extends BasicPart {
 

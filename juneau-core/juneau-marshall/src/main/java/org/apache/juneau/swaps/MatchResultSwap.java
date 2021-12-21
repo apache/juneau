@@ -23,6 +23,11 @@ import org.apache.juneau.swap.*;
  *
  * <p>
  * Entries in the list represent matched groups in a regular expression.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 

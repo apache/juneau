@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 
 /**
  * Swagger items annotation.
+ * {@review}
  *
  * <p>
  * This class is essentially identical to {@link Items} except it's used for defining items of items.
@@ -29,6 +30,7 @@ import java.lang.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

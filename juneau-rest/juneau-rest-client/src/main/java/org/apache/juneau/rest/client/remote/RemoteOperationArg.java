@@ -28,6 +28,8 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Proxies}
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class RemoteOperationArg {

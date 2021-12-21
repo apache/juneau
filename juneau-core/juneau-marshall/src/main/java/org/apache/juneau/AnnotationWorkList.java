@@ -19,6 +19,10 @@ import org.apache.juneau.reflect.*;
 
 /**
  * A list of {@link AnnotationWork} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private static final long serialVersionUID = 1L;

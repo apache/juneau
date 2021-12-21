@@ -23,6 +23,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * A self contained, repeatable entity that obtains its content from a {@link String}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class StringEntity extends BasicHttpEntity {
 

@@ -31,6 +31,11 @@ import java.lang.annotation.*;
  * 	<li>
  * 		On {@link Bean}-annotated methods on configuration beans.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-server-springboot}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)

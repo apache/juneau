@@ -38,6 +38,11 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		Externally-supplied/dynamic content.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @BeanIgnore
 public class BasicHttpEntity implements HttpEntity {

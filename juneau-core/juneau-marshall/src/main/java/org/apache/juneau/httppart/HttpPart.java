@@ -21,6 +21,11 @@ import org.apache.http.*;
  *
  * <p>
  * Can be used to represent both request and response parts.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HttpPart implements NameValuePair {
 	private final String name;

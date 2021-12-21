@@ -36,6 +36,11 @@ import org.apache.juneau.annotation.*;
  * 	<li>Specify the XML namespace on a package, class, or method.
  * 	<li>Override the XML format on a POJO.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})

@@ -44,6 +44,11 @@ import org.apache.juneau.utils.*;
  * <h5 class='topic'>Description</h5>
  *
  * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class XmlParser extends ReaderParser implements XmlMetaProvider {
 

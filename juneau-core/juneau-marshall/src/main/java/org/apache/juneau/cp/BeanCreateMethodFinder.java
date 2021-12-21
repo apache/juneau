@@ -27,6 +27,10 @@ import org.apache.juneau.reflect.*;
  *
  * See {@link BeanStore#createMethodFinder(Class, Object)} for usage.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type being created.
  */
 public class BeanCreateMethodFinder<T> {

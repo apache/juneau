@@ -22,6 +22,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * Encapsulates arguments for basic search/view/sort/position/limit functionality.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SearchArgs {
 

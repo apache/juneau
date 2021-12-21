@@ -18,6 +18,10 @@ import java.util.function.*;
 /**
  * A function that takes in 3 arguments.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <A> The first argument.
  * @param <B> The second argument.
  * @param <C> The third argument.

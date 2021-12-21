@@ -123,6 +123,11 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link Sq} - Default serializer, single quotes.
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 

@@ -16,6 +16,10 @@ import java.io.*;
 
 /**
  * Similar to {@link StringReader} except reads from a generic {@link CharSequenceReader}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class CharSequenceReader extends BufferedReader {
 

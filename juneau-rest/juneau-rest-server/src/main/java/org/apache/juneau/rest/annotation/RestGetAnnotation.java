@@ -30,6 +30,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link RestGet @RestGet} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestGetAnnotation {
 

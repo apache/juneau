@@ -48,7 +48,11 @@ import java.net.*;
  * 	<li><js>"foo"</js> - Path-info-relative URI.
  * 	<li><js>""</js> - Path-info URI.
  * </ul>
-*/
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 public class UriResolver {
 
 	private final UriResolution resolution;

@@ -18,6 +18,11 @@ import org.apache.juneau.uon.annotation.*;
 /**
  * Metadata on bean properties specific to the UON serializers and parsers pulled from the {@link Uon @Uon}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

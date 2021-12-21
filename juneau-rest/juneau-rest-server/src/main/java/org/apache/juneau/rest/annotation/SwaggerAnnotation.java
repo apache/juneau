@@ -21,6 +21,11 @@ import org.apache.juneau.http.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Swagger @Swagger} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SwaggerAnnotation {
 

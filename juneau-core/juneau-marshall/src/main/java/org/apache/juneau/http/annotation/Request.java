@@ -23,6 +23,7 @@ import org.apache.juneau.oapi.*;
 
 /**
  * Request bean annotation.
+ * {@review}
  *
  * <p>
  * Identifies an interface to use to interact with HTTP parts of an HTTP request through a bean.
@@ -133,6 +134,10 @@ import org.apache.juneau.oapi.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

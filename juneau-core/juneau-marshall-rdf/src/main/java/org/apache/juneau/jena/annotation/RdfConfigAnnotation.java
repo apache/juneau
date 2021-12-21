@@ -22,6 +22,11 @@ import org.apache.juneau.xml.Namespace;
 
 /**
  * Utility classes and methods for the {@link RdfConfig @RdfConfig} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfConfigAnnotation {
 

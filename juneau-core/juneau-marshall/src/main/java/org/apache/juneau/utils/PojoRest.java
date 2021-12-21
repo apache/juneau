@@ -124,6 +124,10 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map m = pojoRest.getMap(<js>"/items/@name=foo"</js>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class PojoRest {

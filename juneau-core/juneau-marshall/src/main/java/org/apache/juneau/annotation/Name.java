@@ -35,6 +35,10 @@ import java.lang.annotation.*;
  * 		<jk>public</jk> MyBean(<ja>@Name</ja>("bar") <jk>int</jk> foo) {}
  * 	}
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({PARAMETER})

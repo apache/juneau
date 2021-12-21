@@ -28,7 +28,9 @@ import org.apache.juneau.xml.annotation.*;
  * 	HtmlText t = <jk>new</jk> HtmlText(<js>"&lt;span&gt;&amp;#2753;&lt;/span&gt;"</js>);
  * </p>
  *
- *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Xml(format=XMLTEXT)
 public class HtmlText {

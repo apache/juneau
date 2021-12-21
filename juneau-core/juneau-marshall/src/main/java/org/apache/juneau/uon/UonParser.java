@@ -40,6 +40,11 @@ import org.apache.juneau.utils.*;
  * <h5 class='topic'>Description</h5>
  *
  * This parser uses a state machine, which makes it very fast and efficient.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
 

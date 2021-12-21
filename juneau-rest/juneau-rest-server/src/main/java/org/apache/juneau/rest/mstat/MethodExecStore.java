@@ -10,32 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.mstat;
+package org.apache.juneau.rest.mstat;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.stream.Collectors.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
-
+import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Method execution statistics.
+ * Method execution statistics database.
  *
- * Keeps track of number of starts/finishes on tasks and keeps an average run time.
+ * <p>
+ * Used for tracking basic call statistics on Java methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
-public class MethodExecStats {
+public class MethodExecStore {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Static creator.
+	 * Creates a new builder for this object.
 	 *
 	 * @return A new builder for this object.
 	 */
@@ -51,32 +56,32 @@ public class MethodExecStats {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends BeanBuilder<MethodExecStats> {
+	public static class Builder extends BeanBuilder<MethodExecStore> {
 
-		Method method;
 		ThrownStore thrownStore;
+		Class<? extends MethodExecStats> statsImplClass;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(MethodExecStats.class);
+			super(MethodExecStore.class);
 		}
 
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param copyFrom The builder to copy.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			method = copyFrom.method;
 			thrownStore = copyFrom.thrownStore;
+			statsImplClass = copyFrom.statsImplClass;
 		}
 
 		@Override /* BeanBuilder */
-		protected MethodExecStats buildDefault() {
-			return new MethodExecStats(this);
+		protected MethodExecStore buildDefault() {
+			return new MethodExecStore(this);
 		}
 
 		@Override /* BeanBuilder */
@@ -89,26 +94,42 @@ public class MethodExecStats {
 		//-------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Specifies the Java method.
+		 * Specifies a subclass of {@link MethodExecStats} to use for individual method statistics.
 		 *
 		 * @param value The new value for this setting.
-		 * @return This object.
+		 * @return  This object.
 		 */
-		@FluentSetter
-		public Builder method(Method value) {
-			method = value;
+		public Builder statsImplClass(Class<? extends MethodExecStats> value) {
+			statsImplClass = value;
 			return this;
 		}
 
 		/**
-		 * Specifies the thrown store for tracking exceptions.
+		 * Specifies the store to use for gathering statistics on thrown exceptions.
+		 *
+		 * <p>
+		 * Can be used to capture thrown exception stats across multiple {@link MethodExecStore} objects.
+		 *
+		 * <p>
+		 * If not specified, one will be created by default for the {@link MethodExecStore} object.
+		 *
+		 * @param value The store to use for gathering statistics on thrown exceptions.
+		 * @return This object.
+		 */
+		public Builder thrownStore(ThrownStore value) {
+			thrownStore = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #thrownStore(ThrownStore)} but only sets the new value if the current value is <jk>null</jk>.
 		 *
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
-		public Builder thrownStore(ThrownStore value) {
-			thrownStore = value;
+		public Builder thrownStoreOnce(ThrownStore value) {
+			if (thrownStore == null)
+				thrownStore = value;
 			return this;
 		}
 
@@ -145,167 +166,88 @@ public class MethodExecStats {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final long guid;
-	private final Method method;
 	private final ThrownStore thrownStore;
-
-	private volatile int minTime = -1, maxTime;
-
-	private AtomicInteger
-		starts = new AtomicInteger(),
-		finishes = new AtomicInteger(),
-		errors = new AtomicInteger();
-
-	private AtomicLong
-		totalTime = new AtomicLong();
+	private final BeanStore beanStore;
+	private final Class<? extends MethodExecStats> statsImplClass;
+	private final ConcurrentHashMap<Method,MethodExecStats> db = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this object.
+	 * @param builder The store to use for storing thrown exception statistics.
 	 */
-	protected MethodExecStats(Builder builder) {
-		this.guid = new Random().nextLong();
-		this.method = builder.method;
-		this.thrownStore = ofNullable(builder.thrownStore).orElseGet(ThrownStore::new);
-	}
-
-
-	/**
-	 * Call when task is started.
-	 *
-	 * @return This object.
-	 */
-	public MethodExecStats started() {
-		starts.incrementAndGet();
-		return this;
+	protected MethodExecStore(Builder builder) {
+		this.beanStore = builder.beanStore().orElseGet(()->BeanStore.create().build());
+		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
+		this.statsImplClass = builder.statsImplClass;
 	}
 
 	/**
-	 * Call when task is finished.
-	 *
-	 * @param nanoTime The execution time of the task in nanoseconds.
-	 * @return This object.
-	 */
-	public MethodExecStats finished(long nanoTime) {
-		finishes.incrementAndGet();
-		int milliTime = (int)(nanoTime/1_000_000);
-		totalTime.addAndGet(nanoTime);
-		minTime = minTime == -1 ? milliTime : Math.min(minTime, milliTime);
-		maxTime = Math.max(maxTime, milliTime);
-		return this;
-	}
-
-	/**
-	 * Call when an error occurs.
-	 *
-	 * @param e The exception thrown.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public MethodExecStats error(Throwable e) {
-		errors.incrementAndGet();
-		thrownStore.add(e);
-		return this;
-	}
-
-	/**
-	 * Returns a globally unique ID for this object.
+	 * Returns the statistics for the specified method.
 	 *
 	 * <p>
-	 * A random long generated during the creation of this object.
-	 * Allows this object to be differentiated from other similar objects in multi-node environments so that
-	 * statistics can be reliably stored in a centralized location.
+	 * Creates a new stats object if one has not already been created.
 	 *
-	 * @return The globally unique ID for this object.
+	 * @param m The method to return the statistics for.
+	 * @return The statistics for the specified method.  Never <jk>null</jk>.
 	 */
-	public long getGuid() {
-		return guid;
+	public MethodExecStats getStats(Method m) {
+		MethodExecStats stats = db.get(m);
+		if (stats == null) {
+			stats = MethodExecStats
+				.create()
+				.beanStore(beanStore)
+				.type(statsImplClass)
+				.method(m)
+				.thrownStore(ThrownStore.create().parent(thrownStore).build())
+				.build();
+			db.putIfAbsent(m, stats);
+			stats = db.get(m);
+		}
+		return stats;
 	}
 
 	/**
-	 * Returns the method name of these stats.
+	 * Returns all the statistics in this store.
 	 *
-	 * @return The method name of these stats.
+	 * @return All the statistics in this store.
 	 */
-	public Method getMethod() {
-		return method;
+	public Collection<MethodExecStats> getStats() {
+		return db.values();
 	}
 
 	/**
-	 * Returns the number of times the {@link #started()} method was called.
+	 * Returns timing information on all method executions on this class.
 	 *
-	 * @return The number of times the {@link #started()} method was called.
+	 * @return A list of timing statistics ordered by average execution time descending.
 	 */
-	public int getRuns() {
-		return starts.get();
+	public List<MethodExecStats> getStatsByTotalTime() {
+		return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList());
 	}
 
 	/**
-	 * Returns the number currently running method invocations.
+	 * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.
 	 *
-	 * @return The number of currently running method invocations.
+	 * @return A report of all method execution times ordered by .
 	 */
-	public int getRunning() {
-		return starts.get() - finishes.get();
+	public String getReport() {
+		StringBuilder sb = new StringBuilder()
+			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
+			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
+		getStatsByTotalTime()
+			.stream()
+			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
+			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
+		return sb.toString();
+
 	}
 
 	/**
-	 * Returns the number of times the {@link #error(Throwable)} method was called.
+	 * Returns the thrown exception store being used by this store.
 	 *
-	 * @return The number of times the {@link #error(Throwable)} method was called.
-	 */
-	public int getErrors() {
-		return errors.get();
-	}
-
-	/**
-	 * Returns the max execution time.
-	 *
-	 * @return The average execution time in milliseconds.
-	 */
-	public int getMinTime() {
-		return minTime == -1 ? 0 : minTime;
-	}
-
-	/**
-	 * Returns the max execution time.
-	 *
-	 * @return The average execution time in milliseconds.
-	 */
-	public int getMaxTime() {
-		return maxTime;
-	}
-
-	/**
-	 * Returns the average execution time.
-	 *
-	 * @return The average execution time in milliseconds.
-	 */
-	public int getAvgTime() {
-		int runs = finishes.get();
-		return runs == 0 ? 0 : (int)(getTotalTime() / runs);
-	}
-
-	/**
-	 * Returns the total execution time.
-	 *
-	 * @return The total execution time in milliseconds.
-	 */
-	public long getTotalTime() {
-		return totalTime.get() / 1_000_000;
-	}
-
-	/**
-	 * Returns information on all stack traces of all exceptions encountered.
-	 *
-	 * @return Information on all stack traces of all exceptions encountered.
+	 * @return The thrown exception store being used by this store.
 	 */
 	public ThrownStore getThrownStore() {
 		return thrownStore;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return json(this);
 	}
 }

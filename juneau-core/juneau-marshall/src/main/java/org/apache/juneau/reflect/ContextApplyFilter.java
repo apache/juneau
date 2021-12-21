@@ -19,6 +19,10 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Filter used to accept only annotations that themselves have the {@link ContextApply} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ContextApplyFilter implements Predicate<AnnotationInfo<?>> {
 

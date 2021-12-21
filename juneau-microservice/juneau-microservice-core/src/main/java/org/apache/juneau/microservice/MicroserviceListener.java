@@ -16,6 +16,11 @@ import org.apache.juneau.config.event.*;
 
 /**
  * Listener class for microservice lifecycle events.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface MicroserviceListener {
 

@@ -27,6 +27,11 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */

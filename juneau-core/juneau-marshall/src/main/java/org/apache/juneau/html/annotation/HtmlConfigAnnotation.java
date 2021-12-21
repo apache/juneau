@@ -19,6 +19,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link HtmlConfig @HtmlConfig} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlConfigAnnotation {
 

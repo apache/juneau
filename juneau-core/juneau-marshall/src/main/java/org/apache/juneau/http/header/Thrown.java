@@ -49,6 +49,11 @@ import org.apache.juneau.http.annotation.*;
  * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found
  * 	Thrown: java.lang.RuntimeException;foo
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Header("Thrown")
 public class Thrown extends BasicCsvArrayHeader {

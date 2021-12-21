@@ -22,6 +22,11 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Resolves method parameters annotated with {@link StatusCode} on {@link RestOp}-annotated Java methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ResponseCodeArg implements RestOpArg {
 

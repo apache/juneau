@@ -46,7 +46,8 @@ import org.apache.juneau.svl.*;
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SwitchVar extends MultipartVar {

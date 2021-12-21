@@ -19,6 +19,11 @@ import java.lang.annotation.*;
 
 /**
  * Identifies the default RDF namespaces at the package level.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target(PACKAGE)

@@ -19,6 +19,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link JsonConfig @JsonConfig} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonConfigAnnotation {
 

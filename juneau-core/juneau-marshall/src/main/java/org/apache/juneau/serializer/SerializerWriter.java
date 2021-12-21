@@ -29,6 +29,11 @@ import org.apache.juneau.*;
  * <p class='bcode w800'>
  * 	writer.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SerializerWriter extends Writer {
 

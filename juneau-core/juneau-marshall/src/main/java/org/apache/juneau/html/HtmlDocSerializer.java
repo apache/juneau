@@ -70,6 +70,11 @@ import org.apache.juneau.xml.*;
  * <c>messages</c> annotation.
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 

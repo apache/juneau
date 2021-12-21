@@ -21,6 +21,7 @@ import org.apache.juneau.xml.*;
  * Sample class which shows the complex usage of XmlSerializer.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

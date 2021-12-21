@@ -41,6 +41,12 @@ import org.apache.juneau.internal.*;
  * 	<li>
  * 		Fluent assertions.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @FluentSetters
 @BeanIgnore

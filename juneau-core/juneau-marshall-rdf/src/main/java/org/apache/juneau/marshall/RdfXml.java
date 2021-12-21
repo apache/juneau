@@ -32,6 +32,12 @@ import org.apache.juneau.jena.*;
  * 	MyPojo myPojo = RdfXml.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
  * 	String string = RdfXml.<jsf>DEFAULT</jsf>.write(myPojo);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{@doc jm.Marshalls}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfXml extends CharMarshall {
 

@@ -48,6 +48,10 @@ import org.apache.juneau.serializer.*;
  * 	String json = s.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The entry type.
  */
 @SuppressWarnings({"unchecked"})

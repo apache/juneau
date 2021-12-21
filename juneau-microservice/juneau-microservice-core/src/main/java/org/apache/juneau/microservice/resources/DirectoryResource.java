@@ -53,6 +53,11 @@ import org.apache.juneau.http.response.*;
  * 	<li>
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	title="File System Explorer",

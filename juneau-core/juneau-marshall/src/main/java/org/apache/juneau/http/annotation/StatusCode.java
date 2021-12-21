@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * REST response status annotation.
+ * {@review}
  *
  * <p>
  * Annotation used to denote an HTTP response status code.
@@ -93,6 +94,10 @@ import org.apache.juneau.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Response}
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

@@ -26,6 +26,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Rdf @Rdf} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfAnnotation {
 

@@ -18,6 +18,10 @@ import java.util.*;
 /**
  * Encapsulates multiple collections so they can be iterated over as if they were all part of the same collection.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <E> The object type of this set.
  */
 public class MultiSet<E> extends AbstractSet<E> {

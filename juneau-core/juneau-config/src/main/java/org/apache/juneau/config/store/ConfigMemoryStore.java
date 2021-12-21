@@ -28,6 +28,10 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Points to a file system directory containing configuration files.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ConfigMemoryStore extends ConfigStore {
 

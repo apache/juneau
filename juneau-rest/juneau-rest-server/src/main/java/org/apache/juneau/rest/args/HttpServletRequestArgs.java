@@ -32,6 +32,11 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link HttpServletRequest}
  * 	<li class='jc'>{@link Principal}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HttpServletRequestArgs extends SimpleRestOperationArg {
 

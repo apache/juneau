@@ -17,6 +17,11 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Sample root REST resource.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	path="/",

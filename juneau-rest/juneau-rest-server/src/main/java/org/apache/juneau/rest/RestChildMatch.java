@@ -17,6 +17,11 @@ import org.apache.juneau.rest.util.*;
 
 /**
  * Represents a matched {@link Rest}-annotated child on an HTTP request.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestChildMatch {
 

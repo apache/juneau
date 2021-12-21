@@ -22,6 +22,11 @@ import org.springframework.context.*;
 
 /**
  * Subclass of a {@link RestServlet} meant for use as deployed top-level REST beans.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-server-springboot}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class SpringRestServlet extends RestServlet {
 

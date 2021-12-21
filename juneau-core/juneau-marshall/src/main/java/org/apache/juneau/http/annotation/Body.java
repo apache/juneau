@@ -22,6 +22,7 @@ import org.apache.juneau.json.*;
 
 /**
  * REST request body annotation.
+ * {@review}
  *
  * <p>
  * Identifies a POJO to be used as the body of an HTTP request.
@@ -128,6 +129,10 @@ import org.apache.juneau.json.*;
  *		when trying to access generalized <code>OMaps</code> as beans.  The best solution to this issue is to either
  *		specify the parameter as a bean array (e.g. <code>MyBean[]</code>) or declare the method as final so that CGLIB
  *		will not try to recompile it.
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

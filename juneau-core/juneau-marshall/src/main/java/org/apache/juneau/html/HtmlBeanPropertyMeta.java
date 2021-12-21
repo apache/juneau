@@ -20,6 +20,11 @@ import org.apache.juneau.html.annotation.*;
 /**
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("rawtypes")
 public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {

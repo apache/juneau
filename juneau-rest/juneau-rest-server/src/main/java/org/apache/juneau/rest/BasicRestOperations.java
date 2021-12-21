@@ -48,6 +48,11 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='jc'>{@link BasicRestObject}
  * 	<li class='jc'>{@link BasicRestObjectGroup}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @HtmlDocConfig(
 	// Basic page navigation links.

@@ -23,6 +23,11 @@ import org.apache.juneau.internal.*;
  * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
  * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum TypeCategory {
 

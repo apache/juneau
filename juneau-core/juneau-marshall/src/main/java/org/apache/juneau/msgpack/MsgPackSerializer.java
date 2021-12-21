@@ -36,6 +36,11 @@ import org.apache.juneau.utils.*;
  * Handles <c>Accept</c> types:  <bc>octal/msgpack</bc>
  * <p>
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
 

@@ -45,6 +45,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link PojoIntrospector} - Additional information on introspection of POJO methods.
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
  * 	<li class='link'>{@doc jrs.Converters}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class Introspectable implements RestConverter {

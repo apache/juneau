@@ -81,6 +81,7 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <K> The map key type.

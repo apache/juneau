@@ -19,6 +19,7 @@ import org.apache.juneau.config.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jc.EncodedEntries}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface ConfigEncoder {

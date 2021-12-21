@@ -20,6 +20,11 @@ import org.apache.juneau.json.annotation.*;
 /**
  * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonClassMeta extends ExtendedClassMeta {
 
@@ -35,7 +40,7 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider mp) {
 		super(cm);
 		this.jsons = cm.getAnnotations(Json.class);
-		
+
 		String _wrapperAttr = null;
 		for (Json a : this.jsons)
 			if (! a.wrapperAttr().isEmpty())

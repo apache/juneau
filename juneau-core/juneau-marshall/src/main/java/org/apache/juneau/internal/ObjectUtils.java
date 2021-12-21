@@ -23,6 +23,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Various generic object utility methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ObjectUtils {
 

@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.PlainTextDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class PlainTextSerializerSession extends WriterSerializerSession {
 

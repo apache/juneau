@@ -31,6 +31,7 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(typeName="schema",

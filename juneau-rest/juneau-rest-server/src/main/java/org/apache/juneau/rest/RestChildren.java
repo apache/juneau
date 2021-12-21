@@ -25,6 +25,11 @@ import org.apache.juneau.rest.util.*;
 
 /**
  * Implements the child resources of a {@link Rest}-annotated class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestChildren {
 

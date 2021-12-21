@@ -17,6 +17,10 @@ import java.util.*;
 
 /**
  * Utility methods for collections.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class CollectionUtils {
 

@@ -17,6 +17,11 @@ import org.apache.juneau.http.response.*;
 
 /**
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response @Schema(description="Redirect to servlet root")
 public class SeeOtherRoot extends SeeOther {

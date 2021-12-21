@@ -19,6 +19,11 @@ import java.io.*;
  *
  * <p>
  * Identity encoding is just another name for no encoding at all.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Encoders}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class IdentityEncoder extends Encoder {
 

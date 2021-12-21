@@ -17,6 +17,11 @@ import java.util.*;
 
 /**
  * A simple list of {@link Method} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MethodList extends ArrayList<Method> {
 	private static final long serialVersionUID = 1L;

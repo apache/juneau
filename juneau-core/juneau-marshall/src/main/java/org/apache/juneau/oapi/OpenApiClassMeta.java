@@ -20,6 +20,11 @@ import org.apache.juneau.oapi.annotation.*;
 /**
  * Metadata on classes specific to the OpenApi serializers and parsers pulled from the {@link OpenApi @OpenApi} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class OpenApiClassMeta extends ExtendedClassMeta {
 

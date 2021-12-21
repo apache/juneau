@@ -55,6 +55,11 @@ import org.apache.juneau.reflect.*;
  *  FooHeader <jv>foo</jv> = <jv>headers</jv>.get(FooHeader.<jk>class</jk>);
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The header bean type.
  */
 public class HeaderBeanMeta<T> {

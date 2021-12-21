@@ -23,6 +23,10 @@ import org.apache.juneau.internal.*;
 /**
  * Base class for bean builders.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type that the builder creates.
  */
 @FluentSetters

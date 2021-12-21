@@ -16,6 +16,12 @@ import org.apache.juneau.collections.*;
 
 /**
  * A collection of {@link HtmlWidget} objects keyed by their names.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.HtmlWidgets}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlWidgetMap extends AMap<String,HtmlWidget> {
 	private static final long serialVersionUID = 1L;

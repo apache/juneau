@@ -25,6 +25,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a logging rule used by {@link RestLogger}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestLoggerRule {
 

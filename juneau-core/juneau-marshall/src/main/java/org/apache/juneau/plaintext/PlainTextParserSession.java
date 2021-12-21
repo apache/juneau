@@ -32,6 +32,11 @@ import org.apache.juneau.parser.*;
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.PlainTextDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class PlainTextParserSession extends ReaderParserSession {
 

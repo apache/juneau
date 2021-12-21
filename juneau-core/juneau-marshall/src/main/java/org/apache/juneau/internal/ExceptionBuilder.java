@@ -18,6 +18,10 @@ import static org.apache.juneau.internal.StringUtils.*;
 /**
  * Builder class for {@link Exception} objects.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The exception class.
  */
 public class ExceptionBuilder<T extends Throwable> {

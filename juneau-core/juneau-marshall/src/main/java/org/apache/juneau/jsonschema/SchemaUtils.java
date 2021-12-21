@@ -23,6 +23,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Utilities for working with the schema annotations.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SchemaUtils {
 

@@ -32,6 +32,10 @@ import org.apache.juneau.*;
  * <p>
  * This annotation is typically only applied to non-bean classes.  The {@link Bean @Bean} annotation contains equivalent
  * functionality for bean classes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({METHOD,TYPE})

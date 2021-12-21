@@ -17,6 +17,11 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Resource servlet with additional RDF support.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-server-rdf}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("serial")
 @Rest(

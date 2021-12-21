@@ -40,8 +40,8 @@ import org.apache.juneau.utils.*;
  * other convenience methods.
  *
  * <ul class='seealso'>
- * 	<li class='jc'>{@link RestClient}
  * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ResponseHeader implements Header {

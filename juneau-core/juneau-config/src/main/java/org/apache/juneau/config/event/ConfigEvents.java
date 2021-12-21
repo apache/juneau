@@ -18,6 +18,10 @@ import java.util.*;
 
 /**
  * Represents a list of {@link ConfigEvent} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ConfigEvents extends ArrayList<ConfigEvent> {
 	private static final long serialVersionUID = 1L;

@@ -16,6 +16,11 @@ import org.apache.juneau.*;
 
 /**
  * Interface for providing access to {@link HtmlClassMeta} and {@link HtmlBeanPropertyMeta} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface HtmlMetaProvider extends MetaProvider {
 

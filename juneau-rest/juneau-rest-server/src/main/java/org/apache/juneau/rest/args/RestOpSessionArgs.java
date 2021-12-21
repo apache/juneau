@@ -25,6 +25,11 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link BeanStore}
  * 	<li class='jc'>{@link RestOpSession}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestOpSessionArgs extends SimpleRestOperationArg {
 

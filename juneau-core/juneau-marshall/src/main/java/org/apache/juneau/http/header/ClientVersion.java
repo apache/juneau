@@ -37,6 +37,11 @@ import org.apache.juneau.internal.*;
  * <p>
  * Not part of the RFC2616 specification, but provided to allow for HTTP responses to be tailored to specified
  * known client versions.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Header("Client-Version")
 public class ClientVersion extends BasicStringHeader {

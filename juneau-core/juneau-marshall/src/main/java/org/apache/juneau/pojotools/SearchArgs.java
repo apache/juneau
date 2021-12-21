@@ -18,6 +18,12 @@ import org.apache.juneau.internal.*;
 
 /**
  * Encapsulates arguments for the {@link PojoSorter} class.
+ * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SearchArgs {
 

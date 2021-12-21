@@ -23,6 +23,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

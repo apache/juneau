@@ -56,6 +56,11 @@ import org.apache.juneau.reflect.*;
  *  FooPart <jv>foo</jv> = <jv>parts</jv>.get(FooPart.<jk>class</jk>);
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The HTTP part bean type.
  */
 public class PartBeanMeta<T> {

@@ -22,6 +22,11 @@ import org.apache.juneau.html.annotation.*;
 /**
  * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlClassMeta extends ExtendedClassMeta {
 

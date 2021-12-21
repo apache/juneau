@@ -20,6 +20,11 @@ import org.apache.http.*;
  * A type-safe iterator for {@link NameValuePair} objects.
  *
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface PartIterator extends Iterator<NameValuePair> {
 

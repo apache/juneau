@@ -17,6 +17,11 @@ import org.apache.juneau.swap.*;
 
 /**
  * Transforms {@link Class} objects to and from {@link String Strings}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ClassSwap extends StringSwap<Class<?>> {
 

@@ -36,6 +36,11 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * The parameter type can be a <jk>boolean</jk> or anything convertible from a <jk>boolean</jk>.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HasQueryArg implements RestOpArg {
 

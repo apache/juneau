@@ -194,6 +194,10 @@ import org.apache.juneau.internal.*;
  * <h5 class='topic'>Paging</h5>
  *
  * Use the <tt>position</tt> and <tt>limit</tt> parameters to specify a subset of rows to return.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class PojoQuery {

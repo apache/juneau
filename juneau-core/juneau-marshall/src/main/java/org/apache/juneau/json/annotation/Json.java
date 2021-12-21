@@ -35,6 +35,11 @@ import org.apache.juneau.annotation.*;
  * 	<li>
  * 		Wrap bean instances inside wrapper object (e.g. <c>{'wrapperAttr':bean}</c>).
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({TYPE,METHOD,FIELD})

@@ -18,6 +18,7 @@ import org.apache.juneau.rest.*;
  * Sample guard that only lets administrators through.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-rest}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

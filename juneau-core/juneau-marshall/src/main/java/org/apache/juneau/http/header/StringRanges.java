@@ -49,6 +49,12 @@ import org.apache.juneau.internal.*;
  * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @BeanIgnore
 public class StringRanges {

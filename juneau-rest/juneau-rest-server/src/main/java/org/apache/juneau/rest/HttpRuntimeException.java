@@ -22,6 +22,11 @@ import org.apache.juneau.reflect.*;
 
 /**
  * A {@link RuntimeException} meant to wrap a non-{@link RuntimeException}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class HttpRuntimeException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;

@@ -57,6 +57,10 @@ import org.apache.juneau.xml.annotation.*;
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
  * property value to and from the serialized form.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> Specifies the type of object that this map encapsulates.
  */
 public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T> {

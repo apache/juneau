@@ -22,6 +22,10 @@ import org.apache.juneau.annotation.*;
 
 /**
  * A list of default implementation classes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @NotThreadSafe
 public class DefaultClassList {

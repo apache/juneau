@@ -25,6 +25,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Transparent content negotiation for the request results in a circular reference.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

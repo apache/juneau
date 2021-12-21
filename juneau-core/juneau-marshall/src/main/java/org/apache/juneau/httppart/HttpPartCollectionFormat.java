@@ -14,6 +14,11 @@ package org.apache.juneau.httppart;
 
 /**
  * Valid values for the <c>collectionFormat</c> field.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum HttpPartCollectionFormat {
 

@@ -19,6 +19,11 @@ import java.lang.annotation.*;
 
 /**
  * Identifies the default XML namespaces at the package level.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target(PACKAGE)

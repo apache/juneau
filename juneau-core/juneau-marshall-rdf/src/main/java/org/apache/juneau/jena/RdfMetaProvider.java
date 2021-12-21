@@ -17,6 +17,11 @@ import org.apache.juneau.xml.*;
 
 /**
  * Interface for providing access to {@link RdfClassMeta}, {@link RdfBeanMeta}, and {@link RdfBeanPropertyMeta} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface RdfMetaProvider extends XmlMetaProvider {
 

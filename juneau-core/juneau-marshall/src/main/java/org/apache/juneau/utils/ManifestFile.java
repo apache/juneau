@@ -28,6 +28,10 @@ import org.apache.juneau.collections.*;
  * <p>
  * Copies the contents of a {@link Manifest} into an {@link OMap} so that the various convenience methods on that
  * class can be used to retrieve values.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ManifestFile extends OMap {
 

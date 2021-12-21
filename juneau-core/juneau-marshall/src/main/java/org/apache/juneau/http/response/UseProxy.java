@@ -24,6 +24,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The requested resource is available only through a proxy, the address for which is provided in the response.
  * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

@@ -41,6 +41,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * A single session of generating a Swagger document.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicSwaggerProviderSession {
 

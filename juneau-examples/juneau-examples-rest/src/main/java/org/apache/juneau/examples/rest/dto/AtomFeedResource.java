@@ -31,6 +31,7 @@ import org.apache.juneau.serializer.annotation.*;
  * Sample resource that shows how to generate ATOM feeds.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-rest}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -40,6 +40,10 @@ import org.apache.juneau.swap.*;
  * 	<jc>// Or if the DateSwap.DEFAULT_ISO8601DT is registered with the bean context, set a transformed value</jc>
  * 	birthDate.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BeanMapEntry implements Map.Entry<String,Object> {
 	private final BeanMap<?> beanMap;

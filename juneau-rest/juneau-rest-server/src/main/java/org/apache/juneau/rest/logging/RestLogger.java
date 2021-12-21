@@ -27,8 +27,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.mstat.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mstat.*;
 
 /**
  * Interface class used for logging HTTP requests.
@@ -52,6 +52,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface RestLogger {

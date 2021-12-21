@@ -25,6 +25,11 @@ import org.apache.juneau.rest.logging.*;
  *
  * <p>
  * This session object gets created by {@link RestSession} once the Java method to be invoked has been determined.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestOpSession extends ContextSession {
 

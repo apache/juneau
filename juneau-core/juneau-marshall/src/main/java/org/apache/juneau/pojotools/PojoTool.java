@@ -16,6 +16,12 @@ import org.apache.juneau.*;
 
 /**
  * Interface for classes that convert POJOs in some way using some predefined arguments object.
+ * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  *
  * @param <T> The argument object type.
  */

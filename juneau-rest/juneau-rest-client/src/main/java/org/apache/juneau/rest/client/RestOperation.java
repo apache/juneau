@@ -20,6 +20,11 @@ import org.apache.juneau.http.*;
 
 /**
  * Aggregates the HTTP method, URL, and optional body into a single bean.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestOperation {
 
@@ -120,10 +125,10 @@ public class RestOperation {
 	/**
 	 * Bean property getter:  <property>body</property>.
 	 *
-	 * @return 
+	 * @return
 	 * 	The value of the <property>body</property> property on this bean.
 	 * 	<br>Returns {@link #NO_BODY} if the request does not have a body set.
-	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response. 
+	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response.
 	 */
 	public Object getBody() {
 		return body;

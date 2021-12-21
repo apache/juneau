@@ -25,6 +25,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

@@ -55,6 +55,10 @@ import java.lang.annotation.*;
  * 	<ja>@Example</ja>(<js>"{foo:'bar',baz:123}"</js>)
  * 	<jk>public class</jk> C {...}
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({FIELD,METHOD,TYPE})

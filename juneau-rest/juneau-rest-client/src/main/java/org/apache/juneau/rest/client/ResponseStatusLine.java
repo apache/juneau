@@ -17,6 +17,11 @@ import org.apache.juneau.rest.client.assertion.*;
 
 /**
  * An implementation of {@link StatusLine} that adds assertions methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ResponseStatusLine implements StatusLine {
 

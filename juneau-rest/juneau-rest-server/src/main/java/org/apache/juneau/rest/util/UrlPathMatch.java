@@ -24,6 +24,10 @@ import org.apache.juneau.internal.*;
  *
  * For example, given the pattern <js>"/foo/{bar}/*"</js> and the path <js>"/foo/123/baz/qux"</js>, this match gives
  * you a map containing <js>"{bar:123}"</js> and a remainder string containing <js>"baz/qux"</js>.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlPathMatch {
 

@@ -24,6 +24,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

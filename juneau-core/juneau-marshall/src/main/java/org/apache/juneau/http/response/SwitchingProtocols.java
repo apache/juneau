@@ -23,6 +23,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

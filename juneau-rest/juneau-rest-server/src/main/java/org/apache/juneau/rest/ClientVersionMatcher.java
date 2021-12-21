@@ -25,6 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.ClientVersioning}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ClientVersionMatcher extends RestMatcher {

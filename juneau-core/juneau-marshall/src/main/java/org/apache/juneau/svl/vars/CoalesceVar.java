@@ -20,9 +20,9 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is <js>"$CO{arg1[,arg2...]}"</js>.
  *
- *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class CoalesceVar extends MultipartResolvingVar {

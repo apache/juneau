@@ -14,5 +14,10 @@ package org.apache.juneau.httppart;
 
 /**
  * Base class for implementations of {@link HttpPartSerializerSession}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class BaseHttpPartSerializerSession implements HttpPartSerializerSession {}

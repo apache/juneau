@@ -28,6 +28,11 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)

@@ -19,6 +19,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Base class for implementations of {@link HttpPartParser}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class BaseHttpPartParser extends BeanContextable implements HttpPartParser {
 

@@ -25,6 +25,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The server does not support the HTTP protocol version used in the request.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

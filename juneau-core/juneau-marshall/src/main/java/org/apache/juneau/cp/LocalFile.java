@@ -22,6 +22,10 @@ import java.nio.file.*;
  * Identifies a file located either on the classpath or file system.
  *
  * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class LocalFile {
 

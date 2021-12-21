@@ -25,6 +25,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class ContextSession {
 

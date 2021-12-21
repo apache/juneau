@@ -45,6 +45,11 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 

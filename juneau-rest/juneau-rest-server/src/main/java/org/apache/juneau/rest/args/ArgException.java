@@ -19,6 +19,11 @@ import org.apache.juneau.reflect.*;
 
 /**
  * General exception due to a malformed Java parameter.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ArgException extends InternalServerError {
 	private static final long serialVersionUID = 1L;

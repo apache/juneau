@@ -35,6 +35,11 @@ package org.apache.juneau.httppart;
  * 			<li><c>forString</c>
  * 	</ul>
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SimplePartParser extends BaseHttpPartParser {
 

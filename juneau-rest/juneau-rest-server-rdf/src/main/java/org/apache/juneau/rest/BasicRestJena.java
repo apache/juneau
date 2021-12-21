@@ -19,6 +19,11 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Identical to {@link BasicRestServletJena} but doesn't extend from {@link HttpServlet}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-server-rdf}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("serial")
 @Rest(

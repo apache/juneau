@@ -30,6 +30,11 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>Marshalled classes/methods/fields.
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})

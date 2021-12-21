@@ -55,6 +55,10 @@ import org.apache.juneau.internal.*;
  * 		// Do something with it.
  * 	}
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class ClassInfo {
 

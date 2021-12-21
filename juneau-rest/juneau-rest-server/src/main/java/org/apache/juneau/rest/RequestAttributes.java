@@ -84,7 +84,8 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jc'>{@link RequestAttribute}
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestAttributes {

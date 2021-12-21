@@ -21,6 +21,10 @@ import org.apache.juneau.collections.*;
  * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without affecting the
  * underlying list.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The class type of the wrapped bean.
  */
 public class DelegateList<T extends Collection<?>> extends OList implements Delegate<T> {

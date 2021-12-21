@@ -16,15 +16,20 @@ import org.apache.http.*;
 
 /**
  * Identify an {@link HttpRequest} that was created by a {@link RestRequest}.
- * 
+ *
  * <p>
  * Allows HTTP client code to get access to the underlying {@link RestRequest} if needed.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface RestRequestCreated {
 
 	/**
 	 * Returns the {@link RestRequest} object that created the {@link HttpRequest}.
-	 * 
+	 *
 	 * @return The {@link RestRequest} object that created the {@link HttpRequest}.
 	 */
 	RestRequest getRestRequest();

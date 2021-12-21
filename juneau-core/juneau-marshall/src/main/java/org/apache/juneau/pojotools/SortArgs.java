@@ -19,6 +19,12 @@ import java.util.*;
 
 /**
  * Encapsulates arguments for the {@link PojoSorter} class.
+ * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SortArgs {
 

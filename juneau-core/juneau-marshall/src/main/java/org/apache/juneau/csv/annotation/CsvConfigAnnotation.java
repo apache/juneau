@@ -19,6 +19,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link CsvConfig @CsvConfig} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.CsvDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class CsvConfigAnnotation {
 

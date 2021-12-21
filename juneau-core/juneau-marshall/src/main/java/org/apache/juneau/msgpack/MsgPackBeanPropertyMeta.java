@@ -18,6 +18,11 @@ import org.apache.juneau.msgpack.annotation.*;
 /**
  * Metadata on bean properties specific to the MessagePack serializers and parsers pulled from the {@link MsgPack @MsgPack}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

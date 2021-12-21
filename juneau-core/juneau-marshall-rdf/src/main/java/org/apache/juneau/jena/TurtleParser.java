@@ -14,6 +14,11 @@ package org.apache.juneau.jena;
 
 /**
  * Subclass of {@link RdfParser} for parsing RDF in Turtle notation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class TurtleParser extends RdfParser {
 

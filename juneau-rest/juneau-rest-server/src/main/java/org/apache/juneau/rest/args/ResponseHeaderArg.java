@@ -36,6 +36,11 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RestOpSession#getResponse() getResponse}()
  * 		.{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ResponseHeaderArg implements RestOpArg {
 	final ResponsePartMeta meta;

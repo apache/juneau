@@ -28,6 +28,7 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JsonSchemaRef extends JsonSchema {

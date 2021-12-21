@@ -23,6 +23,11 @@ import org.apache.juneau.json.*;
 
 /**
  * General exception thrown whenever an error occurs during serialization.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SerializeException extends BasicException {
 

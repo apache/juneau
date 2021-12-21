@@ -22,6 +22,11 @@ import org.apache.juneau.swap.*;
  *
  * <p>
  * This is a one-way transform, since {@code Enumerations} cannot be reconstituted.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class EnumerationSwap extends ObjectSwap<Enumeration,List> {

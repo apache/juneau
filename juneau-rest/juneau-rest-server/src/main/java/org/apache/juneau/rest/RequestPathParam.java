@@ -79,7 +79,12 @@ import org.apache.juneau.httppart.*;
  * 		<ul class='javatreec'>
  * 			<li class='jm'>{@link RequestPathParam#getName() getName()}
  * 			<li class='jm'>{@link RequestPathParam#getValue() getValue()}
-* 		</ul>
+ * 		</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestPathParam extends RequestHttpPart implements NameValuePair {

@@ -15,9 +15,10 @@ package org.apache.juneau.examples.core.svl;
 import org.apache.juneau.svl.*;
 
 /**
- * TODO.
+ * Simple Variable Language examples.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

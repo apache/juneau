@@ -24,6 +24,10 @@ import static org.apache.juneau.internal.StringUtils.*;
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class PropertyNamerDUCS implements PropertyNamer {
 

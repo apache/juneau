@@ -32,6 +32,10 @@ import org.apache.juneau.utils.*;
  * <h5 class='topic'>Description</h5>
  *
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class BeanTraverseContext extends BeanContextable {
 

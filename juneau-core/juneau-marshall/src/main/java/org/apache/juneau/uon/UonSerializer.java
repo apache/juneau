@@ -127,6 +127,11 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {
 

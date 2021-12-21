@@ -21,6 +21,10 @@ import java.nio.file.*;
 
 /**
  * File utilities.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class FileUtils {
 

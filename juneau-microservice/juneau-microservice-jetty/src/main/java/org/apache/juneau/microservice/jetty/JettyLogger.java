@@ -36,6 +36,10 @@ import org.eclipse.jetty.util.log.AbstractLogger;
  * 	<ck>org.eclipse.jetty.util.log.class</ck> = org.apache.juneau.microservice.jetty.JettyLogger
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-jetty}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JettyLogger extends AbstractLogger {
 	private static final boolean SHOW_SOURCE = env("org.eclipse.jetty.util.log.SOURCE", env("org.eclipse.jetty.util.log.javautil.SOURCE", true));

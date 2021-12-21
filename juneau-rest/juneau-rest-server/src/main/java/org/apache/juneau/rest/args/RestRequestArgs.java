@@ -54,6 +54,11 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link UriResolver}
  * 	<li class='jc'>{@link VarResolverSession}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestRequestArgs extends SimpleRestOperationArg {
 

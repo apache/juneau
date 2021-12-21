@@ -16,6 +16,12 @@ import org.apache.juneau.*;
 
 /**
  * Common interface for matchers used by the {@link PojoSearcher} class.
+ * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class MatcherFactory {
 

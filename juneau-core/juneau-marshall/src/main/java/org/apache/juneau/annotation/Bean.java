@@ -35,6 +35,7 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.BeanAnnotation}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

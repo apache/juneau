@@ -39,6 +39,11 @@ import org.apache.juneau.xml.*;
  * <h5 class='topic'>Description</h5>
  *
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SoapXmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider {
 

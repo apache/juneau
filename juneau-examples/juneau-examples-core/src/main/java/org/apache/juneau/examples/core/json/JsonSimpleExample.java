@@ -30,6 +30,7 @@ import java.util.Map;
  * Sample class which shows the simple usage of JsonSerializer and JsonParser.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

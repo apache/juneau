@@ -52,6 +52,11 @@ package org.apache.juneau.html;
  *
  * <p>
  * This interface allows you to control how these sections get rendered.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface HtmlDocTemplate {
 

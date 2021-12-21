@@ -26,6 +26,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The URI provided was too long for the server to process.
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

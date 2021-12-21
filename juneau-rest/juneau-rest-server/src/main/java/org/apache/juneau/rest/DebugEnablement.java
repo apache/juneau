@@ -27,6 +27,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * Interface used for selectively turning on debug per request.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface DebugEnablement {
 

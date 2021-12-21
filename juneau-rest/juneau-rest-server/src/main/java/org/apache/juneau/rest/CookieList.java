@@ -18,6 +18,11 @@ import javax.servlet.http.*;
 
 /**
  * A simple list of {@link Cookie} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class CookieList extends ArrayList<Cookie> {
 

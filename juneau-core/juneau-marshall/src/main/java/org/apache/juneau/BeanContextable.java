@@ -35,6 +35,10 @@ import org.apache.juneau.utils.*;
  * <p>
  * This abstraction exists to allow different kinds of subclasses (e.g. JsonSerilalizer, XmlParser...) to share bean context objects since
  * bean context objects are heavyweight objects that cache metadata about encountered beans.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class BeanContextable extends Context {
 

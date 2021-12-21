@@ -22,6 +22,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * Adds a <c>Thrown</c> header to the response and returns <c>0</c> so that the processor chain can continue.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class ThrowableProcessor implements ResponseProcessor {
 

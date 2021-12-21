@@ -34,6 +34,10 @@ import org.apache.juneau.parser.*;
  * <p>
  * This class allows you to convert URL strings to absolute (e.g. <js>"http://host:port/foo/bar"</js>) or root-relative
  * (e.g. <js>"/foo/bar"</js>) URLs.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Bean
 public class UriContext {

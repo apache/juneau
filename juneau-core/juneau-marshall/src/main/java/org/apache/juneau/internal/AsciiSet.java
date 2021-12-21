@@ -18,6 +18,10 @@ import java.util.*;
 
 /**
  * Stores a set of ASCII characters for quick lookup.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class AsciiSet {
 

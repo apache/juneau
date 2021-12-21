@@ -44,6 +44,11 @@ import org.apache.juneau.internal.*;
  * 	<jsm>assertList</jsm>(<jv>myList</jv>)
  * 		.passes(<jsm>eq</jsm>(<js>"foo"</js>), <jsm>any</jsm>(), <jsm>match</jsm>(<js>"bar*"</js>));
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AssertionPredicates {
 

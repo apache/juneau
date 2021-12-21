@@ -39,6 +39,11 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jc'>{@link RequestFormParam}
  * 	<li class='jc'>{@link RequestPathParam}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @FluentSetters
 public abstract class RequestHttpPart {

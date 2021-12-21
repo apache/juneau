@@ -17,6 +17,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * A reflection map for the {@link Enablement} setting.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class DebugEnablementMap extends ReflectionMap<Enablement> {
 

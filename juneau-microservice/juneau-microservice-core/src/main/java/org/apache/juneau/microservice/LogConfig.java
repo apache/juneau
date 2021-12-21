@@ -27,6 +27,11 @@ import org.apache.juneau.microservice.resources.*;
  *
  * <p>
  * These values override values specified in the <js>"Logging"</js> configuration section.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class LogConfig {
 

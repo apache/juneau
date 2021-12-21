@@ -26,6 +26,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

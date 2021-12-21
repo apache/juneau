@@ -22,6 +22,11 @@ import org.apache.juneau.swap.*;
 
 /**
  * Transforms <code>InputStreams</code> to {@link String Strings}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class InputStreamSwap extends StringSwap<InputStream> {
 

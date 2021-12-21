@@ -26,6 +26,11 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link UrlPath}
  * 	<li class='jc'>{@link UrlPathMatch}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestSessionArgs extends SimpleRestOperationArg {
 

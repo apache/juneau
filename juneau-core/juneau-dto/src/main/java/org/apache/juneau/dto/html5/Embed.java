@@ -24,6 +24,7 @@ import org.apache.juneau.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(typeName="embed")

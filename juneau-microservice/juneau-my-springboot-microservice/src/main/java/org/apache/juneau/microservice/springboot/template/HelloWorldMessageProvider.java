@@ -16,6 +16,11 @@ import java.util.function.*;
 
 /**
  * An example of a Spring bean that can be used for injecting messages into {@link HelloWorldResource}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc my-springboot-microservice}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HelloWorldMessageProvider implements Supplier<String> {
 

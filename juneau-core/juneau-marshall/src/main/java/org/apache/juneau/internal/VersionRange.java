@@ -26,6 +26,10 @@ import org.apache.juneau.*;
  * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
  * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class VersionRange {
 

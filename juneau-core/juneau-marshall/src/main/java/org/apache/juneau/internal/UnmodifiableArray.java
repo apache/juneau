@@ -24,6 +24,10 @@ import java.util.*;
  * Allows for forward or reverse access to elements of an array without being able to modify the array and without
  * involving copying the array.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> Array element type.
  */
 public class UnmodifiableArray<T> implements List<T> {

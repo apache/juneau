@@ -28,6 +28,11 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link ServletOutputStream}
  * 	<li class='jc'>{@link Writer}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestResponseArgs extends SimpleRestOperationArg {
 

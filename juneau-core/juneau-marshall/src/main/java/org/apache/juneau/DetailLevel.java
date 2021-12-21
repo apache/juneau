@@ -14,6 +14,10 @@ package org.apache.juneau;
 
 /**
  * Identifies an arbitrary detail level such as the detail of log messages.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum DetailLevel {
 

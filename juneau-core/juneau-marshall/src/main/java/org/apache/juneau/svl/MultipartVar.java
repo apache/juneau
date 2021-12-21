@@ -23,7 +23,8 @@ import static org.apache.juneau.internal.StringUtils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class MultipartVar extends SimpleVar {

@@ -21,6 +21,11 @@ import org.apache.juneau.cp.*;
 
 /**
  * Implements the 'exit' console command to gracefully shut down the microservice and JVM.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ExitCommand extends ConsoleCommand {
 

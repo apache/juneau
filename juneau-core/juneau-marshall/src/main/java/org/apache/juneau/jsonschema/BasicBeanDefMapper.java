@@ -24,6 +24,11 @@ import org.apache.juneau.*;
  * IDs are created by calling {@link Class#getSimpleName()}.
  * <p>
  * URIs are constructed using the pattern <js>"#/definitions/{id}"</js>.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicBeanDefMapper implements BeanDefMapper {
 

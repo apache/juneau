@@ -37,6 +37,11 @@ import org.apache.juneau.http.header.*;
  *
  * <p>
  * Beans are not thread safe unless they're marked as unmodifiable.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @BeanIgnore /* Use toString() to serialize */
 public class BasicHttpResponse implements HttpResponse {

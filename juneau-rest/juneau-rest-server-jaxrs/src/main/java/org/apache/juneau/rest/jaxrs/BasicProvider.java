@@ -29,6 +29,7 @@ import org.apache.juneau.xml.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Provider
@@ -41,15 +42,13 @@ import org.apache.juneau.xml.*;
 	"text/xml+schema",                               // XmlSchemaDocSerializer
 	"text/html",                                     // HtmlDocSerializer
 	"application/x-www-form-urlencoded",             // UrlEncodingSerializer
-	"text/xml+soap",                                 // SoapXmlSerializer
-	"application/x-java-serialized-object"           // JavaSerializedObjectSerializer
+	"text/xml+soap"                                  // SoapXmlSerializer
 })
 @Consumes({
 	"application/json", "text/json",                 // JsonParser
 	"text/xml",                                      // XmlParser
 	"text/html",                                     // HtmlParser
-	"application/x-www-form-urlencoded",             // UrlEncodingParser
-	"application/x-java-serialized-object"           // JavaSerializedObjectParser
+	"application/x-www-form-urlencoded"              // UrlEncodingParser
 })
 @JuneauProvider(
 	serializers={

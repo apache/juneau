@@ -55,7 +55,9 @@ import org.apache.juneau.http.annotation.*;
  * The URI MUST NOT include a fragment. See section 15.1.3 for security considerations.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Header("Referer")

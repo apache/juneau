@@ -32,6 +32,11 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * {@link RequestBeanMeta meta} is derived from the {@link Request} annotation and context configuration.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.RequestBeans}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RequestBeanArg implements RestOpArg {
 	private final RequestBeanMeta meta;

@@ -14,6 +14,11 @@ package org.apache.juneau.html;
 
 /**
  * Identifies possible float values for {@link HtmlDocSerializer.Builder#asideFloat(AsideFloat)}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum AsideFloat {
 

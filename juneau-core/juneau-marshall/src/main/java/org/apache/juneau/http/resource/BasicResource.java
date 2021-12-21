@@ -34,6 +34,11 @@ import org.apache.juneau.http.header.*;
  * 	<li>
  * 		Externally-supplied/dynamic content.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @BeanIgnore  /* Use toString() to serialize */
 public class BasicResource implements HttpResource {

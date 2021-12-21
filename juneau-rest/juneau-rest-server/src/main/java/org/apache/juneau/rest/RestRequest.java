@@ -189,6 +189,11 @@ import org.apache.juneau.utils.*;
  * 		</ul>
  * 	</ul>
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
 public final class RestRequest {

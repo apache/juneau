@@ -31,6 +31,11 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RestOpSession#getResponse() getResponse}()
  * 		.{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.ResponseBeans}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ResponseBeanArg implements RestOpArg {
 	final ResponseBeanMeta meta;

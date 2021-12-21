@@ -35,6 +35,11 @@ import org.apache.juneau.urlencoding.*;
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"someOtherParam"</js>, <js>"foobar"</js>));
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SerializedPart extends BasicPart implements Headerable {
 	private final Object value;

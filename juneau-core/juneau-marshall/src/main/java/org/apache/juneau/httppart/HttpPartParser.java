@@ -30,6 +30,11 @@ import org.apache.juneau.cp.*;
  *
  * <p>
  * Implementations must include either a public no-args constructor.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface HttpPartParser {
 

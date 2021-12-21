@@ -104,6 +104,8 @@ import org.apache.juneau.http.header.*;
  * <ul class='seealso'>
  * 	<li class='jc'>{@link RequestHeader}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestHeaders {

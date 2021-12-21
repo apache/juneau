@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 
 /**
  * Swagger tag annotation.
+ * {@review}
  *
  * <p>
  * Allows adding meta data to a single tag that is used by the {@doc ext.SwaggerOperationObject}.
@@ -44,6 +45,7 @@ import java.lang.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerTagObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

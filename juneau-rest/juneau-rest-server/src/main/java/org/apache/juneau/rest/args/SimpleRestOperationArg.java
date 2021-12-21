@@ -19,6 +19,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * An implementation of a {@link RestOpArg} that takes in a {@link ThrowingFunction} for resolving a parameter value.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SimpleRestOperationArg implements RestOpArg {
 

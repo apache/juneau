@@ -55,6 +55,12 @@ package org.apache.juneau.swap;
  * 		<jk>public void</jk> setTaxInfo(String s) {...}
  * 	}
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type.
  */
 public class BeanInterceptor<T> {

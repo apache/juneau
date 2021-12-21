@@ -20,6 +20,10 @@ import org.apache.juneau.*;
 /**
  * Wrapper around a map where the key names are overridden.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <K> The key class type.
  * @param <V> The value class type.
  */

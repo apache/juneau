@@ -14,6 +14,11 @@ package org.apache.juneau.httppart;
 
 /**
  * HTTP-Part constants.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Constants {
 

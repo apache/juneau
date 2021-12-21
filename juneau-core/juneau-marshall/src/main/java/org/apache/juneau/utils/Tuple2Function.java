@@ -26,6 +26,10 @@ import java.util.function.*;
  * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>);
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <A> Object 1 type.
  * @param <B> Object 2 type.
  * @param <R> Result type.

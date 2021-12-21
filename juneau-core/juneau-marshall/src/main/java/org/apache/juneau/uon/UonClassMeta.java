@@ -20,6 +20,11 @@ import org.apache.juneau.uon.annotation.*;
 /**
  * Metadata on classes specific to the UON serializers and parsers pulled from the {@link Uon @Uon} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UonClassMeta extends ExtendedClassMeta {
 

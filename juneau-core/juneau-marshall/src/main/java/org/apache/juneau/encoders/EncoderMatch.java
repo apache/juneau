@@ -14,6 +14,11 @@ package org.apache.juneau.encoders;
 
 /**
  * Represents a encoder and encoding that matches an HTTP <c>Accept-Encoding</c> header value.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Encoders}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class EncoderMatch {
 

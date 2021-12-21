@@ -20,6 +20,11 @@ import org.apache.juneau.plaintext.annotation.*;
 /**
  * Metadata on classes specific to the PlainText serializers and parsers pulled from the {@link PlainText @PlainText} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.PlainTextDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class PlainTextClassMeta extends ExtendedClassMeta {
 

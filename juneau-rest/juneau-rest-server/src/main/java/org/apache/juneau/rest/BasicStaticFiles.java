@@ -35,6 +35,11 @@ import org.apache.juneau.internal.*;
  * <p>
  * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link HttpResource}
  * objects with arbitrary headers.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicStaticFiles implements StaticFiles {
 

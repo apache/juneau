@@ -39,7 +39,8 @@ import org.apache.juneau.internal.*;
  * Instances of this class are NOT guaranteed to be thread safe.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.VarResolvers}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class VarResolverSession {

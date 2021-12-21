@@ -20,6 +20,11 @@ import org.apache.juneau.msgpack.annotation.*;
 /**
  * Metadata on classes specific to the MessagePack serializers and parsers pulled from the {@link MsgPack @MsgPack} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MsgPackClassMeta extends ExtendedClassMeta {
 

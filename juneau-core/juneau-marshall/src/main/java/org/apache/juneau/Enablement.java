@@ -18,6 +18,10 @@ import java.util.*;
 
 /**
  * Represents the enablement settings of a feature.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum Enablement {
 

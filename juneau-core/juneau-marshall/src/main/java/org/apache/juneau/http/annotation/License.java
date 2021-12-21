@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 
 /**
  * Swagger license annotation.
+ * {@review}
  *
  * <p>
  * License information for the exposed API.
@@ -40,6 +41,7 @@ import java.lang.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerLicenseObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

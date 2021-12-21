@@ -25,6 +25,7 @@ import org.apache.juneau.oapi.*;
 
 /**
  * Swagger schema annotation.
+ * {@review}
  *
  * <p>
  * The Schema Object allows the definition of input and output data types.
@@ -65,6 +66,7 @@ import org.apache.juneau.oapi.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerSchemaObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

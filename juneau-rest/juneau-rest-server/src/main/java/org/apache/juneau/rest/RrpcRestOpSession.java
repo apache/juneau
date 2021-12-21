@@ -24,6 +24,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * A session for a single HTTP request against an RRPC Java method.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RrpcRestOpSession extends RestOpSession {
 

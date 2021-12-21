@@ -19,6 +19,11 @@ import org.apache.juneau.uon.*;
 
 /**
  * Utility classes and methods for the {@link UonConfig @UonConfig} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UonConfigAnnotation {
 

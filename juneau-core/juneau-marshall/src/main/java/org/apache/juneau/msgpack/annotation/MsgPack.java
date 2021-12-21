@@ -31,6 +31,8 @@ import org.apache.juneau.msgpack.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

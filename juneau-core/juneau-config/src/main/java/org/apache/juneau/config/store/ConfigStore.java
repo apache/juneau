@@ -32,7 +32,11 @@ import org.apache.juneau.internal.*;
  * 	<li class='jm'>{@link #read(String)} - Retrieve a config file.
  * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
  * </ul>
- */
+  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+*/
 public abstract class ConfigStore extends Context implements Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------

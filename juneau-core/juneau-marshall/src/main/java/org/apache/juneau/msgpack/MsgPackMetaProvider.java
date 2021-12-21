@@ -16,6 +16,11 @@ import org.apache.juneau.*;
 
 /**
  * Interface for providing access to {@link MsgPackClassMeta} and {@link MsgPackBeanPropertyMeta} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface MsgPackMetaProvider extends MetaProvider {
 

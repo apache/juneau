@@ -17,6 +17,11 @@ import org.apache.juneau.http.entity.*;
 
 /**
  * A repeatable resource that obtains its content from a {@link File}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class FileResource extends BasicResource {
 

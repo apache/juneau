@@ -76,6 +76,10 @@ import org.apache.juneau.svl.*;
  * 	}
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */

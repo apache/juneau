@@ -35,6 +35,7 @@ import org.apache.juneau.oapi.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Marshalls}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class OpenApi extends CharMarshall {

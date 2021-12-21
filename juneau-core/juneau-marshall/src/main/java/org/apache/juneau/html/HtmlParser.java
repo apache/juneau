@@ -36,6 +36,11 @@ import org.apache.juneau.xml.*;
  * See the {@link HtmlSerializer} class for a description of the HTML generated.
  * <p>
  * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 

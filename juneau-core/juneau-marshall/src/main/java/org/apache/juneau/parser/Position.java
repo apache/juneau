@@ -18,6 +18,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Identifies a position in a reader or input stream.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Position {
 

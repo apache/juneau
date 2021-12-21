@@ -32,6 +32,11 @@ import org.apache.juneau.internal.*;
  * 	<jk>if</jk> (errorMessage != <jk>null</jk>)
  * 		<jk>throw new</jk> RuntimeException(errorMessage);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Verify {
 

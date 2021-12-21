@@ -27,6 +27,11 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		This class is not intended for external use.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class UonWriter extends SerializerWriter {
 

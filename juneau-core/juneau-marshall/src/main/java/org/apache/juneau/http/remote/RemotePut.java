@@ -29,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Proxies}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

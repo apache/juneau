@@ -30,6 +30,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Not part of the RFC2616 specification, but provided to allow for debugging of HTTP requests.
  * <br>It's up to the server to decide whether to honor this header.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Header("Debug")
 public class Debug extends BasicBooleanHeader {

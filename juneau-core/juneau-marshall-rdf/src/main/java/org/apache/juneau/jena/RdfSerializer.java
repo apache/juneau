@@ -51,7 +51,8 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall-rdf}
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {

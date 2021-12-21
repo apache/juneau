@@ -44,6 +44,10 @@ import org.apache.juneau.swap.*;
  * <p>
  * Typically session objects are not thread safe nor reusable.  However, bean sessions do not maintain any state and
  * thus can be safely cached and reused.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanSession extends ContextSession {

@@ -40,6 +40,11 @@ import org.apache.juneau.utils.*;
  * <h5 class='topic'>Description</h5>
  *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 

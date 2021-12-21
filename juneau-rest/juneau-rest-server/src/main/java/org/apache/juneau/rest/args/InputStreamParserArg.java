@@ -29,6 +29,11 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RequestBody#getParserMatch() getParserMatch}()
  * 		.{@link ParserMatch#getParser() getParser}();
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class InputStreamParserArg extends SimpleRestOperationArg {
 

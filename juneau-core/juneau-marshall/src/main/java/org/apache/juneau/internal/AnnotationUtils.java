@@ -21,6 +21,10 @@ import java.util.stream.*;
 
 /**
  * Annotation utilities.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AnnotationUtils {
 

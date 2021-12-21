@@ -16,6 +16,10 @@ import org.apache.juneau.collections.*;
 
 /**
  * A list of {@link UrlPathMatcher} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlPathMatcherList extends AList<UrlPathMatcher> {
 

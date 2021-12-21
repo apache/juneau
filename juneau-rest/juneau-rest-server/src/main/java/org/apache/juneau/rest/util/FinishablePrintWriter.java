@@ -18,6 +18,10 @@ import org.apache.juneau.encoders.*;
 
 /**
  * A wrapped {@link PrintWriter} with an added <c>finish()</c> method.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class FinishablePrintWriter extends PrintWriter implements Finishable {
 

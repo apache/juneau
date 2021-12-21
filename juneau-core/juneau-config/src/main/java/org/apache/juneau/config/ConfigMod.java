@@ -20,6 +20,10 @@ import org.apache.juneau.config.encode.*;
 
 /**
  * Identifies the supported modification types for config entries.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum ConfigMod {
 

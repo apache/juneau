@@ -16,6 +16,11 @@ package org.apache.juneau.rest.client;
  * A default implementation of a {@link RestCallInterceptor}.
  *
  * All default methods are no-ops.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class BasicRestCallInterceptor implements RestCallInterceptor {
 

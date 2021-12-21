@@ -35,6 +35,11 @@ import org.apache.juneau.swap.*;
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {

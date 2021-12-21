@@ -40,6 +40,11 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link OutputStream}
  * 	<li>{@link File}
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class SerializerPipe implements Closeable {
 

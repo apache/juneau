@@ -29,6 +29,11 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * The parameter type must be {@link String}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MethodArg implements RestOpArg {
 

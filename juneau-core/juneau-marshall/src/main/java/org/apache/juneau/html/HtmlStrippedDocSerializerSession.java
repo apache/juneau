@@ -30,6 +30,11 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 

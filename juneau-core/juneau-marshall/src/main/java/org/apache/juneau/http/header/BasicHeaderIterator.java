@@ -26,6 +26,11 @@ import org.apache.juneau.internal.*;
  * Basic implementation of a {@link HeaderIterator}.
  *
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @NotThreadSafe
 public class BasicHeaderIterator implements HeaderIterator {

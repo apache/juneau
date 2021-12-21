@@ -36,6 +36,7 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {

@@ -25,6 +25,10 @@ import org.apache.juneau.parser.*;
 /**
  * Builder for lists.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <E> Element type.
  */
 public class ListBuilder<E> {

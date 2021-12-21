@@ -25,6 +25,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Html @Html} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("rawtypes")
 public class HtmlAnnotation {

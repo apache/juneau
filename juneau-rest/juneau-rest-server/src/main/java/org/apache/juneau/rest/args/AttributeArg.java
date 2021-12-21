@@ -30,6 +30,11 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RequestAttributes#get(String) get}(<jv>name</jv>)
  * 		.{@link RequestAttribute#as(Class) as}(<jv>type</jv>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AttributeArg implements RestOpArg {
 

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.mstat;
+package org.apache.juneau.rest.mstat;
 
 import static java.util.stream.Collectors.*;
 import static java.util.Collections.*;
@@ -31,6 +31,11 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Used for preventing duplication of stack traces in log files and replacing them with small hashes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ThrownStore {
 

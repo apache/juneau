@@ -23,6 +23,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link Reader}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ReaderEntity extends BasicHttpEntity {
 

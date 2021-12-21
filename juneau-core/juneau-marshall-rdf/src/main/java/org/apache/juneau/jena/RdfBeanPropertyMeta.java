@@ -21,6 +21,11 @@ import org.apache.juneau.xml.*;
 /**
  * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation
  * on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

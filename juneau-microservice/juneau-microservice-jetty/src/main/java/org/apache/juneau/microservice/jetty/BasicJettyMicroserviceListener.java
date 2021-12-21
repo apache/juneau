@@ -16,6 +16,11 @@ import org.apache.juneau.microservice.*;
 
 /**
  * Basic extensible microservice listener with default no-op method implementations.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-jetty}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicJettyMicroserviceListener extends BasicMicroserviceListener implements JettyMicroserviceListener {
 

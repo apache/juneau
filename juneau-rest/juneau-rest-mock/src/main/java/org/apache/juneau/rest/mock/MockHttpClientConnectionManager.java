@@ -27,6 +27,11 @@ import org.apache.http.protocol.*;
  * This class is instantiated by the {@link MockRestClient.Builder} class.
  *
  * This implementation is NOT thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-mock}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 final class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 

@@ -14,6 +14,11 @@ package org.apache.juneau.jena;
 
 /**
  * Subclass of {@link RdfSerializer} for serializing RDF in Turtle notation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class TurtleSerializer extends RdfSerializer {
 

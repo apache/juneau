@@ -20,6 +20,10 @@ import static java.util.Collections.*;
 
 /**
  * Parent interface for all class/method language-specific metadata providers.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface MetaProvider {
 

@@ -21,6 +21,11 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * This class can be subclassed to customize page rendering.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 

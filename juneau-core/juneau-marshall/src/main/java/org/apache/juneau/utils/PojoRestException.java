@@ -36,6 +36,10 @@ import org.apache.juneau.*;
  * 		{@link HttpURLConnection#HTTP_FORBIDDEN HTTP_FORBIDDEN}
  * 		- Attempting to overwrite the root object.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class PojoRestException extends BasicRuntimeException {
 

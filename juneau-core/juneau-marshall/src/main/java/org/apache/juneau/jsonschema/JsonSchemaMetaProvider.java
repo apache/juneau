@@ -16,6 +16,11 @@ import org.apache.juneau.*;
 
 /**
  * Interface for providing access to {@link JsonSchemaClassMeta} and {@link JsonSchemaBeanPropertyMeta} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface JsonSchemaMetaProvider extends MetaProvider  {
 

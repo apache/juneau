@@ -30,6 +30,11 @@ import org.apache.juneau.httppart.bean.*;
 
 /**
  * Response handler for {@link Response @Response}-annotated objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class ResponseBeanProcessor implements ResponseProcessor {
 

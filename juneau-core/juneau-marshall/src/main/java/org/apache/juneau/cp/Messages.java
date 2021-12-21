@@ -99,10 +99,14 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Localized messages can be retrieved in the following way:
  *
-* <p class='bcode w800'>
-* 	<jc>// Return value from Japan locale bundle.</jc>
-* 	String <jv>foo</jv> = <jsf>MESSAGES</jsf>.forLocale(Locale.<jsf>JAPAN</jsf>).getString(<js>"foo"</js>);
+ * <p class='bcode w800'>
+ * 	<jc>// Return value from Japan locale bundle.</jc>
+ * 	String <jv>foo</jv> = <jsf>MESSAGES</jsf>.forLocale(Locale.<jsf>JAPAN</jsf>).getString(<js>"foo"</js>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Messages extends ResourceBundle {
 

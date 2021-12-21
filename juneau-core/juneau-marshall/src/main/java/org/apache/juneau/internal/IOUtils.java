@@ -19,6 +19,10 @@ import java.util.concurrent.atomic.*;
 
 /**
  * Various I/O related utility methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class IOUtils {
 

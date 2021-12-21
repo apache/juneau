@@ -25,6 +25,10 @@ import org.apache.juneau.collections.*;
  * Provides the {@link #filterKeys(List)} method for specifying the keys to keep in the bean map and in what order
  * they should appear.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The class type of the wrapped bean.
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {

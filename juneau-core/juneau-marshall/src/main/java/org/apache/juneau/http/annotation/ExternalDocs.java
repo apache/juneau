@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 
 /**
  * Swagger external documentation annotation.
+ * {@review}
  *
  * <p>
  * Allows referencing an external resource for extended documentation.
@@ -40,6 +41,7 @@ import java.lang.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerExternalDocumentationObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

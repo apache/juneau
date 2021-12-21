@@ -25,6 +25,7 @@ import org.apache.juneau.json.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class SwaggerElement {

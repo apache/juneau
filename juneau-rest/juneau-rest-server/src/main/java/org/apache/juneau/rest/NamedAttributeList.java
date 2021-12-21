@@ -20,6 +20,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link NamedAttribute} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class NamedAttributeList {
 

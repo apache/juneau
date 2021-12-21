@@ -44,6 +44,10 @@ import org.apache.juneau.serializer.*;
  * 	String json = m.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <K> The key type.
  * @param <V> The value type.
  */

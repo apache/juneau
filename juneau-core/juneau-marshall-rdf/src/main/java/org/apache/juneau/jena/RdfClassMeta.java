@@ -21,6 +21,11 @@ import org.apache.juneau.xml.*;
 /**
  * Metadata on classes specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the
  * class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfClassMeta extends ExtendedClassMeta {
 
@@ -43,7 +48,7 @@ public class RdfClassMeta extends ExtendedClassMeta {
 			if (a.collectionFormat() != RdfCollectionFormat.DEFAULT)
 				_collectionFormat = a.collectionFormat();
 		this.collectionFormat = _collectionFormat;
-		
+
 		List<RdfSchema> schemas = cm.getAnnotations(RdfSchema.class);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}

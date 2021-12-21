@@ -45,6 +45,11 @@ import org.apache.juneau.xml.*;
  * <p>
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 

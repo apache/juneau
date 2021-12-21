@@ -16,10 +16,15 @@ import org.apache.http.*;
 
 /**
  * Identifies a class that can be converted to a {@link Header} object.
- * 
+ *
  * <p>
  * Typically used on {@link NameValuePair} classes to allow them to be easily converted to {@link Header}
  * objects in a controlled way.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface Headerable {
 

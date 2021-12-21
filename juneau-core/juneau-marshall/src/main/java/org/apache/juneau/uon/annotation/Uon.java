@@ -31,6 +31,8 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

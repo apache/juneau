@@ -23,6 +23,10 @@ import org.apache.juneau.svl.*;
 
 /**
  * An ordered list of annotations and the classes/methods/packages they were found on.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;

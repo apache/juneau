@@ -33,6 +33,11 @@ import org.apache.juneau.uon.*;
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UrlEncodingParserSession extends UonParserSession {

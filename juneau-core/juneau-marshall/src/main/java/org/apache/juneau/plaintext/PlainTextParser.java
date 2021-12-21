@@ -45,6 +45,11 @@ import org.apache.juneau.utils.*;
  * <p>
  * Also parses objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;} transform
  * defined on it.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.PlainTextDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider {
 

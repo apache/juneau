@@ -16,11 +16,16 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.mstat.*;
+import org.apache.juneau.rest.mstat.*;
 import org.apache.juneau.swaps.*;
 
 /**
  * A snapshot of execution statistics for REST resource classes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Bean(properties="startTime,upTime,methodStats")
 public class RestContextStats {

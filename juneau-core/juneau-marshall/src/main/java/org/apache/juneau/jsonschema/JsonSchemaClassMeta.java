@@ -22,6 +22,11 @@ import org.apache.juneau.parser.*;
 /**
  * Metadata on classes specific to the JSON-Schema serializer and pulled from the {@link Schema @Schema} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonSchemaClassMeta extends ExtendedClassMeta {
 

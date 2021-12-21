@@ -22,6 +22,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class RestCallException extends HttpException {
 

@@ -35,6 +35,11 @@ import org.apache.juneau.utils.*;
 /**
  * Generates JSON-schema metadata about POJOs.
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
 

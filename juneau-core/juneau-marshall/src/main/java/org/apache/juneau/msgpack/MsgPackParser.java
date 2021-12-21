@@ -29,6 +29,11 @@ import org.apache.juneau.utils.*;
  * <h5 class='topic'>Media types</h5>
  *
  * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {
 

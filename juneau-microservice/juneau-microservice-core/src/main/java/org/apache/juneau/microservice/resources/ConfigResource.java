@@ -32,6 +32,11 @@ import org.apache.juneau.http.response.*;
 
 /**
  * Shows contents of the microservice configuration file.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	path="/config",

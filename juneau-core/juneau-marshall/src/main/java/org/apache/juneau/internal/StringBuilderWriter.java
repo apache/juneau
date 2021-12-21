@@ -19,6 +19,10 @@ import java.io.*;
  *
  * <p>
  * Note that this class is NOT thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class StringBuilderWriter extends Writer {
 

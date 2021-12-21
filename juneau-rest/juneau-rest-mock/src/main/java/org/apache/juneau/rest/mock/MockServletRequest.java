@@ -36,6 +36,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MockServletRequest implements HttpServletRequest {

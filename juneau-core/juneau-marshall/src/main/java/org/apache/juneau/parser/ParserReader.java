@@ -30,6 +30,11 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * <b>Warning:</b>  Not thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ParserReader extends Reader implements Positionable {
 

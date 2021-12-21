@@ -25,6 +25,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

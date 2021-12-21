@@ -14,6 +14,10 @@ package org.apache.juneau.http.annotation;
 
 /**
  * Static strings used for Swagger parameter collection format types.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class CollectionFormatType {
 

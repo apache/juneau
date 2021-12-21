@@ -16,6 +16,11 @@ import javax.xml.stream.util.*;
 
 /**
  * {@link XMLEventAllocator} base class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class XmlEventAllocator implements XMLEventAllocator {
 

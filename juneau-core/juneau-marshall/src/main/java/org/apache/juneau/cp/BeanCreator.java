@@ -27,6 +27,10 @@ import org.apache.juneau.reflect.*;
 /**
  * Utility class for creating beans.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type being created.
  */
 public class BeanCreator<T> {

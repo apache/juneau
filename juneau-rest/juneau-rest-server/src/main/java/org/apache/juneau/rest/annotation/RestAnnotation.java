@@ -31,6 +31,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Rest @Rest} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestAnnotation {
 

@@ -18,6 +18,11 @@ import org.apache.juneau.oapi.annotation.*;
 /**
  * Metadata on bean properties specific to the OpenAPI serializers and parsers pulled from the {@link OpenApi @OpenApi}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class OpenApiBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

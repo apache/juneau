@@ -32,6 +32,11 @@ import org.apache.juneau.utils.*;
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class WriterSerializer extends Serializer {
 

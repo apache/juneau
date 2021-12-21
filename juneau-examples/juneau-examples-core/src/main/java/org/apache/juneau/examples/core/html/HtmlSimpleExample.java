@@ -21,6 +21,7 @@ import org.apache.juneau.html.HtmlSerializer;
  * Sample class which shows the simple usage of HtmlSerializer and HtmlParser.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

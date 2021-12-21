@@ -130,6 +130,7 @@ import org.apache.juneau.xml.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.BasicRestServlet}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest

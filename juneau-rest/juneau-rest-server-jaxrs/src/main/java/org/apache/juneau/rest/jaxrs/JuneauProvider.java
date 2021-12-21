@@ -30,6 +30,7 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

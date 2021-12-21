@@ -24,6 +24,10 @@ import org.apache.juneau.internal.*;
  * Represents a single entry in a configuration.
  *
  * This is a read-only object.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ConfigEntry {
 	final String rawLine;

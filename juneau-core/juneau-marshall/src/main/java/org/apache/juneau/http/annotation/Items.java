@@ -20,6 +20,7 @@ import org.apache.juneau.oapi.*;
 
 /**
  * Swagger items annotation.
+ * {@review}
  *
  * <p>
  * A limited subset of JSON-Schema's items object.
@@ -62,6 +63,7 @@ import org.apache.juneau.oapi.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

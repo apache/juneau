@@ -25,6 +25,10 @@ import org.apache.juneau.internal.*;
  * Identifies a directory located either on the classpath or file system.
  *
  * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class LocalDir {
 

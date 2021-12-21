@@ -22,6 +22,11 @@ import org.apache.juneau.rest.beans.*;
 
 /**
  * Microservice debug utilities.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-jetty}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	path="/debug",

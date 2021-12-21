@@ -67,6 +67,11 @@ import org.apache.juneau.svl.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RestOpContext extends Context implements Comparable<RestOpContext>  {
 

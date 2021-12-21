@@ -27,6 +27,11 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		This class is not intended for external use.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class MsgPackInputStream extends ParserInputStream {
 

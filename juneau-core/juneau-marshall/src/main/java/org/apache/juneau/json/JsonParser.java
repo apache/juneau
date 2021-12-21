@@ -110,6 +110,11 @@ import org.apache.juneau.utils.*;
  * {@link OMap#OMap(CharSequence) OMap(CharSequence)} or {@link OList#OList(CharSequence)
  * OList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
 

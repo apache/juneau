@@ -122,6 +122,11 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street='123+Main+St',city=Anywhere,state=NY,zip=12345)&amp;deceased=false"</jc>
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
 

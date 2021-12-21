@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 
 /**
  * REST has-query-parameter annotation.
+ * {@review}
  *
  * <p>
  * Identifies whether or not an HTTP request has the specified query parameter.
@@ -90,6 +91,10 @@ import java.lang.annotation.*;
 	</tr>
 </table>
  *
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({PARAMETER})

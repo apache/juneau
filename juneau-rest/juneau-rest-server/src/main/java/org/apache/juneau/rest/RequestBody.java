@@ -84,7 +84,8 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='ja'>{@link Body}
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("unchecked")

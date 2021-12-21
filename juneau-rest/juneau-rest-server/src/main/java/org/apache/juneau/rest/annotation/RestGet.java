@@ -33,6 +33,7 @@ import org.apache.juneau.http.header.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target(METHOD)

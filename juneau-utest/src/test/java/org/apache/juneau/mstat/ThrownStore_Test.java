@@ -18,6 +18,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.cp.*;
+import org.apache.juneau.rest.mstat.*;
 import org.junit.*;
 
 @SuppressWarnings("serial")

@@ -17,6 +17,10 @@ import java.nio.charset.*;
 
 /**
  * Utility class for creating {@link FileReader} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class FileReaderBuilder {
 

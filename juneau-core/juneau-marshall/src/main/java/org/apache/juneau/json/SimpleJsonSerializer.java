@@ -30,7 +30,8 @@ package org.apache.juneau.json;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SimpleJsonSerializer extends JsonSerializer {

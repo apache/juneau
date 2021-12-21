@@ -32,6 +32,7 @@ import org.apache.juneau.encoders.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target(METHOD)

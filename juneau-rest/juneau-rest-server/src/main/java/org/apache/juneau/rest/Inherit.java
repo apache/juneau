@@ -38,5 +38,10 @@ package org.apache.juneau.rest;
  * 		swaps={MySwap.<jk>class</jk>, Inherit.<jk>class</jk>}
  * 	)
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class Inherit {}

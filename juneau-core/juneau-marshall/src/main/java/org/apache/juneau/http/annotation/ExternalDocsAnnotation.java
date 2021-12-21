@@ -23,6 +23,10 @@ import org.apache.juneau.parser.*;
 
 /**
  * Utility classes and methods for the {@link ExternalDocs @ExternalDocs} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ExternalDocsAnnotation {
 

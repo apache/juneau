@@ -19,6 +19,11 @@ import org.apache.juneau.swap.*;
 
 /**
  * Transforms {@link TimeZone} objects to and from {@link String Strings}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class TimeZoneSwap extends StringSwap<TimeZone> {
 

@@ -41,6 +41,11 @@ import static org.apache.juneau.internal.StateMachineState.*;
  * 	<li>Whitespace is ignored.
  * 	<li><jk>null</jk> or empty expressions always match as <jk>false</jk>.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.Guards}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RoleMatcher {
 

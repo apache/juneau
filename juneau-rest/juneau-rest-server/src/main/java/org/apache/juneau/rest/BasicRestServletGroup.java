@@ -32,6 +32,7 @@ import org.apache.juneau.rest.config.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest

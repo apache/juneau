@@ -20,6 +20,11 @@ package org.apache.juneau.assertions;
  *
  * <p>
  * See {@link Assertions#assertThrown(Snippet)} for an example.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface Snippet {
 

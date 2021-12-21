@@ -51,6 +51,7 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.BeancAnnotation}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

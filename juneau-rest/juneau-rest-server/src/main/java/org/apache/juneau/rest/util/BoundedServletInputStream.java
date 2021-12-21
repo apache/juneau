@@ -20,6 +20,10 @@ import javax.servlet.*;
 
 /**
  * ServletInputStream wrapper around a normal input stream with support for limiting input.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class BoundedServletInputStream extends ServletInputStream {
 

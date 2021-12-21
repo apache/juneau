@@ -23,6 +23,11 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the
  * class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class XmlBeanMeta extends ExtendedBeanMeta {
 

@@ -19,6 +19,11 @@ import java.io.*;
 
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class InputStreamEntity extends BasicHttpEntity {
 

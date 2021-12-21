@@ -45,6 +45,8 @@ import org.apache.juneau.rest.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
+ * 	<li class='link'>{@doc jrs.HtmlWidgets}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PoweredByApache extends Widget {

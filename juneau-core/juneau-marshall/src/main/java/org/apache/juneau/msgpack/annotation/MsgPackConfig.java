@@ -26,6 +26,11 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)

@@ -41,7 +41,8 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.SvlVariables}
+ * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestFormDataVar extends MultipartResolvingVar {

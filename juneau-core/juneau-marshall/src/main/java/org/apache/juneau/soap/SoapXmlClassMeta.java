@@ -20,6 +20,11 @@ import org.apache.juneau.soap.annotation.*;
 /**
  * Metadata on classes specific to the SOAP/XML serializers and parsers pulled from the {@link SoapXml @SoapXml} annotation on
  * the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SoapXmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SoapXmlClassMeta extends ExtendedClassMeta {
 

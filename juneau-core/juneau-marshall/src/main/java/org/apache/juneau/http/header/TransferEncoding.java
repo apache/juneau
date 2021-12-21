@@ -55,7 +55,9 @@ import org.apache.juneau.http.annotation.*;
  * Many older HTTP/1.0 applications do not understand the Transfer-Encoding header.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Header("Transfer-Encoding")

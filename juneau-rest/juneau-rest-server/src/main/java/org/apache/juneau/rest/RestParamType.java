@@ -17,6 +17,7 @@ package org.apache.juneau.rest;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public enum RestParamType {

@@ -22,6 +22,11 @@ import org.apache.http.protocol.*;
  * Default HTTP call handler.
  *
  * Can be subclasses and specified via {@link RestClient.Builder#callHandler()}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicRestCallHandler implements RestCallHandler {
 

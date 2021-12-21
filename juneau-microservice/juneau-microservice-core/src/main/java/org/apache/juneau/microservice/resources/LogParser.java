@@ -28,6 +28,11 @@ import org.apache.juneau.collections.*;
  * <p>
  * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger
  * names.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
 	private BufferedReader br;

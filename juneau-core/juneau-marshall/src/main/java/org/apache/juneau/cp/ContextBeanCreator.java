@@ -27,6 +27,10 @@ import org.apache.juneau.*;
  * Contains either a pre-existing Context bean, or a builder for that bean.
  * If it's a builder, then annotations can be applied to it.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The bean type.
  */
 public class ContextBeanCreator<T> {

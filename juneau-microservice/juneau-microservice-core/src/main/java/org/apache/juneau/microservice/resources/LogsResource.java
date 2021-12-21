@@ -34,6 +34,11 @@ import org.apache.juneau.http.response.*;
 
 /**
  * REST resource for viewing and accessing log files.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	path="/logs",

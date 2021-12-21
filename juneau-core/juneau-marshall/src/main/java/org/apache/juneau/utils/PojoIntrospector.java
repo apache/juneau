@@ -28,6 +28,10 @@ import org.apache.juneau.reflect.*;
  * 	String s2 = (String)<jk>new</jk> PojoIntrospector(s)
  * 		.invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class PojoIntrospector {
 

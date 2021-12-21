@@ -23,6 +23,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * This and all future requests should be directed to the given URI.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Response
 @StatusCode(STATUS_CODE)

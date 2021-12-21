@@ -25,6 +25,11 @@ import org.apache.juneau.internal.*;
  * Basic implementation of a {@link PartIterator}.
  *
  * {@review}
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @NotThreadSafe
 public class BasicPartIterator implements PartIterator {

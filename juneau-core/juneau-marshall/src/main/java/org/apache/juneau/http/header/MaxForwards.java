@@ -55,7 +55,9 @@ import org.apache.juneau.http.annotation.*;
  * extension methods for which it is not explicitly referred to as part of that method definition.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Header("Max-Forwards")

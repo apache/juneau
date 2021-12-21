@@ -19,6 +19,10 @@ import java.lang.annotation.*;
 
 /**
  * Identifies a class as not thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)

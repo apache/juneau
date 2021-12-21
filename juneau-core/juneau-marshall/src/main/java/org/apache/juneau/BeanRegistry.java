@@ -39,6 +39,10 @@ import org.apache.juneau.reflect.*;
  * 		real class at parse time.
  * 	<li>The dictionary name is used as element names when serialized to XML.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BeanRegistry {
 

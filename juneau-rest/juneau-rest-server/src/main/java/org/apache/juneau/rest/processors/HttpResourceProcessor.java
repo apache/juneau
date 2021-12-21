@@ -21,6 +21,11 @@ import org.apache.juneau.http.resource.*;
 
 /**
  * Response handler for {@link HttpResource} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class HttpResourceProcessor implements ResponseProcessor {
 

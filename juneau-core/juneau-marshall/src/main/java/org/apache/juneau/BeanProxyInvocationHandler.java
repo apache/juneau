@@ -27,6 +27,10 @@ import org.apache.juneau.reflect.*;
  * If the {@code useInterfaceProxies} setting is enabled in {@link BeanContext}, this is the class that creates
  * instances of beans from interfaces.
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The interface class
  */
 public class BeanProxyInvocationHandler<T> implements InvocationHandler {

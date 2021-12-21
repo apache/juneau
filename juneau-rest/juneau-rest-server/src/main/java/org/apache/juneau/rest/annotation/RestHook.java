@@ -93,9 +93,9 @@ import org.apache.juneau.rest.*;
  * 		</ul>
  * </ul>
  *
- *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LifecycleHooks}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({METHOD,TYPE})

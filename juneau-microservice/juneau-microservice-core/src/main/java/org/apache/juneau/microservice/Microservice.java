@@ -87,6 +87,11 @@ import org.apache.juneau.cp.Messages;
  * 	<li>
  * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Microservice implements ConfigEventListener {
 

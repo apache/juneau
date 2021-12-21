@@ -23,6 +23,11 @@ import org.apache.http.*;
 
 /**
  * A {@link NameValuePair} that consists of a single URL value.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicUriPart extends BasicPart {
 

@@ -27,6 +27,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface StaticFiles extends FileFinder {
 

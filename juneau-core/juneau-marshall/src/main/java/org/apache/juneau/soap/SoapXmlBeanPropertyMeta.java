@@ -18,6 +18,11 @@ import org.apache.juneau.soap.annotation.*;
 /**
  * Metadata on bean properties specific to the SOAP/XML serializers and parsers pulled from the {@link SoapXml @SoapXml}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SoapXmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class SoapXmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

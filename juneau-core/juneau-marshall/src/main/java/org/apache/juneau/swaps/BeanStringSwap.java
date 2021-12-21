@@ -28,6 +28,11 @@ import org.apache.juneau.swap.*;
  * Beans serialized as strings cannot be reconstituted using a parser unless it is a
  * {@doc jm.PojoCategories parsable POJO}.
  *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The class type of the bean.
  */
 public class BeanStringSwap<T> extends StringSwap<T> {

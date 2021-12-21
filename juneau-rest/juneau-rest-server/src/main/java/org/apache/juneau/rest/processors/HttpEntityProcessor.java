@@ -21,6 +21,11 @@ import org.apache.http.*;
 
 /**
  * Response handler for {@link HttpEntity} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class HttpEntityProcessor implements ResponseProcessor {
 

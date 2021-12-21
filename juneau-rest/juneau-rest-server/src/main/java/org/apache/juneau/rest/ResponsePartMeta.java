@@ -16,6 +16,11 @@ import org.apache.juneau.httppart.*;
 
 /**
  * Represents the information needed to serialize a response part such as a response header or body.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ResponsePartMeta {
 

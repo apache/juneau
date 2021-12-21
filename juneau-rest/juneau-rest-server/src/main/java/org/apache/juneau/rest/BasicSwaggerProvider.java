@@ -22,8 +22,12 @@ import org.apache.juneau.svl.*;
 
 /**
  * Basic implementation of a {@link SwaggerProvider}.
+ * {@review}
  *
- * TODO
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicSwaggerProvider implements SwaggerProvider {
 

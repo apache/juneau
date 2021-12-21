@@ -14,6 +14,11 @@ package org.apache.juneau.httppart;
 
 /**
  * Valid values for the <c>type</c> field.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum HttpPartDataType {
 
@@ -59,7 +64,7 @@ public enum HttpPartDataType {
 
 	/**
 	 * Create from lowercase string.
-	 * 
+	 *
 	 * @param value The enum name.
 	 * @return The enum.
 	 */

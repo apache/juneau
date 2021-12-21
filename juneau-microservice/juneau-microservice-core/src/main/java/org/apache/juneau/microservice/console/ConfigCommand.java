@@ -22,6 +22,11 @@ import org.apache.juneau.cp.*;
 
 /**
  * Implements the 'config' console command to get or set configuration.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ConfigCommand extends ConsoleCommand {
 

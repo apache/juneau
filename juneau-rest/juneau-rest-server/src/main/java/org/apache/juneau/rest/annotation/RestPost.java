@@ -34,6 +34,7 @@ import org.apache.juneau.parser.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target(METHOD)

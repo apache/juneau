@@ -22,6 +22,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Standard predefined HTTP entities.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HttpEntities {
 

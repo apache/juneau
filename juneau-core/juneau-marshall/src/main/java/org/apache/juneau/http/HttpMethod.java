@@ -22,7 +22,9 @@ import org.apache.juneau.collections.*;
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpMethod {

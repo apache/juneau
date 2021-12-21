@@ -30,6 +30,11 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * This class is NOT thread safe.  It is typically discarded after one-time use.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class ReaderParserSession extends ParserSession {
 

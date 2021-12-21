@@ -40,7 +40,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.SvlVariables}
+ * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SwaggerVar extends MultipartResolvingVar {

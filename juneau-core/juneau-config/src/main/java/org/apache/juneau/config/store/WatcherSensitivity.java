@@ -18,6 +18,10 @@ package org.apache.juneau.config.store;
  * <ul class='notes'>
  * 	<li>This relies on internal Sun packages and may not work on all JVMs.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum WatcherSensitivity {
 

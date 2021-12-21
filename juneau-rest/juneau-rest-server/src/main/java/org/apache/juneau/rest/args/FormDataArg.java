@@ -45,6 +45,11 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * If the {@link Schema#collectionFormat()} value is {@link HttpPartCollectionFormat#MULTI}, then the data type can be a {@link Collection} or array.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class FormDataArg implements RestOpArg {
 	private final boolean multi;

@@ -32,6 +32,10 @@ import java.util.*;
  * 		This object can be used as hashmap keys.
  * </ul>
  *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ *
  * @param <T> The inner object type.
  */
 public class Mutable<T> {

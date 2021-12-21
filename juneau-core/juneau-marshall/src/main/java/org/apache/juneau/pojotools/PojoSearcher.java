@@ -21,9 +21,15 @@ import org.apache.juneau.*;
 
 /**
  * Designed to provide paging on POJOs consisting of arrays and collections.
+ * {@review}
  *
  * <p>
  * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings({"rawtypes"})
 public final class PojoSearcher implements PojoTool<SearchArgs> {

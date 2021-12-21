@@ -18,6 +18,11 @@ import org.apache.juneau.jena.annotation.*;
 /**
  * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the
  * class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfBeanMeta extends ExtendedBeanMeta {
 

@@ -19,6 +19,7 @@ import org.apache.juneau.html.HtmlSerializer;
  * Atom feed HTML example.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

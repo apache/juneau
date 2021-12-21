@@ -36,6 +36,7 @@ import org.apache.juneau.http.response.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.BasicRestObject}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest

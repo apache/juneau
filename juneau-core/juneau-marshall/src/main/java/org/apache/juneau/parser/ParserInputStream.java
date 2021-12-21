@@ -22,6 +22,11 @@ import java.io.*;
  *
  * <p>
  * <b>Warning:</b>  Not thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ParserInputStream extends InputStream implements Positionable {
 

@@ -24,6 +24,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Uon @Uon} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UonAnnotation {
 

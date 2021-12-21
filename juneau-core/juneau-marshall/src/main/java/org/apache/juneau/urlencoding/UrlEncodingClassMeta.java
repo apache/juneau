@@ -19,6 +19,11 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Metadata on classes specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding} annotation on the class.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlEncodingClassMeta extends ExtendedClassMeta {
 

@@ -36,7 +36,8 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.NamePropertyAnnotation}
+ * 	<li class='link'>{@doc jm.ParentPropertyAnnotation}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({METHOD,FIELD,TYPE})

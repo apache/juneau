@@ -25,6 +25,11 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Represents the metadata gathered from a parameter or class annotated with {@link Request}.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RequestBeanMeta {
 

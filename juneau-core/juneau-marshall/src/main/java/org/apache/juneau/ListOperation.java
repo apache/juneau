@@ -15,6 +15,10 @@ package org.apache.juneau;
 /**
  * Identifies how to add elements to a list.
  * {@reviewed}
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public enum ListOperation {
 

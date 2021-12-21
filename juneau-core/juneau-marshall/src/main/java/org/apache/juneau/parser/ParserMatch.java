@@ -16,6 +16,11 @@ import org.apache.juneau.http.header.*;
 
 /**
  * Represents a parser and media type that matches an HTTP <c>Content-Type</c> header value.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class ParserMatch {
 

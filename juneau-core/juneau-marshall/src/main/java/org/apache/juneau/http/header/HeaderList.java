@@ -159,6 +159,11 @@ import org.apache.juneau.svl.*;
  * 		);
  * 	}
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @ThreadSafe
 public class HeaderList {

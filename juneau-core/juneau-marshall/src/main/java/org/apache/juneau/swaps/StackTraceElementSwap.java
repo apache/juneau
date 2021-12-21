@@ -23,6 +23,11 @@ import org.apache.juneau.swap.*;
  * <p>
  * The swap is identical to just calling {@link StackTraceElement#toString()}, but provides the ability to
  * parse the resulting string back into a bean.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> {
 

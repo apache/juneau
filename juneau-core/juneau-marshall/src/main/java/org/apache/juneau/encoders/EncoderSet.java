@@ -64,6 +64,11 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Get the encoder</jc>
  * 	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<jv>matchedCoding</jv>);
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.Encoders}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class EncoderSet {
 

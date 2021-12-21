@@ -20,6 +20,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class BasicRuntimeException extends RuntimeException {
 

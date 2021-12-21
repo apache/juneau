@@ -31,6 +31,8 @@ import org.apache.juneau.csv.*;
  * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.CsvDetails}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

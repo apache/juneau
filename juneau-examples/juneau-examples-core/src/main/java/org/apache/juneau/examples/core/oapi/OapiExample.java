@@ -22,6 +22,7 @@ import org.apache.juneau.oapi.*;
  * Sample class which shows the simple usage of OpenApiSerializer.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

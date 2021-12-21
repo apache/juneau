@@ -20,6 +20,11 @@ import org.apache.juneau.http.response.*;
 
 /**
  * A specialized {@link RestOpContext} for handling <js>"RRPC"</js> HTTP methods.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RrpcRestOpContext extends RestOpContext {
 

@@ -99,6 +99,11 @@ import org.apache.juneau.serializer.*;
  * 		</ul>
  * 	</ul>
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class RestResponse {
 

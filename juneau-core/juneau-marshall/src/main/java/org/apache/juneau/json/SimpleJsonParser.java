@@ -22,6 +22,11 @@ package org.apache.juneau.json;
  * <h5 class='topic'>Description</h5>
  *
  * Identical to {@link JsonParser} but with the media type <bc>application/json+simple</bc>.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.JsonDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SimpleJsonParser extends JsonParser {
 

@@ -49,8 +49,10 @@ import org.apache.juneau.svl.*;
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
- * @see org.apache.juneau.collections.Args
- * @see org.apache.juneau.svl
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ArgsVar extends DefaultingVar {
 

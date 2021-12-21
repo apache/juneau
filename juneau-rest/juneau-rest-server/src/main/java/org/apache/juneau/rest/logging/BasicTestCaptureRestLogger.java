@@ -64,6 +64,11 @@ import org.apache.juneau.assertions.*;
  * 		}
  * }
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class BasicTestCaptureRestLogger extends BasicRestLogger {
 

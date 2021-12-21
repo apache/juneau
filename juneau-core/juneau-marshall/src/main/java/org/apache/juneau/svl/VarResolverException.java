@@ -18,6 +18,11 @@ import org.apache.juneau.*;
 
 /**
  * Exception that occurs during a var resolver session.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class VarResolverException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;

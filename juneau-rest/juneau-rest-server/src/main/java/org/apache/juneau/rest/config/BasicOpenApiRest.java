@@ -71,6 +71,11 @@ import org.apache.juneau.serializer.annotation.*;
  * 	values defined on child classes overriding values defined on parent classes.  That allows any values defined
  * 	on this interface to be overridden by annotations defined on the implemented class.
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 

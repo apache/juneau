@@ -33,6 +33,11 @@ import org.apache.juneau.http.header.*;
  * 		.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
  * 		.build();
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface HttpResource extends HttpEntity {
 

@@ -34,7 +34,9 @@ import org.apache.juneau.http.response.*;
  * Widgets can be defined as inner classes of REST resource classes.
  *
  * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
  * 	<li class='link'>{@doc jrs.HtmlWidgets}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class Widget implements HtmlWidget {

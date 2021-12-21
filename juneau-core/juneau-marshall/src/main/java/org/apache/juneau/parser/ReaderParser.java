@@ -37,6 +37,11 @@ import org.apache.juneau.utils.*;
  * <ul>
  * 	<li><c>parse(ParserSession, ClassMeta)</c>
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public abstract class ReaderParser extends Parser {
 

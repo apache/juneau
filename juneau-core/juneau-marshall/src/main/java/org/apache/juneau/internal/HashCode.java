@@ -20,6 +20,10 @@ package org.apache.juneau.internal;
  * <p class='bcode w800'>
  * 	int hashCode = new HashCode().add("foobar").add(myobject).add(123).get();
  * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class HashCode {
 

@@ -18,6 +18,11 @@ import org.apache.juneau.parser.ParseException;
 
 /**
  * Exception thrown when an HTTP part fails schema validation during parsing.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class SchemaValidationException extends ParseException {
 	private static final long serialVersionUID = 1L;

@@ -97,6 +97,10 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * This class is not thread safe.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class OList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;

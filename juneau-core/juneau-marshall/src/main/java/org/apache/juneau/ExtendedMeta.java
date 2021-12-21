@@ -14,5 +14,9 @@ package org.apache.juneau;
 
 /**
  * Superclass of all extended metadata classes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ExtendedMeta {}

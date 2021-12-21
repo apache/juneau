@@ -16,6 +16,11 @@ import java.util.*;
 
 /**
  * A list of {@link ResourceDescription} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 	private static final long serialVersionUID = 1L;

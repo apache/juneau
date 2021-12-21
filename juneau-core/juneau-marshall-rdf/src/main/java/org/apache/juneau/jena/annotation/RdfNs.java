@@ -21,6 +21,11 @@ import java.lang.annotation.*;
  *
  * <p>
  * Used to identify a namespace/URI pair on a {@link RdfSchema#rdfNs() @RdfSchema(rdfNs)} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Documented
 @Target({})

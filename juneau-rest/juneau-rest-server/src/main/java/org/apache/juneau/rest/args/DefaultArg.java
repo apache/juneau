@@ -30,6 +30,11 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * This is the default parameter resolver if no other applicable parameter resolvers could be found.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class DefaultArg implements RestOpArg {
 

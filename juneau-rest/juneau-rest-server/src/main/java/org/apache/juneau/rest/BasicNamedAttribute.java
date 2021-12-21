@@ -24,6 +24,11 @@ import org.apache.juneau.http.part.*;
 
 /**
  * Implementation of a named object.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @BeanIgnore
 public class BasicNamedAttribute implements NamedAttribute {

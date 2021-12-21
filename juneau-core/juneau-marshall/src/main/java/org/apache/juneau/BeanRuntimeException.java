@@ -16,6 +16,10 @@ import java.text.*;
 
 /**
  * General bean runtime operation exception.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class BeanRuntimeException extends BasicRuntimeException {
 

@@ -23,6 +23,10 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * Property namers are associated with beans through the {@link Bean#propertyNamer @Bean(propertyNamer)} annotation.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface PropertyNamer {
 

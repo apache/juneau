@@ -24,6 +24,7 @@ import static org.apache.juneau.internal.IOUtils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jc.EncodedEntries}
+ * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class ConfigXorEncoder implements ConfigEncoder {

@@ -18,6 +18,11 @@ import org.apache.juneau.urlencoding.annotation.*;
 /**
  * Metadata on bean properties specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding}
  * annotation on the bean property.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class UrlEncodingBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

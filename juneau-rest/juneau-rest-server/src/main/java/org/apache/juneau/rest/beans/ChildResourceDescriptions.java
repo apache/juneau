@@ -22,6 +22,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * Typically used in top-level GET methods of router resources to render a list of available child resources.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class ChildResourceDescriptions extends ResourceDescriptions {
 

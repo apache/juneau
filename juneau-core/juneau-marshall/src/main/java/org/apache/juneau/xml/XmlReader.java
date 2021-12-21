@@ -28,6 +28,11 @@ import org.apache.juneau.parser.*;
  * <p>
  * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for
  * debugging purposes.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class XmlReader implements XMLStreamReader, Positionable {
 

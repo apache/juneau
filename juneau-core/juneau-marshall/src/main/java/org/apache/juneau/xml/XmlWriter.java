@@ -26,6 +26,11 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>
  * 		This class is not intended for external use.
  * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class XmlWriter extends SerializerWriter {
 

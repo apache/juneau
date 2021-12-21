@@ -14,6 +14,11 @@ package org.apache.juneau.rest;
 
 /**
  * A simple named object.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc TODO}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public interface NamedAttribute {
 

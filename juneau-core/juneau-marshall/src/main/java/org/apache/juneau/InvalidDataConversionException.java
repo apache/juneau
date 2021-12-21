@@ -25,6 +25,10 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Exception that gets thrown if you try to perform an invalid conversion, such as when calling
  * {@code OMap.getInt(...)} on a non-numeric <c>String</c>.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public final class InvalidDataConversionException extends BasicRuntimeException {
 

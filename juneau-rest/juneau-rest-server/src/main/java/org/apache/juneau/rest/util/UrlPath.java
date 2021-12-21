@@ -20,6 +20,10 @@ import java.util.*;
 
 /**
  * Represents a parsed URL path-info string.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class UrlPath {
 
