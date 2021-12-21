@@ -18,16 +18,17 @@ import static java.util.Optional.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-
 /**
  * A list of default implementation classes.
+ *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@NotThreadSafe
 public class DefaultClassList {
 
 	//-----------------------------------------------------------------------------------------------------------------

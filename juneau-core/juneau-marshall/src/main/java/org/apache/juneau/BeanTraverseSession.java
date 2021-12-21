@@ -38,9 +38,9 @@ import org.apache.juneau.internal.*;
  * 		Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
  * </ul>
  *
- * <p>
- * This class is NOT thread safe.
- * It is typically discarded after one-time use although it can be reused within the same thread.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

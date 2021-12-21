@@ -15,7 +15,6 @@ package org.apache.juneau.cp;
 import static java.util.Optional.*;
 
 import java.util.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * A list of default settings.
@@ -23,11 +22,14 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Consists of a simple string-keyed map of arbitrary objects.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@NotThreadSafe
 public class DefaultSettingsMap {
 
 	//-----------------------------------------------------------------------------------------------------------------

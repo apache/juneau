@@ -34,8 +34,9 @@ import org.apache.juneau.svl.*;
  * <p>
  * See {@link Serializer} for details.
  *
- * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}

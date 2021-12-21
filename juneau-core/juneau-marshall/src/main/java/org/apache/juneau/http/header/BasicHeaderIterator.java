@@ -19,7 +19,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -27,12 +26,15 @@ import org.apache.juneau.internal.*;
  *
  * {@review}
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@NotThreadSafe
 public class BasicHeaderIterator implements HeaderIterator {
 
 	private final Header[] entries;

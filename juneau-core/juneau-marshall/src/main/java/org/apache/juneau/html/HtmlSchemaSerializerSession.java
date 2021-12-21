@@ -29,8 +29,9 @@ import org.apache.juneau.svl.*;
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSchemaSerializer} and its subclasses.
  *
- * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}

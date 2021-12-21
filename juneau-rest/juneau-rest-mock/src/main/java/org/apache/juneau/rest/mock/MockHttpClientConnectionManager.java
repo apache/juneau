@@ -26,7 +26,9 @@ import org.apache.http.protocol.*;
  * <p>
  * This class is instantiated by the {@link MockRestClient.Builder} class.
  *
- * This implementation is NOT thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This implementation is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}

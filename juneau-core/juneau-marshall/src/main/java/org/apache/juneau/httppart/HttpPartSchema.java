@@ -43,8 +43,9 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Schema objects are created via builders instantiated through the {@link #create()} method.
  *
- * <p>
- * This class is thread safe and reusable.
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.OpenApiDetails}

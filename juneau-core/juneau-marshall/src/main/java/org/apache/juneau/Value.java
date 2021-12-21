@@ -24,8 +24,9 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Similar to an {@link Optional} but mutable.
  *
- * <p>
- * This object is not thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

@@ -23,7 +23,6 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
@@ -160,12 +159,15 @@ import org.apache.juneau.svl.*;
  * 	}
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@ThreadSafe
 public class HeaderList {
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -26,10 +26,11 @@ import java.util.*;
  * </p>
  *
  * <ul class='notes'>
- * 	<li>
- * 		This class is not thread safe.
- * 	<li>
- * 		This object can be used as hashmap keys.
+ * 	<li class='note'>This object can be used as hashmap keys.
+ * </ul>
+ *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
  * <ul class='seealso'>

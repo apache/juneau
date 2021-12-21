@@ -20,8 +20,9 @@ import java.io.*;
  * <p>
  * Keeps track of current byte position.
  *
- * <p>
- * <b>Warning:</b>  Not thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}

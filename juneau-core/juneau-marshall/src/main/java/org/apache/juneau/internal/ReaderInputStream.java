@@ -68,7 +68,10 @@ import java.util.Objects;
  * implementation of the {@link InputStream#available()} method. A call to this method
  * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
  * <p>
- * Instances of {@link ReaderInputStream} are not thread safe.
+ *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

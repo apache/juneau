@@ -17,8 +17,9 @@ import java.io.*;
 /**
  * Similar to {@link StringWriter}, but uses a {@link StringBuilder} instead to avoid synchronization overhead.
  *
- * <p>
- * Note that this class is NOT thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

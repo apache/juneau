@@ -38,8 +38,9 @@ import org.apache.juneau.http.header.*;
  * <p>
  * If the <c>unmodifiable</c> flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.
  *
- * <p>
- * Beans are not thread safe unless they're marked as unmodifiable.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}

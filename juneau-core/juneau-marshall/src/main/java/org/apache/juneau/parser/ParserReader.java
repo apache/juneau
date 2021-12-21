@@ -28,8 +28,9 @@ import org.apache.juneau.internal.*;
  * Additionally keeps track of current line and column number, and provides the ability to set mark points and capture
  * characters from the previous mark point.
  *
- * <p>
- * <b>Warning:</b>  Not thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}

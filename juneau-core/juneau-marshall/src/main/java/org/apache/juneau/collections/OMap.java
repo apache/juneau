@@ -91,8 +91,9 @@ import org.apache.juneau.utils.*;
  * 	<jk>int</jk> a = m2.getInt(<js>"a"</js>);  <jc>// a == 1 </jc>
  * </p>
  *
- * <p>
- * This class is not thread safe.
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

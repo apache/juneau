@@ -22,8 +22,6 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Utility class for starting up the examples microservice.
- * <p>
- * This class is NOT thread safe.
  */
 public class SamplesMicroservice {
 	static volatile JettyMicroservice microservice;
