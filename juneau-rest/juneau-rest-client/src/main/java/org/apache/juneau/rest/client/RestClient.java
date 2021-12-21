@@ -1027,6 +1027,10 @@ import org.apache.juneau.xml.*;
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
  * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * 	<li class='extlink'>{@source}

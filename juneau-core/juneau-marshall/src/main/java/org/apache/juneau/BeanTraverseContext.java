@@ -33,6 +33,10 @@ import org.apache.juneau.utils.*;
  *
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

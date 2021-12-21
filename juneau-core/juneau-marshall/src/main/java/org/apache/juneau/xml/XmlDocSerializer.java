@@ -26,6 +26,10 @@ package org.apache.juneau.xml;
  * Same as {@link XmlSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs>
  * <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response to make it a valid XML document.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc XmlDetails}
  * 	<li class='extlink'>{@source}

@@ -20,6 +20,10 @@ import org.apache.juneau.reflect.*;
  * <p>
  * More precisely, uses the {@link Mutaters#toString(Object)} method to stringify objects.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

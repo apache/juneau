@@ -237,6 +237,10 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
  * 	<li class='extlink'>{@source}

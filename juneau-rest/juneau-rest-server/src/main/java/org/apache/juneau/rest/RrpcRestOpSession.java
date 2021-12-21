@@ -25,6 +25,10 @@ import org.apache.juneau.parser.*;
 /**
  * A session for a single HTTP request against an RRPC Java method.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

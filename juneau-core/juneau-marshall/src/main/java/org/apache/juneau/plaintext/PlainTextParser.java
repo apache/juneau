@@ -46,6 +46,10 @@ import org.apache.juneau.utils.*;
  * Also parses objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;} transform
  * defined on it.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PlainTextDetails}
  * 	<li class='extlink'>{@source}

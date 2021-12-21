@@ -41,6 +41,10 @@ import org.apache.juneau.utils.*;
  *
  * This parser uses a state machine, which makes it very fast and efficient.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UonDetails}
  * 	<li class='extlink'>{@source}

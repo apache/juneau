@@ -37,6 +37,10 @@ import org.apache.juneau.utils.*;
  * <p>
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.MsgPackDetails}
  * 	<li class='extlink'>{@source}

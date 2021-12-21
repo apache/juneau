@@ -124,6 +124,10 @@ import org.apache.juneau.xml.*;
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

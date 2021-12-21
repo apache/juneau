@@ -150,6 +150,10 @@ import org.apache.juneau.utils.*;
  * 	Person <jv>p</jv> = <jv>m2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.BeanContexts}
  * 	<li class='extlink'>{@source}

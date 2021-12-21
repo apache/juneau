@@ -49,6 +49,10 @@ import org.apache.juneau.serializer.*;
  * 	String json = l.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

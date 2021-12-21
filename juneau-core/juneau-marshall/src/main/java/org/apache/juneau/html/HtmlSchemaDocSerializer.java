@@ -46,6 +46,10 @@ import org.apache.juneau.xml.*;
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
  * 	<li class='extlink'>{@source}

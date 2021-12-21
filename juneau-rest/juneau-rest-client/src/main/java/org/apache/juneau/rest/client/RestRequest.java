@@ -71,6 +71,10 @@ import org.apache.juneau.xml.*;
  * <p>
  * Instances of this class are created by the various creator methods on the {@link RestClient} class.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * 	<li class='extlink'>{@source}

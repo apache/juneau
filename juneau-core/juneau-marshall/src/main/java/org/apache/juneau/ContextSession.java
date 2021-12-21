@@ -26,6 +26,10 @@ import org.apache.juneau.internal.*;
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not typically thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

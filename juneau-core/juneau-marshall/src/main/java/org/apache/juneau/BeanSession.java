@@ -41,9 +41,10 @@ import org.apache.juneau.swap.*;
 /**
  * Session object that lives for the duration of a single use of {@link BeanContext}.
  *
- * <p>
- * Typically session objects are not thread safe nor reusable.  However, bean sessions do not maintain any state and
- * thus can be safely cached and reused.
+ * <ul class='spaced-list'>
+ * 	<li class='info'>Typically session objects are not thread safe nor reusable.  However, bean sessions do not maintain any state and
+ * 		thus can be safely cached and reused.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

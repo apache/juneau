@@ -48,6 +48,10 @@ import org.apache.juneau.utils.*;
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

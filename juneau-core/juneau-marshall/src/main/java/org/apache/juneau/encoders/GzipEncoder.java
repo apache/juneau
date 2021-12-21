@@ -18,6 +18,10 @@ import java.util.zip.*;
 /**
  * Encoder for handling <js>"gzip"</js> encoding and decoding.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Encoders}
  * 	<li class='extlink'>{@source}

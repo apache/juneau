@@ -45,6 +45,10 @@ import org.apache.juneau.utils.*;
  *
  * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc XmlDetails}
  * 	<li class='extlink'>{@source}

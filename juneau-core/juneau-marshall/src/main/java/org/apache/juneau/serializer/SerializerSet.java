@@ -74,6 +74,10 @@ import org.apache.juneau.internal.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(addressBook);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

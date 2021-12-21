@@ -32,6 +32,10 @@ import org.apache.juneau.internal.*;
  * <p>
  * Configuration files retrieved from the classpath can be modified but not persisted.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

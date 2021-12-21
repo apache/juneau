@@ -42,6 +42,10 @@ import org.apache.juneau.svl.*;
  * Main configuration API class.
  * {@review}
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-config}
  * 	<li class='extlink'>{@source}

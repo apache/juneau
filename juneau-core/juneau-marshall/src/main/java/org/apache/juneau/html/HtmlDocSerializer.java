@@ -71,6 +71,10 @@ import org.apache.juneau.xml.*;
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
  * 	<li class='extlink'>{@source}

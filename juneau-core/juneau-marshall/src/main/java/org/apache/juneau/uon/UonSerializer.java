@@ -128,6 +128,10 @@ import org.apache.juneau.utils.*;
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UonDetails}
  * 	<li class='extlink'>{@source}

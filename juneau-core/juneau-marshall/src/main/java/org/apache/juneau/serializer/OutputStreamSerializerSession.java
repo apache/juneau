@@ -34,6 +34,10 @@ import org.apache.juneau.svl.*;
  * 	<li>{@link #doSerialize(SerializerPipe, Object)}
  * </ul>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

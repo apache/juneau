@@ -28,6 +28,10 @@ import org.apache.juneau.rest.client.*;
  * <p>
  * Instances of this class are instantiated through methods on {@link MockRestClient} such as {@link MockRestClient#post(Object,Object)}
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
  * 	<li class='extlink'>{@source}

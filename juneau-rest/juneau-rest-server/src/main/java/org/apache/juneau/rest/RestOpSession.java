@@ -26,6 +26,10 @@ import org.apache.juneau.rest.logging.*;
  * <p>
  * This session object gets created by {@link RestSession} once the Java method to be invoked has been determined.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

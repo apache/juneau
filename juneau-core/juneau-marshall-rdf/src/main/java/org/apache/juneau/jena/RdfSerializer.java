@@ -50,6 +50,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link N3Serializer} - N3.
  * </ul>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jmr.RdfDetails}
  * 	<li class='extlink'>{@source}

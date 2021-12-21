@@ -123,6 +123,10 @@ import org.apache.juneau.utils.*;
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UrlEncodingDetails}
  * 	<li class='extlink'>{@source}

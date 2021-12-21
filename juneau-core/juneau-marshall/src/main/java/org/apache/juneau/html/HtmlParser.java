@@ -37,6 +37,10 @@ import org.apache.juneau.xml.*;
  * <p>
  * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
  * 	<li class='extlink'>{@source}

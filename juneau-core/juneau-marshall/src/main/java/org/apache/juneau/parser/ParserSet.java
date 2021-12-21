@@ -75,6 +75,10 @@ import org.apache.juneau.internal.*;
  * 	AddressBook <jv>addressBook</jv> = <jv>parser</jv>.parse(<jv>json</jv>, AddressBook.<jk>class</jk>);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

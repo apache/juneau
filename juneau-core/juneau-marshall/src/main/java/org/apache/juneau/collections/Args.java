@@ -102,6 +102,10 @@ import org.apache.juneau.internal.*;
  * <p>
  * Equivalent operations are available on optional arguments through the {@link #getArg(Class, String)} method.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='warn'>This class is not thread safe.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

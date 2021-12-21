@@ -38,6 +38,10 @@ import org.apache.juneau.xml.*;
  * description.
  * Used primarily for JUnit testing the {@link HtmlDocSerializer} class.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
  * 	<li class='extlink'>{@source}

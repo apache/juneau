@@ -39,6 +39,10 @@ import org.apache.juneau.internal.*;
  * <p>
  * Points to a file system directory containing configuration files.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

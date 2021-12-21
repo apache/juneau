@@ -108,10 +108,13 @@ import org.apache.juneau.svl.vars.*;
  * 	}
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestContext}
  * 	<li class='extlink'>{@source}
- * </ul>
  * </ul>
  */
 public class RestContext extends Context {

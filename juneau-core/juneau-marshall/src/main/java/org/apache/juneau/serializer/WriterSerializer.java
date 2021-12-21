@@ -33,6 +33,10 @@ import org.apache.juneau.utils.*;
  * Subclass of {@link Serializer} for character-based serializers.
  * {@review}
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
  * 	<li class='extlink'>{@source}

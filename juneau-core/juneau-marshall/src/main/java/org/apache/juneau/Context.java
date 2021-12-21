@@ -53,7 +53,7 @@ import org.apache.juneau.xml.annotation.*;
  * Base class for all Context beans.
  *
  * <p>
- * Context beans follow the convention of having the following parts:
+ * Context beans follow the convention of havinTg the following parts:
  * <ul>
  * 	<li>A {@link Builder} class for configuring the context bean.
  * 	<ul>
@@ -67,6 +67,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	<ul>
  * 		<li>This bean is non-thread-safe and meant for one-time use.
  * 	</ul>
+ *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

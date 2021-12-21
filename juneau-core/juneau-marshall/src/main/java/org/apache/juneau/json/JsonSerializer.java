@@ -98,6 +98,10 @@ import org.apache.juneau.utils.*;
  * 	String json = serializer.serialize(someObject);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonDetails}
  * 	<li class='extlink'>{@source}

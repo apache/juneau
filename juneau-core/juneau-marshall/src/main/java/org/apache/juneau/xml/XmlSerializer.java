@@ -124,6 +124,10 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc XmlDetails}
  * 	<li class='extlink'>{@source}

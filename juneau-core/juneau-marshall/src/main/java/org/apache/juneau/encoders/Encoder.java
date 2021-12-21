@@ -24,6 +24,10 @@ import java.io.*;
  * <p>
  * Encoders are registered with <c>RestServlets</c> through the <ja>@Rest(encoders)</ja> annotation.
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Encoders}
  * 	<li class='extlink'>{@source}

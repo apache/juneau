@@ -25,6 +25,10 @@ import org.apache.juneau.xml.*;
 
 /**
  * Used to validate that the syntax of XML documents are valid.
+ *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
  */
 @SuppressWarnings({"unchecked"})
 public class XmlValidatorParser extends XmlParser {

@@ -135,6 +135,10 @@ import org.apache.juneau.xml.*;
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
  *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
  * 	<li class='extlink'>{@source}
