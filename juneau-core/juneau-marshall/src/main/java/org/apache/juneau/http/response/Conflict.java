@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

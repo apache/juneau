@@ -20,7 +20,7 @@ import org.apache.juneau.*;
  * Interface used to retrieve identifiers and URIs for bean classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

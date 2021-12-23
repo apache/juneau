@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
  * Useful for rendering simple information about a bean during REST OPTIONS requests.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.UtilityBeans}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

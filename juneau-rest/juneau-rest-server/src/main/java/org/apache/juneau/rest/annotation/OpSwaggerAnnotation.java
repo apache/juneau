@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Utility classes and methods for the {@link OpSwagger @OpSwagger} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

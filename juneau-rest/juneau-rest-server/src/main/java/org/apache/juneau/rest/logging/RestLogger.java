@@ -28,7 +28,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mstat.*;
+import org.apache.juneau.rest.stats.*;
 
 /**
  * Interface class used for logging HTTP requests.

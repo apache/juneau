@@ -67,9 +67,6 @@
 		<li>REST resource classes and methods can be annotated with configuration annotations for the serializers and parsers (such as <ja>@HtmlConfig</ja> and <ja>@BeanConfig</ja> shown above).
 		<li>Annotations such as the title, summary, and descriptions shown above are used for auto-generated Swagger UI pages (described later).
 	</ul>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Children</h5>
@@ -106,9 +103,6 @@
 		Initialization of and access to the child resources occurs through the parent resource.
 		Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Group Pages</h5>
@@ -149,9 +143,6 @@
 		|	http://localhost:10000
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.RouterPages.1.png'/>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Resource Methods</h5>
@@ -224,9 +215,6 @@
 			<li>Anything else gets converted to an {@link oaj.http.response.InternalServerError}. 
 		</ul>
 	</ul>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 	
 <h5 class='topic'>Deploying as a Servlet</h5>
@@ -246,9 +234,6 @@
 		extend from one of the preconfigured default servlets such as {@link oajr.BasicRestServlet} and {@link oajr.BasicRestServletGroup} 
 		which provides universal language support, basic instrumentation, and auto-generated Swagger UI.
 	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>Deploying in Spring Boot</h5>
@@ -313,7 +298,11 @@
 		|		<jc>// No code!</jc>
 		|	}
 	</p>
+</div>
+
+<h5 class='topic'>Additional Information</h5>
+<div class='topic'>
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc juneau-rest-server} for more information.
 	</ul>
 </div>

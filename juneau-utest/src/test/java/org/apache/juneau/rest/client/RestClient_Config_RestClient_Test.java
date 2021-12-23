@@ -40,6 +40,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.xml.*;

@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * {@review}
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.PojoTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

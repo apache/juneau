@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

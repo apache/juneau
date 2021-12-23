@@ -18,7 +18,7 @@ import java.util.*;
  * A list of {@link ResourceDescription} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.UtilityBeans}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

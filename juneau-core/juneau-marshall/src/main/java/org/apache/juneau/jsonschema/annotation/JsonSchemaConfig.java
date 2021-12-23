@@ -31,7 +31,7 @@ import org.apache.juneau.parser.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

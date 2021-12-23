@@ -37,7 +37,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

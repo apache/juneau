@@ -16,7 +16,7 @@ package org.apache.juneau.httppart;
  * Valid values for the <c>type</c> field.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

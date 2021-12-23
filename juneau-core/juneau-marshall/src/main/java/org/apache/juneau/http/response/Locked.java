@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The resource that is being accessed is locked.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

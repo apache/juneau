@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * If the entity tag does not match, then the server SHOULD return the entire entity using a 200 (OK) response.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

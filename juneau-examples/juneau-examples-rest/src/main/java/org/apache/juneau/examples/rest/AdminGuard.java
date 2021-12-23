@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.guard.*;
 
 /**
  * Sample guard that only lets administrators through.

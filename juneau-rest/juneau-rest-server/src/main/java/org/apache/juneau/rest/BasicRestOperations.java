@@ -24,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.stats.*;
 
 /**
  * Basic REST operation methods.
@@ -50,7 +51,7 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

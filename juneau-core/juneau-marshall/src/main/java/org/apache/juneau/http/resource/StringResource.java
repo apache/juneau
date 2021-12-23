@@ -18,7 +18,7 @@ import org.apache.juneau.http.entity.*;
  * A self contained, repeatable resource that obtains its content from a {@link String}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

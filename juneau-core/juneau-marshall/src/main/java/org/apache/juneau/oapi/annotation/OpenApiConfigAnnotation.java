@@ -22,7 +22,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link OpenApiConfig @OpenApiConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='link'>{@doc jm.OpenApiDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

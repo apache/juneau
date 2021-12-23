@@ -18,7 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.rest.mstat.*;
+import org.apache.juneau.rest.stats.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

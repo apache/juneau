@@ -32,7 +32,7 @@ import org.apache.juneau.xml.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

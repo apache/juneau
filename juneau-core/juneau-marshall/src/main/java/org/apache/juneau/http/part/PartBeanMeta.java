@@ -57,7 +57,7 @@ import org.apache.juneau.reflect.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

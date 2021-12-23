@@ -25,6 +25,10 @@ import org.apache.juneau.cp.Messages;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.httppart.*;
+import org.apache.juneau.rest.matcher.*;
 
 /**
  * Identifies servlet and REST call lifecycle events which cause {@link RestHook @RestHook}-annotated Java methods

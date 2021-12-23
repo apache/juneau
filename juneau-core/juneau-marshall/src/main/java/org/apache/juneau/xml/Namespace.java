@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * in the serializer.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

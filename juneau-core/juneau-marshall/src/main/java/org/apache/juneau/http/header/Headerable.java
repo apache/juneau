@@ -22,7 +22,7 @@ import org.apache.http.*;
  * objects in a controlled way.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

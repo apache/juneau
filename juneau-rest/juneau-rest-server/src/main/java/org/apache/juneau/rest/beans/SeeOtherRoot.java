@@ -19,7 +19,7 @@ import org.apache.juneau.http.response.*;
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.UtilityBeans}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

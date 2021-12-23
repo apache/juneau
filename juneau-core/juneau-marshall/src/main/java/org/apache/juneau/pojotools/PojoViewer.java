@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.PojoTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

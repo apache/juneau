@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The server successfully processed the request and is not returning any content.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

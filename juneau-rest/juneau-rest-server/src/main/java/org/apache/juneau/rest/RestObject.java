@@ -26,6 +26,9 @@ import javax.servlet.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.matcher.*;
 
 /**
  * Identical to {@link RestServlet} but doesn't extend from {@link HttpServlet}.
@@ -35,8 +38,7 @@ import org.apache.juneau.rest.annotation.*;
  * but you want this resource to be deployed as a child instead.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.BasicRestObject}
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.BasicRestServlet}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -99,7 +99,7 @@ import org.apache.juneau.internal.*;
  * A user agent might suggest in such a case to add "en" to get the best matching behavior.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

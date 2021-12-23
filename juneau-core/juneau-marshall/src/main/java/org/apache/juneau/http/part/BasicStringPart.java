@@ -24,7 +24,7 @@ import org.apache.juneau.assertions.*;
  * A {@link NameValuePair} that consists of a single string value.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -138,7 +138,7 @@ import org.apache.juneau.http.annotation.*;
  * It SHOULD store the entire received response in its cache if that is consistent with its cache allocation policies.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

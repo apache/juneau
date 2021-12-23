@@ -17,8 +17,8 @@ import static org.junit.runners.MethodSorters.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 

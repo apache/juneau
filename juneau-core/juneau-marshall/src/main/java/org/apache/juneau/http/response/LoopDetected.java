@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

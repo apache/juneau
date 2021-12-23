@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * A basic implementation of the {@link StatusLine} interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

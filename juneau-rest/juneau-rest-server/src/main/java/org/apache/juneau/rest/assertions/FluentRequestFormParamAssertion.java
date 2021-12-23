@@ -21,7 +21,7 @@ import java.util.regex.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -102,7 +102,7 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.FluentAssertions}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

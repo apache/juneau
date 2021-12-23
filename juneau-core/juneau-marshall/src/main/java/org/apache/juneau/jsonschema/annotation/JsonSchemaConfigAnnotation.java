@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link JsonSchemaConfig @JsonSchemaConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

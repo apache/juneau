@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.Schema;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.http.response.*;
 
 /**

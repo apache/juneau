@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * Builder for {@link BasicHttpException} beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

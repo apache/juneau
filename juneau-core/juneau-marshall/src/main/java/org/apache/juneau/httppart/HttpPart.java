@@ -23,7 +23,7 @@ import org.apache.http.*;
  * Can be used to represent both request and response parts.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

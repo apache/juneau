@@ -52,7 +52,7 @@ import org.apache.juneau.internal.*;
  * streams and readers created from other types (e.g. Files) WILL be automatically closed.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

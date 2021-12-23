@@ -18,7 +18,7 @@ import org.apache.juneau.http.entity.*;
  * A repeatable resource that obtains its content from a byte array.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

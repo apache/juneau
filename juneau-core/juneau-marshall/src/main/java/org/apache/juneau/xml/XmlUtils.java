@@ -28,7 +28,7 @@ import org.apache.juneau.xml.annotation.*;
  * XML utility methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

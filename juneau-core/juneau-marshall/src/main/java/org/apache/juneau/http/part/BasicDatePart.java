@@ -28,7 +28,7 @@ import org.apache.juneau.assertions.*;
  * A {@link NameValuePair} that consist of a single HTTP-date.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

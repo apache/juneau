@@ -25,6 +25,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;

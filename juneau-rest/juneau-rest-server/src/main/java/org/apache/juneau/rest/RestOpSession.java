@@ -18,6 +18,8 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.logging.*;
 
 /**
@@ -31,7 +33,7 @@ import org.apache.juneau.rest.logging.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

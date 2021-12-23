@@ -16,7 +16,7 @@ package org.apache.juneau.xml.annotation;
  * XML format to use when serializing a POJO.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

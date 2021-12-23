@@ -19,6 +19,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
@@ -35,7 +36,7 @@ import org.apache.juneau.http.response.*;
  * but you want this resource to be deployed as a child instead.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.BasicRestObject}
+ * 	<li class='link'>{@doc jrs.BasicRestServlet}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

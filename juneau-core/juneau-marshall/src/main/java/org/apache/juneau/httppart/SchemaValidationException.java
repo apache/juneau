@@ -20,7 +20,7 @@ import org.apache.juneau.parser.ParseException;
  * Exception thrown when an HTTP part fails schema validation during parsing.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

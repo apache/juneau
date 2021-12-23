@@ -35,7 +35,7 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.OpenApiSerializers}
- * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='link'>{@doc jm.OpenApiDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

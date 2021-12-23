@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * This prevents the client from timing out and assuming the request was lost.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

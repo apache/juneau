@@ -115,7 +115,7 @@
 		The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
 	</p>
 	<p>
-		This widget is designed to be used in conjunction with the {@link oajr.converters.Queryable} converter, although implementations
+		This widget is designed to be used in conjunction with the {@link oajr.converter.Queryable} converter, although implementations
 		can process the query parameters themselves if they wish to do so by using the {@del RequestQuery#getSearchArgs()}
 		method to retrieve the arguments and process the data themselves.
 	</p>
@@ -154,7 +154,7 @@
 	<p>
 		When submitted, the form submits a GET request against the current URI with special GET search API query parameters.
 		(e.g. <js>"?s=column1=Foo*&amp;v=column1,column2&amp;o=column1,column2-&amp;p=100&amp;l=100"</js>).
-		The {@link oajr.converters.Queryable} class knows how to perform these filters against collections of POJOs.
+		The {@link oajr.converter.Queryable} class knows how to perform these filters against collections of POJOs.
 	</p>
 	
 	<h5 class='topic'>ThemeMenuItem</h5>

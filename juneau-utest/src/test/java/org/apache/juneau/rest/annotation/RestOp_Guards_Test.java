@@ -14,9 +14,9 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 

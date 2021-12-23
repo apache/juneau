@@ -25,6 +25,10 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.httppart.*;
+import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 

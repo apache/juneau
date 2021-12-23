@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  * A repeatable entity that obtains its content from a {@link File}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

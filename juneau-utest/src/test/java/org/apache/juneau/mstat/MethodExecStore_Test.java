@@ -20,7 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.rest.mstat.*;
+import org.apache.juneau.rest.stats.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

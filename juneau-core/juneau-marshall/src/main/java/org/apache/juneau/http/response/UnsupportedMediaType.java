@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

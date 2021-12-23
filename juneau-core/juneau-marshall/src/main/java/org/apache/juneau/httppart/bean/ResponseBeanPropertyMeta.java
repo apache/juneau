@@ -26,7 +26,7 @@ import org.apache.juneau.reflect.*;
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

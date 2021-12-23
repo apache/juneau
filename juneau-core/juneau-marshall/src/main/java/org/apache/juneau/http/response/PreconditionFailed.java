@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server does not meet one of the preconditions that the requester put on the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

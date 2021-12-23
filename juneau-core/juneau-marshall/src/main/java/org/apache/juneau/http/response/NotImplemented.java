@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

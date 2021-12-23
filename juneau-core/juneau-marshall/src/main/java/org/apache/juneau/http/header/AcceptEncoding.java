@@ -87,7 +87,7 @@ import org.apache.juneau.internal.*;
  * This means that qvalues will not work and are not permitted with x-gzip or x-compress.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

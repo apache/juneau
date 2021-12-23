@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server is unable to store the representation needed to complete the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

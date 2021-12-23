@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended for use with rate-limiting schemes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

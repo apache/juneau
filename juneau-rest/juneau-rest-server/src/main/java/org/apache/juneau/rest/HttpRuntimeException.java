@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  * A {@link RuntimeException} meant to wrap a non-{@link RuntimeException}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

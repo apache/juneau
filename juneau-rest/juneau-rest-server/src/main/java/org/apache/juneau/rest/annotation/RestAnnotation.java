@@ -25,7 +25,15 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.arg.*;
+import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.debug.*;
+import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.processor.*;
+import org.apache.juneau.rest.staticfile.*;
+import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -33,7 +41,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Rest @Rest} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

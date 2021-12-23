@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The request was well-formed but was unable to be followed due to semantic errors.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

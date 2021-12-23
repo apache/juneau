@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -172,7 +172,7 @@
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.jm.SerializersParsers'>Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.SerializersAndParsers'>Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.Marshalls'>Marshalls</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.JavaBeansSupport'>Java Beans Support</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
 		<ol>
@@ -221,6 +221,9 @@
 			<li><p><a class='doclink' href='#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver'>VarResolver.DEFAULT</a><span class='update'>created: 8.1.0</span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlOtherNotes'>Other Notes</a></p>
 		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.Encoders'>Encoders</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts'>HTTP Parts</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.PojoTools'>POJO Tools</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails'>JSON Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonMethodology'>JSON Methodology</a></p>
@@ -228,8 +231,8 @@
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.SimplifiedJson'>Simplified JSON</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonParsers'>JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonAnnotation'>@Json Annotation</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonSchema'>JSON-Schema Support</a></p>
 		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.JsonSchemaDetails'>JSON-Schema Support</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.XmlDetails'>XML Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.XmlDetails.jm.XmlMethodology'>XML Methodology</a></p>
@@ -250,8 +253,8 @@
 			<li><p><a class='doclink' href='#juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer'>HtmlDocSerializer</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate'>BasicHtmlDocTemplate</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates'>Custom Templates</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HtmlDetails.jm.HtmlSchema'>HTML-Schema Support</a></p>
 		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.HtmlSchema'>HTML-Schema Support</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.UonDetails'>UON Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.UonDetails.jm.UonMethodology'>UON Methodology</a></p>
@@ -276,6 +279,9 @@
 			<li><p><a class='doclink' href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers'>OpenAPI Serializers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers'>OpenAPI Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
 		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.PlainTextDetails'>PlainText Details</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.CsvDetails'>CSV Details</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.SoapXmlDetails'>SOAP/XML Details</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.BestPractices'>Best Practices</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></p>
@@ -345,9 +351,8 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.HelloWorldExample'>Hello World Example</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses'>@Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>BasicRestServlet</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestObject'>BasicRestObject</a><span class='update'>created: 8.1.0, updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>BasicRestServletGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>BasicRestServletGroup/BasicRestObjectGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks'>Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></p>
@@ -416,7 +421,12 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestContext'>RestContext</a><span class='update'><b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestRpc'>REST/RPC</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.CustomRestContextsAndBuilders'>Custom REST Context and Builders</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.FluentAssertions'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.Overview'>Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.ResponseProcessors'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.UtilityBeans'>Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
 	</ol>
+	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server-rdf'>juneau-rest-server-jaxrs</a></p>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-rest-server-jaxrs.jrsj.BaseProvider'>Juneau JAX-RS Provider</a></p>
@@ -931,7 +941,7 @@
 		for marshalling a POJO to and from a string.
 	</p>
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc jm.SerializersAndParsers} for more information.
 	</ul>
 </div>
 
@@ -956,7 +966,7 @@
 		that you have access to, or external code where you only have access to binaries.
 	</p>
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc jm.JavaBeansSupport} for more information.
 	</ul>
 </div>
 
@@ -1000,7 +1010,7 @@
 	<jk>public class</jk> MyAnnotatedClass {...}
 	</p>
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc jm.ContextAnnotations} for more information.
 	</ul>
 </div>
 
@@ -1060,7 +1070,7 @@
 	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
 	</p>			
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc jm.SimplifiedJson} for more information.
 	</ul>
 </div>
 
@@ -1678,9 +1688,6 @@
 		<li>REST resource classes and methods can be annotated with configuration annotations for the serializers and parsers (such as <ja>@HtmlConfig</ja> and <ja>@BeanConfig</ja> shown above).
 		<li>Annotations such as the title, summary, and descriptions shown above are used for auto-generated Swagger UI pages (described later).
 	</ul>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Children</h5>
@@ -1717,9 +1724,6 @@
 		Initialization of and access to the child resources occurs through the parent resource.
 		Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Group Pages</h5>
@@ -1760,9 +1764,6 @@
 	http://localhost:10000
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.RouterPages.1.png'/>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Resource Methods</h5>
@@ -1835,9 +1836,6 @@
 			<li>Anything else gets converted to an {@link org.apache.juneau.http.response.InternalServerError}. 
 		</ul>
 	</ul>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 	
 <h5 class='topic'>Deploying as a Servlet</h5>
@@ -1857,9 +1855,6 @@
 		extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestServletGroup} 
 		which provides universal language support, basic instrumentation, and auto-generated Swagger UI.
 	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>Deploying in Spring Boot</h5>
@@ -1924,8 +1919,12 @@
 		<jc>// No code!</jc>
 	}
 	</p>
+</div>
+
+<h5 class='topic'>Additional Information</h5>
+<div class='topic'>
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc juneau-rest-server} for more information.
 	</ul>
 </div>
 </div><!-- END: 1.5 - Overview.o.RestServer -->
@@ -1953,9 +1952,6 @@
 		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
 		.getBody().as(MyBean.<jk>class</jk>);
 	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
-	</ul>
 </div>
 
 <h5 class='topic'>REST Testing Framework</h5>
@@ -2005,8 +2001,13 @@
 		}
 	}
 	</p>
+</div>
+
+
+<h5 class='topic'>Additional Information</h5>
+<div class='topic'>
 	<ul class='seealso'>
-		<li class='link'>{@doc TODO} for more information.
+		<li class='link'>{@doc juneau-rest-client} for more information.
 	</ul>
 </div>
 </div><!-- END: 1.6 - Overview.o.RestClient -->
@@ -2157,8 +2158,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.SerializersParsers' id='juneau-marshall.jm.SerializersParsers'>2.2 - Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 2.2 - juneau-marshall.jm.SerializersParsers -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.SerializersAndParsers' id='juneau-marshall.jm.SerializersAndParsers'>2.2 - Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 2.2 - juneau-marshall.jm.SerializersAndParsers -->
 <div class='topic'>
 	<p>
 		One of the goals of Juneau was to make serialization as simple as possible.  
@@ -2322,7 +2323,7 @@
 		<li class='doclink'>{@doc g.LanguageSupport Language Support} - Glossary of all supported languages.
 	</ul>
 </div>
-</div><!-- END: 2.2 - juneau-marshall.jm.SerializersParsers -->
+</div><!-- END: 2.2 - juneau-marshall.jm.SerializersAndParsers -->
 
 <!-- ==================================================================================================== -->
 
@@ -3582,7 +3583,7 @@
 		<br>The arguments can be arbitrarily long to indicate arbitrarily complex data structures.
 	</p>
 	<p>
-		Similar methods for converting to complex types can be found on the {@link org.apache.juneau.rest.RequestBody} and {@link org.apache.juneau.rest.RequestHttpPart} classes,
+		Similar methods for converting to complex types can be found on the {@link org.apache.juneau.rest.httppart.RequestBody} and {@link org.apache.juneau.rest.httppart.RequestHttpPart} classes,
 		and the {@link org.apache.juneau.BeanSession#convertToType(Object,Type,Type...)} method.
 	</p>
 </div>
@@ -6133,8 +6134,41 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails' id='juneau-marshall.jm.JsonDetails'>2.23 - JSON Details</a></h3>
-<div class='topic'><!-- START: 2.23 - juneau-marshall.jm.JsonDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.Encoders' id='juneau-marshall.jm.Encoders'>2.23 - Encoders</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 2.23 - juneau-marshall.jm.Encoders -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 2.23 - juneau-marshall.jm.Encoders -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts' id='juneau-marshall.jm.HttpParts'>2.24 - HTTP Parts</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 2.24 - juneau-marshall.jm.HttpParts -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 2.24 - juneau-marshall.jm.HttpParts -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.PojoTools' id='juneau-marshall.jm.PojoTools'>2.25 - POJO Tools</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 2.25 - juneau-marshall.jm.PojoTools -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 2.25 - juneau-marshall.jm.PojoTools -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails' id='juneau-marshall.jm.JsonDetails'>2.26 - JSON Details</a></h3>
+<div class='topic'><!-- START: 2.26 - juneau-marshall.jm.JsonDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from JSON using ultra-efficient serializers and parsers.
@@ -6218,8 +6252,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonMethodology' id='juneau-marshall.jm.JsonDetails.jm.JsonMethodology'>2.23.1 - JSON Methodology</a></h4>
-<div class='topic'><!-- START: 2.23.1 - juneau-marshall.jm.JsonDetails.jm.JsonMethodology -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonMethodology' id='juneau-marshall.jm.JsonDetails.jm.JsonMethodology'>2.26.1 - JSON Methodology</a></h4>
+<div class='topic'><!-- START: 2.26.1 - juneau-marshall.jm.JsonDetails.jm.JsonMethodology -->
 <div class='topic'>
 	<p>
 		The JSON data type produced depends on the Java object type being serialized.
@@ -6292,12 +6326,12 @@
 		encoded strings.
 	</p>
 </div>
-</div><!-- END: 2.23.1 - juneau-marshall.jm.JsonDetails.jm.JsonMethodology -->
+</div><!-- END: 2.26.1 - juneau-marshall.jm.JsonDetails.jm.JsonMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonSerializers' id='juneau-marshall.jm.JsonDetails.jm.JsonSerializers'>2.23.2 - JSON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.23.2 - juneau-marshall.jm.JsonDetails.jm.JsonSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonSerializers' id='juneau-marshall.jm.JsonDetails.jm.JsonSerializers'>2.26.2 - JSON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.26.2 - juneau-marshall.jm.JsonDetails.jm.JsonSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.json.JsonSerializer} class is used to serialize POJOs into JSON.
@@ -6342,12 +6376,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.23.2 - juneau-marshall.jm.JsonDetails.jm.JsonSerializers -->
+</div><!-- END: 2.26.2 - juneau-marshall.jm.JsonDetails.jm.JsonSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.SimplifiedJson' id='juneau-marshall.jm.JsonDetails.jm.SimplifiedJson'>2.23.3 - Simplified JSON</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.23.3 - juneau-marshall.jm.JsonDetails.jm.SimplifiedJson -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.SimplifiedJson' id='juneau-marshall.jm.JsonDetails.jm.SimplifiedJson'>2.26.3 - Simplified JSON</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.26.3 - juneau-marshall.jm.JsonDetails.jm.SimplifiedJson -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
@@ -6406,12 +6440,12 @@
 		<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleMode()}
 	</ul>
 </div>
-</div><!-- END: 2.23.3 - juneau-marshall.jm.JsonDetails.jm.SimplifiedJson -->
+</div><!-- END: 2.26.3 - juneau-marshall.jm.JsonDetails.jm.SimplifiedJson -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonParsers' id='juneau-marshall.jm.JsonDetails.jm.JsonParsers'>2.23.4 - JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.23.4 - juneau-marshall.jm.JsonDetails.jm.JsonParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonParsers' id='juneau-marshall.jm.JsonDetails.jm.JsonParsers'>2.26.4 - JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.26.4 - juneau-marshall.jm.JsonDetails.jm.JsonParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.json.JsonParser} class is used to parse JSON into POJOs.
@@ -6463,12 +6497,12 @@
 			Concatenated strings. 
 	</ul>	
 </div>
-</div><!-- END: 2.23.4 - juneau-marshall.jm.JsonDetails.jm.JsonParsers -->
+</div><!-- END: 2.26.4 - juneau-marshall.jm.JsonDetails.jm.JsonParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonAnnotation' id='juneau-marshall.jm.JsonDetails.jm.JsonAnnotation'>2.23.5 - @Json Annotation</a></h4>
-<div class='topic'><!-- START: 2.23.5 - juneau-marshall.jm.JsonDetails.jm.JsonAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonAnnotation' id='juneau-marshall.jm.JsonDetails.jm.JsonAnnotation'>2.26.5 - @Json Annotation</a></h4>
+<div class='topic'><!-- START: 2.26.5 - juneau-marshall.jm.JsonDetails.jm.JsonAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.json.annotation.Json @Json} annotation
@@ -6518,12 +6552,13 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 2.23.5 - juneau-marshall.jm.JsonDetails.jm.JsonAnnotation -->
+</div><!-- END: 2.26.5 - juneau-marshall.jm.JsonDetails.jm.JsonAnnotation -->
+</div><!-- END: 2.26 - juneau-marshall.jm.JsonDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.JsonSchema' id='juneau-marshall.jm.JsonDetails.jm.JsonSchema'>2.23.6 - JSON-Schema Support</a></h4>
-<div class='topic'><!-- START: 2.23.6 - juneau-marshall.jm.JsonDetails.jm.JsonSchema -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonSchemaDetails' id='juneau-marshall.jm.JsonSchemaDetails'>2.27 - JSON-Schema Support</a></h3>
+<div class='topic'><!-- START: 2.27 - juneau-marshall.jm.JsonSchemaDetails -->
 <div class='topic'>
 	<p>
 		Juneau provides the {@link org.apache.juneau.json.JsonSchemaSerializer} class for generating JSON-Schema 
@@ -6617,13 +6652,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 2.23.6 - juneau-marshall.jm.JsonDetails.jm.JsonSchema -->
-</div><!-- END: 2.23 - juneau-marshall.jm.JsonDetails -->
+</div><!-- END: 2.27 - juneau-marshall.jm.JsonSchemaDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails' id='juneau-marshall.jm.XmlDetails'>2.24 - XML Details</a></h3>
-<div class='topic'><!-- START: 2.24 - juneau-marshall.jm.XmlDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails' id='juneau-marshall.jm.XmlDetails'>2.28 - XML Details</a></h3>
+<div class='topic'><!-- START: 2.28 - juneau-marshall.jm.XmlDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
@@ -6702,8 +6736,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlMethodology' id='juneau-marshall.jm.XmlDetails.jm.XmlMethodology'>2.24.1 - XML Methodology</a></h4>
-<div class='topic'><!-- START: 2.24.1 - juneau-marshall.jm.XmlDetails.jm.XmlMethodology -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlMethodology' id='juneau-marshall.jm.XmlDetails.jm.XmlMethodology'>2.28.1 - XML Methodology</a></h4>
+<div class='topic'><!-- START: 2.28.1 - juneau-marshall.jm.XmlDetails.jm.XmlMethodology -->
 <div class='topic'>
 	<p>
 		The following examples show how different data types are represented in XML.
@@ -7106,12 +7140,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 2.24.1 - juneau-marshall.jm.XmlDetails.jm.XmlMethodology -->
+</div><!-- END: 2.28.1 - juneau-marshall.jm.XmlDetails.jm.XmlMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlSerializers' id='juneau-marshall.jm.XmlDetails.jm.XmlSerializers'>2.24.2 - XML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.24.2 - juneau-marshall.jm.XmlDetails.jm.XmlSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlSerializers' id='juneau-marshall.jm.XmlDetails.jm.XmlSerializers'>2.28.2 - XML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.28.2 - juneau-marshall.jm.XmlDetails.jm.XmlSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.xml.XmlSerializer} class is used to serialize POJOs into XML.
@@ -7161,12 +7195,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.24.2 - juneau-marshall.jm.XmlDetails.jm.XmlSerializers -->
+</div><!-- END: 2.28.2 - juneau-marshall.jm.XmlDetails.jm.XmlSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlParsers' id='juneau-marshall.jm.XmlDetails.jm.XmlParsers'>2.24.3 - XML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.24.3 - juneau-marshall.jm.XmlDetails.jm.XmlParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlParsers' id='juneau-marshall.jm.XmlDetails.jm.XmlParsers'>2.28.3 - XML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.28.3 - juneau-marshall.jm.XmlDetails.jm.XmlParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.xml.XmlParser} class is used to parse XML into POJOs.
@@ -7202,12 +7236,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.24.3 - juneau-marshall.jm.XmlDetails.jm.XmlParsers -->
+</div><!-- END: 2.28.3 - juneau-marshall.jm.XmlDetails.jm.XmlParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation' id='juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation'>2.24.4 - @Bean(typeName) Annotation</a></h4>
-<div class='topic'><!-- START: 2.24.4 - juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation' id='juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation'>2.28.4 - @Bean(typeName) Annotation</a></h4>
+<div class='topic'><!-- START: 2.28.4 - juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} annotation can be used to 
@@ -7687,12 +7721,12 @@
 		forced us to make some hard design decisions that may not be the most elegant.
 	</p>
 </div>
-</div><!-- END: 2.24.4 - juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation -->
+</div><!-- END: 2.28.4 - juneau-marshall.jm.XmlDetails.jm.XmlBeanTypeNameAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation' id='juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation'>2.24.5 - @Xml(childName) Annotation</a></h4>
-<div class='topic'><!-- START: 2.24.5 - juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation' id='juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation'>2.28.5 - @Xml(childName) Annotation</a></h4>
+<div class='topic'><!-- START: 2.28.5 - juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml(childName)} annotation can be used to 
@@ -7778,12 +7812,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 2.24.5 - juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation -->
+</div><!-- END: 2.28.5 - juneau-marshall.jm.XmlDetails.jm.XmlChildNameAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation' id='juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation'>2.24.6 - @Xml(format) Annotation</a></h4>
-<div class='topic'><!-- START: 2.24.6 - juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation' id='juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation'>2.28.6 - @Xml(format) Annotation</a></h4>
+<div class='topic'><!-- START: 2.28.6 - juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml(format)} annotation can be used to tweak 
@@ -8489,12 +8523,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 2.24.6 - juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation -->
+</div><!-- END: 2.28.6 - juneau-marshall.jm.XmlDetails.jm.XmlFormatAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces' id='juneau-marshall.jm.XmlDetails.jm.XmlNamespaces'>2.24.7 - Namespaces</a></h4>
-<div class='topic'><!-- START: 2.24.7 - juneau-marshall.jm.XmlDetails.jm.XmlNamespaces -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces' id='juneau-marshall.jm.XmlDetails.jm.XmlNamespaces'>2.28.7 - Namespaces</a></h4>
+<div class='topic'><!-- START: 2.28.7 - juneau-marshall.jm.XmlDetails.jm.XmlNamespaces -->
 <div class='topic'>
 	<p>
 		Let's go back to the example of our original <c>Person</c> bean class, but add some namespace annotations:
@@ -8662,13 +8696,13 @@
 		.build();
 	</p>
 </div>
-</div><!-- END: 2.24.7 - juneau-marshall.jm.XmlDetails.jm.XmlNamespaces -->
-</div><!-- END: 2.24 - juneau-marshall.jm.XmlDetails -->
+</div><!-- END: 2.28.7 - juneau-marshall.jm.XmlDetails.jm.XmlNamespaces -->
+</div><!-- END: 2.28 - juneau-marshall.jm.XmlDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails' id='juneau-marshall.jm.HtmlDetails'>2.25 - HTML Details</a></h3>
-<div class='topic'><!-- START: 2.25 - juneau-marshall.jm.HtmlDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails' id='juneau-marshall.jm.HtmlDetails'>2.29 - HTML Details</a></h3>
+<div class='topic'><!-- START: 2.29 - juneau-marshall.jm.HtmlDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from HTML.
@@ -8681,8 +8715,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology' id='juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology'>2.25.1 - HTML Methodology</a></h4>
-<div class='topic'><!-- START: 2.25.1 - juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology' id='juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology'>2.29.1 - HTML Methodology</a></h4>
+<div class='topic'><!-- START: 2.29.1 - juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology -->
 <div class='topic'>
 	<p>
 		The following examples show how different data types are represented in HTML.
@@ -9192,12 +9226,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 2.25.1 - juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology -->
+</div><!-- END: 2.29.1 - juneau-marshall.jm.HtmlDetails.jm.HtmlMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers' id='juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers'>2.25.2 - HTML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.25.2 - juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers' id='juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers'>2.29.2 - HTML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.29.2 - juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.HtmlSerializer} class is used to serialize POJOs into HTML.
@@ -9249,12 +9283,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.25.2 - juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers -->
+</div><!-- END: 2.29.2 - juneau-marshall.jm.HtmlDetails.jm.HtmlSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlParsers' id='juneau-marshall.jm.HtmlDetails.jm.HtmlParsers'>2.25.3 - HTML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.25.3 - juneau-marshall.jm.HtmlDetails.jm.HtmlParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlParsers' id='juneau-marshall.jm.HtmlDetails.jm.HtmlParsers'>2.29.3 - HTML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.29.3 - juneau-marshall.jm.HtmlDetails.jm.HtmlParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.HtmlParser} class is used to parse HTML into POJOs.
@@ -9291,12 +9325,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.25.3 - juneau-marshall.jm.HtmlDetails.jm.HtmlParsers -->
+</div><!-- END: 2.29.3 - juneau-marshall.jm.HtmlDetails.jm.HtmlParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation' id='juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation'>2.25.4 - @Html Annotation</a></h4>
-<div class='topic'><!-- START: 2.25.4 - juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation' id='juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation'>2.29.4 - @Html Annotation</a></h4>
+<div class='topic'><!-- START: 2.29.4 - juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.annotation.Html @Html} annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
@@ -9354,12 +9388,12 @@
 		The {@link org.apache.juneau.html.annotation.Html#noTables @Html(noTables)} annotation is used to force beans to be serialized as trees instead of tables
 	</p>
 </div>
-</div><!-- END: 2.25.4 - juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation -->
+</div><!-- END: 2.29.4 - juneau-marshall.jm.HtmlDetails.jm.HtmlAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation' id='juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation'>2.25.5 - @Html(render) Annotation</a></h4>
-<div class='topic'><!-- START: 2.25.5 - juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation' id='juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation'>2.29.5 - @Html(render) Annotation</a></h4>
+<div class='topic'><!-- START: 2.29.5 - juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.annotation.Html#render @Html(render)} annotation allows for custom rendering of bean property values when serialized as HTML. 
@@ -9463,12 +9497,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 2.25.5 - juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation -->
+</div><!-- END: 2.29.5 - juneau-marshall.jm.HtmlDetails.jm.HtmlRenderAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer' id='juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer'>2.25.6 - HtmlDocSerializer</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.25.6 - juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer' id='juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer'>2.29.6 - HtmlDocSerializer</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.29.6 - juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer -->
 <div class='topic'>
 	<p>
 		{@link org.apache.juneau.html.HtmlDocSerializer} is an extension of {@link org.apache.juneau.html.HtmlSerializer}
@@ -9536,12 +9570,12 @@
 		The default template is described next.
 	</p>
 </div>
-</div><!-- END: 2.25.6 - juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer -->
+</div><!-- END: 2.29.6 - juneau-marshall.jm.HtmlDetails.jm.HtmlDocSerializer -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate' id='juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate'>2.25.7 - BasicHtmlDocTemplate</a></h4>
-<div class='topic'><!-- START: 2.25.7 - juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate' id='juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate'>2.29.7 - BasicHtmlDocTemplate</a></h4>
+<div class='topic'><!-- START: 2.29.7 - juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.BasicHtmlDocTemplate} class defines a default template for HTML documents
@@ -9577,12 +9611,12 @@
 	&lt;/html&gt;</xt>
 	</p>
 </div>
-</div><!-- END: 2.25.7 - juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate -->
+</div><!-- END: 2.29.7 - juneau-marshall.jm.HtmlDetails.jm.BasicHtmlDocTemplate -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates' id='juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates'>2.25.8 - Custom Templates</a></h4>
-<div class='topic'><!-- START: 2.25.8 - juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates' id='juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates'>2.29.8 - Custom Templates</a></h4>
+<div class='topic'><!-- START: 2.29.8 - juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates -->
 <div class='topic'>
 	<p>
 		Custom page templates can be created by implementing the {@link org.apache.juneau.html.HtmlDocTemplate}
@@ -9599,12 +9633,13 @@
 		The interface implementation is open-ended allowing you to define the contents of the page any way you wish.
 	</p>
 </div>
-</div><!-- END: 2.25.8 - juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates -->
+</div><!-- END: 2.29.8 - juneau-marshall.jm.HtmlDetails.jm.HtmlCustomTemplates -->
+</div><!-- END: 2.29 - juneau-marshall.jm.HtmlDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlDetails.jm.HtmlSchema' id='juneau-marshall.jm.HtmlDetails.jm.HtmlSchema'>2.25.9 - HTML-Schema Support</a></h4>
-<div class='topic'><!-- START: 2.25.9 - juneau-marshall.jm.HtmlDetails.jm.HtmlSchema -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HtmlSchema' id='juneau-marshall.jm.HtmlSchema'>2.30 - HTML-Schema Support</a></h3>
+<div class='topic'><!-- START: 2.30 - juneau-marshall.jm.HtmlSchema -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.HtmlSchemaSerializer} class is the HTML-equivalent to the
@@ -9785,13 +9820,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 2.25.9 - juneau-marshall.jm.HtmlDetails.jm.HtmlSchema -->
-</div><!-- END: 2.25 - juneau-marshall.jm.HtmlDetails -->
+</div><!-- END: 2.30 - juneau-marshall.jm.HtmlSchema -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails' id='juneau-marshall.jm.UonDetails'>2.26 - UON Details</a></h3>
-<div class='topic'><!-- START: 2.26 - juneau-marshall.jm.UonDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails' id='juneau-marshall.jm.UonDetails'>2.31 - UON Details</a></h3>
+<div class='topic'><!-- START: 2.31 - juneau-marshall.jm.UonDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from UON strings using ultra-efficient serializers 
@@ -9865,8 +9899,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails.jm.UonMethodology' id='juneau-marshall.jm.UonDetails.jm.UonMethodology'>2.26.1 - UON Methodology</a></h4>
-<div class='topic'><!-- START: 2.26.1 - juneau-marshall.jm.UonDetails.jm.UonMethodology -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails.jm.UonMethodology' id='juneau-marshall.jm.UonDetails.jm.UonMethodology'>2.31.1 - UON Methodology</a></h4>
+<div class='topic'><!-- START: 2.31.1 - juneau-marshall.jm.UonDetails.jm.UonMethodology -->
 <div class='topic'>
 	<h5 class='figure'>General methodology:</h5>
 	<table class='styled w800' style='border-collapse:collapse'>
@@ -9926,12 +9960,12 @@
 		Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
 	</p>
 </div>
-</div><!-- END: 2.26.1 - juneau-marshall.jm.UonDetails.jm.UonMethodology -->
+</div><!-- END: 2.31.1 - juneau-marshall.jm.UonDetails.jm.UonMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails.jm.UonSerializers' id='juneau-marshall.jm.UonDetails.jm.UonSerializers'>2.26.2 - UON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.26.2 - juneau-marshall.jm.UonDetails.jm.UonSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails.jm.UonSerializers' id='juneau-marshall.jm.UonDetails.jm.UonSerializers'>2.31.2 - UON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.31.2 - juneau-marshall.jm.UonDetails.jm.UonSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.uon.UonSerializer} class is used to serialize POJOs into UON.
@@ -9972,12 +10006,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.26.2 - juneau-marshall.jm.UonDetails.jm.UonSerializers -->
+</div><!-- END: 2.31.2 - juneau-marshall.jm.UonDetails.jm.UonSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails.jm.UonParsers' id='juneau-marshall.jm.UonDetails.jm.UonParsers'>2.26.3 - UON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.26.3 - juneau-marshall.jm.UonDetails.jm.UonParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UonDetails.jm.UonParsers' id='juneau-marshall.jm.UonDetails.jm.UonParsers'>2.31.3 - UON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.31.3 - juneau-marshall.jm.UonDetails.jm.UonParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.uon.UonParser} class is used to parse UON into POJOs.
@@ -10014,13 +10048,13 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.26.3 - juneau-marshall.jm.UonDetails.jm.UonParsers -->
-</div><!-- END: 2.26 - juneau-marshall.jm.UonDetails -->
+</div><!-- END: 2.31.3 - juneau-marshall.jm.UonDetails.jm.UonParsers -->
+</div><!-- END: 2.31 - juneau-marshall.jm.UonDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails' id='juneau-marshall.jm.UrlEncodingDetails'>2.27 - URL-Encoding Details</a></h3>
-<div class='topic'><!-- START: 2.27 - juneau-marshall.jm.UrlEncodingDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails' id='juneau-marshall.jm.UrlEncodingDetails'>2.32 - URL-Encoding Details</a></h3>
+<div class='topic'><!-- START: 2.32 - juneau-marshall.jm.UrlEncodingDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
@@ -10092,8 +10126,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology'>2.27.1 - URL-Encoding Methodology</a></h4>
-<div class='topic'><!-- START: 2.27.1 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology'>2.32.1 - URL-Encoding Methodology</a></h4>
+<div class='topic'><!-- START: 2.32.1 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology -->
 <div class='topic'>
 	<h5 class='figure'>General methodology:</h5>
 	<table class='styled w800' style='border-collapse:collapse'>
@@ -10153,12 +10187,12 @@
 		Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
 	</p>
 </div>
-</div><!-- END: 2.27.1 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology -->
+</div><!-- END: 2.32.1 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers'>2.27.2 - URL-Encoding Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.27.2 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers'>2.32.2 - URL-Encoding Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.32.2 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class is used to serialize POJOs into URL-Encoding.
@@ -10204,12 +10238,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.27.2 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers -->
+</div><!-- END: 2.32.2 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers'>2.27.3 - URL-Encoding Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.27.3 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers'>2.32.3 - URL-Encoding Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.32.3 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.urlencoding.UrlEncodingParser} class is used to parse URL-Encoding into POJOs.
@@ -10248,12 +10282,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.27.3 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers -->
+</div><!-- END: 2.32.3 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation'>2.27.4 - @UrlEncoding Annotation</a></h4>
-<div class='topic'><!-- START: 2.27.4 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation' id='juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation'>2.32.4 - @UrlEncoding Annotation</a></h4>
+<div class='topic'><!-- START: 2.32.4 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding @UrlEncoding} annotation
@@ -10272,13 +10306,13 @@
 		and {@del org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams} properties, but applies to only individual bean properties.
 	</p>
 </div>
-</div><!-- END: 2.27.4 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation -->
-</div><!-- END: 2.27 - juneau-marshall.jm.UrlEncodingDetails -->
+</div><!-- END: 2.32.4 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation -->
+</div><!-- END: 2.32 - juneau-marshall.jm.UrlEncodingDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.MsgPackDetails' id='juneau-marshall.jm.MsgPackDetails'>2.28 - MessagePack Details</a></h3>
-<div class='topic'><!-- START: 2.28 - juneau-marshall.jm.MsgPackDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.MsgPackDetails' id='juneau-marshall.jm.MsgPackDetails'>2.33 - MessagePack Details</a></h3>
+<div class='topic'><!-- START: 2.33 - juneau-marshall.jm.MsgPackDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from MessagePack using ultra-efficient serializers 
@@ -10292,8 +10326,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers' id='juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers'>2.28.1 - MessagePack Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.28.1 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers' id='juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers'>2.33.1 - MessagePack Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.33.1 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.msgpack.MsgPackSerializer} class is used to serialize POJOs into MessagePack.
@@ -10333,12 +10367,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.28.1 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers -->
+</div><!-- END: 2.33.1 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers' id='juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers'>2.28.2 - MessagePack Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.28.2 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers' id='juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers'>2.33.2 - MessagePack Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.33.2 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
@@ -10374,13 +10408,13 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 2.28.2 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers -->
-</div><!-- END: 2.28 - juneau-marshall.jm.MsgPackDetails -->
+</div><!-- END: 2.33.2 - juneau-marshall.jm.MsgPackDetails.jm.MsgPackParsers -->
+</div><!-- END: 2.33 - juneau-marshall.jm.MsgPackDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails' id='juneau-marshall.jm.OpenApiDetails'>2.29 - OpenAPI Details</a><span class='update'>updated: 8.2.0</span></h3>
-<div class='topic'><!-- START: 2.29 - juneau-marshall.jm.OpenApiDetails -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails' id='juneau-marshall.jm.OpenApiDetails'>2.34 - OpenAPI Details</a><span class='update'>updated: 8.2.0</span></h3>
+<div class='topic'><!-- START: 2.34 - juneau-marshall.jm.OpenApiDetails -->
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from strings using OpenAPI-based schema rules. 
@@ -10416,8 +10450,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology' id='juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology'>2.29.1 - OpenAPI Methodology</a><span class='update'>updated: 8.2.0</span></h4>
-<div class='topic'><!-- START: 2.29.1 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology' id='juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology'>2.34.1 - OpenAPI Methodology</a><span class='update'>updated: 8.2.0</span></h4>
+<div class='topic'><!-- START: 2.34.1 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology -->
 <div class='topic'>
 	<p>
 		Unlike the other Juneau serializers and parsers that convert input and output directly to-and-from POJOs,
@@ -10560,12 +10594,12 @@
 		The next sections go more into depth on serializing and parsing various POJO types.
 	</p>
 </div>
-</div><!-- END: 2.29.1 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology -->
+</div><!-- END: 2.34.1 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiMethodology -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers' id='juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers'>2.29.2 - OpenAPI Serializers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.29.2 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers' id='juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers'>2.34.2 - OpenAPI Serializers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.34.2 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
@@ -11070,12 +11104,12 @@
 			(e.g. trying to serialize the string "foo" as a boolean). 
 	</ul>
 </div>
-</div><!-- END: 2.29.2 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers -->
+</div><!-- END: 2.34.2 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiSerializers -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers' id='juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers'>2.29.3 - OpenAPI Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.29.3 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers' id='juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers'>2.34.3 - OpenAPI Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.34.3 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
@@ -11422,13 +11456,46 @@
 			(e.g. trying to parse the string "foo" into a boolean). 
 	</ul>
 </div>
-</div><!-- END: 2.29.3 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers -->
-</div><!-- END: 2.29 - juneau-marshall.jm.OpenApiDetails -->
+</div><!-- END: 2.34.3 - juneau-marshall.jm.OpenApiDetails.jm.OpenApiParsers -->
+</div><!-- END: 2.34 - juneau-marshall.jm.OpenApiDetails -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.BestPractices' id='juneau-marshall.jm.BestPractices'>2.30 - Best Practices</a></h3>
-<div class='topic'><!-- START: 2.30 - juneau-marshall.jm.BestPractices -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.PlainTextDetails' id='juneau-marshall.jm.PlainTextDetails'>2.35 - PlainText Details</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 2.35 - juneau-marshall.jm.PlainTextDetails -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 2.35 - juneau-marshall.jm.PlainTextDetails -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.CsvDetails' id='juneau-marshall.jm.CsvDetails'>2.36 - CSV Details</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 2.36 - juneau-marshall.jm.CsvDetails -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 2.36 - juneau-marshall.jm.CsvDetails -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.SoapXmlDetails' id='juneau-marshall.jm.SoapXmlDetails'>2.37 - SOAP/XML Details</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 2.37 - juneau-marshall.jm.SoapXmlDetails -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 2.37 - juneau-marshall.jm.SoapXmlDetails -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.BestPractices' id='juneau-marshall.jm.BestPractices'>2.38 - Best Practices</a></h3>
+<div class='topic'><!-- START: 2.38 - juneau-marshall.jm.BestPractices -->
 <div class='topic'>
 	<ol class='spaced-list'>
 		<li>
@@ -11454,7 +11521,7 @@
 			hash lookups to resolve to {@link org.apache.juneau.ClassMeta} parameters.
 	</ol>
 </div>
-</div><!-- END: 2.30 - juneau-marshall.jm.BestPractices -->
+</div><!-- END: 2.38 - juneau-marshall.jm.BestPractices -->
 </div><!-- END: 2 - juneau-marshall -->
 
 <!-- ==================================================================================================== -->
@@ -14794,7 +14861,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>6.2.1 - BasicRestServlet</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>6.2.1 - BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 6.2.1 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet -->
 <div class='topic'>
 	<p>
@@ -15034,14 +15101,6 @@
 	<p>
 		<i>Note:</i>  {@link org.apache.juneau.rest.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
 	</p>
-</div>
-</div><!-- END: 6.2.1 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet -->
-
-<!-- ==================================================================================================== -->
-
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestObject' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestObject'>6.2.2 - BasicRestObject</a><span class='update'>created: 8.1.0, updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.2.2 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestObject -->
-<div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.BasicRestObject} class is identical to the {@link org.apache.juneau.rest.BasicRestServlet} class except that
 		it does not extend from <c>HttpServlet</c>.
@@ -15089,12 +15148,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.2.2 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestObject -->
+</div><!-- END: 6.2.1 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>6.2.3 - BasicRestServletGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.2.3 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>6.2.2 - BasicRestServletGroup/BasicRestObjectGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.2.2 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.BasicRestServletGroup} class provides a default "router" page for 
@@ -15156,12 +15215,12 @@
 		<i>Note:</i>  {@link org.apache.juneau.rest.BasicRestObjectGroup} is the equivalent class that doesn't extend from <c>Servlet</c>.
 	</p>
 </div>
-</div><!-- END: 6.2.3 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup -->
+</div><!-- END: 6.2.2 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks'>6.2.4 - Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 6.2.4 - juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks'>6.2.3 - Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 6.2.3 - juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks -->
 <div class='topic'>
 	<p>
 		Lifecycle hooks allow you to hook into lifecycle events of the servlet/resource creation and REST calls.
@@ -15223,7 +15282,7 @@
 		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestHook}
 	</ul>
 </div>
-</div><!-- END: 6.2.4 - juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks -->
+</div><!-- END: 6.2.3 - juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks -->
 </div><!-- END: 6.2 - juneau-rest-server.jrs.AnnotatedClasses -->
 
 <!-- ==================================================================================================== -->
@@ -15378,7 +15437,7 @@
 				<li>Request objects:
 					<ul class='javatreec'>
 						<li class='jic'>{@link javax.servlet.AsyncContext}
-						<li class='jc'>{@link org.apache.juneau.rest.CookieList}
+						<li class='jc'>{@link org.apache.juneau.rest.arg.CookieList}
 						<li class='je'>{@link javax.servlet.DispatcherType}
 						<li class='jc'>{@link org.apache.juneau.httppart.HttpPartParserSession}
 						<li class='jc'>{@link org.apache.juneau.httppart.HttpPartSerializerSession}
@@ -15391,12 +15450,12 @@
 						<li class='jic'>{@link java.security.Principal}
 						<li class='jc'>{@link java.io.Reader}
 						<li class='jac'>{@link org.apache.juneau.parser.ReaderParser}
-						<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
-						<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
-						<li class='jc'>{@link org.apache.juneau.rest.RequestFormParams}
-						<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
-						<li class='jc'>{@link org.apache.juneau.rest.RequestPathParams}
-						<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
+						<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestAttributes}
+						<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestBody}
+						<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestFormParams}
+						<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestHeaders}
+						<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestPathParams}
+						<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestQueryParams}
 						<li class='jc'>{@link java.util.ResourceBundle}
 						<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 						<li class='jic'>{@link javax.servlet.ServletInputStream}
@@ -15475,13 +15534,13 @@
 						<li class='jc'>{@link org.apache.juneau.parser.ParserSet}
 						<li class='jc'>{@link org.apache.juneau.rest.RestChildren}
 						<li class='jc'>{@link org.apache.juneau.rest.RestContext}
-						<li class='jc'>{@link org.apache.juneau.rest.RestContextStats}
+						<li class='jc'>{@link org.apache.juneau.rest.stats.RestContextStats}
 						<li class='jic'>{@link org.apache.juneau.rest.logging.RestLogger}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOpContext}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOperations}
 						<li class='jc'>{@link org.apache.juneau.serializer.SerializerSet}
 						<li class='jic'>{@link org.apache.juneau.rest.StaticFiles}
-						<li class='jc'>{@link org.apache.juneau.mstat.ThrownStore}
+						<li class='jc'>{@link org.apache.juneau.rest.stats.ThrownStore}
 					</ul>
 			</ul>
 		<li><b>Annotated parameters (either on the parameter or parameter type):</b>
@@ -15831,7 +15890,7 @@
 	<p>
 		Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
 		Any remainder after the match can be accessed through 
-		{@link org.apache.juneau.rest.RequestPathParams#getRemainder()} or parameters with the 
+		{@link org.apache.juneau.rest.httppart.RequestPathParams#getRemainder()} or parameters with the 
 		<c><ja>@Path</ja>(<js>"/*"</js>)</c> annotation.
 		On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 		require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
@@ -15908,8 +15967,8 @@
 	
 	<ul class='seealso'>
 		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#matchers RestOp(matchers)}
-		<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
-		<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
+		<li class='jc'>{@link org.apache.juneau.rest.matcher.MultipartFormDataMatcher}
+		<li class='jc'>{@link org.apache.juneau.rest.matcher.UrlEncodedFormMatcher}
 	</ul>
 </div>
 </div><!-- END: 6.3.6 - juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.Matchers -->
@@ -15926,11 +15985,11 @@
 		<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 		<li class='jc'>{@link org.apache.juneau.rest.RestResponse}
 		<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestFormParams}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestPathParams}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestHeaders}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestQueryParams}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestFormParams}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestPathParams}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestAttributes}
 	</ul>
 </div>
 </div><!-- END: 6.3.7 - juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.AdditionalInformation -->
@@ -16706,10 +16765,10 @@
 		can be passed in as parameters or access through {@link org.apache.juneau.rest.RestRequest} bean:
 	</p>
 	<ul class='javatreec'>
-		<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestFormParams}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestPathParams}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestHeaders}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestQueryParams}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestFormParams}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestPathParams}
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -17196,7 +17255,7 @@
 	<p>
 		A guard failure results in an <l>HTTP 401 Unauthorized</l> response.
 		However, this can be configured by overriding the 
-		{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
+		{@link org.apache.juneau.rest.guard.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 		yourself.
 	</p>
 	<p class='bcode w800'>
@@ -17377,15 +17436,15 @@
 		{@link org.apache.juneau.rest.RestConverter}
 		<ul>
 			<li class='jc'>
-				{@link org.apache.juneau.rest.converters.Queryable}
+				{@link org.apache.juneau.rest.converter.Queryable}
 				<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the 
 				POJO response before being serialized).
 			<li class='jc'>
-				{@link org.apache.juneau.rest.converters.Traversable}
+				{@link org.apache.juneau.rest.converter.Traversable}
 				<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on 
 				the request.
 			<li class='jc'>
-				{@link org.apache.juneau.rest.converters.Introspectable}
+				{@link org.apache.juneau.rest.converter.Introspectable}
 				<br>Allows method calls to be made on the response POJO, and for the result of that method call to be 
 				serialized as the response.
 		</ul>
@@ -18607,7 +18666,7 @@
 	<p>
 		Another option is to specify your parameter information in the <c>parameters</c> annotation as free-form Simple JSON.
 		In the case of the <c>PetStoreResource.getPets()</c> method, we pull this information from a static field
-		defined in the {@link org.apache.juneau.rest.converters.Queryable} class:
+		defined in the {@link org.apache.juneau.rest.converter.Queryable} class:
 	</p>
 	<h5 class='figure'>PetStoreResource.getPets()</h5>
 	<p class='bcode w800'>
@@ -19729,7 +19788,7 @@
 		The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
 	</p>
 	<p>
-		This widget is designed to be used in conjunction with the {@link org.apache.juneau.rest.converters.Queryable} converter, although implementations
+		This widget is designed to be used in conjunction with the {@link org.apache.juneau.rest.converter.Queryable} converter, although implementations
 		can process the query parameters themselves if they wish to do so by using the {@del RequestQuery#getSearchArgs()}
 		method to retrieve the arguments and process the data themselves.
 	</p>
@@ -19768,7 +19827,7 @@
 	<p>
 		When submitted, the form submits a GET request against the current URI with special GET search API query parameters.
 		(e.g. <js>"?s=column1=Foo*&amp;v=column1,column2&amp;o=column1,column2-&amp;p=100&amp;l=100"</js>).
-		The {@link org.apache.juneau.rest.converters.Queryable} class knows how to perform these filters against collections of POJOs.
+		The {@link org.apache.juneau.rest.converter.Queryable} class knows how to perform these filters against collections of POJOs.
 	</p>
 	
 	<h5 class='topic'>ThemeMenuItem</h5>
@@ -20548,7 +20607,7 @@
 		<tr>
 			<td><l>401</l></td>
 			<td>Unauthorized</td>
-			<td>A {@link org.apache.juneau.rest.RestGuard guard} prevented the method from being executed</td>
+			<td>A {@link org.apache.juneau.rest.guard.RestGuard guard} prevented the method from being executed</td>
 		</tr>
 		<tr>
 			<td><l>404</l></td>
@@ -21428,12 +21487,88 @@
 	</p>
 </div>
 </div><!-- END: 6.33 - juneau-rest-server.jrs.CustomRestContextsAndBuilders -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.FluentAssertions' id='juneau-rest-server.jrs.FluentAssertions'>6.34 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.34 - juneau-rest-server.jrs.FluentAssertions -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 6.34 - juneau-rest-server.jrs.FluentAssertions -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Overview' id='juneau-rest-server.jrs.Overview'>6.35 - Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.35 - juneau-rest-server.jrs.Overview -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 6.35 - juneau-rest-server.jrs.Overview -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ResponseProcessors' id='juneau-rest-server.jrs.ResponseProcessors'>6.36 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.36 - juneau-rest-server.jrs.ResponseProcessors -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 6.36 - juneau-rest-server.jrs.ResponseProcessors -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UtilityBeans' id='juneau-rest-server.jrs.UtilityBeans'>6.37 - Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.37 - juneau-rest-server.jrs.UtilityBeans -->
+<div class='topic'>
+	<p>
+		TODO
+	</p>
+</div>
+</div><!-- END: 6.37 - juneau-rest-server.jrs.UtilityBeans -->
 </div><!-- END: 6 - juneau-rest-server -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-jaxrs' id='juneau-rest-server-jaxrs'>7 - juneau-rest-server-jaxrs</a></h2>
-<div class='topic'><!-- START: 7 - juneau-rest-server-jaxrs -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-rdf' id='juneau-rest-server-rdf'>7 - juneau-rest-server-jaxrs</a></h2>
+<div class='topic'><!-- START: 7 - juneau-rest-server-rdf -->
+<div class='topic'>
+	<h5 class='figure'>Maven Dependency</h5>
+	<p class='bcode w500'>
+	<xt>&lt;dependency&gt;</xt>
+		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		<xt>&lt;artifactId&gt;</xt>juneau-rest-server-jaxrs<xt>&lt;/artifactId&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	
+	<h5 class='figure'>Java Library</h5>
+	<p class='bcode w500'>
+	juneau-rest-server-jaxrs-{@property juneauVersion}.jar 
+	</p>	
+	
+	<h5 class='figure'>OSGi Module</h5>
+	<p class='bcode w500'>
+	org.apache.juneau.rest.server_{@property juneauVersion}.jar 
+	</p>	
+	
+	<p>
+		The <c>juneau-rest-server-jaxrs</c> library provides an implementation of a <c>MessageBodyReader</c>
+		and <c>MessageBodyWriter</c> to allow any of the Juneau serializers and parsers to be used in a 
+		JAX/RS environment. 
+	</p>
+</div>
+</div><!-- END: 7 - juneau-rest-server-rdf -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-jaxrs' id='juneau-rest-server-jaxrs'>8 - juneau-rest-server-jaxrs</a></h2>
+<div class='topic'><!-- START: 8 - juneau-rest-server-jaxrs -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
 	<p class='bcode w500'>
@@ -21463,8 +21598,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-jaxrs.jrsj.BaseProvider' id='juneau-rest-server-jaxrs.jrsj.BaseProvider'>7.1 - Juneau JAX-RS Provider</a></h3>
-<div class='topic'><!-- START: 7.1 - juneau-rest-server-jaxrs.jrsj.BaseProvider -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-jaxrs.jrsj.BaseProvider' id='juneau-rest-server-jaxrs.jrsj.BaseProvider'>8.1 - Juneau JAX-RS Provider</a></h3>
+<div class='topic'><!-- START: 8.1 - juneau-rest-server-jaxrs.jrsj.BaseProvider -->
 <div class='topic'>
 	<p>
 		The Juneau framework contains the <l>juneau-rest-server-jaxrs</l> bundle for performing simple
@@ -21528,13 +21663,13 @@
 		or define your own by subclassing <l>BaseProvider</l>.
 	</p>
 </div>
-</div><!-- END: 7.1 - juneau-rest-server-jaxrs.jrsj.BaseProvider -->
-</div><!-- END: 7 - juneau-rest-server-jaxrs -->
+</div><!-- END: 8.1 - juneau-rest-server-jaxrs.jrsj.BaseProvider -->
+</div><!-- END: 8 - juneau-rest-server-jaxrs -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>8 - juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 8 - juneau-rest-server-springboot -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>9 - juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 9 - juneau-rest-server-springboot -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
 	<p class='bcode w500'>
@@ -21563,8 +21698,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.Overview' id='juneau-rest-server-springboot.jrss.Overview'>8.1 - Overview</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 8.1 - juneau-rest-server-springboot.jrss.Overview -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.Overview' id='juneau-rest-server-springboot.jrss.Overview'>9.1 - Overview</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.jrss.Overview -->
 <div class='topic'>
 	<p>
 		The Juneau integration component for Spring Boot consists of the following classes:
@@ -21626,12 +21761,12 @@
 		 using Spring Boot and quickly deployable as an online application using Heroku.
 	</p>
 </div>
-</div><!-- END: 8.1 - juneau-rest-server-springboot.jrss.Overview -->
+</div><!-- END: 9.1 - juneau-rest-server-springboot.jrss.Overview -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.ChildResources' id='juneau-rest-server-springboot.jrss.ChildResources'>8.2 - Child Resources</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 8.2 - juneau-rest-server-springboot.jrss.ChildResources -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.ChildResources' id='juneau-rest-server-springboot.jrss.ChildResources'>9.2 - Child Resources</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 9.2 - juneau-rest-server-springboot.jrss.ChildResources -->
 <div class='topic'>
 	<p>
 		When using the <ja>@JuneauRestRoot</ja> annotation, servlet are given an instance of {@del org.apache.juneau.rest.springboot.SpringRestResourceResolver}.  
@@ -21700,13 +21835,13 @@
 	}
 	</p>
 </div>
-</div><!-- END: 8.2 - juneau-rest-server-springboot.jrss.ChildResources -->
-</div><!-- END: 8 - juneau-rest-server-springboot -->
+</div><!-- END: 9.2 - juneau-rest-server-springboot.jrss.ChildResources -->
+</div><!-- END: 9 - juneau-rest-server-springboot -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>9 - juneau-rest-client</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 9 - juneau-rest-client -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>10 - juneau-rest-client</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 10 - juneau-rest-client -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
 	<p class='bcode w500'>
@@ -21872,8 +22007,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.PojoMarshalling' id='juneau-rest-client.jrc.PojoMarshalling'>9.1 - POJO Marshalling</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.1 - juneau-rest-client.jrc.PojoMarshalling -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.PojoMarshalling' id='juneau-rest-client.jrc.PojoMarshalling'>10.1 - POJO Marshalling</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.1 - juneau-rest-client.jrc.PojoMarshalling -->
 <div class='topic'>
 	<p>
 		By default, JSON support is provided for HTTP request and response bodies.
@@ -21985,12 +22120,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 9.1 - juneau-rest-client.jrc.PojoMarshalling -->
+</div><!-- END: 10.1 - juneau-rest-client.jrc.PojoMarshalling -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestHeaders' id='juneau-rest-client.jrc.RequestHeaders'>9.2 - Request Headers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.2 - juneau-rest-client.jrc.RequestHeaders -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestHeaders' id='juneau-rest-client.jrc.RequestHeaders'>10.2 - Request Headers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.2 - juneau-rest-client.jrc.RequestHeaders -->
 <div class='topic'>
 	<p>
 		Per-client or per-request headers can be specified using the following methods:
@@ -22105,12 +22240,12 @@
 		<li class='jp'>{@link org.apache.juneau.http.header} - Predefined {@link org.apache.http.Header} beans.
 	</ul>
 </div>
-</div><!-- END: 9.2 - juneau-rest-client.jrc.RequestHeaders -->
+</div><!-- END: 10.2 - juneau-rest-client.jrc.RequestHeaders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestQueryParameters' id='juneau-rest-client.jrc.RequestQueryParameters'>9.3 - Request Query Parameters</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.3 - juneau-rest-client.jrc.RequestQueryParameters -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestQueryParameters' id='juneau-rest-client.jrc.RequestQueryParameters'>10.3 - Request Query Parameters</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.3 - juneau-rest-client.jrc.RequestQueryParameters -->
 <div class='topic'>
 	<p>
 		Per-client or per-request query parameters can be specified using the following methods:
@@ -22190,12 +22325,12 @@
 			objects use the values returned by that bean directly.
 	</ul>
 </div>
-</div><!-- END: 9.3 - juneau-rest-client.jrc.RequestQueryParameters -->
+</div><!-- END: 10.3 - juneau-rest-client.jrc.RequestQueryParameters -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestFormData' id='juneau-rest-client.jrc.RequestFormData'>9.4 - Request Form Data</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.4 - juneau-rest-client.jrc.RequestFormData -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestFormData' id='juneau-rest-client.jrc.RequestFormData'>10.4 - Request Form Data</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.4 - juneau-rest-client.jrc.RequestFormData -->
 <div class='topic'>
 	<p>
 		Per-client or per-request form-data parameters can be specified using the following methods:
@@ -22276,12 +22411,12 @@
 			objects use the values returned by that bean directly.
 	</ul>
 </div>
-</div><!-- END: 9.4 - juneau-rest-client.jrc.RequestFormData -->
+</div><!-- END: 10.4 - juneau-rest-client.jrc.RequestFormData -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestBody' id='juneau-rest-client.jrc.RequestBody'>9.5 - Request Body</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.5 - juneau-rest-client.jrc.RequestBody -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.RequestBody' id='juneau-rest-client.jrc.RequestBody'>10.5 - Request Body</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.5 - juneau-rest-client.jrc.RequestBody -->
 <div class='topic'>
 	<p>
 		The request body can either be passed in with the client creator method (e.g. {@del org.apache.juneau.rest.client2.RestClient#post(Object,Object) post(uri,body)}),
@@ -22346,12 +22481,12 @@
 			POJOs will be converted to strings using {@link org.apache.juneau.ClassMeta#toString(Object)} which typically just calls {@link java.lang.Object#toString()}.
 	</ul>
 </div>
-</div><!-- END: 9.5 - juneau-rest-client.jrc.RequestBody -->
+</div><!-- END: 10.5 - juneau-rest-client.jrc.RequestBody -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ResponseStatus' id='juneau-rest-client.jrc.ResponseStatus'>9.6 - Response Status</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.6 - juneau-rest-client.jrc.ResponseStatus -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ResponseStatus' id='juneau-rest-client.jrc.ResponseStatus'>10.6 - Response Status</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.6 - juneau-rest-client.jrc.ResponseStatus -->
 <div class='topic'>
 	<p>
 		After execution using {@del org.apache.juneau.rest.client2.RestRequest#run()} or {@del org.apache.juneau.rest.client2.RestRequest#complete()}, the following methods can be used
@@ -22412,12 +22547,12 @@
 		.getBody().asString();
 	</p>
 </div>
-</div><!-- END: 9.6 - juneau-rest-client.jrc.ResponseStatus -->
+</div><!-- END: 10.6 - juneau-rest-client.jrc.ResponseStatus -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ResponseHeaders' id='juneau-rest-client.jrc.ResponseHeaders'>9.7 - Response Headers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.7 - juneau-rest-client.jrc.ResponseHeaders -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ResponseHeaders' id='juneau-rest-client.jrc.ResponseHeaders'>10.7 - Response Headers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.7 - juneau-rest-client.jrc.ResponseHeaders -->
 <div class='topic'>
 	<p>
 		Response headers are accessed through the following methods:
@@ -22519,12 +22654,12 @@
 		.getBody().asString();
 	</p>
 </div>
-</div><!-- END: 9.7 - juneau-rest-client.jrc.ResponseHeaders -->
+</div><!-- END: 10.7 - juneau-rest-client.jrc.ResponseHeaders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ResponseBody' id='juneau-rest-client.jrc.ResponseBody'>9.8 - Response Body</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.8 - juneau-rest-client.jrc.ResponseBody -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ResponseBody' id='juneau-rest-client.jrc.ResponseBody'>10.8 - Response Body</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.8 - juneau-rest-client.jrc.ResponseBody -->
 <div class='topic'>
 	<p>
 		The response body is accessed through the following method:
@@ -22658,12 +22793,12 @@
 		.getBody().as(MyBean.<jk>class</jk>);
 	</p>
 </div>
-</div><!-- END: 9.8 - juneau-rest-client.jrc.ResponseBody -->
+</div><!-- END: 10.8 - juneau-rest-client.jrc.ResponseBody -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.CustomCallHandlers' id='juneau-rest-client.jrc.CustomCallHandlers'>9.9 - Custom Call Handlers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.9 - juneau-rest-client.jrc.CustomCallHandlers -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.CustomCallHandlers' id='juneau-rest-client.jrc.CustomCallHandlers'>10.9 - Custom Call Handlers</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.9 - juneau-rest-client.jrc.CustomCallHandlers -->
 <div class='topic'>
 	<p>
 		The {@del org.apache.juneau.rest.client2.RestCallHandler} interface provides the ability to provide custom handling of requests.
@@ -22716,12 +22851,12 @@
 		or by defining your own {@link org.apache.http.protocol.HttpRequestExecutor}.  Using this interface is often simpler though.
 	</p>
 </div>
-</div><!-- END: 9.9 - juneau-rest-client.jrc.CustomCallHandlers -->
+</div><!-- END: 10.9 - juneau-rest-client.jrc.CustomCallHandlers -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Interceptors' id='juneau-rest-client.jrc.Interceptors'>9.10 - Interceptors</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.10 - juneau-rest-client.jrc.Interceptors -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Interceptors' id='juneau-rest-client.jrc.Interceptors'>10.10 - Interceptors</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.10 - juneau-rest-client.jrc.Interceptors -->
 <div class='topic'>
 	<p>
 		The {@del org.apache.juneau.rest.client2.RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
@@ -22773,12 +22908,12 @@
 		.build();
 	</p>
 </div>
-</div><!-- END: 9.10 - juneau-rest-client.jrc.Interceptors -->
+</div><!-- END: 10.10 - juneau-rest-client.jrc.Interceptors -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies' id='juneau-rest-client.jrc.Proxies'>9.11 - REST Proxies</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.11 - juneau-rest-client.jrc.Proxies -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies' id='juneau-rest-client.jrc.Proxies'>10.11 - REST Proxies</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.11 - juneau-rest-client.jrc.Proxies -->
 <div class='topic'>
 	<p>
 		One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
@@ -22880,8 +23015,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Remote' id='juneau-rest-client.jrc.Proxies.jrc.Remote'>9.11.1 - @Remote</a><span class='update'>updated: 8.1.2,8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.1 - juneau-rest-client.jrc.Proxies.jrc.Remote -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Remote' id='juneau-rest-client.jrc.Proxies.jrc.Remote'>10.11.1 - @Remote</a><span class='update'>updated: 8.1.2,8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.1 - juneau-rest-client.jrc.Proxies.jrc.Remote -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.remote.Remote @Remote} annotation is used on your interface class
@@ -23042,12 +23177,12 @@
 		<li class='doclink'>{@doc jrs.ClientVersioning}
 	</ul>
 </div>
-</div><!-- END: 9.11.1 - juneau-rest-client.jrc.Proxies.jrc.Remote -->
+</div><!-- END: 10.11.1 - juneau-rest-client.jrc.Proxies.jrc.Remote -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.RemoteMethod' id='juneau-rest-client.jrc.Proxies.jrc.RemoteMethod'>9.11.2 - @RemoteOp</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.2 - juneau-rest-client.jrc.Proxies.jrc.RemoteMethod -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.RemoteMethod' id='juneau-rest-client.jrc.Proxies.jrc.RemoteMethod'>10.11.2 - @RemoteOp</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.2 - juneau-rest-client.jrc.Proxies.jrc.RemoteMethod -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.remote.RemoteOp @RemoteOp} annotation is applied to methods
@@ -23201,12 +23336,12 @@
 		the rules defined in {@doc jm.PojoCategories}. 
 	</p>
 </div>
-</div><!-- END: 9.11.2 - juneau-rest-client.jrc.Proxies.jrc.RemoteMethod -->
+</div><!-- END: 10.11.2 - juneau-rest-client.jrc.Proxies.jrc.RemoteMethod -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Body' id='juneau-rest-client.jrc.Proxies.jrc.Body'>9.11.3 - @Body</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.3 - juneau-rest-client.jrc.Proxies.jrc.Body -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Body' id='juneau-rest-client.jrc.Proxies.jrc.Body'>10.11.3 - @Body</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.3 - juneau-rest-client.jrc.Proxies.jrc.Body -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
@@ -23312,12 +23447,12 @@
 		string using the rules defined in {@doc jm.PojoCategories}.
 	</p>
 </div>
-</div><!-- END: 9.11.3 - juneau-rest-client.jrc.Proxies.jrc.Body -->
+</div><!-- END: 10.11.3 - juneau-rest-client.jrc.Proxies.jrc.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.FormData' id='juneau-rest-client.jrc.Proxies.jrc.FormData'>9.11.4 - @FormData</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.4 - juneau-rest-client.jrc.Proxies.jrc.FormData -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.FormData' id='juneau-rest-client.jrc.Proxies.jrc.FormData'>10.11.4 - @FormData</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.4 - juneau-rest-client.jrc.Proxies.jrc.FormData -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
@@ -23401,12 +23536,12 @@
 		<li class='link'>{@doc jm.OpenApiSerializers}
 	</ul>
 </div>
-</div><!-- END: 9.11.4 - juneau-rest-client.jrc.Proxies.jrc.FormData -->
+</div><!-- END: 10.11.4 - juneau-rest-client.jrc.Proxies.jrc.FormData -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Query' id='juneau-rest-client.jrc.Proxies.jrc.Query'>9.11.5 - @Query</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.5 - juneau-rest-client.jrc.Proxies.jrc.Query -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Query' id='juneau-rest-client.jrc.Proxies.jrc.Query'>10.11.5 - @Query</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.5 - juneau-rest-client.jrc.Proxies.jrc.Query -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
@@ -23493,12 +23628,12 @@
 		<li class='link'>{@doc jm.OpenApiSerializers}
 	</ul>
 </div>
-</div><!-- END: 9.11.5 - juneau-rest-client.jrc.Proxies.jrc.Query -->
+</div><!-- END: 10.11.5 - juneau-rest-client.jrc.Proxies.jrc.Query -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Header' id='juneau-rest-client.jrc.Proxies.jrc.Header'>9.11.6 - @Header</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.6 - juneau-rest-client.jrc.Proxies.jrc.Header -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Header' id='juneau-rest-client.jrc.Proxies.jrc.Header'>10.11.6 - @Header</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.6 - juneau-rest-client.jrc.Proxies.jrc.Header -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
@@ -23571,12 +23706,12 @@
 		<li class='link'>{@doc jm.OpenApiSerializers}
 	</ul>
 </div>
-</div><!-- END: 9.11.6 - juneau-rest-client.jrc.Proxies.jrc.Header -->
+</div><!-- END: 10.11.6 - juneau-rest-client.jrc.Proxies.jrc.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Path' id='juneau-rest-client.jrc.Proxies.jrc.Path'>9.11.7 - @Path</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.7 - juneau-rest-client.jrc.Proxies.jrc.Path -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Path' id='juneau-rest-client.jrc.Proxies.jrc.Path'>10.11.7 - @Path</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.7 - juneau-rest-client.jrc.Proxies.jrc.Path -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
@@ -23648,12 +23783,12 @@
 		<li class='link'>{@doc jm.OpenApiSerializers}
 	</ul>
 </div>
-</div><!-- END: 9.11.7 - juneau-rest-client.jrc.Proxies.jrc.Path -->
+</div><!-- END: 10.11.7 - juneau-rest-client.jrc.Proxies.jrc.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Request' id='juneau-rest-client.jrc.Proxies.jrc.Request'>9.11.8 - @Request</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.8 - juneau-rest-client.jrc.Proxies.jrc.Request -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Request' id='juneau-rest-client.jrc.Proxies.jrc.Request'>10.11.8 - @Request</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.8 - juneau-rest-client.jrc.Proxies.jrc.Request -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteOp</ja>-annotated method 
@@ -23770,12 +23905,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 9.11.8 - juneau-rest-client.jrc.Proxies.jrc.Request -->
+</div><!-- END: 10.11.8 - juneau-rest-client.jrc.Proxies.jrc.Request -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Response' id='juneau-rest-client.jrc.Proxies.jrc.Response'>9.11.9 - @Response</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.9 - juneau-rest-client.jrc.Proxies.jrc.Response -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.Response' id='juneau-rest-client.jrc.Proxies.jrc.Response'>10.11.9 - @Response</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.9 - juneau-rest-client.jrc.Proxies.jrc.Response -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteOp</ja>-annotated methods.
@@ -23836,12 +23971,12 @@
 		The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
 	</p>
 </div>
-</div><!-- END: 9.11.9 - juneau-rest-client.jrc.Proxies.jrc.Response -->
+</div><!-- END: 10.11.9 - juneau-rest-client.jrc.Proxies.jrc.Response -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces' id='juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces'>9.11.10 - Dual-purpose (end-to-end) interfaces</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.11.10 - juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces' id='juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces'>10.11.10 - Dual-purpose (end-to-end) interfaces</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.11.10 - juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces -->
 <div class='topic'>
 	<p>
 		A common coding practice is to use the same Java interface to define both your server and client side REST interfaces.
@@ -23942,13 +24077,13 @@
 		the annotations were inherited from the interface.
 	</p>
 </div>
-</div><!-- END: 9.11.10 - juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces -->
-</div><!-- END: 9.11 - juneau-rest-client.jrc.Proxies -->
+</div><!-- END: 10.11.10 - juneau-rest-client.jrc.Proxies.jrc.DualPurposeInterfaces -->
+</div><!-- END: 10.11 - juneau-rest-client.jrc.Proxies -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.LoggingAndDebugging' id='juneau-rest-client.jrc.LoggingAndDebugging'>9.12 - Logging and Debugging</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.12 - juneau-rest-client.jrc.LoggingAndDebugging -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.LoggingAndDebugging' id='juneau-rest-client.jrc.LoggingAndDebugging'>10.12 - Logging and Debugging</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.12 - juneau-rest-client.jrc.LoggingAndDebugging -->
 <div class='topic'>
 	<p>
 		The following methods provide logging of requests and responses:
@@ -24032,12 +24167,12 @@
 		<li>{@del org.apache.juneau.rest.client2.RestClient.Builder#logToConsole()} is called.
 	</ul>
 </div>
-</div><!-- END: 9.12 - juneau-rest-client.jrc.LoggingAndDebugging -->
+</div><!-- END: 10.12 - juneau-rest-client.jrc.LoggingAndDebugging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.CustomizingHttpClient' id='juneau-rest-client.jrc.CustomizingHttpClient'>9.13 - Customizing HttpClient</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.13 - juneau-rest-client.jrc.CustomizingHttpClient -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.CustomizingHttpClient' id='juneau-rest-client.jrc.CustomizingHttpClient'>10.13 - Customizing HttpClient</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.13 - juneau-rest-client.jrc.CustomizingHttpClient -->
 <div class='topic'>
 	<p>
 		Several methods are provided for customizing the underlying HTTP client and client builder classes:
@@ -24072,12 +24207,12 @@
 		Refer to the {@del org.apache.http.client.impl.HttpClientBuilder HttpClientBuilder} docs for more information.
 	</p>
 </div>
-</div><!-- END: 9.13 - juneau-rest-client.jrc.CustomizingHttpClient -->
+</div><!-- END: 10.13 - juneau-rest-client.jrc.CustomizingHttpClient -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ExtendingRestClient' id='juneau-rest-client.jrc.ExtendingRestClient'>9.14 - Extending RestClient</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.14 - juneau-rest-client.jrc.ExtendingRestClient -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.ExtendingRestClient' id='juneau-rest-client.jrc.ExtendingRestClient'>10.14 - Extending RestClient</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.14 - juneau-rest-client.jrc.ExtendingRestClient -->
 <div class='topic'>
 	<p>
 		The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
@@ -24108,12 +24243,12 @@
 		{@del org.apache.juneau.rest.client2.RestClient#createRequest(URI, String, boolean)} and {@del org.apache.juneau.rest.client2.RestClient#createResponse(RestRequest, HttpResponse, Parser)} methods.
 	</p>
 </div>
-</div><!-- END: 9.14 - juneau-rest-client.jrc.ExtendingRestClient -->
+</div><!-- END: 10.14 - juneau-rest-client.jrc.ExtendingRestClient -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication' id='juneau-rest-client.jrc.Authentication'>9.15 - Authentication</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.15 - juneau-rest-client.jrc.Authentication -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication' id='juneau-rest-client.jrc.Authentication'>10.15 - Authentication</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 10.15 - juneau-rest-client.jrc.Authentication -->
 <div class='topic'>
 	<p>
 		The Juneau REST client itself does not implement any support for authentication.  
@@ -24126,8 +24261,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC' id='juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC'>9.15.1 - BASIC Authentication</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.15.1 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC' id='juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC'>10.15.1 - BASIC Authentication</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.15.1 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC -->
 <div class='topic'>
 	<p>
 		The {@del org.apache.juneau.rest.client2.RestClient.Builder#basicAuth(String,int,String,String)} method 
@@ -24153,12 +24288,12 @@
 	<jv>builder</jv>.setDefaultCredentialsProvider(<jv>p</jv>);
 	</p>
 </div>
-</div><!-- END: 9.15.1 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC -->
+</div><!-- END: 10.15.1 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationBASIC -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm' id='juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm'>9.15.2 - FORM-based Authentication</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.15.2 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm' id='juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm'>10.15.2 - FORM-based Authentication</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.15.2 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm -->
 <div class='topic'>
 	<p>
 		The {@del org.apache.juneau.rest.client2.RestClient.Builder} class does not itself provide FORM-based 
@@ -24245,12 +24380,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 9.15.2 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm -->
+</div><!-- END: 10.15.2 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationForm -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC' id='juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC'>9.15.3 - OIDC Authentication</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 9.15.3 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC' id='juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC'>10.15.3 - OIDC Authentication</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 10.15.3 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC -->
 <div class='topic'>
 	<p>
 		The following example shows an implementation of a client that performs OIDC authentication against
@@ -24375,14 +24510,14 @@
 	}
 	</p>	
 </div>
-</div><!-- END: 9.15.3 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC -->
-</div><!-- END: 9.15 - juneau-rest-client.jrc.Authentication -->
-</div><!-- END: 9 - juneau-rest-client -->
+</div><!-- END: 10.15.3 - juneau-rest-client.jrc.Authentication.jrc.AuthenticationOIDC -->
+</div><!-- END: 10.15 - juneau-rest-client.jrc.Authentication -->
+</div><!-- END: 10 - juneau-rest-client -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-mock' id='juneau-rest-mock'>10 - juneau-rest-mock</a><span class='update'>created: 8.1.0, updated: 8.2.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 10 - juneau-rest-mock -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-mock' id='juneau-rest-mock'>11 - juneau-rest-mock</a><span class='update'>created: 8.1.0, updated: 8.2.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 11 - juneau-rest-mock -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
 	<p class='bcode w500'>
@@ -24413,8 +24548,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-mock.jrm.MockRestClient' id='juneau-rest-mock.jrm.MockRestClient'>10.1 - MockRestClient</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 10.1 - juneau-rest-mock.jrm.MockRestClient -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-mock.jrm.MockRestClient' id='juneau-rest-mock.jrm.MockRestClient'>11.1 - MockRestClient</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 11.1 - juneau-rest-mock.jrm.MockRestClient -->
 <div class='topic'>
 	<p>
 		The {@del org.apache.juneau.rest.mock2.MockRestClient} class is used for performing serverless unit testing of {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated
@@ -24618,13 +24753,13 @@
 	}
 	</p>
 </div>
-</div><!-- END: 10.1 - juneau-rest-mock.jrm.MockRestClient -->
-</div><!-- END: 10 - juneau-rest-mock -->
+</div><!-- END: 11.1 - juneau-rest-mock.jrm.MockRestClient -->
+</div><!-- END: 11 - juneau-rest-mock -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-core</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></h2>
-<div class='topic'><!-- START: 11 - juneau-microservice-core -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>12 - juneau-microservice-core</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></h2>
+<div class='topic'><!-- START: 12 - juneau-microservice-core -->
 <div class='topic'>
 	<div class='warn'>
 		The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
@@ -24671,8 +24806,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Overview' id='juneau-microservice-core.jmc.Overview'>11.1 - Microservice Overview</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.1 - juneau-microservice-core.jmc.Overview -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Overview' id='juneau-microservice-core.jmc.Overview'>12.1 - Microservice Overview</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.1 - juneau-microservice-core.jmc.Overview -->
 <div class='topic'>
 	<p>
 		The Microservice API consists of a base class for defining executable microservices.
@@ -24726,12 +24861,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 11.1 - juneau-microservice-core.jmc.Overview -->
+</div><!-- END: 12.1 - juneau-microservice-core.jmc.Overview -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.LifecycleMethods' id='juneau-microservice-core.jmc.LifecycleMethods'>11.2 - Lifecycle Methods</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.2 - juneau-microservice-core.jmc.LifecycleMethods -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.LifecycleMethods' id='juneau-microservice-core.jmc.LifecycleMethods'>12.2 - Lifecycle Methods</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.2 - juneau-microservice-core.jmc.LifecycleMethods -->
 <div class='topic'>
 	<p>
 		The lifecycle methods of the {@link org.apache.juneau.microservice.Microservice} class consists of the following:
@@ -24814,12 +24949,12 @@
 		subclasses can override them to provide customized behavior.  
 	</p>
 </div>
-</div><!-- END: 11.2 - juneau-microservice-core.jmc.LifecycleMethods -->
+</div><!-- END: 12.2 - juneau-microservice-core.jmc.LifecycleMethods -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Args' id='juneau-microservice-core.jmc.Args'>11.3 - Args</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.3 - juneau-microservice-core.jmc.Args -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Args' id='juneau-microservice-core.jmc.Args'>12.3 - Args</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.3 - juneau-microservice-core.jmc.Args -->
 <div class='topic'>
 	<p>
 		Command-line arguments can be associated with a microservice using the {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)} method.
@@ -24894,12 +25029,12 @@
 	)
 	</p>
 </div>
-</div><!-- END: 11.3 - juneau-microservice-core.jmc.Args -->
+</div><!-- END: 12.3 - juneau-microservice-core.jmc.Args -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Manifest' id='juneau-microservice-core.jmc.Manifest'>11.4 - Manifest</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.4 - juneau-microservice-core.jmc.Manifest -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Manifest' id='juneau-microservice-core.jmc.Manifest'>12.4 - Manifest</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.4 - juneau-microservice-core.jmc.Manifest -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.microservice.Microservice.Builder#manifest(Object)} method can be used to specify the contents or location of of the main 
@@ -24959,12 +25094,12 @@
 	)
 	</p>
 </div>
-</div><!-- END: 11.4 - juneau-microservice-core.jmc.Manifest -->
+</div><!-- END: 12.4 - juneau-microservice-core.jmc.Manifest -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Config' id='juneau-microservice-core.jmc.Config'>11.5 - Config</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.5 - juneau-microservice-core.jmc.Config -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Config' id='juneau-microservice-core.jmc.Config'>12.5 - Config</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.5 - juneau-microservice-core.jmc.Config -->
 <div class='topic'>
 	<p>
 		The following methods can be used to define the configuration for your microservice using the powerful Config API:
@@ -25091,12 +25226,12 @@
 		<li class='link'>{@doc juneau-config}
 	</ul>
 </div>
-</div><!-- END: 11.5 - juneau-microservice-core.jmc.Config -->
+</div><!-- END: 12.5 - juneau-microservice-core.jmc.Config -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.SystemProperties' id='juneau-microservice-core.jmc.SystemProperties'>11.6 - System properties</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.6 - juneau-microservice-core.jmc.SystemProperties -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.SystemProperties' id='juneau-microservice-core.jmc.SystemProperties'>12.6 - System properties</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.6 - juneau-microservice-core.jmc.SystemProperties -->
 <div class='topic'>
 	<p>
 		As a convenience, the <c>SystemProperties</c> section of your configuration file can be used to define system
@@ -25123,12 +25258,12 @@
 	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>
 	</p>
 </div>
-</div><!-- END: 11.6 - juneau-microservice-core.jmc.SystemProperties -->
+</div><!-- END: 12.6 - juneau-microservice-core.jmc.SystemProperties -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.VarResolver' id='juneau-microservice-core.jmc.VarResolver'>11.7 - VarResolver</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.7 - juneau-microservice-core.jmc.VarResolver -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.VarResolver' id='juneau-microservice-core.jmc.VarResolver'>12.7 - VarResolver</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.7 - juneau-microservice-core.jmc.VarResolver -->
 <div class='topic'>
 	<p>
 		The Microservice API incorporates the {@doc jm.SimpleVariableLanguage Simple Variable Language} API.
@@ -25173,12 +25308,12 @@
 		<li><c>$NE{arg}</c> - {@link org.apache.juneau.svl.vars.NotEmptyVar}
 	</ul>
 </div>
-</div><!-- END: 11.7 - juneau-microservice-core.jmc.VarResolver -->
+</div><!-- END: 12.7 - juneau-microservice-core.jmc.VarResolver -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.ConsoleCommands' id='juneau-microservice-core.jmc.ConsoleCommands'>11.8 - Console Commands</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.8 - juneau-microservice-core.jmc.ConsoleCommands -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.ConsoleCommands' id='juneau-microservice-core.jmc.ConsoleCommands'>12.8 - Console Commands</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.8 - juneau-microservice-core.jmc.ConsoleCommands -->
 <div class='topic'>
 	<p>
 		The Microservice API provides support for simple console commands.
@@ -25264,12 +25399,12 @@
 		These can be overridden using the {@link org.apache.juneau.microservice.Microservice.Builder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} method.
 	</p>
 </div>
-</div><!-- END: 11.8 - juneau-microservice-core.jmc.ConsoleCommands -->
+</div><!-- END: 12.8 - juneau-microservice-core.jmc.ConsoleCommands -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Logging' id='juneau-microservice-core.jmc.Logging'>11.9 - Logging</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.9 - juneau-microservice-core.jmc.Logging -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Logging' id='juneau-microservice-core.jmc.Logging'>12.9 - Logging</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.9 - juneau-microservice-core.jmc.Logging -->
 <div class='topic'>
 	<p>
 		The Microservice API provides build-in but configurable and overridable support for logging.
@@ -25412,12 +25547,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 11.9 - juneau-microservice-core.jmc.Logging -->
+</div><!-- END: 12.9 - juneau-microservice-core.jmc.Logging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Listeners' id='juneau-microservice-core.jmc.Listeners'>11.10 - Listeners</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 11.10 - juneau-microservice-core.jmc.Listeners -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Listeners' id='juneau-microservice-core.jmc.Listeners'>12.10 - Listeners</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.10 - juneau-microservice-core.jmc.Listeners -->
 <div class='topic'>
 	<p>
 		As mentioned previously, the lifecycle methods for the {@link org.apache.juneau.microservice.Microservice} class are explicitly
@@ -25471,13 +25606,13 @@
 	}
 	</p>
 </div>
-</div><!-- END: 11.10 - juneau-microservice-core.jmc.Listeners -->
-</div><!-- END: 11 - juneau-microservice-core -->
+</div><!-- END: 12.10 - juneau-microservice-core.jmc.Listeners -->
+</div><!-- END: 12 - juneau-microservice-core -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>12 - juneau-microservice-jetty</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></h2>
-<div class='topic'><!-- START: 12 - juneau-microservice-jetty -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>13 - juneau-microservice-jetty</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></h2>
+<div class='topic'><!-- START: 13 - juneau-microservice-jetty -->
 <div class='topic'>
 	<div class='warn'>
 		The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
@@ -25511,8 +25646,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.Overview' id='juneau-microservice-jetty.jmj.Overview'>12.1 - Overview</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.1 - juneau-microservice-jetty.jmj.Overview -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.Overview' id='juneau-microservice-jetty.jmj.Overview'>13.1 - Overview</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.1 - juneau-microservice-jetty.jmj.Overview -->
 <div class='topic'>
 	<p>
 		The Jetty Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
@@ -25559,12 +25694,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 12.1 - juneau-microservice-jetty.jmj.Overview -->
+</div><!-- END: 13.1 - juneau-microservice-jetty.jmj.Overview -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.LifecycleMethods' id='juneau-microservice-jetty.jmj.LifecycleMethods'>12.2 - Lifecycle Methods</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.2 - juneau-microservice-jetty.jmj.LifecycleMethods -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.LifecycleMethods' id='juneau-microservice-jetty.jmj.LifecycleMethods'>13.2 - Lifecycle Methods</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.2 - juneau-microservice-jetty.jmj.LifecycleMethods -->
 <div class='topic'>
 	<p>
 		To review, the {@link org.apache.juneau.microservice.Microservice} class contains the following lifecycle methods:
@@ -25656,12 +25791,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 12.2 - juneau-microservice-jetty.jmj.LifecycleMethods -->
+</div><!-- END: 13.2 - juneau-microservice-jetty.jmj.LifecycleMethods -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.ResourceClasses' id='juneau-microservice-jetty.jmj.ResourceClasses'>12.3 - Resource Classes</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.3 - juneau-microservice-jetty.jmj.ResourceClasses -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.ResourceClasses' id='juneau-microservice-jetty.jmj.ResourceClasses'>13.3 - Resource Classes</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.3 - juneau-microservice-jetty.jmj.ResourceClasses -->
 <div class='topic'>
 	<p>
 		This section describes how to define a top-level REST resource page and deploy it in our microservice.
@@ -25801,12 +25936,12 @@
 			</p>
 	</ul>
 </div>
-</div><!-- END: 12.3 - juneau-microservice-jetty.jmj.ResourceClasses -->
+</div><!-- END: 13.3 - juneau-microservice-jetty.jmj.ResourceClasses -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.PredefinedResourceClasses' id='juneau-microservice-jetty.jmj.PredefinedResourceClasses'>12.4 - Predefined Resource Classes</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.4 - juneau-microservice-jetty.jmj.PredefinedResourceClasses -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.PredefinedResourceClasses' id='juneau-microservice-jetty.jmj.PredefinedResourceClasses'>13.4 - Predefined Resource Classes</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.4 - juneau-microservice-jetty.jmj.PredefinedResourceClasses -->
 <div class='topic'>
 	<p>
 		The following predefined resource classes are also provided for easy inclusion into your microservice:
@@ -25824,12 +25959,12 @@
 			- Shutdown and/or restart the JVM.
 	</ul>
 </div>
-</div><!-- END: 12.4 - juneau-microservice-jetty.jmj.PredefinedResourceClasses -->
+</div><!-- END: 13.4 - juneau-microservice-jetty.jmj.PredefinedResourceClasses -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.Config' id='juneau-microservice-jetty.jmj.Config'>12.5 - Config</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.5 - juneau-microservice-jetty.jmj.Config -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.Config' id='juneau-microservice-jetty.jmj.Config'>13.5 - Config</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.5 - juneau-microservice-jetty.jmj.Config -->
 <div class='topic'>
 	<p>
 		In {@doc jmc.Config}, we described how to associate a configuration file with your
@@ -26034,12 +26169,12 @@
 		<li class='link'>{@doc juneau-config}
 	</ul>
 </div>
-</div><!-- END: 12.5 - juneau-microservice-jetty.jmj.Config -->
+</div><!-- END: 13.5 - juneau-microservice-jetty.jmj.Config -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.JettyXml' id='juneau-microservice-jetty.jmj.JettyXml'>12.6 - Jetty.xml file</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.6 - juneau-microservice-jetty.jmj.JettyXml -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.JettyXml' id='juneau-microservice-jetty.jmj.JettyXml'>13.6 - Jetty.xml file</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.6 - juneau-microservice-jetty.jmj.JettyXml -->
 <div class='topic'>
 	<p>
 		The Jetty microservice comes with a bare-bones <c>jetty.xml</c> file which can be modified to suite any needs. 
@@ -26124,12 +26259,12 @@
 		to use your own customized Jetty server.
 	</p>
 </div>
-</div><!-- END: 12.6 - juneau-microservice-jetty.jmj.JettyXml -->
+</div><!-- END: 13.6 - juneau-microservice-jetty.jmj.JettyXml -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.UiCustomization' id='juneau-microservice-jetty.jmj.UiCustomization'>12.7 - UI Customization</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.7 - juneau-microservice-jetty.jmj.UiCustomization -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.UiCustomization' id='juneau-microservice-jetty.jmj.UiCustomization'>13.7 - UI Customization</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.7 - juneau-microservice-jetty.jmj.UiCustomization -->
 <div class='topic'>
 	<p>
 		The Microservice project contains a <c>files/htdocs</c> folder with predefined stylesheets and
@@ -26240,12 +26375,12 @@
 	<ck>RestContext.disableClasspathResourceCaching.b</ck> = <cv>true</cv>
 	</p>
 </div>
-</div><!-- END: 12.7 - juneau-microservice-jetty.jmj.UiCustomization -->
+</div><!-- END: 13.7 - juneau-microservice-jetty.jmj.UiCustomization -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.Extending' id='juneau-microservice-jetty.jmj.Extending'>12.8 - Extending JettyMicroservice</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.8 - juneau-microservice-jetty.jmj.Extending -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-jetty.jmj.Extending' id='juneau-microservice-jetty.jmj.Extending'>13.8 - Extending JettyMicroservice</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 13.8 - juneau-microservice-jetty.jmj.Extending -->
 <div class='topic'>
 	<p>
 		This example shows how the {@link org.apache.juneau.microservice.jetty.JettyMicroservice} class
@@ -26321,13 +26456,13 @@
 	}
 	</p>
 </div>
-</div><!-- END: 12.8 - juneau-microservice-jetty.jmj.Extending -->
-</div><!-- END: 12 - juneau-microservice-jetty -->
+</div><!-- END: 13.8 - juneau-microservice-jetty.jmj.Extending -->
+</div><!-- END: 13 - juneau-microservice-jetty -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice' id='my-jetty-microservice'>13 - my-jetty-microservice</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></h2>
-<div class='topic'><!-- START: 13 - my-jetty-microservice -->
+<h2 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice' id='my-jetty-microservice'>14 - my-jetty-microservice</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></h2>
+<div class='topic'><!-- START: 14 - my-jetty-microservice -->
 <div class='topic'>
 	<div class='warn'>
 		The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
@@ -26350,8 +26485,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice.mjm.Installing' id='my-jetty-microservice.mjm.Installing'>13.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 13.1 - my-jetty-microservice.mjm.Installing -->
+<h3 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice.mjm.Installing' id='my-jetty-microservice.mjm.Installing'>14.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 14.1 - my-jetty-microservice.mjm.Installing -->
 <div class='topic'>
 	<p>
 		Follow these instructions to create a new template project in Eclipse.
@@ -26605,12 +26740,12 @@
 		At this point, you're ready to start the microservice from your workspace.
 	</p>
 </div>
-</div><!-- END: 13.1 - my-jetty-microservice.mjm.Installing -->
+</div><!-- END: 14.1 - my-jetty-microservice.mjm.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice.mjm.Running' id='my-jetty-microservice.mjm.Running'>13.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 13.2 - my-jetty-microservice.mjm.Running -->
+<h3 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice.mjm.Running' id='my-jetty-microservice.mjm.Running'>14.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 14.2 - my-jetty-microservice.mjm.Running -->
 <div class='topic'>
 	<p>
 		The <l>mjm.launch</l> file is already provided to allow you to quickly start
@@ -26643,12 +26778,12 @@
 		You can enter the command <c>exit</c> to shut it down.
 	</p>
 </div>
-</div><!-- END: 13.2 - my-jetty-microservice.mjm.Running -->
+</div><!-- END: 14.2 - my-jetty-microservice.mjm.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice.mjm.Building' id='my-jetty-microservice.mjm.Building'>13.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 13.3 - my-jetty-microservice.mjm.Building -->
+<h3 class='topic' onclick='toggle(this)'><a href='#my-jetty-microservice.mjm.Building' id='my-jetty-microservice.mjm.Building'>14.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 14.3 - my-jetty-microservice.mjm.Building -->
 <div class='topic'>
 	<p>
 		The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
@@ -26692,13 +26827,13 @@
 		then this microservice is already running elsewhere and so it cannot bind to port 10000.
 	</p>
 </div>
-</div><!-- END: 13.3 - my-jetty-microservice.mjm.Building -->
-</div><!-- END: 13 - my-jetty-microservice -->
+</div><!-- END: 14.3 - my-jetty-microservice.mjm.Building -->
+</div><!-- END: 14 - my-jetty-microservice -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice' id='my-springboot-microservice'>14 - my-springboot-microservice</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 14 - my-springboot-microservice -->
+<h2 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice' id='my-springboot-microservice'>15 - my-springboot-microservice</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 15 - my-springboot-microservice -->
 <div class='topic'>
 	<h5 class='figure'>Starter Project Zip</h5>
 	<p class='bcode w500'>
@@ -26720,8 +26855,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice.msm.Installing' id='my-springboot-microservice.msm.Installing'>14.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 14.1 - my-springboot-microservice.msm.Installing -->
+<h3 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice.msm.Installing' id='my-springboot-microservice.msm.Installing'>15.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 15.1 - my-springboot-microservice.msm.Installing -->
 <div class='topic'>
 	<p>
 		Follow these instructions to create a new template project in Eclipse.
@@ -26851,12 +26986,12 @@
 		At this point, you're ready to start the microservice from your workspace.
 	</p>
 </div>
-</div><!-- END: 14.1 - my-springboot-microservice.msm.Installing -->
+</div><!-- END: 15.1 - my-springboot-microservice.msm.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice.msm.Running' id='my-springboot-microservice.msm.Running'>14.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 14.2 - my-springboot-microservice.msm.Running -->
+<h3 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice.msm.Running' id='my-springboot-microservice.msm.Running'>15.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 15.2 - my-springboot-microservice.msm.Running -->
 <div class='topic'>
 	<p>
 		The <l>msm.launch</l> file is already provided to allow you to quickly start
@@ -26888,12 +27023,12 @@
 	</p>			
 	<img class='bordered w400' src='doc-files/msm.Running.1.png'>
 </div>
-</div><!-- END: 14.2 - my-springboot-microservice.msm.Running -->
+</div><!-- END: 15.2 - my-springboot-microservice.msm.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice.msm.Building' id='my-springboot-microservice.msm.Building'>14.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 14.3 - my-springboot-microservice.msm.Building -->
+<h3 class='topic' onclick='toggle(this)'><a href='#my-springboot-microservice.msm.Building' id='my-springboot-microservice.msm.Building'>15.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 15.3 - my-springboot-microservice.msm.Building -->
 <div class='topic'>
 	<p>
 		The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
@@ -26934,13 +27069,13 @@
 	INFO: Started App in 1.999 seconds (JVM running for 2.999)
 	</p>
 </div>
-</div><!-- END: 14.3 - my-springboot-microservice.msm.Building -->
-</div><!-- END: 14 - my-springboot-microservice -->
+</div><!-- END: 15.3 - my-springboot-microservice.msm.Building -->
+</div><!-- END: 15 - my-springboot-microservice -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-core' id='juneau-examples-core'>15 - juneau-examples-core</a><span class='update'>updated: 8.0.0</span></h2>
-<div class='topic'><!-- START: 15 - juneau-examples-core -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-core' id='juneau-examples-core'>16 - juneau-examples-core</a><span class='update'>updated: 8.0.0</span></h2>
+<div class='topic'><!-- START: 16 - juneau-examples-core -->
 <div class='topic'>
 	<h5 class='figure'>Archive File</h5>
 	<p class='bcode w500'>
@@ -26954,8 +27089,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-core.jec.Installing' id='juneau-examples-core.jec.Installing'>15.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0</span></h3>
-<div class='topic'><!-- START: 15.1 - juneau-examples-core.jec.Installing -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-core.jec.Installing' id='juneau-examples-core.jec.Installing'>16.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0</span></h3>
+<div class='topic'><!-- START: 16.1 - juneau-examples-core.jec.Installing -->
 <div class='topic'>
 	<p>
 		Follow these instructions to import the Juneau project into Eclipse.
@@ -26976,12 +27111,12 @@
 			<img class='bordered' src='doc-files/jec.Installing.3.png' style='width:400px'>
 	</ol>
 </div>
-</div><!-- END: 15.1 - juneau-examples-core.jec.Installing -->
+</div><!-- END: 16.1 - juneau-examples-core.jec.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-core.jec.Examples' id='juneau-examples-core.jec.Examples'>15.2 - Examples</a><span class='update'>created: 8.0.0</span></h3>
-<div class='topic'><!-- START: 15.2 - juneau-examples-core.jec.Examples -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-core.jec.Examples' id='juneau-examples-core.jec.Examples'>16.2 - Examples</a><span class='update'>created: 8.0.0</span></h3>
+<div class='topic'><!-- START: 16.2 - juneau-examples-core.jec.Examples -->
 <div class='topic'>
 	<p>
 		The following shows the core examples provided:
@@ -27015,8 +27150,8 @@
 			</ul>
 		<li class='jp'>{@link org.apache.juneau.examples.core.uon}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.examples.core.uon.UONExample} - UonSerializer usage on serialize and deserialize simple Pojo bean.
-				<li class='jc'>{@link org.apache.juneau.examples.core.uon.UONComplexExample} - UonSerializer usage on serialize and deserialize complex Pojo bean.
+				<li class='jc'>{@link org.apache.juneau.examples.core.uon.UonExample} - UonSerializer usage on serialize and deserialize simple Pojo bean.
+				<li class='jc'>{@link org.apache.juneau.examples.core.uon.UonComplexExample} - UonSerializer usage on serialize and deserialize complex Pojo bean.
 			</ul>
 		<li class='jp'>{@link org.apache.juneau.examples.core.svl}
 			<ul>
@@ -27024,13 +27159,13 @@
 			</ul>
 	</ul>
 </div>
-</div><!-- END: 15.2 - juneau-examples-core.jec.Examples -->
-</div><!-- END: 15 - juneau-examples-core -->
+</div><!-- END: 16.2 - juneau-examples-core.jec.Examples -->
+</div><!-- END: 16 - juneau-examples-core -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>16 - juneau-examples-rest</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 16 - juneau-examples-rest -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>17 - juneau-examples-rest</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 17 - juneau-examples-rest -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
 	<p class='bcode w500'>
@@ -27067,8 +27202,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.RootResources' id='juneau-examples-rest.jer.RootResources'>16.1 - RootResources</a><span class='update'>updated: 8.0.0,8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 16.1 - juneau-examples-rest.jer.RootResources -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.RootResources' id='juneau-examples-rest.jer.RootResources'>17.1 - RootResources</a><span class='update'>updated: 8.0.0,8.1.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 17.1 - juneau-examples-rest.jer.RootResources -->
 <div class='topic'>
 	<p>
 		The <l>RootResources</l> class is the main page for the REST microservice.
@@ -27209,12 +27344,12 @@
 		independently (e.g. path-info, resource-URI, and so forth).
 	</p>
 </div>
-</div><!-- END: 16.1 - juneau-examples-rest.jer.RootResources -->
+</div><!-- END: 17.1 - juneau-examples-rest.jer.RootResources -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.HelloWorldResource' id='juneau-examples-rest.jer.HelloWorldResource'>16.2 - HelloWorldResource</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 16.2 - juneau-examples-rest.jer.HelloWorldResource -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.HelloWorldResource' id='juneau-examples-rest.jer.HelloWorldResource'>17.2 - HelloWorldResource</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 17.2 - juneau-examples-rest.jer.HelloWorldResource -->
 <div class='topic'>
 	<p>
 		The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
@@ -27280,12 +27415,12 @@
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.HelloWorldResource.2.png'>
 </div>
-</div><!-- END: 16.2 - juneau-examples-rest.jer.HelloWorldResource -->
+</div><!-- END: 17.2 - juneau-examples-rest.jer.HelloWorldResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.DtoExamples' id='juneau-examples-rest.jer.DtoExamples'>16.3 - DtoExamples</a><span class='update'>created: 8.0.0, updated: 8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 16.3 - juneau-examples-rest.jer.DtoExamples -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.DtoExamples' id='juneau-examples-rest.jer.DtoExamples'>17.3 - DtoExamples</a><span class='update'>created: 8.0.0, updated: 8.1.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 17.3 - juneau-examples-rest.jer.DtoExamples -->
 <div class='topic'>
 	<p>
 		The <l>DtoExamples</l> resource is a resource group for demonstrating various DTO examples.
@@ -27503,12 +27638,12 @@
 	} 		
 	</p>
 </div>
-</div><!-- END: 16.3 - juneau-examples-rest.jer.DtoExamples -->
+</div><!-- END: 17.3 - juneau-examples-rest.jer.DtoExamples -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.ConfigResource' id='juneau-examples-rest.jer.ConfigResource'>16.4 - ConfigResource</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 16.4 - juneau-examples-rest.jer.ConfigResource -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.ConfigResource' id='juneau-examples-rest.jer.ConfigResource'>17.4 - ConfigResource</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 17.4 - juneau-examples-rest.jer.ConfigResource -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
@@ -27660,12 +27795,12 @@
 	} 		
 	</p>
 </div>
-</div><!-- END: 16.4 - juneau-examples-rest.jer.ConfigResource -->
+</div><!-- END: 17.4 - juneau-examples-rest.jer.ConfigResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.LogsResource' id='juneau-examples-rest.jer.LogsResource'>16.5 - LogsResource</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 16.5 - juneau-examples-rest.jer.LogsResource -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest.jer.LogsResource' id='juneau-examples-rest.jer.LogsResource'>17.5 - LogsResource</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 17.5 - juneau-examples-rest.jer.LogsResource -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
@@ -27679,13 +27814,13 @@
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.LogsResource.1.png'>
 </div>
-</div><!-- END: 16.5 - juneau-examples-rest.jer.LogsResource -->
-</div><!-- END: 16 - juneau-examples-rest -->
+</div><!-- END: 17.5 - juneau-examples-rest.jer.LogsResource -->
+</div><!-- END: 17 - juneau-examples-rest -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>17 - juneau-examples-rest-jetty</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h2>
-<div class='topic'><!-- START: 17 - juneau-examples-rest-jetty -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>18 - juneau-examples-rest-jetty</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h2>
+<div class='topic'><!-- START: 18 - juneau-examples-rest-jetty -->
 <div class='topic'>
 	<div class='warn'>
 		The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
@@ -27705,8 +27840,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.jerj.Installing' id='juneau-examples-rest-jetty.jerj.Installing'>17.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 17.1 - juneau-examples-rest-jetty.jerj.Installing -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.jerj.Installing' id='juneau-examples-rest-jetty.jerj.Installing'>18.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 18.1 - juneau-examples-rest-jetty.jerj.Installing -->
 <div class='topic'>
 	<p>
 		Follow these instructions to import the REST examples project using Jetty into Eclipse.
@@ -27981,12 +28116,12 @@
 		At this point, you're ready to start the microservice from your workspace.
 	</p>
 </div>
-</div><!-- END: 17.1 - juneau-examples-rest-jetty.jerj.Installing -->
+</div><!-- END: 18.1 - juneau-examples-rest-jetty.jerj.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.jerj.Running' id='juneau-examples-rest-jetty.jerj.Running'>17.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 17.2 - juneau-examples-rest-jetty.jerj.Running -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.jerj.Running' id='juneau-examples-rest-jetty.jerj.Running'>18.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 18.2 - juneau-examples-rest-jetty.jerj.Running -->
 <div class='topic'>
 	<p>
 		The <l>jerj.launch</l> file is already provided to allow you to quickly start
@@ -28019,12 +28154,12 @@
 		You can enter the command <c>exit</c> to shut it down.
 	</p>
 </div>
-</div><!-- END: 17.2 - juneau-examples-rest-jetty.jerj.Running -->
+</div><!-- END: 18.2 - juneau-examples-rest-jetty.jerj.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.jerj.Building' id='juneau-examples-rest-jetty.jerj.Building'>17.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 17.3 - juneau-examples-rest-jetty.jerj.Building -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.jerj.Building' id='juneau-examples-rest-jetty.jerj.Building'>18.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 18.3 - juneau-examples-rest-jetty.jerj.Building -->
 <div class='topic'>
 	<p>
 		The <l>pom.xml</l> file is a basic Maven build script for creating the examples microservice
@@ -28068,13 +28203,13 @@
 		then this microservice is already running elsewhere and so it cannot bind to port 10000.
 	</p>
 </div>
-</div><!-- END: 17.3 - juneau-examples-rest-jetty.jerj.Building -->
-</div><!-- END: 17 - juneau-examples-rest-jetty -->
+</div><!-- END: 18.3 - juneau-examples-rest-jetty.jerj.Building -->
+</div><!-- END: 18 - juneau-examples-rest-jetty -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>18 - juneau-examples-rest-springboot</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 18 - juneau-examples-rest-springboot -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>19 - juneau-examples-rest-springboot</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 19 - juneau-examples-rest-springboot -->
 <div class='topic'>
 	<h5 class='figure'>Starter Project Zip</h5>
 	<p class='bcode w500'>
@@ -28099,8 +28234,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.Installing' id='juneau-examples-rest-springboot.jers.Installing'>18.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 18.1 - juneau-examples-rest-springboot.jers.Installing -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.Installing' id='juneau-examples-rest-springboot.jers.Installing'>19.1 - Installing in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 19.1 - juneau-examples-rest-springboot.jers.Installing -->
 <div class='topic'>
 	<p>
 		Follow these instructions to import the REST examples project using Spring Boot into Eclipse.
@@ -28241,12 +28376,12 @@
 		At this point, you're ready to start the microservice from your workspace.
 	</p>
 </div>
-</div><!-- END: 18.1 - juneau-examples-rest-springboot.jers.Installing -->
+</div><!-- END: 19.1 - juneau-examples-rest-springboot.jers.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.Running' id='juneau-examples-rest-springboot.jers.Running'>18.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 18.2 - juneau-examples-rest-springboot.jers.Running -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.Running' id='juneau-examples-rest-springboot.jers.Running'>19.2 - Running in Eclipse</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 19.2 - juneau-examples-rest-springboot.jers.Running -->
 <div class='topic'>
 	<p>
 		The <l>jers.launch</l> file is already provided to allow you to quickly start
@@ -28278,12 +28413,12 @@
 	</p>			
 	<img class='bordered w400' src='doc-files/jers.Running.1.png'>
 </div>
-</div><!-- END: 18.2 - juneau-examples-rest-springboot.jers.Running -->
+</div><!-- END: 19.2 - juneau-examples-rest-springboot.jers.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.Building' id='juneau-examples-rest-springboot.jers.Building'>18.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 18.3 - juneau-examples-rest-springboot.jers.Building -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.Building' id='juneau-examples-rest-springboot.jers.Building'>19.3 - Building and Running from Command-Line</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 19.3 - juneau-examples-rest-springboot.jers.Building -->
 <div class='topic'>
 	<p>
 		The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
@@ -28324,12 +28459,12 @@
 	INFO: Started App in 1.999 seconds (JVM running for 2.999)
 	</p>
 </div>
-</div><!-- END: 18.3 - juneau-examples-rest-springboot.jers.Building -->
+</div><!-- END: 19.3 - juneau-examples-rest-springboot.jers.Building -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.DeployingToHeroku' id='juneau-examples-rest-springboot.jers.DeployingToHeroku'>18.4 - Deploying to Heroku</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 18.4 - juneau-examples-rest-springboot.jers.DeployingToHeroku -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.jers.DeployingToHeroku' id='juneau-examples-rest-springboot.jers.DeployingToHeroku'>19.4 - Deploying to Heroku</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 19.4 - juneau-examples-rest-springboot.jers.DeployingToHeroku -->
 <div class='topic'>
 	<p>
 		<a href='https://www.heroku.com'>Heroku</a> is a platform-as-a-service that allows applications to be quickly hosted
@@ -28466,13 +28601,13 @@
 	</p>
 	<img class='bordered w1000' src='doc-files/jers.Heroku.6.png'>
 </div>
-</div><!-- END: 18.4 - juneau-examples-rest-springboot.jers.DeployingToHeroku -->
-</div><!-- END: 18 - juneau-examples-rest-springboot -->
+</div><!-- END: 19.4 - juneau-examples-rest-springboot.jers.DeployingToHeroku -->
+</div><!-- END: 19 - juneau-examples-rest-springboot -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-petstore' id='juneau-petstore'>19 - juneau-pestore</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h2>
-<div class='topic'><!-- START: 19 - juneau-petstore -->
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-petstore' id='juneau-petstore'>20 - juneau-pestore</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h2>
+<div class='topic'><!-- START: 20 - juneau-petstore -->
 <div class='topic'>
 	<p>
 		TODO
@@ -28481,8 +28616,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.Installing' id='juneau-petstore.jp.Installing'>19.1 - Installing in Eclipse</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 19.1 - juneau-petstore.jp.Installing -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.Installing' id='juneau-petstore.jp.Installing'>20.1 - Installing in Eclipse</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 20.1 - juneau-petstore.jp.Installing -->
 <div class='topic'>
 	<p>
 		How to import Petstore to Eclipse or Spring Tool Suite: <br><br>
@@ -28494,12 +28629,12 @@
 		</ol>
 	</p>		
 </div>
-</div><!-- END: 19.1 - juneau-petstore.jp.Installing -->
+</div><!-- END: 20.1 - juneau-petstore.jp.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.Running' id='juneau-petstore.jp.Running'>19.2 - Running Petstore manually</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 19.2 - juneau-petstore.jp.Running -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.Running' id='juneau-petstore.jp.Running'>20.2 - Running Petstore manually</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 20.2 - juneau-petstore.jp.Running -->
 <div class='topic'>
 	<p>
 			How to run Petstore --Java Backend-- in Eclipse or Spring Tool Suite: <br><br>
@@ -28517,12 +28652,12 @@
 		</ol>
 	</p>
 </div>
-</div><!-- END: 19.2 - juneau-petstore.jp.Running -->
+</div><!-- END: 20.2 - juneau-petstore.jp.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.Building' id='juneau-petstore.jp.Building'>19.3 - Building and Running from Command-Line (Using Dockerfiles)</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 19.3 - juneau-petstore.jp.Building -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.Building' id='juneau-petstore.jp.Building'>20.3 - Building and Running from Command-Line (Using Dockerfiles)</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 20.3 - juneau-petstore.jp.Building -->
 <div class='topic'>
 	<p>
 			How to build and run Petstore using Docker: <br>
@@ -28537,12 +28672,12 @@
 		</ol>
 	</p>
 </div>
-</div><!-- END: 19.3 - juneau-petstore.jp.Building -->
+</div><!-- END: 20.3 - juneau-petstore.jp.Building -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.App' id='juneau-petstore.jp.App'>19.4 - About Petstore App</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 19.4 - juneau-petstore.jp.App -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.jp.App' id='juneau-petstore.jp.App'>20.4 - About Petstore App</a><span class='update'>created: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 20.4 - juneau-petstore.jp.App -->
 <div class='topic'>
 	<div style="width: 70%;">
 	    <h3 style="color: blue;">
@@ -28605,13 +28740,13 @@
 	
 	</div>
 </div>
-</div><!-- END: 19.4 - juneau-petstore.jp.App -->
-</div><!-- END: 19 - juneau-petstore -->
+</div><!-- END: 20.4 - juneau-petstore.jp.App -->
+</div><!-- END: 20 - juneau-petstore -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#Glossaries' id='Glossaries'>20 - Glossaries</a><span class='update'>created: 8.1.3</span></h2>
-<div class='topic'><!-- START: 20 - Glossaries -->
+<h2 class='topic' onclick='toggle(this)'><a href='#Glossaries' id='Glossaries'>21 - Glossaries</a><span class='update'>created: 8.1.3</span></h2>
+<div class='topic'><!-- START: 21 - Glossaries -->
 <div class='topic'>
 	<p>
 	</p>
@@ -28619,8 +28754,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.g.LanguageSupport' id='Glossaries.g.LanguageSupport'>20.1 - Language Support</a><span class='update'>created: 8.1.3</span></h3>
-<div class='topic'><!-- START: 20.1 - Glossaries.g.LanguageSupport -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.g.LanguageSupport' id='Glossaries.g.LanguageSupport'>21.1 - Language Support</a><span class='update'>created: 8.1.3</span></h3>
+<div class='topic'><!-- START: 21.1 - Glossaries.g.LanguageSupport -->
 <div class='topic'>
 	<table class='styled w1000'>
 		<tr>
@@ -28666,7 +28801,7 @@
 			<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSchemaSerializer}</ul></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			<td>{@doc jm.JsonSchema JSON-Schema Support}</td>
+			<td>{@doc jm.JsonSchemaDetails JSON-Schema Support}</td>
 		</tr>
 		<tr>
 			<td><c>octal/msgpack</c></td>
@@ -28754,12 +28889,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 20.1 - Glossaries.g.LanguageSupport -->
+</div><!-- END: 21.1 - Glossaries.g.LanguageSupport -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.g.Annotations' id='Glossaries.g.Annotations'>20.2 - Annotations</a><span class='update'>created: 8.1.3</span></h3>
-<div class='topic'><!-- START: 20.2 - Glossaries.g.Annotations -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.g.Annotations' id='Glossaries.g.Annotations'>21.2 - Annotations</a><span class='update'>created: 8.1.3</span></h3>
+<div class='topic'><!-- START: 21.2 - Glossaries.g.Annotations -->
 <h5 class='topic'>Serialization Annotations (used to modify how artifacts are marshalled)</h5>
 <div class='topic'>
 	<table class='styled w1000'>
@@ -29079,13 +29214,13 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 20.2 - Glossaries.g.Annotations -->
-</div><!-- END: 20 - Glossaries -->
+</div><!-- END: 21.2 - Glossaries.g.Annotations -->
+</div><!-- END: 21 - Glossaries -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#Security' id='Security'>21 - Security Best-Practices</a></h2>
-<div class='topic'><!-- START: 21 - Security -->
+<h2 class='topic' onclick='toggle(this)'><a href='#Security' id='Security'>22 - Security Best-Practices</a></h2>
+<div class='topic'><!-- START: 22 - Security -->
 <div class='topic'>
 	<p>
 		Security is always an ongoing concern in any library.  
@@ -29098,8 +29233,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Security.s.Marshall' id='Security.s.Marshall'>21.1 - juneau-marshall</a><span class='update'>created: 8.2.0</span></h3>
-<div class='topic'><!-- START: 21.1 - Security.s.Marshall -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Security.s.Marshall' id='Security.s.Marshall'>22.1 - juneau-marshall</a><span class='update'>created: 8.2.0</span></h3>
+<div class='topic'><!-- START: 22.1 - Security.s.Marshall -->
 <h5 class='topic'>Demarshalling vulnerabilities</h5>
 <div class='topic'>
 	<p>
@@ -29169,12 +29304,12 @@
 			As of <c>7.0.1</c>, no known security vulnerabilities exist that affect Juneau at this time.
 	</ul>
 </div>
-</div><!-- END: 21.1 - Security.s.Marshall -->
+</div><!-- END: 22.1 - Security.s.Marshall -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Security.s.Svl' id='Security.s.Svl'>21.2 - juneau-svl</a><span class='update'>created: 8.2.0</span></h3>
-<div class='topic'><!-- START: 21.2 - Security.s.Svl -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Security.s.Svl' id='Security.s.Svl'>22.2 - juneau-svl</a><span class='update'>created: 8.2.0</span></h3>
+<div class='topic'><!-- START: 22.2 - Security.s.Svl -->
 <div class='topic'>
 	<p>
 		Care must be used when defining new {@link org.apache.juneau.svl.Var Vars} using the SVL API since mistakes 
@@ -29221,12 +29356,12 @@
 		methods to prevent recursive handling of variables.
 	</p>
 </div>
-</div><!-- END: 21.2 - Security.s.Svl -->
+</div><!-- END: 22.2 - Security.s.Svl -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Security.s.Rest' id='Security.s.Rest'>21.3 - juneau-rest-server</a><span class='update'>created: 8.2.0</span></h3>
-<div class='topic'><!-- START: 21.3 - Security.s.Rest -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Security.s.Rest' id='Security.s.Rest'>22.3 - juneau-rest-server</a><span class='update'>created: 8.2.0</span></h3>
+<div class='topic'><!-- START: 22.3 - Security.s.Rest -->
 <div class='topic'>
 	<p>
 		Denial of service attacks can be alleviated through the {@link org.apache.juneau.rest.annotation.Rest#maxInput() maxInput()}
@@ -29240,8 +29375,8 @@
 		RDF, you may want to consider lowering the max-input value above.
 	</p>
 </div>
-</div><!-- END: 21.3 - Security.s.Rest -->
-</div><!-- END: 21 - Security -->
+</div><!-- END: 22.3 - Security.s.Rest -->
+</div><!-- END: 22 - Security -->
 
 
 <h2 class='topic' onclick='toggle(this)'><a href='#ReleaseNotes' id='ReleaseNotes'>Release Notes</a></h2>
@@ -30805,7 +30940,7 @@
 		Juno 5.0.0.35 is a minor update.
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} now returns a boolean to allow redirects to login pages.
+		<li>{@del org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} now returns a boolean to allow redirects to login pages.
 		<li>Fixed bug in RestServlet where occasional false positive "duplicate method with same name and path" errors were occurring.
 	</ul>	
 </div>
@@ -30977,7 +31112,7 @@
 	<h5 class='topic w800'>REST Server API updates</h5>
 	<ul class='spaced-list'>
 		<li>New {@del RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
-			Useful for accessing the method name or annotations during requests, such as in calls to {@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)}.
+			Useful for accessing the method name or annotations during requests, such as in calls to {@del org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)}.
 		<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
 		<li>Added new string variables <dc>$A{...}</dc> (request attributes) and <dc>$P{...}</dc> (request parameters) to <c>RestServlet.createRequestVarResolver(RestRequest)</c>.
 	</ul>
@@ -31086,8 +31221,8 @@
 		<li>{@link org.apache.juneau.xml.XmlParser} now accepts <c>application/xml</c>.		
 		<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
 		<li>Improved concurrency on BeanContext class.
-		<li>Fixed bug in {@link org.apache.juneau.rest.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
-		<li>Fixed bug in {@link org.apache.juneau.rest.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
+		<li>Fixed bug in {@del org.apache.juneau.rest.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
+		<li>Fixed bug in {@del org.apache.juneau.rest.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
 	</ul>
 </div>
 </div><!-- END: 5.1.0.7 -->
@@ -31368,7 +31503,7 @@
 	<h5 class='topic w800'>Server</h5>		
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.rest.RestConverter} API fixed to handle the existence of POJO filters.
-			{@link org.apache.juneau.rest.converters.Introspectable}/{@link org.apache.juneau.rest.converters.Queryable}/{@link org.apache.juneau.rest.converters.Traversable} classes can now work with filtered POJOs.  
+			{@del org.apache.juneau.rest.converters.Introspectable}/{@del org.apache.juneau.rest.converters.Queryable}/{@del org.apache.juneau.rest.converters.Traversable} classes can now work with filtered POJOs.  
 		<li>{@del @RestResource(messages)} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
 		<li>Performance improvements in <c>RestServletNls</c> class. 
 		<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
@@ -31801,10 +31936,10 @@
 			Allows encoders to be fine-tuned at the method level.
 		<li>New {@del @RestResource(config)} annotation for associating external {@del ConfigFile} config files with servlets.
 		<li>{@del ResourceLink}.
-		<li>New <c>org.apache.juneau.rest.matchers</c> package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
+		<li>New <c>org.apache.juneau.rest.matcher</c> package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
 			<ul>
-				<li>{@link org.apache.juneau.rest.matchers#MultipartFormDataMatcher}
-				<li>{@link org.apache.juneau.rest.matchers#UrlEncodedFormMatcher}
+				<li>{@del org.apache.juneau.rest.matchers#MultipartFormDataMatcher}
+				<li>{@del org.apache.juneau.rest.matchers#UrlEncodedFormMatcher}
 			</ul>
 	</ul>
 			
@@ -33212,11 +33347,11 @@
 			</ul>	
 			The following classes have been introduced:
 			<ul>
-				<li>{@link org.apache.juneau.rest.RequestBody}
-				<li>{@link org.apache.juneau.rest.RequestHeaders}
-				<li>{@link org.apache.juneau.rest.RequestQuery}
-				<li>{@link org.apache.juneau.rest.RequestFormData}
-				<li>{@link org.apache.juneau.rest.RequestPath}
+				<li>{@del org.apache.juneau.rest.RequestBody}
+				<li>{@del org.apache.juneau.rest.RequestHeaders}
+				<li>{@del org.apache.juneau.rest.RequestQuery}
+				<li>{@del org.apache.juneau.rest.RequestFormData}
+				<li>{@del org.apache.juneau.rest.RequestPath}
 			</ul>						
 		<li>
 			The un-annotated parameter types that can be passed in through REST Java methods has been significantly expanded.
@@ -33267,11 +33402,11 @@
 				<li>{@link java.util.ResourceBundle} - Client-localized resource bundle.
 				<li>{@del org.apache.juneau.utils.MessageBundle} - A resource bundle with additional features.
 				<li>{@link java.util.Locale} - Client locale.
-				<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
-				<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
-				<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-				<li>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
-				<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
+				<li>{@del org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
+				<li>{@del org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
+				<li>{@del org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
+				<li>{@del org.apache.juneau.rest.RequestPath} - API for accessing path variables.
+				<li>{@del org.apache.juneau.rest.RequestBody} - API for accessing request body.
 				<li>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <c><ja>@RestMethod</ja>(name=<js>"*"</js>)</c>)
 				<li>{@link java.util.logging.Logger} - The logger to use for logging.
 				<li>{@del org.apache.juneau.internal.JuneauLogger} - Logger with additional features.
@@ -34093,7 +34228,7 @@
 			<ul>
 				<li>{@link org.apache.juneau.rest.widget.Widget}
 				<li>{@link org.apache.juneau.rest.RestConverter}
-				<li>{@link org.apache.juneau.rest.RestGuard}
+				<li>{@del org.apache.juneau.rest.RestGuard}
 				<li>{@link org.apache.juneau.rest.ResponseHandler}
 				<li>{@del org.apache.juneau.rest.RestCallHandler}
 				<li>{@del org.apache.juneau.rest.RestInfoProvider}
@@ -34642,19 +34777,19 @@
 			<c>@RestMethod.serializersInherit</c> and <c>@RestMethod.parsersInherit</c> replaced with
 			simplified {@del @RestMethod(inherit)}. 
 		<li>
-			Changes to {@link org.apache.juneau.rest.RequestFormData}:
+			Changes to {@del org.apache.juneau.rest.RequestFormData}:
 			<ul>
 				<li>{@del org.apache.juneau.rest.RequestFormData#addDefault(Map) addDefault(Map)} takes in a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			</ul>
 		<li>
-			Changes to {@link org.apache.juneau.rest.RequestHeaders}:
+			Changes to {@del org.apache.juneau.rest.RequestHeaders}:
 			<ul>
 				<li>{@del org.apache.juneau.rest.RequestHeaders#addDefault(Map) addDefault(Map)} takes in a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			</ul>
 		<li>
-			Changes to {@link org.apache.juneau.rest.RequestQuery}:
+			Changes to {@del org.apache.juneau.rest.RequestQuery}:
 			<ul>
 				<li>{@del org.apache.juneau.rest.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
@@ -35017,7 +35152,7 @@
 		<li>
 			New/updated documentation:
 			<ul>
-				<li><a href='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>
+				<li><a del='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>
 			</ul>
 	</ul>
 	
@@ -35186,8 +35321,8 @@
 		<li>
 			<c><ja>@RestMethod</ja>(inherit)</c> annotation has been removed and replaced with the following classes:
 			<ul class='doctree'>
-				<li class='jc'>{@link org.apache.juneau.rest.Inherit}
-				<li class='jc'>{@link org.apache.juneau.rest.None}
+				<li class='jc'>{@del org.apache.juneau.rest.Inherit}
+				<li class='jc'>{@del org.apache.juneau.rest.None}
 			</ul>
 			<br>These can be used in the following locations:
 			<ul class='doctree'>
@@ -35202,7 +35337,7 @@
 			</ul>
 			<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <c>Inherit</c> class. 
 		<li>
-			<c>RequestPathMatch</c> class has been renamed to {@link org.apache.juneau.rest.RequestPath}.
+			<c>RequestPathMatch</c> class has been renamed to {@del org.apache.juneau.rest.RequestPath}.
 		<li>
 			{@link org.apache.juneau.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
 			<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
@@ -35810,7 +35945,7 @@
 		<li>
 			New support for using Servlet request attributes.  
 			<ul class='javatree'>
-				<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
+				<li class='jc'>{@del org.apache.juneau.rest.RequestAttributes}
 				<li class='jc'>{@link org.apache.juneau.rest.RestContext}
 				<ul>
 					<li class='jf'>{@del REST_attrs}
@@ -36578,7 +36713,7 @@
 				<li class='jc'>{@del org.apache.juneau.rest.RestInfoProvider}
 				<li class='jc'>{@del org.apache.juneau.utils.ClasspathResourceFinder}
 				<li class='jc'>{@del org.apache.juneau.rest.RestResourceResolver}
-				<li class='jc'>{@link org.apache.juneau.rest.RestGuard}
+				<li class='jc'>{@del org.apache.juneau.rest.RestGuard}
 				<li class='jc'>{@link org.apache.juneau.rest.ResponseHandler}
 			</ul>
 		<li>

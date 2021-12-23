@@ -20,7 +20,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.swaps.*;

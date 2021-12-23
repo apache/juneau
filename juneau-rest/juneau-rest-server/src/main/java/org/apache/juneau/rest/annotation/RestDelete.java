@@ -20,6 +20,10 @@ import java.nio.charset.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.httppart.*;
+import org.apache.juneau.rest.matcher.*;
+import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 

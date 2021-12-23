@@ -22,7 +22,14 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.arg.*;
+import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.debug.*;
+import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.processor.*;
+import org.apache.juneau.rest.staticfile.*;
+import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
@@ -161,9 +168,9 @@ public class RestAnnotation_Test {
 				+ "config:'config',"
 				+ "consumes:['consumes'],"
 				+ "contextClass:'org.apache.juneau.rest.RestContext',"
-				+ "converters:['org.apache.juneau.rest.RestConverter'],"
+				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
 				+ "debug:'debug',"
-				+ "debugEnablement:'org.apache.juneau.rest.DebugEnablement',"
+				+ "debugEnablement:'org.apache.juneau.rest.debug.DebugEnablement',"
 				+ "debugOn:'debugOn',"
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
@@ -175,7 +182,7 @@ public class RestAnnotation_Test {
 				+ "disableBodyParam:'disableBodyParam',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "fileFinder:'org.apache.juneau.cp.FileFinder',"
-				+ "guards:['org.apache.juneau.rest.RestGuard'],"
+				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
 				+ "on:['on'],"
@@ -186,18 +193,18 @@ public class RestAnnotation_Test {
 				+ "path:'path',"
 				+ "produces:['produces'],"
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
-				+ "responseProcessors:['org.apache.juneau.rest.ResponseProcessor'],"
+				+ "responseProcessors:['org.apache.juneau.rest.processor.ResponseProcessor'],"
 				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
-				+ "restOpArgs:['org.apache.juneau.rest.RestOpArg'],"
+				+ "restOpArgs:['org.apache.juneau.rest.arg.RestOpArg'],"
 				+ "restOpContextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "restOperationsClass:'org.apache.juneau.rest.RestOperations',"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
 				+ "siteName:'siteName',"
-				+ "staticFiles:'org.apache.juneau.rest.StaticFiles',"
+				+ "staticFiles:'org.apache.juneau.rest.staticfile.StaticFiles',"
 				+ "swagger:{contact:{email:'',name:'',url:''},description:[],externalDocs:{description:[],url:''},license:{name:'',url:''},tags:[],termsOfService:[],title:[],value:[],version:''},"
-				+ "swaggerProvider:'org.apache.juneau.rest.BasicSwaggerProvider',"
+				+ "swaggerProvider:'org.apache.juneau.rest.swagger.BasicSwaggerProvider',"
 				+ "title:['title'],"
 				+ "uriAuthority:'uriAuthority',"
 				+ "uriContext:'uriContext',"

@@ -27,6 +27,7 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 

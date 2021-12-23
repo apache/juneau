@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Generally, this is a temporary state.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

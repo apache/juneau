@@ -19,6 +19,8 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.matcher.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -92,8 +94,8 @@ public class RestDeleteAnnotation_Test {
 				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
 				+ "description:['description'],"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "guards:['org.apache.juneau.rest.RestGuard'],"
-				+ "matchers:['org.apache.juneau.rest.RestMatcher'],"
+				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
+				+ "matchers:['org.apache.juneau.rest.matcher.RestMatcher'],"
 				+ "on:['on'],"
 				+ "path:['path'],"
 				+ "roleGuard:'roleGuard',"

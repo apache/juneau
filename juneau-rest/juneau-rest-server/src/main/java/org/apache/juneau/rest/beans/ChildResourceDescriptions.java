@@ -24,7 +24,7 @@ import org.apache.juneau.rest.*;
  * Typically used in top-level GET methods of router resources to render a list of available child resources.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jrs.UtilityBeans}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

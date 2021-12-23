@@ -20,7 +20,7 @@ import org.apache.juneau.*;
  * Class for listening for serialize events during a serialization.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

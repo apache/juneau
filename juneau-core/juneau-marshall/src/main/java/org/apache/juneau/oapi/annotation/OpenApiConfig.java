@@ -28,7 +28,7 @@ import org.apache.juneau.msgpack.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc OpenApiDetails}
+ * 	<li class='link'>{@doc jm.OpenApiDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

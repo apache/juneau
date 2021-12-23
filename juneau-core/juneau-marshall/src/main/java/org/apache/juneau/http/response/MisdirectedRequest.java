@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

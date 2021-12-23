@@ -30,7 +30,7 @@ import org.apache.juneau.json.*;
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * Unlike a 204 response, this response requires that the requester reset the document view.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
+ * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

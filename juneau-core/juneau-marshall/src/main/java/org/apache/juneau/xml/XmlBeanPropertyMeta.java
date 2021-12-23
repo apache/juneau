@@ -22,7 +22,7 @@ import org.apache.juneau.xml.annotation.*;
  * on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc XmlDetails}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
