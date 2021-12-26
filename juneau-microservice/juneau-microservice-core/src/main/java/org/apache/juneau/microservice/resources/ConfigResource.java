@@ -25,7 +25,6 @@ import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.http.annotation.Schema;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.response.*;
@@ -103,7 +102,7 @@ public class ConfigResource extends BasicRestServlet {
 	)
 	public OMap getConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section
-		) throws SectionNotFound, BadConfig {
+		) throws SectionNotFound {
 
 		return getSection(section);
 	}
@@ -121,7 +120,7 @@ public class ConfigResource extends BasicRestServlet {
 	public String getConfigEntry(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Path("key") @Schema(d="Key name in section.") String key
-		) throws SectionNotFound, BadConfig {
+		) throws SectionNotFound {
 
 		return getSection(section).getString(key);
 	}
@@ -194,7 +193,7 @@ public class ConfigResource extends BasicRestServlet {
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Path("key") @Schema(d="Key name in section.") String key,
 			@Body @Schema(d="New value for entry.") String value
-		) throws SectionNotFound, BadConfig {
+		) throws SectionNotFound {
 
 		getContext().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
@@ -213,28 +212,11 @@ public class ConfigResource extends BasicRestServlet {
 		}
 	}
 
-	@Response @Schema(description="The configuration file contained syntax errors and could not be parsed.")
-	private class BadConfig extends InternalServerError {
-		private static final long serialVersionUID = 1L;
-
-		BadConfig(Exception e) {
-			super(e, "The configuration file contained syntax errors and could not be parsed.");
-		}
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private OMap getSection(String name) throws SectionNotFound, BadConfig {
-		OMap m;
-		try {
-			m = getContext().getConfig().getSectionAsMap(name);
-		} catch (ParseException e) {
-			throw new BadConfig(e);
-		}
-		if (m == null)
-			throw new SectionNotFound();
-		return m;
+	private OMap getSection(String name) throws SectionNotFound {
+		return getContext().getConfig().getSection(name).asMap().orElseThrow(SectionNotFound::new);
 	}
 }

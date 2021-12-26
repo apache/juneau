@@ -839,24 +839,24 @@ public class ConfigTest {
 		ABean a = null;
 		BBean b = null;
 
-		a = c.getSectionAsBean("", ABean.class);
+		a = c.getSection("").toBean(ABean.class);
 		assertObject(a).asJson().is("{foo:'qux'}");
-		a = c.getSectionAsBean("", ABean.class);
+		a = c.getSection("").toBean(ABean.class);
 		assertObject(a).asJson().is("{foo:'qux'}");
-		a = c.getSectionAsBean("S", ABean.class);
+		a = c.getSection(null).toBean(ABean.class);
+		assertObject(a).asJson().is("{foo:'qux'}");
+		a = c.getSection("S").toBean(ABean.class);
 		assertObject(a).asJson().is("{foo:'baz'}");
 
-		b = c.getSectionAsBean("", BBean.class);
+		b = c.getSection("").toBean(BBean.class);
 		assertObject(b).asJson().is("{foo:'qux'}");
-		b = c.getSectionAsBean("", BBean.class);
+		b = c.getSection("").toBean(BBean.class);
 		assertObject(b).asJson().is("{foo:'qux'}");
-		b = c.getSectionAsBean("S", BBean.class);
+		b = c.getSection("S").toBean(BBean.class);
 		assertObject(b).asJson().is("{foo:'baz'}");
 
-		assertThrown(()->c.getSectionAsBean("T", ABean.class)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSectionAsBean("T", BBean.class)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSectionAsBean(null, ABean.class)).message().is("Argument 'section' cannot be null.");
-		assertThrown(()->c.getSectionAsBean(null, BBean.class)).message().is("Argument 'section' cannot be null.");
+		assertThrown(()->c.getSection("T").toBean(ABean.class)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").toBean(BBean.class)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -869,13 +869,13 @@ public class ConfigTest {
 		ABean a = null;
 		BBean b = null;
 
-		a = c.getSectionAsBean("T", ABean.class, true);
+		a = c.getSection("T").toBean(ABean.class, true);
 		assertObject(a).asJson().is("{foo:'qux'}");
-		b = c.getSectionAsBean("T", BBean.class, true);
+		b = c.getSection("T").toBean(BBean.class, true);
 		assertObject(b).asJson().is("{foo:'qux'}");
 
-		assertThrown(()->c.getSectionAsBean("T", ABean.class, false)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSectionAsBean("T", BBean.class, false)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").toBean(ABean.class, false)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").toBean(BBean.class, false)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -885,13 +885,12 @@ public class ConfigTest {
 	public void getSectionAsMap() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "[T]");
 
-		assertObject(c.getSectionAsMap("")).asJson().is("{a:'1'}");
-		assertObject(c.getSectionAsMap("")).asJson().is("{a:'1'}");
-		assertObject(c.getSectionAsMap("S")).asJson().is("{b:'2'}");
-		assertObject(c.getSectionAsMap("T")).asJson().is("{}");
-		assertNull(c.getSectionAsMap("U"));
-
-		assertThrown(()->c.getSectionAsMap(null)).message().is("Argument 'section' cannot be null.");
+		assertObject(c.getSection("").toMap()).asJson().is("{a:'1'}");
+		assertObject(c.getSection("").toMap()).asJson().is("{a:'1'}");
+		assertObject(c.getSection(null).toMap()).asJson().is("{a:'1'}");
+		assertObject(c.getSection("S").toMap()).asJson().is("{b:'2'}");
+		assertObject(c.getSection("T").toMap()).asJson().is("{}");
+		assertNull(c.getSection("U").toMap());
 	}
 
 	//====================================================================================================
@@ -902,20 +901,22 @@ public class ConfigTest {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 		AInterface a = null;
 
-		a = c.getSectionAsInterface("", AInterface.class);
+		a = c.getSection("").toInterface(AInterface.class);
 		assertEquals("qux", a.getFoo());
 
-		a = c.getSectionAsInterface("", AInterface.class);
+		a = c.getSection("").toInterface(AInterface.class);
 		assertEquals("qux", a.getFoo());
 
-		a = c.getSectionAsInterface("S", AInterface.class);
+		a = c.getSection(null).toInterface(AInterface.class);
+		assertEquals("qux", a.getFoo());
+
+		a = c.getSection("S").toInterface(AInterface.class);
 		assertEquals("baz", a.getFoo());
 
-		a = c.getSectionAsInterface("T", AInterface.class);
+		a = c.getSection("T").toInterface(AInterface.class);
 		assertEquals("qux", a.getFoo());
 
-		assertThrown(()->c.getSectionAsInterface("T", ABean.class)).message().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to getSectionAsInterface() is not an interface.");
-		assertThrown(()->c.getSectionAsInterface(null, AInterface.class)).message().is("Argument 'section' cannot be null.");
+		assertThrown(()->c.getSection("T").toInterface(ABean.class)).message().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
 	}
 
 	public static interface AInterface {
@@ -1424,15 +1425,15 @@ public class ConfigTest {
 	public void testGetSectionMap() throws Exception {
 		Config cf = init("[A]", "a1=1", "", "[D]", "d1=$C{A/a1}","d2=$S{X}");
 
-		assertObject(cf.getSectionAsMap("A")).asJson().is("{a1:'1'}");
-		assertNull(cf.getSectionAsMap("B"));
-		assertObject(cf.getSectionAsMap("C")).asJson().is("null");
+		assertObject(cf.getSection("A").toMap()).asJson().is("{a1:'1'}");
+		assertNull(cf.getSection("B").toMap());
+		assertObject(cf.getSection("C").toMap()).asJson().is("null");
 
-		OMap m = cf.getSectionAsMap("A");
+		OMap m = cf.getSection("A").toMap();
 		assertObject(m).asJson().is("{a1:'1'}");
 
 		System.setProperty("X", "x");
-		m = cf.getSectionAsMap("D");
+		m = cf.getSection("D").toMap();
 		assertObject(m).asJson().is("{d1:'1',d2:'x'}");
 		System.clearProperty("X");
 	}

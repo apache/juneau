@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
-import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -671,7 +670,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return This object.
 	 */
 	public Config setSystemProperties() {
-		for (String section : getSections()) {
+		for (String section : getSectionNames()) {
 			for (String key : getKeys(section)) {
 				String k = (section.isEmpty() ? key : section + '/' + key);
 				System.setProperty(k, getRaw(k));
@@ -877,10 +876,23 @@ public final class Config extends Context implements ConfigEventListener {
 	 * If entry does not exist, returns an empty {@link Entry} object.
 	 *
 	 * @param key The key.
-	 * @return The value, never <jk>null</jk>.
+	 * @return The entry bean, never <jk>null</jk>.
 	 */
 	public Entry get(String key) {
 		return new Entry(this, configMap, sname(key), skey(key));
+	}
+
+	/**
+	 * Gets the section with the specified name.
+	 *
+	 * <p>
+	 * If section does not exist, returns an empty {@link Section} object.
+	 *
+	 * @param name The section name.  <jk>null</jk> and blank refer to the default section.
+	 * @return The section bean, never <jk>null</jk>.
+	 */
+	public Section getSection(String name) {
+		return new Section(this, configMap, emptyIfNull(name));
 	}
 
 	/**
@@ -936,206 +948,12 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	/**
-	 * Shortcut for calling <code>getSectionAsBean(sectionName, c, <jk>false</jk>)</code>.
-	 *
-	 * @param section
-	 * 	The section name to write from.
-	 * 	<br>If empty, refers to the default section.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param c The bean class to create.
-	 * @return A new bean instance.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public <T> T getSectionAsBean(String section, Class<T> c) throws ParseException {
-		return getSectionAsBean(section, c, false);
-	}
-
-	/**
-	 * Converts this config file section to the specified bean instance.
-	 *
-	 * <p>
-	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
-	 *
-	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode w800'>
-	 * 	<cs>[MyAddress]</cs>
-	 * 	<ck>name</ck> = <cv>John Smith</cv>
-	 * 	<ck>street</ck> = <cv>123 Main Street</cv>
-	 * 	<ck>city</ck> = <cv>Anywhere</cv>
-	 * 	<ck>state</ck> = <cv>NY</cv>
-	 * 	<ck>zip</ck> = <cv>12345</cv>
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example bean</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> Address {
-	 * 		public String name, street, city;
-	 * 		public StateEnum state;
-	 * 		public int zip;
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param section
-	 * 	The section name to write from.
-	 * 	<br>If empty, refers to the default section.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param c The bean class to create.
-	 * @param ignoreUnknownProperties
-	 * 	If <jk>false</jk>, throws a {@link ParseException} if the section contains an entry that isn't a bean property
-	 * 	name.
-	 * @return A new bean instance, or <jk>null</jk> if the section doesn't exist.
-	 * @throws ParseException Unknown property was encountered in section.
-	 */
-	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		assertArgNotNull("c", c);
-		section = section(section);
-
-		if (! configMap.hasSection(section))
-			return null;
-
-		Set<String> keys = configMap.getKeys(section);
-
-		BeanMap<T> bm = beanSession.newBeanMap(c);
-		for (String k : keys) {
-			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
-			if (bpm == null) {
-				if (! ignoreUnknownProperties)
-					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, section);
-			} else {
-				bm.put(k, get(section + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
-			}
-		}
-
-		return bm.getBean();
-	}
-
-	/**
-	 * Returns a section of this config copied into an {@link OMap}.
-	 *
-	 * @param section
-	 * 	The section name to write from.
-	 * 	<br>If empty, refers to the default section.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @return A new {@link OMap}, or <jk>null</jk> if the section doesn't exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap getSectionAsMap(String section) throws ParseException {
-		section = section(section);
-
-		if (! configMap.hasSection(section))
-			return null;
-
-		Set<String> keys = configMap.getKeys(section);
-
-		OMap om = new OMap();
-		for (String k : keys)
-			om.put(k, get(section + '/' + k).as(Object.class).orElse(null));
-		return om;
-	}
-
-	/**
 	 * Returns the section names defined in this config.
 	 *
 	 * @return The section names defined in this config.
 	 */
-	public Set<String> getSections() {
+	public Set<String> getSectionNames() {
 		return Collections.unmodifiableSet(configMap.getSections());
-	}
-
-	/**
-	 * Wraps a config file section inside a Java interface so that values in the section can be read and
-	 * write using getters and setters.
-	 *
-	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode w800'>
-	 * 	<cs>[MySection]</cs>
-	 * 	<ck>string</ck> = <cv>foo</cv>
-	 * 	<ck>int</ck> = <cv>123</cv>
-	 * 	<ck>enum</ck> = <cv>ONE</cv>
-	 * 	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
-	 * 	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
-	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example interface</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public interface</jk> MyConfigInterface {
-	 *
-	 * 		String getString();
-	 * 		<jk>void</jk> setString(String x);
-	 *
-	 * 		<jk>int</jk> getInt();
-	 * 		<jk>void</jk> setInt(<jk>int</jk> x);
-	 *
-	 * 		MyEnum getEnum();
-	 * 		<jk>void</jk> setEnum(MyEnum x);
-	 *
-	 * 		MyBean getBean();
-	 * 		<jk>void</jk> setBean(MyBean x);
-	 *
-	 * 		<jk>int</jk>[][][] getInt3dArray();
-	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
-	 *
-	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
-	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 *
-	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
-	 *
-	 * 	<jk>int</jk> myInt = ci.getInt();
-	 *
-	 * 	ci.setBean(<jk>new</jk> MyBean());
-	 *
-	 * 	cf.save();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
-	 * </ul>
-	 *
-	 * @param section
-	 * 	The section name to write from.
-	 * 	<br>If empty, refers to the default section.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param c The proxy interface class.
-	 * @return The proxy interface.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getSectionAsInterface(String section, final Class<T> c) {
-		assertArgNotNull("c", c);
-		final String section2 = section(section);
-
-		if (! c.isInterface())
-			throw illegalArgumentException("Class ''{0}'' passed to getSectionAsInterface() is not an interface.", c.getName());
-
-		InvocationHandler h = new InvocationHandler() {
-
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				BeanInfo bi = Introspector.getBeanInfo(c, null);
-				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
-					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
-					if (method.equals(rm))
-						return Config.this.get(section2 + '/' + pd.getName()).to(rm.getGenericReturnType());
-					if (method.equals(wm))
-						return Config.this.set(section2 + '/' + pd.getName(), args[0]);
-				}
-				throw unsupportedOperationException("Unsupported interface method.  method=''{0}''", method);
-			}
-		};
-
-		return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h);
 	}
 
 	/**

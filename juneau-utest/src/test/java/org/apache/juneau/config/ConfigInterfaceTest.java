@@ -31,7 +31,7 @@ public class ConfigInterfaceTest {
 
 	public ConfigInterfaceTest() throws Exception {
 		cf = Config.create().serializer(SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build()).build();
-		proxy = cf.getSectionAsInterface("A", ConfigInterface.class);
+		proxy = cf.getSection("A").toInterface(ConfigInterface.class);
 	}
 
 
