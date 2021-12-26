@@ -28,7 +28,6 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
@@ -122,8 +121,7 @@ public final class ClassMeta<T> implements Type {
 	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 
-	private final ReadWriteLock lock = new ReentrantReadWriteLock(false);
-	private final Lock rLock = lock.readLock(), wLock = lock.writeLock();
+	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
@@ -151,8 +149,7 @@ public final class ClassMeta<T> implements Type {
 		this.beanContext = beanContext;
 		String notABeanReason = null;
 
-		wLock.lock();
-		try {
+		try (SimpleLock x = lock.write()) {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
 			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
@@ -196,7 +193,6 @@ public final class ClassMeta<T> implements Type {
 			throw e;
 		} finally {
 			this.notABeanReason = notABeanReason;
-			wLock.unlock();
 		}
 	}
 
@@ -217,8 +213,7 @@ public final class ClassMeta<T> implements Type {
 	 * Causes thread to wait until constructor has exited.
 	 */
 	final void waitForInit() {
-		rLock.lock();
-		rLock.unlock();
+		try (SimpleLock x = lock.read()) {}
 	}
 
 	/**

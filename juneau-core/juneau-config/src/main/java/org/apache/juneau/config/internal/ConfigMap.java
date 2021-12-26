@@ -19,7 +19,6 @@ import static org.apache.juneau.config.event.ConfigEventType.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -57,7 +56,7 @@ public class ConfigMap implements ConfigStoreListener {
 	// Import statements in this config.
 	final List<Import> imports = new CopyOnWriteArrayList<>();
 
-	private final ReadWriteLock lock = new ReentrantReadWriteLock();
+	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
 
 	/**
 	 * Constructor.
@@ -225,8 +224,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public ConfigMapEntry getEntry(String section, String key) {
 		checkSectionName(section);
 		checkKeyName(key);
-		readLock();
-		try {
+		try (SimpleLock x = lock.read()) {
 			ConfigSection cs = entries.get(section);
 			ConfigMapEntry ce = cs == null ? null : cs.entries.get(key);
 
@@ -239,8 +237,6 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 
 			return ce;
-		} finally {
-			readUnlock();
 		}
 	}
 
@@ -259,12 +255,9 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public List<String> getPreLines(String section) {
 		checkSectionName(section);
-		readLock();
-		try {
+		try (SimpleLock x = lock.read()) {
 			ConfigSection cs = entries.get(section);
 			return cs == null ? null : cs.preLines;
-		} finally {
-			readUnlock();
 		}
 	}
 
@@ -457,8 +450,7 @@ public class ConfigMap implements ConfigStoreListener {
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
 		if (ce == null)
 			return this;
-		writeLock();
-		try {
+		try (SimpleLock x = lock.write()) {
 			String section = ce.getSection();
 			ConfigSection cs = entries.get(section);
 			if (ce.getType() == SET_ENTRY) {
@@ -492,8 +484,6 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 			if (addToChangeList)
 				changes.add(ce);
-		} finally {
-			writeUnlock();
 		}
 		return this;
 	}
@@ -549,8 +539,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ConfigMap commit() throws IOException {
-		writeLock();
-		try {
+		try (SimpleLock x = lock.write()) {
 			String newContents = asString();
 			for (int i = 0; i <= 10; i++) {
 				if (i == 10)
@@ -561,8 +550,6 @@ public class ConfigMap implements ConfigStoreListener {
 				onChange(currentContents);
 			}
 			this.changes.clear();
-		} finally {
-			writeUnlock();
 		}
 		return this;
 	}
@@ -616,8 +603,7 @@ public class ConfigMap implements ConfigStoreListener {
 	@Override /* ConfigStoreListener */
 	public void onChange(String newContents) {
 		ConfigEvents changes = null;
-		writeLock();
-		try {
+		try (SimpleLock x = lock.write()) {
 			if (ne(contents, newContents)) {
 				changes = findDiffs(newContents);
 				load(newContents);
@@ -628,8 +614,6 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		} catch (IOException e) {
 			throw runtimeException(e);
-		} finally {
-			writeUnlock();
 		}
 		if (changes != null && ! changes.isEmpty())
 			signal(changes);
@@ -637,11 +621,8 @@ public class ConfigMap implements ConfigStoreListener {
 
 	@Override /* Object */
 	public String toString() {
-		readLock();
-		try {
+		try (SimpleLock x = lock.read()) {
 			return asString();
-		} finally {
-			readUnlock();
 		}
 	}
 
@@ -658,8 +639,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public OMap asMap() {
 		OMap m = new OMap();
-		readLock();
-		try {
+		try (SimpleLock x = lock.read()) {
 			for (Import i : imports)
 				m.putAll(i.getConfigMap().asMap());
 			for (ConfigSection cs : entries.values()) {
@@ -668,8 +648,6 @@ public class ConfigMap implements ConfigStoreListener {
 					m2.put(ce.key, ce.value);
 				m.put(cs.name, m2);
 			}
-		} finally {
-			readUnlock();
 		}
 		return m;
 	}
@@ -682,12 +660,9 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Writer writeTo(Writer w) throws IOException {
-		readLock();
-		try {
+		try (SimpleLock x = lock.read()) {
 			for (ConfigSection cs : entries.values())
 				cs.writeTo(w);
-		} finally {
-			readUnlock();
 		}
 		return w;
 	}
@@ -699,14 +674,11 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public ConfigMap rollback() {
 		if (changes.size() > 0) {
-			writeLock();
-			try {
+			try (SimpleLock x = lock.write()) {
 				changes.clear();
 				load(contents);
 			} catch (IOException e) {
 				throw runtimeException(e);
-		 	} finally {
-				writeUnlock();
 			}
 		}
 		return this;
@@ -716,22 +688,6 @@ public class ConfigMap implements ConfigStoreListener {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Private methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private void readLock() {
-		lock.readLock().lock();
-	}
-
-	private void readUnlock() {
-		lock.readLock().unlock();
-	}
-
-	private void writeLock() {
-		lock.writeLock().lock();
-	}
-
-	private void writeUnlock() {
-		lock.writeLock().unlock();
-	}
 
 	private void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
