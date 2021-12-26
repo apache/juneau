@@ -644,7 +644,7 @@ public final class Config extends Context implements ConfigEventListener {
 		String sname = sname(key);
 		String skey = skey(key);
 
-		ConfigEntry ce = configMap.getEntry(sname, skey);
+		ConfigMapEntry ce = configMap.getEntry(sname, skey);
 
 		if (ce == null || ce.getValue() == null)
 			return null;
@@ -697,7 +697,7 @@ public final class Config extends Context implements ConfigEventListener {
 		String sname = sname(key);
 		String skey = skey(key);
 
-		ConfigEntry ce = configMap.getEntry(sname, skey);
+		ConfigMapEntry ce = configMap.getEntry(sname, skey);
 		if (ce == null && value == null)
 			return this;
 
@@ -846,7 +846,7 @@ public final class Config extends Context implements ConfigEventListener {
 		checkWrite();
 		for (String section : configMap.getSections()) {
 			for (String key : configMap.getKeys(section)) {
-				ConfigEntry ce = configMap.getEntry(section, key);
+				ConfigMapEntry ce = configMap.getEntry(section, key);
 				if (ce != null && ce.hasModifier('*') && ! encoder.isEncoded(ce.getValue())) {
 					configMap.setEntry(section, key, encoder.encode(section + '/' + key, ce.getValue()), null, null, null);
 				}

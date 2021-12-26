@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
  */
 public class Entry {
 
-	private final ConfigEntry configEntry;
+	private final ConfigMapEntry configEntry;
 	private final Config config;
 	private final String value;
 

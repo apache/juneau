@@ -29,17 +29,17 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ConfigEntry {
+public class ConfigMapEntry {
 	final String rawLine;
 	final String key, value, comment;
 	final String modifiers;
 	final List<String> preLines;
 
-	static final ConfigEntry NULL = new ConfigEntry(null, null, null, null, null);
+	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 
 	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
 
-	ConfigEntry(String line, List<String> preLines) {
+	ConfigMapEntry(String line, List<String> preLines) {
 		this.rawLine = line;
 		int i = line.indexOf('=');
 		String key = line.substring(0, i).trim();
@@ -71,7 +71,7 @@ public class ConfigEntry {
 		this.preLines = AList.unmodifiable(preLines);
 	}
 
-	ConfigEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
+	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
 		this.rawLine = null;
 		this.key = key;
 		this.value = value;

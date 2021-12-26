@@ -222,13 +222,13 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return The entry, or <jk>null</jk> if the entry doesn't exist.
 	 */
-	public ConfigEntry getEntry(String section, String key) {
+	public ConfigMapEntry getEntry(String section, String key) {
 		checkSectionName(section);
 		checkKeyName(key);
 		readLock();
 		try {
 			ConfigSection cs = entries.get(section);
-			ConfigEntry ce = cs == null ? null : cs.entries.get(key);
+			ConfigMapEntry ce = cs == null ? null : cs.entries.get(key);
 
 			if (ce == null) {
 				for (Import i : imports) {
@@ -466,9 +466,9 @@ public class ConfigMap implements ConfigStoreListener {
 					cs = new ConfigSection(section);
 					entries.put(section, cs);
 				}
-				ConfigEntry oe = cs.entries.get(ce.getKey());
+				ConfigMapEntry oe = cs.entries.get(ce.getKey());
 				if (oe == null)
-					oe = ConfigEntry.NULL;
+					oe = ConfigMapEntry.NULL;
 				cs.addEntry(
 					ce.getKey(),
 					ce.getValue() == null ? oe.value : ce.getValue(),
@@ -587,7 +587,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	boolean hasEntry(String section, String key) {
 		ConfigSection cs = entries.get(section);
-		ConfigEntry ce = cs == null ? null : cs.entries.get(key);
+		ConfigMapEntry ce = cs == null ? null : cs.entries.get(key);
 		return ce != null;
 	}
 
@@ -664,7 +664,7 @@ public class ConfigMap implements ConfigStoreListener {
 				m.putAll(i.getConfigMap().asMap());
 			for (ConfigSection cs : entries.values()) {
 				Map<String,String> m2 = new LinkedHashMap<>();
-				for (ConfigEntry ce : cs.entries.values())
+				for (ConfigMapEntry ce : cs.entries.values())
 					m2.put(ce.key, ce.value);
 				m.put(cs.name, m2);
 			}
@@ -804,7 +804,7 @@ public class ConfigMap implements ConfigStoreListener {
 		for (Import i : newMap.imports) {
 			if (! imports.contains(i)) {
 				for (ConfigSection s : i.getConfigMap().entries.values()) {
-					for (ConfigEntry e : s.oentries.values()) {
+					for (ConfigMapEntry e : s.oentries.values()) {
 						if (! newMap.hasEntry(s.name, e.key)) {
 							changes.add(ConfigEvent.setEntry(name, s.name, e.key, e.value, e.modifiers, e.comment, e.preLines));
 						}
@@ -817,7 +817,7 @@ public class ConfigMap implements ConfigStoreListener {
 		for (Import i : imports) {
 			if (! newMap.imports.contains(i)) {
 				for (ConfigSection s : i.getConfigMap().entries.values()) {
-					for (ConfigEntry e : s.oentries.values()) {
+					for (ConfigMapEntry e : s.oentries.values()) {
 						if (! newMap.hasEntry(s.name, e.key)) {
 							changes.add(ConfigEvent.removeEntry(name, s.name, e.key));
 						}
@@ -830,18 +830,18 @@ public class ConfigMap implements ConfigStoreListener {
 			ConfigSection s = oentries.get(ns.name);
 			if (s == null) {
 				//changes.add(ConfigEvent.setSection(ns.name, ns.preLines));
-				for (ConfigEntry ne : ns.entries.values()) {
+				for (ConfigMapEntry ne : ns.entries.values()) {
 					changes.add(ConfigEvent.setEntry(name, ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 				}
 			} else {
-				for (ConfigEntry ne : ns.oentries.values()) {
-					ConfigEntry e = s.oentries.get(ne.key);
+				for (ConfigMapEntry ne : ns.oentries.values()) {
+					ConfigMapEntry e = s.oentries.get(ne.key);
 					if (e == null || ne(e.value, ne.value)) {
 						changes.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 					}
 				}
-				for (ConfigEntry e : s.oentries.values()) {
-					ConfigEntry ne = ns.oentries.get(e.key);
+				for (ConfigMapEntry e : s.oentries.values()) {
+					ConfigMapEntry ne = ns.oentries.get(e.key);
 					if (ne == null) {
 						changes.add(ConfigEvent.removeEntry(name, s.name, e.key));
 					}
@@ -853,7 +853,7 @@ public class ConfigMap implements ConfigStoreListener {
 			ConfigSection ns = newMap.oentries.get(s.name);
 			if (ns == null) {
 				//changes.add(ConfigEvent.removeSection(s.name));
-				for (ConfigEntry e : s.oentries.values())
+				for (ConfigMapEntry e : s.oentries.values())
 					changes.add(ConfigEvent.removeEntry(name, s.name, e.key));
 			}
 		}
@@ -885,8 +885,8 @@ public class ConfigMap implements ConfigStoreListener {
 		final List<String> preLines = Collections.synchronizedList(new ArrayList<String>());
 		private final String rawLine;
 
-		final Map<String,ConfigEntry> oentries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigEntry>());
-		final Map<String,ConfigEntry> entries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigEntry>());
+		final Map<String,ConfigMapEntry> oentries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigMapEntry>());
+		final Map<String,ConfigMapEntry> entries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigMapEntry>());
 
 		/**
 		 * Constructor.
@@ -923,7 +923,7 @@ public class ConfigMap implements ConfigStoreListener {
 					}
 				} else {
 					if (c != '#' && l.indexOf('=') != -1) {
-						ConfigEntry e = new ConfigEntry(l, lines.subList(start, i));
+						ConfigMapEntry e = new ConfigMapEntry(l, lines.subList(start, i));
 						if (entries.containsKey(e.key))
 							throw new ConfigException("Duplicate entry found in section [{0}] of configuration:  {1}", name, e.key);
 						entries.put(e.key, e);
@@ -938,7 +938,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		ConfigSection addEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
-			ConfigEntry e = new ConfigEntry(key, value, modifiers, comment, preLines);
+			ConfigMapEntry e = new ConfigMapEntry(key, value, modifiers, comment, preLines);
 			this.entries.put(e.key, e);
 			return this;
 		}
@@ -961,7 +961,7 @@ public class ConfigMap implements ConfigStoreListener {
 					w.append('\n');
 			}
 
-			for (ConfigEntry e : entries.values())
+			for (ConfigMapEntry e : entries.values())
 				e.writeTo(w);
 
 			return w;
