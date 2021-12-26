@@ -81,6 +81,15 @@ public class ConfigEntry {
 	}
 
 	/**
+	 * Returns the name of this entry.
+	 *
+	 * @return The name of this entry.
+	 */
+	public String getKey() {
+		return key;
+	}
+
+	/**
 	 * Returns the raw value of this entry.
 	 *
 	 * @return The raw value of this entry.

@@ -649,7 +649,7 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
 		// --------------------------------------------------------------------------------
-		this.consoleEnabled = ObjectUtils.firstNonNull(builder.consoleEnabled, config.getBoolean("Console/enabled", false));
+		this.consoleEnabled = ObjectUtils.firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
 		if (consoleEnabled) {
 			Console c = System.console();
 			this.consoleReader = ObjectUtils.firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
@@ -658,7 +658,7 @@ public class Microservice implements ConfigEventListener {
 			for (ConsoleCommand cc : builder.consoleCommands) {
 				consoleCommandMap.put(cc.getName(), cc);
 			}
-			for (String s : config.getStringArray("Console/commands")) {
+			for (String s : config.get("Console/commands").asStringArray().orElse(new String[0])) {
 				ConsoleCommand cc;
 				try {
 					cc = (ConsoleCommand)Class.forName(s).newInstance();
@@ -760,7 +760,7 @@ public class Microservice implements ConfigEventListener {
 		Set<String> spKeys = config.getKeys("SystemProperties");
 		if (spKeys != null)
 			for (String key : spKeys)
-				System.setProperty(key, config.getString("SystemProperties/"+key));
+				System.setProperty(key, config.get("SystemProperties/"+key).orElse(null));
 
 		// --------------------------------------------------------------------------------
 		// Initialize logging.
@@ -770,43 +770,42 @@ public class Microservice implements ConfigEventListener {
 		if (this.logger == null) {
 			LogManager.getLogManager().reset();
 			this.logger = Logger.getLogger("");
-			String logFile = firstNonNull(logConfig.logFile, config.getString("Logging/logFile"));
+			String logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
 			if (isNotEmpty(logFile)) {
-				String logDir = firstNonNull(logConfig.logDir, config.getString("Logging/logDir", "."));
+				String logDir = firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				File logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
 				System.setProperty("juneau.logDir", logDir);
 
-				boolean append = firstNonNull(logConfig.append, config.getBoolean("Logging/append"));
-				int limit = firstNonNull(logConfig.limit, config.getInt("Logging/limit", 1024*1024));
-				int count = firstNonNull(logConfig.count, config.getInt("Logging/count", 1));
+				boolean append = firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
+				int limit = firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024*1024));
+				int count = firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
 
 				FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
 
 				Formatter f = logConfig.formatter;
 				if (f == null) {
-					String format = config.getString("Logging/format", "[{date} {level}] {msg}%n");
-					String dateFormat = config.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss");
-					boolean useStackTraceHashes = config.getBoolean("Logging/useStackTraceHashes");
+					String format = config.get("Logging/format").orElse("[{date} {level}] {msg}%n");
+					String dateFormat = config.get("Logging/dateFormat").orElse("yyyy.MM.dd hh:mm:ss");
+					boolean useStackTraceHashes = config.get("Logging/useStackTraceHashes").asBoolean().orElse(false);
 					f = new LogEntryFormatter(format, dateFormat, useStackTraceHashes);
 				}
 				fh.setFormatter(f);
-				fh.setLevel(firstNonNull(logConfig.fileLevel, config.getObjectWithDefault("Logging/fileLevel", Level.INFO, Level.class)));
+				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
 				logger.addHandler(fh);
 
 				ConsoleHandler ch = new ConsoleHandler();
-				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.getObjectWithDefault("Logging/consoleLevel", Level.WARNING, Level.class)));
+				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
 				ch.setFormatter(f);
 				logger.addHandler(ch);
 			}
 		}
 
-		OMap loggerLevels = config.getObject("Logging/levels", OMap.class);
-		if (loggerLevels != null)
-			for (String l : loggerLevels.keySet())
-				Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
+		OMap loggerLevels = config.get("Logging/levels").as(OMap.class).orElseGet(OMap::new);
+		for (String l : loggerLevels.keySet())
+			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
 		for (String l : logConfig.levels.keySet())
 			Logger.getLogger(l).setLevel(logConfig.levels.get(l));
 

@@ -13,20 +13,24 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Guards', flags:'todo'}
+{title:'Guards', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		Guards are classes that control access to REST classes and methods.
+		Guards control access to REST classes and methods.
+		When guards are associated at the class-level, it's equivalent to associating guards on all Java methods on 
+		the servlet.
+		If multiple guards are present, ALL guards must pass.  (Note that this is different in behavior to {@doc jrs.Matchers Matchers}
+		which require only one matcher to pass.)
 	</p>
 	<p>
 		Guards are associated with resource classes and methods via the following:
 	</p>
-	<ul class='javatree'>
+	<ul class='javatreec'>
 		<li class='ja'>{@link oajr.annotation.Rest#guards() Rest(guards)} 
 		<li class='ja'>{@link oajr.annotation.RestOp#guards() RestOp(guards)} 
-		<li class='jm'>{@del oajr.RestContext.Builder#guards(Class...)} 
 	</ul>
+	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
 		|	<jc>// Define a guard that only lets Billy make a request</jc>
 		|	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
@@ -51,7 +55,7 @@
 	</p>
 	<p class='bcode w800'>
 		|	<jc>// DELETE method</jc>
-		|	<ja>@RestDDelete</ja>(guards={AdminGuard.<jk>class</jk>})
+		|	<ja>@RestDelete</ja>(guards={AdminGuard.<jk>class</jk>})
 		|	<jk>public void</jk> doDelete(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {...}
 	</p>
 	<p class='bcode w800'>
@@ -65,7 +69,7 @@
 	</p>
 	<p>
 		A guard failure results in an <l>HTTP 401 Unauthorized</l> response.
-		However, this can be configured by overriding the 
+		However, this can be configured by overriding 
 		{@link oajr.guard.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 		yourself.
 	</p>
@@ -73,19 +77,29 @@
 		|	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 		|
 		|		<ja>@Override</ja> <jc>/* RestGuard */</jc>
-		|		<jk>public boolean</jk> guard(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> RestException {
+		|		<jk>public boolean</jk> guard(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> BasicHttpException {
 		|			<jk>if</jk> (! isOkay(req))
-		|				<jk>throw new</jk> RestException(<jsf>SC_FORBIDDEN</jsf>, <js>"Access denied!!!"</js>);
+		|				<jk>throw new</jk> Forbidden(<js>"Access denied!!!"</js>);
 		|			<jk>return true</jk>;
 		|		}
 		|	}
 	</p>
 	<p>
-		When guards are associated at the class-level, it's equivalent to associating guards on all Java methods on 
-		the servlet.
-		If multiple guards are present, ALL guards must pass.
+		A simplified format is available for matching based on the user role on the request using the following:
 	</p>
-	<ul class='seealso'>
-		<li class='jf'>{@del oajr.RestContext#REST_guards}
+	
+	<ul class='javatreec'>
+		<li class='ja'>{@link oajr.annotation.Rest#roleGuard() Rest(roleGuard)} 
+		<li class='ja'>{@link oajr.annotation.RestOp#roleGuard() RestOp(roleGuard)} 
 	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+	|	<ja>@Rest</ja>(
+	|		path=<js>"/foo"</js>,
+	|		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+	|	)
+	|	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	|		...
+	|	}
+	</p>
 </div>

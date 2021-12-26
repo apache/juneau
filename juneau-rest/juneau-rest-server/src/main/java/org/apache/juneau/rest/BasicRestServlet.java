@@ -156,7 +156,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicUnive
 
 	@Override /* BasicRestOperations */
 	public HttpResource getFavIcon() {
-		String favIcon = getContext().getConfig().getString("REST/favicon", "images/juneau.png");
+		String favIcon = getContext().getConfig().get("REST/favicon").orElse("images/juneau.png");
 		return getHtdoc(favIcon, null);
 	}
 

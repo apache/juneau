@@ -61,7 +61,7 @@ public class ConfigCommand extends ConsoleCommand {
 			if (option.equals("get")) {
 				// config get <key>
 				if (args.size() == 3) {
-					String val = conf.getString(key);
+					String val = conf.get(key).orElse(null);
 					if (val != null)
 						out.println(val);
 					else
@@ -82,7 +82,7 @@ public class ConfigCommand extends ConsoleCommand {
 			} else if (option.equals("remove")) {
 				// config remove <key>
 				if (args.size() == 3) {
-					if (conf.getString(key) != null) {
+					if (conf.get(key).isPresent()) {
 						conf.remove(key);
 						out.println(mb.getString("ConfigRemove", key));
 					} else {

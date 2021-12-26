@@ -670,15 +670,15 @@ public class JettyMicroservice extends Microservice {
 		OMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
-		int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class));
+		int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(()->mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class)));
 		int availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)
 			System.setProperty("availablePort", String.valueOf(availablePort));
 
 		String jettyXml = builder.jettyXml;
-		String jettyConfig = cf.getString("Jetty/config", mf.getString("Jetty-Config", "jetty.xml"));
-		boolean resolveVars = ObjectUtils.firstNonNull(builder.jettyXmlResolveVars, cf.getBoolean("Jetty/resolveVars"));
+		String jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
+		boolean resolveVars = ObjectUtils.firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 
 		if (jettyXml == null)
 			jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");
@@ -696,7 +696,7 @@ public class JettyMicroservice extends Microservice {
 			throw new ExecutableException(e2);
 		}
 
-		for (String s : cf.getStringArray("Jetty/servlets", new String[0])) {
+		for (String s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
 			try {
 				ClassInfo c = ClassInfo.of(Class.forName(s));
 				if (c.isChildOf(RestServlet.class)) {
@@ -710,7 +710,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.getMap("Jetty/servletMap", OMap.EMPTY_MAP).entrySet()) {
+		for (Map.Entry<String,Object> e : cf.get("Jetty/servletMap").asMap().orElse(OMap.EMPTY_MAP).entrySet()) {
 			try {
 				ClassInfo c = ClassInfo.of(Class.forName(e.getValue().toString()));
 				if (c.isChildOf(Servlet.class)) {
@@ -724,7 +724,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.getMap("Jetty/servletAttributes", OMap.EMPTY_MAP).entrySet())
+		for (Map.Entry<String,Object> e : cf.get("Jetty/servletAttributes").asMap().orElse(OMap.EMPTY_MAP).entrySet())
 			addServletAttribute(e.getKey(), e.getValue());
 
 		for (Map.Entry<String,Servlet> e : builder.servlets.entrySet())

@@ -34,6 +34,6 @@ public class ConfigResource extends BasicRestServlet {
 
 	@RestOp(method=GET, path="/{key}/{class}")
 	public Object test2(RestRequest req, @Path("key") String key, @Path("class") Class<?> c) throws Exception {
-		return req.getConfig().getObject(key, c);
+		return req.getConfig().get(key).as(c).orElse(null);
 	}
 }

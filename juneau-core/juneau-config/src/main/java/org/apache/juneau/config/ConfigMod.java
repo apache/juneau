@@ -45,7 +45,7 @@ public enum ConfigMod {
 	 * @param mods The modifiers.
 	 * @return A modifier string, or an empty string if there are no modifiers.
 	 */
-	public static String asString(ConfigMod...mods) {
+	public static String toModString(ConfigMod...mods) {
 		if (mods.length == 0)
 			return "";
 		if (mods.length == 1)
@@ -69,7 +69,7 @@ public enum ConfigMod {
 	 * @param s The modifier string.
 	 * @return The list of modifiers, or an empty list if the string is empty or <jk>null</jk>.
 	 */
-	public static List<ConfigMod> asModifiersReverse(String s) {
+	public static List<ConfigMod> toReverse(String s) {
 		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.length() == 1) {
@@ -91,7 +91,7 @@ public enum ConfigMod {
 	 * @param s The modifier string.
 	 * @return The list of modifiers, or an empty list if the string is empty or <jk>null</jk>.
 	 */
-	public static List<ConfigMod> asModifiers(String s) {
+	public static List<ConfigMod> toModifiers(String s) {
 		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.length() == 1) {

@@ -106,6 +106,31 @@
 		|	}
 	</p>
 	<p>
+		Swaps are associated serializers and parsers registered on a REST resource via the {@link oaj.annotation.BeanConfig} annotation
+		on either the class or method level:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Servlet with transforms applied</jc>
+		|	<ja>@Rest</ja>(
+		|		...
+		|	)
+		|	<ja>@BeanConfig</ja>(
+		|		swaps={
+		|			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
+		|			TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
+		|
+		|			<jc>// Byte arrays should be serialized/parsed as BASE64-encoded strings</jc>
+		|			ByteArraySwap.Base64.<jk>class</jk>
+		|		},
+		|		beanFilters={
+		|			<jc>// Subclasses of MyInterface will be treated as MyInterface objects.</jc>
+		|			<jc>// Bean properties not defined on that interface will be ignored.</jc>
+		|			MyInterface.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+	</p>
+	<p>
 		Config annotations are defined for all serializers and parsers:
 	</p>
 	<ul class='javatreec'>

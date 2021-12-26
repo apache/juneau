@@ -42,9 +42,9 @@ public class GetConfiguration implements Command, GetValue<Map<String, ConfigIte
 
 		Config config = Config.create().name("juneau-server-config.cfg").build();
 
-		String pathStr = config.getString("GitServer/pathLocal");
+		String pathStr = config.get("GitServer/pathLocal").orElse(null);
 
-		String git = config.get("GitServer/gitRemote");
+		String git = config.get("GitServer/gitRemote").orElse(null);
 
 		GitControl gitControl = new GitControl(pathStr, git);
 

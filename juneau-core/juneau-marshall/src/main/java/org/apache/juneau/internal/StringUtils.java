@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.math.*;
@@ -2279,6 +2280,9 @@ public final class StringUtils {
 	 * 	<li><js>"K"</js> - x 1024
 	 * 	<li><js>"M"</js> - x 1024*1024
 	 * 	<li><js>"G"</js> - x 1024*1024*1024
+	 * 	<li><js>"k"</js> - x 1000
+	 * 	<li><js>"m"</js> - x 1000*1000
+	 * 	<li><js>"g"</js> - x 1000*1000*1000
 	 * </ul>
 	 *
 	 * @param s The string to parse.
@@ -2286,18 +2290,21 @@ public final class StringUtils {
 	 */
 	public static int parseIntWithSuffix(String s) {
 		assertArgNotNull("s", s);
-		int m = 1;
-		if (s.endsWith("G")) {
-			m = 1024*1024*1024;
-			s = s.substring(0, s.length()-1).trim();
-		} else if (s.endsWith("M")) {
-			m = 1024*1024;
-			s = s.substring(0, s.length()-1).trim();
-		} else if (s.endsWith("K")) {
-			m = 1024;
-			s = s.substring(0, s.length()-1).trim();
-		}
-		return Integer.decode(s) * m;
+		int m = multiplier(s);
+		if (m == 1)
+			return Integer.decode(s);
+		return Integer.decode(s.substring(0, s.length()-1).trim()) * m;
+	}
+
+	private static int multiplier(String s) {
+		char c = s.length() == 0 ? null : s.charAt(s.length()-1);
+		if (c == 'G') return 1024*1024*1024;
+		if (c == 'M') return 1024*1024;
+		if (c == 'K') return 1024;
+		if (c == 'g') return 1000*1000*1000;
+		if (c == 'm') return 1000*1000;
+		if (c == 'k') return 1000;
+		return 1;
 	}
 
 	/**
@@ -2309,6 +2316,13 @@ public final class StringUtils {
 	 * 	<li><js>"K"</js> - x 1024
 	 * 	<li><js>"M"</js> - x 1024*1024
 	 * 	<li><js>"G"</js> - x 1024*1024*1024
+	 * 	<li><js>"T"</js> - x 1024*1024*1024*1024
+	 * 	<li><js>"P"</js> - x 1024*1024*1024*1024*1024
+	 * 	<li><js>"k"</js> - x 1000
+	 * 	<li><js>"m"</js> - x 1000*1000
+	 * 	<li><js>"g"</js> - x 1000*1000*1000
+	 * 	<li><js>"t"</js> - x 1000*1000*1000*1000
+	 * 	<li><js>"p"</js> - x 1000*1000*1000*1000*1000
 	 * </ul>
 	 *
 	 * @param s The string to parse.
@@ -2316,18 +2330,25 @@ public final class StringUtils {
 	 */
 	public static long parseLongWithSuffix(String s) {
 		assertArgNotNull("s", s);
-		int m = 1;
-		if (s.endsWith("G")) {
-			m = 1024*1024*1024;
-			s = s.substring(0, s.length()-1).trim();
-		} else if (s.endsWith("M")) {
-			m = 1024*1024;
-			s = s.substring(0, s.length()-1).trim();
-		} else if (s.endsWith("K")) {
-			m = 1024;
-			s = s.substring(0, s.length()-1).trim();
-		}
-		return Long.decode(s) * m;
+		long m = multiplier2(s);
+		if (m == 1)
+			return Long.decode(s);
+		return Long.decode(s.substring(0, s.length()-1).trim()) * m;
+	}
+
+	private static long multiplier2(String s) {
+		char c = s.length() == 0 ? null : s.charAt(s.length()-1);
+		if (c == 'P') return 1024*1024*1024*1024*1024;
+		if (c == 'T') return 1024*1024*1024*1024;
+		if (c == 'G') return 1024*1024*1024;
+		if (c == 'M') return 1024*1024;
+		if (c == 'K') return 1024;
+		if (c == 'p') return 1000*1000*1000*1000*1000;
+		if (c == 't') return 1000*1000*1000*1000;
+		if (c == 'g') return 1000*1000*1000;
+		if (c == 'm') return 1000*1000;
+		if (c == 'k') return 1000;
+		return 1;
 	}
 
 	/**

@@ -93,12 +93,12 @@ public class LogsResource extends BasicRestServlet {
 	final boolean allowDeletes;
 
 	public LogsResource(Config c) {
-		logDir = new File(c.getString(LOGS_RESOURCE_logDir, "logDir"));
-		allowDeletes = c.getBoolean(LOGS_RESOURCE_allowDeletes, true);
+		logDir = new File(c.get(LOGS_RESOURCE_logDir).orElse("logDir"));
+		allowDeletes = c.get(LOGS_RESOURCE_allowDeletes).asBoolean().orElse(true);
 		leFormatter = new LogEntryFormatter(
-			c.getString(LOGS_RESOURCE_logFormat, "[{date} {level}] {msg}%n"),
-			c.getString(LOGS_RESOURCE_dateFormat, "yyyy.MM.dd hh:mm:ss"),
-			c.getBoolean(LOGS_RESOURCE_useStackTraceHashes, true)
+			c.get(LOGS_RESOURCE_logFormat).orElse("[{date} {level}] {msg}%n"),
+			c.get(LOGS_RESOURCE_dateFormat).orElse("yyyy.MM.dd hh:mm:ss"),
+			c.get(LOGS_RESOURCE_useStackTraceHashes).asBoolean().orElse(true)
 		);
 	}
 

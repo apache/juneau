@@ -40,7 +40,7 @@ public class ConfigImportsTest {
 			.create("B")
 			.store(ms)
 			.build();
-		assertEquals("1", c.getString("x"));
+		assertEquals("1", c.get("x").get());
 
 		c.set("x", "2");
 		c.commit();
@@ -55,8 +55,8 @@ public class ConfigImportsTest {
 		ms.write("A2", "", "y=2");
 		ms.write("B", "", "<A1>\n<A2>");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("1", c.getString("x"));
-		assertEquals("2", c.getString("y"));
+		assertEquals("1", c.get("x").get());
+		assertEquals("2", c.get("y").get());
 
 		c.set("x", "3");
 		c.set("y", "4");
@@ -73,8 +73,8 @@ public class ConfigImportsTest {
 		ms.write("A2", "", "<A1>\ny=2");
 		ms.write("B", "", "<A2>");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("1", c.getString("x"));
-		assertEquals("2", c.getString("y"));
+		assertEquals("1", c.get("x").get());
+		assertEquals("2", c.get("y").get());
 
 		c.set("x", "3");
 		c.set("y", "4");
@@ -99,7 +99,7 @@ public class ConfigImportsTest {
 		ConfigMemoryStore ms = ConfigMemoryStore.create().build();
 		ms.write("B", "", "<A>\nx=1");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("1", c.getString("x"));
+		assertEquals("1", c.get("x").get());
 	}
 
 	@Test
@@ -108,10 +108,10 @@ public class ConfigImportsTest {
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("1", c.getString("x"));
+		assertEquals("1", c.get("x").get());
 		c.set("x", "2");
-		assertEquals("2", c.getString("x"));
-		assertEquals("1", Config.create("A").store(ms).build().getString("x"));
+		assertEquals("2", c.get("x").get());
+		assertEquals("1", Config.create("A").store(ms).build().get("x").get());
 	}
 
 	@Test
@@ -120,8 +120,8 @@ public class ConfigImportsTest {
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na2=2");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("1", c.getString("A/a1"));
-		assertEquals("2", c.getString("A/a2"));
+		assertEquals("1", c.get("A/a1").get());
+		assertEquals("2", c.get("A/a2").get());
 	}
 
 	@Test
@@ -130,8 +130,8 @@ public class ConfigImportsTest {
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "[A]\na2=2\n<A>");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("1", c.getString("A/a1"));
-		assertEquals("2", c.getString("A/a2"));
+		assertEquals("1", c.get("A/a1").get());
+		assertEquals("2", c.get("A/a2").get());
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class ConfigImportsTest {
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
 		Config c = Config.create("B").store(ms).build();
-		assertEquals("2", c.getString("A/a1"));
+		assertEquals("2", c.get("A/a1").get());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -207,8 +207,8 @@ public class ConfigImportsTest {
 		assertEquals(1, l.getEvents().size());
 		assertEquals("2", l.getNewValue("A", "a1"));
 
-		assertEquals("2", cb.get("A/a1"));
-		assertEquals("2", cb.get("B/b1"));
+		assertEquals("2", cb.get("A/a1").get());
+		assertEquals("2", cb.get("B/b1").get());
 
 		l.reset();
 		cb.removeListener(l);
@@ -219,8 +219,8 @@ public class ConfigImportsTest {
 
 		assertFalse(l.isTriggered());
 
-		assertEquals("3", cb.get("A/a1"));
-		assertEquals("2", cb.get("B/b1"));
+		assertEquals("3", cb.get("A/a1").get());
+		assertEquals("2", cb.get("B/b1").get());
 	}
 
 	@Test
@@ -252,9 +252,9 @@ public class ConfigImportsTest {
 		assertEquals(1, l.getEvents().size());
 		assertEquals("2", l.getNewValue("A", "a1"));
 
-		assertEquals("2", cc.get("A/a1"));
-		assertEquals("2", cc.get("B/b1"));
-		assertEquals("3", cc.get("C/c1"));
+		assertEquals("2", cc.get("A/a1").get());
+		assertEquals("2", cc.get("B/b1").get());
+		assertEquals("3", cc.get("C/c1").get());
 
 		l.reset();
 		cc.removeListener(l);
@@ -266,9 +266,9 @@ public class ConfigImportsTest {
 
 		assertFalse(l.isTriggered());
 
-		assertEquals("3", cc.get("A/a1"));
-		assertEquals("2", cc.get("B/b1"));
-		assertEquals("3", cc.get("C/c1"));
+		assertEquals("3", cc.get("A/a1").get());
+		assertEquals("2", cc.get("B/b1").get());
+		assertEquals("3", cc.get("C/c1").get());
 	}
 
 	@Test
@@ -293,8 +293,8 @@ public class ConfigImportsTest {
 		assertEquals(1, l.getEvents().size());
 		assertEquals("2", l.getNewValue("A", "a1"));
 
-		assertEquals("2", cb.get("A/a1"));
-		assertEquals("2", cb.get("A/b1"));
+		assertEquals("2", cb.get("A/a1").get());
+		assertEquals("2", cb.get("A/b1").get());
 
 		l.reset();
 		cb.removeListener(l);
@@ -305,8 +305,8 @@ public class ConfigImportsTest {
 
 		assertFalse(l.isTriggered());
 
-		assertEquals("3", cb.get("A/a1"));
-		assertEquals("2", cb.get("A/b1"));
+		assertEquals("3", cb.get("A/a1").get());
+		assertEquals("2", cb.get("A/b1").get());
 	}
 
 	@Test
@@ -328,7 +328,7 @@ public class ConfigImportsTest {
 		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=3");
 
 		assertFalse(l.isTriggered());
-		assertEquals("2", cb.get("A/a1"));
+		assertEquals("2", cb.get("A/a1").get());
 	}
 
 	@Test
@@ -353,7 +353,7 @@ public class ConfigImportsTest {
 		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=4");
 
 		assertFalse(l.isTriggered());
-		assertEquals("3", cc.get("A/a1"));
+		assertEquals("3", cc.get("A/a1").get());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -385,8 +385,8 @@ public class ConfigImportsTest {
 		assertEquals(2, l.getEvents().size());  // Should contain [SET(y = 1), SET(A/a1 = 1)]
 		assertEquals("1", l.getNewValue("A", "a1"));
 
-		assertEquals("1", cb.get("A/a1"));
-		assertEquals("2", cb.get("B/b1"));
+		assertEquals("1", cb.get("A/a1").get());
+		assertEquals("2", cb.get("B/b1").get());
 
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
@@ -399,8 +399,8 @@ public class ConfigImportsTest {
 		assertEquals(2, l.getEvents().size());  // Should contain [REMOVE_ENTRY(y), REMOVE_ENTRY(A/a1)]
  		assertEquals(null, l.getNewValue("A", "a1"));
 
-		assertNull(cb.get("A/a1"));
-		assertEquals("2", cb.get("B/b1"));
+		assertNull(cb.get("A/a1").orElse(null));
+		assertEquals("2", cb.get("B/b1").get());
 
 		l.reset();
 		cb.removeListener(l);
@@ -411,7 +411,7 @@ public class ConfigImportsTest {
 
 		assertFalse(l.isTriggered());
 
-		assertEquals("1", cb.get("A/a1"));
-		assertEquals("2", cb.get("B/b1"));
+		assertEquals("1", cb.get("A/a1").get());
+		assertEquals("2", cb.get("B/b1").get());
 	}
 }

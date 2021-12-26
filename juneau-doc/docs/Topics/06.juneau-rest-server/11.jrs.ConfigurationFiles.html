@@ -13,12 +13,25 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Configuration Files', flags:'todo'}
+{title:'Configuration Files', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
 		The Server API provides methods for associating configuration files with REST servlets so that 
-		configuration properties can be defined in external files.
+		configuration properties can be defined in external files.  It uses the following annotation:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest#config() Rest(config)}
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<ja>@Rest</ja>(
+		|		<jc>// Config file is located at ./config_dir/myconfig.cfg</jc>
+		|		config=<js>"config_dir/myconfig.cfg"</js>,
+		|		...
+		|	)
+		|	<jk>public class</jk> MyResource {...}
 	</p>
 	<p>
 		In recap, the Configuration API provides support for INI-style configuration files with embedded string variables:
@@ -38,26 +51,13 @@
 		These properties are then accessible through the {@link oaj.config.Config} class.
 	</p>
 	<p class='bcode w800'>
-		|	Config c = Config.<jsm>create</jsm>(<js>"myconfig.cfg"</js>).build();
-		|	String path = c.getString(<js>"MyProperties/path"</js>);
-		|	File javaHome = c.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
-		|	String customMessage = c.getString(<js>"MyProperties/customMessage"</js>);
-	</p>
-	<p>
-		Configuration files are associated with REST resources through the following:
-	</p>
-	<ul class='javatree'>
-		<li class='ja'>{@link oajr.annotation.Rest#config() Rest(config)}
-	</ul>
-	
-	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-		|	<ja>@Rest</ja>(
-		|		<jc>// Config file is located at ./config_dir/myconfig.cfg</jc>
-		|		config=<js>"config_dir/myconfig.cfg"</js>,
+		|	<ja>@RestGet</ja>(<js>"/"</js>)
+		|	<jk>public</jk> String sample(Config <jv>config</jv>) {
+		|		String <jv>path</jv> = <jv>config</jv>.getString(<js>"MyProperties/path"</js>);
+		|		File <jv>javaHome</jv> = <jv>config</jv>.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
+		|		String <jv>customMessage</jv> = <jv>config</jv>.getString(<js>"MyProperties/customMessage"</js>);
 		|		...
-		|	)
-		|	<jk>public class</jk> MyResource {...}
+		|	}
 	</p>
 	<p>
 		The annotation itself can contain string variables.  
@@ -73,8 +73,24 @@
 		|	<jk>public class</jk> MyResource {...}
 	</p>
 	<p>
-		Once a config file has been associated with a REST resource, it can be accessed through the 
-		{@link oajr.RestContext.Builder#getConfig()} method.
+		Spring Boot applications typically define an <c>application.properties</c> file.  You can reuse it
+		as a config file like so:
+	</p>
+	<p class='bcode w800'>
+		|	<ja>@Rest</ja>(
+		|		config=<js>"application.properties"</js>,
+		|		...
+		|	)
+		|	<jk>public class</jk> MyResource {...}
+	</p>
+	<p>
+		Note that properties files are a subset of functionality of INI files (they're basically just INI files with a single default section).  
+		It's therefore possible to use INI-style syntax such as sections in your <c>application.properties</c> file.  
+	</p>
+	<p>
+		Once a config file has been associated with a REST resource, it can be accessed through one of the following:
+		{@link oajr.RestContext.Builder#getConfig()} method.  It can also be access by passing in a {@link oaj.config.Config} bean to any of your
+		REST OP methods.
 	</p>
 	<p>
 		A common usage is to use this method to initialize fields in your servlet.
@@ -85,7 +101,7 @@
 		|		config=<js>"config_dir/myconfig.cfg"</js>,
 		|		...
 		|	)
-		|	<jk>public class</jk> MyResource  {
+		|	<jk>public class</jk> MyResource {
 		|		<jk>private final</jk> String <jf>path</jf>;
 		|		<jk>private final</jk> File <jf>javaHome</jf>;
 		|	
@@ -99,12 +115,10 @@
 		Another common usage is to refer to config properties through <ck>$C</ck> variables in your annotations:
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@Rest</ja>(
-		|		<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			stylesheet=<js>"$C{MyServlet/stylesheet,servlet:/styles/devops.css}"</js>,
-		|		)
-		|		...
+		|	<ja>@Rest</ja>
+		|	<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
+		|	<ja>@HtmlDoc</ja>(
+		|		stylesheet=<js>"$C{MyServlet/stylesheet,servlet:/styles/devops.css}"</js>,
 		|	)
 		|	<jk>public class</jk> MyResource {...}
 	</p>
@@ -134,8 +148,8 @@
 		|		 * Specify the GET parameter "?person=X" for a specialized message! 
 		|		 */</jd>
 		|		<ja>@RestGet</ja>(<js>"/"</js>)
-		|		<jk>public</jk> String sayHello(RestRequest <jv>req</jv>) {
-		|			<jk>return</jk> <jv>req</jv>.getConfig().getString(<js>"HelloWorldResource/message"</js>);
+		|		<jk>public</jk> String sayHello(Config <jv>config</jv>) {
+		|			<jk>return</jk> <jv>config</jv>.getString(<js>"HelloWorldResource/message"</js>);
 		|		}
 		|	}
 	</p>

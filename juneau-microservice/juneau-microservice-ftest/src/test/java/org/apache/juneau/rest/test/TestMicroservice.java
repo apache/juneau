@@ -159,7 +159,7 @@ public class TestMicroservice {
 	private static int dumpCount = 0;
 
 	public static void jettyDump(RequestLine rl, StatusLine sl) {
-		try (FileWriter fw = new FileWriter(microservice.getConfig().getString("Logging/logDir") + "/jetty-thread-dump-"+(dumpCount++)+".log")) {
+		try (FileWriter fw = new FileWriter(microservice.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump-"+(dumpCount++)+".log")) {
 			String dump = microservice.getServer().dump();
 			fw.append("RequestLine = [" + rl + "]\n");
 			fw.append("StatusLine = [" + sl + "]\n");

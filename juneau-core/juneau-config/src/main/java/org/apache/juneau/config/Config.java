@@ -545,10 +545,10 @@ public final class Config extends Context implements ConfigEventListener {
 	final int binaryLineLength;
 	final BinaryFormat binaryFormat;
 	final boolean multiLineValuesOnSeparateLines, readOnly;
+	final BeanSession beanSession;
+	final VarResolverSession varSession;
 
-	private final VarResolverSession varSession;
 	private final ConfigMap configMap;
-	private final BeanSession beanSession;
 	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
 
 
@@ -640,7 +640,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or value doesn't exist.
 	 */
-	public String get(String key) {
+	private String getRaw(String key) {
 
 		String sname = sname(key);
 		String skey = skey(key);
@@ -651,7 +651,7 @@ public final class Config extends Context implements ConfigEventListener {
 			return null;
 
 		String val = ce.getValue();
-		for (ConfigMod m : ConfigMod.asModifiersReverse(ce.getModifiers())) {
+		for (ConfigMod m : ConfigMod.toReverse(ce.getModifiers())) {
 			if (m == ENCODED) {
 				if (encoder.isEncoded(val))
 					val = encoder.decode(key, val);
@@ -674,7 +674,7 @@ public final class Config extends Context implements ConfigEventListener {
 		for (String section : getSections()) {
 			for (String key : getKeys(section)) {
 				String k = (section.isEmpty() ? key : section + '/' + key);
-				System.setProperty(k, get(k));
+				System.setProperty(k, getRaw(k));
 			}
 		}
 		return this;
@@ -705,7 +705,7 @@ public final class Config extends Context implements ConfigEventListener {
 		String mod = ce == null ? "" : ce.getModifiers();
 
 		String s = stringify(value);
-		for (ConfigMod m : ConfigMod.asModifiers(mod)) {
+		for (ConfigMod m : ConfigMod.toModifiers(mod)) {
 			if (m == ENCODED) {
 				s = encoder.encode(key, s);
 			}
@@ -814,7 +814,7 @@ public final class Config extends Context implements ConfigEventListener {
 			}
 		}
 
-		configMap.setEntry(sname, skey, s, modifiers == null ? null : ConfigMod.asString(modifiers), comment, preLines);
+		configMap.setEntry(sname, skey, s, modifiers == null ? null : ConfigMod.toModString(modifiers), comment, preLines);
 		return this;
 	}
 
@@ -873,557 +873,14 @@ public final class Config extends Context implements ConfigEventListener {
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
 	 *
-	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public String getString(String key) {
-		String s = get(key);
-		if (s == null)
-			return null;
-		if (varSession != null)
-			s = varSession.resolve(s);
-		return s;
-	}
-
-	/**
-	 * Gets the entry with the specified key.
-	 *
 	 * <p>
-	 * The key can be in one of the following formats...
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
-	 * 	<li>
-	 * 		<js>"section/key"</js> - A value from the specified section.
-	 * </ul>
+	 * If entry does not exist, returns an empty {@link Entry} object.
 	 *
 	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the section or key does not exist.
+	 * @return The value, never <jk>null</jk>.
 	 */
-	public String getString(String key, String def) {
-		String s = get(key);
-		if (isEmpty(s))
-			return def;
-		if (varSession != null)
-			s = varSession.resolve(s);
-		return s;
-	}
-
-	/**
-	 * Gets the entry with the specified key, splits the value on commas, and returns the values as trimmed strings.
-	 *
-	 * @param key The key.
-	 * @return The value, or an empty array if the section or key does not exist.
-	 */
-	public String[] getStringArray(String key) {
-		return getStringArray(key, new String[0]);
-	}
-
-	/**
-	 * Same as {@link #getStringArray(String)} but returns a default value if the value cannot be found.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the section or key does not exist or is blank.
-	 */
-	public String[] getStringArray(String key, String[] def) {
-		String s = getString(key);
-		if (isEmpty(s))
-			return def;
-		String[] r = split(s);
-		return r.length == 0 ? def : r;
-	}
-
-	/**
-	 * Convenience method for getting int config values.
-	 *
-	 * <p>
-	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<code><js>"100K"</js> => 1024000</code>
-	 * 	<li>
-	 * 		<code><js>"100M"</js> => 104857600</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link Integer#decode(String)} underneath, so any of the following integer formats are supported:
-	 * <ul>
-	 * 	<li><js>"0x..."</js>
-	 * 	<li><js>"0X..."</js>
-	 * 	<li><js>"#..."</js>
-	 * 	<li><js>"0..."</js>
-	 * </ul>
-	 *
-	 * @param key The key.
-	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
-	 */
-	public int getInt(String key) {
-		return getInt(key, 0);
-	}
-
-	/**
-	 * Same as {@link #getInt(String)} but returns a default value if not set.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the value does not exist or the value is empty.
-	 */
-	public int getInt(String key, int def) {
-		String s = getString(key);
-		if (isEmpty(s))
-			return def;
-		return parseIntWithSuffix(s);
-	}
-
-	/**
-	 * Convenience method for getting boolean config values.
-	 *
-	 * @param key The key.
-	 * @return The value, or <jk>false</jk> if the section or key does not exist or cannot be parsed as a boolean.
-	 */
-	public boolean getBoolean(String key) {
-		return getBoolean(key, false);
-	}
-
-	/**
-	 * Convenience method for getting boolean config values.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as a boolean.
-	 */
-	public boolean getBoolean(String key, boolean def) {
-		String s = getString(key);
-		return isEmpty(s) ? def : Boolean.parseBoolean(s);
-	}
-
-	/**
-	 * Convenience method for getting long config values.
-	 *
-	 * <p>
-	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<code><js>"100K"</js> => 1024000</code>
-	 * 	<li>
-	 * 		<code><js>"100M"</js> => 104857600</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link Long#decode(String)} underneath, so any of the following number formats are supported:
-	 * <ul>
-	 * 	<li><js>"0x..."</js>
-	 * 	<li><js>"0X..."</js>
-	 * 	<li><js>"#..."</js>
-	 * 	<li><js>"0..."</js>
-	 * </ul>
-	 *
-	 * @param key The key.
-	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
-	 */
-	public long getLong(String key) {
-		return getLong(key, 0);
-	}
-
-	/**
-	 * Same as {@link #getLong(String)} but returns a default value if not set.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the value does not exist or the value is empty.
-	 */
-	public long getLong(String key, long def) {
-		String s = getString(key);
-		if (isEmpty(s))
-			return def;
-		return parseLongWithSuffix(s);
-	}
-
-	/**
-	 * Convenience method for getting double config values.
-	 *
-	 * <p>
-	 * Uses {@link Double#valueOf(String)} underneath, so any of the following number formats are supported:
-	 * <ul>
-	 * 	<li><js>"0x..."</js>
-	 * 	<li><js>"0X..."</js>
-	 * 	<li><js>"#..."</js>
-	 * 	<li><js>"0..."</js>
-	 * </ul>
-	 *
-	 * @param key The key.
-	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
-	 */
-	public double getDouble(String key) {
-		return getDouble(key, 0);
-	}
-
-	/**
-	 * Same as {@link #getDouble(String)} but returns a default value if not set.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the value does not exist or the value is empty.
-	 */
-	public double getDouble(String key, double def) {
-		String s = getString(key);
-		if (isEmpty(s))
-			return def;
-		return Double.valueOf(s);
-	}
-
-	/**
-	 * Convenience method for getting float config values.
-	 *
-	 * <p>
-	 * Uses {@link Float#valueOf(String)} underneath, so any of the following number formats are supported:
-	 * <ul>
-	 * 	<li><js>"0x..."</js>
-	 * 	<li><js>"0X..."</js>
-	 * 	<li><js>"#..."</js>
-	 * 	<li><js>"0..."</js>
-	 * </ul>
-	 *
-	 * @param key The key.
-	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
-	 */
-	public float getFloat(String key) {
-		return getFloat(key, 0);
-	}
-
-	/**
-	 * Same as {@link #getFloat(String)} but returns a default value if not set.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the value does not exist or the value is empty.
-	 */
-	public float getFloat(String key, float def) {
-		String s = getString(key);
-		if (isEmpty(s))
-			return def;
-		return Float.valueOf(s);
-	}
-
-	/**
-	 * Convenience method for getting byte array config values.
-	 *
-	 * <p>
-	 * This is equivalent to calling the following:
-	 * <p class='bcode w800'>
-	 * 	<jk>byte</jk>[] b = config.getObject(key, <jk>byte</jk>[].<jk>class</jk>);
-	 * </p>
-	 *
-	 * <p>
-	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link Builder#binaryFormat(BinaryFormat)} setting.
-	 *
-	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException If value could not be converted to a byte array.
-	 */
-	public byte[] getBytes(String key) throws ParseException {
-		String s = get(key);
-		if (s == null)
-			return null;
-		if (s.isEmpty())
-			return new byte[0];
-		return getObject(key, byte[].class);
-	}
-
-	/**
-	 * Same as {@link #getBytes(String)} but with a default value if the entry doesn't exist.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException If value could not be converted to a byte array.
-	 */
-	public byte[] getBytes(String key, byte[] def) throws ParseException {
-		String s = get(key);
-		if (s == null)
-			return def;
-		if (s.isEmpty())
-			return def;
-		return getObjectWithDefault(key, def, byte[].class);
-	}
-
-	/**
-	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
-	 * <p>
-	 * The key can be in one of the following formats...
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
-	 * 	<li>
-	 * 		<js>"section/key"</js> - A value from the specified section.
-	 * </ul>
-	 *
-	 * <p>
-	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 *
-	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List l = cf.getObject(<js>"MySection/myListOfStrings"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List l = cf.getObject(<js>"MySection/myListOfBeans"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = cf.getObject(<js>"MySection/my2dListOfStrings"</js>, LinkedList.<jk>class</jk>,
-	 * 		LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
-	 * 		String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = cf.getObject(<js>"MySection/myMapOfListsOfBeans"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
-	 * 		List.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <p>
-	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
-	 * <p>
-	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value
-	 * types.
-	 *
-	 * <p>
-	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
-	 * </ul>
-	 *
-	 * @param key The key.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public <T> T getObject(String key, Type type, Type...args) throws ParseException {
-		return getObject(key, (Parser)null, type, args);
-	}
-
-	/**
-	 * Same as {@link #getObject(String, Type, Type...)} but allows you to specify the parser to use to parse the value.
-	 *
-	 * @param key The key.
-	 * @param parser
-	 * 	The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException {
-		assertArgNotNull("type", type);
-		return parse(getString(key), parser, type, args);
-	}
-
-	/**
-	 * Same as {@link #getObject(String, Type, Type...)} except optimized for a non-parameterized class.
-	 *
-	 * <p>
-	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 *
-	 * 	<jc>// Parse into a string.</jc>
-	 * 	String s = cf.getObject(<js>"MySection/mySimpleString"</js>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean b = cf.getObject(<js>"MySection/myBean"</js>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] b = cf.getObject(<js>"MySection/myBeanArray"</js>, MyBean[].<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List l = cf.getObject(<js>"MySection/myList"</js>, LinkedList.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param key The key.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public <T> T getObject(String key, Class<T> type) throws ParseException {
-		return getObject(key, (Parser)null, type);
-	}
-
-	/**
-	 * Same as {@link #getObject(String, Class)} but allows you to specify the parser to use to parse the value.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param key The key.
-	 * @param parser
-	 * 	The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException {
-		assertArgNotNull("c", type);
-		return parse(getString(key), parser, type);
-	}
-
-	/**
-	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
-	 * <p>
-	 * Same as {@link #getObject(String, Class)}, but with a default value.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @param type The class to convert the value to.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException {
-		return getObjectWithDefault(key, null, def, type);
-	}
-
-	/**
-	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse
-	 * the value.
-	 *
-	 * @param key The key.
-	 * @param parser
-	 * 	The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
-	 * @param def The default value if the value does not exist.
-	 * @param type The class to convert the value to.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException {
-		assertArgNotNull("type", type);
-		T t = parse(getString(key), parser, type);
-		return (t == null ? def : t);
-	}
-
-	/**
-	 * Gets the entry with the specified key and converts it to the specified value.
-	 *
-	 * <p>
-	 * Same as {@link #getObject(String, Type, Type...)}, but with a default value.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the value does not exist.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException {
-		return getObjectWithDefault(key, null, def, type, args);
-	}
-
-	/**
-	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use
-	 * to parse the value.
-	 *
-	 * @param key The key.
-	 * @param parser
-	 * 	The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
-	 * @param def The default value if the value does not exist.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException {
-		assertArgNotNull("type", type);
-		T t = parse(getString(key), parser, type, args);
-		return (t == null ? def : t);
-	}
-
-	/**
-	 * Convenience method for returning a config entry as an {@link OMap}.
-	 *
-	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap getMap(String key) throws ParseException {
-		return getObject(key, OMap.class);
-	}
-
-	/**
-	 * Convenience method for returning a config entry as an {@link OMap}.
-	 *
-	 * @param key The key.
-	 * @param def The default value.
-	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OMap getMap(String key, OMap def) throws ParseException {
-		return getObjectWithDefault(key, def, OMap.class);
-	}
-
-	/**
-	 * Convenience method for returning a config entry as an {@link OList}.
-	 *
-	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OList getList(String key) throws ParseException {
-		return getObject(key, OList.class);
-	}
-
-	/**
-	 * Convenience method for returning a config entry as an {@link OList}.
-	 *
-	 * @param key The key.
-	 * @param def The default value.
-	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public OList getList(String key, OList def) throws ParseException {
-		return getObjectWithDefault(key, def, OList.class);
+	public Entry get(String key) {
+		return new Entry(this, configMap, sname(key), skey(key));
 	}
 
 	/**
@@ -1471,7 +928,7 @@ public final class Config extends Context implements ConfigEventListener {
 				if (! ignoreUnknownProperties)
 					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, section);
 			} else {
-				bm.put(k, getObject(section + '/' + k, bpm.getClassMeta().getInnerClass()));
+				bm.put(k, get(section + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
 			}
 		}
 
@@ -1551,7 +1008,7 @@ public final class Config extends Context implements ConfigEventListener {
 				if (! ignoreUnknownProperties)
 					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, section);
 			} else {
-				bm.put(k, getObject(section + '/' + k, bpm.getClassMeta().getInnerClass()));
+				bm.put(k, get(section + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
 			}
 		}
 
@@ -1578,7 +1035,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 		OMap om = new OMap();
 		for (String k : keys)
-			om.put(k, getObject(section + '/' + k, Object.class));
+			om.put(k, get(section + '/' + k).as(Object.class).orElse(null));
 		return om;
 	}
 
@@ -1670,7 +1127,7 @@ public final class Config extends Context implements ConfigEventListener {
 				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
 					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
 					if (method.equals(rm))
-						return Config.this.getObject(section2 + '/' + pd.getName(), rm.getGenericReturnType());
+						return Config.this.get(section2 + '/' + pd.getName()).to(rm.getGenericReturnType());
 					if (method.equals(wm))
 						return Config.this.set(section2 + '/' + pd.getName(), args[0]);
 				}
@@ -1688,7 +1145,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
-		return isNotEmpty(getString(key, null));
+		return isNotEmpty(get(key).as(String.class).orElse(null));
 	}
 
 	/**
@@ -2000,55 +1457,11 @@ public final class Config extends Context implements ConfigEventListener {
 		return s;
 	}
 
-	@SuppressWarnings({ "unchecked" })
-	private <T> T parse(String s, Parser parser, Type type, Type...args) throws ParseException {
-
-		if (isEmpty(s))
-			return null;
-
-		if (isSimpleType(type))
-			return (T)beanSession.convertToType(s, (Class<?>)type);
-
-		if (type == byte[].class) {
-			if (s.indexOf('\n') != -1)
-				s = s.replaceAll("\n", "");
-			try {
-				switch (binaryFormat) {
-					case HEX: return (T)fromHex(s);
-					case SPACED_HEX: return (T)fromSpacedHex(s);
-					default: return (T)base64Decode(s);
-				}
-			} catch (Exception e) {
-				throw new ParseException(e, "Value could not be converted to a byte array.");
-			}
-		}
-
-		if (parser == null)
-			parser = this.parser;
-
-		if (parser instanceof JsonParser) {
-			char s1 = firstNonWhitespaceChar(s);
-			if (isArray(type) && s1 != '[')
-				s = '[' + s + ']';
-			else if (s1 != '[' && s1 != '{' && ! "null".equals(s))
-				s = '\'' + s + '\'';
-		}
-
-		return parser.parse(s, type, args);
-	}
-
 	private boolean isSimpleType(Type t) {
 		if (! (t instanceof Class))
 			return false;
 		Class<?> c = (Class<?>)t;
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
-	}
-
-	private boolean isArray(Type t) {
-		if (! (t instanceof Class))
-			return false;
-		Class<?> c = (Class<?>)t;
-		return (c.isArray());
 	}
 
 	private String sname(String key) {
@@ -2073,7 +1486,7 @@ public final class Config extends Context implements ConfigEventListener {
 		return section;
 	}
 
-	private void checkWrite() {
+	void checkWrite() {
 		if (readOnly)
 			throw unsupportedOperationException("Cannot call this method on a read-only configuration.");
 	}

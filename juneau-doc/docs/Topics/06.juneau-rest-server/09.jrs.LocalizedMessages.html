@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Messages', updated:'8.2.0', flags:'todo'}
+{title:'Localized Messages', updated:'8.2.0,9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -37,15 +37,14 @@
 	</ul>
 	
 	<p>
-		This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following methods:
+		This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following method:
 	</p>
 	<ul class='javatree'>
 		<li class='jm'>{@link oajr.RestRequest#getMessage(String, Object...)}
-		<li class='jm'>{@link oajr.RestContext#getMessages() RestContext.getMessages()}
 	</ul>
 	
 	<p>
-		Request-localized messages are also available by passing either of the following parameter types into your Java method:
+		Request-localized messages are also available by passing either of the following args into your Java method:
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link java.util.ResourceBundle} - Basic Java resource bundle.
@@ -102,9 +101,4 @@
 		Messages are automatically inherited from super classes.  If a string cannot be found in the bundle of the current
 		class, it will be searched for up the class hierarchy.
 	</p>
-	
-	<ul class='seealso'>
-		<li class='jc'>{@link oaj.cp.Messages}
-		<li class='jf'>{@del oajr.RestContext#REST_messages}
-	</ul>
 </div>

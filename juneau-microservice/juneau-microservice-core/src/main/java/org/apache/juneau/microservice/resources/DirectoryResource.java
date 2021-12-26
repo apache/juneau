@@ -114,10 +114,10 @@ public class DirectoryResource extends BasicRestServlet {
 	final boolean allowDeletes, allowUploads, allowViews;
 
 	public DirectoryResource(Config c) throws Exception {
-		rootDir = new File(c.getString(DIRECTORY_RESOURCE_rootDir, "."));
-		allowViews = c.getBoolean(DIRECTORY_RESOURCE_allowViews, false);
-		allowDeletes = c.getBoolean(DIRECTORY_RESOURCE_allowDeletes, false);
-		allowUploads = c.getBoolean(DIRECTORY_RESOURCE_allowUploads, false);
+		rootDir = new File(c.get(DIRECTORY_RESOURCE_rootDir).orElse("."));
+		allowViews = c.get(DIRECTORY_RESOURCE_allowViews).asBoolean().orElse(false);
+		allowDeletes = c.get(DIRECTORY_RESOURCE_allowDeletes).asBoolean().orElse(false);
+		allowUploads = c.get(DIRECTORY_RESOURCE_allowUploads).asBoolean().orElse(false);
 	}
 
 	@RestGet(

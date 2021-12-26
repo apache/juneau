@@ -20,7 +20,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * The format for this var is <js>"$C{key[,defaultValue]}"</js>.
- * See {@link Config#getString(String)} for the format of the key.
+ * See {@link Config#get(String)} for the format of the key.
  *
  * <p>
  * This variable resolver requires that a {@link Config} bean be available in the resolver session bean factory.
@@ -65,7 +65,7 @@ public class ConfigVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(Config.class).get().getString(key);
+		return session.getBean(Config.class).get().get(key).orElse(null);
 	}
 
 	@Override /* Var */
