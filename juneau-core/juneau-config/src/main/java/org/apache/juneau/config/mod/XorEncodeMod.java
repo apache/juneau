@@ -10,45 +10,62 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.encode;
+package org.apache.juneau.config.mod;
 
-import org.apache.juneau.config.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import static org.apache.juneau.internal.IOUtils.*;
 
 /**
- * API for defining a string encoding/decoding mechanism for entries in {@link Config}.
+ * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
+ *
+ * <p>
+ * This is not intended to be used as strong encryption.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jc.EncodedEntries}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public interface ConfigEncoder {
+public class XorEncodeMod extends Mod {
+
+	/** Reusable XOR-ConfigEncoder instance. */
+	public static final XorEncodeMod INSTANCE = new XorEncodeMod();
+
+	private static final String KEY = System.getProperty("org.apache.juneau.config.XorEncoder.key",
+		"nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
 	/**
-	 * Encode a string.
-	 *
-	 * @param fieldName The field name being encoded.
-	 * @param in The unencoded input string.
-	 * @return The encoded output string.
+	 * Constructor.
 	 */
-	public String encode(String fieldName, String in);
+	public XorEncodeMod() {
+		super('*', null, null, null);
+	}
 
-	/**
-	 * Decode a string.
-	 *
-	 * @param fieldName The field name being decoded.
-	 * @param in The encoded input string.
-	 * @return The decoded output string.
-	 */
-	public String decode(String fieldName, String in);
+	@Override
+	public String apply(String value) {
+		byte[] b = value.getBytes(UTF8);
+		for (int i = 0; i < b.length; i++) {
+				int j = i % KEY.length();
+			b[i] = (byte)(b[i] ^ KEY.charAt(j));
+		}
+		return "{" + base64Encode(b) + "}";
+	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified string is encoded.
-	 *
-	 * @param in The input string.
-	 * @return
-	 * 	<jk>true</jk> if the specified string is encoded.
-	 * 	<br>Returns <jk>false</jk> if the string is <jk>null</jk>.
-	 */
-	public boolean isEncoded(String in);
+	@Override
+	public String remove(String value) {
+		value = value.trim();
+		value = value.substring(1, value.length()-1);
+		byte[] b = base64Decode(value);
+		for (int i = 0; i < b.length; i++) {
+			int j = i % KEY.length();
+			b[i] = (byte)(b[i] ^ KEY.charAt(j));
+		}
+		return new String(b, UTF8);
+	}
+
+	@Override
+	public boolean isApplied(String value) {
+		return startsWith(value, '{') && endsWith(value, '}');
+	}
 }

@@ -13385,17 +13385,17 @@
 	<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
 	</p>
 	<p>
-		The default encoder is {@link org.apache.juneau.config.encode.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
+		The default encoder is {@link org.apache.juneau.config.mod.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
 	</p>
 	<p>
-		Custom encoders can be used to provide your own encoding support by implementing the {@link org.apache.juneau.config.encode.ConfigEncoder} interface.
+		Custom encoders can be used to provide your own encoding support by implementing the {@link org.apache.juneau.config.mod.ConfigEncoder} interface.
 	</p>
 	<ul class='javatree'>
-		<li class='jic'>{@link org.apache.juneau.config.encode.ConfigEncoder}
+		<li class='jic'>{@link org.apache.juneau.config.mod.ConfigEncoder}
 		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.encode.ConfigEncoder#encode(String,String) encode(String,String)}
-			<li class='jm'>{@link org.apache.juneau.config.encode.ConfigEncoder#decode(String,String) decode(String,String)}
-			<li class='jm'>{@link org.apache.juneau.config.encode.ConfigEncoder#isEncoded(String) isEncoded(String)}
+			<li class='jm'>{@link org.apache.juneau.config.mod.ConfigEncoder#encode(String,String) encode(String,String)}
+			<li class='jm'>{@link org.apache.juneau.config.mod.ConfigEncoder#decode(String,String) decode(String,String)}
+			<li class='jm'>{@link org.apache.juneau.config.mod.ConfigEncoder#isEncoded(String) isEncoded(String)}
 		</ul>
 	</ul>
 	<p>

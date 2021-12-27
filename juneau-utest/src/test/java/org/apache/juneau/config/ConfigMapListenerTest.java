@@ -137,7 +137,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).replaceAll("\\r?\\n", "|").is("#k|k^* = kb # C|[S1]|#k1|k1^* = k1b # C1|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#k|k<^*> = kb # C|[S1]|#k1|k1<^*> = k1b # C1|");
 	}
 
 	@Test
@@ -169,7 +169,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).replaceAll("\\r?\\n", "|").is("#kb|k^* = kb # Cb|#S1|[S1]|#k1b|k1^* = k1b # Cb1|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#kb|k<^*> = kb # Cb|#S1|[S1]|#k1b|k1<^*> = k1b # Cb1|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

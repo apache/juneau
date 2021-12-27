@@ -350,4 +350,35 @@ public class Section {
 	public <T> Optional<T> asInterface(final Class<T> c) {
 		return ofNullable(toInterface(c));
 	}
+
+	/**
+	 * Copies the entries in this section to the specified bean by calling the public setters on that bean.
+	 *
+	 * @param bean The bean to set the properties on.
+	 * @param ignoreUnknownProperties
+	 * 	If <jk>true</jk>, don't throw an {@link IllegalArgumentException} if this section contains a key that doesn't
+	 * 	correspond to a setter method.
+	 * @return An object map of the changes made to the bean.
+	 * @throws ParseException If parser was not set on this config file or invalid properties were found in the section.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
+		assertArgNotNull("bean", bean);
+		if (! isPresent()) throw illegalArgumentException("Section ''{0}'' not found in configuration.", name);
+
+		Set<String> keys = configMap.getKeys(name);
+
+		BeanMap<?> bm = config.beanSession.toBeanMap(bean);
+		for (String k : keys) {
+			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
+			if (bpm == null) {
+				if (! ignoreUnknownProperties)
+					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
+			} else {
+				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
+			}
+		}
+
+		return this;
+	}
 }

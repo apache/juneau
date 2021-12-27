@@ -39,8 +39,6 @@ public class ConfigMap implements ConfigStoreListener {
 	private volatile String contents;        // The original contents of this object.
 	final String name;                       // The name  of this object.
 
-	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
-
 	// Changes that have been applied since the last load.
 	private final List<ConfigEvent> changes = Collections.synchronizedList(new ConfigEvents());
 
@@ -371,8 +369,6 @@ public class ConfigMap implements ConfigStoreListener {
 	public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List<String> preLines) {
 		checkSectionName(section);
 		checkKeyName(key);
-		if (modifiers != null && ! MOD_CHARS.containsOnly(modifiers))
-			throw new ConfigException("Invalid modifiers: {0}", modifiers);
 		return applyChange(true, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));
 	}
 

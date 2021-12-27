@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.BinaryFormat.*;
 import static java.util.Optional.*;
@@ -48,17 +47,7 @@ public class Entry {
 	protected Entry(Config config, ConfigMap configMap, String sectionName, String entryName) {
 		this.configEntry = configMap.getEntry(sectionName, entryName);
 		this.config = config;
-
-		String v = null;
-		if (configEntry != null) {
-			v = configEntry.getValue();
-			if (! StringUtils.isEmpty(configEntry.getModifiers()))
-				for (ConfigMod m : ConfigMod.toReverse(configEntry.getModifiers()))
-					if (m == ENCODED)
-						if (config.encoder.isEncoded(v))
-							v = config.encoder.decode(configEntry.getKey(), v);
-		}
-		this.value = v;
+		this.value = configEntry == null ? null : config.removeMods(configEntry.getModifiers(), configEntry.getValue());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -826,19 +815,9 @@ public class Entry {
 	}
 
 	/**
-	 * Returns whether this entry has the specified modifier.
-	 *
-	 * @param m The modifier character.
-	 * @return <jk>true</jk> if this entry is encoded.
-	 */
-	public boolean hasModifier(char m) {
-		return configEntry.hasModifier(m);
-	}
-
-	/**
 	 * Returns the modifiers for this entry.
 	 *
-	 * @return The modifiers for this entry, or an empty string if it has no modifiers.
+	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 */
 	public String getModifiers() {
 		return configEntry.getModifiers();

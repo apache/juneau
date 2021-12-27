@@ -37,20 +37,17 @@ public class ConfigMapEntry {
 
 	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 
-	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
+//	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
 
 	ConfigMapEntry(String line, List<String> preLines) {
 		this.rawLine = line;
 		int i = line.indexOf('=');
 		String key = line.substring(0, i).trim();
 
-		int modIndex = key.length();
-		for (int j = key.length()-1; j > 0; j--)
-			if (MOD_CHARS.contains(key.charAt(j)))
-				modIndex--;
+		int m1 = key.indexOf('<'), m2 = key.indexOf('>');
+		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key.substring(m1+1, m2) : null);
 
-		this.modifiers = key.substring(modIndex);
-		this.key = key.substring(0, modIndex);
+		this.key = m1 == -1 ? key : key.substring(0, m1);
 
 		line = line.substring(i+1);
 
@@ -117,19 +114,9 @@ public class ConfigMapEntry {
 	}
 
 	/**
-	 * Returns whether this entry has the specified modifier.
-	 *
-	 * @param m The modifier character.
-	 * @return <jk>true</jk> if this entry is encoded.
-	 */
-	public boolean hasModifier(char m) {
-		return modifiers.indexOf(m) != -1;
-	}
-
-	/**
 	 * Returns the modifiers for this entry.
 	 *
-	 * @return The modifiers for this entry, or an empty string if it has no modifiers.
+	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 */
 	public String getModifiers() {
 		return modifiers;
@@ -152,7 +139,7 @@ public class ConfigMapEntry {
 		} else {
 			w.append(key);
 			if (modifiers != null)
-				w.append(modifiers);
+				w.append('<').append(new String(modifiers)).append('>');
 			w.append(" = ");
 
 			String val = value;

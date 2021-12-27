@@ -13,7 +13,6 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.config.ConfigMod.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -24,8 +23,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
@@ -172,18 +171,18 @@ public class ConfigTest {
 		Config c = init("a1=1", "[S]", "b1=1");
 
 		ABean b = new ABean().init();
-		c.set("a1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		c.set("a2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		c.set("a3", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		c.set("S/b1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		c.set("S/b2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
-		c.set("T/c1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
+		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
+		c.set("a2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
+		c.set("a3", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
+		c.set("S/b1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
+		c.set("S/b2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
+		c.set("T/c1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 
-		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|");
+		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
 		c.commit();
-		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|");
+		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
 		c = cb.build();
-		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|");
+		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
 
 		assertEquals("(foo=bar)", c.get("a1").get());
 		assertEquals("(foo=bar)", c.get("a2").get());
@@ -815,18 +814,18 @@ public class ConfigTest {
 		BBean b = new BBean().init();
 
 		Config c = init("foo=qux", "[S]", "foo=baz", "bar=baz");
-		c.writeProperties("S", a, true);
+		c.getSection("S").writeToBean(a, true);
 		assertObject(a).asJson().is("{foo:'baz'}");
-		c.writeProperties("S", b, true);
+		c.getSection("S").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'baz'}");
-		assertThrown(()->c.writeProperties("S", a, false)).message().is("Unknown property 'bar' encountered in configuration section 'S'.");
-		assertThrown(()->c.writeProperties("S", b, false)).message().is("Unknown property 'bar' encountered in configuration section 'S'.");
-		c.writeProperties("", b, true);
+		assertThrown(()->c.getSection("S").writeToBean(a, false)).message().is("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrown(()->c.getSection("S").writeToBean(b, false)).message().is("Unknown property 'bar' encountered in configuration section 'S'.");
+		c.getSection("").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'qux'}");
-		c.writeProperties("", a, true);
+		c.getSection("").writeToBean(a, true);
 		assertObject(a).asJson().is("{foo:'qux'}");
-
-		assertThrown(()->c.writeProperties(null, a, true)).message().is("Argument 'section' cannot be null.");
+		c.getSection(null).writeToBean(a, true);
+		assertObject(a).asJson().is("{foo:'qux'}");
 	}
 
 	//====================================================================================================
@@ -1087,7 +1086,7 @@ public class ConfigTest {
 	@Test
 	public void testEncodedValues() throws Exception {
 		Config cf = init(
-			"[s1]", "", "foo* = "
+			"[s1]", "", "foo<*> = "
 		);
 
 		cf.set("s1/foo", "mypassword");
@@ -1096,11 +1095,11 @@ public class ConfigTest {
 
 		cf.commit();
 
-		assertString(cf).replaceAll("\\r?\\n", "|").is("[s1]||foo* = {AwwJVhwUQFZEMg==}|");
+		assertString(cf).replaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
 
 		assertEquals("mypassword", cf.get("s1/foo").get());
 
-		cf.load(reader("[s1]\nfoo* = mypassword2\n"), true);
+		cf.load(reader("[s1]\nfoo<*> = mypassword2\n"), true);
 
 		assertEquals("mypassword2", cf.get("s1/foo").get());
 
@@ -1109,7 +1108,7 @@ public class ConfigTest {
 		// INI output should be encoded
 		StringWriter sw = new StringWriter();
 		cf.writeTo(new PrintWriter(sw));
-		assertString(sw).replaceAll("\\r?\\n", "|").is("[s1]|foo* = {AwwJVhwUQFZEMg==}|");
+		assertString(sw).replaceAll("\\r?\\n", "|").is("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================
@@ -1118,12 +1117,12 @@ public class ConfigTest {
 	@Test
 	public void testEncodeEntries() throws Exception {
 		Config cf = init(
-			"[s1]", "", "foo* = mypassword"
+			"[s1]", "", "foo<*> = mypassword"
 		);
 
-		cf.encodeEntries();
+		cf.applyMods();
 		cf.commit();
-		assertString(ConfigMemoryStore.DEFAULT.read("Test.cfg")).replaceAll("\\r?\\n", "|").is("[s1]||foo* = {AwwJVhwUQFZEMg==}|");
+		assertString(ConfigMemoryStore.DEFAULT.read("Test.cfg")).replaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================
@@ -1180,9 +1179,9 @@ public class ConfigTest {
 	}
 
 	private void testXor(String in) {
-		ConfigXorEncoder e = new ConfigXorEncoder();
-		String s = e.encode("", in);
-		String s2 = e.decode("", s);
+		XorEncodeMod e = new XorEncodeMod();
+		String s = e.apply(in);
+		String s2 = e.remove(s);
 		assertEquals(in, s2);
 	}
 
@@ -1308,8 +1307,8 @@ public class ConfigTest {
 
 		// Encoded
 		changes.clear();
-		cf.set("a4", "4", null, ConfigMod.ENCODED, null, null);
-		cf.set("B/b4", "4", null, ConfigMod.ENCODED, null, null);
+		cf.set("a4", "4", null, "*", null, null);
+		cf.set("B/b4", "4", null, "*", null, null);
 		cf.commit();
 		assertObject(changes).asJson().is("['a4={Wg==}','B/b4={Wg==}']");
 
@@ -1542,7 +1541,7 @@ public class ConfigTest {
 		assertEquals("a,#b,=c", cf.get("a").get());
 		assertEquals("a,#b,=c", cf.get("A/a").get());
 
-		cf.set("a", "a,#b,=c", null, (ConfigMod)null, "comment#comment", null);
+		cf.set("a", "a,#b,=c", null, null, "comment#comment", null);
 		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|");
 		assertEquals("a,#b,=c", cf.get("a").get());
 	}

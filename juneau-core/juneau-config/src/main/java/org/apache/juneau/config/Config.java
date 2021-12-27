@@ -13,11 +13,11 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static java.util.Collections.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -26,9 +26,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
+import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
@@ -189,7 +189,7 @@ public final class Config extends Context implements ConfigEventListener {
 		ConfigStore store;
 		WriterSerializer serializer;
 		ReaderParser parser;
-		ConfigEncoder encoder;
+		Map<Character,Mod> mods;
 		VarResolver varResolver;
 		int binaryLineLength;
 		BinaryFormat binaryFormat;
@@ -204,7 +204,8 @@ public final class Config extends Context implements ConfigEventListener {
 			store = ConfigFileStore.DEFAULT;
 			serializer = SimpleJsonSerializer.DEFAULT;
 			parser = JsonParser.DEFAULT;
-			encoder = ConfigXorEncoder.INSTANCE;
+			mods = new LinkedHashMap<>();
+			mods(XorEncodeMod.INSTANCE);
 			varResolver = VarResolver.DEFAULT;
 			binaryLineLength = env("Config.binaryLineLength", -1);
 			binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
@@ -223,7 +224,7 @@ public final class Config extends Context implements ConfigEventListener {
 			store = copyFrom.store;
 			serializer = copyFrom.serializer;
 			parser = copyFrom.parser;
-			encoder = copyFrom.encoder;
+			mods = new LinkedHashMap<>(copyFrom.mods);
 			varResolver = copyFrom.varResolver;
 			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
@@ -242,7 +243,7 @@ public final class Config extends Context implements ConfigEventListener {
 			store = copyFrom.store;
 			serializer = copyFrom.serializer;
 			parser = copyFrom.parser;
-			encoder = copyFrom.encoder;
+			mods = new LinkedHashMap<>(copyFrom.mods);
 			varResolver = copyFrom.varResolver;
 			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
@@ -354,18 +355,18 @@ public final class Config extends Context implements ConfigEventListener {
 		}
 
 		/**
-		 * Value encoder.
+		 * Adds a value modifier.
 		 *
 		 * <p>
-		 * The encoder to use for encoding encoded configuration values.
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
+		 * Modifiers are used to modify entry value before being persisted.
+		 * 
+		 * @param values
+		 * 	The mods to apply to this config.
 		 * @return This object.
 		 */
-		public Builder encoder(ConfigEncoder value) {
-			encoder = value;
+		public Builder mods(Mod...values) {
+			for (Mod value : values)
+				mods.put(value.getId(), value);
 			return this;
 		}
 
@@ -539,7 +540,7 @@ public final class Config extends Context implements ConfigEventListener {
 	final ConfigStore store;
 	final WriterSerializer serializer;
 	final ReaderParser parser;
-	final ConfigEncoder encoder;
+	final Map<Character,Mod> mods;
 	final VarResolver varResolver;
 	final int binaryLineLength;
 	final BinaryFormat binaryFormat;
@@ -572,7 +573,7 @@ public final class Config extends Context implements ConfigEventListener {
 		serializer = builder.serializer;
 		parser = builder.parser;
 		beanSession = parser.getBeanContext().getSession();
-		encoder = builder.encoder;
+		mods = unmodifiableMap(new LinkedHashMap<>(builder.mods));
 		varResolver = builder.varResolver;
 		varSession = varResolver
 			.copy()
@@ -594,7 +595,7 @@ public final class Config extends Context implements ConfigEventListener {
 		configMap.register(this);
 		serializer = copyFrom.serializer;
 		parser = copyFrom.parser;
-		encoder = copyFrom.encoder;
+		mods = copyFrom.mods;
 		varResolver = copyFrom.varResolver;
 		this.varSession = varSession;
 		binaryLineLength = copyFrom.binaryLineLength;
@@ -646,18 +647,28 @@ public final class Config extends Context implements ConfigEventListener {
 
 		ConfigMapEntry ce = configMap.getEntry(sname, skey);
 
-		if (ce == null || ce.getValue() == null)
-			return null;
+		if (ce == null) return null;
 
-		String val = ce.getValue();
-		for (ConfigMod m : ConfigMod.toReverse(ce.getModifiers())) {
-			if (m == ENCODED) {
-				if (encoder.isEncoded(val))
-					val = encoder.decode(key, val);
-			}
-		}
+		return removeMods(ce.getModifiers(), ce.getValue());
+	}
 
-		return val;
+	String applyMods(String mods, String x) {
+		if (mods != null && x != null)
+			for (int i = 0; i < mods.length(); i++)
+				x = getMod(mods.charAt(i)).doApply(x);
+		return x;
+	}
+
+	String removeMods(String mods, String x) {
+		if (mods != null && x != null)
+			for (int i = mods.length()-1; i > -1; i--)
+				x = getMod(mods.charAt(i)).doRemove(x);
+		return x;
+	}
+
+	Mod getMod(char id) {
+		Mod x = mods.get(id);
+		return x == null ? Mod.NO_OP : x;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -701,14 +712,7 @@ public final class Config extends Context implements ConfigEventListener {
 		if (ce == null && value == null)
 			return this;
 
-		String mod = ce == null ? "" : ce.getModifiers();
-
-		String s = stringify(value);
-		for (ConfigMod m : ConfigMod.toModifiers(mod)) {
-			if (m == ENCODED) {
-				s = encoder.encode(key, s);
-			}
-		}
+		String s = applyMods(ce == null ? null : ce.getModifiers(), stringify(value));
 
 		configMap.setEntry(sname, skey, s, null, null, null);
 		return this;
@@ -758,32 +762,6 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param modifier
-	 * 	Optional modifier to apply to the value.
-	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @param comment
-	 * 	Optional same-line comment to add to this value.
-	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @param preLines
-	 * 	Optional comment or blank lines to add before this entry.
-	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
-	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
-	 * @throws SerializeException
-	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
-	 * @throws UnsupportedOperationException If configuration is read only.
-	 */
-	public Config set(String key, Object value, Serializer serializer, ConfigMod modifier, String comment, List<String> preLines) throws SerializeException {
-		return set(key, value, serializer, modifier == null ? null : new ConfigMod[]{modifier}, comment, preLines);
-	}
-
-	/**
-	 * Same as {@link #set(String, Object)} but allows you to specify all aspects of a value.
-	 *
-	 * @param key The key.
-	 * @param value The new value.
-	 * @param serializer
-	 * 	The serializer to use for serializing the object.
-	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
 	 * @param modifiers
 	 * 	Optional modifiers to apply to the value.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
@@ -798,22 +776,16 @@ public final class Config extends Context implements ConfigEventListener {
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines) throws SerializeException {
+	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
 		assertArgNotNull("key", key);
 		String sname = sname(key);
 		String skey = skey(key);
+		modifiers = nullIfEmpty(modifiers);
 
-		String s = serialize(value, serializer);
-		if (modifiers != null) {
-			for (ConfigMod m : modifiers) {
-				if (m == ENCODED) {
-					s = encoder.encode(key, s);
-				}
-			}
-		}
+		String s = applyMods(modifiers, serialize(value, serializer));
 
-		configMap.setEntry(sname, skey, s, modifiers == null ? null : ConfigMod.toModString(modifiers), comment, preLines);
+		configMap.setEntry(sname, skey, s, modifiers, comment, preLines);
 		return this;
 	}
 
@@ -842,13 +814,20 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return This object.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config encodeEntries() {
+	public Config applyMods() {
 		checkWrite();
 		for (String section : configMap.getSections()) {
 			for (String key : configMap.getKeys(section)) {
 				ConfigMapEntry ce = configMap.getEntry(section, key);
-				if (ce != null && ce.hasModifier('*') && ! encoder.isEncoded(ce.getValue())) {
-					configMap.setEntry(section, key, encoder.encode(section + '/' + key, ce.getValue()), null, null, null);
+				if (ce.getModifiers() != null) {
+					String mods = ce.getModifiers();
+					String value = ce.getValue();
+					for (int i = 0; i < mods.length(); i++) {
+						Mod mod = getMod(mods.charAt(i));
+						if (! mod.isApplied(value)) {
+							configMap.setEntry(section, key, mod.apply(value), null, null, null);
+						}
+					}
 				}
 			}
 		}
@@ -907,44 +886,6 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Set<String> getKeys(String section) {
 		return configMap.getKeys(section(section));
-	}
-
-	/**
-	 * Copies the entries in a section to the specified bean by calling the public setters on that bean.
-	 *
-	 * @param section
-	 * 	The section name to write from.
-	 * 	<br>If empty, refers to the default section.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param bean The bean to set the properties on.
-	 * @param ignoreUnknownProperties
-	 * 	If <jk>true</jk>, don't throw an {@link IllegalArgumentException} if this section contains a key that doesn't
-	 * 	correspond to a setter method.
-	 * @return An object map of the changes made to the bean.
-	 * @throws ParseException If parser was not set on this config file or invalid properties were found in the section.
-	 * @throws UnsupportedOperationException If configuration is read only.
-	 */
-	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties) throws ParseException {
-		checkWrite();
-		assertArgNotNull("bean", bean);
-		section = section(section);
-
-		Set<String> keys = configMap.getKeys(section);
-		if (keys == null)
-			throw illegalArgumentException("Section ''{0}'' not found in configuration.", section);
-
-		BeanMap<?> bm = beanSession.toBeanMap(bean);
-		for (String k : keys) {
-			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
-			if (bpm == null) {
-				if (! ignoreUnknownProperties)
-					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, section);
-			} else {
-				bm.put(k, get(section + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
-			}
-		}
-
-		return this;
 	}
 
 	/**

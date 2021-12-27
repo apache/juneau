@@ -973,10 +973,10 @@ public class ConfigMapTest {
 		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v2|");
 
 		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
-		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1* = v3 # c3|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1<*> = v3 # c3|");
 
 		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
-		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1^ = v4 # c4|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1<^> = v4 # c4|");
 	}
 
 	@Test
@@ -992,10 +992,10 @@ public class ConfigMapTest {
 		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v2 # comment|");
 
 		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
-		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1* = v3 # c3|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1<*> = v3 # c3|");
 
 		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
-		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1^ = v4 # c4|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1<^> = v4 # c4|");
 	}
 
 	@Test
@@ -1096,22 +1096,19 @@ public class ConfigMapTest {
 	public void testModifiers() throws Exception {
 		ConfigStore s = initStore("Foo.cfg",
 			"[S1]",
-			"k1^ = v1",
-			"k2* = v2",
-			"k3*^ = v3"
+			"k1<^> = v1",
+			"k2<*> = v2",
+			"k3<*^> = v3"
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1^ = v1|k2* = v2|k3*^ = v3|");
-		assertTrue(cm.getEntry("S1", "k1").hasModifier('^'));
-		assertFalse(cm.getEntry("S1", "k1").hasModifier('*'));
-		assertFalse(cm.getEntry("S1", "k2").hasModifier('^'));
-		assertTrue(cm.getEntry("S1", "k2").hasModifier('*'));
-		assertTrue(cm.getEntry("S1", "k3").hasModifier('^'));
-		assertTrue(cm.getEntry("S1", "k3").hasModifier('*'));
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1<^> = v1|k2<*> = v2|k3<*^> = v3|");
+		assertEquals("^", cm.getEntry("S1", "k1").getModifiers());
+		assertEquals("*", cm.getEntry("S1", "k2").getModifiers());
+		assertEquals("*^", cm.getEntry("S1", "k3").getModifiers());
 
 		cm.setEntry("S1", "k1", "v1", "#$%&*+^@~", null, null);
-		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1#$%&*+^@~ = v1|k2* = v2|k3*^ = v3|");
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1<#$%&*+^@~> = v1|k2<*> = v2|k3<*^> = v3|");
 	}
 
 	@Test
@@ -1126,9 +1123,6 @@ public class ConfigMapTest {
 
 		// This is okay.
 		cm.setEntry("S1", "k1", "v1", "", null, null);
-
-		assertThrown(()->cm.setEntry("S1", "k1", "v1", "X", null, null)).message().is("Invalid modifiers: X");
-		assertThrown(()->cm.setEntry("S1", "k1", "v1", " ", null, null)).message().is("Invalid modifiers:  ");
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {
