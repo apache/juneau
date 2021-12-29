@@ -24,20 +24,20 @@ public class ConfigMemoryStoreTest {
 
 	@Test
 	public void testNoFile() throws Exception {
-		ConfigMemoryStore fs = ConfigMemoryStore.create().build();
+		MemoryStore fs = MemoryStore.create().build();
 		assertEquals("", fs.read("X"));
 	}
 
 	@Test
 	public void testSimpleCreate() throws Exception {
-		ConfigMemoryStore fs = ConfigMemoryStore.create().build();
+		MemoryStore fs = MemoryStore.create().build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 	}
 
 	@Test
 	public void testFailOnMismatch() throws Exception {
-		ConfigMemoryStore fs = ConfigMemoryStore.create().build();
+		MemoryStore fs = MemoryStore.create().build();
 		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals("", fs.read("X"));
 		assertNull(fs.write("X", null, "foo"));
@@ -50,7 +50,7 @@ public class ConfigMemoryStoreTest {
 
 	@Test
 	public void testUpdate() throws Exception {
-		ConfigMemoryStore fs = ConfigMemoryStore.create().build();
+		MemoryStore fs = MemoryStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		fs.register("X", new ConfigStoreListener() {
@@ -76,14 +76,14 @@ public class ConfigMemoryStoreTest {
 
 	@Test
 	public void testExists() {
-		ConfigMemoryStore.DEFAULT.write("foo", null, "foo");
+		MemoryStore.DEFAULT.write("foo", null, "foo");
 
-		assertTrue(ConfigMemoryStore.DEFAULT.exists("foo"));
-		assertFalse(ConfigMemoryStore.DEFAULT.exists("foo2"));
+		assertTrue(MemoryStore.DEFAULT.exists("foo"));
+		assertFalse(MemoryStore.DEFAULT.exists("foo2"));
 
-		ConfigMemoryStore.DEFAULT.write("foo", "foo", null);
+		MemoryStore.DEFAULT.write("foo", "foo", null);
 
-		assertFalse(ConfigMemoryStore.DEFAULT.exists("foo"));
-		assertFalse(ConfigMemoryStore.DEFAULT.exists("foo2"));
+		assertFalse(MemoryStore.DEFAULT.exists("foo"));
+		assertFalse(MemoryStore.DEFAULT.exists("foo2"));
 	}
 }

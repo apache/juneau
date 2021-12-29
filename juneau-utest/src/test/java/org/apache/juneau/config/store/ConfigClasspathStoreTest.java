@@ -24,13 +24,13 @@ public class ConfigClasspathStoreTest {
 
 	@Test
 	public void testNoFile() throws Exception {
-		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
+		ClasspathStore fs = ClasspathStore.create().build();
 		assertEquals("", fs.read("X.cfg"));
 	}
 
 	@Test
 	public void testRealFiles() throws Exception {
-		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
+		ClasspathStore fs = ClasspathStore.create().build();
 		assertString(fs.read("foo1.cfg")).contains("bar1");
 		assertString(fs.read("sub/foo2.cfg")).contains("bar2");
 		assertEquals("", fs.read("sub/bad.cfg"));
@@ -39,7 +39,7 @@ public class ConfigClasspathStoreTest {
 
 	@Test
 	public void testOverwriteRealFiles() throws Exception {
-		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
+		ClasspathStore fs = ClasspathStore.create().build();
 		assertString(fs.read("foo1.cfg")).contains("bar1");
 		fs.write("foo1.cfg", fs.read("foo1.cfg"), "xxx");
 		assertEquals("xxx", fs.read("foo1.cfg"));
@@ -47,14 +47,14 @@ public class ConfigClasspathStoreTest {
 
 	@Test
 	public void testSimpleCreate() throws Exception {
-		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
+		ClasspathStore fs = ClasspathStore.create().build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 	}
 
 	@Test
 	public void testFailOnMismatch() throws Exception {
-		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
+		ClasspathStore fs = ClasspathStore.create().build();
 		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
 		assertEquals("", fs.read("X.cfg"));
 		assertNull(fs.write("X.cfg", null, "foo"));
@@ -67,7 +67,7 @@ public class ConfigClasspathStoreTest {
 
 	@Test
 	public void testUpdate() throws Exception {
-		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
+		ClasspathStore fs = ClasspathStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		fs.register("X.cfg", new ConfigStoreListener() {
@@ -93,14 +93,14 @@ public class ConfigClasspathStoreTest {
 
 	@Test
 	public void testExists() throws Exception {
-		ConfigClasspathStore.DEFAULT.write("foo.cfg", null, "foo");
+		ClasspathStore.DEFAULT.write("foo.cfg", null, "foo");
 
-		assertTrue(ConfigClasspathStore.DEFAULT.exists("foo.cfg"));
-		assertFalse(ConfigClasspathStore.DEFAULT.exists("foo2.cfg"));
+		assertTrue(ClasspathStore.DEFAULT.exists("foo.cfg"));
+		assertFalse(ClasspathStore.DEFAULT.exists("foo2.cfg"));
 
-		ConfigClasspathStore.DEFAULT.write("foo.cfg", "foo", null);
+		ClasspathStore.DEFAULT.write("foo.cfg", "foo", null);
 
-		assertFalse(ConfigClasspathStore.DEFAULT.exists("foo.cfg"));
-		assertFalse(ConfigClasspathStore.DEFAULT.exists("foo2.cfg"));
+		assertFalse(ClasspathStore.DEFAULT.exists("foo.cfg"));
+		assertFalse(ClasspathStore.DEFAULT.exists("foo2.cfg"));
 	}
 }

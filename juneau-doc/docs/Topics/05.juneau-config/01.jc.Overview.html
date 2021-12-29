@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Overview'}
+{title:'Overview', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -53,10 +53,10 @@
 	</p>
 	<p class='bcode w800'>
 		|	<jc>// Read values from section #1</jc>
-		|	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.getInt(<js>"Section1/key1"</js>);
-		|	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.getBoolean(<js>"Section1/key2"</js>);
-		|	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
-		|	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+		|	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.get(<js>"Section1/key1"</js>).asInteger().orElse(-1);
+		|	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.get(<js>"Section1/key2"</js>).asBoolean().orElse(<jk>false</jk>);
+		|	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.get(<js>"Section1/key3"</js>).as(<jk>int</jk>[].<jk>class</jk>).orElse(<jk>null</jk>);
+		|	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).as(URL.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
 		The config language may look simple, but it is a very powerful feature with many capabilities including:

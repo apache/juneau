@@ -13,21 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'POJOs'}
+{title:'POJOs', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		The following methods are provided for accessing POJO values:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link oaj.config.Config}
-		<ul>
-			<li class='jm'>{@link oaj.config.Config#getObject(String,Class) getObject(String,Class)}
-			<li class='jm'>{@link oaj.config.Config#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,T,Class)}
-		</ul>
-	</ul>
-	<p>
-		In theory, any {@doc jm.PojoCategories parsable} POJO type can be represented
+		Entries can also be read as POJOs.  In theory, any {@doc jm.PojoCategories parsable} POJO type can be represented
 		as a config value. 
 		However in practice, we're typically talking about the following:
 	</p>
@@ -45,7 +35,7 @@
 	</p>
 	<p class='bcode w800'>
 		|	<jc>// Read values from section #1</jc>
-		|	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+		|	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).to(URL.<jk>class</jk>);
 	</p>
 	<p>
 		Beans are represented as {@doc jm.SimplifiedJson Simplified JSON} by default:
@@ -71,27 +61,16 @@
 		|
 		|	<jc>// Example usage</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-		|	Address <jv>myAddress</jv> = <jv>config</jv>.getObject(<js>"ContactInfo/address"</js>, Address.<jk>class</jk>);
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"ContactInfo/address"</js>).to(Address.<jk>class</jk>);
 	</p>
 	<p>
-		The format for beans depends on the serializer and parser registered on the Config which 
-		is defined in the builder via the following methods:
+		The default serializer and parser is registered on the Config through the following methods:
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.config.Config.Builder}
 		<ul>
 			<li class='jm'>{@link oaj.config.Config.Builder#serializer(WriterSerializer) serializer(WriterSerializer)}
 			<li class='jm'>{@link oaj.config.Config.Builder#parser(ReaderParser) parser(ReaderParser)}
-		</ul>
-	</ul>
-	<p>
-		The default parser can also be overridden on the following getters:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link oaj.config.Config}
-		<ul>
-			<li class='jm'>{@link oaj.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
-			<li class='jm'>{@link oaj.config.Config#getObjectWithDefault(String,Parser,Object,Class) getObjectWithDefault(String,T,Parser,Class)}
 		</ul>
 	</ul>
 </div>

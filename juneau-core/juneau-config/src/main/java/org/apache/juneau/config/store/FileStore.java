@@ -17,7 +17,6 @@ import static java.nio.file.StandardOpenOption.*;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -47,14 +46,14 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ConfigFileStore extends ConfigStore {
+public class FileStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default file store, all default values.*/
-	public static final ConfigFileStore DEFAULT = ConfigFileStore.create().build();
+	public static final FileStore DEFAULT = FileStore.create().build();
 
 	/**
 	 * Creates a new builder for this object.
@@ -85,7 +84,7 @@ public class ConfigFileStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
-			type(ConfigFileStore.class);
+			type(FileStore.class);
 			directory = env("ConfigFileStore.directory", ".");
 			charset = env("ConfigFileStore.charset", Charset.defaultCharset());
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
@@ -99,7 +98,7 @@ public class ConfigFileStore extends ConfigStore {
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-		protected Builder(ConfigFileStore copyFrom) {
+		protected Builder(FileStore copyFrom) {
 			super(copyFrom);
 			type(copyFrom.getClass());
 			directory = copyFrom.directory;
@@ -131,8 +130,8 @@ public class ConfigFileStore extends ConfigStore {
 		}
 
 		@Override /* Context.Builder */
-		public ConfigFileStore build() {
-			return build(ConfigFileStore.class, null);
+		public FileStore build() {
+			return build(FileStore.class, null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -209,7 +208,7 @@ public class ConfigFileStore extends ConfigStore {
 		 * Use a file system watcher for file system changes.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Calling {@link ConfigFileStore#close()} closes the watcher.
+		 * 	<li>Calling {@link FileStore#close()} closes the watcher.
 		 * </ul>
 		 *
 		 *	<p>
@@ -256,8 +255,8 @@ public class ConfigFileStore extends ConfigStore {
 		 * Update-on-write.
 		 *
 		 * <p>
-		 * When enabled, the {@link ConfigFileStore#update(String, String)} method will be called immediately following
-		 * calls to {@link ConfigFileStore#write(String, String, String)} when the contents are changing.
+		 * When enabled, the {@link FileStore#update(String, String)} method will be called immediately following
+		 * calls to {@link FileStore#write(String, String, String)} when the contents are changing.
 		 * <br>This allows for more immediate responses to configuration changes on file systems that use
 		 * polling watchers.
 		 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
@@ -376,7 +375,7 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ConfigFileStore(Builder builder) {
+	protected FileStore(Builder builder) {
 		super(builder);
 		directory = builder.directory;
 		extensions = builder.extensions;
@@ -550,7 +549,7 @@ public class ConfigFileStore extends ConfigStore {
 	}
 
 	@Override /* ConfigStore */
-	public synchronized ConfigFileStore update(String name, String newContents) {
+	public synchronized FileStore update(String name, String newContents) {
 		cache.put(name, newContents);
 		super.update(name, newContents);
 		return this;
@@ -601,7 +600,7 @@ public class ConfigFileStore extends ConfigStore {
 					for (WatchEvent<?> event : key.pollEvents()) {
 						WatchEvent.Kind<?> kind = event.kind();
 						if (kind != OVERFLOW)
-							ConfigFileStore.this.onFileEvent(((WatchEvent<Path>)event));
+							FileStore.this.onFileEvent(((WatchEvent<Path>)event));
 					}
 					if (! key.reset())
 						break;

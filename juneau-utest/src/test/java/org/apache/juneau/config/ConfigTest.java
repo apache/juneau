@@ -32,10 +32,10 @@ import org.junit.*;
 
 public class ConfigTest {
 
-	private Config.Builder cb = Config.create().store(ConfigMemoryStore.DEFAULT).name("Test.cfg");
+	private Config.Builder cb = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg");
 
 	private Config init(String...lines) {
-		ConfigMemoryStore.DEFAULT.update("Test.cfg", lines);
+		MemoryStore.DEFAULT.update("Test.cfg", lines);
 		return cb.build().rollback();
 	}
 
@@ -1122,7 +1122,7 @@ public class ConfigTest {
 
 		cf.applyMods();
 		cf.commit();
-		assertString(ConfigMemoryStore.DEFAULT.read("Test.cfg")).replaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
+		assertString(MemoryStore.DEFAULT.read("Test.cfg")).replaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================

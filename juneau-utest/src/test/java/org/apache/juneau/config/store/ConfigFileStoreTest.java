@@ -35,21 +35,21 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testNoFile() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 		assertEquals("", fs.read("X.cfg"));
 		assertFileNotExists("X.cfg");
 	}
 
 	@Test
 	public void testDifferentExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 		assertEquals("", fs.read("X.xxx"));
 		assertFileNotExists("X.xxx");
 	}
 
 	@Test
 	public void testSimpleCreateAndDelete() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 		assertFileExists("X.cfg");
@@ -59,7 +59,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testSimpleCreateAndDeleteWithNoExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertFileExists("X.cfg");
@@ -69,7 +69,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testSimpleCreateAndDeleteWithNonStandardExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).extensions("xxx").build();
+		FileStore fs = FileStore.create().directory(DIR).extensions("xxx").build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertFileExists("X.xxx");
@@ -79,7 +79,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testSimpleCreateAndDeleteWithMultipleSpecialExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).extensions("foo1,foo2").build();
+		FileStore fs = FileStore.create().directory(DIR).extensions("foo1,foo2").build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertFileExists("X.foo1");
@@ -90,7 +90,7 @@ public class ConfigFileStoreTest {
 	@Test
 	public void testFailOnMismatch() throws Exception {
 		assertFileNotExists("X.cfg");
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
 		assertFileNotExists("X.cfg");
 		assertEquals("", fs.read("X.cfg"));
@@ -106,7 +106,7 @@ public class ConfigFileStoreTest {
 	@Test
 	public void testFailOnMismatchNoExtension() throws Exception {
 		assertFileNotExists("X.cfg");
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertFileNotExists("X.cfg");
 		assertEquals("", fs.read("X"));
@@ -125,7 +125,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testCharset() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
+		FileStore fs = FileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 		assertEquals("foo", fs.read("X"));
@@ -133,7 +133,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testCharsetNoExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
+		FileStore fs = FileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertEquals("foo", fs.read("X.cfg"));
@@ -141,7 +141,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testWatcher_LONGRUNNING() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
+		FileStore fs = FileStore.create().directory(DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 
 		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", new ConfigStoreListener() {
@@ -181,7 +181,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testUpdate() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		FileStore fs = FileStore.create().directory(DIR).build();
 
 		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", new ConfigStoreListener() {
@@ -221,7 +221,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testExists() throws IOException {
-		ConfigFileStore cs = ConfigFileStore.DEFAULT;
+		FileStore cs = FileStore.DEFAULT;
 		assertTrue(cs.exists("test.cfg"));
 		assertTrue(cs.exists("test"));
 		assertFalse(cs.exists("test2.cfg"));

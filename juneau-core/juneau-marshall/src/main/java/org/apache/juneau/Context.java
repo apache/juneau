@@ -16,7 +16,6 @@ import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.*;
@@ -737,6 +736,34 @@ public abstract class Context implements MetaProvider {
 			return debug;
 		}
 
+		/**
+		 * Looks up a system property or environment variable.
+		 *
+		 * <p>
+		 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
+		 * Then returns the default if it can't be found.
+		 *
+		 * @param name The property name.
+		 * @param def The default value if not found.
+		 * @return The default value.
+		 */
+		protected <T> T env(String name, T def) {
+			return SystemEnv.env(name, def);
+		}
+
+		/**
+		 * Looks up a system property or environment variable.
+		 *
+		 * <p>
+		 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
+		 * Then returns the default if it can't be found.
+		 *
+		 * @param name The property name.
+		 * @return The value if found.
+		 */
+		protected Optional<String> env(String name) {
+			return SystemEnv.env(name);
+		}
 		// <FluentSetters>
 
 		// </FluentSetters>

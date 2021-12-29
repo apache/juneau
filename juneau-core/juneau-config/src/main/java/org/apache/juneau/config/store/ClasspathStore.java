@@ -40,14 +40,14 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ConfigClasspathStore extends ConfigStore {
+public class ClasspathStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default memory store, all default values.*/
-	public static final ConfigClasspathStore DEFAULT = ConfigClasspathStore.create().build();
+	public static final ClasspathStore DEFAULT = ClasspathStore.create().build();
 
 	/**
 	 * Creates a new builder for this object.
@@ -73,7 +73,7 @@ public class ConfigClasspathStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
-			type(ConfigClasspathStore.class);
+			type(ClasspathStore.class);
 		}
 
 		/**
@@ -81,7 +81,7 @@ public class ConfigClasspathStore extends ConfigStore {
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-		protected Builder(ConfigClasspathStore copyFrom) {
+		protected Builder(ClasspathStore copyFrom) {
 			super(copyFrom);
 			type(copyFrom.getClass());
 		}
@@ -101,8 +101,8 @@ public class ConfigClasspathStore extends ConfigStore {
 		}
 
 		@Override /* Context.Builder */
-		public ConfigClasspathStore build() {
-			return build(ConfigClasspathStore.class, null);
+		public ClasspathStore build() {
+			return build(ClasspathStore.class, null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -178,7 +178,7 @@ public class ConfigClasspathStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ConfigClasspathStore(Builder builder) {
+	protected ClasspathStore(Builder builder) {
 		super(builder);
 	}
 
@@ -223,7 +223,7 @@ public class ConfigClasspathStore extends ConfigStore {
 	}
 
 	@Override /* ConfigStore */
-	public synchronized ConfigClasspathStore update(String name, String newContents) {
+	public synchronized ClasspathStore update(String name, String newContents) {
 		if (newContents == null)
 			cache.remove(name);
 		else

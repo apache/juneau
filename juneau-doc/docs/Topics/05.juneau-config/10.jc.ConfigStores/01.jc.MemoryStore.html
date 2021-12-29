@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'ConfigMemoryStore'}
+{title:'MemoryStore'}
 
 <div class='topic'>
 	<p>
-		The {@link oaj.config.store.ConfigMemoryStore} class is simply an in-memory storage
+		The {@link oaj.config.store.MemoryStore} class is simply an in-memory storage
 		location for configuration files.
 		There is no hard persistence and is used primarily for testing purposes.
 	</p>
@@ -25,7 +25,7 @@
 		However, the implementation provides a good idea on how stores work (especially the write method):
 	</p>
 	<p class='bcode w800'>
-		|	<jk>public class</jk> ConfigMemoryStore <jk>extends</jk> ConfigStore {
+		|	<jk>public class</jk> MemoryStore <jk>extends</jk> ConfigStore {
 		|	
 		|		<jc>// Some methods ommitted.</jc>
 		|		
@@ -56,7 +56,7 @@
 		|	
 		|		
 		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		|		<jk>public synchronized</jk> ConfigMemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		|		<jk>public synchronized</jk> MemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
 		|			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
 		|			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
 		|			<jk>return this</jk>;

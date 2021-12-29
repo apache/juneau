@@ -368,7 +368,7 @@ public class Microservice implements ConfigEventListener {
 		 * Specifies the config store to use for storing and retrieving configurations.
 		 *
 		 * <p>
-		 * By default, we use a {@link ConfigFileStore} store for configuration files.
+		 * By default, we use a {@link FileStore} store for configuration files.
 		 *
 		 * @param configStore The configuration name.
 		 * @return This object.
@@ -614,10 +614,10 @@ public class Microservice implements ConfigEventListener {
 		// Try to resolve the configuration if not specified.
 		// --------------------------------------------------------------------------------
 		Config config = builder.config;
-		Config.Builder configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(ConfigMemoryStore.DEFAULT);
+		Config.Builder configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(MemoryStore.DEFAULT);
 		if (config == null) {
 			ConfigStore store = builder.configStore;
-			ConfigFileStore cfs = workingDir == null ? ConfigFileStore.DEFAULT : ConfigFileStore.create().directory(workingDir).build();
+			FileStore cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
 			for (String name : getCandidateConfigNames()) {
 				 if (store != null) {
 					 if (store.exists(name)) {
@@ -629,8 +629,8 @@ public class Microservice implements ConfigEventListener {
 						 configBuilder.store(cfs).name(name);
 						 break;
 					 }
-					 if (ConfigClasspathStore.DEFAULT.exists(name)) {
-						 configBuilder.store(ConfigClasspathStore.DEFAULT).name(name);
+					 if (ClasspathStore.DEFAULT.exists(name)) {
+						 configBuilder.store(ClasspathStore.DEFAULT).name(name);
 						 break;
 					 }
 				 }

@@ -17,16 +17,7 @@
 
 <div class='topic'>
 	<p>
-		The following methods are provided for accessing binary data:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link oaj.config.Config}
-		<ul>
-			<li class='jm'>{@link oaj.config.Config#getBytes(String) getBytes(String)}
-			<li class='jm'>{@link oaj.config.Config#getBytes(String,byte[]) getBytes(String,byte[])}
-		</ul>
-	</ul>
-	<p>
+		Entries can also be accessed as binary data.
 		Binary data can be represented in 3 formats:
 	</p>
 	<ul class='spaced-list'>
@@ -50,7 +41,7 @@
 		|	<ck>key</ck> = <cv>Zm9vYmFycw==</cv>
 	</p>
 	<p class='bcode w800'>
-		|	<jk>byte</jk>[] <jv>bytes</jv> = <jv>config</jv>.getBytes(<js>"key"</js>);
+		|	<jk>byte</jk>[] <jv>bytes</jv> = <jv>config</jv>.get(<js>"key"</js>).toBytes();
 	</p>
 	<p>
 		Binary lines can be split up into separate lines for readability:

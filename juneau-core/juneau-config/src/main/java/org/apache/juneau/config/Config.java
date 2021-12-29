@@ -14,7 +14,6 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static java.util.Collections.*;
@@ -149,10 +148,10 @@ public final class Config extends Context implements ConfigEventListener {
 	private synchronized static Config find(String name) {
 		if (name == null)
 			return null;
-		if (ConfigFileStore.DEFAULT.exists(name))
-			return Config.create(name).store(ConfigFileStore.DEFAULT).build();
-		if (ConfigClasspathStore.DEFAULT.exists(name))
-			return Config.create(name).store(ConfigClasspathStore.DEFAULT).build();
+		if (FileStore.DEFAULT.exists(name))
+			return Config.create(name).store(FileStore.DEFAULT).build();
+		if (ClasspathStore.DEFAULT.exists(name))
+			return Config.create(name).store(ClasspathStore.DEFAULT).build();
 		return null;
 	}
 
@@ -201,7 +200,7 @@ public final class Config extends Context implements ConfigEventListener {
 		protected Builder() {
 			super();
 			name = env("Config.name", "Configuration.cfg");
-			store = ConfigFileStore.DEFAULT;
+			store = FileStore.DEFAULT;
 			serializer = SimpleJsonSerializer.DEFAULT;
 			parser = JsonParser.DEFAULT;
 			mods = new LinkedHashMap<>();
@@ -301,7 +300,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>The default is {@link ConfigFileStore#DEFAULT}.
+		 * 	<br>The default is {@link FileStore#DEFAULT}.
 		 * @return This object.
 		 */
 		public Builder store(ConfigStore value) {
@@ -318,7 +317,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder memStore() {
-			store = ConfigMemoryStore.DEFAULT;
+			store = MemoryStore.DEFAULT;
 			return this;
 		}
 
@@ -359,7 +358,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 *
 		 * <p>
 		 * Modifiers are used to modify entry value before being persisted.
-		 * 
+		 *
 		 * @param values
 		 * 	The mods to apply to this config.
 		 * @return This object.
@@ -859,6 +858,32 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Entry get(String key) {
 		return new Entry(this, configMap, sname(key), skey(key));
+	}
+
+	/**
+	 * Gets the entry with the specified key.
+	 *
+	 * <p>
+	 * The key can be in one of the following formats...
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
+	 * 	<li>
+	 * 		<js>"section/key"</js> - A value from the specified section.
+	 * </ul>
+	 *
+	 * <p>
+	 * If entry does not exist, returns <jk>null</jk>.
+	 *
+	 * <ul>
+	 * 	<li class='note'>This method is equivalent to calling <c>get(<jv>key</jv>).orElse(<jk>null</jk>);</c>.
+	 * </ul>
+	 *
+	 * @param key The key.
+	 * @return The entry value, or <jk>null</jk> if it doesn't exist.
+	 */
+	public String getString(String key) {
+		return new Entry(this, configMap, sname(key), skey(key)).orElse(null);
 	}
 
 	/**

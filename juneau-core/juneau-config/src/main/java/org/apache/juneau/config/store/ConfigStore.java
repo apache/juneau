@@ -283,7 +283,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * Subclasses can override this method to convert config names to internal forms.
 	 *
 	 * <p>
-	 * For example, the {@link ConfigFileStore} class can take in both <js>"MyConfig"</js> and <js>"MyConfig.cfg"</js>
+	 * For example, the {@link FileStore} class can take in both <js>"MyConfig"</js> and <js>"MyConfig.cfg"</js>
 	 * as names that both resolve to <js>"MyConfig.cfg"</js>.
 	 *
 	 * @param name The name to resolve.

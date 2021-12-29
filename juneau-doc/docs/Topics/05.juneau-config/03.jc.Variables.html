@@ -44,10 +44,10 @@
 	<p class='bcode w800'>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>().build();
 		|	
-		|	Locale <jv>locale</jv> = <jv>config</jv>.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 
-		|	String <jv>path</jv> = <jv>config</jv>.getString(<js>"MySection/path"</js>); 
-		|	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.getInt(<js>"MySection/sameAsAnInt"</js>); 
-		|	ABean <jv>bean</jv> = <jv>config</jv>.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
+		|	Locale <jv>locale</jv> = <jv>config</jv>.get(<js>"MySection/locale"</js>).to(Locale.<jk>class</jk>); 
+		|	String <jv>path</jv> = <jv>config</jv>.get(<js>"MySection/path"</js>).toString(); 
+		|	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.get(<js>"MySection/sameAsAnInt"</js>).toInteger(); 
+		|	ABean <jv>bean</jv> = <jv>config</jv>.get(<js>"MySection/aBean"</js>).to(ABean.<jk>class</jk>); 
 	</p>
 	<p>
 		By default, <c>Configs</c> use the {@link oaj.svl.VarResolver#DEFAULT} variable resolver

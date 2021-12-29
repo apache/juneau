@@ -23,7 +23,7 @@ import static org.apache.juneau.internal.IOUtils.*;
  * This is not intended to be used as strong encryption.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jc.EncodedEntries}
+ * 	<li class='link'>{@doc jc.ModdedEntries}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

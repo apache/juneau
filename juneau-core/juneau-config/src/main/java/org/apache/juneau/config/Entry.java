@@ -84,27 +84,6 @@ public class Entry {
 	}
 
 	/**
-	 * Returns this entry converted to the specified type.
-	 *
-	 * @param type The type to convert the value to.
-	 * @return This entry converted to the specified type.
-	 */
-	public <T> Optional<T> as(Class<T> type) {
-		return ofNullable(to((Type)type));
-	}
-
-	/**
-	 * Returns this entry converted to the specified type.
-	 *
-	 * @param parser The parser to use to parse the entry value.
-	 * @param type The type to convert the value to.
-	 * @return This entry converted to the specified type.
-	 */
-	public <T> Optional<T> as(Parser parser, Class<T> type) {
-		return ofNullable(to(parser, (Type)type));
-	}
-
-	/**
 	 * Returns this entry converted to the specified type or returns the default value.
 	 *
 	 * <p>
@@ -140,6 +119,16 @@ public class Entry {
 	 */
 	public <T> T to(Class<T> type) {
 		return to((Type)type);
+	}
+
+	/**
+	 * Returns this entry converted to the specified type.
+	 *
+	 * @param type The type to convert the value to.
+	 * @return This entry converted to the specified type.
+	 */
+	public <T> Optional<T> as(Class<T> type) {
+		return ofNullable(to((Type)type));
 	}
 
 	/**
@@ -316,6 +305,28 @@ public class Entry {
 	 */
 	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
 		return ofNullable(to(parser, type, args));
+	}
+
+	/**
+	 * Returns this entry converted to the specified type.
+	 *
+	 * @param parser The parser to use to parse the entry value.
+	 * @param type The type to convert the value to.
+	 * @return This entry converted to the specified type, or <jk>null</jk> if the entry does not exist.
+	 */
+	public <T> T to(Parser parser, Class<T> type) {
+		return to(parser, (Type)type);
+	}
+
+	/**
+	 * Returns this entry converted to the specified type.
+	 *
+	 * @param parser The parser to use to parse the entry value.
+	 * @param type The type to convert the value to.
+	 * @return This entry converted to the specified type, or {@link Optional#empty()} if the entry does not exist.
+	 */
+	public <T> Optional<T> as(Parser parser, Class<T> type) {
+		return ofNullable(to(parser, type));
 	}
 
 	/**

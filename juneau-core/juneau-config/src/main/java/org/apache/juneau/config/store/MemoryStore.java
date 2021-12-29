@@ -37,14 +37,14 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ConfigMemoryStore extends ConfigStore {
+public class MemoryStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default memory store, all default values.*/
-	public static final ConfigMemoryStore DEFAULT = ConfigMemoryStore.create().build();
+	public static final MemoryStore DEFAULT = MemoryStore.create().build();
 
 	/**
 	 * Creates a new builder for this object.
@@ -70,7 +70,7 @@ public class ConfigMemoryStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
-			type(ConfigMemoryStore.class);
+			type(MemoryStore.class);
 		}
 
 		/**
@@ -78,7 +78,7 @@ public class ConfigMemoryStore extends ConfigStore {
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-		protected Builder(ConfigMemoryStore copyFrom) {
+		protected Builder(MemoryStore copyFrom) {
 			super(copyFrom);
 			type(copyFrom.getClass());
 		}
@@ -98,8 +98,8 @@ public class ConfigMemoryStore extends ConfigStore {
 		}
 
 		@Override /* Context.Builder */
-		public ConfigMemoryStore build() {
-			return build(ConfigMemoryStore.class, null);
+		public MemoryStore build() {
+			return build(MemoryStore.class, null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ public class ConfigMemoryStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ConfigMemoryStore(Builder builder) {
+	protected MemoryStore(Builder builder) {
 		super(builder);
 	}
 
@@ -207,7 +207,7 @@ public class ConfigMemoryStore extends ConfigStore {
 	}
 
 	@Override /* ConfigStore */
-	public synchronized ConfigMemoryStore update(String name, String newContents) {
+	public synchronized MemoryStore update(String name, String newContents) {
 		if (newContents == null)
 			cache.remove(name);
 		else

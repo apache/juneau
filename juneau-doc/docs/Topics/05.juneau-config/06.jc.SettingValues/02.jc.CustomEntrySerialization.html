@@ -13,35 +13,30 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Section Beans'}
+{title:'Custom Entry Serialization'}
 
 <div class='topic'>
 	<p>
-		Config files can also be used to directly populate beans using 
-		{@link oaj.config.Config#getSectionAsBean(String,Class,boolean)}.
-	</p>
-	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-		|	<jc>// Example config file</jc>
-		|	<cs>[MyAddress]</cs>
-		|	<ck>street</ck> = <cv>123 Main Street</cv>
-		|	<ck>city</ck> = <cv>Anywhere</cv>
-		|	<ck>state</ck> = <cv>NY</cv>
-		|	<ck>zip</ck> = <cv>12345</cv>
+		Setter methods that take in a <c>Serializer</c> can be used to provide custom serialization of entries
+		instead of using the predefined serializer.
 	</p>
 	<p class='bcode w800'>
-		|	<jc>// Example bean</jc>
-		|	<jk>public class</jk> Address {
-		|		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
-		|		<jk>public</jk> StateEnum <jf>state</jf>;
-		|		<jk>public int</jk> <jf>zip</jf>;
-		|	}
-		|
-		|	<jc>// Example usage</jc>
-		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-		|	Address <jv>myAddress</jv> = <jv>config</jv>.getSectionAsBean(<js>"MyAddress"</js>, Address.<jk>class</jk>);
+		|	<jc>// Set an XML value instead of JSON.</jc>
+		|	<jv>config</jv>.set(<js>"key1"</js>, <jv>myAddress</jv>, XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>);
 	</p>
+	<p class='bcode w800'>
+		|	<ck>key1</ck> = 
+		|		<cv>&lt;address&gt;	
+		|			&lt;street&gt;123 Main Street&lt;/street&gt;
+		|			&lt;city&gt;Anywhere&lt;/city&gt;
+		|			&lt;state&gt;NY&lt;/state&gt;
+		|			&lt;zip&gt;12345&lt;/zip&gt;
+		|		&lt;/address&gt;</cv>
+	</p>		
 	<p>
-		Like maps, beans created this way are snapshot copies of the section at the time of the method call.
+		The value can then be retrieved using the equivalent parser:
+	</p>
+	<p class='bcode w800'>
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"key1"</js>).to(XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
 	</p>
 </div>

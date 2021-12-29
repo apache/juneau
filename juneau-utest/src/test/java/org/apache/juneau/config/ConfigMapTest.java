@@ -34,7 +34,7 @@ public class ConfigMapTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testNonExistentConfig() throws Exception {
-		ConfigStore s = ConfigMemoryStore.create().build();
+		ConfigStore s = MemoryStore.create().build();
 		ConfigMap cm = s.getMap("Foo.cfg");
 		assertEquals("", cm.toString());
 	}
@@ -1126,6 +1126,6 @@ public class ConfigMapTest {
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {
-		return ConfigMemoryStore.create().build().update(name, contents);
+		return MemoryStore.create().build().update(name, contents);
 	}
 }

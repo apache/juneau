@@ -42,31 +42,31 @@
 		Write is slightly trickier:
 	</p>
 	<p class='bcode w800'>
-		<jk>public</jk> String write(String <jv>name</jv>, String <jv>oldContents</jv>, String <jv>newContents</jv>) {
-		
-			<jc>// If the old contents match the current stored contents, the new contents will get stored, 
-			//	and the method returns null indicating success.
-		
-			// If the old contents DO NOT match the current stored contents (i.e. it was modified in some way), 
-			//	the new contents are NOT stored, and the method returns the current stored contents.
-		
-			// If the old contents are null, then just always write the new contents.</jc>
-		}
+		|	<jk>public</jk> String write(String <jv>name</jv>, String <jv>oldContents</jv>, String <jv>newContents</jv>) {
+		|			
+		|		<jc>// If the old contents match the current stored contents, the new contents will get stored, 
+		|		//	and the method returns null indicating success.
+		|			
+		|		// If the old contents DO NOT match the current stored contents (i.e. it was modified in some way), 
+		|		//	the new contents are NOT stored, and the method returns the current stored contents.
+		|			
+		|		// If the old contents are null, then just always write the new contents.</jc>
+		|	}
 	</p>
 	<p>
 		The update method is called whenever the stored file gets modified externally:
 	</p>		
 	<p class='bcode w800'>
-		<jk>public</jk> String update(String <jv>name</jv>, String <jv>newContents</jv>) {
-			<jc>// Do something with the updated contents.</jc>
-		}
+		|	<jk>public</jk> String update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		|		<jc>// Do something with the updated contents.</jc>
+		|	}
 	</p>
 	<p>
 		Two configuration stores are provided by default:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@link oaj.config.store.ConfigFileStore} - File-system storage.
-		<li class='jc'>{@link oaj.config.store.ConfigMemoryStore} - In-memory storage.
+		<li class='jc'>{@link oaj.config.store.FileStore} - File-system storage.
+		<li class='jc'>{@link oaj.config.store.MemoryStore} - In-memory storage.
 	</ul>
 	<p>
 		The store is defined on the <c>Config</c> object via the following setting:
@@ -77,11 +77,11 @@
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<jc>// Create a config with in-memory storage.</jc>
-		Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
+		|	<jc>// Create a config with in-memory storage.</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
 	</p>
 	<p>
-		The default store used is {@link oaj.config.store.ConfigFileStore#DEFAULT} which defines
+		The default store used is {@link oaj.config.store.åFileStore#DEFAULT} which defines
 		the execution directory as the file system directory to store and retrieve files. 
 	</p>
 </div>

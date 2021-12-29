@@ -306,26 +306,23 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-config'>juneau-config</a></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-config.jc.Overview'>Overview</a></p>
+		<li><p><a class='doclink' href='#juneau-config.jc.Overview'>Overview</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-config.jc.Overview.jc.SyntaxRules'>Syntax Rules</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-config.jc.EntryTypes'>Entry Types</a></p>
+		<li><p><a class='doclink' href='#juneau-config.jc.ReadingEntries'>Reading Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-config.jc.EntryTypes.jc.PrimitiveTypes'>Primitive Types</a></p>
-			<li><p><a class='doclink' href='#juneau-config.jc.EntryTypes.jc.Pojos'>POJOs</a></p>
-			<li><p><a class='doclink' href='#juneau-config.jc.EntryTypes.jc.Arrays'>Arrays</a></p>
-			<li><p><a class='doclink' href='#juneau-config.jc.EntryTypes.jc.Collections'>Collections</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-config.jc.EntryTypes.jc.BinaryData'>Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-config.jc.ReadingEntries.jc.Pojos'>POJOs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-config.jc.ReadingEntries.jc.Arrays'>Arrays</a></p>
+			<li><p><a class='doclink' href='#juneau-config.jc.ReadingEntries.jc.JCFObjects'>Java Collection Framework Objects</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-config.jc.ReadingEntries.jc.BinaryData'>Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-config.jc.Variables'>Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-config.jc.Variables.jc.LogicVariables'>Logic Variables</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-config.jc.EncodedEntries'>Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-config.jc.SectionMaps'>Section Maps</a></p>
-		<li><p><a class='doclink' href='#juneau-config.jc.SectionBeans'>Section Beans</a></p>
-		<li><p><a class='doclink' href='#juneau-config.jc.SectionInterfaces'>Section Interfaces</a></p>
+		<li><p><a class='doclink' href='#juneau-config.jc.ModdedEntries'>Modded/Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-config.jc.Sections'>Sections</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-config.jc.SettingValues'>Setting Values</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-config.jc.SettingValues.jc.FileSystemChanges'>File System Changes</a></p>
@@ -337,8 +334,8 @@
 		<li><p><a class='doclink' href='#juneau-config.jc.ConfigImports'>Imports</a><span class='update'>updated: 8.1.0</span></p>
 		<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores'>Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores.jc.MemoryStore'>ConfigMemoryStore</a></p>
-			<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores.jc.FileStore'>ConfigFileStore</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores.jc.MemoryStore'>MemoryStore</a></p>
+			<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores.jc.FileStore'>FileStore</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores.jc.CustomStores'>Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-config.jc.ConfigStores.jc.StoreListeners'>ConfigStore Listeners</a></p>
 		</ol>
@@ -12671,7 +12668,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.Overview' id='juneau-config.jc.Overview'>5.1 - Overview</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.Overview' id='juneau-config.jc.Overview'>5.1 - Overview</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 5.1 - juneau-config.jc.Overview -->
 <div class='topic'>
 	<p>
@@ -12711,10 +12708,10 @@
 	</p>
 	<p class='bcode w800'>
 	<jc>// Read values from section #1</jc>
-	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.getInt(<js>"Section1/key1"</js>);
-	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.getBoolean(<js>"Section1/key2"</js>);
-	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
-	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.get(<js>"Section1/key1"</js>).asInteger().orElse(-1);
+	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.get(<js>"Section1/key2"</js>).asBoolean().orElse(<jk>false</jk>);
+	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.get(<js>"Section1/key3"</js>).as(<jk>int</jk>[].<jk>class</jk>).orElse(<jk>null</jk>);
+	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).as(URL.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
 		The config language may look simple, but it is a very powerful feature with many capabilities including:
@@ -12789,7 +12786,7 @@
 		<li>
 			Values containing <js>'#'</js> must be escaped to prevent identification as a comment character:
 			<p class='bcode w800'>
-		<ck>valueContainingPound</ck> = <cv>Value containing \u0023 character</cv>
+	<ck>valueContainingPound</ck> = <cv>Value containing \u0023 character</cv>
 			</p>
 			<br>Likewise, <js>'\'</js> should be escaped to prevent confusion with unicode escapes.
 		<li>
@@ -12845,19 +12842,74 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EntryTypes' id='juneau-config.jc.EntryTypes'>5.2 - Entry Types</a></h3>
-<div class='topic'><!-- START: 5.2 - juneau-config.jc.EntryTypes -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadingEntries' id='juneau-config.jc.ReadingEntries'>5.2 - Reading Entries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 5.2 - juneau-config.jc.ReadingEntries -->
 <div class='topic'>
 	<p>
 		Configuration files can contain entries for anything from primitive types up to complex hierarchies of POJOs consisting of maps, collections, and/or beans.
 	</p>
-</div>
-
-<!-- ==================================================================================================== -->
-
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EntryTypes.jc.PrimitiveTypes' id='juneau-config.jc.EntryTypes.jc.PrimitiveTypes'>5.2.1 - Primitive Types</a></h4>
-<div class='topic'><!-- START: 5.2.1 - juneau-config.jc.EntryTypes.jc.PrimitiveTypes -->
-<div class='topic'>
+	<p>
+		Entries are accessed via the {@link org.apache.juneau.config.Config#get(String)} method which returns the following bean:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.config.Entry}
+		<ul class='spaced-list'>
+			<li>Primary methods
+				<ul class='javatreec'>
+					<li class='jm'>{@link org.apache.juneau.config.Entry#get() get()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#isNotEmpty() isNotEmpty()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#isPresent() isPresent()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#orElse(String) orElse(String)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#orElseGet(Supplier) orElseGet(Supplier)}
+				</ul>
+			<li>Direct conversion methods
+				<ul class='javatreec'>
+					<li class='jm'>{@link org.apache.juneau.config.Entry#to(Class) to(Class)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#to(Parser,Class) to(Parser,Class)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#to(Parser,Type,Type...) to(Parser,Type,Type...)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#to(Type,Type...) to(Type,Type...)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toBoolean() toBoolean()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toBytes() toBytes()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toDouble() toDouble()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toFloat() toFloat()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toInteger() toInteger()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toList() toList()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toList(Parser) toList(Parser)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toLong() toLong()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toMap() toMap()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toMap(Parser) toMap(Parser)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toString() toString()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#toStringArray() toStringArray()}	
+				</ul>
+			<li>Conversion through {@link java.util.Optional Optionals}
+				<ul class='javatreec'>
+					<li class='jm'>{@link org.apache.juneau.config.Entry#as(Class) as(Class)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#as(Parser,Class) as(Parser,Class)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#as(Parser,Type,Type...) as(Parser,Type,Type...)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#as(Type,Type...) as(Type,Type...)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asBoolean() asBoolean()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asBytes() asBytes()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asDouble() asDouble()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asFloat() asFloat()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asInteger() asInteger()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asList() asList()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asList(Parser) asList(Parser)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asLong() asLong()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asMap() asMap()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asMap(Parser) asMap(Parser)}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asString() asString()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#asStringArray() asStringArray()}
+				</ul>
+			<li>Metadata methods
+				<ul class='javatreec'>
+					<li class='jm'>{@link org.apache.juneau.config.Entry#getComment() getComment()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#getKey() getKey()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#getModifiers() getModifiers()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#getPreLines() getPreLines()}
+					<li class='jm'>{@link org.apache.juneau.config.Entry#getValue() getValue()}
+				</ul>
+		</ul>
+	</ul>
 	<p>
 		The most common case for configuration values are primitives.
 	</p>
@@ -12878,26 +12930,6 @@
 	<ck>key5</ck> = <cv>6.67e−11</cv>
 	<ck>key6</ck> = <cv>Infinity</cv>
 	</p>
-	<p>
-		The following methods are provided for accessing primitive values:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.Config#getString(String) getString(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getString(String,String) getString(String,String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getBoolean(String) getBoolean(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getBoolean(String,boolean) getBoolean(String,boolean)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getInt(String) getInt(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getInt(String,int) getInt(String,int)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getLong(String) getLong(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getLong(String,long) getLong(String,long)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getFloat(String) getFloat(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getFloat(String,float) getFloat(String,long)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getDouble(String) getDouble(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getDouble(String,double) getDouble(String,long)}
-		</ul>
-	</ul>
 	<p>
 		On integers and longs, <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
 	</p>	
@@ -12929,25 +12961,14 @@
 		<cv>onto separate lines</cv>.
 	</p>
 </div>
-</div><!-- END: 5.2.1 - juneau-config.jc.EntryTypes.jc.PrimitiveTypes -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EntryTypes.jc.Pojos' id='juneau-config.jc.EntryTypes.jc.Pojos'>5.2.2 - POJOs</a></h4>
-<div class='topic'><!-- START: 5.2.2 - juneau-config.jc.EntryTypes.jc.Pojos -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadingEntries.jc.Pojos' id='juneau-config.jc.ReadingEntries.jc.Pojos'>5.2.1 - POJOs</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 5.2.1 - juneau-config.jc.ReadingEntries.jc.Pojos -->
 <div class='topic'>
 	<p>
-		The following methods are provided for accessing POJO values:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Class) getObject(String,Class)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,T,Class)}
-		</ul>
-	</ul>
-	<p>
-		In theory, any {@doc jm.PojoCategories parsable} POJO type can be represented
+		Entries can also be read as POJOs.  In theory, any {@doc jm.PojoCategories parsable} POJO type can be represented
 		as a config value. 
 		However in practice, we're typically talking about the following:
 	</p>
@@ -12965,7 +12986,7 @@
 	</p>
 	<p class='bcode w800'>
 	<jc>// Read values from section #1</jc>
-	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).to(URL.<jk>class</jk>);
 	</p>
 	<p>
 		Beans are represented as {@doc jm.SimplifiedJson Simplified JSON} by default:
@@ -12991,11 +13012,10 @@
 
 	<jc>// Example usage</jc>
 	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	Address <jv>myAddress</jv> = <jv>config</jv>.getObject(<js>"ContactInfo/address"</js>, Address.<jk>class</jk>);
+	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"ContactInfo/address"</js>).to(Address.<jk>class</jk>);
 	</p>
 	<p>
-		The format for beans depends on the serializer and parser registered on the Config which 
-		is defined in the builder via the following methods:
+		The default serializer and parser is registered on the Config through the following methods:
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.config.Config.Builder}
@@ -13004,64 +13024,42 @@
 			<li class='jm'>{@link org.apache.juneau.config.Config.Builder#parser(ReaderParser) parser(ReaderParser)}
 		</ul>
 	</ul>
-	<p>
-		The default parser can also be overridden on the following getters:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Class) getObjectWithDefault(String,T,Parser,Class)}
-		</ul>
-	</ul>
 </div>
-</div><!-- END: 5.2.2 - juneau-config.jc.EntryTypes.jc.Pojos -->
+</div><!-- END: 5.2.1 - juneau-config.jc.ReadingEntries.jc.Pojos -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EntryTypes.jc.Arrays' id='juneau-config.jc.EntryTypes.jc.Arrays'>5.2.3 - Arrays</a></h4>
-<div class='topic'><!-- START: 5.2.3 - juneau-config.jc.EntryTypes.jc.Arrays -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadingEntries.jc.Arrays' id='juneau-config.jc.ReadingEntries.jc.Arrays'>5.2.2 - Arrays</a></h4>
+<div class='topic'><!-- START: 5.2.2 - juneau-config.jc.ReadingEntries.jc.Arrays -->
 <div class='topic'>
 	<p>
-		The following methods are provided for accessing arrays:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.Config#getStringArray(String) getStringArray(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getStringArray(String,String[]) getStringArray(String,String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Class) getObject(String,Class)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
-		</ul>
-	</ul>
-	<p>
-		The <c>getStringArray()</c> methods allow you to retrieve comma-delimited lists of values:
+		The <c>toStringArray()</c> method allows you to retrieve comma-delimited lists of values:
 	<p class='bcode w800'>
 	<ck>key1</ck> = <cv>foo, bar, baz</cv>
 	</p>
 	<p class='bcode w800'>
-	String[] <jv>key1</jv> = <jv>config</jv>.getStringArray(<js>"key1"</js>);
+	String[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).toStringArray();
 	</p>
 	<p>
-		String arrays can also be represented in JSON when using the <c>getObject()</c> methods:
+		String arrays can also be represented in JSON when the registered parser is a JSON parser:
 	</p>
 	<p class='bcode w800'>
 	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
 	</p>
 	<p class='bcode w800'>
-	String[] <jv>key1</jv> = <jv>config</jv>.getObject(<js>"key1"</js>, String[].<jk>class</jk>);
+	String[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).toStringArray();
 	</p>
 	<p>
-		Primitive arrays can also be retrieved using the <c>getObject()</c> methods:
+		Primitive arrays can also be retrieved using the <c>as()</c> and <c>to()</c> methods:
 	</p>
 	<p class='bcode w800'>
 	<ck>key1</ck> = <cv>[1,2,3]</cv>
 	</p>
 	<p class='bcode w800'>
-	<jk>int</jk>[] <jv>key1</jv> = <jv>config</jv>.getObject(<js>"key1"</js>, <jk>int</jk>[].<jk>class</jk>);
+	<jk>int</jk>[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).to(<jk>int</jk>[].<jk>class</jk>);
 	</p>
 	<p>
-		Arrays of POJOs can also be retrieved using the <c>getObject()</c> methods:
+		Arrays of POJOs can also be retrieved using the methods as well:
 	</p>
 	<p class='bcode w800'>
 	<ck>addresses</ck> = 
@@ -13081,29 +13079,18 @@
 		]</cv>
 	</p>
 	<p class='bcode w800'>
-	Address[] <jv>addresses</jv> = <jv>config</jv>.getObject(<js>"addresses"</js>, Address[].<jk>class</jk>);
+	Address[] <jv>addresses</jv> = <jv>config</jv>.get(<js>"addresses"</js>).to(Address[].<jk>class</jk>);
 	</p>
 </div>
-</div><!-- END: 5.2.3 - juneau-config.jc.EntryTypes.jc.Arrays -->
+</div><!-- END: 5.2.2 - juneau-config.jc.ReadingEntries.jc.Arrays -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EntryTypes.jc.Collections' id='juneau-config.jc.EntryTypes.jc.Collections'>5.2.4 - Collections</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 5.2.4 - juneau-config.jc.EntryTypes.jc.Collections -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadingEntries.jc.JCFObjects' id='juneau-config.jc.ReadingEntries.jc.JCFObjects'>5.2.3 - Java Collection Framework Objects</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 5.2.3 - juneau-config.jc.ReadingEntries.jc.JCFObjects -->
 <div class='topic'>
 	<p>
-		The following methods are provided for accessing maps and collections:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Type,Type...) getObject(String,Type,Type...)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,T,Type,Type...)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,T,Parser,Type,Type...)}
-		</ul>
-	</ul>
-	<p>
+		Entries can also be read as Java Collection Framework objects.
 		The <c>Type,Type...</c> arguments allow you to specify the component types for maps and collections.
 		<c>List</c> class arguments can be followed by zero or one arguments representing the entry types.
 		<c>Map</c> class arguments can be followed by zero or two arguments representing the key and value types.
@@ -13113,19 +13100,19 @@
 		Examples are shown below:
 	</p>
 	<ul class='spaced-list'>
-		<li><c>getObject(<js>"..."</js>, List.<jk>class</jk>)</c>
+		<li><c>to(List.<jk>class</jk>)</c>
 			<br>Produces: <c>List&lt;?&gt;</c>
-		<li><c>getObject(<js>"..."</js>, LinkedList.<jk>class</jk>)</c>
+		<li><c>to(LinkedList.<jk>class</jk>)</c>
 			<br>Produces: <c>LinkedList&lt;?&gt;</c>
-		<li><c>getObject(<js>"..."</js>, HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</c>
+		<li><c>to(HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</c>
 			<br>Produces: <c>HashSet&lt;Integer&gt;</c>
-		<li><c>getObject(<js>"..."</js>, Map.<jk>class</jk>)</c>
+		<li><c>to(Map.<jk>class</jk>)</c>
 			<br>Produces: <c>Map&lt;?,?&gt;</c>
-		<li><c>getObject(<js>"..."</js>, HashMap.<jk>class</jk>)</c>
+		<li><c>to(HashMap.<jk>class</jk>)</c>
 			<br>Produces: <c>HashMap&lt;?,?&gt;</c>
-		<li><c>getObject(<js>"..."</js>, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</c>
+		<li><c>to(LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</c>
 			<br>Produces: <c>LinkedHashMap&lt;String,MyBean&gt;</c> 
-		<li><c>getObject(<js>"..."</js>, HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</c>
+		<li><c>to(HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</c>
 			<br>Produces: <c>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</c> 
 	</ul>
 	<h5 class='figure'>Example:</h5>
@@ -13147,35 +13134,26 @@
 		]</cv>
 	</p>
 	<p class='bcode w800'>
-	List&lt;Address&gt; <jv>addresses</jv> = <jv>config</jv>.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
+	List&lt;Address&gt; <jv>addresses</jv> = <jv>config</jv>.get(<js>"addresses"</js>).to(ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
 	</p>
 	<p>
 		Oftentimes, it might be useful to parse into the {@link org.apache.juneau.collections.OList} and {@link org.apache.juneau.collections.OMap}
 		classes that provide the various convenience methods for working with JSON-like data structures:
 	</p>
 	<p class='bcode w800'>
-	OMap <jv>omap</jv> = <jv>config</jv>.getObject(<js>"key1"</js>, OMap.<jk>class</jk>);
-	OList <jv>olist</jv> = <jv>config</jv>.getObject(<js>"key2"</js>, OList.<jk>class</jk>);
+	OMap <jv>omap</jv> = <jv>config</jv>.get(<js>"key1"</js>).toMap();
+	OList <jv>olist</jv> = <jv>config</jv>.get(<js>"key2"</js>).toList();
 	</p>
 </div>
-</div><!-- END: 5.2.4 - juneau-config.jc.EntryTypes.jc.Collections -->
+</div><!-- END: 5.2.3 - juneau-config.jc.ReadingEntries.jc.JCFObjects -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EntryTypes.jc.BinaryData' id='juneau-config.jc.EntryTypes.jc.BinaryData'>5.2.5 - Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 5.2.5 - juneau-config.jc.EntryTypes.jc.BinaryData -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadingEntries.jc.BinaryData' id='juneau-config.jc.ReadingEntries.jc.BinaryData'>5.2.4 - Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 5.2.4 - juneau-config.jc.ReadingEntries.jc.BinaryData -->
 <div class='topic'>
 	<p>
-		The following methods are provided for accessing binary data:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.Config#getBytes(String) getBytes(String)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#getBytes(String,byte[]) getBytes(String,byte[])}
-		</ul>
-	</ul>
-	<p>
+		Entries can also be accessed as binary data.
 		Binary data can be represented in 3 formats:
 	</p>
 	<ul class='spaced-list'>
@@ -13199,7 +13177,7 @@
 	<ck>key</ck> = <cv>Zm9vYmFycw==</cv>
 	</p>
 	<p class='bcode w800'>
-	<jk>byte</jk>[] <jv>bytes</jv> = <jv>config</jv>.getBytes(<js>"key"</js>);
+	<jk>byte</jk>[] <jv>bytes</jv> = <jv>config</jv>.get(<js>"key"</js>).toBytes();
 	</p>
 	<p>
 		Binary lines can be split up into separate lines for readability:
@@ -13216,8 +13194,8 @@
 		<li class='jm'>{@link org.apache.juneau.config.Config.Builder#binaryLineLength(int)}
 	</ul>
 </div>
-</div><!-- END: 5.2.5 - juneau-config.jc.EntryTypes.jc.BinaryData -->
-</div><!-- END: 5.2 - juneau-config.jc.EntryTypes -->
+</div><!-- END: 5.2.4 - juneau-config.jc.ReadingEntries.jc.BinaryData -->
+</div><!-- END: 5.2 - juneau-config.jc.ReadingEntries -->
 
 <!-- ==================================================================================================== -->
 
@@ -13252,10 +13230,10 @@
 	<p class='bcode w800'>
 	Config <jv>config</jv> = Config.<jsm>create</jsm>().build();
 	
-	Locale <jv>locale</jv> = <jv>config</jv>.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 
-	String <jv>path</jv> = <jv>config</jv>.getString(<js>"MySection/path"</js>); 
-	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.getInt(<js>"MySection/sameAsAnInt"</js>); 
-	ABean <jv>bean</jv> = <jv>config</jv>.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
+	Locale <jv>locale</jv> = <jv>config</jv>.get(<js>"MySection/locale"</js>).to(Locale.<jk>class</jk>); 
+	String <jv>path</jv> = <jv>config</jv>.get(<js>"MySection/path"</js>).toString(); 
+	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.get(<js>"MySection/sameAsAnInt"</js>).toInteger(); 
+	ABean <jv>bean</jv> = <jv>config</jv>.get(<js>"MySection/aBean"</js>).to(ABean.<jk>class</jk>); 
 	</p>
 	<p>
 		By default, <c>Configs</c> use the {@link org.apache.juneau.svl.VarResolver#DEFAULT} variable resolver
@@ -13366,63 +13344,81 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.EncodedEntries' id='juneau-config.jc.EncodedEntries'>5.4 - Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 5.4 - juneau-config.jc.EncodedEntries -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ModdedEntries' id='juneau-config.jc.ModdedEntries'>5.4 - Modded/Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 5.4 - juneau-config.jc.ModdedEntries -->
 <div class='topic'>
 	<p>
-		Encoded entries allow for sensitive information such as passwords to be obfuscated.
+		The following method can be used to associates entry modifiers to a config:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.config.Config.Builder}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.config.Config.Builder#mods(Mod...) mods(Mod...)}
+		</ul>
+	</ul>
+	<p>
+		Mods are used to modify values before being persisted.  This can be used to
+		replace or encode sensitive information.  They are denoted by a single
+		character that gets appended between angle brackets on the property name (e.g. <ck>key&lt;X&gt;</ck>).
+		Multiple modifiers can be denoted by multiple characters (e.g. <ck>key&lt;XYZ&gt;</ck>) and
+		are applied/removed in the order denoted.
 	</p>
 	<p>
-		Encoded entries are denoted with a <js>'*'</js> character at the end of the key name.
-	</p>
-	<p>
-		For example, the following password is marked for encoding:
+		The framework comes built-in with a simple {@link org.apache.juneau.config.mod.XorEncodeMod xor-encode} mod tied
+		to the <js>'*'</js> character.  The following shows how it is used:
 	</p>
 	<p class='bcode w800'>
 	<cs>[MyHost]</cs>
 	<ck>url</ck> = <cv>http://localhost:9080/foo</cv>
 	<ck>user</ck> = <cv>me</cv>
-	<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
+	<ck>password&lt;*&gt;</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
 	</p>
 	<p>
-		The default encoder is {@link org.apache.juneau.config.mod.ConfigXorEncoder} which is a simple XOR+Base64 encoder.
-	</p>
-	<p>
-		Custom encoders can be used to provide your own encoding support by implementing the {@link org.apache.juneau.config.mod.ConfigEncoder} interface.
+		Custom encoders can be used to provide your own encoding support by implementing the {@link org.apache.juneau.config.mod.Mod} class.
 	</p>
 	<ul class='javatree'>
-		<li class='jic'>{@link org.apache.juneau.config.mod.ConfigEncoder}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.mod.ConfigEncoder#encode(String,String) encode(String,String)}
-			<li class='jm'>{@link org.apache.juneau.config.mod.ConfigEncoder#decode(String,String) decode(String,String)}
-			<li class='jm'>{@link org.apache.juneau.config.mod.ConfigEncoder#isEncoded(String) isEncoded(String)}
+		<li class='jac'>{@link org.apache.juneau.config.mod.Mod}
+		<ul class='javatreec'>
+			<li class='jm'>{@link org.apache.juneau.config.mod.Mod#apply(String) apply(String)}
+			<li class='jm'>{@link org.apache.juneau.config.mod.Mod#remove(String) remove(String)}
+			<li class='jm'>{@link org.apache.juneau.config.mod.Mod#isApplied(String) isApplied(String)}
 		</ul>
 	</ul>
 	<p>
-		Encoders are controlled via the following setting:
-	</p>
-	<ul class='javatree'>
-		<li class='jm'>{@link org.apache.juneau.config.Config.Builder#encoder(ConfigEncoder)}
-	</ul>
-	<p>
-		Encoded values can be set to plain-text values.  
-		The curly brackets around the value identify whether the value has been encoded or not. 
-	</p>
-	<p>
-		Unencoded values are encoded when the file is saved using the {@link org.apache.juneau.config.Config#commit()} method.
-		They can also be encoded immediately by calling {@link org.apache.juneau.config.Config#encodeEntries()}.
+		Unmodified values are encoded when the file is saved using the {@link org.apache.juneau.config.Config#commit()} method.
+		They can also be encoded immediately by calling {@link org.apache.juneau.config.Config#applyMods()} which can typically
+		be done during JVM startup to immediately encode any unencoded passwords in the file.
 	</p>
 </div>
-</div><!-- END: 5.4 - juneau-config.jc.EncodedEntries -->
+</div><!-- END: 5.4 - juneau-config.jc.ModdedEntries -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SectionMaps' id='juneau-config.jc.SectionMaps'>5.5 - Section Maps</a></h3>
-<div class='topic'><!-- START: 5.5 - juneau-config.jc.SectionMaps -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.Sections' id='juneau-config.jc.Sections'>5.5 - Sections</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 5.5 - juneau-config.jc.Sections -->
 <div class='topic'>
 	<p>
-		Config sections can be retrieved in-bulk using  
-		{@link org.apache.juneau.config.Config#getSectionAsMap(String)}.
+		Config sections can be retrieved in-bulk using the
+		{@link org.apache.juneau.config.Config#getSection(String)} method.  It returns the following bean:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.config.Section}
+		<ul class='javatreec'>
+			<li class='jm'>{@link org.apache.juneau.config.Section#asBean(Class) asBean(Class)}
+			<li class='jm'>{@link org.apache.juneau.config.Section#asBean(Class,boolean) asBean(Class,boolean)}
+			<li class='jm'>{@link org.apache.juneau.config.Section#asInterface(Class) asInterface(Class)}
+			<li class='jm'>{@link org.apache.juneau.config.Section#asMap() asMap()}
+			<li class='jm'>{@link org.apache.juneau.config.Section#isPresent() isPresent()}
+			<li class='jm'>{@link org.apache.juneau.config.Section#toBean(Class) toBean(Class)}
+			<li class='jm'>{@link org.apache.juneau.config.Section#toBean(Class,boolean) toBean(Class,boolean)}
+			<li class='jm'>{@link org.apache.juneau.config.Section#toInterface(Class) toInterface(Class)}
+			<li class='jm'>{@link org.apache.juneau.config.Section#toMap() toMap()}
+			<li class='jm'>{@link org.apache.juneau.config.Section#writeToBean(Object,boolean) writeToBean(Object,boolean)}
+		</ul>
+	</ul>
+	<p>	
+		The {@link org.apache.juneau.config.Section#asMap() asMap()} and {@link org.apache.juneau.config.Section#toMap() toMap()}
+		methods allow you to access a section as simple key/value pairs. 
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -13437,7 +13433,7 @@
 	<jc>// Example usage</jc>
 	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
 	
-	OMap <jv>omap</jv> = <jv>config</jv>.getSectionAsMap(<js>"MyAddress"</js>);
+	OMap <jv>omap</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).asMap();
 	
 	String <jv>street</jv> = <jv>omap</jv>.getString(<js>"street"</js>);
 	String <jv>city</jv> = <jv>omap</jv>.getString(<js>"city"</js>);
@@ -13447,17 +13443,9 @@
 	<p>
 		Maps created this way are snapshot copies of the section at the time of the method call.
 	</p>
-</div>
-</div><!-- END: 5.5 - juneau-config.jc.SectionMaps -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SectionBeans' id='juneau-config.jc.SectionBeans'>5.6 - Section Beans</a></h3>
-<div class='topic'><!-- START: 5.6 - juneau-config.jc.SectionBeans -->
-<div class='topic'>
 	<p>
 		Config files can also be used to directly populate beans using 
-		{@link org.apache.juneau.config.Config#getSectionAsBean(String,Class,boolean)}.
+		{@link org.apache.juneau.config.Section#asBean(Class) asBean()}, {@link org.apache.juneau.config.Section#toBean(Class) toBean()}, or {@link org.apache.juneau.config.Section#writeToBean(Object,boolean) writeToBean()}.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -13478,22 +13466,14 @@
 
 	<jc>// Example usage</jc>
 	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	Address <jv>myAddress</jv> = <jv>config</jv>.getSectionAsBean(<js>"MyAddress"</js>, Address.<jk>class</jk>);
+	Address <jv>myAddress</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).to(Address.<jk>class</jk>);
 	</p>
 	<p>
 		Like maps, beans created this way are snapshot copies of the section at the time of the method call.
 	</p>
-</div>
-</div><!-- END: 5.6 - juneau-config.jc.SectionBeans -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SectionInterfaces' id='juneau-config.jc.SectionInterfaces'>5.7 - Section Interfaces</a></h3>
-<div class='topic'><!-- START: 5.7 - juneau-config.jc.SectionInterfaces -->
-<div class='topic'>
 	<p>
 		Config sections can also be accessed via interface proxies using 
-		{@link org.apache.juneau.config.Config#getSectionAsInterface(String,Class)}.
+		{@link org.apache.juneau.config.Section#asInterface(Class)}.
 	</p>
 	<p>
 		While section maps and beans retrieve copies of the configuration data at the time of the method
@@ -13536,7 +13516,7 @@
 	
 	<jc>// Example usage.</jc>
 	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-	MyConfigInterface <jv>intf</jv> = <jv>config</jv>.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
+	MyConfigInterface <jv>intf</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).toInterface(MyConfigInterface.<jk>class</jk>);
 	
 	<jc>// Read a value.</jc>
 	<jk>int</jk> <jv>myInt</jv> = <jv>intf</jv>.getInt();
@@ -13547,13 +13527,14 @@
 	<jc>// Commit your changes to the store.</jc>
 	<jv>config</jv>.commit();
 	</p>
+	
 </div>
-</div><!-- END: 5.7 - juneau-config.jc.SectionInterfaces -->
+</div><!-- END: 5.5 - juneau-config.jc.Sections -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues' id='juneau-config.jc.SettingValues'>5.8 - Setting Values</a></h3>
-<div class='topic'><!-- START: 5.8 - juneau-config.jc.SettingValues -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues' id='juneau-config.jc.SettingValues'>5.6 - Setting Values</a></h3>
+<div class='topic'><!-- START: 5.6 - juneau-config.jc.SettingValues -->
 <div class='topic'>
 	<p>
 		The following methods allow you to add, remove, and modify entries and sections in a config file:
@@ -13563,8 +13544,7 @@
 		<ul>
 			<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object) set(String,Object)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer) set(String,Object,Serializer)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod,String,List) set(String,Object,Serializer,ConfigMod,String,List)}
-			<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List) set(String,Object,Serializer,ConfigMod[],String,List)}
+			<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,String,String,List) set(String,Object,Serializer,String,String,List)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#set(String,String) set(String,String)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#remove(String) remove(String)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List) setSection(String,List)}
@@ -13586,12 +13566,12 @@
 		.commit();
 	</p>
 	<p>
-		The method {@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} can be used
+		The method {@link org.apache.juneau.config.Config#set(String,Object,Serializer,String,String,List)} can be used
 		for adding comments and pre-lines to entries, and specifying encoded values.
 	</p>
 	<p class='bcode w800'>
 	<jc>// Set an encoded value with some comments.</jc>
-	<jv>config</jv>.set(<js>"key1"</js>, 1, <jk>null</jk>, ConfigMod.<jsf>ENCODED</jsf>, <js>"Same-line comment"</js>, 
+	<jv>config</jv>.set(<js>"key1"</js>, 1, <jk>null</jk>, <js>"*"</js>, <js>"Same-line comment"</js>, 
 		Arrays.asList(
 			<js>"# Comment 1"</js>, <js>""</js>, <js>"# Comment 2"</js>
 		)
@@ -13604,7 +13584,7 @@
 	<ck>key1</ck> = <cv>1</cv> <cc># Same-line comment</cc>
 	</p>	
 	<p>
-		The last 4 arguments in {@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} 
+		The last 4 arguments in {@link org.apache.juneau.config.Config#set(String,Object,Serializer,String,String,List)} 
 		are optional in that if you pass <jk>null</jk>, the current value will not be overwritten.
 		To unset the same-line comment, you should pass in a blank string.
 		To remove pre-lines, you should pass in an empty list.
@@ -13639,8 +13619,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues.jc.FileSystemChanges' id='juneau-config.jc.SettingValues.jc.FileSystemChanges'>5.8.1 - File System Changes</a></h4>
-<div class='topic'><!-- START: 5.8.1 - juneau-config.jc.SettingValues.jc.FileSystemChanges -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues.jc.FileSystemChanges' id='juneau-config.jc.SettingValues.jc.FileSystemChanges'>5.6.1 - File System Changes</a></h4>
+<div class='topic'><!-- START: 5.6.1 - juneau-config.jc.SettingValues.jc.FileSystemChanges -->
 <div class='topic'>
 	<p>
 		In general, external file modifications will be detected immediately in the <c>Config</c>
@@ -13664,12 +13644,12 @@
 		overwritten (although both change events will be seen by listeners).
 	</p>
 </div>
-</div><!-- END: 5.8.1 - juneau-config.jc.SettingValues.jc.FileSystemChanges -->
+</div><!-- END: 5.6.1 - juneau-config.jc.SettingValues.jc.FileSystemChanges -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues.jc.CustomEntrySerialization' id='juneau-config.jc.SettingValues.jc.CustomEntrySerialization'>5.8.2 - Custom Entry Serialization</a></h4>
-<div class='topic'><!-- START: 5.8.2 - juneau-config.jc.SettingValues.jc.CustomEntrySerialization -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues.jc.CustomEntrySerialization' id='juneau-config.jc.SettingValues.jc.CustomEntrySerialization'>5.6.2 - Custom Entry Serialization</a></h4>
+<div class='topic'><!-- START: 5.6.2 - juneau-config.jc.SettingValues.jc.CustomEntrySerialization -->
 <div class='topic'>
 	<p>
 		Setter methods that take in a <c>Serializer</c> can be used to provide custom serialization of entries
@@ -13692,22 +13672,22 @@
 		The value can then be retrieved using the equivalent parser:
 	</p>
 	<p class='bcode w800'>
-	Address <jv>myAddress</jv> = <jv>config</jv>.getObject(<js>"key1"</js>, XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
+	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"key1"</js>).to(XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
 	</p>
 </div>
-</div><!-- END: 5.8.2 - juneau-config.jc.SettingValues.jc.CustomEntrySerialization -->
+</div><!-- END: 5.6.2 - juneau-config.jc.SettingValues.jc.CustomEntrySerialization -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues.jc.BulkSettingValues' id='juneau-config.jc.SettingValues.jc.BulkSettingValues'>5.8.3 - Setting Values in Bulk</a></h4>
-<div class='topic'><!-- START: 5.8.3 - juneau-config.jc.SettingValues.jc.BulkSettingValues -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SettingValues.jc.BulkSettingValues' id='juneau-config.jc.SettingValues.jc.BulkSettingValues'>5.6.3 - Setting Values in Bulk</a></h4>
+<div class='topic'><!-- START: 5.6.3 - juneau-config.jc.SettingValues.jc.BulkSettingValues -->
 <div class='topic'>
 	<p>
 		The following methods can be used to bulk-load configuration values:
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List,Map) setSection(String,List,Map)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#load(Map) load(Map)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#load(Reader,boolean) load(Reader,boolean)}
@@ -13718,13 +13698,13 @@
 		Changes can then be committed using the {@link org.apache.juneau.config.Config#commit()} method.
 	</p>
 </div>
-</div><!-- END: 5.8.3 - juneau-config.jc.SettingValues.jc.BulkSettingValues -->
-</div><!-- END: 5.8 - juneau-config.jc.SettingValues -->
+</div><!-- END: 5.6.3 - juneau-config.jc.SettingValues.jc.BulkSettingValues -->
+</div><!-- END: 5.6 - juneau-config.jc.SettingValues -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.Listeners' id='juneau-config.jc.Listeners'>5.9 - Listeners</a></h3>
-<div class='topic'><!-- START: 5.9 - juneau-config.jc.Listeners -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.Listeners' id='juneau-config.jc.Listeners'>5.7 - Listeners</a></h3>
+<div class='topic'><!-- START: 5.7 - juneau-config.jc.Listeners -->
 <div class='topic'>
 	<p>
 		Configuration change events can be listened for using the following methods:
@@ -13750,7 +13730,7 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.config.event.ConfigEvent}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getType() getType()}
 			<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getSection() getSection()}
 			<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getKey() getKey()}
@@ -13799,19 +13779,19 @@
 	)
 	</p>
 </div>
-</div><!-- END: 5.9 - juneau-config.jc.Listeners -->
+</div><!-- END: 5.7 - juneau-config.jc.Listeners -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SerializingConfigs' id='juneau-config.jc.SerializingConfigs'>5.10 - Serializing</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 5.10 - juneau-config.jc.SerializingConfigs -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SerializingConfigs' id='juneau-config.jc.SerializingConfigs'>5.8 - Serializing</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 5.8 - juneau-config.jc.SerializingConfigs -->
 <div class='topic'>
 	<p>
 		The following methods are used for serializing <c>Config</c> objects back into INI files:
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link org.apache.juneau.config.Config#writeTo(Writer) writeTo(Writer)}
 			<li class='jm'>{@link org.apache.juneau.config.Config#toString() toString()}
 		</ul>
@@ -13820,12 +13800,12 @@
 		Both methods are thread safe.
 	</p>
 </div>
-</div><!-- END: 5.10 - juneau-config.jc.SerializingConfigs -->
+</div><!-- END: 5.8 - juneau-config.jc.SerializingConfigs -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigImports' id='juneau-config.jc.ConfigImports'>5.11 - Imports</a><span class='update'>updated: 8.1.0</span></h3>
-<div class='topic'><!-- START: 5.11 - juneau-config.jc.ConfigImports -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigImports' id='juneau-config.jc.ConfigImports'>5.9 - Imports</a><span class='update'>updated: 8.1.0</span></h3>
+<div class='topic'><!-- START: 5.9 - juneau-config.jc.ConfigImports -->
 <div class='topic'>
 	<p>
 		Configurations can import values from other configurations using the following syntax: 
@@ -13862,8 +13842,8 @@
 	</p>
 	<p class='bcode w800'>
 	<jc>// Java code</jc>
-	Config <jv>config</jv> = Config.Builder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
-	String <jv>foo</jv> = <jv>config</jv>.getString(<js>"Foo/bar"</js>);  <jc>// == "baz"</jc>
+	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+	String <jv>foo</jv> = <jv>config</jv>.get(<js>"Foo/bar"</js>).get();  <jc>// == "baz"</jc>
 	</p>
 	<p>
 		Values can be overridden by child configurations.
@@ -13889,8 +13869,8 @@
 	<ck>bar</ck> = <cv>quux</cv>
 	</p>
 	<p class='bcode w800'>
-	Config <jv>config</jv> = Config.Builder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
-	String <jv>foo</jv> = <jv>config</jv>.getString(<js>"Foo/bar"</js>);  <jc>// == "baz"</jc>
+	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+	String <jv>foo</jv> = <jv>config</jv>.get(<js>"Foo/bar"</js>).get();  <jc>// == "baz"</jc>
 	</p>
 	
 	<p>
@@ -13920,7 +13900,7 @@
 	</p>
 	<p class='bcode w800'>
 	<jc>// Create our configuration.</jc>
-	Config <jv>config</jv> = Config.Builder.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 	
 	<jc>// Create a listener that sets a flag if "Foo/bar" is set.</jc>	
 	<jk>final boolean</jk>[] <jv>triggered</jv> = <jk>new boolean</jk>[1];
@@ -13946,12 +13926,12 @@
 		from the change events.
 	</p>
 </div>
-</div><!-- END: 5.11 - juneau-config.jc.ConfigImports -->
+</div><!-- END: 5.9 - juneau-config.jc.ConfigImports -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores' id='juneau-config.jc.ConfigStores'>5.12 - Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 5.12 - juneau-config.jc.ConfigStores -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores' id='juneau-config.jc.ConfigStores'>5.10 - Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 5.10 - juneau-config.jc.ConfigStores -->
 <div class='topic'>
 	<p>
 		Configuration files are stored in entities called Stores.
@@ -13979,31 +13959,31 @@
 		Write is slightly trickier:
 	</p>
 	<p class='bcode w800'>
-		<jk>public</jk> String write(String <jv>name</jv>, String <jv>oldContents</jv>, String <jv>newContents</jv>) {
-		
-			<jc>// If the old contents match the current stored contents, the new contents will get stored, 
-			//	and the method returns null indicating success.
-		
-			// If the old contents DO NOT match the current stored contents (i.e. it was modified in some way), 
-			//	the new contents are NOT stored, and the method returns the current stored contents.
-		
-			// If the old contents are null, then just always write the new contents.</jc>
-		}
+	<jk>public</jk> String write(String <jv>name</jv>, String <jv>oldContents</jv>, String <jv>newContents</jv>) {
+			
+		<jc>// If the old contents match the current stored contents, the new contents will get stored, 
+		//	and the method returns null indicating success.
+			
+		// If the old contents DO NOT match the current stored contents (i.e. it was modified in some way), 
+		//	the new contents are NOT stored, and the method returns the current stored contents.
+			
+		// If the old contents are null, then just always write the new contents.</jc>
+	}
 	</p>
 	<p>
 		The update method is called whenever the stored file gets modified externally:
 	</p>		
 	<p class='bcode w800'>
-		<jk>public</jk> String update(String <jv>name</jv>, String <jv>newContents</jv>) {
-			<jc>// Do something with the updated contents.</jc>
-		}
+	<jk>public</jk> String update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		<jc>// Do something with the updated contents.</jc>
+	}
 	</p>
 	<p>
 		Two configuration stores are provided by default:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.store.ConfigFileStore} - File-system storage.
-		<li class='jc'>{@link org.apache.juneau.config.store.ConfigMemoryStore} - In-memory storage.
+		<li class='jc'>{@link org.apache.juneau.config.store.FileStore} - File-system storage.
+		<li class='jc'>{@link org.apache.juneau.config.store.MemoryStore} - In-memory storage.
 	</ul>
 	<p>
 		The store is defined on the <c>Config</c> object via the following setting:
@@ -14014,22 +13994,22 @@
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<jc>// Create a config with in-memory storage.</jc>
-		Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
+	<jc>// Create a config with in-memory storage.</jc>
+	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
 	</p>
 	<p>
-		The default store used is {@link org.apache.juneau.config.store.ConfigFileStore#DEFAULT} which defines
+		The default store used is {@link org.apache.juneau.config.store.åFileStore#DEFAULT} which defines
 		the execution directory as the file system directory to store and retrieve files. 
 	</p>
 </div>
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.MemoryStore' id='juneau-config.jc.ConfigStores.jc.MemoryStore'>5.12.1 - ConfigMemoryStore</a></h4>
-<div class='topic'><!-- START: 5.12.1 - juneau-config.jc.ConfigStores.jc.MemoryStore -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.MemoryStore' id='juneau-config.jc.ConfigStores.jc.MemoryStore'>5.10.1 - MemoryStore</a></h4>
+<div class='topic'><!-- START: 5.10.1 - juneau-config.jc.ConfigStores.jc.MemoryStore -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.config.store.ConfigMemoryStore} class is simply an in-memory storage
+		The {@link org.apache.juneau.config.store.MemoryStore} class is simply an in-memory storage
 		location for configuration files.
 		There is no hard persistence and is used primarily for testing purposes.
 	</p>
@@ -14037,7 +14017,7 @@
 		However, the implementation provides a good idea on how stores work (especially the write method):
 	</p>
 	<p class='bcode w800'>
-	<jk>public class</jk> ConfigMemoryStore <jk>extends</jk> ConfigStore {
+	<jk>public class</jk> MemoryStore <jk>extends</jk> ConfigStore {
 	
 		<jc>// Some methods ommitted.</jc>
 		
@@ -14068,7 +14048,7 @@
 	
 		
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> ConfigMemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		<jk>public synchronized</jk> MemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
 			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
 			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
 			<jk>return this</jk>;
@@ -14076,32 +14056,32 @@
 	}
 	</p>
 </div>
-</div><!-- END: 5.12.1 - juneau-config.jc.ConfigStores.jc.MemoryStore -->
+</div><!-- END: 5.10.1 - juneau-config.jc.ConfigStores.jc.MemoryStore -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.FileStore' id='juneau-config.jc.ConfigStores.jc.FileStore'>5.12.2 - ConfigFileStore</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 5.12.2 - juneau-config.jc.ConfigStores.jc.FileStore -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.FileStore' id='juneau-config.jc.ConfigStores.jc.FileStore'>5.10.2 - FileStore</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 5.10.2 - juneau-config.jc.ConfigStores.jc.FileStore -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.config.store.ConfigFileStore} is the typical store used for configuration files.
+		The {@link org.apache.juneau.config.store.FileStore} is the typical store used for configuration files.
 		It provides the following configurable settings:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.config.store.ConfigFileStore.Builder}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStore.Builder#charset(Charset) charset(Charset)}
-			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStore.Builder#directory(File) directory(File)}
-			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStore.Builder#updateOnWrite() updateOnWrite()}
-			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStore.Builder#enableWatcher() enableWatcher()}
-			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStore.Builder#watcherSensitivity(WatcherSensitivity) watcherSensitivity(WatcherSensitivity)}
+		<li class='jc'>{@link org.apache.juneau.config.store.FileStore.Builder}
+		<ul class='javatreec'>
+			<li class='jm'>{@link org.apache.juneau.config.store.FileStore.Builder#charset(Charset) charset(Charset)}
+			<li class='jm'>{@link org.apache.juneau.config.store.FileStore.Builder#directory(File) directory(File)}
+			<li class='jm'>{@link org.apache.juneau.config.store.FileStore.Builder#updateOnWrite() updateOnWrite()}
+			<li class='jm'>{@link org.apache.juneau.config.store.FileStore.Builder#enableWatcher() enableWatcher()}
+			<li class='jm'>{@link org.apache.juneau.config.store.FileStore.Builder#watcherSensitivity(WatcherSensitivity) watcherSensitivity(WatcherSensitivity)}
 		</ul>
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
 	<jc>// Create a config store with a watcher thread and high sensitivity.</jc>
-	ConfigFileStore <jv>fileStore</jv> = ConfigFileStore
+	FileStore <jv>fileStore</jv> = FileStore
 		.<jsm>create</jsm>()
 		.directory(<js>"configs"</js>)
 		.useWatcher()
@@ -14115,79 +14095,73 @@
 		.build();
 	</p>
 </div>
-</div><!-- END: 5.12.2 - juneau-config.jc.ConfigStores.jc.FileStore -->
+</div><!-- END: 5.10.2 - juneau-config.jc.ConfigStores.jc.FileStore -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.CustomStores' id='juneau-config.jc.ConfigStores.jc.CustomStores'>5.12.3 - Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 5.12.3 - juneau-config.jc.ConfigStores.jc.CustomStores -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.CustomStores' id='juneau-config.jc.ConfigStores.jc.CustomStores'>5.10.3 - Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 5.10.3 - juneau-config.jc.ConfigStores.jc.CustomStores -->
 <div class='topic'>
 	<p>
 		The <c>ConfigStore</c> API has been written to allow easy development of custom configuration storage classes.
 	</p>
 	<p>
 		The example below shows a starting point for an implementation based on polling a relational database.
+		The source can be found here: {@link org.apache.juneau.examples.core.config.store.SqlStore}.
 		Completing it is left as an exercise:
 	</p>
 	<h5 class='figure'>Example Store Class:</h5>
 	<p class='bcode w800'>
-	<jk>public class</jk> ConfigSqlStore <jk>extends</jk> ConfigStore {
-
-		<jc>// Configurable properties</jc>
-		<jk>static final</jk> String
-			<jsf>CONFIGSQLSTORE_jdbcUrl</jsf> = <js>"ConfigSqlStore.jdbcUrl.s"</js>,
-			<jsf>CONFIGSQLSTORE_tableName</jsf> = <js>"ConfigSqlStore.tableName.s"</js>,
-			<jsf>CONFIGSQLSTORE_nameColumn</jsf> = <js>"ConfigSqlStore.nameColumn.s"</js>,
-			<jsf>CONFIGSQLSTORE_valueColumn</jsf> = <js>"ConfigSqlStore.valueColumn.s"</js>,
-			<jsf>CONFIGSQLSTORE_pollInterval</jsf> = <js>"ConfigSqlStore.pollInterval.i"</js>;
-
-		<jc>// Instance fields</jc>
+	<jk>public class</jk> SqlStore <jk>extends</jk> ConfigStore {
+	
 		<jk>private final</jk> String <jf>jdbcUrl</jf>;
 		<jk>private final</jk> String <jf>tableName</jf>, <jf>nameColumn</jf>, <jf>valueColumn</jf>;
 		<jk>private final</jk> Timer <jf>watcher</jf>;
-		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
-
+		<jk>private final</jk> ConcurrentHashMap&låt;String,String> <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap<>();
 	
-		<jc>// Constructor called from builder.</jc>
-		<jk>protected</jk> ConfigSqlStore(ContextProperties <jv>ps</jv>) {
-			<jk>super</jk>(<jv>ps</jv>);
-			
-			<jk>this</jk>.<jf>jdbcUrl</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, <js>"jdbc:derby:mydb"</js>);
-			<jk>this</jk>.<jf>tableName</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_tableName</jsf>);
-			<jk>this</jk>.<jf>nameColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_nameColumn</jsf>);
-			<jk>this</jk>.<jf>valueColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_valueColumn</jsf>);		
-
-			<jk>int</jk> <jv>pollInterval</jv> = getStringProperty(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, 600);  <jc>// Time in seconds.</jc>
-			
+		<jk>protected</jk> SqlStore(Builder <jv>builder</jv>) {
+			<jk>super</jk>(<jv>builder</jv>);
+			<jk>this</jk>.<jf>jdbcUrl</jf> = <jv>builder</jv>.<jf>jdbcUrl</jf>;
+			<jk>this</jk>.<jf>tableName</jf> = <jv>builder</jv>.<jf>tableName</jf>;
+			<jk>this</jk>.<jf>nameColumn</jf> = <jv>builder</jv>.<jf>nameColumn</jf>;
+			<jk>this</jk>.<jf>valueColumn</jf> = <jv>builder</jv>.<jf>valueColumn</jf>;
+	
+			<jk>int</jk> <jv>pollInterval</jv> = <jv>builder</jv>.<jf>pollInterval</jf>;
+	
 			TimerTask <jv>timerTask</jv> = <jk>new</jk> TimerTask() {
 				<ja>@Override</ja>
 				<jk>public void</jk> run() {
-					ConfigSqlStore.<jk>this</jk>.poll();
+					SqlStore.<jk>this</jk>.poll();
 				}
 			};
-
+	
 			<jk>this</jk>.<jf>watcher</jf> = <jk>new</jk> Timer(<js>"MyTimer"</js>);
 			<jf>watcher</jf>.scheduleAtFixedRate(<jv>timerTask</jv>, 0, <jv>pollInterval</jv> * 1000);
 		}
-		
-		<jk>private synchronized void</jk> poll() {
-		
+	
+		<jk>synchronized void</jk> poll() {
 			<jc>// Loop through all our entries and find the latest values.</jc>
-			<jk>for</jk> (Map.Entry&lt;String,String&gt; <jv>e</jv> : <jf>cache</jf>.entrySet()) {
+			<jk>for</jk> (Map.Entry&lt;String,String> <jv>e</jv> : <jf>cache</jf>.entrySet()) {
 				String <jv>name</jv> = <jv>e</jv>.getKey();
 				String <jv>cacheContents</jv> = <jv>e</jv>.getValue();
 				String <jv>newContents</jv> = getDatabaseValue(<jv>name</jv>);
-				
+	
 				<jc>// Change detected!</jc>
-				<jk>if</jk> (! <jv>cacheContents</jv>.equals(<jv>newContents</jv>)) 
+				<jk>if</jk> (! <jv>cacheContents</jv>.equals(<jv>newContents</jv>))
 					update(<jv>name</jv>, <jv>newContents</jv>);
 			}
-			
 		}
-		
+	
 		<jc>// Reads the value from the database.</jc>
 		<jk>protected</jk> String getDatabaseValue(String <jv>name</jv>) {
 			<jc>// Implement me!</jc>
+			<jk>return null</jk>;
+		}
+	
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public boolean</jk> exists(String <jv>name</jv>) {
+			<jc>// Implement me!</jc>
+			<jk>return false</jk>;
 		}
 	
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
@@ -14204,27 +14178,27 @@
 		<jk>public synchronized</jk> String write(String <jv>name</jv>, String <jv>expectedContents</jv>, String <jv>newContents</jv>) {
 	
 			<jc>// This is a no-op.</jc>
-			<jk>if</jk> (<jsm>isEquals</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
+			<jk>if</jk> (StringUtils.<jsm>eq</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
 				<jk>return null</jk>;
-			
+	
 			String <jv>currentContents</jv> = read(<jv>name</jv>);
-			
-			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>)) 
+	
+			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> && StringUtils.<jsm>ne</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>))
 				<jk>return</jk> <jv>currentContents</jv>;
-			
+	
 			update(<jv>name</jv>, <jv>newContents</jv>);
-			
+	
 			<jc>// Success!</jc>
 			<jk>return null</jk>;
 		}
-		
+	
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> ConfigSqlStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		<jk>public synchronized</jk> SqlStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
 			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
 			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
 			<jk>return this</jk>;
 		}
-		
+	
 		<ja>@Override</ja> <jc>/* Closeable */</jc>
 		<jk>public synchronized void</jk> close() {
 			<jk>if</jk> (<jf>watcher</jf> != <jk>null</jk>)
@@ -14233,12 +14207,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 5.12.3 - juneau-config.jc.ConfigStores.jc.CustomStores -->
+</div><!-- END: 5.10.3 - juneau-config.jc.ConfigStores.jc.CustomStores -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.StoreListeners' id='juneau-config.jc.ConfigStores.jc.StoreListeners'>5.12.4 - ConfigStore Listeners</a></h4>
-<div class='topic'><!-- START: 5.12.4 - juneau-config.jc.ConfigStores.jc.StoreListeners -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ConfigStores.jc.StoreListeners' id='juneau-config.jc.ConfigStores.jc.StoreListeners'>5.10.4 - ConfigStore Listeners</a></h4>
+<div class='topic'><!-- START: 5.10.4 - juneau-config.jc.ConfigStores.jc.StoreListeners -->
 <div class='topic'>
 	<p>
 		The <c>ConfigStore</c> class has the following listener methods:
@@ -14265,13 +14239,13 @@
 		updated in real-time.
 	</p>
 </div>
-</div><!-- END: 5.12.4 - juneau-config.jc.ConfigStores.jc.StoreListeners -->
-</div><!-- END: 5.12 - juneau-config.jc.ConfigStores -->
+</div><!-- END: 5.10.4 - juneau-config.jc.ConfigStores.jc.StoreListeners -->
+</div><!-- END: 5.10 - juneau-config.jc.ConfigStores -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadOnlyConfigs' id='juneau-config.jc.ReadOnlyConfigs'>5.13 - Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 5.13 - juneau-config.jc.ReadOnlyConfigs -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ReadOnlyConfigs' id='juneau-config.jc.ReadOnlyConfigs'>5.11 - Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 5.11 - juneau-config.jc.ReadOnlyConfigs -->
 <div class='topic'>
 	<p>
 		The following settings can be used to create read-only <c>Config</c> objects:
@@ -14289,12 +14263,12 @@
 		This causes all methods that make modifications to throw {@link java.lang.UnsupportedOperationException}.
 	</p>
 </div>
-</div><!-- END: 5.13 - juneau-config.jc.ReadOnlyConfigs -->
+</div><!-- END: 5.11 - juneau-config.jc.ReadOnlyConfigs -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ClosingConfigs' id='juneau-config.jc.ClosingConfigs'>5.14 - Closing Configs</a></h3>
-<div class='topic'><!-- START: 5.14 - juneau-config.jc.ClosingConfigs -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.ClosingConfigs' id='juneau-config.jc.ClosingConfigs'>5.12 - Closing Configs</a></h3>
+<div class='topic'><!-- START: 5.12 - juneau-config.jc.ClosingConfigs -->
 <div class='topic'>
 	<p>
 		In general, it's good practice to close Config if you're only creating them temporarily so that
@@ -14311,12 +14285,12 @@
 	<jv>config</jv>.close();
 	</p>
 </div>
-</div><!-- END: 5.14 - juneau-config.jc.ClosingConfigs -->
+</div><!-- END: 5.12 - juneau-config.jc.ClosingConfigs -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SystemDefaultConfig' id='juneau-config.jc.SystemDefaultConfig'>5.15 - System Default Config</a><span class='update'>created: 8.0.0, updated: 8.1.0</span></h3>
-<div class='topic'><!-- START: 5.15 - juneau-config.jc.SystemDefaultConfig -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-config.jc.SystemDefaultConfig' id='juneau-config.jc.SystemDefaultConfig'>5.13 - System Default Config</a><span class='update'>created: 8.0.0, updated: 8.1.0</span></h3>
+<div class='topic'><!-- START: 5.13 - juneau-config.jc.SystemDefaultConfig -->
 <div class='topic'>
 	<p>
 		Each JVM has a system default config.  This is a configuration file that serves as the default
@@ -14372,7 +14346,7 @@
 		This can be disabled by setting the system property <js>"juneau.disableAutoSystemProps"</js> to <js>"true"</js>.
 	</p>
 </div>
-</div><!-- END: 5.15 - juneau-config.jc.SystemDefaultConfig -->
+</div><!-- END: 5.13 - juneau-config.jc.SystemDefaultConfig -->
 </div><!-- END: 5 - juneau-config -->
 
 <!-- ==================================================================================================== -->
@@ -17390,13 +17364,13 @@
 		These properties are then accessible through the {@link org.apache.juneau.config.Config} class.
 	</p>
 	<p class='bcode w800'>
-		<ja>@RestGet</ja>(<js>"/"</js>)
-		<jk>public</jk> String sample(Config <jv>config</jv>) {
-			String <jv>path</jv> = <jv>config</jv>.getString(<js>"MyProperties/path"</js>);
-			File <jv>javaHome</jv> = <jv>config</jv>.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
-			String <jv>customMessage</jv> = <jv>config</jv>.getString(<js>"MyProperties/customMessage"</js>);
-			...
-		}
+	<ja>@RestGet</ja>(<js>"/"</js>)
+	<jk>public</jk> String sample(Config <jv>config</jv>) {
+		String <jv>path</jv> = <jv>config</jv>.getString(<js>"MyProperties/path"</js>);
+		File <jv>javaHome</jv> = <jv>config</jv>.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
+		String <jv>customMessage</jv> = <jv>config</jv>.getString(<js>"MyProperties/customMessage"</js>);
+		...
+	}
 	</p>
 	<p>
 		The annotation itself can contain string variables.  

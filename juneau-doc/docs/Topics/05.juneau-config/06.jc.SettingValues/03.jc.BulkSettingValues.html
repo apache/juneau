@@ -13,10 +13,22 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Entry Types'}
+{title:'Setting Values in Bulk'}
 
 <div class='topic'>
 	<p>
-		Configuration files can contain entries for anything from primitive types up to complex hierarchies of POJOs consisting of maps, collections, and/or beans.
+		The following methods can be used to bulk-load configuration values:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.config.Config}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oaj.config.Config#setSection(String,List,Map) setSection(String,List,Map)}
+			<li class='jm'>{@link oaj.config.Config#load(Map) load(Map)}
+			<li class='jm'>{@link oaj.config.Config#load(Reader,boolean) load(Reader,boolean)}
+			<li class='jm'>{@link oaj.config.Config#load(String,boolean) load(String,boolean)}
+		</ul>
+	</ul>
+	<p>
+		Changes can then be committed using the {@link oaj.config.Config#commit()} method.
 	</p>
 </div>

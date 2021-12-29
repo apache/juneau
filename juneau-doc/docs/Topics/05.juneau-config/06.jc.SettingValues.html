@@ -24,8 +24,7 @@
 		<ul>
 			<li class='jm'>{@link oaj.config.Config#set(String,Object) set(String,Object)}
 			<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer) set(String,Object,Serializer)}
-			<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer,ConfigMod,String,List) set(String,Object,Serializer,ConfigMod,String,List)}
-			<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List) set(String,Object,Serializer,ConfigMod[],String,List)}
+			<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer,String,String,List) set(String,Object,Serializer,String,String,List)}
 			<li class='jm'>{@link oaj.config.Config#set(String,String) set(String,String)}
 			<li class='jm'>{@link oaj.config.Config#remove(String) remove(String)}
 			<li class='jm'>{@link oaj.config.Config#setSection(String,List) setSection(String,List)}
@@ -47,12 +46,12 @@
 		|		.commit();
 	</p>
 	<p>
-		The method {@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} can be used
+		The method {@link oaj.config.Config#set(String,Object,Serializer,String,String,List)} can be used
 		for adding comments and pre-lines to entries, and specifying encoded values.
 	</p>
 	<p class='bcode w800'>
 		|	<jc>// Set an encoded value with some comments.</jc>
-		|	<jv>config</jv>.set(<js>"key1"</js>, 1, <jk>null</jk>, ConfigMod.<jsf>ENCODED</jsf>, <js>"Same-line comment"</js>, 
+		|	<jv>config</jv>.set(<js>"key1"</js>, 1, <jk>null</jk>, <js>"*"</js>, <js>"Same-line comment"</js>, 
 		|		Arrays.asList(
 		|			<js>"# Comment 1"</js>, <js>""</js>, <js>"# Comment 2"</js>
 		|		)
@@ -65,7 +64,7 @@
 		|	<ck>key1</ck> = <cv>1</cv> <cc># Same-line comment</cc>
 	</p>	
 	<p>
-		The last 4 arguments in {@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} 
+		The last 4 arguments in {@link oaj.config.Config#set(String,Object,Serializer,String,String,List)} 
 		are optional in that if you pass <jk>null</jk>, the current value will not be overwritten.
 		To unset the same-line comment, you should pass in a blank string.
 		To remove pre-lines, you should pass in an empty list.
