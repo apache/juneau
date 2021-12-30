@@ -13,27 +13,21 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Models', flags:'todo'}
+{title:'Models', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		The {@del oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} setting can be used to reduce the size of your
+		The {@link oaj.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} setting can be used to reduce the size of your
 		generated Swagger JSON files by creating model definitions for beans and referencing those definitions through <c>$ref</c> attributes.
 	</p>
 	<p>
-		By default, this flag is enabled when extending from {@link oajr.BasicRestServlet}:
+		This setting is disabled by default, but can be set on the {@link oajr.RestContext.Builder} object:
 	</p>
 	<p class='bcode w800'>
-		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
-		|		
-		|		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
-		|			...
-		|			flags={
-		|				<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
-		|				<jsf>JSONSCHEMA_useBeanDefs</jsf>
-		|			}
-		|		)
-		|		<jk>public</jk> Swagger getOptions(RestRequest <jv>req</jv>) {...}
+		|	<ja>@HookEvent</ja>(<jsf>INIT</jsf>)
+		|	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+		|		<jv>builder</jv>.jsonSchemaGenerator().useBeanDefs();
+		|	}
 	</p>
 	<p>
 		In the Swagger UI, this causes bean definitions to show up in the Models section at the bottom of the page:

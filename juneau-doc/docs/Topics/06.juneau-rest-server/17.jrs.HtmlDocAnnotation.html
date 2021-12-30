@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@HtmlDocConfig', updated:'8.1.0', flags:'todo'}
+{title:'@HtmlDocConfig', updated:'8.1.0,9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -26,26 +26,16 @@
 		<li>{@link oajr.annotation.RestOp @RestOp}-annotated methods.
 	</ul>
 	<p>
-		The annotation itself is just a convenience for setting configuration properties set
-		on the {@link oaj.html.HtmlDocSerializer} class.
-		For example, the following two pieces of code are equivalent:
+		For example, the following shows setting the title on a page:
 	</p>
 	<p class='bcode w800'>
-		|	<jc>// Title defined via property.</jc>
-		|	<ja>@Rest</ja>(
-		|		properties={
-		|			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My Resource Page"</js>)
-		|		}
-		|	)
-		|
-		|	<jc>// Title defined via @HtmlDoc annotation.</jc>
-		|	<ja>@Rest</ja>()
+		|	<ja>@Rest</ja>
 		|	<ja>@HtmlDocConfig</ja>(
 		|		title=<js>"My Resource Page"</js>
 		|	)
 	</p>
 	<p>
-		The purpose of these annotation is to populate the HTML document view which by default consists of the following
+		The purpose of this annotation is to populate the HTML document view which by default consists of the following
 		structure:
 	</p>
 	<p class='bcode w800'>

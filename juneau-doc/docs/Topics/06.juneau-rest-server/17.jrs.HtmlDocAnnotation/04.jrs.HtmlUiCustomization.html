@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'UI Customization', flags:'todo'}
+{title:'UI Customization', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -36,32 +36,7 @@
 	<p class='bcode w800'>
 		|	<ja>@Rest</ja>(
 		|		...
-		|		<jc>// HTML-page specific settings</jc>
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|	
-		|			<jc>// Default page header contents.</jc>
-		|			header={
-		|				<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
-		|				<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
-		|				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
-		|			},
-		|	
-		|			<jc>// Default stylesheet to use for the page.
-		|			// Can be overridden from external config file.
-		|			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
-		|			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-		|	
-		|			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
-		|			// Use it to add a favicon link to the page.</jc>
-		|			head={
-		|				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
-		|			},
-		|	
-		|			<jc>// No default page footer contents.
-		|			// Can be overridden from external config file.</jc>
-		|			footer=<js>"$C{REST/footer}"</js>
-		|		),
-		|	
+		
 		|		<jc>// Optional external configuration file.</jc>
 		|		config=<js>"$S{juneau.configFile}"</js>,
 		|	
@@ -70,21 +45,41 @@
 		|		// By default, we define static files through the external configuration file.</jc>
 		|		staticFiles=<js>"$C{REST/staticFiles}"</js>
 		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|	
+		|		<jc>// Default page header contents.</jc>
+		|		header={
+		|			<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+		|			<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
+		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+		|		},
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+		|	
+		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+		|		// Use it to add a favicon link to the page.</jc>
+		|		head={
+		|			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+		|		},
+		|	
+		|		<jc>// No default page footer contents.
+		|		// Can be overridden from external config file.</jc>
+		|		footer=<js>"$C{REST/footer}"</js>
+		|	)
+		|	
 		|	<jk>public interface</jk> BasicRestConfig {}
 	</p>
 	<p class='bcode w800'>			
-		|	<ja>@Rest</ja>(
-		|		...
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			htmldoc=<ja>@HtmlDoc</ja>(
-		|				<jc>// Basic page navigation links.</jc>
-		|				navlinks={
-		|					<js>"up: request:/.."</js>,
-		|					<js>"options: servlet:/?method=OPTIONS"</js>
-		|				}
-		|			)
-		|		),
-		|		...
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		<jc>// Basic page navigation links.</jc>
+		|		navlinks={
+		|			<js>"up: request:/.."</js>,
+		|			<js>"options: servlet:/?method=OPTIONS"</js>
+		|		}
 		|	)
 		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {...}
 	</p>
@@ -93,32 +88,30 @@
 		|	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p class='bcode w800'>			
-		<ja>@Rest</ja>(
-			htmldoc=<ja>@HtmlDoc</ja>(
-				widgets={
-					ContentTypeMenuItem.<jk>class</jk>,
-					ThemeMenuItem.<jk>class</jk>
-				},
-				navlinks={
-					<js>"options: ?method=OPTIONS"</js>,
-					<js>"$W{ContentTypeMenuItem}"</js>,
-					<js>"$W{ThemeMenuItem}"</js>,
-					<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-				},
-				aside={
-					<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-					<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
-					<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
-					<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;options&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
-					<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;sources&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
-					<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
-					<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
-					<js>"&lt;/div&gt;"</js>
-				}
-			),
-			...
-		)
-		<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			ContentTypeMenuItem.<jk>class</jk>,
+		|			ThemeMenuItem.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"options: ?method=OPTIONS"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;options&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;sources&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
 	</p>
 	
 	<p>

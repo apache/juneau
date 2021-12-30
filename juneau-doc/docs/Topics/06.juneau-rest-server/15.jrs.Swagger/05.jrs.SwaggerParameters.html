@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Parameters', flags:'todo'}
+{title:'Parameters', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -29,27 +29,29 @@
 		|	<jk>public</jk> Collection&lt;Pet&gt; getPets(
 		|			<ja>@Query</ja>(
 		|				name=<js>"s"</js>,
-		|				description={
-		|					<js>"Search."</js>,
-		|					<js>"Key/value pairs representing column names and search tokens."</js>,
-		|					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
-		|					<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
-		|					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
-		|				},
-		|				type=<js>"array"</js>,
-		|				collectionFormat=<js>"csv"</js>,
-		|				example=<js>"Bill*,birthDate>2000"</js>
+		|				schema=<ja>@Schema</ja>(	
+		|					description={
+		|						<js>"Search."</js>,
+		|						<js>"Key/value pairs representing column names and search tokens."</js>,
+		|						<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
+		|						<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
+		|						<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
+		|					},
+		|					type=<js>"array"</js>,
+		|					collectionFormat=<js>"csv"</js>
+		|				)	
 		|			) 
 		|			String[] <jv>s</jv>,
 		|			<ja>@Query</ja>(
 		|				name=<js>"v"</js>,
-		|				description={
-		|					<js>"View."</js>,
-		|					<js>"Column names to display."</js>
-		|				},
-		|				type=<js>"array"</js>,
-		|				collectionFormat=<js>"csv"</js>,
-		|				example=<js>"name,birthDate"</js>
+		|				schema=<ja>@Schema</ja>(
+		|					description={
+		|						<js>"View."</js>,
+		|						<js>"Column names to display."</js>
+		|					},
+		|					type=<js>"array"</js>,
+		|					collectionFormat=<js>"csv"</js>
+		|				)
 		|			) 
 		|			String[] <jv>v</jv>,
 		|			...
@@ -57,11 +59,13 @@
 		|		...
 		|	}
 	</p>
-	<p>
-		<b>Note:</b>  The <c>type</c> and <c>collectionFormat</c> values above are optional and auto-detected based on the
-		parameter class type if omitted.  They're included here for clarity.
-		The examples will be explained in the next section.
-	</p>
+	<ul class='spaced-list'>
+		<li class='note'>The {@link oaj.http.annotation.Schema @Schema} annotation can also be attached
+			directly to the parameter or parameter type as well.
+		<li class='note'>The {@link oaj.http.annotation.Schema#type() type} and {@link oaj.http.annotation.Schema#collectionFormat() collectionFormat} values above are optional and auto-detected based on the
+			parameter class type if omitted.  They're included here for clarity.
+			The examples will be explained in the next section.
+	</ul>
 	<p>
 		Another option is to specify your parameter information in the <c>parameters</c> annotation as free-form Simple JSON.
 		In the case of the <c>PetStoreResource.getPets()</c> method, we pull this information from a static field
@@ -137,7 +141,9 @@
 		|		)
 		|	)
 		|	<jk>public</jk> Ok postPet(
-		|			<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) PetCreate <jv>pet</jv>
+		|			<ja>@Body</ja> 
+		|			<ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>) 
+		|			PetCreate <jv>pet</jv>
 		|		) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
 		|
 		|		<jf>store</jf>.create(<jv>pet</jv>);

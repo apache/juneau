@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Predefined Widgets', flags:'todo'}
+{title:'Predefined Widgets', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -84,21 +84,19 @@
 		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides a drop-down menu item for rendering all other supported content types in plain text:
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@RestGet</ja>(
-		|		path=<js>"/"</js>,
+		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
 		|			ContentTypeMenuItem.<jk>class</jk>,
 		|		},
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			navlinks={
-		|				<js>"up: ..."</js>,
-		|				<js>"options: ..."</js>,
-		|				<js>"$W{QueryMenuItem}"</js>,
-		|				<js>"$W{ContentTypeMenuItem}"</js>,
-		|				<js>"$W{ThemeMenuItem}"</js>,
-		|				<js>"source: ..."</js>
-		|			}
-		|		)
+		|		navlinks={
+		|			<js>"up: ..."</js>,
+		|			<js>"options: ..."</js>,
+		|			<js>"$W{QueryMenuItem}"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: ..."</js>
+		|		}
 		|	)
 		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
 	</p>
@@ -116,7 +114,7 @@
 	</p>
 	<p>
 		This widget is designed to be used in conjunction with the {@link oajr.converter.Queryable} converter, although implementations
-		can process the query parameters themselves if they wish to do so by using the {@del RequestQuery#getSearchArgs()}
+		can process the query parameters themselves if they wish to do so by using the {@link oajr.httppart.RequestQueryParams#getSearchArgs()}
 		method to retrieve the arguments and process the data themselves.
 	</p>
 	<p>
@@ -125,20 +123,20 @@
 	<p class='bcode w800'>
 		|	<ja>@RestGet</ja>(
 		|		path=<js>"/"</js>,
+		|		converters=Queryable.<jk>class</jk>
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
 		|			QueryMenuItem.<jk>class</jk>,
 		|		},
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			navlinks={
-		|				<js>"up: ..."</js>,
-		|				<js>"options: ..."</js>,
-		|				<js>"$W{QueryMenuItem}"</js>,
-		|				<js>"$W{ContentTypeMenuItem}"</js>,
-		|				<js>"$W{ThemeMenuItem}"</js>,
-		|				<js>"source: ..."</js>
-		|			}
-		|		),
-		|		converters=Queryable.<jk>class</jk>
+		|		navlinks={
+		|			<js>"up: ..."</js>,
+		|			<js>"options: ..."</js>,
+		|			<js>"$W{QueryMenuItem}"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: ..."</js>
+		|		}
 		|	)
 		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
 	</p>
@@ -169,21 +167,19 @@
 		a drop-down menu item for rendering all other supported content types in plain text:
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@RestGet</ja>(
-		|		path=<js>"/"</js>,
+		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
 		|			ThemeMenuItem.<jk>class</jk>,
 		|		},
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			navlinks={
-		|				<js>"up: ..."</js>,
-		|				<js>"options: ..."</js>,
-		|				<js>"$W{QueryMenuItem}"</js>,
-		|				<js>"$W{ContentTypeMenuItem}"</js>,
-		|				<js>"$W{ThemeMenuItem}"</js>,
-		|				<js>"source: ..."</js>
-		|			}
-		|		)
+		|		navlinks={
+		|			<js>"up: ..."</js>,
+		|			<js>"options: ..."</js>,
+		|			<js>"$W{QueryMenuItem}"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: ..."</js>
+		|		}
 		|	)
 		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
 	</p>
@@ -200,14 +196,13 @@
 		Typically it's used in the footer of the page, as shown below in the <c>AddressBookResource</c> from the examples:
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@Rest</ja>(
-		|		path=<js>"/addressBook"</js>,
+		|	<ja>@Rest</ja>(path=<js>"/addressBook"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
 		|			PoweredByJuneau.<jk>class</jk>
 		|		},
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			footer=<js>"$W{PoweredByJuneau}"</js>
-		|		)
+		|		footer=<js>"$W{PoweredByJuneau}"</js>
+		|	)
 	</p>
 	<p>
 		It renders the following image:

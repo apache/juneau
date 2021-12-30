@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'REST method execution statistics', created:'8.1.3', flags:'todo'}
+{title:'REST method execution statistics', created:'8.1.3', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -21,7 +21,33 @@
 		and <ja>@RestHook</ja> annotated methods on the class.
 	</p>
 	<p>
-		The statistics are made available via the subpath <c>/stats</c> as shown below in the <c>HelloWorldResource</c> example:
+		If you extend from {@link oajr.BasicRestServlet} or {@link oajr.BasicRestObject}, then
+		the statics are made available through the REST interface via the following method:
+	</p>
+	<p class='bcode w800'>
+	<ja>@RestGet</ja>(
+		path=<js>"/stats"</js>,
+		summary=<js>"Timing statistics"</js>,
+		description=<js>"Timing statistics for method invocations on this resource."</js>
+	)
+	<ja>@HtmlDocConfig</ja>(
+		<jc>// Should override config annotations defined on class.</jc>
+		rank=10,
+		<jc>// Override the nav links for the swagger page.</jc>
+		navlinks={
+			<js>"back: servlet:/"</js>,
+			<js>"json: servlet:/stats?Accept=text/json&plainText=true"</js>
+		},
+		<jc>// Never show aside contents of page inherited from class.</jc>
+		aside=<js>"NONE"</js>
+	)
+	<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+	<jk>public</jk> RestContextStats getStats(RestRequest <jv>req</jv>) {
+		<jk>return</jk> <jv>req</jv>.getContext().getStats();
+	}
+	</p>
+	<p>
+		Rendered in a browser, it looks like this:
 	</p>
 	<img class='bordered w900' src='doc-files/jrs.ExecutionStatistics.1.png'>
 	<p>

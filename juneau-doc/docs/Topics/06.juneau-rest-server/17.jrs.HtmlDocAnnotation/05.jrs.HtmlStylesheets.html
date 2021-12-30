@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Stylesheets', updated:'8.1.0', flags:'todo'}
+{title:'Stylesheets', updated:'8.1.0,9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -46,11 +46,10 @@
 		The {@link oajr.BasicRestServlet} class defines the stylesheet served up as a static file:
 	<p class='bcode w800'>
 		|	<ja>@Rest</ja>(
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>,
-		|		),
-		|	
 		|		staticFiles={<js>"styles:styles"</js>}
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>
 		|	)
 		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet {...}
 	</p>		
@@ -65,10 +64,10 @@
 	</p>
 	<p class='bcode w800'>
 		|	<ja>@Rest</ja>(
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			stylesheet=<js>"servlet:/my-styles/my-style.css}"</js>,
-		|		),
 		|		staticFiles={<js>"my-styles:my-styles"</js>}
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		stylesheet=<js>"servlet:/my-styles/my-style.css}"</js>
 		|	)
 		|	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
 	</p>
@@ -81,19 +80,19 @@
 		In case you're curious about how the menu item works, it's defined via a widget:
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@Rest</ja>(
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|			widgets={
-		|				PoweredByApache.<jk>class</jk>,
-		|				ContentTypeMenuItem.<jk>class</jk>,
-		|				StyleMenuItem.<jk>class</jk>
-		|			},
-		|			navlinks={
-		|				<js>"options: ?method=OPTIONS"</js>,
-		|				<js>"$W{ContentTypeMenuItem}"</js>,
-		|				<js>"$W{StyleMenuItem}"</js>,
-		|				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-		|			},
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			PoweredByApache.<jk>class</jk>,
+		|			ContentTypeMenuItem.<jk>class</jk>,
+		|			StyleMenuItem.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"options: ?method=OPTIONS"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{StyleMenuItem}"</js>,
+		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		|		}
 		|	)
 		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {...}
 	</p>
