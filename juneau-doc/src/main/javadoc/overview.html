@@ -377,10 +377,9 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.LocalizedMessages'>Localized Messages</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.Encoders'>Encoders</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.ConfigurationFiles'>Configuration Files</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.SvlVariables'>SVL Variables</a><span class='update'><b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.StaticFiles'>Static files</a><span class='update'><b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.ClientVersioning'>Client Versioning</a><span class='update'><b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.InfoProvider'>RestInfoProvider</a><span class='update'><b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.SvlVariables'>SVL Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.StaticFiles'>Static files</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.ClientVersioning'>Client Versioning</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.Swagger'>Swagger</a><span class='update'><b><red>todo</red></b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger'>BasicRestServlet</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></p>
@@ -14298,7 +14297,7 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.config.Config}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link org.apache.juneau.config.Config#getSystemDefault() getSystemDefault()}
 			<li class='jm'>{@link org.apache.juneau.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
 		</ul>
@@ -14693,7 +14692,7 @@
 	<p>
 		In a Spring Boot environment, child classes will typically extend from these latter two when
 		implementing REST resources as <ja>@Bean</ja>-annotated Spring Beans.
-		If you extend from one of the servlet classses, Spring Boot will automatically
+		If you extend from one of the servlet classes, Spring Boot will automatically
 		register them as top-level servlets which typically is not the desired behavior.
 	</p>
 	<p>
@@ -14702,6 +14701,7 @@
 	<ul class='javatree'>
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalRest} - Support for all languages.
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonRest} - Support for JSON.
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonHtmlRest} - Support for JSON and HTML.
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonRest} - Support for simplified JSON.
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiRest} - Support for OpenAPI. 
 	</ul>
@@ -14753,11 +14753,12 @@
 		Child REST objects can also be preconfigured with basic functionality by implementing one of the 
 		following interfaces as well:
 	</p>
-	<ul class='javatree'>
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalRest} - Support for all languages.
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonRest} - Support for JSON.
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonRest} - Support for simplified JSON.
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiRest} - Support for OpenAPI. 
+	<ul class='javatreec'>
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalRest}
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonRest}
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonHtmlRest}
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonRest}
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiRest}
 	</ul>
 	
 	<h5 class='topic'>Path Variables</h5>
@@ -15313,7 +15314,7 @@
 	<p>
 		The following specialized annotations are also provided for specific HTTP methods:
 	</p>
-	<ul class='javatree'>
+	<ul class='javatreec'>
 		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestGet}
 		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPut}
 		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPost}
@@ -15956,7 +15957,7 @@
 	<ul class='javatreec w900'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 		<li class='jc'>{@link org.apache.juneau.rest.RestResponse}
-		<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestBody}
 		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestHeaders}
 		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestQueryParams}
 		<li class='jc'>{@link org.apache.juneau.rest.httppart.RequestFormParams}
@@ -16016,8 +16017,8 @@
 		</ul>
 		<li>Sub-annotations:
 		<ul class='javatreec'>
-			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Schema}
-			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Items}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Schema}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Items}
 		</ul>	
 	</ul>
 	<p>
@@ -16744,18 +16745,18 @@
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<ja>@RestPost</ja>(...)
-		<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
 	
-			<jc>// Add a default value.</jc>
-			<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+		<jc>// Add a default value.</jc>
+		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	
-			<jc>// Get a header value as a POJO.</jc>
-			UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
+		<jc>// Get a header value as a POJO.</jc>
+		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
 	
-			<jc>// Get a header as a standard HTTP part.</jc>
-			ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
-		}
+		<jc>// Get a header as a standard HTTP part.</jc>
+		ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
+	}
 	</p>
 	<p>
 		Built in to these APIs are various convenience methods such as converting parts to 
@@ -16763,11 +16764,11 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<jc>// Inline fluent assertion and retrieval.</jc>
-		String <jv>foo</jv> = <jv>request</jv>
-			.getHeader(<js>"Foo"</js>)
-			.assertString().contains(<js>"bar"</js>)
-			.get();
+	<jc>// Inline fluent assertion and retrieval.</jc>
+	String <jv>foo</jv> = <jv>request</jv>
+		.getHeader(<js>"Foo"</js>)
+		.assertString().contains(<js>"bar"</js>)
+		.get();
 	</p>
 </div>
 </div><!-- END: 6.4.5 - juneau-rest-server.jrs.HttpParts.jrs.HttpPartApis -->
@@ -16818,15 +16819,22 @@
 		The following classes provide common default serializers and parsers that can be
 		used as-is or augmented by child classes:
 	<p>
-	<ul class='javatreec'>
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalRest}
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonRest}
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonRest}
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiRest}
-		<li class='jc'>{@link org.apache.juneau.rest.BasicRestServlet}
-		<li class='jc'>{@link org.apache.juneau.rest.BasicRestServletGroup}
-		<li class='jc'>{@link org.apache.juneau.rest.BasicRestObject}
-		<li class='jc'>{@link org.apache.juneau.rest.BasicRestObjectGroup}
+	<ul class='javatree'>
+		<li>Classes:
+			<ul class='javatreec'>
+				<li class='jc'>{@link org.apache.juneau.rest.BasicRestServlet}
+				<li class='jc'>{@link org.apache.juneau.rest.BasicRestServletGroup}
+				<li class='jc'>{@link org.apache.juneau.rest.BasicRestObject}
+				<li class='jc'>{@link org.apache.juneau.rest.BasicRestObjectGroup}
+			</ul>
+		<li>Interfaces:
+			<ul class='javatreec'>
+				<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalRest}
+				<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonRest}
+				<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonHtmlRest}
+				<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonRest}
+				<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiRest}
+			</ul>
 	</ul>
 	<p>
 		Serializers and parsers can also be defined programmatically using an INIT hook method like shown below:
@@ -17311,15 +17319,11 @@
 	<p>
 		Juneau defines the following encoders out-of-the-box:
 	</p>
-	<ul class='javatree'>
-		<li class='jac'>
-		{@link org.apache.juneau.encoders.Encoder}
-		<ul>
-			<li class='jc'>
-				{@link org.apache.juneau.encoders.GzipEncoder}
-			<li class='jc'>
-				{@link org.apache.juneau.encoders.IdentityEncoder}
-		</ul>
+	<ul class='javatreec'>
+		<li class='jc'>
+			{@link org.apache.juneau.encoders.GzipEncoder}
+		<li class='jc'>
+			{@link org.apache.juneau.encoders.IdentityEncoder}
 	</ul>
 </div>
 </div><!-- END: 6.10 - juneau-rest-server.jrs.Encoders -->
@@ -17358,7 +17362,8 @@
 	<cs>[MyProperties]</cs>
 	<ck>path</ck> = <cv>$E{PATH}</cv>
 	<ck>javaHome</ck> = <cv>$S{java.home}</cv>
-	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
+	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the 
+		environment path is $C{MyProperties/path}.</cv>
 	</p>
 	<p>
 		These properties are then accessible through the {@link org.apache.juneau.config.Config} class.
@@ -17366,9 +17371,9 @@
 	<p class='bcode w800'>
 	<ja>@RestGet</ja>(<js>"/"</js>)
 	<jk>public</jk> String sample(Config <jv>config</jv>) {
-		String <jv>path</jv> = <jv>config</jv>.getString(<js>"MyProperties/path"</js>);
-		File <jv>javaHome</jv> = <jv>config</jv>.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
-		String <jv>customMessage</jv> = <jv>config</jv>.getString(<js>"MyProperties/customMessage"</js>);
+		String <jv>path</jv> = <jv>config</jv>.get(<js>"MyProperties/path"</js>).get();
+		File <jv>javaHome</jv> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
+		String <jv>customMessage</jv> = <jv>config</jv>.get(<js>"MyProperties/customMessage"</js>).orElse(<js>"Hello"</js>);
 		...
 	}
 	</p>
@@ -17420,8 +17425,8 @@
 	
 		<jk>public</jk> MyResource(RestContext.Builder builder) {
 			Config c = builder.getConfig();
-			<jf>path</jf> = c.getString(<js>"MyProperties/path"</js>);
-			<jf>javaHome</jf> = c.getObject(File.<jk>class</jk>, <js>"MyProperties/javaHome"</js>);
+			<jf>path</jf> = c.get(<js>"MyProperties/path"</js>).orElse(<js>"mypath"</js>);
+			<jf>javaHome</jf> = c.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
 		}
 	</p>
 	<p>
@@ -17498,8 +17503,8 @@
 		 * Specify the GET parameter "?person=X" for a specialized message! 
 		 */</jd>
 		<ja>@RestGet</ja>(<js>"/"</js>)
-		<jk>public</jk> String sayHello(RestRequest <jv>req</jv>) {
-			<jk>return</jk> <jv>req</jv>.getConfig().getString(<js>"HelloWorldResource/message"</js>);
+		<jk>public</jk> String sayHello(Config <jv>config</jv>) {
+			<jk>return</jk> <jv>config</jv>.getString(<js>"HelloWorldResource/message"</js>);
 		}
 	}
 	</p>
@@ -17512,7 +17517,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.SvlVariables' id='juneau-rest-server.jrs.SvlVariables'>6.12 - SVL Variables</a><span class='update'><b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.SvlVariables' id='juneau-rest-server.jrs.SvlVariables'>6.12 - SVL Variables</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 6.12 - juneau-rest-server.jrs.SvlVariables -->
 <div class='topic'>
 	<p>	
@@ -17537,46 +17542,7 @@
 		<li>
 			Variables are recursively resolved. 
 			<br>i.e., if a variable results to a value with another variable in it, that variable will also be 
-			resolved (restricted for security reasons on some variables).
-	</ul>
-	<p>
-		Variables are configured on resources via the following API:
-	</p>
-	<ul class='javatree'>
-		<li class='jm'>{@del org.apache.juneau.rest.RestContext.Builder#vars(Class[])}
-	</ul>
-	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-	<jc>// Defined a variable that simply wrapps all strings inside [] brackets.</jc>
-	<jc>// e.g. "$BRACKET{foobar}" -> "[foobar]"</jc>
-	<jk>public class</jk> BracketVar <jk>extends</jk> SimpleVar {
-		
-		<jk>public</jk> BracketVar() {
-			<jk>super</jk>(<js>"BRACKET"</js>);
-		}
-			
-		<ja>@Override</ja> <jc>/* Var */</jc>
-		<jk>public</jk> String resolve(VarResolverSession session, String arg) {
-			<jk>return</jk> <js>'['</js> + arg + <js>']'</js>;
-		}
-	}
-
-	<jc>// Register it with our resource.</jc>
-	<ja>@Rest</ja>(...)
-	<jk>public class</jk> MyResource {
-	
-		<jk>public</jk> MyResource(RestContext.Builder builder) {
-			builder.vars(BracketVar.<jk>class</jk>);
-		}
-	}
-	</p>
-	<p>
-		The methods involved with variables are:
-	</p>
-	<ul class='javatree'>
-		<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()}
-		<li class='jm'>{@del RestRequest#getClasspathHttpResource(String,boolean)}
+			resolved (restricted for security reasons on variables that involve user input).
 	</ul>
 	<p>
 		There are two distinct groups of variables:
@@ -17776,72 +17742,101 @@
 			<td class='code'>$U{servlet:/foo?bar=$UE{$RA{bar}}</td>
 		</tr>
 		<tr class='dark dd'>
-			<td>{@del org.apache.juneau.rest.vars.WidgetVar}</td>
+			<td>{@link org.apache.juneau.html.Widget}</td>
 			<td class='code'>$W{name}</td>
 			<td style='text-align:center;font-weight:bold'>no</td>
 			<td style='text-align:center;font-weight:bold'>yes</td>
 			<td class='code'>$W{MenuItemWidget}</td>
 		</tr>
 	</table>
+	<p>
+		Custom variables can be defined on resources via the following API:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver()}
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+	<jc>// Defined a variable that simply wrapps all strings inside [] brackets.</jc>
+	<jc>// e.g. "$BRACKET{foobar}" -> "[foobar]"</jc>
+	<jk>public class</jk> BracketVar <jk>extends</jk> SimpleVar {
+		
+		<jk>public</jk> BracketVar() {
+			<jk>super</jk>(<js>"BRACKET"</js>);
+		}
+			
+		<ja>@Override</ja> <jc>/* Var */</jc>
+		<jk>public</jk> String resolve(VarResolverSession <jv>session</jv>, String <jv>arg</jv>) {
+			<jk>return</jk> <js>'['</js> + <jv>arg</jv> + <js>']'</js>;
+		}
+	}
+
+	<jc>// Register it with our resource.</jc>
+	<ja>@Rest</ja>(...)
+	<jk>public class</jk> MyResource {
+	
+		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
+			<jv>builder</jv>.varResolver().vars(BracketVar.<jk>class</jk>);
+		}
+	}
+	</p>
+	<p>
+		The methods involved with variables are:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()}
+	</ul>
 </div>
 </div><!-- END: 6.12 - juneau-rest-server.jrs.SvlVariables -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.StaticFiles' id='juneau-rest-server.jrs.StaticFiles'>6.13 - Static files</a><span class='update'><b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.StaticFiles' id='juneau-rest-server.jrs.StaticFiles'>6.13 - Static files</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 6.13 - juneau-rest-server.jrs.StaticFiles -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.rest.annotation.Rest#staticFiles @Rest(staticFiles)} 
-		annotation is used to define paths and locations of statically-served files such as images or HTML 
-		documents.
+		The {@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestObject} classes come with built-in support
+		for serving up static files through the following REST operation:
 	</p>
-	<p>
-		The value is a JSON map of paths to packages/directories located on either the classpath or working 
-		directory.
-	</p>
-	
-	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-	<jk>package</jk> com.foo.mypackage;
-
-	<ja>@Rest</ja>(
-		path=<js>"/myresource"</js>,
-		staticFiles={<js>"htdocs:docs"</js>}
-	)
-	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
-	</p>
-	<p>	
-		Static files are found by calling {@link java.lang.Class#getResource(String)} up the class hierarchy.  
-		If not found, then an attempt is made to find the class in the Java working directory.
+	<ja>@RestGet</ja>(path=<js>"/htdocs/*"</js>)
+	<jk>public</jk> HttpResource getHtdoc(<ja>@Path</ja>("/*") String <jv>path</jv>, Locale <jv>locale</jv>) <jk>throws</jk> NotFound {
+		<jk>return</jk> getContext().getStaticFiles().resolve(<jv>path</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
+	}
 	</p>
 	<p>
-		In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will 
-		attempt to find the <l>foobar.html</l> file in the following ordered locations:
+		The static file finder can be accessed through the following methods:
 	</p>
-	<ol>
-		<li><l>com.foo.mypackage.docs</l> package.
-		<li><l>[working-dir]/docs</l> directory.
-	</ol>
-	
-	<ul class='notes'>
-		<li>
-			Mappings are cumulative from parent to child.  
-			<br>Child resources can override mappings made on parent resources.
-		<li>
-			The media type on the response is determined by the 
-			{@del RestContext#getMediaTypeForName(String)} method.
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext#getStaticFiles()}
+		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getStaticFiles()}
 	</ul>
-	
-	<ul class='seealso'>
-		<li class='jf'>{@del org.apache.juneau.rest.RestContext#REST_staticFiles}
-	</ul>
+	<p>
+		By default, the {@link org.apache.juneau.rest.staticfile.StaticFiles} bean is configured as follows:
+	</p>
+	<p class='bcode w800'>
+	StaticFiles
+		.<jsm>create</jsm>()
+		.beanStore(<jv>beanStore</jv>)  <jc>// Allow injected beans in constructor.</jc>
+		.type(BasicStaticFiles.<jk>class</jk>)  <jc>// Default implementation class.</jc>
+		.dir(<js>"static"</js>)  <jc>// Look in working /static directory.</jc>
+		.dir(<js>"htdocs"</js>)  <jc>// Look in working /htdocs directory.</jc>
+		.cp(<jv>resourceClass</jv>, <js>"htdocs"</js>, <jk>true</jk>)  <jc>// Look in htdocs subpackage.</jc>
+		.cp(<jv>resourceClass</jv>, <js>"/htdocs"</js>, <jk>true</jk>)  <jc>// Look in htdocs package.</jc>
+		.caching(1_000_000)  <jc>// Cache files in memory up to 1MB.</jc>
+		.exclude(<js>"(?i).*\\.(class|properties)"</js>)  <jc>// Ignore class/properties files.</jc>
+		.headers(<jsm>cacheControl</jsm>(<js>"max-age=86400, public"</js>));  <jc>// Add cache control.</jc>
+	</p>
+	<p>
+		See {@link org.apache.juneau.rest.RestContext.Builder#createStaticFiles(BeanStore,Supplier)} for details on configuring this bean.
+	</p>
 </div>
 </div><!-- END: 6.13 - juneau-rest-server.jrs.StaticFiles -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ClientVersioning' id='juneau-rest-server.jrs.ClientVersioning'>6.14 - Client Versioning</a><span class='update'><b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ClientVersioning' id='juneau-rest-server.jrs.ClientVersioning'>6.14 - Client Versioning</a><span class='update'>updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 6.14 - juneau-rest-server.jrs.ClientVersioning -->
 <div class='topic'>
 	<p>
@@ -17881,68 +17876,13 @@
 			...
 		}
 	</p>
-	
-	<ul class='seealso'>
-		<li class='jf'>{@del org.apache.juneau.rest.RestContext#REST_clientVersionHeader}
-	</ul>
 </div>
 </div><!-- END: 6.14 - juneau-rest-server.jrs.ClientVersioning -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.InfoProvider' id='juneau-rest-server.jrs.InfoProvider'>6.15 - RestInfoProvider</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.15 - juneau-rest-server.jrs.InfoProvider -->
-<div class='topic'>
-	<p>
-		The {@del org.apache.juneau.rest.RestInfoProvider} class is used to find the title
-		and description for your resource and also generate the Swagger documentation.
-		It can be overridden to provide your own custom Swagger documentation.
-	</p>
-	<p>
-		The methods on this interface are:
-	</p>
-	<ul class='javatree'>
-		<li class='jic'>{@del RestInfoProvider}
-		<ul>
-			<li class='jm'>{@del getSwagger(RestRequest)}
-			<li class='jm'>{@del getSiteName(RestRequest)}
-			<li class='jm'>{@del getTitle(RestRequest)}
-			<li class='jm'>{@del getDescription(RestRequest)}
-			<li class='jm'>{@del getMethodSummary(Method,RestRequest)}
-			<li class='jm'>{@del getMethodDescription(Method,RestRequest)}
-		</ul>
-	</ul>
-	<p>
-		The info provider in turn supplies the information returned by the following methods:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
-			<li class='jm'>{@del getSiteName()}
-			<li class='jm'>{@del getResourceTitle()}
-			<li class='jm'>{@del getResourceDescription()}
-			<li class='jm'>{@del getMethodSummary()}
-			<li class='jm'>{@del getMethodDescription()}
-		</ul>
-	</ul>
-	<p>
-		Info providers are registered through the following property:
-	</p>
-	<ul class='javatree'>
-		<li class='jf'>{@del RestContext#REST_infoProvider}
-	</ul>
-	<p>
-		While you can implement this interface from scratch, you may want to instead consider extending
-		from the <l>BasicRestInfoProvider</l> class described next.
-	</p>
-</div>
-</div><!-- END: 6.15 - juneau-rest-server.jrs.InfoProvider -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger' id='juneau-rest-server.jrs.Swagger'>6.16 - Swagger</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.16 - juneau-rest-server.jrs.Swagger -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger' id='juneau-rest-server.jrs.Swagger'>6.15 - Swagger</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.15 - juneau-rest-server.jrs.Swagger -->
 <div class='topic'>
 	<p>
 		One of the most useful features of Juneau is the ability to generate Swagger-based OPTIONS pages for self-documenting designs 
@@ -17960,8 +17900,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger' id='juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger'>6.16.1 - BasicRestServlet</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.1 - juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger' id='juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger'>6.15.1 - BasicRestServlet</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.1 - juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger -->
 <div class='topic'>
 	<p>
 		Any subclass of {@link org.apache.juneau.rest.BasicRestServlet} gets an auto-generated Swagger UI when performing an <c>OPTIONS</c>
@@ -18038,12 +17978,12 @@
 		your own <ja>@RestOp</ja>-annotated method that returns a {@link org.apache.juneau.dto.swagger.Swagger} object and a {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} swap.
 	</p>
 </div>
-</div><!-- END: 6.16.1 - juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger -->
+</div><!-- END: 6.15.1 - juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo' id='juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo'>6.16.2 - Basic Swagger Info</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.2 - juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo' id='juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo'>6.15.2 - Basic Swagger Info</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.2 - juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo -->
 <div class='topic'>
 	<p>
 		Let's look at the various parts of the <c>Petstore</c> application Swagger UI to see how they are defined.
@@ -18206,12 +18146,12 @@
 		<li>Swagger JSON file
 	</ol>
 </div>
-</div><!-- END: 6.16.2 - juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo -->
+</div><!-- END: 6.15.2 - juneau-rest-server.jrs.Swagger.jrs.BasicSwaggerInfo -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerTags' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerTags'>6.16.3 - Tags</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.3 - juneau-rest-server.jrs.Swagger.jrs.SwaggerTags -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerTags' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerTags'>6.15.3 - Tags</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.3 - juneau-rest-server.jrs.Swagger.jrs.SwaggerTags -->
 <div class='topic'>
 	<p>
 		Tags allow you to group operations into general categories.
@@ -18308,12 +18248,12 @@
 	</p>
 	<img class='bordered w900' src='doc-files/jrs.Swagger.5.png'>
 </div>
-</div><!-- END: 6.16.3 - juneau-rest-server.jrs.Swagger.jrs.SwaggerTags -->
+</div><!-- END: 6.15.3 - juneau-rest-server.jrs.Swagger.jrs.SwaggerTags -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations'>6.16.4 - Operations</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.4 - juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations'>6.15.4 - Operations</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.4 - juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations -->
 <div class='topic'>
 	<p>
 		<ja>@RestOp</ja>-annotated methods automatically get rendered as Swagger operations:
@@ -18353,12 +18293,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.16.4 - juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations -->
+</div><!-- END: 6.15.4 - juneau-rest-server.jrs.Swagger.jrs.SwaggerOperations -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters'>6.16.5 - Parameters</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.5 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters'>6.15.5 - Parameters</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.5 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters -->
 <div class='topic'>
 	<p>
 		Expanding operations shows you a list of parameters:
@@ -18492,12 +18432,12 @@
 		Note that the schema information on the body parameter is automatically detected if not provided.
 	</p>
 </div>
-</div><!-- END: 6.16.5 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters -->
+</div><!-- END: 6.15.5 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameters -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples'>6.16.6 - Parameter Examples</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.6 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples'>6.15.6 - Parameter Examples</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.6 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples -->
 <div class='topic'>
 	<p>
 		The <c>model</c> select box in the parameters can be expanded to show examples:
@@ -18719,12 +18659,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 6.16.6 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples -->
+</div><!-- END: 6.15.6 - juneau-rest-server.jrs.Swagger.jrs.SwaggerParameterExamples -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses'>6.16.7 - Responses</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.7 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses'>6.15.7 - Responses</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.7 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses -->
 <div class='topic'>
 	<p>
 		Under the input parameters are listed the possible responses for the resource:
@@ -18763,12 +18703,12 @@
 		<li class='link'>{@doc jrs.ResponseBeans}
 	</ul>
 </div>
-</div><!-- END: 6.16.7 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses -->
+</div><!-- END: 6.15.7 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponses -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples'>6.16.8 - Response Examples</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.8 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples'>6.15.8 - Response Examples</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.8 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples -->
 <div class='topic'>
 	<p>
 		The <c>model</c> select box in the responses can be expanded to show examples:
@@ -18988,12 +18928,12 @@
 	}
 	</p>	
 </div>
-</div><!-- END: 6.16.8 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples -->
+</div><!-- END: 6.15.8 - juneau-rest-server.jrs.Swagger.jrs.SwaggerResponseExamples -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerModels' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerModels'>6.16.9 - Models</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.9 - juneau-rest-server.jrs.Swagger.jrs.SwaggerModels -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerModels' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerModels'>6.15.9 - Models</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.9 - juneau-rest-server.jrs.Swagger.jrs.SwaggerModels -->
 <div class='topic'>
 	<p>
 		The {@del org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} setting can be used to reduce the size of your
@@ -19088,12 +19028,12 @@
 	</p>
 	<img class='bordered w900' src='doc-files/jrs.Swagger.Models.3.png'> 
 </div>
-</div><!-- END: 6.16.9 - juneau-rest-server.jrs.Swagger.jrs.SwaggerModels -->
+</div><!-- END: 6.15.9 - juneau-rest-server.jrs.Swagger.jrs.SwaggerModels -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet'>6.16.10 - SwaggerUI.css</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.16.10 - juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet' id='juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet'>6.15.10 - SwaggerUI.css</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.15.10 - juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet -->
 <div class='topic'>
 	<p>
 		The look-and-feel of the Swagger UI is controlled via a single CSS file:  <c>SwaggerUI.css</c>.
@@ -19104,13 +19044,13 @@
 		This file can be modified to change the look-and-feel of your Swagger UI.
 	</p>
 </div>
-</div><!-- END: 6.16.10 - juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet -->
-</div><!-- END: 6.16 - juneau-rest-server.jrs.Swagger -->
+</div><!-- END: 6.15.10 - juneau-rest-server.jrs.Swagger.jrs.SwaggerStylesheet -->
+</div><!-- END: 6.15 - juneau-rest-server.jrs.Swagger -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ExecutionStatistics' id='juneau-rest-server.jrs.ExecutionStatistics'>6.17 - REST method execution statistics</a><span class='update'>created: 8.1.3, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.17 - juneau-rest-server.jrs.ExecutionStatistics -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ExecutionStatistics' id='juneau-rest-server.jrs.ExecutionStatistics'>6.16 - REST method execution statistics</a><span class='update'>created: 8.1.3, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.16 - juneau-rest-server.jrs.ExecutionStatistics -->
 <div class='topic'>
 	<p>
 		<ja>@RestResource</ja> annotated classes get automated timing and error statistic information for all <ja>@RestOp</ja>
@@ -19138,12 +19078,12 @@
 		</ul>
 	</ul>
 </div>
-</div><!-- END: 6.17 - juneau-rest-server.jrs.ExecutionStatistics -->
+</div><!-- END: 6.16 - juneau-rest-server.jrs.ExecutionStatistics -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation' id='juneau-rest-server.jrs.HtmlDocAnnotation'>6.18 - @HtmlDocConfig</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.18 - juneau-rest-server.jrs.HtmlDocAnnotation -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation' id='juneau-rest-server.jrs.HtmlDocAnnotation'>6.17 - @HtmlDocConfig</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.17 - juneau-rest-server.jrs.HtmlDocAnnotation -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
@@ -19261,8 +19201,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI'>6.18.1 - User Interfaces (UI) vs. Developer Interfaces (DI)</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.18.1 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI'>6.17.1 - User Interfaces (UI) vs. Developer Interfaces (DI)</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.17.1 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI -->
 <div class='topic'>
 	<p>
 		An important distinction needs to be made about the HTML representations produced by the REST
@@ -19305,12 +19245,12 @@
 			Angular, or any number of sophisticated Javascript UI frameworks.  Resist the urge to do so.
 	</ul>		
 </div>
-</div><!-- END: 6.18.1 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI -->
+</div><!-- END: 6.17.1 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUIvsDI -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets'>6.18.2 - Widgets</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.18.2 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets'>6.17.2 - Widgets</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.17.2 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
@@ -19425,12 +19365,12 @@
 		<li class='jf'>{@del org.apache.juneau.rest.RestContext#REST_widgets}
 	</ul>
 </div>
-</div><!-- END: 6.18.2 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets -->
+</div><!-- END: 6.17.2 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets'>6.18.3 - Predefined Widgets</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.18.3 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets'>6.17.3 - Predefined Widgets</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.17.3 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.widget} package contains predefined reusable widgets.
@@ -19667,12 +19607,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.18.3 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets -->
+</div><!-- END: 6.17.3 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization'>6.18.4 - UI Customization</a><span class='update'><b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.18.4 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization'>6.17.4 - UI Customization</a><span class='update'><b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.17.4 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization -->
 <div class='topic'>
 	<p>
 		The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
@@ -19818,12 +19758,12 @@
 		<li class='link'>{@doc jmj.UiCustomization}
 	</ul>
 </div>
-</div><!-- END: 6.18.4 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization -->
+</div><!-- END: 6.17.4 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets'>6.18.5 - Stylesheets</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h4>
-<div class='topic'><!-- START: 6.18.5 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets'>6.17.5 - Stylesheets</a><span class='update'>updated: 8.1.0, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 6.17.5 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets -->
 <div class='topic'>
 	<p>
 		The sample root page renders in the default "devops" look-and-feel:
@@ -19935,13 +19875,13 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.18.5 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets -->
-</div><!-- END: 6.18 - juneau-rest-server.jrs.HtmlDocAnnotation -->
+</div><!-- END: 6.17.5 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets -->
+</div><!-- END: 6.17 - juneau-rest-server.jrs.HtmlDocAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.DefaultHeaders' id='juneau-rest-server.jrs.DefaultHeaders'>6.19 - Default Headers</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.19 - juneau-rest-server.jrs.DefaultHeaders -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.DefaultHeaders' id='juneau-rest-server.jrs.DefaultHeaders'>6.18 - Default Headers</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.18 - juneau-rest-server.jrs.DefaultHeaders -->
 <div class='topic'>
 	<p>
 		The following annotations are provided for specifying default header values for requests and responses:
@@ -19985,12 +19925,12 @@
 		</li>
 	</ul>
 </div>
-</div><!-- END: 6.19 - juneau-rest-server.jrs.DefaultHeaders -->
+</div><!-- END: 6.18 - juneau-rest-server.jrs.DefaultHeaders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.LoggingAndDebugging' id='juneau-rest-server.jrs.LoggingAndDebugging'>6.20 - Logging / Debugging</a><span class='update'>created: 8.1.0, updated: 8.2.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.20 - juneau-rest-server.jrs.LoggingAndDebugging -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.LoggingAndDebugging' id='juneau-rest-server.jrs.LoggingAndDebugging'>6.19 - Logging / Debugging</a><span class='update'>created: 8.1.0, updated: 8.2.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.19 - juneau-rest-server.jrs.LoggingAndDebugging -->
 <div class='topic'>
 	<p>
 		The REST APIs provides support for fine-tuned control of logging for HTTP requests and responses.
@@ -20323,12 +20263,12 @@
 		to the log file again.
 	</p>
 </div>
-</div><!-- END: 6.20 - juneau-rest-server.jrs.LoggingAndDebugging -->
+</div><!-- END: 6.19 - juneau-rest-server.jrs.LoggingAndDebugging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HttpStatusCodes' id='juneau-rest-server.jrs.HttpStatusCodes'>6.21 - HTTP Status Codes</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.21 - juneau-rest-server.jrs.HttpStatusCodes -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HttpStatusCodes' id='juneau-rest-server.jrs.HttpStatusCodes'>6.20 - HTTP Status Codes</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.20 - juneau-rest-server.jrs.HttpStatusCodes -->
 <div class='topic'>
 	<p>
 		By default, a 200 (OK) status is automatically set as the HTTP status when a Java method executes 
@@ -20393,12 +20333,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 6.21 - juneau-rest-server.jrs.HttpStatusCodes -->
+</div><!-- END: 6.20 - juneau-rest-server.jrs.HttpStatusCodes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.OverloadingHttpMethods' id='juneau-rest-server.jrs.OverloadingHttpMethods'>6.22 - Overloading HTTP Methods</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.22 - juneau-rest-server.jrs.OverloadingHttpMethods -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.OverloadingHttpMethods' id='juneau-rest-server.jrs.OverloadingHttpMethods'>6.21 - Overloading HTTP Methods</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.21 - juneau-rest-server.jrs.OverloadingHttpMethods -->
 <div class='topic'>
 	<p>
 		Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic 
@@ -20424,12 +20364,12 @@
 	)
 	</p>
 </div>
-</div><!-- END: 6.22 - juneau-rest-server.jrs.OverloadingHttpMethods -->
+</div><!-- END: 6.21 - juneau-rest-server.jrs.OverloadingHttpMethods -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.BuiltInParameters' id='juneau-rest-server.jrs.BuiltInParameters'>6.23 - Built-in Parameters</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.23 - juneau-rest-server.jrs.BuiltInParameters -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.BuiltInParameters' id='juneau-rest-server.jrs.BuiltInParameters'>6.22 - Built-in Parameters</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.22 - juneau-rest-server.jrs.BuiltInParameters -->
 <div class='topic'>
 	<p>
 		The following URL parameters have special meaning and can be passed in through the URL of the request:
@@ -20491,12 +20431,12 @@
 		</tr>
 	</table>
 </div>
-</div><!-- END: 6.23 - juneau-rest-server.jrs.BuiltInParameters -->
+</div><!-- END: 6.22 - juneau-rest-server.jrs.BuiltInParameters -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.CustomSerializersAndParsers' id='juneau-rest-server.jrs.CustomSerializersAndParsers'>6.24 - Custom Serializers and Parsers</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.24 - juneau-rest-server.jrs.CustomSerializersAndParsers -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.CustomSerializersAndParsers' id='juneau-rest-server.jrs.CustomSerializersAndParsers'>6.23 - Custom Serializers and Parsers</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.23 - juneau-rest-server.jrs.CustomSerializersAndParsers -->
 <div class='topic'>
 	<p>
 		A very easy-to-use API is provided for defining your own serializers and parsers at both the servlet and 
@@ -20613,12 +20553,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.24 - juneau-rest-server.jrs.CustomSerializersAndParsers -->
+</div><!-- END: 6.23 - juneau-rest-server.jrs.CustomSerializersAndParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UsingWithOsgi' id='juneau-rest-server.jrs.UsingWithOsgi'>6.25 - Using with OSGi</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.25 - juneau-rest-server.jrs.UsingWithOsgi -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UsingWithOsgi' id='juneau-rest-server.jrs.UsingWithOsgi'>6.24 - Using with OSGi</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.24 - juneau-rest-server.jrs.UsingWithOsgi -->
 <div class='topic'>
 	<p>
 		Since REST servlets are basically just <l>HttpServlets</l>, incorporating them into an OSGi environment
@@ -20682,12 +20622,12 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.25 - juneau-rest-server.jrs.UsingWithOsgi -->
+</div><!-- END: 6.24 - juneau-rest-server.jrs.UsingWithOsgi -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Injection' id='juneau-rest-server.jrs.Injection'>6.26 - Using with Spring and Injection frameworks</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.26 - juneau-rest-server.jrs.Injection -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Injection' id='juneau-rest-server.jrs.Injection'>6.25 - Using with Spring and Injection frameworks</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.25 - juneau-rest-server.jrs.Injection -->
 <div class='topic'>
 	<p>
 		The Juneau REST server API is compatible with dependency injection frameworks such as Spring.
@@ -20791,12 +20731,12 @@
 		}
 	</p>
 </div>
-</div><!-- END: 6.26 - juneau-rest-server.jrs.Injection -->
+</div><!-- END: 6.25 - juneau-rest-server.jrs.Injection -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.OtherNotes' id='juneau-rest-server.jrs.OtherNotes'>6.27 - Other Notes</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.27 - juneau-rest-server.jrs.OtherNotes -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.OtherNotes' id='juneau-rest-server.jrs.OtherNotes'>6.26 - Other Notes</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.26 - juneau-rest-server.jrs.OtherNotes -->
 <div class='topic'>
 	<ul class='spaced-list'>
 		<li>
@@ -20809,12 +20749,12 @@
 			parameter can be specified:  <l>"/sample?X-Response-Headers={Refresh=1}"</l>
 	</ul>
 </div>
-</div><!-- END: 6.27 - juneau-rest-server.jrs.OtherNotes -->
+</div><!-- END: 6.26 - juneau-rest-server.jrs.OtherNotes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.RestContext' id='juneau-rest-server.jrs.RestContext'>6.28 - RestContext</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.28 - juneau-rest-server.jrs.RestContext -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.RestContext' id='juneau-rest-server.jrs.RestContext'>6.27 - RestContext</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.27 - juneau-rest-server.jrs.RestContext -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.RestContext} object is the workhorse class for all of the configuration
@@ -20864,12 +20804,12 @@
 			resource finders, info providers, etc...
 	</p>
 </div>
-</div><!-- END: 6.28 - juneau-rest-server.jrs.RestContext -->
+</div><!-- END: 6.27 - juneau-rest-server.jrs.RestContext -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.RestRpc' id='juneau-rest-server.jrs.RestRpc'>6.29 - REST/RPC</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.29 - juneau-rest-server.jrs.RestRpc -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.RestRpc' id='juneau-rest-server.jrs.RestRpc'>6.28 - REST/RPC</a><span class='update'>updated: 8.0.0, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.28 - juneau-rest-server.jrs.RestRpc -->
 <div class='topic'>
 	<p>
 		The REST/RPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
@@ -21190,12 +21130,12 @@
 	<h5 class='figure'>Sample form entry page results</h5>
 	<img class='bordered w800' src='doc-files/jrs.restRPC.9.png'>
 </div>
-</div><!-- END: 6.29 - juneau-rest-server.jrs.RestRpc -->
+</div><!-- END: 6.28 - juneau-rest-server.jrs.RestRpc -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.CustomRestContextsAndBuilders' id='juneau-rest-server.jrs.CustomRestContextsAndBuilders'>6.30 - Custom REST Context and Builders</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.30 - juneau-rest-server.jrs.CustomRestContextsAndBuilders -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.CustomRestContextsAndBuilders' id='juneau-rest-server.jrs.CustomRestContextsAndBuilders'>6.29 - Custom REST Context and Builders</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.29 - juneau-rest-server.jrs.CustomRestContextsAndBuilders -->
 <div class='topic'>
 	<p>
 		They can also be defined programmatically:
@@ -21229,56 +21169,56 @@
 	}
 	</p>
 </div>
-</div><!-- END: 6.30 - juneau-rest-server.jrs.CustomRestContextsAndBuilders -->
+</div><!-- END: 6.29 - juneau-rest-server.jrs.CustomRestContextsAndBuilders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.FluentAssertions' id='juneau-rest-server.jrs.FluentAssertions'>6.31 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
-<div class='topic'><!-- START: 6.31 - juneau-rest-server.jrs.FluentAssertions -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.FluentAssertions' id='juneau-rest-server.jrs.FluentAssertions'>6.30 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.30 - juneau-rest-server.jrs.FluentAssertions -->
 <div class='topic'>
 	<p>
 		TODO
 	</p>
 </div>
-</div><!-- END: 6.31 - juneau-rest-server.jrs.FluentAssertions -->
+</div><!-- END: 6.30 - juneau-rest-server.jrs.FluentAssertions -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Overview' id='juneau-rest-server.jrs.Overview'>6.32 - Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
-<div class='topic'><!-- START: 6.32 - juneau-rest-server.jrs.Overview -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.Overview' id='juneau-rest-server.jrs.Overview'>6.31 - Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.31 - juneau-rest-server.jrs.Overview -->
 <div class='topic'>
 	<p>
 		TODO
 	</p>
 </div>
-</div><!-- END: 6.32 - juneau-rest-server.jrs.Overview -->
+</div><!-- END: 6.31 - juneau-rest-server.jrs.Overview -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ResponseProcessors' id='juneau-rest-server.jrs.ResponseProcessors'>6.33 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
-<div class='topic'><!-- START: 6.33 - juneau-rest-server.jrs.ResponseProcessors -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ResponseProcessors' id='juneau-rest-server.jrs.ResponseProcessors'>6.32 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.32 - juneau-rest-server.jrs.ResponseProcessors -->
 <div class='topic'>
 	<p>
 		TODO
 	</p>
 </div>
-</div><!-- END: 6.33 - juneau-rest-server.jrs.ResponseProcessors -->
+</div><!-- END: 6.32 - juneau-rest-server.jrs.ResponseProcessors -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UtilityBeans' id='juneau-rest-server.jrs.UtilityBeans'>6.34 - Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
-<div class='topic'><!-- START: 6.34 - juneau-rest-server.jrs.UtilityBeans -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UtilityBeans' id='juneau-rest-server.jrs.UtilityBeans'>6.33 - Utility Beans</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<div class='topic'><!-- START: 6.33 - juneau-rest-server.jrs.UtilityBeans -->
 <div class='topic'>
 	<p>
 		TODO
 	</p>
 </div>
-</div><!-- END: 6.34 - juneau-rest-server.jrs.UtilityBeans -->
+</div><!-- END: 6.33 - juneau-rest-server.jrs.UtilityBeans -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.SerializingUris' id='juneau-rest-server.jrs.SerializingUris'>6.35 - URIs</a><span class='update'><b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 6.35 - juneau-rest-server.jrs.SerializingUris -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.SerializingUris' id='juneau-rest-server.jrs.SerializingUris'>6.34 - URIs</a><span class='update'><b><red>todo</red></b></span></h3>
+<div class='topic'><!-- START: 6.34 - juneau-rest-server.jrs.SerializingUris -->
 <div class='topic'>
 	<p>
 		As mention earlier {@doc jm.MarshallingUris here}, Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
@@ -21360,7 +21300,7 @@
 		URIs are resolved by both regular and part serializers.
 	</p>
 </div>
-</div><!-- END: 6.35 - juneau-rest-server.jrs.SerializingUris -->
+</div><!-- END: 6.34 - juneau-rest-server.jrs.SerializingUris -->
 </div><!-- END: 6 - juneau-rest-server -->
 
 <!-- ==================================================================================================== -->

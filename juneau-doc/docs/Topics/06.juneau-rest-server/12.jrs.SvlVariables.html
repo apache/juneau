@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'SVL Variables', flags:'todo'}
+{title:'SVL Variables', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>	
@@ -38,46 +38,7 @@
 		<li>
 			Variables are recursively resolved. 
 			<br>i.e., if a variable results to a value with another variable in it, that variable will also be 
-			resolved (restricted for security reasons on some variables).
-	</ul>
-	<p>
-		Variables are configured on resources via the following API:
-	</p>
-	<ul class='javatree'>
-		<li class='jm'>{@del oajr.RestContext.Builder#vars(Class[])}
-	</ul>
-	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-		|	<jc>// Defined a variable that simply wrapps all strings inside [] brackets.</jc>
-		|	<jc>// e.g. "$BRACKET{foobar}" -> "[foobar]"</jc>
-		|	<jk>public class</jk> BracketVar <jk>extends</jk> SimpleVar {
-		|		
-		|		<jk>public</jk> BracketVar() {
-		|			<jk>super</jk>(<js>"BRACKET"</js>);
-		|		}
-		|			
-		|		<ja>@Override</ja> <jc>/* Var */</jc>
-		|		<jk>public</jk> String resolve(VarResolverSession session, String arg) {
-		|			<jk>return</jk> <js>'['</js> + arg + <js>']'</js>;
-		|		}
-		|	}
-		|
-		|	<jc>// Register it with our resource.</jc>
-		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource {
-		|	
-		|		<jk>public</jk> MyResource(RestContext.Builder builder) {
-		|			builder.vars(BracketVar.<jk>class</jk>);
-		|		}
-		|	}
-	</p>
-	<p>
-		The methods involved with variables are:
-	</p>
-	<ul class='javatree'>
-		<li class='jm'>{@link oajr.RestContext#getVarResolver()}
-		<li class='jm'>{@link oajr.RestRequest#getVarResolverSession()}
-		<li class='jm'>{@del RestRequest#getClasspathHttpResource(String,boolean)}
+			resolved (restricted for security reasons on variables that involve user input).
 	</ul>
 	<p>
 		There are two distinct groups of variables:
@@ -277,11 +238,49 @@
 			<td class='code'>$U{servlet:/foo?bar=$UE{$RA{bar}}</td>
 		</tr>
 		<tr class='dark dd'>
-			<td>{@del oajr.vars.WidgetVar}</td>
+			<td>{@link oaj.html.Widget}</td>
 			<td class='code'>$W{name}</td>
 			<td style='text-align:center;font-weight:bold'>no</td>
 			<td style='text-align:center;font-weight:bold'>yes</td>
 			<td class='code'>$W{MenuItemWidget}</td>
 		</tr>
 	</table>
+	<p>
+		Custom variables can be defined on resources via the following API:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oajr.RestContext.Builder#varResolver()}
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode w800'>
+		|	<jc>// Defined a variable that simply wrapps all strings inside [] brackets.</jc>
+		|	<jc>// e.g. "$BRACKET{foobar}" -> "[foobar]"</jc>
+		|	<jk>public class</jk> BracketVar <jk>extends</jk> SimpleVar {
+		|		
+		|		<jk>public</jk> BracketVar() {
+		|			<jk>super</jk>(<js>"BRACKET"</js>);
+		|		}
+		|			
+		|		<ja>@Override</ja> <jc>/* Var */</jc>
+		|		<jk>public</jk> String resolve(VarResolverSession <jv>session</jv>, String <jv>arg</jv>) {
+		|			<jk>return</jk> <js>'['</js> + <jv>arg</jv> + <js>']'</js>;
+		|		}
+		|	}
+		|
+		|	<jc>// Register it with our resource.</jc>
+		|	<ja>@Rest</ja>(...)
+		|	<jk>public class</jk> MyResource {
+		|	
+		|		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
+		|			<jv>builder</jv>.varResolver().vars(BracketVar.<jk>class</jk>);
+		|		}
+		|	}
+	</p>
+	<p>
+		The methods involved with variables are:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oajr.RestContext#getVarResolver()}
+		<li class='jm'>{@link oajr.RestRequest#getVarResolverSession()}
+	</ul>
 </div>

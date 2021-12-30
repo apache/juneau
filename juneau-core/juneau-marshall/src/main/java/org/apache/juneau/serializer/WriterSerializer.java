@@ -13,7 +13,6 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.collections.OMap.*;
 import static java.util.Optional.*;
 

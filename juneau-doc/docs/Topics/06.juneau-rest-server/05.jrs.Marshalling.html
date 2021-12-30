@@ -56,15 +56,22 @@
 		The following classes provide common default serializers and parsers that can be
 		used as-is or augmented by child classes:
 	<p>
-	<ul class='javatreec'>
-		<li class='jic'>{@link oajr.config.BasicUniversalRest}
-		<li class='jic'>{@link oajr.config.BasicJsonRest}
-		<li class='jic'>{@link oajr.config.BasicSimpleJsonRest}
-		<li class='jic'>{@link oajr.config.BasicOpenApiRest}
-		<li class='jc'>{@link oajr.BasicRestServlet}
-		<li class='jc'>{@link oajr.BasicRestServletGroup}
-		<li class='jc'>{@link oajr.BasicRestObject}
-		<li class='jc'>{@link oajr.BasicRestObjectGroup}
+	<ul class='javatree'>
+		<li>Classes:
+			<ul class='javatreec'>
+				<li class='jc'>{@link oajr.BasicRestServlet}
+				<li class='jc'>{@link oajr.BasicRestServletGroup}
+				<li class='jc'>{@link oajr.BasicRestObject}
+				<li class='jc'>{@link oajr.BasicRestObjectGroup}
+			</ul>
+		<li>Interfaces:
+			<ul class='javatreec'>
+				<li class='jic'>{@link oajr.config.BasicUniversalRest}
+				<li class='jic'>{@link oajr.config.BasicJsonRest}
+				<li class='jic'>{@link oajr.config.BasicJsonHtmlRest}
+				<li class='jic'>{@link oajr.config.BasicSimpleJsonRest}
+				<li class='jic'>{@link oajr.config.BasicOpenApiRest}
+			</ul>
 	</ul>
 	<p>
 		Serializers and parsers can also be defined programmatically using an INIT hook method like shown below:

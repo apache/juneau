@@ -14,8 +14,6 @@ package org.apache.juneau.jena;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.filteredMap;
-import static org.apache.juneau.internal.SystemEnv.env;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;

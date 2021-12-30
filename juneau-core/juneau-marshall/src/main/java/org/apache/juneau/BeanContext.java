@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 import static java.util.Optional.*;
 import static java.util.Arrays.*;
 

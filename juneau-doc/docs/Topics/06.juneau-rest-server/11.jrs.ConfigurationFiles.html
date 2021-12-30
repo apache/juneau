@@ -45,7 +45,8 @@
 		|	<cs>[MyProperties]</cs>
 		|	<ck>path</ck> = <cv>$E{PATH}</cv>
 		|	<ck>javaHome</ck> = <cv>$S{java.home}</cv>
-		|	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
+		|	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the 
+		|		environment path is $C{MyProperties/path}.</cv>
 	</p>
 	<p>
 		These properties are then accessible through the {@link oaj.config.Config} class.
@@ -53,9 +54,9 @@
 	<p class='bcode w800'>
 		|	<ja>@RestGet</ja>(<js>"/"</js>)
 		|	<jk>public</jk> String sample(Config <jv>config</jv>) {
-		|		String <jv>path</jv> = <jv>config</jv>.getString(<js>"MyProperties/path"</js>);
-		|		File <jv>javaHome</jv> = <jv>config</jv>.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
-		|		String <jv>customMessage</jv> = <jv>config</jv>.getString(<js>"MyProperties/customMessage"</js>);
+		|		String <jv>path</jv> = <jv>config</jv>.get(<js>"MyProperties/path"</js>).get();
+		|		File <jv>javaHome</jv> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
+		|		String <jv>customMessage</jv> = <jv>config</jv>.get(<js>"MyProperties/customMessage"</js>).orElse(<js>"Hello"</js>);
 		|		...
 		|	}
 	</p>
@@ -107,8 +108,8 @@
 		|	
 		|		<jk>public</jk> MyResource(RestContext.Builder builder) {
 		|			Config c = builder.getConfig();
-		|			<jf>path</jf> = c.getString(<js>"MyProperties/path"</js>);
-		|			<jf>javaHome</jf> = c.getObject(File.<jk>class</jk>, <js>"MyProperties/javaHome"</js>);
+		|			<jf>path</jf> = c.get(<js>"MyProperties/path"</js>).orElse(<js>"mypath"</js>);
+		|			<jf>javaHome</jf> = c.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
 		|		}
 	</p>
 	<p>
@@ -185,8 +186,8 @@
 		|		 * Specify the GET parameter "?person=X" for a specialized message! 
 		|		 */</jd>
 		|		<ja>@RestGet</ja>(<js>"/"</js>)
-		|		<jk>public</jk> String sayHello(RestRequest <jv>req</jv>) {
-		|			<jk>return</jk> <jv>req</jv>.getConfig().getString(<js>"HelloWorldResource/message"</js>);
+		|		<jk>public</jk> String sayHello(Config <jv>config</jv>) {
+		|			<jk>return</jk> <jv>config</jv>.getString(<js>"HelloWorldResource/message"</js>);
 		|		}
 		|	}
 	</p>

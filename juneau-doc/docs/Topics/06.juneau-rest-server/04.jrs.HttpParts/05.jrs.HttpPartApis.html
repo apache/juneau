@@ -28,18 +28,18 @@
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<ja>@RestPost</ja>(...)
-		<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
-	
-			<jc>// Add a default value.</jc>
-			<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
-	
-			<jc>// Get a header value as a POJO.</jc>
-			UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
-	
-			<jc>// Get a header as a standard HTTP part.</jc>
-			ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
-		}
+		|	<ja>@RestPost</ja>(...)
+		|	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
+		|	
+		|		<jc>// Add a default value.</jc>
+		|		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+		|	
+		|		<jc>// Get a header value as a POJO.</jc>
+		|		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
+		|	
+		|		<jc>// Get a header as a standard HTTP part.</jc>
+		|		ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
+		|	}
 	</p>
 	<p>
 		Built in to these APIs are various convenience methods such as converting parts to 
@@ -47,10 +47,10 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
-		<jc>// Inline fluent assertion and retrieval.</jc>
-		String <jv>foo</jv> = <jv>request</jv>
-			.getHeader(<js>"Foo"</js>)
-			.assertString().contains(<js>"bar"</js>)
-			.get();
+		|	<jc>// Inline fluent assertion and retrieval.</jc>
+		|	String <jv>foo</jv> = <jv>request</jv>
+		|		.getHeader(<js>"Foo"</js>)
+		|		.assertString().contains(<js>"bar"</js>)
+		|		.get();
 	</p>
 </div>

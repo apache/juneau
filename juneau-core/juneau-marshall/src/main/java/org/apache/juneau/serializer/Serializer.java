@@ -14,8 +14,6 @@ package org.apache.juneau.serializer;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.SystemEnv.*;
-
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;

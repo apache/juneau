@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.*;

@@ -14,8 +14,6 @@ package org.apache.juneau;
 
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.SystemEnv.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;

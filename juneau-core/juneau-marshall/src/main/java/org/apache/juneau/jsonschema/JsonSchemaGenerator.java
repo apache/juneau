@@ -15,7 +15,6 @@ package org.apache.juneau.jsonschema;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 import static java.util.Collections.*;
 
 import java.lang.annotation.*;
