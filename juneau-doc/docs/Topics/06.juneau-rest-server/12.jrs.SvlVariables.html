@@ -238,7 +238,7 @@
 			<td class='code'>$U{servlet:/foo?bar=$UE{$RA{bar}}</td>
 		</tr>
 		<tr class='dark dd'>
-			<td>{@link oaj.html.Widget}</td>
+			<td>{@link oajr.widget.Widget}</td>
 			<td class='code'>$W{name}</td>
 			<td style='text-align:center;font-weight:bold'>no</td>
 			<td style='text-align:center;font-weight:bold'>yes</td>
@@ -249,7 +249,13 @@
 		Custom variables can be defined on resources via the following API:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link oajr.RestContext.Builder#varResolver()}
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jmp'>{@link oajr.RestContext.Builder#createVarResolver(BeanStore,Class) createVarResolver(BeanStore,Class)}
+				<li class='jm'>{@link oajr.RestContext.Builder#varResolver() varResolver()}
+				<li class='jm'>{@link oajr.RestContext.Builder#varResolver(Consumer) varResolver(Consumer)}
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -280,7 +286,15 @@
 		The methods involved with variables are:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link oajr.RestContext#getVarResolver()}
-		<li class='jm'>{@link oajr.RestRequest#getVarResolverSession()}
+		<li class='jc'>{@link oajr.RestContext}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.RestContext#getVarResolver() getVarResolver()}
+			</ul>
+		</li>
+		<li class='jc'>{@link oajr.RestRequest}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.RestRequest#getVarResolverSession() getVarResolverSession()}
+			</ul>
+		</li>
 	</ul>
 </div>

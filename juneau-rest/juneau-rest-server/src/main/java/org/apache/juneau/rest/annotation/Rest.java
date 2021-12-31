@@ -359,7 +359,7 @@ public @interface Rest {
 	 * <ul>
 	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
 	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
-	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
+	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -404,9 +404,9 @@ public @interface Rest {
 	 * Consists of a comma-delimited list of strings of the following forms:
 	 * <ul>
 	 * 	<li><js>"class-identifier"</js> - Enable debug on the specified class.
-	 * 	<li><js>"class-identifier=[true|false|per-request]"</js> - Explicitly enable debug on the specified class.
+	 * 	<li><js>"class-identifier=[true|false|conditional]"</js> - Explicitly enable debug on the specified class.
 	 * 	<li><js>"method-identifier"</js> - Enable debug on the specified class.
-	 * 	<li><js>"method-identifier=[true|false|per-request]"</js> - Explicitly enable debug on the specified class.
+	 * 	<li><js>"method-identifier=[true|false|conditional]"</js> - Explicitly enable debug on the specified class.
 	 * </ul>
 	 *
 	 * <p>
@@ -467,7 +467,7 @@ public @interface Rest {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>.
 	 * 	<ja>@Rest</ja>(
-	 * 		debugOn=<js>"MyResource=per-request,Mysource.doX=true"</js>
+	 * 		debugOn=<js>"MyResource=conditional,MyResource.doX=true"</js>
 	 * 	)
 	 * 	<jk>public class</jk> MyResource {
 	 *

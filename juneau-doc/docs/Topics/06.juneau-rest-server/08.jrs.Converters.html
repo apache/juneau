@@ -22,9 +22,17 @@
 	<p>
 		Converters are associated with resource classes and methods via the following:
 	</p>
-	<ul class='javatreec'>
-		<li class='ja'>{@link oajr.annotation.Rest#converters() Rest(converters)} 
-		<li class='ja'>{@link oajr.annotation.RestOp#converters() RestOp(converters)} 
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#converters() converters} 
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#converters() converters} 
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -43,21 +51,21 @@
 		Juneau defines the following converters out-of-the-box:
 	</p>
 	<ul class='javatree'>
-		<li class='jic'>
-		{@link oajr.converter.RestConverter}
-		<ul class='spaced-list'>
-			<li class='jc'>
-				{@link oajr.converter.Queryable}
-				<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the 
-				POJO response before being serialized).
-			<li class='jc'>
-				{@link oajr.converter.Traversable}
-				<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on 
-				the request.
-			<li class='jc'>
-				{@link oajr.converter.Introspectable}
-				<br>Allows method calls to be made on the response POJO, and for the result of that method call to be 
-				serialized as the response.
-		</ul>
+		<li class='jic'>{@link oajr.converter.RestConverter}
+			<ul class='spaced-list'>
+				<li class='jc'>
+					{@link oajr.converter.Queryable}
+					<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the 
+					POJO response before being serialized).
+				<li class='jc'>
+					{@link oajr.converter.Traversable}
+					<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on 
+					the request.
+				<li class='jc'>
+					{@link oajr.converter.Introspectable}
+					<br>Allows method calls to be made on the response POJO, and for the result of that method call to be 
+					serialized as the response.
+			</ul>
+		</li>
 	</ul>
 </div>

@@ -43,10 +43,11 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.BeanContext.Builder}
-		<ul>
-			<li class='jm'>{@link oaj.BeanContext.Builder#applyAnnotations(Class...) applyAnnotations(Class...)} - Apply annotations from class and all parent classes.
-			<li class='jm'>{@link oaj.BeanContext.Builder#applyAnnotations(Method...) applyAnnotations(Method...)} - Apply annotations from method and parent methods.
-		</ul>
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.BeanContext.Builder#applyAnnotations(Class...) applyAnnotations(Class...)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#applyAnnotations(Method...) applyAnnotations(Method...)}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		The following example shows how annotations defined on a dummy class can be applied to a serializer:
@@ -62,12 +63,11 @@
 	<p>
 		Config annotations are provided for all serializers and parsers:
 	</p>
-	<ul class='javatree'>
+	<ul class='javatreec'>
 		<li class='ja'>{@link oaj.annotation.BeanConfig BeanConfig}
 		<li class='ja'>{@link oaj.csv.annotation.CsvConfig CsvConfig}
 		<li class='ja'>{@link oaj.html.annotation.HtmlConfig HtmlConfig}
 		<li class='ja'>{@link oaj.html.annotation.HtmlDocConfig HtmlDocConfig}
-		<li class='ja'>{@del oaj.jso.annotation.JsoConfig JsoConfig}
 		<li class='ja'>{@link oaj.json.annotation.JsonConfig JsonConfig}
 		<li class='ja'>{@link oaj.jsonschema.annotation.JsonSchemaConfig JsonSchemaConfig}
 		<li class='ja'>{@link oaj.msgpack.annotation.MsgPackConfig MsgPackConfig}
@@ -92,9 +92,10 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.BeanContext.Builder}
-		<ul>
-			<li class='jm'>{@link oaj.BeanContext.Builder#annotations(Annotation...) annotations(Annotation...)} 
-		</ul>
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.BeanContext.Builder#annotations(Annotation...) annotations(Annotation...)} 
+			</ul>
+		</li>
 	</ul>
 	<p>
 		The following example shows a concrete implementation of an interface can be applied to a serializer:

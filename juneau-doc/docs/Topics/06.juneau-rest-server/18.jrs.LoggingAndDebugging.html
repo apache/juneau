@@ -1,0 +1,234 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Logging / Debugging', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The REST APIs provides supports enabling logging of HTTP requests and responses through
+		the following annotations:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#debug() debug}
+				<li class='jma'>{@link oajr.annotation.Rest#debugOn() debugOn}
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#debug() debug}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Debug mode enables the following:
+	</p>	
+	<ul class='spaced-list'>
+		<li>
+			HTTP request/response bodies are cached in memory for logging purposes.
+		<li>
+			HTTP requests/responses are logged to the registered {@link oajr.logging.RestLogger}.
+	</ul>
+	<p>
+		The possible annotation values are:
+	</p>
+	<ul>
+		<li><js>"true"</js> - Debug is enabled for all requests.
+		<li><js>"false"</js> - Debug is disabled for all requests.
+		<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
+	</ul>
+	<h5 class='figure'>Example</h5>
+	<p class='bcode w800'>
+		|	<jc>// Enable debugging on all op calls on this resource</jc>
+		|	<ja>@Rest</ja>(debug=<js>"true"</js>)
+		|	<jk>public class</jk> MyResource {...}
+	</p>
+	<p>
+		These annotations support SVL variables, so it's possible to define them as a system property for example.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Enable via system property 'MyResource.debug'</jc>
+		|	<ja>@Rest</ja>(debug=<js>"$S{MyResource.debug}"</js>)
+		|	<jk>public class</jk> MyResource {...}
+	</p>
+	<p>
+		The {@link oajr.annotation.Rest#debugOn() @Rest(debugOn)} annotation can also be used
+		to enable debugging.  It takes a comma-delimited list of key-value pairs, the keys
+		being class or method names, and the values being one of <c>true|false|conditional</c>.
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>
+		|	<ja>@Rest</ja>(debugOn=<js>"MyResource=conditional,MyResource.doX=true"</js>)
+		|	<jk>public class</jk> MyResource {...}
+	</p>
+	<p>
+		The primary advantage of {@link oajr.annotation.Rest#debugOn() @Rest(debugOn)} is that
+		you can control debugging externally such as through a system property or environment variable:
+	</p>
+	<p class='bcode w800'>
+		|	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>
+		|	<ja>@Rest</ja>(debugOn=<js>"$E{DEBUG}"</js>)
+		|	<jk>public class</jk> MyResource {...}
+	</p>
+	<p>
+		Debugging can also be enabled programmatically with the use of the following APIs:
+	</p>	
+	<ul class='javatree'>
+		<li class='jic'>{@link oajr.debug.DebugEnablement}
+		<li class='jc'>{@link oajr.debug.BasicDebugEnablement}
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jmp'>{@link oajr.RestContext.Builder#createDebugEnablement(BeanStore,Supplier) createDebugEnablement(BeanStore,Supplier)}
+				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement() debugEnablement()}
+				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement(Consumer) debugEnablement(Consumer)}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		HTTP calls can be logged with the following levels of granularity:
+	</p>	
+	<ul class='javatree'>
+		<li class='je'>{@link oajr.logging.RestLoggingDetail}
+			<ul class='javatreec'>
+				<li class='jf'>{@link oajr.logging.RestLoggingDetail#STATUS_LINE STATUS_LINE}
+				<li class='jf'>{@link oajr.logging.RestLoggingDetail#HEADER HEADER}
+				<li class='jf'>{@link oajr.logging.RestLoggingDetail#ENTITY ENTITY}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		The following examples show the output format for each detail type:
+	</p>
+	<h5 class='figure'>STATUS_LINE</h5>
+	<p class='bcode'>
+		|	WARNING: [500] HTTP POST /foo?foo=bar
+	</p>
+	<h5 class='figure'>HEADER</h5>
+	<p class='bcode'>
+		|	WARNING: 
+		|	=== HTTP Call (incoming) ===================================================
+		|	[500] HTTP POST /foo?foo=bar
+		|		Request length: 3 bytes
+		|		Response code: 500
+		|		Response length: 3 bytes
+		|		Exec time: 20ms
+		|	---Request Headers---
+		|		Foo: bar
+		|	---Response Headers---
+		|		Foo: bar
+		|		Content-Type: text/plain
+		|	=== END ===================================================================
+	</p>
+	<h5 class='figure'>ENTITY</h5>
+	<p class='bcode'>
+		|	WARNING: 
+		|	=== HTTP Call (incoming) ===================================================
+		|	[500] HTTP POST /foo?foo=bar
+		|		Request length: 3 bytes
+		|		Response code: 500
+		|		Response length: 3 bytes
+		|		Exec time: 20ms
+		|	---Request Headers---
+		|		Foo: bar
+		|	---Response Headers---
+		|		Foo: bar
+		|		Content-Type: text/plain
+		|	---Request Body UTF-8---
+		|	Foo
+		|	---Request Body Hex---
+		|	46 6F 6F
+		|	---Response Body UTF-8---
+		|	Foo
+		|	---Response Body Hex---
+		|	46 6F 6F
+		|	=== END ===================================================================
+	</p>
+	<p>
+		The interface responsible for generating the log entries is {@link oajr.logging.RestLogger}
+		and the default is {@link oajr.logging.BasicRestLogger} which produces the output above.  It
+		can be changed through any of the following:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#callLogger() callLogger()}
+			</ul>
+		</li>
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jmp'>{@link oajr.RestContext.Builder#createCallLogger(BeanStore,Supplier) createCallLogger(BeanStore,Supplier)}
+				<li class='jm'>{@link oajr.RestContext.Builder#callLogger() callLogger()}
+				<li class='jm'>{@link oajr.RestContext.Builder#callLogger(Consumer) callLogger(Consumer)}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		The call logger uses logging rules to map requests to logging detail levels.
+		By default, these are the logging rules:
+	</p>
+	<p class='bcode w800'>
+		|	RestLogger
+		|		.<jsm>create</jsm>()
+		|		.beanStore(<jv>beanStore</jv>)  <jc>// Allow injected beans in constructor</jc>
+		|		.normalRules(  <jc>// Rules when debugging is not enabled</jc>
+		|			RestLoggerRule.<jsm>create</jsm>()  <jc>// Log 500+ errors with status-line and header information</jc>
+		|				.statusFilter(<jv>x</jv> -> <jv>x</jv> >= 500)
+		|				.level(<jsf>SEVERE</jsf>)
+		|				.requestDetail(<jsf>HEADER</jsf>)
+		|				.responseDetail(<jsf>HEADER</jsf>)
+		|				.build(),
+		|			RestLoggerRule.<jsm>create</jsm>()  <jc>// Log 400-500 errors with just status-line information</jc>
+		|				.statusFilter(<jv>x</jv> -> <jv>x</jv> >= 400)
+		|				.level(<jsf>WARNING</jsf>)
+		|				.requestDetail(<jsf>STATUS_LINE</jsf>)
+		|				.responseDetail(<jsf>STATUS_LINE</jsf>)
+		|				.build()
+		|		)
+		|		.debugRules(  <jc>// Rules when debugging is enabled</jc>
+		|			RestLoggerRule.<jsm>create</jsm>()  <jc>// Log everything with full details</jc>
+		|				.level(<jsf>SEVERE</jsf>)
+		|				.requestDetail(<jsf>ENTITY</jsf>)
+		|				.responseDetail(<jsf>ENTITY</jsf>)
+		|				.build()
+		|		);
+	</p>
+	<p>
+		Thrown exceptions get logged with a stack trace hash and a counter like below:
+	</p>
+	<p class='bcode w800'>
+		|	WARNING: [500,9b85cc96.13] HTTP POST /foo?foo=bar
+	</p>
+	<p>
+		Stack trace hashes are controlled by the {@link oajr.stats.ThrownStore} bean which is configured
+		via the following:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jmp'>{@link oajr.RestContext.Builder#createThrownStore(BeanStore,Supplier,RestContext) createThrownStore(BeanStore,Supplier)}
+				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore() thrownStore()}
+				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore(Consumer) thrownStore(Consumer)}
+			</ul>
+		</li>
+	</ul>
+	<ul class='spaced-list'>
+		<li class='note'>The {@link oajr.logging.BasicTestRestLogger} class is useful for testing and
+			allows you to suppress logging when testing error conditions by passing in a <c>noTrace=true</c> query parameter
+			or <c>No-Trace: true</c> header on requests.  
+		<li class='note'>{@link oajr.debug.DebugEnablement}, {@link oajr.logging.RestLogger}, and 
+			{@link oajr.stats.ThrownStore} can all be defined globally as Spring beans in a Spring Boot environment.
+	</ul>
+</div>

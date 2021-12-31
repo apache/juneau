@@ -1304,7 +1304,7 @@ public final class RestRequest {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
-	 * 	<li class='link'>{@doc jrs.Messages}
+	 * 	<li class='link'>{@doc jrs.LocalizedMessages}
 	 * </ul>
 	 *
 	 * @return

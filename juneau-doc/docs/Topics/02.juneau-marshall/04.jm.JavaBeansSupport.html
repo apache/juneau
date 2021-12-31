@@ -70,28 +70,30 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.BeanContext.Builder}
-		<ul>
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)} - Allows non-public POJOs to be treated as beans.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanConstructorVisibility(Visibility) beanConstructorVisibility(Visibility)} - Allows non-public constructors to be used on beans.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility(Visibility)} - Allows non-public fields to be used as bean properties.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanMethodVisibility(Visibility) beanMethodVisibility(Visibility)} - Allows non-public methods to be used as bean getters and setters.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()} - Don't treat a POJO as a bean if it doesn't have a default no-arg constructor.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireSerializable() beansRequireSerializable()} - Don't treat a POJO as a bean if it doesn't implement <c>Serializable</c>.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireSettersForGetters() beansRequireSettersForGetters()} - Ignore getter methods if they don't have setter methods.
-			<li class='jm'>{@link oaj.BeanContext.Builder#disableBeansRequireSomeProperties() disableBeansRequireSomeProperties()} - Don't treat a POJO as a bean if it doesn't have at least one property defined.
-		</ul>
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanConstructorVisibility(Visibility) beanConstructorVisibility(Visibility)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility(Visibility)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanMethodVisibility(Visibility) beanMethodVisibility(Visibility)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireSerializable() beansRequireSerializable()}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireSettersForGetters() beansRequireSettersForGetters()}
+				<li class='jm'>{@link oaj.BeanContext.Builder#disableBeansRequireSomeProperties() disableBeansRequireSomeProperties()}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		Settings and equivalent annotations are also available to control which properties are marshalled and how they are ordered.
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.BeanContext.Builder}
-		<ul>
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanProperties(Class,String) beanProperties(Class,String)} - Specifies properties to include and property order during marshalling.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)} - Specifies properties to exclude during marshalling.
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String) } - Specifies read-only properties (ignored during parsing).
-			<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)} - Specifies write-only properties (ignored during reading).
-		</ul>
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanProperties(Class,String) beanProperties(Class,String)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)}
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String) }
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		It's common to use the {@link oaj.annotation.Bean#properties @Bean(properties|p)} annotation to force the ordering

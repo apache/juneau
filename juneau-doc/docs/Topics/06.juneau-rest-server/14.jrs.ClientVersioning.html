@@ -24,9 +24,21 @@
 		The APIs involved with defining client version headers are:
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@link oajr.annotation.Rest#clientVersionHeader() Rest(clientVersionHeader)}
-		<li class='jm'>{@link oajr.RestContext.Builder#clientVersionHeader(String)}
-		<li class='ja'>{@link oajr.annotation.RestOp#clientVersion() RestOp(clientVersion)}
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#clientVersionHeader() clientVersionHeader}
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#clientVersion() clientVersion}
+			</ul>
+		</li>
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.RestContext.Builder#clientVersionHeader(String) clientVersionHeader(String)}
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>

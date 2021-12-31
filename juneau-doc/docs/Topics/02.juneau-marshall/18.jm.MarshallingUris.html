@@ -91,6 +91,7 @@
 	<ul class='javatree'>
 		<li class='jm'>{@link oaj.serializer.Serializer.Builder#uriContext(UriContext)}
 			<br>Setting that defines the URI contextual information used to resolve relative URIs.
+		</li>
 		<li class='jm'>{@link oaj.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
 			<br>Setting that defines how relative URIs should be interpreted.
 			<br>Possible values:
@@ -102,6 +103,7 @@
 					<br>Relative URIs should be considered relative to the request URI.
 					<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
 			</ul>
+		</li>
 		<li class='jm'>{@link oaj.serializer.Serializer.Builder#uriResolution(UriResolution)}
 			<br>Setting that defines the final format of serialized URIs.
 			<br>Possible values:
@@ -115,6 +117,7 @@
 				<li class='jf'>{@link oaj.UriResolution#NONE}
 					<br>Don't do any URL resolution.
 			</ul>
+		</li>
 	</ul>
 	<p>
 		Juneau automatically interprets any {@link java.net.URL} and {@link java.net.URI} objects as URIs and will

@@ -24,11 +24,12 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link oaj.config.store.ConfigStore}
-		<ul>
-			<li class='jm'>{@link oaj.config.store.ConfigStore#read(String) read(String)} - Read a config file.
-			<li class='jm'>{@link oaj.config.store.ConfigStore#write(String,String,String) write(String,String,String)} - Write a config file.
-			<li class='jm'>{@link oaj.config.store.ConfigStore#update(String,String) update(String,String)} - Update the contents of a config file.
-		</ul>
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.config.store.ConfigStore#read(String) read(String)}
+				<li class='jm'>{@link oaj.config.store.ConfigStore#write(String,String,String) write(String,String,String)}
+				<li class='jm'>{@link oaj.config.store.ConfigStore#update(String,String) update(String,String)}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		Read is self-explanatory:
@@ -72,7 +73,11 @@
 		The store is defined on the <c>Config</c> object via the following setting:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link oaj.config.Config.Builder#store(ConfigStore)}
+		<li class='jc'>{@link oaj.config.Config.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.config.Config.Builder#store(ConfigStore) store(ConfigStore)}
+			</ul>
+		</li>
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
@@ -81,7 +86,7 @@
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
 	</p>
 	<p>
-		The default store used is {@link oaj.config.store.åFileStore#DEFAULT} which defines
+		The default store used is {@link oaj.config.store.FileStore#DEFAULT} which defines
 		the execution directory as the file system directory to store and retrieve files. 
 	</p>
 </div>

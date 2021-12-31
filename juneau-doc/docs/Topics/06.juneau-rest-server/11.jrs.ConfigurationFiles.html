@@ -21,7 +21,11 @@
 		configuration properties can be defined in external files.  It uses the following annotation:
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@link oajr.annotation.Rest#config() Rest(config)}
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#config() config}
+			</ul>
+		</li>
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
@@ -138,7 +142,7 @@
 		|	<jd>/** 
 		|	 * Sample REST resource that prints out a simple "Hello world!" message.
 		|	 */</jd>
-		|	 <ja>@Rest</ja>(
+		|	<ja>@Rest</ja>(
 		|		config=<js>"config_dir/myconfig.cfg"</js>,
 		|		...
 		|	)

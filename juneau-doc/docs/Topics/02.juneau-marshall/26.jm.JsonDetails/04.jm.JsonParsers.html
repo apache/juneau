@@ -24,18 +24,22 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link oaj.Context.Builder}
-		<ul>
-			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.parser.Parser.Builder}
-				<ul>
-					<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<li class='jac'>{@link oaj.BeanContextable.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.json.JsonParser.Builder}
+						<li class='jac'>{@link oaj.parser.Parser.Builder}
+							<ul>
+								<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+									<ul>
+										<li class='jc'>{@link oaj.json.JsonParser.Builder}
+									</ul>
+								</li>
+							</ul>
+						</li>
 					</ul>
-				</ul>
+				</li>
 			</ul>
-		</ul>
+		</li>
 	</ul>
 	<p>
 		Refer to the builder javadocs for configurable settings.
@@ -45,10 +49,11 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.json.JsonParser}
-		<ul>
-			<li class='jf'>{@link oaj.json.JsonParser#DEFAULT DEFAULT}
-			<li class='jf'>{@link oaj.json.JsonParser#DEFAULT_STRICT DEFAULT_STRICT}
-		</ul>
+			<ul class='javatreec'>
+				<li class='jf'>{@link oaj.json.JsonParser#DEFAULT DEFAULT}
+				<li class='jf'>{@link oaj.json.JsonParser#DEFAULT_STRICT DEFAULT_STRICT}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		The JSON parser supports ALL valid JSON, including:

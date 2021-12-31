@@ -19,7 +19,7 @@
 	<p>
 		The following parsers can be configured to read continuous streams of objects from the same input stream:
 	</p>
-	<ul class='javatree'>
+	<ul class='javatreec'>
 		<li class='jc'>{@link oaj.json.JsonParser}
 		<li class='jc'>{@link oaj.uon.UonParser}
 		<li class='jc'>{@link oaj.msgpack.MsgPackParser}
@@ -54,9 +54,21 @@
 		For obvious reasons, do not use the following properties when reading continuous streams:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link oaj.json.JsonParser.Builder#validateEnd()}
-		<li class='jm'>{@link oaj.uon.UonParser.Builder#validateEnd()}
-		<li class='jm'>{@link oaj.parser.Parser.Builder#autoCloseStreams()}
+		<li class='jc'>{@link oaj.json.JsonParser.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.json.JsonParser.Builder#validateEnd() validateEnd()}
+			</ul>
+		</li>
+		<li class='jc'>{@link oaj.uon.UonParser.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.uon.UonParser.Builder#validateEnd() validateEnd()}
+			</ul>
+		</li>
+		<li class='jac'>{@link oaj.parser.Parser.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.parser.Parser.Builder#autoCloseStreams() validateEnd()}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		The {@link oaj.msgpack.MsgPackParser} class doesn't use any internal buffering to begin with, so it can be used with

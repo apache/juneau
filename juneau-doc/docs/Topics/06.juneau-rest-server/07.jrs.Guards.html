@@ -26,9 +26,17 @@
 	<p>
 		Guards are associated with resource classes and methods via the following:
 	</p>
-	<ul class='javatreec'>
-		<li class='ja'>{@link oajr.annotation.Rest#guards() Rest(guards)} 
-		<li class='ja'>{@link oajr.annotation.RestOp#guards() RestOp(guards)} 
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#guards() guards} 
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#guards() guards} 
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -88,9 +96,17 @@
 		A simplified format is available for matching based on the user role on the request using the following:
 	</p>
 	
-	<ul class='javatreec'>
-		<li class='ja'>{@link oajr.annotation.Rest#roleGuard() Rest(roleGuard)} 
-		<li class='ja'>{@link oajr.annotation.RestOp#roleGuard() RestOp(roleGuard)} 
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#roleGuard() roleGuard} 
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#roleGuard() roleGuard} 
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>

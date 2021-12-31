@@ -25,11 +25,19 @@
 	<p>
 		Serializers and parsers can be associated with REST servlets using the following annotations:
 	</p>
-	<ul class='javatreec'>
-		<li class='ja'>{@link oajr.annotation.Rest#serializers() Rest(serializers)}</li>
-		<li class='ja'>{@link oajr.annotation.Rest#parsers() Rest(parsers)}</li>
-		<li class='ja'>{@link oajr.annotation.RestOp#serializers() RestOp(serializers)}</li>
-		<li class='ja'>{@link oajr.annotation.RestOp#parsers() RestOp(parsers)}</li>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#serializers() serializers}
+				<li class='jma'>{@link oajr.annotation.Rest#serializers() parsers}
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#serializers() serializers}
+				<li class='jma'>{@link oajr.annotation.RestOp#serializers() parsers}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		Request bodies are parsed and passed in via {@link oaj.http.annotation.Body @Body}-annotated parameters,
@@ -64,6 +72,7 @@
 				<li class='jc'>{@link oajr.BasicRestObject}
 				<li class='jc'>{@link oajr.BasicRestObjectGroup}
 			</ul>
+		</li>
 		<li>Interfaces:
 			<ul class='javatreec'>
 				<li class='jic'>{@link oajr.config.BasicUniversalRest}
@@ -72,6 +81,7 @@
 				<li class='jic'>{@link oajr.config.BasicSimpleJsonRest}
 				<li class='jic'>{@link oajr.config.BasicOpenApiRest}
 			</ul>
+		</li>
 	</ul>
 	<p>
 		Serializers and parsers can also be defined programmatically using an INIT hook method like shown below:

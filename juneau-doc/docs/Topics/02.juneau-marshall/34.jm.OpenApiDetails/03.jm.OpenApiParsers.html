@@ -24,21 +24,26 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link oaj.Context.Builder}
-		<ul>
-			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.parser.Parser.Builder}
-				<ul>
-					<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<li class='jac'>{@link oaj.BeanContextable.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.uon.UonParser.Builder}
-						<ul>
-							<li class='jc'>{@link oaj.oapi.OpenApiParser.Builder}
-						</ul>
+						<li class='jac'>{@link oaj.parser.Parser.Builder}
+							<ul>
+								<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+									<ul>
+										<li class='jc'>{@link oaj.uon.UonParser.Builder}
+											<ul>
+												<li class='jc'>{@link oaj.oapi.OpenApiParser.Builder}
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
 					</ul>
-				</ul>
+				</li>
 			</ul>
-		</ul>
+		</li>
 	</ul>
 	<p>
 		Refer to the builder javadocs for configurable settings.

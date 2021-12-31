@@ -105,6 +105,7 @@
 	<ul class='javatree'>
 		<li class='jm'>{@link oaj.microservice.Microservice#getConfig()} 
 			<p>Any {@doc jrs.SvlVariables initialization-time variables} can be used.</p>
+		</li>
 		<li class='jm'>{@link oajr.RestContext#getConfig()} 
 			<p>Any {@doc jrs.SvlVariables initialization-time variables} can be used.</p>
 			<h5 class='figure'>Example usage:</h5>
@@ -136,6 +137,7 @@
 				{@link oajr.annotation.HookEvent#INIT} hook method
 				and using the {@del oajr.RestContext.Builder#vars(Class...)} method.
 			</p>
+		</li>
 		<li class='jm'>
 			{@link oajr.RestRequest#getConfig()} 
 			- An instance method to access it from inside a REST method.
@@ -184,6 +186,7 @@
 				Additional user-defined variables can be defined at this level by overriding the 
 				{@del oajr.RestContext.Builder#vars(Class...)} method.
 			</p>
+		</li>
 	</ul>
 	<p>
 		That <l>sayLocalizedHello()</l> example might need some explanation since there's a lot going on there.

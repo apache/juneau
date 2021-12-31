@@ -231,8 +231,10 @@ ul.javatreec, .javatreec ul {  padding-left:0px; margin:0px; }
 .javatreec li.jic::before { color:#5f4ba2; content:'\00a0\00a0\24d8\00a0'; }
 .javatreec li.je::before  { color:#906029; content:'\00a0\00a0\24d4\00a0'; }
 .javatreec li.jf::before  { color:#008000; content:'\00a0\00a0\25cf\00a0'; }
+.javatreec li.jfp::before  { color:#eed304; content:'\00a0\00a0\25cf\00a0'; }
 .javatreec li.jm::before  { color:#008000; content:'\00a0\00a0\25cf\00a0'; }
 .javatreec li.jmp::before  { color:#eed304; content:'\00a0\00a0\25c6\00a0'; }
+.javatreec li.jma::before  { color:#00ced1; content:'\00a0\00a0\25cf\00a0'; }
 
 li.jc::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\24d2\00a0\00a0'; }
 li.jac::marker { font-weight:bolder; font-size:small; color:#eed304; content:'\00a0\00a0\24d2\00a0\00a0'; }

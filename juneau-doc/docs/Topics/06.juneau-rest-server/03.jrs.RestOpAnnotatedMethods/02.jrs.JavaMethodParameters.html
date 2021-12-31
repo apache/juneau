@@ -54,6 +54,7 @@
 						<li class='jc'>{@link oaj.UriResolver}
 						<li class='jc'>{@link oaj.svl.VarResolverSession}
 					</ul>
+				</li>
 				<li>Response objects:
 					<ul class='javatreec'>
 						<li class='jic'>{@link javax.servlet.HttpServletResponse}
@@ -62,6 +63,7 @@
 						<li class='jic'>{@link javax.servlet.ServletOutputStream}
 						<li class='jc'>{@link java.io.Writer}
 					</ul>
+				</li>
 				<li>Session objects:
 					<ul class='javatreec'>
 						<li class='jic'>{@link javax.servlet.http.HttpSession}
@@ -71,6 +73,7 @@
 						<li class='jc'>{@link oaj.cp.BeanStore}
 						<li class='jc'>{@link oajr.RestOpSession}
 					</ul>				
+				</li>
 				<li>Parsed request header values:
 					<ul class='javatreec'>
 						<li class='jc'>{@link oaj.http.header.Accept}
@@ -110,16 +113,17 @@
 						<li class='jc'>{@link oaj.http.header.UserAgent}
 						<li class='jc'>{@link oaj.http.header.Warning}
 					</ul>
+				</li>
 				<li>Context values:
 					<ul class='javatreec'>
 						<li class='jc'>{@link oaj.BeanContext}
 						<li class='jc'>{@link oaj.config.Config}
-						<li class='jic'>{@link oajr.DebugEnablement}
+						<li class='jic'>{@link oajr.debug.DebugEnablement}
 						<li class='jc'>{@link oaj.encoders.EncoderSet}
 						<li class='jic'>{@link oaj.cp.FileFinder}
 						<li class='jc'>{@link oaj.jsonschema.JsonSchemaGenerator}
 						<li class='jc'>{@link java.util.Logger}
-						<li class='jc'>{@link oaj.mstat.MethodExecStore}
+						<li class='jc'>{@link oaj.stats.MethodExecStore}
 						<li class='jc'>{@link oaj.parser.ParserSet}
 						<li class='jc'>{@link oajr.RestChildren}
 						<li class='jc'>{@link oajr.RestContext}
@@ -128,9 +132,10 @@
 						<li class='jc'>{@link oajr.RestOpContext}
 						<li class='jc'>{@link oajr.RestOperations}
 						<li class='jc'>{@link oaj.serializer.SerializerSet}
-						<li class='jic'>{@link oajr.StaticFiles}
+						<li class='jic'>{@link oajr.staticfile.StaticFiles}
 						<li class='jc'>{@link oajr.stats.ThrownStore}
 					</ul>
+				</li>
 			</ul>
 		<li><b>Annotated parameters (either on the parameter or parameter type):</b>
 			<ul class='javatreec'>
@@ -147,6 +152,7 @@
 				<li class='ja'>{@link oaj.http.annotation.Request}
 				<li class='ja'>{@link oaj.http.annotation.Response}
 			</ul>
+		</li>
 	</ul>
 	<p>
 		In Spring Boot environments, any available Spring Beans can also be passed in as parameters.

@@ -168,7 +168,7 @@ public @interface RestPut {
 	 * <ul>
 	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
 	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
-	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
+	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
 	 * 	<li><js>""</js> (or anything else) - Debug mode is inherited from class.
 	 * </ul>
 	 *

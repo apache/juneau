@@ -38,8 +38,10 @@
 		as this one:
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@Response</ja>(code=406, description=<js>"Not Acceptable"</js>)
-		|	<jk>public class</jk> NotAcceptable <jk>extends</jk> RestException {...}
+		|	<ja>@Response</ja>
+		|	<ja>@StatusCode</ja>(406)
+		|	<ja>@Schema</ja>(description=<js>"Not Acceptable"</js>)
+		|	<jk>public class</jk> NotAcceptable <jk>extends</jk> BasicHttpException {...}
 	</p>
 	<p>
 		Like input parameters, the Swagger for responses can be define in multiple locations such as:

@@ -1613,7 +1613,7 @@ public class RestContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jc'>{@link Messages}
-		 * 	<li class='link'>{@doc jrs.Messages}
+		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
 		 * </ul>
 		 *
 		 * @param beanStore

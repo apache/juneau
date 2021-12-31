@@ -56,10 +56,12 @@
 				<li class='jc'>{@link oaj.http.response.UriTooLong}
 				<li class='jc'>{@link oaj.http.response.VariantAlsoNegotiates}
 			</ul>
+		</li>
 		<li>Annotated throwables:
 			<ul class='javatreec'>
 				<li class='ja'>{@link oaj.http.annotation.Response}
 			</ul>
+		</li>
 	</ul>
 	<p>
 		All other throwables get processed as follows:
@@ -70,14 +72,17 @@
 				<li class='jc'>{@link oaj.parser.ParseException}
 				<li class='jc'>{@link oaj.InvalidDataConversionException}
 			</ul>
+		</li>
 		<li>Processed as 401/Unauthorized:
 			<ul>
 				<li>Any class named <js>"*AccessDenied*"</js> or  <js>"*Unauthorized*"</js>
 			</ul>
+		</li>
 		<li>Processed as 404/Not Found:
 			<ul>
 				<li>Any class named <js>"*Empty*"</js> or  <js>"*NotFound*"</js>
 			</ul>
+		</li>
 		<li>Anything else processed as 500/Internal Server Error.
 	</ul>
 	

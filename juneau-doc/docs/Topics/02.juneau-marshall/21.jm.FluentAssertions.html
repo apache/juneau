@@ -33,9 +33,9 @@
 		|		.getBody().assertValue().asString().contains(<js>"OK"</js>)
 		|		.getBody().as(MyBean.<jk>class</jk>);
 	</p>
-	<p>
-		<i>Note:  The REST API is described later in the documentation.</i>
-	</p>
+	<ul>
+		<li class='note'>The REST API is described later in the documentation.</i>
+	</ul>
 	<p>
 		The assertions API is designed to be used in both code (as it's done in the REST APIs) or for standalone
 		use in unit tests.
@@ -46,7 +46,7 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.assertions.Assertions}
-			<ul>
+			<ul class='javatreec'>
 				<li class='jm'>{@link oaj.assertions.Assertions#assertAny(Object) assertAny(T)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertArray(Object[]) assertArray(E[])}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertBean(Object) assertBean(V)}
@@ -169,21 +169,26 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link oaj.assertions.Assertion Assertion} - Base class for all assertion objects containing common configuration methods.
-		<ul>
-			<li class='jac'>{@link oaj.assertions.FluentAssertion FluentAssertion&lt;R&gt;} - Parent class for all fluent assertions.
 			<ul>
-				<li class='jac'>{@link oaj.assertions.FluentObjectAssertion FluentObjectAssertion&lt;T,R&gt;} - Tests and transforms for general POJOs.
-				<ul>
-					<li class='jac'>{@link oaj.assertions.FluentComparableAssertion FluentComparableAssertion&lt;T <jk>extends</jk> Comparable,R&gt;} - Tests and transforms for Comparables.
+				<li class='jac'>{@link oaj.assertions.FluentAssertion FluentAssertion&lt;R&gt;} - Parent class for all fluent assertions.
 					<ul>
-						<li class='jac'>{@link oaj.assertions.FluentIntegerAssertion FluentIntegerAssertion&lt;R&gt;} - Tests and transforms for Integers.
-						<ul>
-							<li class='jac'>{@link oaj.assertions.IntegerAssertion IntegerAssertion} - Assertion that returns itself.
-						</ul>
+						<li class='jac'>{@link oaj.assertions.FluentObjectAssertion FluentObjectAssertion&lt;T,R&gt;} - Tests and transforms for general POJOs.
+							<ul>
+								<li class='jac'>{@link oaj.assertions.FluentComparableAssertion FluentComparableAssertion&lt;T <jk>extends</jk> Comparable,R&gt;} - Tests and transforms for Comparables.
+									<ul>
+										<li class='jac'>{@link oaj.assertions.FluentIntegerAssertion FluentIntegerAssertion&lt;R&gt;} - Tests and transforms for Integers.
+											<ul>
+												<li class='jac'>{@link oaj.assertions.IntegerAssertion IntegerAssertion} - Assertion that returns itself.
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
 					</ul>
-				</ul>
+				</li>
 			</ul>
-		</ul>
+		</li>
 	</ul>
 	<p>
 		In the design, the "Fluent" classes (e.g. {@link oaj.assertions.FluentIntegerAssertion}) allow you to specify the object

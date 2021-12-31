@@ -22,12 +22,13 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.svl.VarResolver}
-		<ul>
-			<li class='jm'>{@link oaj.svl.VarResolver#resolve(String) resolve(String)} 
-				- Resolves variables and returns the results as a simple string.
-			<li class='jm'>{@link oaj.svl.VarResolver#resolveTo(String,Writer) resolveTo(String,Writer)} 
-				- Resolves variables and sends results to a writer.
-		</ul>
+			<ul>
+				<li class='jm'>{@link oaj.svl.VarResolver#resolve(String) resolve(String)} 
+					- Resolves variables and returns the results as a simple string.
+				<li class='jm'>{@link oaj.svl.VarResolver#resolveTo(String,Writer) resolveTo(String,Writer)} 
+					- Resolves variables and sends results to a writer.
+			</ul>
+		</li>
 	</ul>
 	<p>
 		Var resolvers can rely on the existence of other objects.
@@ -36,14 +37,16 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.svl.VarResolver.Builder} 
-		<ul>
-			<li class='jm'>{@link oaj.svl.VarResolver.Builder#beanStore(BeanStore) beanStore(BeanStore)} - Specify a bean store to find beans.
-			<li class='jm'>{@link oaj.svl.VarResolver.Builder#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for all sessions.
-		</ul>
+			<ul>
+				<li class='jm'>{@link oaj.svl.VarResolver.Builder#beanStore(BeanStore) beanStore(BeanStore)} - Specify a bean store to find beans.
+				<li class='jm'>{@link oaj.svl.VarResolver.Builder#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for all sessions.
+			</ul>
+		</li>
 		<li class='jc'>{@link oaj.svl.VarResolverSession}
-		<ul>
-			<li class='jm'>{@link oaj.svl.VarResolverSession#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for this session.
-		</ul>
+			<ul>
+				<li class='jm'>{@link oaj.svl.VarResolverSession#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for this session.
+			</ul>
+		</li>
 	</ul>
 	<p>
 		Beans are accessible through the following method:

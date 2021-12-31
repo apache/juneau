@@ -22,12 +22,13 @@
 	</p>	
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.jena.RdfParser}
-		<ul>
-			<li class='jc'>{@link oaj.jena.RdfXmlParser}
-			<li class='jc'>{@link oaj.jena.NTripleParser}
-			<li class='jc'>{@link oaj.jena.TurtleParser}
-			<li class='jc'>{@link oaj.jena.N3Parser}
-		</ul>
+			<ul class='javatreec'>
+				<li class='jc'>{@link oaj.jena.RdfXmlParser}
+				<li class='jc'>{@link oaj.jena.NTripleParser}
+				<li class='jc'>{@link oaj.jena.TurtleParser}
+				<li class='jc'>{@link oaj.jena.N3Parser}
+			</ul>
+		</li>
 	</ul>
 	<p>
 		The <c>RdfParser.Xml</c> parser handles both regular and abbreviated RDF/XML.
@@ -37,18 +38,22 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link oaj.Context.Builder}
-		<ul>
-			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.parser.Parser.Builder}
-				<ul>
-					<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+				<li class='jac'>{@link oaj.BeanContextable.Builder}
 					<ul>
-						<li class='jc'>{@link oaj.jena.RdfParser.Builder}
+						<li class='jac'>{@link oaj.parser.Parser.Builder}
+							<ul>
+								<li class='jac'>{@link oaj.parser.ReaderParser.Builder}
+									<ul>
+										<li class='jc'>{@link oaj.jena.RdfParser.Builder}
+									</ul>
+								</li>
+							</ul>
+						</li>
 					</ul>
-				</ul>
+				</li>
 			</ul>
-		</ul>
+		</li>
 	</ul>
 	<p>
 		Refer to the builder javadocs for configurable settings.
@@ -58,23 +63,28 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.jena.RdfParser}
-		<ul>
-			<li class='jc'>{@link oaj.jena.RdfXmlParser}
 			<ul>
-				<li class='jf'>{@link oaj.jena.RdfXmlParser#DEFAULT DEFAULT}
+				<li class='jc'>{@link oaj.jena.RdfXmlParser}
+					<ul>
+						<li class='jf'>{@link oaj.jena.RdfXmlParser#DEFAULT DEFAULT}
+					</ul>
+				</li>
+				<li class='jc'>{@link oaj.jena.N3Parser}
+					<ul>
+						<li class='jf'>{@link oaj.jena.N3Parser#DEFAULT DEFAULT}
+					</ul>
+				</li>
+				<li class='jc'>{@link oaj.jena.NTripleParser}
+					<ul>
+						<li class='jf'>{@link oaj.jena.NTripleParser#DEFAULT DEFAULT}
+					</ul>
+				</li>
+				<li class='jc'>{@link oaj.jena.TurtleParser}
+					<ul>
+						<li class='jf'>{@link oaj.jena.TurtleParser#DEFAULT DEFAULT}
+					</ul>
+				</li>
 			</ul>
-			<li class='jc'>{@link oaj.jena.N3Parser}
-			<ul>
-				<li class='jf'>{@link oaj.jena.N3Parser#DEFAULT DEFAULT}
-			</ul>
-			<li class='jc'>{@link oaj.jena.NTripleParser}
-			<ul>
-				<li class='jf'>{@link oaj.jena.NTripleParser#DEFAULT DEFAULT}
-			</ul>
-			<li class='jc'>{@link oaj.jena.TurtleParser}
-			<ul>
-				<li class='jf'>{@link oaj.jena.TurtleParser#DEFAULT DEFAULT}
-			</ul>
-		</ul>
+		</li>
 	</ul>
 </div>

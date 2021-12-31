@@ -24,21 +24,26 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link oaj.Context.Builder}
-		<ul>
-			<li class='jac'>{@link oaj.BeanContextable.Builder}
 			<ul>
-				<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
-				<ul>
-					<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+				<li class='jac'>{@link oaj.BeanContextable.Builder}
 					<ul>
-						<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
-						<ul>
-							<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
-						</ul>
+						<li class='jac'>{@link oaj.BeanTraverseContext.Builder}
+							<ul>
+								<li class='jac'>{@link oaj.serializer.Serializer.Builder}
+									<ul>
+										<li class='jac'>{@link oaj.serializer.WriterSerializer.Builder}
+											<ul>
+												<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
 					</ul>
-				</ul>
+				</li>
 			</ul>
-		</ul>
+		</li>
 	</ul>
 	<p>
 		Refer to the builder javadocs for configurable settings.
@@ -48,10 +53,11 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oaj.uon.UonSerializer}
-		<ul>
-			<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT DEFAULT}
-			<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_ENCODING DEFAULT_ENCODING}
-			<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
-		</ul>
+			<ul class='javatreec'>
+				<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT DEFAULT}
+				<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_ENCODING DEFAULT_ENCODING}
+				<li class='jf'>{@link oaj.uon.UonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+			</ul>
+		</li>
 	</ul>
 </div>
