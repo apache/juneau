@@ -258,7 +258,6 @@ jrs.ClientVersioning = #juneau-rest-server.jrs.ClientVersioning, Overview > june
 jrs.ConfigurationFiles = #juneau-rest-server.jrs.ConfigurationFiles, Overview > juneau-rest-server > Configuration Files
 jrs.Converters = #juneau-rest-server.jrs.Converters, Overview > juneau-rest-server > Converters
 jrs.CustomRestContextsAndBuilders = #juneau-rest-server.jrs.CustomRestContextsAndBuilders, Overview > juneau-rest-server > Custom REST Context and Builders
-jrs.CustomSerializersAndParsers = #juneau-rest-server.jrs.CustomSerializersAndParsers, Overview > juneau-rest-server > Custom Serializers and Parsers
 jrs.DefaultHeaders = #juneau-rest-server.jrs.HttpParts.jrs.DefaultHeaders, Overview > juneau-rest-server > HTTP Parts > Default Parts
 jrs.Encoders = #juneau-rest-server.jrs.Encoders, Overview > juneau-rest-server > Encoders
 jrs.ExecutionStatistics = #juneau-rest-server.jrs.ExecutionStatistics, Overview > juneau-rest-server > REST method execution statistics

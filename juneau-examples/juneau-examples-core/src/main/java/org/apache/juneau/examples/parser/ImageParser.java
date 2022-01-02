@@ -22,6 +22,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Example parser that converts byte streams to {@link BufferedImage} objects.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("javadoc")
 public class ImageParser extends InputStreamParser {

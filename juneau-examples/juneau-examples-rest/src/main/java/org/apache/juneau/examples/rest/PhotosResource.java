@@ -27,6 +27,13 @@ import java.net.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
+ * 	<li class='jc'>{@link ImageSerializer}
+ * 	<li class='jc'>{@link ImageParser}
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	path="/photos",
